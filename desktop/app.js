@@ -16,7 +16,7 @@
   const LEGACY_KEYS = ["control-avaluos.desktop.v2", "control-avaluos.desktop.v1"];
   // API pública para despliegues externos como GitHub Pages + Cloudflare Tunnel.
   // Si el enlace temporal de Cloudflare cambia, actualiza únicamente esta constante.
-  const API_BASE_URL = "https://really-reviewer-random-columnists.trycloudflare.com/api";
+  const API_BASE_URL = "https://control-operativo-cop6.loca.lt/api";
   const today = () => new Date().toISOString().slice(0, 10);
   const initialDraft = { numeroAvaluo: "", usuario: "", tipoBien: "", tipoAvaluo: "", solicitante: "", valorAvaluo: "", seEntregoA: "", pagoEntregadoA: "", observacion: "", fechaAvaluo: today(), pagado: false, montoPagado: 0, metodoPago: "", fechaPago: "" };
 
