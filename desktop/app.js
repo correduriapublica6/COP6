@@ -107,19 +107,32 @@
     } catch { return []; }
   }
   function saveTechnicalObjectives(values) { localStorage.setItem(TECHNICAL_OBJECTIVES_KEY, JSON.stringify([...new Set(values.map((value) => String(value).trim()).filter(Boolean))])); }
+  const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
   async function apiRequest(endpoint, options = {}) {
+    const maxAttempts = Number.isFinite(options.retries) ? Math.max(1, Math.min(4, options.retries + 1)) : 3;
+    const { retries: _retries, ...requestOptions } = options;
     let response;
-    try {
-      const requestHeaders = { "Content-Type": "application/json", ...(activeSessionUser ? { "X-User-Name": encodeURIComponent(activeSessionUser) } : {}), ...(options.headers || {}) };
-      requestHeaders["bypass-tunnel-reminder"] = "true";
-      response = await fetch(`${API_BASE_URL}${endpoint}`, { ...options, cache: "no-store", headers: requestHeaders });
-      setServerStatus("online");
-    } catch {
-      setServerStatus("offline");
-      throw new Error("Sin conexión con el servidor de Recepción. Verifica que esté encendido y que la dirección de red sea correcta.");
+    let lastError;
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      try {
+        const requestHeaders = { "Content-Type": "application/json", ...(activeSessionUser ? { "X-User-Name": encodeURIComponent(activeSessionUser) } : {}), ...(requestOptions.headers || {}) };
+        requestHeaders["bypass-tunnel-reminder"] = "true";
+        response = await fetch(`${API_BASE_URL}${endpoint}`, { ...requestOptions, cache: "no-store", headers: requestHeaders });
+        if (response.ok || ![429, 502, 503, 504].includes(response.status) || attempt === maxAttempts) break;
+        lastError = new Error(`Servidor temporalmente no disponible (${response.status}).`);
+      } catch (error) {
+        lastError = error;
+        if (attempt === maxAttempts) break;
+      }
+      await wait(450 * attempt);
     }
+    if (!response) {
+      setServerStatus("offline");
+      throw new Error("Sin conexión con el servidor de Recepción después de varios intentos. Verifica que esté encendido y que la dirección de red sea correcta.");
+    }
+    setServerStatus("online");
     if (!response.ok) {
-      let detail = "No se pudo completar la operación en el servidor.";
+      let detail = lastError?.message || "No se pudo completar la operación en el servidor.";
       try { detail = (await response.json()).error || detail; } catch {}
       if (/tipo de avalúo técnico no es válido/i.test(detail)) {
         detail = "El servidor de Recepción está desactualizado y no reconoce Mobiliario y Bienes Diversos. Reemplaza local-server/server.mjs con la versión actualizada y reinícialo sin borrar la carpeta data.";

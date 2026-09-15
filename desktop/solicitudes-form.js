@@ -10,20 +10,35 @@
   let editingRequestId = "";
   let applicantSession = null;
 
+  const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
   async function api(endpoint, options = {}) {
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 15000);
-    try {
-      const activeInternalUser = window.ControlAvaluosDesktop?.getActiveUser?.() || "";
-      const headers = { "Content-Type": "application/json", "bypass-tunnel-reminder": "true", ...(activeInternalUser ? { "X-User-Name": encodeURIComponent(activeInternalUser) } : {}), ...(applicantSession?.email ? { "X-Applicant-Email": applicantSession.email } : {}), ...(options.headers || {}) };
-      const response = await fetch(`${API}${endpoint}`, { cache: "no-store", ...options, headers, signal: controller.signal });
-      if (!response.ok) { let message = "No se pudo completar la operación."; try { message = (await response.json()).error || message; } catch {} throw new Error(message); }
-      return response.status === 204 ? null : response.json();
-    } catch (error) {
-      if (error?.name === "AbortError") throw new Error("El servidor tardó demasiado en responder. Verifica que Recepción esté encendido y vuelve a intentarlo.");
-      if (error instanceof TypeError) throw new Error("No fue posible comunicarse con el servidor. Verifica la conexión y la dirección de Recepción.");
-      throw error;
-    } finally { window.clearTimeout(timeout); }
+    const maxAttempts = 3;
+    const { retries: _retries, signal: _signal, ...requestOptions } = options;
+    let lastError;
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 10000);
+      try {
+        const activeInternalUser = window.ControlAvaluosDesktop?.getActiveUser?.() || "";
+        const headers = { "Content-Type": "application/json", ...(activeInternalUser ? { "X-User-Name": encodeURIComponent(activeInternalUser) } : {}), ...(applicantSession?.email ? { "X-Applicant-Email": applicantSession.email } : {}), ...(requestOptions.headers || {}) };
+        headers["bypass-tunnel-reminder"] = "true";
+        const response = await fetch(`${API}${endpoint}`, { ...requestOptions, cache: "no-store", headers, signal: controller.signal });
+        if (response.ok) return response.status === 204 ? null : response.json();
+        if (![429, 502, 503, 504].includes(response.status) || attempt === maxAttempts) {
+          let message = "No se pudo completar la operación.";
+          try { message = (await response.json()).error || message; } catch {}
+          throw new Error(message);
+        }
+        lastError = new Error(`Servidor temporalmente no disponible (${response.status}).`);
+      } catch (error) {
+        lastError = error?.name === "AbortError" ? new Error("El servidor tardó demasiado en responder.") : error;
+        if (attempt === maxAttempts || (error?.name !== "AbortError" && !(error instanceof TypeError))) throw error;
+      } finally {
+        window.clearTimeout(timeout);
+      }
+      await wait(450 * attempt);
+    }
+    throw new Error(lastError?.message || "No fue posible comunicarse con el servidor. Verifica la conexión y la dirección de Recepción.");
   }
 
   async function readFiles(input) {
