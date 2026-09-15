@@ -14,9 +14,8 @@
   const DEFAULT_ROLE_BY_USER = { "Juan Manuel Barrera Martínez": "admin", "Francisco Gabriel Hernández Estrada": "admin", "Caridad Rojas Vázquez": "editor", "Ivan de Luna Aldape": "valuador" };
   const VALID_ROLES = ["admin", "editor", "viewer", "valuador", "auditor"];
   const LEGACY_KEYS = ["control-avaluos.desktop.v2", "control-avaluos.desktop.v1"];
-  // API pública para despliegues externos como GitHub Pages + Cloudflare Tunnel.
-  // Si el enlace temporal de Cloudflare cambia, actualiza únicamente esta constante.
-  const API_BASE_URL = "https://clause-cafe-essence-parts.trycloudflare.com/api";
+  // API pública fija para despliegues externos como GitHub Pages.
+  const API_BASE_URL = "https://api.cp6coahuila.com/api";
   const today = () => new Date().toISOString().slice(0, 10);
   const initialDraft = { numeroAvaluo: "", usuario: "", tipoBien: "", tipoAvaluo: "", solicitante: "", valorAvaluo: "", seEntregoA: "", pagoEntregadoA: "", observacion: "", fechaAvaluo: today(), pagado: false, montoPagado: 0, metodoPago: "", fechaPago: "" };
 
