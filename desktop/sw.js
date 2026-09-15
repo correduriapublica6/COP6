@@ -14,7 +14,6 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
   if (url.pathname.startsWith("/api/")) {
     const headers = new Headers(event.request.headers);
-    headers.set("bypass-tunnel-reminder", "true");
     const apiRequest = new Request(event.request, { headers });
     event.respondWith(fetch(apiRequest, { cache: "no-store" }));
     return;

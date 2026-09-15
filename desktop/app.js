@@ -16,7 +16,7 @@
   const LEGACY_KEYS = ["control-avaluos.desktop.v2", "control-avaluos.desktop.v1"];
   // API pública para despliegues externos como GitHub Pages + Cloudflare Tunnel.
   // Si el enlace temporal de Cloudflare cambia, actualiza únicamente esta constante.
-  const API_BASE_URL = "https://control-operativo-cop6.loca.lt/api";
+  const API_BASE_URL = "https://clause-cafe-essence-parts.trycloudflare.com/api";
   const today = () => new Date().toISOString().slice(0, 10);
   const initialDraft = { numeroAvaluo: "", usuario: "", tipoBien: "", tipoAvaluo: "", solicitante: "", valorAvaluo: "", seEntregoA: "", pagoEntregadoA: "", observacion: "", fechaAvaluo: today(), pagado: false, montoPagado: 0, metodoPago: "", fechaPago: "" };
 
@@ -116,7 +116,6 @@
     for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
       try {
         const requestHeaders = { "Content-Type": "application/json", ...(activeSessionUser ? { "X-User-Name": encodeURIComponent(activeSessionUser) } : {}), ...(requestOptions.headers || {}) };
-        requestHeaders["bypass-tunnel-reminder"] = "true";
         response = await fetch(`${API_BASE_URL}${endpoint}`, { ...requestOptions, cache: "no-store", headers: requestHeaders });
         if (response.ok || ![429, 502, 503, 504].includes(response.status) || attempt === maxAttempts) break;
         lastError = new Error(`Servidor temporalmente no disponible (${response.status}).`);

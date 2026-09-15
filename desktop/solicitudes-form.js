@@ -21,7 +21,6 @@
       try {
         const activeInternalUser = window.ControlAvaluosDesktop?.getActiveUser?.() || "";
         const headers = { "Content-Type": "application/json", ...(activeInternalUser ? { "X-User-Name": encodeURIComponent(activeInternalUser) } : {}), ...(applicantSession?.email ? { "X-Applicant-Email": applicantSession.email } : {}), ...(requestOptions.headers || {}) };
-        headers["bypass-tunnel-reminder"] = "true";
         const response = await fetch(`${API}${endpoint}`, { ...requestOptions, cache: "no-store", headers, signal: controller.signal });
         if (response.ok) return response.status === 204 ? null : response.json();
         if (![429, 502, 503, 504].includes(response.status) || attempt === maxAttempts) {
