@@ -110,7 +110,9 @@
   async function apiRequest(endpoint, options = {}) {
     let response;
     try {
-      response = await fetch(`${API_BASE_URL}${endpoint}`, { cache: "no-store", headers: { "Content-Type": "application/json", ...(activeSessionUser ? { "X-User-Name": encodeURIComponent(activeSessionUser) } : {}), ...(options.headers || {}) }, ...options });
+      const requestHeaders = { "Content-Type": "application/json", ...(activeSessionUser ? { "X-User-Name": encodeURIComponent(activeSessionUser) } : {}), ...(options.headers || {}) };
+      requestHeaders["bypass-tunnel-reminder"] = "true";
+      response = await fetch(`${API_BASE_URL}${endpoint}`, { ...options, cache: "no-store", headers: requestHeaders });
       setServerStatus("online");
     } catch {
       setServerStatus("offline");

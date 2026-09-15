@@ -15,7 +15,7 @@
     const timeout = window.setTimeout(() => controller.abort(), 15000);
     try {
       const activeInternalUser = window.ControlAvaluosDesktop?.getActiveUser?.() || "";
-      const headers = { "Content-Type": "application/json", ...(activeInternalUser ? { "X-User-Name": encodeURIComponent(activeInternalUser) } : {}), ...(applicantSession?.email ? { "X-Applicant-Email": applicantSession.email } : {}), ...(options.headers || {}) };
+      const headers = { "Content-Type": "application/json", "bypass-tunnel-reminder": "true", ...(activeInternalUser ? { "X-User-Name": encodeURIComponent(activeInternalUser) } : {}), ...(applicantSession?.email ? { "X-Applicant-Email": applicantSession.email } : {}), ...(options.headers || {}) };
       const response = await fetch(`${API}${endpoint}`, { cache: "no-store", ...options, headers, signal: controller.signal });
       if (!response.ok) { let message = "No se pudo completar la operación."; try { message = (await response.json()).error || message; } catch {} throw new Error(message); }
       return response.status === 204 ? null : response.json();
