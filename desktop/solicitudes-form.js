@@ -41,8 +41,7 @@
   }
 
   async function readFiles(input) {
-    const files = [...(input?.files || [])].slice(0, 8);
-    return Promise.all(files.map((file) => new Promise((resolve) => { const reader = new FileReader(); reader.onload = () => resolve({ name: file.name, type: file.type, size: file.size, data: reader.result }); reader.onerror = () => resolve(null); reader.readAsDataURL(file); }))).then((items) => items.filter(Boolean));
+    return window.ControlAvaluosImageUtils?.uploadFiles(input?.files || [], { maxFiles: 8 }) || [];
   }
 
   function valuadores() {
@@ -181,8 +180,9 @@
     return allowed ? data : "";
   }
   function requestFileUrl(item, index, download = false) {
-    const suffix = download ? "?download=1" : "";
-    return `${API}/service-requests/${encodeURIComponent(item.id)}/files/${index}${suffix}`;
+    const file = Array.isArray(item.archivos) ? item.archivos[index] : null;
+    const suffix = download ? (file?.url?.includes("?") ? "&download=1" : "?download=1") : "";
+    return file?.url ? `${file.url}${suffix}` : `${API}/service-requests/${encodeURIComponent(item.id)}/files/${index}${download ? "?download=1" : ""}`;
   }
   function renderRequestDetail(item) {
     const detail = $("#requestDetailContent");
@@ -193,8 +193,9 @@
     const fileMarkup = files.length ? files.map((file, index) => {
       const name = escapeHtml(file.name || `Archivo ${index + 1}`);
       const data = safeFileData(file);
-      if (!data) return `<li class="request-file-card request-file-unavailable"><span>${name}</span><small>Archivo no disponible</small></li>`;
-      const preview = String(file.type || "").startsWith("image/") ? `<img src="${data}" alt="${name}" />` : file.type === "application/pdf" ? `<iframe title="${name}" src="${data}"></iframe>` : `<div class="request-file-icon" aria-hidden="true">DOC</div>`;
+      const source = file.url || data;
+      if (!source) return `<li class="request-file-card request-file-unavailable"><span>${name}</span><small>Archivo no disponible</small></li>`;
+      const preview = String(file.type || "").startsWith("image/") ? `<img src="${escapeHtml(source)}" alt="${name}" />` : file.type === "application/pdf" ? `<iframe title="${name}" src="${escapeHtml(source)}"></iframe>` : `<div class="request-file-icon" aria-hidden="true">DOC</div>`;
       return `<li class="request-file-card request-file-document">${preview}<span>${name}</span><div class="request-file-actions"><button type="button" class="request-detail-button" data-view-file="${index}">Ver</button><button type="button" class="request-detail-button" data-download-file="${index}">Descargar</button></div></li>`;
     }).join("") : `<li class="request-file-empty">No hay documentos ni imágenes adjuntos.</li>`;
     $("#requestDetailTitle").textContent = `${item.folio || "Solicitud"}`;

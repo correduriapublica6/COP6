@@ -1185,3 +1185,26 @@ h1, h2, h3, h4, .form-header {
   .workspace-header-logo { min-width: 54px !important; }
   .workspace-header-logo img { height: 46px !important; width: 54px !important; }
 }
+
+/* Home: acciones directas por rol */
+.home-actions-section { margin: 24px 0 22px; }
+.home-actions-heading { margin-bottom: 14px; }
+.home-actions-heading h3 { color: #173e55; font-size: 1.38rem; margin: 5px 0 4px; }
+.home-actions-heading p { color: #6b7b84; margin: 0; }
+.home-action-grid { display: grid; gap: 14px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.home-action-card { align-items: flex-start; background: #fff; border: 1px solid #d8e4e9; border-radius: 15px; color: #1f465c; cursor: pointer; display: grid; font: inherit; gap: 12px; grid-template-columns: auto minmax(0, 1fr) auto; min-height: 126px; padding: 18px 16px; position: relative; text-align: left; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
+.home-action-card:hover, .home-action-card:focus-visible { border-color: #8fbdcf; box-shadow: 0 10px 22px rgba(23, 67, 88, .12); outline: none; transform: translateY(-2px); }
+.home-action-card:active { transform: scale(.98); }
+.home-action-card.is-hidden { display: none !important; }
+.home-action-card > span:nth-child(2) { display: flex; flex-direction: column; gap: 7px; padding-right: 4px; }
+.home-action-card strong { color: #183d53; font-size: .97rem; }
+.home-action-card small { color: #6c7e87; font-size: .79rem; line-height: 1.4; }
+.home-action-card b { align-self: end; color: #4b7282; font-size: 1.1rem; font-weight: 500; }
+.home-action-icon { align-items: center; background: #e8f3f6; border-radius: 10px; color: #1d637d; display: inline-flex; flex: 0 0 36px; font-family: Georgia, serif; font-size: 1.2rem; height: 36px; justify-content: center; }
+.home-action-gestion .home-action-icon, .home-action-validacion .home-action-icon { background: #f8efdc; color: #9b6a20; }
+.home-action-solicitudes .home-action-icon, .home-action-buscar .home-action-icon { background: #e9eef4; color: #43677f; }
+.home-action-crear { border-top: 3px solid #c78e30; }
+.home-action-validacion { border-top: 3px solid #2f8194; }
+.home-action-buscar { border-top: 3px solid #547b96; }
+@media (max-width: 900px) { .home-action-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 580px) { .home-action-grid { grid-template-columns: 1fr; } .home-action-card { min-height: 104px; } }

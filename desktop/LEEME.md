@@ -4,9 +4,13 @@ Esta carpeta conserva la aplicación de escritorio de **Correduría Pública 6**
 
 ## Dirección del servidor
 
-La aplicación utiliza la ruta relativa `/api`, por lo que el navegador envía las peticiones al mismo origen desde el que se abrió la aplicación. Esto permite utilizarla mediante una dirección de Cloudflare Tunnel u otro proxy sin que el navegador intente conectarse a `localhost` o a una IP fija.
+La aplicación está configurada para comunicarse con:
 
-La PC o servidor que publique la aplicación debe exponer conjuntamente el frontend y las rutas `/api`. La PC de Recepción debe tener encendido el servidor antes de abrir la aplicación.
+```text
+http://192.168.100.16:3000/api
+```
+
+La PC de recepción debe tener encendido el servidor antes de abrir `index.html`. Si la dirección IPv4 de esa PC cambia, abre `app.js`, localiza la constante `API_BASE_URL` y reemplaza únicamente la dirección IP.
 
 ## Uso diario
 

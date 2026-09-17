@@ -209,13 +209,27 @@
     return { id: editingId || `mobiliario-${Date.now()}-${Math.random().toString(16).slice(2)}`, tipo: 'mobiliario', tipoAvaluo: 'Mobiliario y Bienes Diversos', estadoExpediente, numeroAvaluo: folio.value, solicitante: String(data.get('solicitante') || '').trim(), fechaSolicitud: String(data.get('fechaSolicitud') || ''), fechaVisita: String(data.get('fechaVisita') || ''), fechaAvaluo: String(data.get('fechaAvaluo') || ''), bienesAValuar: String(data.get('bienesAValuar') || '').trim(), propietario: String(data.get('propietario') || '').trim(), ubicacionBienes: String(data.get('ubicacionBienes') || '').trim(), objetivoAvaluo: currentObjective(), propositoAvaluo: String(data.get('propositoAvaluo') || '').trim(), localizacionFoto: locationDataUrl, bienes, valoresMobiliario: bienes, valorActualTotal, valorMercado: Math.round(valorActualTotal), valorMercadoAplicable: Math.round(valorActualTotal) * factor, obsolescencia: { descripcion: document.querySelector('#mobiliarioReplacementDescription').value, cantidad: number(document.querySelector('#mobiliarioReplacementQuantity').value || 1), funcional: functional, economica: economic, factor }, consideraciones: [...considerations.before], consideracionesConclusion: [...considerations.conclusion], creadoPor: app.getActiveUser(), creadoEn: editingCreatedAt || undefined };
   }
 
+  async function persistMobiliarioImages(appraisal) {
+    const utils = window.ControlAvaluosImageUtils;
+    if (!utils) return appraisal;
+    if (appraisal.localizacionFoto?.startsWith?.('data:')) appraisal.localizacionFoto = (await utils.uploadDataUrl(appraisal.localizacionFoto, `localizacion-${appraisal.numeroAvaluo}.jpg`))?.url || '';
+    appraisal.bienes = await Promise.all((appraisal.bienes || []).map(async (item, index) => {
+      if (!item.fotografia?.startsWith?.('data:')) return item;
+      const stored = await utils.uploadDataUrl(item.fotografia, `bien-${index + 1}.jpg`);
+      return { ...item, fotografia: stored?.url || '' };
+    }));
+    appraisal.valoresMobiliario = appraisal.bienes;
+    return appraisal;
+  }
+
   async function saveProgress(index) {
     if (!currentObjective()) { message.textContent = 'Especifica el objeto del avalúo.'; form._mobiliarioGoTo?.(0); return null; }
     if (!folio.value) await refreshFolio();
     message.classList.remove('is-error', 'is-success');
     message.textContent = index === 0 ? 'Generando folio y guardando Antecedentes…' : 'Guardando avance del expediente…';
     try {
-      const stored = await app.saveTechnicalAppraisal(buildAppraisal('borrador'));
+      const appraisal = await persistMobiliarioImages(buildAppraisal('borrador'));
+      const stored = await app.saveTechnicalAppraisal(appraisal);
       editingId = stored.id;
       editingCreatedAt = stored.creadoEn || stored.createdAt || editingCreatedAt;
       folio.value = stored.numeroAvaluo || folio.value;
@@ -275,7 +289,7 @@
   document.querySelector('#addMobiliarioConclusionConsiderationButton').addEventListener('click', () => addConsideration('conclusion', '#mobiliarioConclusionConsiderationInput'));
   document.querySelector('#mobiliarioFunctional').addEventListener('input', updateValueSummary); document.querySelector('#mobiliarioEconomic').addEventListener('input', updateValueSummary); document.querySelector('#mobiliarioReplacementQuantity').addEventListener('input', updateValueSummary);
   objectiveSelect.addEventListener('change', () => { const other = objectiveSelect.value === 'Otro'; otherObjectiveField.hidden = !other; otherObjectiveInput.required = other; if (!other) otherObjectiveInput.value = ''; });
-  form.addEventListener('submit', async (event) => { event.preventDefault(); if (!app.canEdit()) return; if (!itemRecords.length) { message.textContent = 'Agrega al menos un bien en Características antes de guardar.'; form._mobiliarioGoTo?.(1); return; } if (!currentObjective()) { message.textContent = 'Especifica el objeto del avalúo.'; form._mobiliarioGoTo?.(0); return; } const appraisal = buildAppraisal('completo'); message.textContent = 'Guardando el expediente técnico…'; try { const stored = await app.saveTechnicalAppraisal(appraisal); editingId = stored.id; editingCreatedAt = stored.creadoEn || stored.createdAt || editingCreatedAt; folio.value = stored.numeroAvaluo || folio.value; message.classList.remove('is-error'); message.classList.add('is-success'); message.textContent = `Avalúo de Mobiliario y Bienes Diversos ${folio.value} guardado.`; window.setTimeout(() => { document.querySelector('#technicalListPanel').hidden = false; document.querySelector('#technicalCreationPanel').hidden = true; editor.hidden = true; typeSelect.value = ''; typeSelect.dispatchEvent(new Event('change', { bubbles: true })); typePanel.classList.remove('is-hidden'); }, 800); } catch (error) { message.classList.remove('is-success'); message.classList.add('is-error'); message.textContent = error.message || 'No se pudo guardar el avalúo.'; } });
+  form.addEventListener('submit', async (event) => { event.preventDefault(); if (!app.canEdit()) return; if (!itemRecords.length) { message.textContent = 'Agrega al menos un bien en Características antes de guardar.'; form._mobiliarioGoTo?.(1); return; } if (!currentObjective()) { message.textContent = 'Especifica el objeto del avalúo.'; form._mobiliarioGoTo?.(0); return; } let appraisal = buildAppraisal('completo'); message.textContent = 'Guardando el expediente técnico…'; try { appraisal = await persistMobiliarioImages(appraisal); const stored = await app.saveTechnicalAppraisal(appraisal); editingId = stored.id; editingCreatedAt = stored.creadoEn || stored.createdAt || editingCreatedAt; folio.value = stored.numeroAvaluo || folio.value; message.classList.remove('is-error'); message.classList.add('is-success'); message.textContent = `Avalúo de Mobiliario y Bienes Diversos ${folio.value} guardado.`; window.setTimeout(() => { document.querySelector('#technicalListPanel').hidden = false; document.querySelector('#technicalCreationPanel').hidden = true; editor.hidden = true; typeSelect.value = ''; typeSelect.dispatchEvent(new Event('change', { bubbles: true })); typePanel.classList.remove('is-hidden'); }, 800); } catch (error) { message.classList.remove('is-success'); message.classList.add('is-error'); message.textContent = error.message || 'No se pudo guardar el avalúo.'; } });
 
   window.addEventListener('control-avaluos:open-mobiliario-edit', (event) => openEditor(event.detail));
   window.addEventListener('control-avaluos:preview-mobiliario', (event) => printPdf(event.detail));

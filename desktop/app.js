@@ -83,7 +83,15 @@
       return Array.isArray(saved) ? saved : [];
     } catch { return []; }
   }
-  const saveTechnicalAppraisals = () => localStorage.setItem(TECHNICAL_APPRAISALS_KEY, JSON.stringify(technicalAppraisals));
+  function stripInlineImages(value) {
+    if (Array.isArray(value)) return value.map(stripInlineImages);
+    if (!value || typeof value !== "object") return value;
+    return Object.fromEntries(Object.entries(value).map(([key, nested]) => {
+      if (["dataUrl", "localizacionFoto", "fotografia", "foto", "data"].includes(key) && typeof nested === "string" && nested.startsWith("data:")) return [key, ""];
+      return [key, stripInlineImages(nested)];
+    }));
+  }
+  const saveTechnicalAppraisals = () => localStorage.setItem(TECHNICAL_APPRAISALS_KEY, JSON.stringify(technicalAppraisals.map(stripInlineImages)));
   function loadTasks() { try { const saved = JSON.parse(localStorage.getItem(TASKS_KEY) || "[]"); return Array.isArray(saved) ? saved : []; } catch { return []; } }
   const saveTasks = () => localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
   function loadChatMessages() { try { const saved = JSON.parse(localStorage.getItem(CHAT_MESSAGES_KEY) || "[]"); return Array.isArray(saved) ? saved : []; } catch { return []; } }
@@ -478,6 +486,7 @@
     if (activeAppView === "fe-publica" && !canViewFePublica()) switchAppView("avaluos");
     $$(".solicitudes-access").forEach((button) => button.classList.toggle("is-hidden", !canViewRequests()));
     if (activeAppView === "solicitudes" && !canViewRequests()) switchAppView("avaluos");
+    renderHomeActions();
   }
   function renderWelcomeTasks() {
     const assignedList = $("#taskList");
@@ -498,6 +507,23 @@
       list.querySelectorAll("[data-complete-task]:not(:disabled)").forEach((checkbox) => checkbox.addEventListener("change", () => toggleTask(checkbox.dataset.completeTask, checkbox.checked)));
       list.querySelectorAll("[data-remove-task]").forEach((button) => button.addEventListener("click", () => removeTask(button.dataset.removeTask)));
     });
+  }
+  function renderHomeActions() {
+    const permissions = { recepcion: Boolean(activeSessionUser), gestion: canEdit(), solicitudes: canViewRequests(), crear: canEdit(), validacion: canAuthorizeFolios(), buscar: canViewRequests() };
+    $$("[data-home-action]").forEach((card) => {
+      const visible = Boolean(permissions[card.dataset.homeAction]);
+      card.classList.toggle("is-hidden", !visible);
+      card.disabled = !visible;
+    });
+  }
+  function openHomeAction(action) {
+    if (action === "solicitudes" || action === "buscar") { if (canViewRequests()) switchAppView("solicitudes"); return; }
+    if (action === "recepcion") { switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:section", { detail: "recepcion" })); return; }
+    if (["gestion", "crear", "validacion"].includes(action)) {
+      switchAppView("avaluos");
+      window.dispatchEvent(new CustomEvent("control-avaluos:section", { detail: action === "validacion" ? "validacion" : "crear" }));
+      if (action === "crear") window.setTimeout(() => window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-creation")), 0);
+    }
   }
   async function toggleTask(id, completed) {
     const task = tasks.find((item) => item.id === id);
@@ -1014,7 +1040,8 @@
   $("#closeAdminAccessButton").addEventListener("click", () => adminAccessDialog.close());
   $("#cancelAdminAccessButton").addEventListener("click", () => adminAccessDialog.close());
   $("#taskForm").addEventListener("submit", createTask);
-  $("#homeButton").addEventListener("click", () => switchAppView("inicio"));
+  $("#homeButton").addEventListener("click", () => { switchAppView("inicio"); renderHomeActions(); });
+  $$('[data-home-action]').forEach((card) => card.addEventListener('click', () => openHomeAction(card.dataset.homeAction)));
   $("#chatForm").addEventListener("submit", createChatMessage);
   $("#chatToggleButton").addEventListener("click", () => { const widget = $("#chatWidget"); const panel = $("#chatPanel"); const button = $("#chatToggleButton"); const isOpening = widget.hidden || panel.hidden; widget.hidden = false; panel.hidden = !isOpening; button.setAttribute("aria-expanded", String(isOpening)); button.textContent = isOpening ? "Cerrar" : "Abrir Chat"; if (isOpening) { renderChat(); $("#chatMessageInput").focus(); } });
   $("#closeChatButton").addEventListener("click", () => { $("#chatPanel").hidden = true; $("#chatWidget").hidden = true; $("#chatToggleButton").setAttribute("aria-expanded", "false"); $("#chatToggleButton").textContent = "Chat"; });

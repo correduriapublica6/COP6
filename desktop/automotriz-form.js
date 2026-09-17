@@ -187,8 +187,9 @@
       const photos = Array.isArray(vehicle.fotografias) ? vehicle.fotografias.slice(0, 4) : [];
       const photoSlots = Array.from({ length: Math.max(2, photos.length) }, (_, photoIndex) => {
         const photo = photos[photoIndex];
-        return photo?.dataUrl
-          ? `<figure class="vehicle-report-photo"><img src="${photo.dataUrl}" alt="Fotografía ${photoIndex + 1} de ${escapeHtml(unitName)}" /></figure>`
+        const source = photo?.url || photo?.dataUrl;
+        return source
+          ? `<figure class="vehicle-report-photo"><img src="${escapeHtml(source)}" alt="Fotografía ${photoIndex + 1} de ${escapeHtml(unitName)}" /></figure>`
           : `<figure class="vehicle-report-photo is-empty"><span>Espacio para fotografía ${photoIndex + 1}</span></figure>`;
       }).join("");
       const functionalGroupOne = vehicle.factores?.funcionalGrupoUno || [];
@@ -627,7 +628,7 @@
   function renderPhotoPreview(cardId) {
     const gallery = document.querySelector(`[data-photo-gallery="${cardId}"]`);
     const photos = photoStore.get(cardId) || [];
-    gallery.innerHTML = photos.length ? photos.map((photo, index) => `<figure class="photo-preview"><img src="${photo.dataUrl}" alt="Fotografía ${index + 1} del vehículo" /><button class="remove-photo-button" data-remove-photo="${cardId}:${index}" type="button" aria-label="Quitar fotografía ${index + 1}">×</button></figure>`).join("") : `<p class="photo-empty">Aún no se agregan fotografías.</p>`;
+    gallery.innerHTML = photos.length ? photos.map((photo, index) => `<figure class="photo-preview"><img src="${escapeHtml(photo.url || photo.dataUrl || "")}" alt="Fotografía ${index + 1} del vehículo" /><button class="remove-photo-button" data-remove-photo="${cardId}:${index}" type="button" aria-label="Quitar fotografía ${index + 1}">×</button></figure>`).join("") : `<p class="photo-empty">Aún no se agregan fotografías.</p>`;
     gallery.querySelectorAll("[data-remove-photo]").forEach((button) => button.addEventListener("click", () => {
       const [, rawIndex] = button.dataset.removePhoto.split(":");
       const next = [...(photoStore.get(cardId) || [])];
@@ -795,6 +796,20 @@
       calculo: calculation,
     };
   }
+  async function persistAutomotiveImages(appraisal) {
+    const utils = window.ControlAvaluosImageUtils;
+    if (!utils) return appraisal;
+    appraisal.localizacionFoto = appraisal.localizacionFoto?.startsWith?.("data:") ? (await utils.uploadDataUrl(appraisal.localizacionFoto, `localizacion-${appraisal.numeroAvaluo}.jpg`))?.url || "" : appraisal.localizacionFoto;
+    appraisal.vehiculos = await Promise.all(appraisal.vehiculos.map(async (vehicle, vehicleIndex) => ({
+      ...vehicle,
+      fotografias: await Promise.all((vehicle.fotografias || []).map(async (photo, photoIndex) => {
+        if (photo?.url) return photo;
+        const stored = await utils.uploadDataUrl(photo?.dataUrl, `vehiculo-${vehicleIndex + 1}-${photoIndex + 1}.jpg`);
+        return stored ? { name: stored.name, type: stored.type, size: stored.size, url: stored.url, storageName: stored.storageName } : null;
+      })).then((photos) => photos.filter(Boolean)),
+    })));
+    return appraisal;
+  }
 
   function resetTechnicalForm() {
     form.reset();
@@ -950,6 +965,7 @@
       const saveButton = document.querySelector("#saveAutomotrizButton");
       if (saveButton) saveButton.disabled = true;
       message.textContent = "Guardando el expediente técnico…";
+      await persistAutomotiveImages(appraisal);
       const saved = await app.saveTechnicalAppraisal(appraisal);
       folioInput.value = saved.numeroAvaluo || folioInput.value;
       message.classList.remove("is-error");

@@ -9,6 +9,18 @@
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" type="image/png" href="./assets/images/favicon.png" />
     <title>Correduría Pública 6</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Correduría Pública 6">
+    <meta property="og:description" content="Plaza Coahuila">
+    <meta property="og:url" content="https://cp6coahuila.com">
+    <meta property="og:image" content="https://cp6coahuila.com/desktop/preview.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Correduría Pública 6">
+    <meta name="twitter:description" content="Plaza Coahuila">
+    <meta name="twitter:image" content="https://cp6coahuila.com/desktop/preview.png">
+
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="dashboard.css" />
     <link rel="stylesheet" href="override.css" />
@@ -68,8 +80,15 @@
         </header>
 
         <section id="inicioView" class="app-view welcome-view" aria-labelledby="welcomeTitle" hidden>
-          <div class="welcome-card"><div class="welcome-card-main"><h2 id="welcomeTitle">Bienvenido,<span id="welcomeUserName">usuario</span></h2></div><p id="welcomeRoleCopy" class="welcome-copy">Tu espacio está listo para continuar con el control local.</p></div>
-          <section id="welcomeRequestsPanel" class="welcome-requests-panel" hidden><div class="welcome-tasks-header"><div><span class="section-kicker">SOLICITUDES ASIGNADAS</span><h3>Seguimiento de solicitudes</h3></div><button id="openRequestsViewButton" class="subtle-action-button" type="button">Ver solicitudes</button></div><div id="welcomeRequestsTable" class="request-table-wrap"></div></section><div class="welcome-guide"><span class="section-kicker">JORNADA DE TRABAJO</span><h3>Todo listo para una gestión ordenada.</h3></div>
+          <div class="welcome-card"><div class="welcome-card-main"><h2 id="welcomeTitle">Bienvenido, <span id="welcomeUserName">usuario</span></h2><p id="welcomeRoleCopy" class="welcome-copy">Tu espacio está listo para continuar con el control local.</p></div></div>
+          <section class="home-actions-section" aria-labelledby="homeActionsTitle"><div class="home-actions-heading"><div><span class="section-kicker">ACCESOS DIRECTOS</span><h3 id="homeActionsTitle">¿Qué deseas realizar?</h3><p>Selecciona una acción para continuar con tu operación.</p></div></div><div id="homeActionGrid" class="home-action-grid">
+            <button class="home-action-card home-action-recepcion" data-home-action="recepcion" type="button"><span class="home-action-icon">▦</span><span><strong>Recepción</strong><small>Registra y consulta los avalúos recibidos.</small></span><b>→</b></button>
+            <button class="home-action-card home-action-gestion" data-home-action="gestion" type="button"><span class="home-action-icon">✦</span><span><strong>Gestión de Avalúos</strong><small>Consulta y administra expedientes técnicos.</small></span><b>→</b></button>
+            <button class="home-action-card home-action-solicitudes" data-home-action="solicitudes" type="button"><span class="home-action-icon">✉</span><span><strong>Solicitudes</strong><small>Administra las solicitudes de servicio.</small></span><b>→</b></button>
+            <button class="home-action-card home-action-crear" data-home-action="crear" type="button"><span class="home-action-icon">＋</span><span><strong>Crear Avalúo</strong><small>Abre directamente una nueva ficha técnica.</small></span><b>→</b></button>
+            <button class="home-action-card home-action-validacion" data-home-action="validacion" type="button"><span class="home-action-icon">✓</span><span><strong>Validación</strong><small>Autoriza folios y revisa su recepción.</small></span><b>→</b></button>
+            <button class="home-action-card home-action-buscar" data-home-action="buscar" type="button"><span class="home-action-icon">⌕</span><span><strong>Buscar una solicitud</strong><small>Consulta las solicitudes disponibles para tu rol.</small></span><b>→</b></button>
+          </div></section>
           <section class="welcome-tasks" aria-labelledby="tasksTitle"><div class="welcome-tasks-header"><div><span class="section-kicker">SEGUIMIENTO PERSONAL</span><h3 id="tasksTitle">Tareas pendientes <span id="taskCount" class="task-count">0</span></h3></div><span class="task-sync-label">Compartidas en la red local</span></div><div class="welcome-tasks-layout"><div class="task-list-column"><span class="task-column-label">Asignadas a mí</span><div id="taskList" class="task-list"><p class="task-empty">No tienes tareas asignadas.</p></div><span class="task-column-label task-created-label">Asignadas por mí</span><div id="createdTaskList" class="task-list"><p class="task-empty">No has asignado tareas.</p></div></div><form id="taskForm" class="task-form" hidden><span class="task-column-label">Nueva actividad</span><label for="taskTitle">Nueva tarea</label><input id="taskTitle" type="text" maxlength="160" placeholder="Escribe la actividad pendiente" required /><label for="taskDetails">Detalle <span>(opcional)</span></label><textarea id="taskDetails" maxlength="500" rows="2" placeholder="Añade una nota breve"></textarea><label for="taskAssignedTo">Asignar a</label><select id="taskAssignedTo" required><option value="">Selecciona un usuario</option></select><div class="task-form-footer"><small id="taskMessage" role="status"></small><button id="taskSubmitButton" class="subtle-action-button" type="submit">Asignar tarea</button></div></form></div></section>
         </section>
 
@@ -217,6 +236,7 @@
     <dialog id="reportDialog" class="record-dialog report-dialog"><form id="reportForm" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">REPORTE GENERAL</p><h2>Selecciona el periodo</h2></div><button id="closeReportDialogButton" class="icon-button" type="button" aria-label="Cerrar">×</button></div><p class="report-dialog-copy">Para generar un resumen primero selecciona las fechas y da clic en Generar resumen PDF.</p><div class="form-grid"><label>Desde *<input id="reportStartDate" type="date" required /></label><label>Hasta *<input id="reportEndDate" type="date" required /></label></div><p id="reportMessage" class="form-message" role="alert"></p><div class="dialog-actions"><button id="cancelReportDialogButton" class="secondary-button" type="button">Cancelar</button><button class="primary-button" type="submit">Generar resumen PDF</button></div></form></dialog>
     <script src="automotriz-model.js"></script>
     <script src="app.js"></script>
+    <script src="image-utils.js"></script>
     <script>
       if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
     </script>
