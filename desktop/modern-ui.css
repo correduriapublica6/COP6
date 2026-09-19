@@ -455,3 +455,179 @@ textarea:focus-visible { outline: 2px solid var(--glass-cyan-soft) !important; o
   .home-action-grid,
   .avaluos-choice-grid { grid-template-columns: 1fr !important; }
 }
+
+
+/* Final contrast pass — dark glass modals and isolated application columns. */
+#adminAccessDialog,
+#credentialDialog,
+#publicRequestDialog,
+#applicantLoginDialog,
+#applicantRegisterDialog,
+#applicantRequestsDialog,
+#requestDetailDialog,
+#applicantProfileDialog {
+  background: rgba(15, 23, 42, .95) !important;
+  border: 1px solid rgba(255, 255, 255, .2) !important;
+  border-radius: 16px !important;
+  color: #fff !important;
+  overflow: hidden !important;
+}
+#adminAccessDialog form,
+#credentialDialog form,
+#publicRequestDialog form,
+#applicantLoginDialog form,
+#applicantRegisterDialog form,
+#applicantRequestsDialog form,
+#requestDetailDialog form,
+#applicantProfileDialog form {
+  background: transparent !important;
+  color: #fff !important;
+  padding: 26px !important;
+}
+#adminAccessDialog .dialog-heading,
+#credentialDialog .dialog-heading,
+#publicRequestDialog .dialog-heading,
+#applicantLoginDialog .dialog-heading,
+#applicantRegisterDialog .dialog-heading,
+#applicantRequestsDialog .dialog-heading,
+#requestDetailDialog .dialog-heading,
+#applicantProfileDialog .dialog-heading {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, .16) !important;
+  margin-bottom: 24px !important;
+  padding-bottom: 16px !important;
+}
+#adminAccessDialog h2,
+#credentialDialog h2,
+#publicRequestDialog h2,
+#applicantLoginDialog h2,
+#applicantRegisterDialog h2,
+#applicantRequestsDialog h2,
+#requestDetailDialog h2,
+#applicantProfileDialog h2,
+#adminAccessDialog .eyebrow,
+#credentialDialog .eyebrow,
+#publicRequestDialog .eyebrow,
+#applicantLoginDialog .eyebrow,
+#applicantRegisterDialog .eyebrow,
+#applicantRequestsDialog .eyebrow,
+#requestDetailDialog .eyebrow,
+#applicantProfileDialog .eyebrow {
+  color: #f8fafc !important;
+  font-weight: 600 !important;
+}
+#adminAccessDialog label,
+#credentialDialog label,
+#publicRequestDialog label,
+#applicantLoginDialog label,
+#applicantRegisterDialog label,
+#applicantRequestsDialog label,
+#requestDetailDialog label,
+#applicantProfileDialog label {
+  color: #f8fafc !important;
+  font-weight: 600 !important;
+}
+#adminAccessDialog input:not([type="checkbox"]):not([type="radio"]),
+#adminAccessDialog select,
+#credentialDialog input:not([type="checkbox"]):not([type="radio"]),
+#credentialDialog select,
+#publicRequestDialog input:not([type="checkbox"]):not([type="radio"]),
+#publicRequestDialog select,
+#publicRequestDialog textarea,
+#applicantLoginDialog input:not([type="checkbox"]):not([type="radio"]),
+#applicantLoginDialog select,
+#applicantRegisterDialog input:not([type="checkbox"]):not([type="radio"]),
+#applicantRegisterDialog select,
+#applicantRequestsDialog input:not([type="checkbox"]):not([type="radio"]),
+#applicantRequestsDialog select,
+#requestDetailDialog input:not([type="checkbox"]):not([type="radio"]),
+#requestDetailDialog select,
+#applicantProfileDialog input:not([type="checkbox"]):not([type="radio"]),
+#applicantProfileDialog select {
+  background: rgba(255, 255, 255, .1) !important;
+  border: 1px solid rgba(255, 255, 255, .3) !important;
+  color: #fff !important;
+}
+#adminAccessDialog input::placeholder,
+#credentialDialog input::placeholder,
+#publicRequestDialog input::placeholder,
+#publicRequestDialog textarea::placeholder,
+#applicantLoginDialog input::placeholder,
+#applicantRegisterDialog input::placeholder,
+#applicantProfileDialog input::placeholder { color: rgba(248, 250, 252, .68) !important; }
+#adminAccessDialog option,
+#credentialDialog option,
+#publicRequestDialog option,
+#applicantLoginDialog option,
+#applicantRegisterDialog option,
+#applicantProfileDialog option { background: #0f172a !important; color: #f8fafc !important; }
+#adminAccessDialog .login-copy,
+#adminAccessDialog .login-hint,
+#credentialDialog .credential-copy,
+#publicRequestDialog .dialog-copy,
+#applicantLoginDialog .dialog-copy,
+#applicantRegisterDialog .dialog-copy { color: #e2e8f0 !important; }
+#adminAccessDialog .icon-button,
+#credentialDialog .icon-button,
+#publicRequestDialog .icon-button,
+#applicantLoginDialog .icon-button,
+#applicantRegisterDialog .icon-button,
+#applicantRequestsDialog .icon-button,
+#requestDetailDialog .icon-button,
+#applicantProfileDialog .icon-button { background: rgba(255, 255, 255, .12) !important; color: #67e8f9 !important; }
+
+/* Sidebar and content cannot overlap. */
+#appShell.control-shell,
+.control-shell {
+  display: flex !important;
+  flex-flow: row nowrap !important;
+  min-height: 100vh !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+#appShell.control-shell > .app-sidebar,
+.control-shell > .app-sidebar {
+  flex: 0 0 260px !important;
+  position: relative !important;
+  width: 260px !important;
+  z-index: 2 !important;
+}
+#appShell.control-shell > .main-content,
+#appShell.control-shell > .app-workspace,
+.control-shell > .main-content,
+.control-shell > .app-workspace {
+  background: transparent !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+.app-workspace > .app-view,
+.app-workspace > .app-view > section,
+.app-workspace > .app-view > .welcome-card,
+.app-workspace > .app-view > .home-actions-section,
+.app-workspace > .app-view > .welcome-tasks {
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+.app-workspace .welcome-card,
+.app-workspace .home-actions-section,
+.app-workspace .welcome-tasks,
+.app-workspace .dashboard-tabs,
+.app-workspace .search-panel,
+.app-workspace .record-section,
+.app-workspace .technical-form-section,
+.app-workspace .inline-panel,
+.app-workspace .request-filter-row,
+.app-workspace .request-table-wrap {
+  background: rgba(255, 255, 255, .12) !important;
+  border-color: rgba(255, 255, 255, .2) !important;
+}
+@media (max-width: 860px) {
+  #appShell.control-shell,
+  .control-shell { flex-direction: column !important; overflow: visible !important; }
+  #appShell.control-shell > .app-sidebar,
+  .control-shell > .app-sidebar { flex-basis: auto !important; width: 100% !important; }
+}
