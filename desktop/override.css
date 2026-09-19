@@ -1208,3 +1208,8 @@ h1, h2, h3, h4, .form-header {
 .home-action-buscar { border-top: 3px solid #547b96; }
 @media (max-width: 900px) { .home-action-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 580px) { .home-action-grid { grid-template-columns: 1fr; } .home-action-card { min-height: 104px; } }
+
+
+/* Glassmorphism integration layer. The detailed visual system lives in modern-ui.css. */
+.glass-card, .glass-panel { -webkit-backdrop-filter: blur(16px) saturate(125%); backdrop-filter: blur(16px) saturate(125%); }
+body[data-server-status="online"] .sidebar-status-dot { box-shadow: 0 0 12px rgba(34, 211, 238, .85); }
