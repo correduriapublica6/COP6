@@ -229,3 +229,128 @@ fieldset legend { color: rgba(235, 250, 254, .88) !important; }
 /* Compatibility hook for future markup */
 .glass-card { background: var(--glass-panel) !important; border: 1px solid var(--glass-border) !important; box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,.12) !important; -webkit-backdrop-filter: blur(16px) saturate(125%); backdrop-filter: blur(16px) saturate(125%); }
 .progressive-glow { color: var(--glass-cyan-soft) !important; text-shadow: 0 0 18px rgba(34, 211, 238, .35); }
+
+
+/* Legibilidad y brillo — revisión 2 */
+body,
+.home-action-card,
+.home-action-card strong,
+.avaluos-choice-card,
+.avaluos-choice-copy strong,
+.technical-section-heading h3,
+.subtopic-header h2,
+.workspace-header h1,
+.dialog-heading h2 {
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+}
+
+.public-entry-panel,
+.login-visual,
+.app-workspace,
+.workspace-header,
+.search-panel,
+.record-section,
+.expiry-section,
+.delivered-section,
+.technical-list-panel,
+.technical-search-panel,
+.technical-form-section,
+.technical-intro,
+.avaluos-menu,
+.inline-panel,
+.dashboard-tabs,
+.status-list-heading,
+.record-dialog,
+.vehicle-card,
+.factor-group,
+.values-table-block,
+.task-panel,
+.chat-panel,
+.home-action-card,
+.avaluos-choice-card {
+  background: rgba(255, 255, 255, .12) !important;
+  border: 1px solid rgba(255, 255, 255, .25) !important;
+  position: relative;
+}
+
+.public-entry-panel::before,
+.login-visual::before,
+.app-workspace::before,
+.workspace-header::before,
+.home-action-card::before,
+.avaluos-choice-card::before {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent);
+  content: "";
+  height: 1px;
+  left: 10%;
+  opacity: .7;
+  position: absolute;
+  right: 10%;
+  top: 0;
+  animation: glass-light-pulse 3.8s ease-in-out infinite;
+}
+
+@keyframes glass-light-pulse {
+  0%, 100% { opacity: .28; }
+  50% { opacity: .95; }
+}
+
+.home-action-card,
+.avaluos-choice-card {
+  overflow: hidden;
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease, background .22s ease !important;
+}
+.home-action-card:hover,
+.home-action-card:focus-visible,
+.avaluos-choice-card:hover,
+.avaluos-choice-card:focus-visible {
+  background: rgba(255, 255, 255, .17) !important;
+  border-color: rgba(103, 232, 249, .92) !important;
+  box-shadow: 0 0 26px rgba(34, 211, 238, .28), 0 22px 42px rgba(2, 12, 27, .28), inset 0 1px 0 rgba(255,255,255,.35) !important;
+  outline: none;
+  transform: translateY(-4px) !important;
+}
+
+.home-actions-heading h3,
+.home-action-card strong,
+.avaluos-menu-intro h2,
+.avaluos-choice-copy strong,
+.technical-section-heading h3,
+.subtopic-header h2 { color: #f8fdff !important; font-family: Inter, "Segoe UI", sans-serif !important; font-weight: 800 !important; }
+.home-actions-heading p,
+.home-action-card small,
+.avaluos-menu-intro p:not(.eyebrow),
+.avaluos-choice-copy small,
+.technical-section-heading p,
+.workspace-description,
+.login-copy,
+.login-hint,
+.dialog-copy { color: #e2e8f0 !important; }
+.home-action-card small,
+.avaluos-choice-copy small { font-size: .84rem; line-height: 1.5; }
+
+.home-action-icon,
+.avaluos-choice-icon {
+  background: rgba(34, 211, 238, .18) !important;
+  border: 1px solid rgba(103, 232, 249, .48) !important;
+  box-shadow: 0 0 18px rgba(34, 211, 238, .2), inset 0 1px 0 rgba(255,255,255,.35) !important;
+  filter: saturate(1.15);
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif !important;
+  text-shadow: 0 0 12px rgba(103, 232, 249, .55);
+}
+.home-action-card .home-action-icon { font-size: 1.22rem; }
+
+/* Más aire entre navegación y contenido principal */
+.app-shell { column-gap: 34px !important; }
+.app-workspace { margin-left: 8px !important; padding-left: 18px !important; }
+@media (max-width: 900px) {
+  .app-shell { column-gap: 18px !important; }
+  .app-workspace { margin-left: 0 !important; padding-left: 0 !important; }
+}
+
+/* Estado de foco accesible y texto secundario de alto contraste */
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible { outline: 2px solid var(--glass-cyan-soft) !important; outline-offset: 3px; }
