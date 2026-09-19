@@ -17,7 +17,7 @@
   // API pública fija para despliegues externos como GitHub Pages.
   const API_BASE_URL = "https://api.cp6coahuila.com/api";
   const today = () => new Date().toISOString().slice(0, 10);
-  const initialDraft = { numeroAvaluo: "", usuario: "", tipoBien: "", tipoAvaluo: "", solicitante: "", valorAvaluo: "", seEntregoA: "", pagoEntregadoA: "", observacion: "", fechaAvaluo: today(), pagado: false, montoPagado: 0, metodoPago: "", fechaPago: "" };
+  const initialDraft = { numeroAvaluo: "", usuario: "", asesorValuador: "", tipoBien: "", tipoAvaluo: "", solicitante: "", valorAvaluo: "", seEntregoA: "", pagoEntregadoA: "", observacion: "", fechaAvaluo: today(), pagado: false, montoPagado: 0, metodoPago: "", fechaPago: "" };
 
   let records = loadRecords();
   let technicalAppraisals = loadTechnicalAppraisals();
@@ -759,13 +759,13 @@
   async function removeRecord(id) { if (!isAdmin()) return; const record = records.find((item) => item.id === id); if (!record || !window.confirm(`¿Eliminar el avalúo ${record.numeroAvaluo}? Esta acción no se puede deshacer.`)) return; try { await deleteRemoteRecord(id); records = records.filter((item) => item.id !== id); saveRecords(); render(); } catch (error) { window.alert(error.message); } }
   function formDraft() {
     const data = new FormData(form);
-    return { numeroAvaluo: normalizeNumber(data.get("numeroAvaluo")), usuario: String(data.get("usuario") || "").trim(), tipoBien: String(data.get("tipoBien") || "").trim(), tipoAvaluo: String(data.get("tipoAvaluo") || "").trim(), solicitante: String(data.get("solicitante") || "").trim(), valorAvaluo: parseMoney(data.get("valorAvaluo")), seEntregoA: String(data.get("seEntregoA") || "").trim(), pagoEntregadoA: paidInput.checked ? String(data.get("pagoEntregadoA") || "") : "", observacion: String(data.get("observacion") || "").trim(), fechaAvaluo: String(data.get("fechaAvaluo") || ""), pagado: paidInput.checked, montoPagado: paidInput.checked ? parseMoney(data.get("montoPagado")) : 0, metodoPago: paidInput.checked ? String(data.get("metodoPago") || "") : "", fechaPago: paidInput.checked ? String(data.get("fechaPago") || "") : "" };
+    return { numeroAvaluo: normalizeNumber(data.get("numeroAvaluo")), usuario: String(data.get("usuario") || "").trim(), asesorValuador: String(data.get("asesorValuador") || "").trim(), tipoBien: String(data.get("tipoBien") || "").trim(), tipoAvaluo: String(data.get("tipoAvaluo") || "").trim(), solicitante: String(data.get("solicitante") || "").trim(), valorAvaluo: parseMoney(data.get("valorAvaluo")), seEntregoA: String(data.get("seEntregoA") || "").trim(), pagoEntregadoA: paidInput.checked ? String(data.get("pagoEntregadoA") || "") : "", observacion: String(data.get("observacion") || "").trim(), fechaAvaluo: String(data.get("fechaAvaluo") || ""), pagado: paidInput.checked, montoPagado: paidInput.checked ? parseMoney(data.get("montoPagado")) : 0, metodoPago: paidInput.checked ? String(data.get("metodoPago") || "") : "", fechaPago: paidInput.checked ? String(data.get("fechaPago") || "") : "" };
   }
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!canEditReception()) return;
     const draft = formDraft();
-    const required = [draft.numeroAvaluo, draft.usuario, draft.tipoBien, draft.tipoAvaluo, draft.solicitante, draft.fechaAvaluo];
+    const required = [draft.numeroAvaluo, draft.usuario, draft.tipoBien, draft.tipoAvaluo, draft.asesorValuador, draft.solicitante, draft.fechaAvaluo];
     if (!/^\d{4}$/.test(draft.numeroAvaluo)) { $("#formMessage").textContent = "El número de avalúo debe tener exactamente cuatro dígitos."; return; }
     if (!serverOnline) { $("#formMessage").textContent = "No fue posible comunicarse con el servidor de Recepción. Verifica la dirección, el puerto 3000 y /api/health antes de registrar."; return; }
     if (!authorizedAppraisalNumbers.includes(draft.numeroAvaluo)) { $("#formMessage").textContent = `El avalúo ${draft.numeroAvaluo} no ha sido autorizado para su registro por Administración o Auditoría. Autorízalo primero desde Avalúos > Validación.`; return; }

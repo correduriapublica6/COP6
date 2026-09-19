@@ -794,3 +794,106 @@ textarea:focus-visible { outline: 2px solid var(--glass-cyan-soft) !important; o
   .values-table,
   .table-card table { min-width: 620px; }
 }
+
+
+/* Recepción: formulario claro, industrial y sin Glassmorphism. */
+#recordEditor,
+#recordEditor form {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, .08) !important;
+  color: #0f172a !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+#recordEditor form { padding: 24px !important; }
+#recordEditor .dialog-heading {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  margin-bottom: 20px !important;
+  padding: 0 0 14px !important;
+}
+#recordEditor .dialog-heading h2,
+#recordEditor .dialog-heading .eyebrow,
+#recordEditor label,
+#recordEditor .form-label {
+  color: #1e293b !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-weight: 600 !important;
+}
+#recordEditor .record-form-grid {
+  align-items: start !important;
+  display: grid !important;
+  gap: 16px !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+#recordEditor .record-primary-fields,
+#recordEditor .record-secondary-fields {
+  display: grid !important;
+  gap: 14px !important;
+  grid-column: 1 / -1 !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+#recordEditor .record-primary-fields { border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; }
+#recordEditor .record-secondary-fields { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+#recordEditor .record-form-grid > label { min-width: 0 !important; }
+#recordEditor input:not([type="checkbox"]),
+#recordEditor select,
+#recordEditor textarea {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  color: #0f172a !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .88rem !important;
+  margin-top: 6px !important;
+  min-height: 42px !important;
+  padding: 9px 10px !important;
+  width: 100% !important;
+}
+#recordEditor input:not([type="checkbox"]):focus,
+#recordEditor select:focus,
+#recordEditor textarea:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, .12) !important;
+  outline: none !important;
+}
+#recordEditor .payment-details {
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  display: grid !important;
+  gap: 14px !important;
+  grid-column: 1 / -1 !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  padding: 14px !important;
+}
+#recordEditor .dialog-actions {
+  border-top: 1px solid #e2e8f0 !important;
+  margin-top: 18px !important;
+  padding-top: 16px !important;
+}
+#recordEditor .primary-button,
+#recordEditor .secondary-button,
+#recordEditor .receipt-button {
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  transform: none !important;
+}
+#recordEditor .icon-button { background: transparent !important; color: #475569 !important; box-shadow: none !important; }
+@media (max-width: 900px) {
+  #recordEditor .record-form-grid,
+  #recordEditor .record-primary-fields,
+  #recordEditor .record-secondary-fields,
+  #recordEditor .payment-details { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 600px) {
+  #recordEditor .record-form-grid,
+  #recordEditor .record-primary-fields,
+  #recordEditor .record-secondary-fields,
+  #recordEditor .payment-details { grid-template-columns: 1fr !important; }
+}
