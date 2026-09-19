@@ -631,3 +631,166 @@ textarea:focus-visible { outline: 2px solid var(--glass-cyan-soft) !important; o
   #appShell.control-shell > .app-sidebar,
   .control-shell > .app-sidebar { flex-basis: auto !important; width: 100% !important; }
 }
+
+
+/* Data tables — clean white card treatment */
+.table-card,
+.operational-table-wrap,
+.request-table-wrap,
+.values-table-wrap {
+  background: #ffffff !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, .25) !important;
+  color: #0f172a !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+}
+.operational-table-wrap,
+.request-table-wrap { margin-top: 0 !important; }
+.operational-table,
+.request-table,
+.values-table,
+.table-card table,
+.operational-table-wrap table,
+.request-table-wrap table,
+.values-table-wrap table {
+  background: #ffffff !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  color: #0f172a !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  min-width: 680px;
+  width: 100% !important;
+}
+.operational-table thead,
+.request-table thead,
+.values-table thead,
+.table-card thead { background: #f1f5f9 !important; }
+.operational-table th,
+.request-table th,
+.values-table th,
+.table-card th {
+  background: #f1f5f9 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #475569 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .055em !important;
+  padding: 13px 12px !important;
+  text-align: left !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+.operational-table td,
+.request-table td,
+.values-table td,
+.table-card td {
+  background: #ffffff !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: #334155 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .83rem !important;
+  padding: 12px !important;
+  vertical-align: middle !important;
+}
+.operational-table tbody tr:hover td,
+.request-table tbody tr:hover td,
+.values-table tbody tr:hover td { background: #f8fafc !important; }
+.operational-table tbody tr:last-child td,
+.request-table tbody tr:last-child td,
+.values-table tbody tr:last-child td { border-bottom: 0 !important; }
+.operational-table .avaluo-list-number,
+.request-table strong,
+.table-card strong { color: #0f172a !important; font-weight: 800 !important; }
+.operational-table .avaluo-list-requester,
+.request-table td { color: #334155 !important; }
+
+/* Existing section header becomes the light table-card bar. */
+.app-workspace .status-list-heading,
+.app-workspace .technical-list-panel .status-list-heading {
+  align-items: center !important;
+  background: #f8fafc !important;
+  border: 0 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  border-radius: 12px 12px 0 0 !important;
+  box-shadow: none !important;
+  color: #0f172a !important;
+  display: flex !important;
+  margin: 0 !important;
+  min-height: 58px !important;
+  padding: 15px 18px !important;
+}
+.app-workspace .status-list-heading h2 {
+  color: #0f172a !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+}
+.app-workspace .status-list-heading .section-count {
+  background: #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+/* Pastel state badges */
+.avaluo-status,
+.payment-badge,
+.request-status,
+.request-state-badge {
+  border: 0 !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  font-size: .72rem !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  padding: 6px 10px !important;
+  white-space: nowrap !important;
+}
+.avaluo-status.paid,
+.payment-badge.paid,
+.request-status-concluida,
+.request-status-entregada { background: #dcfce7 !important; color: #166534 !important; }
+.avaluo-status.pending,
+.payment-badge.pending,
+.request-status-recibida,
+.request-status-en-revisión { background: #fef9c3 !important; color: #854d0e !important; }
+.avaluo-status.expired,
+.payment-badge.expired { background: #fee2e2 !important; color: #991b1b !important; }
+
+/* Compact outlined actions */
+.operational-table .record-action,
+.request-table .request-detail-button,
+.request-table .request-action-cell button,
+.table-card .record-action {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 7px !important;
+  box-shadow: none !important;
+  color: #334155 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .72rem !important;
+  font-weight: 700 !important;
+  min-width: auto !important;
+  padding: 6px 9px !important;
+  transform: none !important;
+}
+.operational-table .record-action:hover,
+.request-table .request-detail-button:hover,
+.request-table .request-action-cell button:hover,
+.table-card .record-action:hover {
+  background: #f8fafc !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, .14) !important;
+  color: #0f172a !important;
+}
+.operational-table .record-action.receipt { border-color: #86efac !important; color: #166534 !important; }
+.operational-table .record-action.delete { border-color: #fca5a5 !important; color: #991b1b !important; }
+.table-action-cell { white-space: nowrap !important; }
+
+@media (max-width: 760px) {
+  .operational-table,
+  .request-table,
+  .values-table,
+  .table-card table { min-width: 620px; }
+}

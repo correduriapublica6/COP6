@@ -292,7 +292,8 @@
     } catch { return []; }
   }
   function saveAddedUsers(users) { localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(users)); }
-  const allUsers = () => remoteUsers?.length ? [...new Set(remoteUsers.map((user) => user.name))] : [...USERS, ...loadAddedUsers()];
+  const prioritizeJuan = (names) => [...new Set(names)].sort((a, b) => (/juan manuel barrera mart[ií]nez/i.test(a) ? 0 : 1) - (/juan manuel barrera mart[ií]nez/i.test(b) ? 0 : 1) || a.localeCompare(b, "es"));
+  const allUsers = () => remoteUsers?.length ? prioritizeJuan(remoteUsers.map((user) => user.name)) : prioritizeJuan([...USERS, ...loadAddedUsers()]);
   function loadRoles() {
     try {
       const saved = JSON.parse(localStorage.getItem(ROLE_STORAGE_KEY) || "{}");
@@ -711,7 +712,7 @@
   function render() {
     const visible = getVisibleRecords();
     const operationalRecords = getRecordsForOperationalView(operationalView, visible);
-    const titles = { todos: "Todos los avalúos", "pendientes-entrega": "Pendientes de entrega", "entregados-sin-pago": "Entregados sin registro de pago", pagados: "Pagados", vencidos: "Vencidos" };
+    const titles = { todos: "Registros Recientes", "pendientes-entrega": "Pendientes de entrega", "entregados-sin-pago": "Entregados sin registro de pago", pagados: "Pagados", vencidos: "Vencidos" };
     $("#filteredCount").textContent = `${visible.length} ${visible.length === 1 ? "resultado" : "resultados"}`;
     $("#statusListTitle").textContent = titles[operationalView];
     $("#statusListCount").textContent = String(operationalRecords.length);
