@@ -1213,3 +1213,78 @@ h1, h2, h3, h4, .form-header {
 /* Glassmorphism integration layer. The detailed visual system lives in modern-ui.css. */
 .glass-card, .glass-panel { -webkit-backdrop-filter: blur(16px) saturate(125%); backdrop-filter: blur(16px) saturate(125%); }
 body[data-server-status="online"] .sidebar-status-dot { box-shadow: 0 0 12px rgba(34, 211, 238, .85); }
+
+
+/* Solicitudes: datos legibles sobre tarjeta clara */
+#solicitudesView .request-table-wrap,
+#registeredApplicantsTable .request-table-wrap,
+.welcome-requests-panel .request-table-wrap {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, .08) !important;
+}
+#solicitudesView .request-table,
+#registeredApplicantsTable .request-table,
+.welcome-requests-panel .request-table {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+}
+#solicitudesView .request-table th,
+#registeredApplicantsTable .request-table th,
+.welcome-requests-panel .request-table th {
+  background: #f1f5f9 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #475569 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .04em !important;
+  text-transform: uppercase !important;
+}
+#solicitudesView .request-table td,
+#registeredApplicantsTable .request-table td,
+.welcome-requests-panel .request-table td {
+  background: #ffffff !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: #334155 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .84rem !important;
+}
+#solicitudesView .request-table tbody tr:hover td,
+#registeredApplicantsTable .request-table tbody tr:hover td,
+.welcome-requests-panel .request-table tbody tr:hover td { background: #f8fafc !important; }
+#solicitudesView .request-table strong,
+#registeredApplicantsTable .request-table strong,
+.welcome-requests-panel .request-table strong { color: #0f172a !important; }
+#solicitudesView .request-table select,
+#registeredApplicantsTable .request-table select,
+.welcome-requests-panel .request-table select {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+
+/* Logo institucional al doble de su tamaño anterior */
+.login-visual-logo {
+  min-height: 184px !important;
+}
+.login-visual-logo img {
+  height: 184px !important;
+  width: 176px !important;
+}
+.workspace-header-logo {
+  min-width: 152px !important;
+}
+.workspace-header-logo img {
+  height: 124px !important;
+  width: 152px !important;
+}
+@media (max-width: 760px) {
+  .login-visual-logo { min-height: 144px !important; }
+  .login-visual-logo img { height: 144px !important; width: 176px !important; }
+  .workspace-header-logo { min-width: 108px !important; }
+  .workspace-header-logo img { height: 92px !important; width: 108px !important; }
+}
