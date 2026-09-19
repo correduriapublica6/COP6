@@ -354,3 +354,104 @@ a:focus-visible,
 select:focus-visible,
 input:focus-visible,
 textarea:focus-visible { outline: 2px solid var(--glass-cyan-soft) !important; outline-offset: 3px; }
+
+
+/* Layout cleanup — sidebar and workspace remain in normal document flow. */
+.control-shell,
+.app-shell.control-shell {
+  align-items: stretch !important;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+  min-height: 100vh !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+.app-sidebar {
+  align-self: stretch !important;
+  flex: 0 0 260px !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  position: relative !important;
+  top: auto !important;
+  width: 260px !important;
+  z-index: 1 !important;
+}
+.main-content,
+.app-workspace {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  padding: 2rem clamp(24px, 4vw, 60px) 3.5rem !important;
+  position: relative !important;
+  width: auto !important;
+}
+.workspace-header {
+  align-items: flex-start !important;
+  display: grid !important;
+  gap: 1rem 1.5rem !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  margin-bottom: 1.75rem !important;
+  min-width: 0 !important;
+  padding: 1.25rem !important;
+}
+.workspace-header > div:first-child { min-width: 0 !important; }
+.workspace-header-logo { align-self: start !important; grid-column: 2 !important; grid-row: 1 !important; }
+.workspace-actions { align-items: center !important; grid-column: 1 / -1 !important; grid-row: 2 !important; justify-content: flex-end !important; min-width: 0 !important; }
+.workspace-header h1,
+.workspace-header .workspace-description { overflow-wrap: anywhere; }
+
+/* Never use a solid white surface in the operational shell. */
+.app-workspace .dashboard-tabs,
+.app-workspace .inline-panel,
+.app-workspace .inline-record-editor,
+.app-workspace .technical-list-panel,
+.app-workspace .technical-form-section,
+.app-workspace .values-table-block,
+.app-workspace .vehicle-card,
+.app-workspace .factor-group,
+.app-workspace .record-section,
+.app-workspace .search-panel,
+.app-workspace .status-list-heading,
+.app-workspace .request-table-wrap,
+.app-workspace .development-card,
+.app-workspace .admin-card,
+.app-workspace .setting-card {
+  background: rgba(255, 255, 255, .12) !important;
+  border-color: rgba(255, 255, 255, .25) !important;
+}
+
+.home-action-grid,
+.avaluos-choice-grid {
+  display: grid !important;
+  gap: 1.5rem !important;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  min-width: 0 !important;
+}
+.home-action-card,
+.avaluos-choice-card {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+.home-action-card > span:nth-child(2),
+.avaluos-choice-copy { min-width: 0 !important; overflow-wrap: anywhere; }
+
+@media (max-width: 860px) {
+  .control-shell,
+  .app-shell.control-shell { flex-direction: column !important; }
+  .app-sidebar { flex: 0 0 auto !important; min-height: auto !important; width: 100% !important; }
+  .sidebar-nav { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+  .sidebar-footer { margin-top: 1rem !important; }
+  .main-content,
+  .app-workspace { padding: 1.25rem !important; }
+}
+@media (max-width: 620px) {
+  .workspace-header { grid-template-columns: 1fr !important; }
+  .workspace-header-logo { grid-column: 1 !important; grid-row: 2 !important; }
+  .workspace-actions { grid-row: 3 !important; justify-content: flex-start !important; }
+  .home-action-grid,
+  .avaluos-choice-grid { grid-template-columns: 1fr !important; }
+}
