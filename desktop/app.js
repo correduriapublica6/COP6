@@ -927,10 +927,36 @@
       applyRoleUi();
     } catch (error) { message.textContent = error.message; message.classList.add("is-error"); }
   }
+  async function updateUserEmail(user, nextEmail) {
+    if (!isAdmin() || !allUsers().includes(user)) return;
+    const email = String(nextEmail || "").trim().toLowerCase();
+    const message = $("#roleMessage");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { message.textContent = "Captura un correo electrónico válido."; message.classList.add("is-error"); return; }
+    try {
+      const remoteUser = remoteUsers?.find((item) => item.name === user);
+      if (serverOnline && remoteUser) {
+        const saved = await apiRequest(`/users/${encodeURIComponent(remoteUser.id)}`, { method: "PUT", body: JSON.stringify({ email }) });
+        remoteUsers = remoteUsers.map((item) => item.id === saved.id ? { ...item, ...saved } : item);
+      }
+      message.classList.remove("is-error");
+      message.classList.add("is-success");
+      message.textContent = `Correo de ${user} actualizado.`;
+      renderUserPermissions();
+    } catch (error) { message.textContent = error.message; message.classList.add("is-error"); }
+  }
   function renderUserPermissions() {
     const credentials = loadCredentials();
-    $("#userPermissionsList").innerHTML = allUsers().map((user) => { const role = roleFor(user);     const detail = role === "admin" ? "Control total, contraseñas, resumen y configuración" : role === "auditor" ? "Acceso total a Avalúos, Fe Pública, resumen, Chat y Notas/Tareas" : role === "valuador" ? "Puede crear y editar avalúos técnicos; Recepción solo en consulta" : role === "editor" ? "Puede crear y editar avalúos" : "Solo consulta, recibos y listados"; const roleControl = DEFAULT_ROLE_BY_USER[user] === "admin" ? `<span class="role-badge admin">Administrador</span>` : `<label class="role-select-label">Rol<select class="role-select" data-role-user="${escapeHtml(user)}" aria-label="Cambiar rol de ${escapeHtml(user)}"><option value="editor" ${role === "editor" ? "selected" : ""}>Editor(a)</option><option value="viewer" ${role === "viewer" ? "selected" : ""}>Solo lectura</option><option value="valuador" ${role === "valuador" ? "selected" : ""}>Valuador</option><option value="auditor" ${role === "auditor" ? "selected" : ""}>Auditor</option></select></label>`; return `<article class="user-permission-row"><div class="user-initial">${escapeHtml(user.split(" ").map((part) => part[0]).slice(0, 2).join(""))}</div><div><strong>${escapeHtml(user)}</strong><span>${detail}</span></div><div class="user-permission-status">${roleControl}<small>${credentials[user] ? "Contraseña configurada" : "Sin contraseña"}</small></div></article>`; }).join("");
+    $("#userPermissionsList").innerHTML = allUsers().map((user) => {
+      const role = roleFor(user);
+      const remoteUser = remoteUsers?.find((item) => item.name === user);
+      const email = remoteUser?.email || "";
+      const detail = role === "admin" ? "Control total, contraseñas, resumen y configuración" : role === "auditor" ? "Acceso total a Avalúos, Fe Pública, resumen, Chat y Notas/Tareas" : role === "valuador" ? "Puede crear y editar avalúos técnicos; Recepción solo en consulta" : role === "editor" ? "Puede crear y editar avalúos" : "Solo consulta, recibos y listados";
+      const roleControl = DEFAULT_ROLE_BY_USER[user] === "admin" ? `<span class="role-badge admin">Administrador</span>` : `<label class="role-select-label">Rol<select class="role-select" data-role-user="${escapeHtml(user)}" aria-label="Cambiar rol de ${escapeHtml(user)}"><option value="editor" ${role === "editor" ? "selected" : ""}>Editor(a)</option><option value="viewer" ${role === "viewer" ? "selected" : ""}>Solo lectura</option><option value="valuador" ${role === "valuador" ? "selected" : ""}>Valuador</option><option value="auditor" ${role === "auditor" ? "selected" : ""}>Auditor</option></select></label>`;
+      const emailEditor = `<label class="user-email-editor">Correo electrónico<input type="email" value="${escapeHtml(email)}" data-email-user="${escapeHtml(user)}" placeholder="correo@ejemplo.com" required /><button type="button" class="text-action-button" data-save-email-user="${escapeHtml(user)}">Guardar correo</button></label>`;
+      return `<article class="user-permission-row"><div class="user-initial">${escapeHtml(user.split(" ").map((part) => part[0]).slice(0, 2).join(""))}</div><div><strong>${escapeHtml(user)}</strong><span>${detail}</span>${emailEditor}</div><div class="user-permission-status">${roleControl}<small>${credentials[user] ? "Contraseña configurada" : "Sin contraseña"}</small></div></article>`;
+    }).join("");
     $$(".role-select").forEach((select) => select.addEventListener("change", () => updateUserRole(select.dataset.roleUser, select.value)));
+    $$('[data-save-email-user]').forEach((button) => button.addEventListener("click", () => { const input = document.querySelector(`[data-email-user="${CSS.escape(button.dataset.saveEmailUser)}"]`); updateUserEmail(button.dataset.saveEmailUser, input?.value); }));
   }
 
   async function registerUser(event) {
@@ -938,14 +964,16 @@
     if (!isAdmin()) return;
     const user = normalizeUserName($("#newUserName").value);
     const role = VALID_ROLES.includes($("#newUserRole").value) ? $("#newUserRole").value : "viewer";
+    const email = String($("#newUserEmail").value || "").trim().toLowerCase();
     const message = $("#addUserMessage");
     if (user.length < 3) { message.textContent = "Escribe el nombre completo del nuevo usuario."; return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { message.textContent = "Captura un correo electrónico válido."; return; }
     if (!/[\p{L}]/u.test(user)) { message.textContent = "El nombre debe incluir al menos una letra."; return; }
     if (allUsers().some((candidate) => candidate.localeCompare(user, "es", { sensitivity: "base" }) === 0)) { message.textContent = "Ese usuario ya está registrado."; return; }
     const nextRole = role === "editor" ? "editor" : "viewer";
     try {
       if (serverOnline) {
-        const created = await apiRequest("/users", { method: "POST", body: JSON.stringify({ name: user, role: nextRole }) });
+        const created = await apiRequest("/users", { method: "POST", body: JSON.stringify({ name: user, role: nextRole, email }) });
         remoteUsers = [...(remoteUsers || []), created];
       } else {
         const addedUsers = loadAddedUsers();
@@ -957,6 +985,7 @@
       }
     } catch (error) { message.textContent = error.message; message.classList.add("is-error"); return; }
     $("#newUserName").value = "";
+    $("#newUserEmail").value = "";
     message.classList.add("is-success");
     message.textContent = `${user} fue registrado como ${roleLabel(nextRole)}. Configura su contraseña antes de iniciar sesión.`;
     syncUserOptions();

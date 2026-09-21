@@ -1288,3 +1288,9 @@ body[data-server-status="online"] .sidebar-status-dot { box-shadow: 0 0 12px rgb
   .workspace-header-logo { min-width: 108px !important; }
   .workspace-header-logo img { height: 92px !important; width: 108px !important; }
 }
+
+
+/* Administración: editor de correo del usuario */
+.user-email-editor { display: flex; align-items: end; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.user-email-editor input { flex: 1 1 230px; min-width: 180px; }
+.user-email-editor button { flex: 0 0 auto; }
