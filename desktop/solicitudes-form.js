@@ -41,20 +41,23 @@
   }
 
   async function readFiles(input) {
-    return window.ControlAvaluosImageUtils?.uploadFiles(input?.files || [], { maxFiles: 8 }) || [];
+    // FileList no es un arreglo: convertimos explícitamente todos los archivos seleccionados.
+    const selectedFiles = Array.from(input?.files || []);
+    if (!selectedFiles.length) return [];
+    return (await window.ControlAvaluosImageUtils?.uploadFiles(selectedFiles, { maxFiles: 8 })) || [];
   }
 
   function valuadores() {
     const users = window.ControlAvaluosDesktop?.allUsers?.() || [];
     const remote = window.__controlRemoteUsers || [];
-    return [...new Set([...users, ...remote.filter((user) => user.role === "valuador").map((user) => user.name)])].filter((name) => /Ivan|Juan|Gabriel|Cesar|Diana|Caridad|Francisco|Emmanuel/i.test(name));
+    const names = [...new Set([...users, ...remote.filter((user) => user.role === "valuador").map((user) => user.name)])].filter((name) => /Ivan|Juan|Gabriel|Cesar|Diana|Caridad|Francisco|Emmanuel/i.test(name)); return names.sort((a, b) => { const priority = (name) => /juan manuel barrera mart[ií]nez/i.test(name) ? 0 : 1; return priority(a) - priority(b) || a.localeCompare(b, "es"); });
   }
 
   async function fillAdvisors() {
     const select = $("#publicRequestAdvisor");
     if (!select) return;
     let names = valuadores();
-    try { const state = await api("/state"); window.__controlRemoteUsers = state.users || []; names = [...new Set((state.users || []).filter((user) => user.role === "valuador").map((user) => user.name).concat(names))]; } catch {}
+    try { const state = await api("/state"); window.__controlRemoteUsers = state.users || []; names = [...new Set((state.users || []).filter((user) => user.role === "valuador").map((user) => user.name).concat(names))].sort((a, b) => (/juan manuel barrera mart[ií]nez/i.test(a) ? 0 : 1) - (/juan manuel barrera mart[ií]nez/i.test(b) ? 0 : 1) || a.localeCompare(b, "es")); } catch {}
     select.innerHTML = `<option value="">Selecciona un valuador</option>${names.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("")}`;
   }
   function notaryOptions(selected = "") {
@@ -96,7 +99,7 @@
     if (type === "Inmuebles") {
       container.innerHTML = `<div class="request-subgrid"><label>Modalidad *<select name="modalidadInmueble" id="requestInmuebleMode"><option value="">Selecciona</option><option>Referido</option><option>Comercial</option><option>Otro</option></select></label><div id="requestInmuebleModeFields"></div><label>Tipo de bien *<select name="tipoBien"><option value="">Selecciona</option><option>Terreno</option><option>Construcción</option></select></label><label>Valor de la operación<input name="valorOperacion" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></label><label>Número de enajenantes<input name="numeroEnajenantes" type="number" min="0" step="1" /></label><label>Propietario<input name="propietario" /></label></div>`;
       $("#requestInmuebleMode").addEventListener("change", renderInmuebleModeFields);
-    } else if (type === "Maquinaria y equipo") {
+    } else if (["Automotriz", "Maquinaria y equipo", "Mobiliario y Bienes Diversos"].includes(type)) {
       container.innerHTML = `<div class="request-subgrid"><label>Calle<input name="calle" /></label><label>Número<input name="numero" /></label><label>Colonia<input name="colonia" /></label><label>Ciudad<input name="ciudad" /></label><label>Propietario<input name="propietario" /></label></div>`;
     } else if (type === "Intangibles") {
       container.innerHTML = `<div class="request-subgrid"><label>Tipo de intangible *<select name="tipoIntangible" id="requestIntangibleType"><option value="">Selecciona</option><option>Empresa en marcha</option><option>Marca</option><option>Patente</option><option>Títulos accionarios</option><option>Partes sociales</option><option>Otro</option></select></label><div id="requestIntangibleOther"></div></div>`;
