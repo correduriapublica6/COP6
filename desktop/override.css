@@ -1294,3 +1294,13 @@ body[data-server-status="online"] .sidebar-status-dot { box-shadow: 0 0 12px rgb
 .user-email-editor { display: flex; align-items: end; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .user-email-editor input { flex: 1 1 230px; min-width: 180px; }
 .user-email-editor button { flex: 0 0 auto; }
+
+
+/* Solicitudes: archivos acumulados desde varias carpetas */
+.request-attachments-list { margin-top: 8px; }
+.request-attachments-list ul { background: #f7faf9; border: 1px solid #d9e5e8; border-radius: 8px; display: grid; gap: 6px; list-style: none; margin: 0; padding: 8px; }
+.request-attachments-list li { align-items: center; display: flex; gap: 8px; min-width: 0; }
+.request-attachments-list li span { color: #244b5b; flex: 1; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.request-attachments-list li small { color: #718188; white-space: nowrap; }
+.request-attachments-list li button { background: #fff; border: 1px solid #c8d8de; border-radius: 6px; color: #9a433c; cursor: pointer; font: 600 12px Georgia, 'Times New Roman', serif; padding: 4px 8px; }
+.request-attachments-list li button:hover { background: #fff1ef; border-color: #b8736c; }

@@ -9,6 +9,7 @@
   let requests = [];
   let editingRequestId = "";
   let applicantSession = null;
+  let archivosSeleccionados = [];
 
   const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
   async function api(endpoint, options = {}) {
@@ -40,9 +41,27 @@
     throw new Error(lastError?.message || "No fue posible comunicarse con el servidor. Verifica la conexión y la dirección de Recepción.");
   }
 
-  async function readFiles(input) {
-    // FileList no es un arreglo: convertimos explícitamente todos los archivos seleccionados.
-    const selectedFiles = Array.from(input?.files || []);
+  function renderSelectedFiles() {
+    const list = $("#publicRequestAttachmentsList");
+    if (!list) return;
+    list.innerHTML = archivosSeleccionados.length ? `<ul>${archivosSeleccionados.map((file, index) => `<li><span title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</span><small>${Math.max(1, Math.round(file.size / 1024))} KB</small><button type="button" data-remove-request-file="${index}" aria-label="Quitar ${escapeHtml(file.name)}">Quitar</button></li>`).join("")}</ul>` : "";
+    list.querySelectorAll("[data-remove-request-file]").forEach((button) => button.addEventListener("click", () => {
+      archivosSeleccionados.splice(Number(button.dataset.removeRequestFile), 1);
+      renderSelectedFiles();
+    }));
+  }
+  function addSelectedFiles(fileList) {
+    Array.from(fileList || []).forEach((file) => {
+      if (!(file instanceof File)) return;
+      const duplicate = archivosSeleccionados.some((saved) => saved.name === file.name && saved.size === file.size && saved.lastModified === file.lastModified);
+      if (!duplicate && archivosSeleccionados.length < 8) archivosSeleccionados.push(file);
+    });
+    const input = $("#publicRequestAttachments");
+    if (input) input.value = "";
+    renderSelectedFiles();
+  }
+  async function readFiles(files) {
+    const selectedFiles = Array.from(files || []);
     if (!selectedFiles.length) return [];
     return (await window.ControlAvaluosImageUtils?.uploadFiles(selectedFiles, { maxFiles: 8 })) || [];
   }
@@ -126,6 +145,8 @@
     const form = getRequestForm();
     if (!form) return;
     form.reset();
+    archivosSeleccionados = [];
+    renderSelectedFiles();
     $("#publicRequestDynamicFields").innerHTML = "";
     editingRequestId = "";
     if (applicantSession) {
@@ -219,7 +240,7 @@
     const values = formObject(form);
     setBusy(form, true, "Enviando…");
     try {
-      const files = await readFiles(form.elements.archivos);
+      const files = await readFiles(archivosSeleccionados);
       const payload = { solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo }, tipoAvaluo: values.tipoAvaluo, asesor: values.asesor, notaria: values.notaria || values.notariaReferida || "", modalidad: values.modalidadInmueble || "", datosEspecificos: values, archivos: files, contactoVisita: { nombre: values.contactoVisitaNombre, telefono: values.contactoVisitaTelefono }, observaciones: values.observaciones, requesterEmail: values.correo || applicantSession?.email || "" };
       const result = await api(editingRequestId ? `/service-requests/${encodeURIComponent(editingRequestId)}` : "/service-requests", { method: editingRequestId ? "PUT" : "POST", body: JSON.stringify(payload) });
       const actionLabel = editingRequestId ? "Solicitud actualizada" : "Solicitud registrada";
@@ -382,6 +403,7 @@
     if (window.__controlSolicitudesBound) return;
     window.__controlSolicitudesBound = true;
     $("#publicRequestType")?.addEventListener("change", () => { renderDynamicFields(); fillNotaries(); });
+    $("#publicRequestAttachments")?.addEventListener("change", (event) => addSelectedFiles(event.target.files));
     window.addEventListener("control-avaluos:notarias-updated", () => { if (selectedNotaryValue() || $("#requestNotaryMunicipality")) renderNotarySearch(selectedNotaryValue()); });
     $("#publicRequestForm")?.addEventListener("submit", submitPublicRequest);
     $("#applicantRegisterForm")?.addEventListener("submit", registerApplicant);

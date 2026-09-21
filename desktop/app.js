@@ -122,7 +122,8 @@
     let lastError;
     for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
       try {
-        const requestHeaders = { "Content-Type": "application/json", ...(activeSessionUser ? { "X-User-Name": encodeURIComponent(activeSessionUser) } : {}), ...(requestOptions.headers || {}) };
+        const isFormData = typeof FormData !== "undefined" && requestOptions.body instanceof FormData;
+        const requestHeaders = { ...(isFormData ? {} : { "Content-Type": "application/json" }), ...(activeSessionUser ? { "X-User-Name": encodeURIComponent(activeSessionUser) } : {}), ...(requestOptions.headers || {}) };
         response = await fetch(`${API_BASE_URL}${endpoint}`, { ...requestOptions, cache: "no-store", headers: requestHeaders });
         if (response.ok || ![429, 502, 503, 504].includes(response.status) || attempt === maxAttempts) break;
         lastError = new Error(`Servidor temporalmente no disponible (${response.status}).`);

@@ -40,13 +40,12 @@
   async function uploadFiles(files, options = {}) {
     const selected = [...(files || [])].filter(Boolean).slice(0, Number(options.maxFiles || 8));
     if (!selected.length) return [];
-    const prepared = [];
+    const formData = new FormData();
     for (const original of selected) {
       const file = await compressImage(original);
-      const data = await fileToDataUrl(file);
-      prepared.push({ name: file.name, type: file.type || 'application/octet-stream', size: file.size, data });
+      formData.append('files', file, file.name);
     }
-    const result = await app().apiRequest('/uploads', { method: 'POST', body: JSON.stringify({ files: prepared }) });
+    const result = await app().apiRequest('/uploads', { method: 'POST', body: formData });
     return Array.isArray(result?.files) ? result.files.map((file) => ({ ...file, url: file.url ? new URL(file.url, app().getApiBaseUrl()).href : "" })) : [];
   }
 
