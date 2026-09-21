@@ -627,13 +627,13 @@
   }
 
   const VIEW_DETAILS = {
-    inicio: { title: "Correduría Pública 6", kicker: "CORREDURÍA PÚBLICA 6", description: "" },
+    inicio: { title: "Correduría Pública 6", kicker: "", description: "" },
     solicitudes: { title: "Solicitudes de servicio", kicker: "CONTROL DE SOLICITUDES", description: "Administra solicitudes, asesores y estados del proceso." },
-    avaluos: { title: "Avalúos", kicker: "CORREDURÍA PÚBLICA 6", description: "Registra, consulta, filtra, edita y da seguimiento a cada avalúo." },
-    "fe-publica": { title: "Fe Pública", kicker: "MÓDULO EN DESARROLLO", description: "" },
+    avaluos: { title: "Avalúos", kicker: "", description: "Registra, consulta, filtra, edita y da seguimiento a cada avalúo." },
+    "fe-publica": { title: "Fe Pública", kicker: "", description: "" },
     resumen: { title: "Resumen general", kicker: "", description: "" },
     usuarios: { title: "Usuarios", kicker: "ACCESO LOCAL", description: "Gestiona usuarios administrativos y usuarios externos registrados." },
-    configuracion: { title: "Configuración", kicker: "RESPALDO LOCAL", description: "Exporta, importa y respalda la información del equipo." },
+    configuracion: { title: "Configuración", kicker: "", description: "Exporta, importa y respalda la información del equipo." },
   };
   function setUsersSection(section = "menu") {
     const menu = $("#usuariosMenuSection");
