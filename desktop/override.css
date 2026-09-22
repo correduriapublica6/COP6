@@ -1703,3 +1703,31 @@ html body #appShell:not(.is-hidden):not([hidden]) { display: block !important; v
 /* En login, ningún módulo administrativo puede ocupar espacio visual o interactivo. */
 #loginScreen:not(.is-hidden) ~ #appShell,
 #loginScreen:not(.is-hidden) ~ #appShell * { visibility: hidden; }
+
+
+/* Separación definitiva entre Login y aplicación: regla global de máxima prioridad. */
+.is-hidden,
+[hidden],
+#appShell.is-hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* El Login es hermano independiente de #appShell y ocupa la pantalla solo sin sesión. */
+body > #loginScreen:not(.is-hidden):not([hidden]) {
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+body > #appShell:not(.is-hidden):not([hidden]) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  overflow: visible !important;
+}
