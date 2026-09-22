@@ -11,6 +11,7 @@
   let applicantSession = null;
   let archivosSeleccionados = [];
   let archivosExistentesEnEdicion = [];
+  let applicantRefreshTimer = null;
 
   const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
   async function api(endpoint, options = {}) {
@@ -22,7 +23,8 @@
       const timeout = window.setTimeout(() => controller.abort(), 10000);
       try {
         const activeInternalUser = window.ControlAvaluosDesktop?.getActiveUser?.() || "";
-        const headers = { "Content-Type": "application/json", ...(activeInternalUser ? { "X-User-Name": encodeURIComponent(activeInternalUser) } : {}), ...(applicantSession?.email ? { "X-Applicant-Email": applicantSession.email } : {}), ...(requestOptions.headers || {}) };
+        const isFormData = typeof FormData !== "undefined" && requestOptions.body instanceof FormData;
+        const headers = { ...(isFormData ? {} : { "Content-Type": "application/json" }), ...(activeInternalUser ? { "X-User-Name": encodeURIComponent(activeInternalUser) } : {}), ...(applicantSession?.email ? { "X-Applicant-Email": applicantSession.email } : {}), ...(applicantSession?.id ? { "X-Applicant-Id": applicantSession.id } : {}), ...(requestOptions.headers || {}) };
         const response = await fetch(`${API}${endpoint}`, { ...requestOptions, cache: "no-store", headers, signal: controller.signal });
         if (response.ok) return response.status === 204 ? null : response.json();
         if (![429, 502, 503, 504].includes(response.status) || attempt === maxAttempts) {
@@ -179,6 +181,7 @@
     content.hidden = true;
     home.hidden = false;
     $("#loginScreen")?.classList.add("applicant-dashboard-active");
+    if (!applicantRefreshTimer) applicantRefreshTimer = window.setInterval(() => renderApplicantHomeRequests(), 2500);
     $("#loginVisualBrand")?.setAttribute("hidden", "true");
     $("#applicantVisualPanel")?.setAttribute("hidden", "true");
     $("#openInternalAccessButton")?.setAttribute("hidden", "true");
@@ -193,6 +196,7 @@
     const home = $("#applicantHomePanel");
     if (content) content.hidden = false;
     if (home) home.hidden = true;
+    if (applicantRefreshTimer) { window.clearInterval(applicantRefreshTimer); applicantRefreshTimer = null; }
     $("#loginScreen")?.classList.remove("applicant-dashboard-active");
     $("#loginVisualBrand")?.removeAttribute("hidden");
     $("#applicantVisualPanel")?.setAttribute("hidden", "true");
@@ -203,7 +207,7 @@
     const table = $("#applicantHomeRequestsTable");
     if (!table || !applicantSession) return;
     try {
-      const own = await api(`/service-requests?email=${encodeURIComponent(applicantSession.email)}`);
+      const own = await api(`/mis-solicitudes?email=${encodeURIComponent(applicantSession.email)}&usuario_id=${encodeURIComponent(applicantSession.id || "")}`);
       table.innerHTML = applicantOwnRequestsTable(own);
       if ($("#applicantTotalRequests")) $("#applicantTotalRequests").textContent = own.length;
       if ($("#applicantActiveRequests")) $("#applicantActiveRequests").textContent = own.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
@@ -223,6 +227,27 @@
     const file = Array.isArray(item.archivos) ? item.archivos[index] : null;
     const suffix = download ? (file?.url?.includes("?") ? "&download=1" : "?download=1") : "";
     return file?.url ? `${file.url}${suffix}` : `${API}/service-requests/${encodeURIComponent(item.id)}/files/${index}${download ? "?download=1" : ""}`;
+  }
+  async function annexDocuments(item) {
+    if (!item?.id) return;
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*,.pdf,.doc,.docx";
+    input.multiple = true;
+    input.addEventListener("change", async () => {
+      const selected = Array.from(input.files || []);
+      if (!selected.length) return;
+      const formData = new FormData();
+      selected.slice(0, 8).forEach((file) => formData.append("documentos", file, file.name));
+      try {
+        const result = await api(`/solicitudes/${encodeURIComponent(item.id)}/anexar-documento`, { method: "POST", body: formData });
+        const updated = result.solicitud || { ...item, archivos: [...(item.archivos || []), ...(result.archivos || [])] };
+        await renderApplicantHomeRequests();
+        renderRequestDetail(updated);
+        window.alert("Documento(s) anexado(s) correctamente al expediente.");
+      } catch (error) { window.alert(error.message || "No fue posible anexar el documento."); }
+    });
+    input.click();
   }
   function renderRequestDetail(item) {
     const detail = $("#requestDetailContent");
@@ -249,7 +274,7 @@
     detail.innerHTML = `<div class="client-detail-hero"><div><span class="client-folio">Folio ${escapeHtml(item.folio || "Pendiente")}</span><h3>${escapeHtml(item.tipoAvaluo || "Solicitud de avalúo")}</h3><p>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</p></div><span class="client-status-badge client-status-${requestStatusClass(item.estado)}">${escapeHtml(item.estado || "Recibida")}</span></div><section class="client-detail-section"><div class="client-detail-section-heading"><div><span class="section-kicker">MÓDULO 1</span><h3>Línea del tiempo</h3></div><strong>${escapeHtml(item.estado || "Recibida")}</strong></div>${timeline}</section><section class="client-detail-section"><div class="client-detail-section-heading"><div><span class="section-kicker">RESUMEN</span><h3>Datos del trámite</h3></div></div><div class="client-detail-grid"><div><small>Valuador asignado</small><strong>${escapeHtml(item.asesor || "En asignación")}</strong></div><div><small>Tipo de avalúo</small><strong>${escapeHtml(item.tipoAvaluo || "")}</strong></div><div><small>Contacto</small><strong>${escapeHtml(item.contactoVisita?.nombre || "Pendiente")}</strong></div></div></section><section class="client-detail-section"><div class="client-detail-section-heading"><div><span class="section-kicker">MÓDULO 3</span><h3>Expediente digital</h3><p>Documentos y fotografías entregados con tu solicitud.</p></div><button type="button" class="client-outline-button" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documento faltante</button></div><ul class="request-files-grid">${fileMarkup}</ul></section>${finalPdfAction ? `<section class="client-detail-download"><span class="section-kicker">MÓDULO 2</span><h3>Portal de descargas</h3><p>Tu avalúo final está disponible.</p>${finalPdfAction}</section>` : ""}<section class="request-detail-section client-detail-legacy"><h3>Información registrada</h3><dl>${Object.entries(info).filter(([key, value]) => key !== "archivos" && value && typeof value !== "object").map(([key, value]) => `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("") || "<p>No hay datos adicionales.</p>"}</dl></section>`;
     detail.querySelectorAll("[data-view-file]").forEach((button) => button.addEventListener("click", () => { const index = Number(button.dataset.viewFile); const popup = window.open("about:blank", "_blank", "noopener"); if (popup) popup.location.href = requestFileUrl(item, index); else window.location.href = requestFileUrl(item, index); }));
     detail.querySelectorAll("[data-download-file]").forEach((button) => button.addEventListener("click", () => { const link = document.createElement("a"); link.href = requestFileUrl(item, Number(button.dataset.downloadFile), true); link.download = files[Number(button.dataset.downloadFile)]?.name || "archivo"; document.body.appendChild(link); link.click(); link.remove(); }));
-    detail.querySelector("[data-attach-missing]")?.addEventListener("click", () => editOwnRequest(item));
+    detail.querySelector("[data-attach-missing]")?.addEventListener("click", () => annexDocuments(item));
     openDialog(dialog);
   }
   function bindRequestDetailButtons(container, list) { container.querySelectorAll("[data-request-detail]").forEach((button) => button.addEventListener("click", () => { const item = list.find((candidate) => candidate.id === button.dataset.requestDetail); if (item) renderRequestDetail(item); })); }
@@ -265,7 +290,7 @@
     setBusy(form, true, "Enviando…");
     try {
       const files = await readFiles(archivosSeleccionados);
-      const payload = { solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo }, tipoAvaluo: values.tipoAvaluo, asesor: values.asesor, notaria: values.notaria || values.notariaReferida || "", modalidad: values.modalidadInmueble || "", datosEspecificos: values, archivos: [...archivosExistentesEnEdicion, ...files], contactoVisita: { nombre: values.contactoVisitaNombre, telefono: values.contactoVisitaTelefono }, observaciones: values.observaciones, requesterEmail: values.correo || applicantSession?.email || "" };
+      const payload = { solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo }, tipoAvaluo: values.tipoAvaluo, asesor: values.asesor, notaria: values.notaria || values.notariaReferida || "", modalidad: values.modalidadInmueble || "", datosEspecificos: values, archivos: [...archivosExistentesEnEdicion, ...files], contactoVisita: { nombre: values.contactoVisitaNombre, telefono: values.contactoVisitaTelefono }, observaciones: values.observaciones, usuario_id: applicantSession?.id || values.usuario_id || "", requesterEmail: values.correo || applicantSession?.email || "" };
       const result = await api(editingRequestId ? `/service-requests/${encodeURIComponent(editingRequestId)}` : "/service-requests", { method: editingRequestId ? "PUT" : "POST", body: JSON.stringify(payload) });
       const actionLabel = editingRequestId ? "Solicitud actualizada" : "Solicitud registrada";
       setMessage(message, `${actionLabel} con folio ${result.folio}. Conserva este número para consultar el avance.`, "success");
@@ -298,7 +323,7 @@
     if (!applicantSession) return;
     const table = $("#applicantRequestsTable");
     if (!table) return;
-    const own = await api(`/service-requests?email=${encodeURIComponent(applicantSession.email)}`);
+    const own = await api(`/mis-solicitudes?email=${encodeURIComponent(applicantSession.email)}&usuario_id=${encodeURIComponent(applicantSession.id || "")}`);
     table.innerHTML = applicantOwnRequestsTable(own);
     bindRequestDetailButtons(table, own);
     table.querySelectorAll("[data-edit-own-request]").forEach((button) => button.addEventListener("click", () => { const item = own.find((candidate) => candidate.id === button.dataset.editOwnRequest); if (item) editOwnRequest(item); }));
@@ -411,7 +436,10 @@
     visible = visible.filter((item) => (!query || JSON.stringify(item).toLowerCase().includes(query)) && (!status || item.estado === status));
     table.innerHTML = requestRows(visible, role === "admin" || role === "auditor", true, role === "admin");
     bindRequestDetailButtons(table, visible);
-    table.querySelectorAll("[data-request-status]").forEach((select) => select.addEventListener("change", async () => { const item = requests.find((request) => request.id === select.dataset.requestStatus); if (!item) return; try { await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ estado: select.value }) }); await renderRequests(); } catch (error) { window.alert(error.message); } })); table.querySelectorAll("[data-delete-request]").forEach((button) => button.addEventListener("click", () => deleteRequest(button.dataset.deleteRequest)));
+    table.querySelectorAll("[data-request-status]").forEach((select) => select.addEventListener("change", async () => { const item = requests.find((request) => request.id === select.dataset.requestStatus); if (!item) return; try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ estado: select.value }) });
+        requests = requests.map((request) => request.id === item.id ? updated : request);
+        await renderRequests();
+        window.dispatchEvent(new CustomEvent("control-avaluos:request-updated", { detail: updated })); } catch (error) { window.alert(error.message); } })); table.querySelectorAll("[data-delete-request]").forEach((button) => button.addEventListener("click", () => deleteRequest(button.dataset.deleteRequest)));
   }
 
   async function renderWelcomeRequests() {
