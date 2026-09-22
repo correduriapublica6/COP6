@@ -1525,3 +1525,30 @@ body[data-server-status="online"] .sidebar-status-dot { box-shadow: 0 0 12px rgb
 .client-request-table .client-status-badge { display: inline-block; font-size: 10px; padding: 7px 9px; white-space: nowrap; }
 .sr-only { height: 1px; margin: -1px; overflow: hidden; position: absolute; width: 1px; clip: rect(0, 0, 0, 0); }
 @media (max-width: 720px) { .client-request-toolbar { align-items: stretch; flex-direction: column; } .client-request-filter { flex-basis: auto; } }
+
+
+/* MI PORTAL — fondo claro y tarjetas de indicadores */
+#loginScreen.applicant-dashboard-active,
+#loginScreen.applicant-dashboard-active .public-entry-panel,
+#loginScreen.applicant-dashboard-active .applicant-home-panel {
+  background: #f8fafc !important;
+  color: #1e293b !important;
+}
+#loginScreen.applicant-dashboard-active .client-dashboard-intro h2,
+#loginScreen.applicant-dashboard-active .client-dashboard-intro h2#applicantWelcomeTitle {
+  color: #1e293b !important;
+}
+#loginScreen.applicant-dashboard-active .client-dashboard-stats article {
+  background: #ffffff !important;
+  border: 1px solid #d4af37 !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, .06) !important;
+}
+#loginScreen.applicant-dashboard-active .client-dashboard-stats span,
+#loginScreen.applicant-dashboard-active .client-dashboard-stats strong {
+  color: #1e293b !important;
+}
+#loginScreen.applicant-dashboard-active .client-history-section {
+  background: #ffffff !important;
+  border: 1px solid #d4af37 !important;
+  margin-top: 20px !important;
+}
