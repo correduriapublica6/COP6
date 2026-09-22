@@ -588,7 +588,9 @@
     const currentRole = roleFor(user);
     $("#welcomeRoleCopy").textContent = currentRole === "admin" ? "Tienes acceso administrativo para gestionar los avalúos, el resumen y la configuración local." : currentRole === "auditor" ? "Tienes acceso total a Avalúos, Fe Pública, Resumen general, Chat y Notas/Tareas." : currentRole === "valuador" ? "Puedes crear y editar avalúos técnicos, además de usar el Chat y registrar Notas/Tareas; Recepción es solo de consulta." : currentRole === "editor" ? "Puedes registrar y editar avalúos, además de consultar el Control de saldos." : "Puedes consultar los avalúos, recibos y listados disponibles en este equipo.";
     loginScreen.classList.add("is-hidden");
+    loginScreen.hidden = true;
     appShell.classList.remove("is-hidden");
+    appShell.hidden = false;
     appShell.classList.remove("is-entering");
     applyRoleUi();
     window.setTimeout(() => appShell.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
@@ -601,8 +603,10 @@
     if (adminAccessDialog?.open) adminAccessDialog.close();
     activeSessionUser = "";
     appShell.classList.add("is-hidden");
+    appShell.hidden = true;
     appShell.classList.remove("is-entering");
     loginScreen.classList.remove("is-hidden", "is-exiting");
+    loginScreen.hidden = false;
     loginPassword.value = "";
     loginMessage.textContent = "";
     $("#openCredentialSetupButton").classList.toggle("is-hidden", Object.keys(loadCredentials()).length > 0);

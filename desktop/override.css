@@ -1686,3 +1686,20 @@ body[data-server-status="online"] .sidebar-status-dot { box-shadow: 0 0 12px rgb
   .control-shell .app-workspace { padding: 22px 18px 42px !important; }
   #loginScreen.applicant-dashboard-active .client-dashboard-header { margin-left: -5vw !important; margin-right: -5vw !important; }
 }
+
+
+/* Aislamiento estricto de autenticación: nunca mostrar el dashboard sin sesión */
+html body #appShell.is-hidden,
+html body #appShell[hidden],
+html body .app-shell.is-hidden,
+html body .app-shell[hidden] { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
+html body #loginScreen.is-hidden,
+html body #loginScreen[hidden] { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
+html body #loginScreen:not(.is-hidden):not([hidden]) { display: grid !important; visibility: visible !important; opacity: 1 !important; }
+html body [hidden] { display: none !important; }
+/* El contenedor administrativo conserva el layout horizontal únicamente después de autenticarse. */
+html body #appShell:not(.is-hidden):not([hidden]) { display: block !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+
+/* En login, ningún módulo administrativo puede ocupar espacio visual o interactivo. */
+#loginScreen:not(.is-hidden) ~ #appShell,
+#loginScreen:not(.is-hidden) ~ #appShell * { visibility: hidden; }
