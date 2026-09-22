@@ -1973,3 +1973,137 @@ body > #appShell:not(.is-hidden):not([hidden]) {
 .control-shell .app-view[hidden] {
   display: none !important;
 }
+
+
+/* Ajuste final del header: institución a la izquierda y usuario a la derecha. */
+.control-shell .app-sidebar {
+  align-items: center !important;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  min-height: 78px !important;
+  padding: 0 30px !important;
+  width: 100% !important;
+}
+.control-shell .sidebar-brand {
+  align-items: center !important;
+  justify-self: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.control-shell .sidebar-brand-copy {
+  display: block !important;
+}
+.control-shell .sidebar-brand strong {
+  color: #fffdf8 !important;
+  display: block !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 1.05rem !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+.control-shell .sidebar-brand-copy > span,
+.control-shell .sidebar-brand strong small {
+  display: none !important;
+}
+.control-shell .sidebar-footer {
+  align-items: center !important;
+  display: flex !important;
+  gap: 18px !important;
+  grid-column: auto !important;
+  justify-self: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: static !important;
+}
+.control-shell .admin-header-actions {
+  display: flex !important;
+  gap: 7px !important;
+}
+.control-shell .admin-header-actions #adminProfileButton {
+  display: none !important;
+}
+.control-shell > .floating-nav-capsule {
+  max-width: 90% !important;
+  padding: 10px 25px !important;
+  width: auto !important;
+}
+.control-shell > .floating-nav-capsule .sidebar-link {
+  color: #1e293b !important;
+  font-weight: 600 !important;
+  min-width: max-content !important;
+  padding: 9px 12px !important;
+}
+.control-shell > .floating-nav-capsule .sidebar-link .nav-icon,
+.control-shell > .floating-nav-capsule .sidebar-link span:last-child {
+  color: #1e293b !important;
+}
+.control-shell > .floating-nav-capsule .sidebar-link.is-active,
+.control-shell > .floating-nav-capsule .sidebar-link.is-active .nav-icon,
+.control-shell > .floating-nav-capsule .sidebar-link.is-active span:last-child,
+.control-shell > .floating-nav-capsule .sidebar-link:hover,
+.control-shell > .floating-nav-capsule .sidebar-link:hover .nav-icon,
+.control-shell > .floating-nav-capsule .sidebar-link:hover span:last-child {
+  color: #17130d !important;
+}
+/* Regla explícita de centrado absoluto para Avalúos y todos los módulos. */
+.main-content,
+#appShell main,
+.dashboard-container {
+  width: 100% !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+}
+.control-shell > .app-workspace.main-content {
+  align-items: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  margin: 0 auto !important;
+  padding: 20px !important;
+  width: 100% !important;
+}
+.control-shell .app-workspace > .workspace-header,
+.control-shell .app-workspace > .app-view,
+.control-shell .app-workspace > .chat-widget {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 1200px !important;
+  width: 100% !important;
+}
+.control-shell #avaluosView > *,
+.control-shell #inicioView > *,
+.control-shell #solicitudesView > *,
+.control-shell #fe-publicaView > *,
+.control-shell #resumenView > *,
+.control-shell #usuariosView > *,
+.control-shell #configuracionView > * {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 1200px !important;
+  width: 100% !important;
+}
+@media (max-width: 920px) {
+  .control-shell .app-sidebar {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    min-height: 0 !important;
+    padding: 14px 18px !important;
+  }
+  .control-shell .sidebar-footer {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  .control-shell .sidebar-account-copy { align-items: flex-start !important; }
+  .control-shell > .floating-nav-capsule {
+    max-width: calc(100% - 24px) !important;
+    padding: 8px 14px !important;
+  }
+  .main-content,
+  #appShell main,
+  .dashboard-container { padding: 14px !important; }
+}
