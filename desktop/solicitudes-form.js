@@ -12,6 +12,7 @@
   let archivosSeleccionados = [];
   let archivosExistentesEnEdicion = [];
   let applicantRefreshTimer = null;
+  let applicantRequestsCache = [];
 
   const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
   async function api(endpoint, options = {}) {
@@ -170,10 +171,44 @@
   }
   function requestStatusClass(status) { return String(status || "recibida").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-"); }
   function requestDate(value) { const date = value ? new Date(value) : null; return date && !Number.isNaN(date.getTime()) ? date.toLocaleDateString("es-MX", { day: "2-digit", month: "short", year: "numeric" }) : "Sin fecha"; }
+  function applicantRequestStatusGroup(status) {
+    const normalized = String(status || "recibida").toLowerCase();
+    if (normalized === "concluida") return "concluida";
+    if (["recibida", "recibido"].includes(normalized)) return "recibida";
+    return "proceso";
+  }
+  function applicantRequestOwner(item) {
+    return item.propietario || item.datosEspecificos?.propietario || item.datosEspecificos?.razonSocial || item.solicitante?.nombre || "No especificado";
+  }
+  function applicantRequestAssetType(item) {
+    return item.tipoBien || item.datosEspecificos?.tipoBien || item.datosEspecificos?.tipoBienSolicitado || item.modalidad || item.datosEspecificos?.modalidadInmueble || "No especificado";
+  }
+  function applicantRequestAppraisalType(item) {
+    return item.modalidad || item.datosEspecificos?.modalidadInmueble || item.datosEspecificos?.tipoAvaluo || item.tipoAvaluo || "No especificado";
+  }
+  function applicantPdfUrl(item) {
+    return apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "");
+  }
+  function applicantRequestStatusGroup(status) {
+    const normalized = String(status || "recibida").toLowerCase();
+    if (normalized === "concluida") return "concluida";
+    if (["recibida", "recibido"].includes(normalized)) return "recibida";
+    return "proceso";
+  }
+  function applicantRequestOwner(item) { return item.propietario || item.datosEspecificos?.propietario || item.datosEspecificos?.razonSocial || item.solicitante?.nombre || "No especificado"; }
+  function applicantRequestAssetType(item) { return item.tipoBien || item.datosEspecificos?.tipoBien || item.datosEspecificos?.tipoBienSolicitado || item.modalidad || item.datosEspecificos?.modalidadInmueble || "No especificado"; }
+  function applicantRequestAppraisalType(item) { return item.modalidad || item.datosEspecificos?.modalidadInmueble || item.datosEspecificos?.tipoAvaluo || item.tipoAvaluo || "No especificado"; }
+  function applicantPdfUrl(item) { return apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || ""); }
   function applicantOwnRequestsTable(list) {
     if (!list.length) return `<div class="client-empty-state"><div class="client-empty-icon">＋</div><h4>Aún no tienes solicitudes</h4><p>Inicia tu primer trámite y consulta aquí todo su avance.</p><button type="button" class="client-primary-button" id="clientEmptyNewRequest">Solicitar un servicio</button></div>`;
-    return `<div class="client-request-cards">${list.map((item) => `<article class="client-request-card" data-request-detail="${escapeHtml(item.id)}" tabindex="0"><div class="client-request-card-top"><span class="client-folio">Folio ${escapeHtml(item.folio || "Pendiente")}</span><span class="client-status-badge client-status-${requestStatusClass(item.estado)}">${escapeHtml(item.estado || "Recibida")}</span></div><h4>${escapeHtml(item.tipoAvaluo || "Solicitud de avalúo")}</h4><div class="client-request-meta"><span><small>Registrada</small>${escapeHtml(requestDate(item.creadoEn))}</span><span><small>Valuador asignado</small>${escapeHtml(item.asesor || "En asignación")}</span></div><button type="button" class="client-card-link" data-request-detail="${escapeHtml(item.id)}">Ver seguimiento <span>→</span></button></article>`).join("")}</div>`;
+    return `<div class="client-request-table-wrap"><table class="client-request-table"><thead><tr><th>Folio</th><th>Tipo de bien</th><th>Tipo de avalúo</th><th>Propietario</th><th>Estatus</th><th>Ver</th><th>PDF</th></tr></thead><tbody>${list.map((item) => { const group=applicantRequestStatusGroup(item.estado); const pdf=applicantPdfUrl(item); const pdfAction=pdf && group === "concluida" ? `<a class="client-pdf-link" href="${escapeHtml(pdf)}" target="_blank" rel="noopener" download>⇩</a>` : `<span class="client-pdf-disabled">−</span>`; return `<tr><td><strong>${escapeHtml(item.folio || "Pendiente")}</strong></td><td>${escapeHtml(applicantRequestAssetType(item))}</td><td>${escapeHtml(applicantRequestAppraisalType(item))}</td><td>${escapeHtml(applicantRequestOwner(item))}</td><td><span class="client-status-badge client-status-${requestStatusClass(item.estado)}">${escapeHtml(item.estado || "Recibida")}</span></td><td><button type="button" class="client-table-view-button" data-request-detail="${escapeHtml(item.id)}">Ver avance <span>→</span></button></td><td class="client-pdf-cell">${pdfAction}</td></tr>`; }).join("")}</tbody></table></div>`;
   }
+  function filterApplicantRequests() {
+    const query=String($("#applicantRequestSearchInput")?.value || "").trim().toLowerCase(); const status=$("#applicantRequestStatusFilter")?.value || "";
+    const visible=applicantRequestsCache.filter((item) => { const owner=applicantRequestOwner(item).toLowerCase(); const folio=String(item.folio || "").toLowerCase(); return (!query || folio.includes(query) || owner.includes(query)) && (!status || applicantRequestStatusGroup(item.estado) === status); });
+    const table=$("#applicantHomeRequestsTable"); if (!table) return; table.innerHTML=applicantOwnRequestsTable(visible); bindRequestDetailButtons(table, visible); table.querySelector("#clientEmptyNewRequest")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
+  }
+
   function showApplicantHome() {
     const content = $(".public-entry-content");
     const home = $("#applicantHomePanel");
@@ -210,14 +245,12 @@
     if (!table || !applicantSession) return;
     try {
       const own = await api(`/mis-solicitudes?email=${encodeURIComponent(applicantSession.email)}&usuario_id=${encodeURIComponent(applicantSession.id || "")}`);
-      table.innerHTML = applicantOwnRequestsTable(own);
+      applicantRequestsCache = own;
       table.dataset.loaded = "true";
       if ($("#applicantTotalRequests")) $("#applicantTotalRequests").textContent = own.length;
       if ($("#applicantActiveRequests")) $("#applicantActiveRequests").textContent = own.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
       if ($("#applicantCompletedRequests")) $("#applicantCompletedRequests").textContent = own.filter((item) => String(item.estado || "").toLowerCase() === "concluida").length;
-      bindRequestDetailButtons(table, own);
-      table.querySelector("#clientEmptyNewRequest")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
-      table.querySelectorAll(".client-request-card").forEach((card) => card.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); const item = own.find((candidate) => candidate.id === card.dataset.requestDetail); if (item) renderRequestDetail(item); } }));
+      filterApplicantRequests();
     } catch (error) { table.innerHTML = `<p class="request-empty">${escapeHtml(error.message)}</p>`; }
   }
   function apiResourceUrl(source) {
@@ -511,6 +544,8 @@
     $("#backRequestsToAvaluosButton")?.addEventListener("click", () => $("[data-app-view=avaluos]")?.click());
     $("#applicantProfileForm")?.addEventListener("submit", saveApplicantProfile);
     $("#applicantHomeNewRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
+    $("#applicantRequestSearchInput")?.addEventListener("input", filterApplicantRequests);
+    $("#applicantRequestStatusFilter")?.addEventListener("change", filterApplicantRequests);
     $("#applicantVisualNewRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
     $("#applicantVisualProfileButton")?.addEventListener("click", openApplicantProfile);
     $("#applicantHomeProfileButton")?.addEventListener("click", openApplicantProfile);
