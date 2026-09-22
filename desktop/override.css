@@ -1864,3 +1864,112 @@ body > #appShell:not(.is-hidden):not([hidden]) {
   .control-shell .sidebar-footer { align-self: stretch !important; justify-self: auto !important; }
   .control-shell .sidebar-account-copy { align-items: flex-start !important; }
 }
+
+
+/* Cápsula fuera del header y cuerpo administrativo perfectamente centrado */
+.control-shell {
+  align-items: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+}
+.control-shell .app-sidebar {
+  grid-template-columns: minmax(0, 1fr) minmax(430px, auto) !important;
+  width: 100% !important;
+}
+.control-shell .sidebar-footer {
+  grid-column: 2 !important;
+}
+.control-shell > .floating-nav-capsule {
+  align-items: center !important;
+  background: #ffffff !important;
+  border: 1px solid #d4af37 !important;
+  border-radius: 50px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,.08) !important;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  flex-wrap: nowrap !important;
+  gap: 3px !important;
+  justify-content: center !important;
+  margin: 15px auto !important;
+  max-width: calc(100% - 32px) !important;
+  overflow-x: auto !important;
+  padding: 4px 8px !important;
+  width: max-content !important;
+}
+.control-shell > .floating-nav-capsule .sidebar-link {
+  background: transparent !important;
+  color: #1e293b !important;
+  flex: 0 0 auto !important;
+}
+.control-shell > .floating-nav-capsule .sidebar-link.is-active,
+.control-shell > .floating-nav-capsule .sidebar-link:hover {
+  background: #c5a059 !important;
+  border-color: #d4af37 !important;
+  color: #17130d !important;
+}
+.control-shell > .floating-nav-capsule .nav-capsule-leading {
+  color: #8a6823 !important;
+  flex: 0 0 auto !important;
+}
+.control-shell .app-workspace {
+  align-items: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  margin: 0 auto !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  width: 100% !important;
+}
+.control-shell .app-workspace > .workspace-header,
+.control-shell .app-workspace > .app-view,
+.control-shell .app-workspace > .chat-widget {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 1200px !important;
+  width: 100% !important;
+}
+.control-shell #avaluosView,
+.control-shell #inicioView,
+.control-shell #solicitudesView,
+.control-shell #fe-publicaView,
+.control-shell #resumenView,
+.control-shell #usuariosView,
+.control-shell #configuracionView {
+  align-items: center !important;
+  display: flex;
+  flex-direction: column !important;
+}
+.control-shell #avaluosView > *,
+.control-shell #inicioView > *,
+.control-shell #solicitudesView > *,
+.control-shell #fe-publicaView > *,
+.control-shell #resumenView > *,
+.control-shell #usuariosView > *,
+.control-shell #configuracionView > * {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 1200px !important;
+  width: 100% !important;
+}
+.control-shell .avaluos-choice-grid,
+.control-shell .home-action-grid {
+  align-items: stretch !important;
+  justify-content: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100% !important;
+}
+@media (max-width: 920px) {
+  .control-shell .app-sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .control-shell .sidebar-footer { grid-column: auto !important; }
+  .control-shell > .floating-nav-capsule { margin-top: 12px !important; }
+}
+
+/* Las vistas no activas deben conservar el ocultamiento nativo. */
+.control-shell .app-view[hidden] {
+  display: none !important;
+}
