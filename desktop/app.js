@@ -1077,6 +1077,7 @@
   $("#chatToggleButton").addEventListener("click", () => { const widget = $("#chatWidget"); const panel = $("#chatPanel"); const button = $("#chatToggleButton"); const isOpening = widget.hidden || panel.hidden; widget.hidden = false; panel.hidden = !isOpening; button.setAttribute("aria-expanded", String(isOpening)); button.textContent = isOpening ? "Cerrar" : "Abrir Chat"; if (isOpening) { renderChat(); $("#chatMessageInput").focus(); } });
   $("#closeChatButton").addEventListener("click", () => { $("#chatPanel").hidden = true; $("#chatWidget").hidden = true; $("#chatToggleButton").setAttribute("aria-expanded", "false"); $("#chatToggleButton").textContent = "Chat"; });
   $("#openCredentialSetupButton").addEventListener("click", openCredentialSetup);
+  $("#adminProfileButton")?.addEventListener("click", openCredentialSetup);
   manageUsersButton.addEventListener("click", () => switchAppView("usuarios"));
   credentialForm.addEventListener("submit", saveCredential);
   $("#closeCredentialDialogButton").addEventListener("click", closeCredentialSetup);
