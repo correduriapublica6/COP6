@@ -228,6 +228,7 @@
     const detail = $("#requestDetailContent");
     const dialog = $("#requestDetailDialog");
     if (!detail || !dialog || !item) return;
+    dialog.classList.add("client-luxury-detail");
     const files = Array.isArray(item.archivos) ? item.archivos : [];
     const info = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
     const currentStatus = String(item.estado || "recibida").toLowerCase();

@@ -1384,3 +1384,92 @@ body[data-server-status="online"] .sidebar-status-dot { box-shadow: 0 0 12px rgb
 .client-download-button.is-disabled { background: #aaa; border-color: #aaa; cursor: not-allowed; }
 .client-detail-legacy { color: #657180; }
 @media (max-width: 700px) { .client-dashboard-header, .client-dashboard-intro, .client-section-heading, .client-detail-section-heading { align-items: flex-start; flex-direction: column; } .client-header-actions { justify-content: space-between; width: 100%; } .client-header-actions > div { text-align: left; } .client-dashboard-stats { grid-template-columns: 1fr; } .client-timeline { gap: 16px; grid-template-columns: 1fr; margin-left: 0; } .client-timeline::before { bottom: 14px; height: auto; left: 13px; right: auto; top: 14px; width: 2px; } .client-timeline-step { align-items: center; display: flex; gap: 10px; text-align: left; } .client-timeline-step small { margin: 0; max-width: none; } .client-detail-grid { grid-template-columns: 1fr; } .client-outline-button { width: 100%; } }
+
+
+/* MI PORTAL — identidad Dark Luxury / Ejecutivo */
+#loginScreen.applicant-dashboard-active { background: #121212 !important; color: #f4f1ea !important; }
+#loginScreen.applicant-dashboard-active .public-entry-panel { background: #121212 !important; color: #f4f1ea !important; }
+#loginScreen.applicant-dashboard-active .applicant-home-panel { background: radial-gradient(circle at 80% 0%, rgba(197,160,89,.08), transparent 34%), #121212 !important; color: #f4f1ea !important; }
+#loginScreen.applicant-dashboard-active .client-dashboard-header { background: #1e1e1e !important; border-bottom: 1px solid #c5a059 !important; box-shadow: 0 8px 24px rgba(0,0,0,.28); }
+#loginScreen.applicant-dashboard-active .client-brand strong { color: #fffdf8 !important; font-family: "Playfair Display", "Cinzel", Georgia, serif !important; font-size: 18px; letter-spacing: .015em; }
+#loginScreen.applicant-dashboard-active .client-brand span { color: #d4af37 !important; font-family: Arial, sans-serif !important; font-size: 10px; letter-spacing: .22em; margin-top: 5px; }
+#loginScreen.applicant-dashboard-active .client-header-actions small { color: #c5a059 !important; }
+#loginScreen.applicant-dashboard-active .client-header-actions strong { color: #f4f1ea !important; }
+#loginScreen.applicant-dashboard-active .client-logout-button { background: transparent !important; border: 1px solid rgba(197,160,89,.78) !important; color: #f5f1e8 !important; }
+#loginScreen.applicant-dashboard-active .client-logout-button:hover { background: #c5a059 !important; border-color: #d4af37 !important; color: #17130d !important; box-shadow: 0 0 18px rgba(197,160,89,.25); }
+#loginScreen.applicant-dashboard-active .client-dashboard-intro h2 { color: #fffdf8 !important; font-family: "Playfair Display", "Cinzel", Georgia, serif !important; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; letter-spacing: .01em; }
+#loginScreen.applicant-dashboard-active .client-dashboard-intro .applicant-home-contact { color: #c4c0b8 !important; }
+#loginScreen.applicant-dashboard-active .client-primary-button { background: linear-gradient(135deg, #d4af37 0%, #c5a059 48%, #a77c32 100%) !important; border: 1px solid #e1c36a !important; box-shadow: 0 8px 20px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.3); color: #17130d !important; font-weight: 800; }
+#loginScreen.applicant-dashboard-active .client-primary-button:hover { background: linear-gradient(135deg, #e4c55b, #d4af37) !important; box-shadow: 0 0 22px rgba(212,175,55,.3); color: #111 !important; }
+#loginScreen.applicant-dashboard-active .client-dashboard-stats article,
+#loginScreen.applicant-dashboard-active .client-history-section { background: rgba(255,255,255,.05) !important; border: 1px solid rgba(197,160,89,.62) !important; box-shadow: 0 12px 32px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.05); }
+#loginScreen.applicant-dashboard-active .client-dashboard-stats span,
+#loginScreen.applicant-dashboard-active .client-request-meta small,
+#loginScreen.applicant-dashboard-active .client-section-heading p { color: #bdb8ad !important; }
+#loginScreen.applicant-dashboard-active .client-dashboard-stats strong { color: #f5f0e7 !important; font-family: Arial, sans-serif !important; }
+#loginScreen.applicant-dashboard-active .client-section-heading h3 { color: #fffdf8 !important; font-family: "Playfair Display", "Cinzel", Georgia, serif !important; font-size: 1.55rem; }
+#loginScreen.applicant-dashboard-active .client-section-badge { background: rgba(197,160,89,.15) !important; border: 1px solid rgba(197,160,89,.5); color: #d4af37 !important; }
+#loginScreen.applicant-dashboard-active .client-request-card { background: rgba(255,255,255,.045) !important; border: 1px solid rgba(197,160,89,.38) !important; box-shadow: 0 8px 20px rgba(0,0,0,.18); }
+#loginScreen.applicant-dashboard-active .client-request-card:hover,
+#loginScreen.applicant-dashboard-active .client-request-card:focus-visible { border-color: #d4af37 !important; box-shadow: 0 0 20px rgba(197,160,89,.18), 0 12px 26px rgba(0,0,0,.3); }
+#loginScreen.applicant-dashboard-active .client-request-card h4 { color: #f4f1ea !important; font-family: "Playfair Display", "Cinzel", Georgia, serif !important; }
+#loginScreen.applicant-dashboard-active .client-folio { color: #d4af37 !important; }
+#loginScreen.applicant-dashboard-active .client-request-meta { border-top-color: rgba(197,160,89,.22) !important; }
+#loginScreen.applicant-dashboard-active .client-request-meta span { color: #e0dcd3 !important; }
+#loginScreen.applicant-dashboard-active .client-card-link { color: #d4af37 !important; }
+#loginScreen.applicant-dashboard-active .client-empty-state { border-color: rgba(197,160,89,.55) !important; }
+#loginScreen.applicant-dashboard-active .client-empty-state h4 { color: #fffdf8 !important; font-family: "Playfair Display", "Cinzel", Georgia, serif !important; }
+#loginScreen.applicant-dashboard-active .client-empty-state p { color: #c4c0b8 !important; }
+#loginScreen.applicant-dashboard-active .client-empty-icon { color: #d4af37 !important; }
+/* El modal de detalle conserva el mismo lenguaje visual cuando se abre desde MI PORTAL. */
+#loginScreen.applicant-dashboard-active ~ dialog#requestDetailDialog,
+#requestDetailDialog.client-luxury-detail { background: #1e1e1e; border: 1px solid #c5a059; color: #f4f1ea; }
+
+
+/* Dark Luxury — textura institucional, microanimaciones y modal de detalle */
+#loginScreen.applicant-dashboard-active .applicant-home-panel::before { background-image: linear-gradient(115deg, rgba(255,255,255,.018) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.012) 50%, rgba(255,255,255,.012) 75%, transparent 75%); background-size: 7px 7px; content: ""; inset: 0; opacity: .32; pointer-events: none; position: absolute; }
+#loginScreen.applicant-dashboard-active .applicant-home-panel { overflow: hidden; position: relative; }
+#loginScreen.applicant-dashboard-active .applicant-home-panel > * { position: relative; z-index: 1; }
+#loginScreen.applicant-dashboard-active .client-request-card,
+#loginScreen.applicant-dashboard-active .client-dashboard-stats article,
+#loginScreen.applicant-dashboard-active .client-history-section { animation: clientLuxuryRise .42s ease both; }
+#loginScreen.applicant-dashboard-active .client-request-card:nth-child(2) { animation-delay: .04s; }
+#loginScreen.applicant-dashboard-active .client-request-card:nth-child(3) { animation-delay: .08s; }
+#loginScreen.applicant-dashboard-active .client-request-card:nth-child(4) { animation-delay: .12s; }
+#loginScreen.applicant-dashboard-active .client-request-card:nth-child(5) { animation-delay: .16s; }
+#loginScreen.applicant-dashboard-active .client-request-card:nth-child(6) { animation-delay: .2s; }
+@keyframes clientLuxuryRise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes clientGoldShimmer { 0%, 100% { box-shadow: 0 0 0 rgba(212,175,55,0); } 50% { box-shadow: 0 0 18px rgba(212,175,55,.22); } }
+#loginScreen.applicant-dashboard-active .client-primary-button { animation: clientGoldShimmer 3.8s ease-in-out infinite; }
+#loginScreen.applicant-dashboard-active .client-primary-button:hover { animation: none; }
+#requestDetailDialog.client-luxury-detail { background: #1e1e1e !important; border: 1px solid #c5a059 !important; border-radius: 14px !important; box-shadow: 0 24px 80px rgba(0,0,0,.62), 0 0 0 1px rgba(212,175,55,.12) inset !important; color: #f4f1ea !important; max-width: min(920px, calc(100vw - 28px)); }
+#requestDetailDialog.client-luxury-detail::backdrop { background: rgba(0,0,0,.74); backdrop-filter: blur(4px); }
+#requestDetailDialog.client-luxury-detail[open] { animation: clientLuxuryModal .26s ease both; }
+@keyframes clientLuxuryModal { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+#requestDetailDialog.client-luxury-detail #requestDetailTitle { color: #d4af37 !important; font-family: "Playfair Display", "Cinzel", Georgia, serif !important; letter-spacing: .01em; }
+#requestDetailDialog.client-luxury-detail #requestDetailContent { color: #f4f1ea !important; }
+#requestDetailDialog.client-luxury-detail .client-detail-hero,
+#requestDetailDialog.client-luxury-detail .client-detail-grid > div,
+#requestDetailDialog.client-luxury-detail .request-file-card { background: rgba(255,255,255,.055) !important; border-color: rgba(197,160,89,.42) !important; }
+#requestDetailDialog.client-luxury-detail .client-detail-hero h3,
+#requestDetailDialog.client-luxury-detail .client-detail-section-heading h3,
+#requestDetailDialog.client-luxury-detail .client-detail-download h3 { color: #fffdf8 !important; font-family: "Playfair Display", "Cinzel", Georgia, serif !important; }
+#requestDetailDialog.client-luxury-detail .client-detail-hero p,
+#requestDetailDialog.client-luxury-detail .client-detail-section-heading p,
+#requestDetailDialog.client-luxury-detail .client-detail-grid small,
+#requestDetailDialog.client-luxury-detail .request-file-card span,
+#requestDetailDialog.client-luxury-detail .request-file-card small { color: #c4c0b8 !important; }
+#requestDetailDialog.client-luxury-detail .client-detail-section { border-top-color: rgba(197,160,89,.3) !important; }
+#requestDetailDialog.client-luxury-detail .client-timeline::before { background: rgba(197,160,89,.4); }
+#requestDetailDialog.client-luxury-detail .client-timeline-step span { background: #292929; border-color: #1e1e1e; color: #aaa39a; }
+#requestDetailDialog.client-luxury-detail .client-timeline-step.is-complete span { background: #c5a059; color: #17130d; }
+#requestDetailDialog.client-luxury-detail .client-timeline-step.is-current span { background: #d4af37; box-shadow: 0 0 0 4px rgba(212,175,55,.15); }
+#requestDetailDialog.client-luxury-detail .client-timeline-step small { color: #d8d2c7; }
+#requestDetailDialog.client-luxury-detail .client-outline-button,
+#requestDetailDialog.client-luxury-detail .request-detail-button { background: transparent !important; border-color: rgba(197,160,89,.7) !important; color: #e1c36a !important; }
+#requestDetailDialog.client-luxury-detail .client-outline-button:hover,
+#requestDetailDialog.client-luxury-detail .request-detail-button:hover { background: #c5a059 !important; color: #17130d !important; }
+#requestDetailDialog.client-luxury-detail .client-download-button { background: linear-gradient(135deg, #d4af37, #a77c32) !important; border-color: #e1c36a !important; color: #17130d !important; }
+#requestDetailDialog.client-luxury-detail .request-file-card img,
+#requestDetailDialog.client-luxury-detail .request-file-card iframe { border-color: rgba(197,160,89,.35); }
+@media (prefers-reduced-motion: reduce) { #loginScreen.applicant-dashboard-active .client-request-card, #loginScreen.applicant-dashboard-active .client-dashboard-stats article, #loginScreen.applicant-dashboard-active .client-history-section, #loginScreen.applicant-dashboard-active .client-primary-button, #requestDetailDialog.client-luxury-detail[open] { animation: none !important; } }
