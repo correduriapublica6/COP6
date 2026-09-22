@@ -1316,7 +1316,7 @@ body[data-server-status="online"] .sidebar-status-dot { box-shadow: 0 0 12px rgb
 .client-brand { gap: 12px; }
 .client-brand img { height: 42px; object-fit: contain; width: 52px; }
 .client-brand span, .client-header-actions small { color: #7b8490; display: block; font: 700 10px/1.2 Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
-.client-brand strong { color: #18212b; display: block; font: 700 15px/1.25 Arial, sans-serif; margin-top: 4px; }
+.client-brand strong { color: #18212b; display: block; font: 700 15px/1.25 Arial, sans-serif; }
 .client-header-actions { gap: 22px; }
 .client-header-actions > div { text-align: right; }
 .client-header-actions strong { color: #1f2933; display: block; font: 700 14px/1.35 Arial, sans-serif; margin-top: 4px; }
