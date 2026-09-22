@@ -10,6 +10,7 @@
   let editingRequestId = "";
   let applicantSession = null;
   let archivosSeleccionados = [];
+  let archivosExistentesEnEdicion = [];
 
   const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
   async function api(endpoint, options = {}) {
@@ -146,6 +147,7 @@
     if (!form) return;
     form.reset();
     archivosSeleccionados = [];
+    archivosExistentesEnEdicion = [];
     renderSelectedFiles();
     $("#publicRequestDynamicFields").innerHTML = "";
     editingRequestId = "";
@@ -164,9 +166,11 @@
     }
     setMessage($("#publicRequestMessage"), "");
   }
+  function requestStatusClass(status) { return String(status || "recibida").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-"); }
+  function requestDate(value) { const date = value ? new Date(value) : null; return date && !Number.isNaN(date.getTime()) ? date.toLocaleDateString("es-MX", { day: "2-digit", month: "short", year: "numeric" }) : "Sin fecha"; }
   function applicantOwnRequestsTable(list) {
-    if (!list.length) return `<p class="request-empty">Todavía no has enviado solicitudes.</p>`;
-    return `<table class="request-table applicant-request-table"><thead><tr><th>Folio</th><th>Tipo de avalúo</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead><tbody>${list.map((item) => `<tr><td><strong>${escapeHtml(item.folio)}</strong></td><td>${escapeHtml(item.tipoAvaluo)}</td><td><span class="request-status request-status-${String(item.estado).replace(/\\s+/g, "-")}">${escapeHtml(item.estado)}</span></td><td>${escapeHtml(item.creadoEn?.slice(0, 10) || "")}</td><td class="request-action-cell"><button type="button" class="request-detail-button" data-request-detail="${escapeHtml(item.id)}">Ver detalle</button><button type="button" class="request-detail-button" data-edit-own-request="${escapeHtml(item.id)}">Editar</button></td></tr>`).join("")}</tbody></table>`;
+    if (!list.length) return `<div class="client-empty-state"><div class="client-empty-icon">＋</div><h4>Aún no tienes solicitudes</h4><p>Inicia tu primer trámite y consulta aquí todo su avance.</p><button type="button" class="client-primary-button" id="clientEmptyNewRequest">Solicitar un servicio</button></div>`;
+    return `<div class="client-request-cards">${list.map((item) => `<article class="client-request-card" data-request-detail="${escapeHtml(item.id)}" tabindex="0"><div class="client-request-card-top"><span class="client-folio">Folio ${escapeHtml(item.folio || "Pendiente")}</span><span class="client-status-badge client-status-${requestStatusClass(item.estado)}">${escapeHtml(item.estado || "Recibida")}</span></div><h4>${escapeHtml(item.tipoAvaluo || "Solicitud de avalúo")}</h4><div class="client-request-meta"><span><small>Registrada</small>${escapeHtml(requestDate(item.creadoEn))}</span><span><small>Valuador asignado</small>${escapeHtml(item.asesor || "En asignación")}</span></div><button type="button" class="client-card-link" data-request-detail="${escapeHtml(item.id)}">Ver seguimiento <span>→</span></button></article>`).join("")}</div>`;
   }
   function showApplicantHome() {
     const content = $(".public-entry-content");
@@ -174,10 +178,12 @@
     if (!content || !home || !applicantSession) return;
     content.hidden = true;
     home.hidden = false;
+    $("#loginScreen")?.classList.add("applicant-dashboard-active");
     $("#loginVisualBrand")?.setAttribute("hidden", "true");
-    $("#applicantVisualPanel")?.removeAttribute("hidden");
+    $("#applicantVisualPanel")?.setAttribute("hidden", "true");
     $("#openInternalAccessButton")?.setAttribute("hidden", "true");
     $("#applicantWelcomeName").textContent = applicantSession.name || "solicitante";
+    $("#applicantWelcomeNameMirror").textContent = applicantSession.name || "solicitante";
     $("#applicantWelcomeContact").textContent = [applicantSession.phone, applicantSession.email].filter(Boolean).join(" · ");
     $("#publicRequestForm")?.elements.correo && ($("#publicRequestForm").elements.correo.readOnly = true);
     renderApplicantHomeRequests();
@@ -187,6 +193,7 @@
     const home = $("#applicantHomePanel");
     if (content) content.hidden = false;
     if (home) home.hidden = true;
+    $("#loginScreen")?.classList.remove("applicant-dashboard-active");
     $("#loginVisualBrand")?.removeAttribute("hidden");
     $("#applicantVisualPanel")?.setAttribute("hidden", "true");
     $("#openInternalAccessButton")?.removeAttribute("hidden");
@@ -195,7 +202,16 @@
   async function renderApplicantHomeRequests() {
     const table = $("#applicantHomeRequestsTable");
     if (!table || !applicantSession) return;
-    try { const own = await api(`/service-requests?email=${encodeURIComponent(applicantSession.email)}`); table.innerHTML = applicantOwnRequestsTable(own); const visualTable = $("#applicantVisualRequestsTable"); if (visualTable) { visualTable.innerHTML = applicantOwnRequestsTable(own); bindRequestDetailButtons(visualTable, own); visualTable.querySelectorAll("[data-edit-own-request]").forEach((button) => button.addEventListener("click", () => { const item = own.find((candidate) => candidate.id === button.dataset.editOwnRequest); if (item) editOwnRequest(item); })); } bindRequestDetailButtons(table, own); table.querySelectorAll("[data-edit-own-request]").forEach((button) => button.addEventListener("click", () => { const item = own.find((candidate) => candidate.id === button.dataset.editOwnRequest); if (item) editOwnRequest(item); })); } catch (error) { table.innerHTML = `<p class="request-empty">${escapeHtml(error.message)}</p>`; }
+    try {
+      const own = await api(`/service-requests?email=${encodeURIComponent(applicantSession.email)}`);
+      table.innerHTML = applicantOwnRequestsTable(own);
+      if ($("#applicantTotalRequests")) $("#applicantTotalRequests").textContent = own.length;
+      if ($("#applicantActiveRequests")) $("#applicantActiveRequests").textContent = own.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
+      if ($("#applicantCompletedRequests")) $("#applicantCompletedRequests").textContent = own.filter((item) => String(item.estado || "").toLowerCase() === "concluida").length;
+      bindRequestDetailButtons(table, own);
+      table.querySelector("#clientEmptyNewRequest")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
+      table.querySelectorAll(".client-request-card").forEach((card) => card.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); const item = own.find((candidate) => candidate.id === card.dataset.requestDetail); if (item) renderRequestDetail(item); } }));
+    } catch (error) { table.innerHTML = `<p class="request-empty">${escapeHtml(error.message)}</p>`; }
   }
   function safeFileData(file) {
     const data = String(file?.data || "");
@@ -214,6 +230,10 @@
     if (!detail || !dialog || !item) return;
     const files = Array.isArray(item.archivos) ? item.archivos : [];
     const info = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
+    const currentStatus = String(item.estado || "recibida").toLowerCase();
+    const steps = ["recibida", "inspección programada", "en elaboración", "en firma", "concluida"];
+    const statusIndex = currentStatus === "en visita" ? 1 : currentStatus === "asignada" || currentStatus === "en revisión" ? 0 : currentStatus === "en elaboración" ? 2 : currentStatus === "en firma" ? 3 : currentStatus === "concluida" ? 4 : 0;
+    const timeline = `<div class="client-timeline">${steps.map((step, index) => `<div class="client-timeline-step ${index <= statusIndex ? "is-complete" : ""} ${index === statusIndex ? "is-current" : ""}"><span>${index < statusIndex ? "✓" : index + 1}</span><small>${step}</small></div>`).join("")}</div>`;
     const fileMarkup = files.length ? files.map((file, index) => {
       const name = escapeHtml(file.name || `Archivo ${index + 1}`);
       const data = safeFileData(file);
@@ -222,10 +242,13 @@
       const preview = String(file.type || "").startsWith("image/") ? `<img src="${escapeHtml(source)}" alt="${name}" />` : file.type === "application/pdf" ? `<iframe title="${name}" src="${escapeHtml(source)}"></iframe>` : `<div class="request-file-icon" aria-hidden="true">DOC</div>`;
       return `<li class="request-file-card request-file-document">${preview}<span>${name}</span><div class="request-file-actions"><button type="button" class="request-detail-button" data-view-file="${index}">Ver</button><button type="button" class="request-detail-button" data-download-file="${index}">Descargar</button></div></li>`;
     }).join("") : `<li class="request-file-empty">No hay documentos ni imágenes adjuntos.</li>`;
-    $("#requestDetailTitle").textContent = `${item.folio || "Solicitud"}`;
-    detail.innerHTML = `<div class="request-detail-summary"><div><span>Solicitante</span><strong>${escapeHtml(item.solicitante?.nombre || "")}</strong></div><div><span>Tipo de avalúo</span><strong>${escapeHtml(item.tipoAvaluo || "")}</strong></div><div><span>Asesor</span><strong>${escapeHtml(item.asesor || "Sin asignar")}</strong></div><div><span>Estado</span><strong>${escapeHtml(item.estado || "recibida")}</strong></div></div><section class="request-detail-section"><h3>Información registrada</h3><dl>${Object.entries(info).filter(([key, value]) => key !== "archivos" && value && typeof value !== "object").map(([key, value]) => `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("") || "<p>No hay datos adicionales.</p>"}</dl></section><section class="request-detail-section"><h3>Documentos e imágenes</h3><ul class="request-files-grid">${fileMarkup}</ul></section>`;
+    const finalPdf = item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "";
+    const finalPdfAction = currentStatus === "concluida" ? (finalPdf ? `<a class="client-download-button" href="${escapeHtml(finalPdf)}" target="_blank" rel="noopener">Descargar Avalúo Final (PDF) ↗</a>` : `<button type="button" class="client-download-button is-disabled" disabled>Avalúo final en preparación</button>`) : "";
+    $("#requestDetailTitle").textContent = `Seguimiento · ${item.folio || "Solicitud"}`;
+    detail.innerHTML = `<div class="client-detail-hero"><div><span class="client-folio">Folio ${escapeHtml(item.folio || "Pendiente")}</span><h3>${escapeHtml(item.tipoAvaluo || "Solicitud de avalúo")}</h3><p>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</p></div><span class="client-status-badge client-status-${requestStatusClass(item.estado)}">${escapeHtml(item.estado || "Recibida")}</span></div><section class="client-detail-section"><div class="client-detail-section-heading"><div><span class="section-kicker">MÓDULO 1</span><h3>Línea del tiempo</h3></div><strong>${escapeHtml(item.estado || "Recibida")}</strong></div>${timeline}</section><section class="client-detail-section"><div class="client-detail-section-heading"><div><span class="section-kicker">RESUMEN</span><h3>Datos del trámite</h3></div></div><div class="client-detail-grid"><div><small>Valuador asignado</small><strong>${escapeHtml(item.asesor || "En asignación")}</strong></div><div><small>Tipo de avalúo</small><strong>${escapeHtml(item.tipoAvaluo || "")}</strong></div><div><small>Contacto</small><strong>${escapeHtml(item.contactoVisita?.nombre || "Pendiente")}</strong></div></div></section><section class="client-detail-section"><div class="client-detail-section-heading"><div><span class="section-kicker">MÓDULO 3</span><h3>Expediente digital</h3><p>Documentos y fotografías entregados con tu solicitud.</p></div><button type="button" class="client-outline-button" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documento faltante</button></div><ul class="request-files-grid">${fileMarkup}</ul></section>${finalPdfAction ? `<section class="client-detail-download"><span class="section-kicker">MÓDULO 2</span><h3>Portal de descargas</h3><p>Tu avalúo final está disponible.</p>${finalPdfAction}</section>` : ""}<section class="request-detail-section client-detail-legacy"><h3>Información registrada</h3><dl>${Object.entries(info).filter(([key, value]) => key !== "archivos" && value && typeof value !== "object").map(([key, value]) => `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("") || "<p>No hay datos adicionales.</p>"}</dl></section>`;
     detail.querySelectorAll("[data-view-file]").forEach((button) => button.addEventListener("click", () => { const index = Number(button.dataset.viewFile); const popup = window.open("about:blank", "_blank", "noopener"); if (popup) popup.location.href = requestFileUrl(item, index); else window.location.href = requestFileUrl(item, index); }));
     detail.querySelectorAll("[data-download-file]").forEach((button) => button.addEventListener("click", () => { const link = document.createElement("a"); link.href = requestFileUrl(item, Number(button.dataset.downloadFile), true); link.download = files[Number(button.dataset.downloadFile)]?.name || "archivo"; document.body.appendChild(link); link.click(); link.remove(); }));
+    detail.querySelector("[data-attach-missing]")?.addEventListener("click", () => editOwnRequest(item));
     openDialog(dialog);
   }
   function bindRequestDetailButtons(container, list) { container.querySelectorAll("[data-request-detail]").forEach((button) => button.addEventListener("click", () => { const item = list.find((candidate) => candidate.id === button.dataset.requestDetail); if (item) renderRequestDetail(item); })); }
@@ -241,7 +264,7 @@
     setBusy(form, true, "Enviando…");
     try {
       const files = await readFiles(archivosSeleccionados);
-      const payload = { solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo }, tipoAvaluo: values.tipoAvaluo, asesor: values.asesor, notaria: values.notaria || values.notariaReferida || "", modalidad: values.modalidadInmueble || "", datosEspecificos: values, archivos: files, contactoVisita: { nombre: values.contactoVisitaNombre, telefono: values.contactoVisitaTelefono }, observaciones: values.observaciones, requesterEmail: values.correo || applicantSession?.email || "" };
+      const payload = { solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo }, tipoAvaluo: values.tipoAvaluo, asesor: values.asesor, notaria: values.notaria || values.notariaReferida || "", modalidad: values.modalidadInmueble || "", datosEspecificos: values, archivos: [...archivosExistentesEnEdicion, ...files], contactoVisita: { nombre: values.contactoVisitaNombre, telefono: values.contactoVisitaTelefono }, observaciones: values.observaciones, requesterEmail: values.correo || applicantSession?.email || "" };
       const result = await api(editingRequestId ? `/service-requests/${encodeURIComponent(editingRequestId)}` : "/service-requests", { method: editingRequestId ? "PUT" : "POST", body: JSON.stringify(payload) });
       const actionLabel = editingRequestId ? "Solicitud actualizada" : "Solicitud registrada";
       setMessage(message, `${actionLabel} con folio ${result.folio}. Conserva este número para consultar el avance.`, "success");
@@ -282,6 +305,9 @@
   }
   function editOwnRequest(item) {
     editingRequestId = item.id;
+    archivosExistentesEnEdicion = Array.isArray(item.archivos) ? item.archivos : [];
+    archivosSeleccionados = [];
+    renderSelectedFiles();
     const form = $("#publicRequestForm");
     form.elements.nombre.value = item.solicitante?.nombre || "";
     form.elements.telefono.value = item.solicitante?.telefono || "";

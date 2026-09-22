@@ -1304,3 +1304,83 @@ body[data-server-status="online"] .sidebar-status-dot { box-shadow: 0 0 12px rgb
 .request-attachments-list li small { color: #718188; white-space: nowrap; }
 .request-attachments-list li button { background: #fff; border: 1px solid #c8d8de; border-radius: 6px; color: #9a433c; cursor: pointer; font: 600 12px Georgia, 'Times New Roman', serif; padding: 4px 8px; }
 .request-attachments-list li button:hover { background: #fff1ef; border-color: #b8736c; }
+
+
+/* Portal del cliente — dashboard corporativo responsive */
+#loginScreen.applicant-dashboard-active { background: #f5f6f8; display: block; min-height: 100vh; }
+#loginScreen.applicant-dashboard-active .public-entry-panel { background: #f5f6f8; display: block; min-height: 100vh; padding: 0; }
+#loginScreen.applicant-dashboard-active .login-visual { display: none; }
+#loginScreen.applicant-dashboard-active .applicant-home-panel { background: #f5f6f8; border: 0; border-radius: 0; box-shadow: none; color: #1f2933; display: block; margin: 0; max-width: none; min-height: 100vh; padding: 0 clamp(18px, 4vw, 64px) 56px; }
+.client-dashboard-header { align-items: center; background: #fff; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; margin: 0 calc(clamp(18px, 4vw, 64px) * -1); padding: 18px clamp(18px, 4vw, 64px); }
+.client-brand, .client-header-actions, .client-brand > div { align-items: center; display: flex; }
+.client-brand { gap: 12px; }
+.client-brand img { height: 42px; object-fit: contain; width: 52px; }
+.client-brand span, .client-header-actions small { color: #7b8490; display: block; font: 700 10px/1.2 Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+.client-brand strong { color: #18212b; display: block; font: 700 15px/1.25 Arial, sans-serif; margin-top: 4px; }
+.client-header-actions { gap: 22px; }
+.client-header-actions > div { text-align: right; }
+.client-header-actions strong { color: #1f2933; display: block; font: 700 14px/1.35 Arial, sans-serif; margin-top: 4px; }
+.client-logout-button, .client-primary-button, .client-outline-button { border-radius: 8px; cursor: pointer; font: 700 13px/1 Arial, sans-serif; padding: 11px 15px; transition: background .18s ease, border-color .18s ease, transform .18s ease; }
+.client-logout-button { background: #fff; border: 1px solid #cbd1d8; color: #374151; }
+.client-logout-button:hover, .client-outline-button:hover { background: #f1f3f5; border-color: #9da7b2; transform: translateY(-1px); }
+.client-dashboard-intro { align-items: end; display: flex; gap: 22px; justify-content: space-between; margin: 42px auto 24px; max-width: 1240px; }
+.client-dashboard-intro h2 { color: #151b22; font: 700 clamp(1.7rem, 3vw, 2.45rem)/1.1 Arial, sans-serif; margin: 7px 0 8px; }
+.client-dashboard-intro .applicant-home-contact { color: #6b7280; font: 400 14px/1.5 Arial, sans-serif; margin: 0; }
+.client-primary-button { background: #1d2732; border: 1px solid #1d2732; color: #fff; white-space: nowrap; }
+.client-primary-button:hover { background: #b78935; border-color: #b78935; transform: translateY(-1px); }
+.client-dashboard-stats { display: grid; gap: 15px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0 auto 30px; max-width: 1240px; }
+.client-dashboard-stats article { background: #fff; border: 1px solid #e3e6ea; border-radius: 12px; box-shadow: 0 6px 18px rgba(20,27,36,.04); padding: 18px 20px; }
+.client-dashboard-stats span, .client-request-meta small, .client-detail-grid small { color: #7a8490; display: block; font: 700 10px/1.3 Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.client-dashboard-stats strong { color: #18212b; display: block; font: 700 2rem/1 Arial, sans-serif; margin-top: 10px; }
+.client-history-section { background: #fff; border: 1px solid #e1e5e9; border-radius: 14px; box-shadow: 0 10px 28px rgba(20,27,36,.05); margin: 0 auto; max-width: 1240px; padding: clamp(20px, 3vw, 30px); }
+.client-section-heading, .client-detail-section-heading { align-items: start; display: flex; gap: 16px; justify-content: space-between; }
+.client-section-heading h3, .client-detail-section-heading h3 { color: #1d2732; font: 700 1.2rem/1.2 Arial, sans-serif; margin: 6px 0 5px; }
+.client-section-heading p, .client-detail-section-heading p { color: #7a8490; font: 400 13px/1.5 Arial, sans-serif; margin: 0; }
+.client-section-badge { background: #f5f0e5; border-radius: 999px; color: #8e6829; font: 700 11px/1 Arial, sans-serif; padding: 9px 12px; white-space: nowrap; }
+.client-request-grid { margin-top: 22px; }
+.client-request-cards { display: grid; gap: 15px; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); }
+.client-request-card { background: #fbfcfd; border: 1px solid #e1e6eb; border-radius: 11px; cursor: pointer; padding: 18px; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
+.client-request-card:hover, .client-request-card:focus-visible { border-color: #b78935; box-shadow: 0 10px 24px rgba(20,27,36,.09); outline: none; transform: translateY(-2px); }
+.client-request-card-top { align-items: center; display: flex; gap: 10px; justify-content: space-between; }
+.client-folio { color: #697586; font: 700 11px/1 Arial, sans-serif; letter-spacing: .05em; text-transform: uppercase; }
+.client-status-badge { border-radius: 999px; display: inline-block; font: 700 10px/1 Arial, sans-serif; padding: 7px 9px; text-transform: capitalize; }
+.client-status-recibida, .client-status-en-revision, .client-status-asignada { background: #fff5d9; color: #916d23; }
+.client-status-en-visita, .client-status-en-elaboracion, .client-status-en-firma { background: #e8f0f8; color: #315a7b; }
+.client-status-concluida { background: #e5f4eb; color: #2f7048; }
+.client-status-cancelada { background: #fbe9e9; color: #a04444; }
+.client-request-card h4 { color: #202b36; font: 700 16px/1.3 Arial, sans-serif; margin: 17px 0; }
+.client-request-meta { border-top: 1px solid #e7ebef; display: grid; gap: 12px; grid-template-columns: 1fr 1fr; padding-top: 14px; }
+.client-request-meta span { color: #384454; font: 600 12px/1.4 Arial, sans-serif; }
+.client-request-meta small { font-size: 9px; margin-bottom: 4px; }
+.client-card-link { background: transparent; border: 0; color: #986e24; cursor: pointer; font: 700 12px/1 Arial, sans-serif; margin-top: 18px; padding: 0; }
+.client-card-link span { font-size: 15px; margin-left: 5px; }
+.client-empty-state { border: 1px dashed #d3d9df; border-radius: 10px; padding: 42px 18px; text-align: center; }
+.client-empty-icon { color: #b78935; font-size: 2rem; }
+.client-empty-state h4 { color: #27313d; font: 700 17px/1.3 Arial, sans-serif; margin: 10px 0 5px; }
+.client-empty-state p { color: #7a8490; font: 400 13px/1.5 Arial, sans-serif; margin: 0 0 18px; }
+.client-empty-state .client-primary-button { display: inline-block; }
+.client-detail-hero { align-items: start; background: #f6f7f8; border: 1px solid #e4e7eb; border-radius: 11px; display: flex; gap: 14px; justify-content: space-between; padding: 18px; }
+.client-detail-hero h3 { color: #1d2732; font: 700 20px/1.25 Arial, sans-serif; margin: 9px 0 4px; }
+.client-detail-hero p { color: #7a8490; font: 400 12px/1.4 Arial, sans-serif; margin: 0; }
+.client-detail-section { border-top: 1px solid #e5e8ec; margin-top: 24px; padding-top: 22px; }
+.client-detail-section-heading strong { color: #657180; font: 700 12px/1 Arial, sans-serif; text-transform: capitalize; }
+.client-outline-button { background: #fff; border: 1px solid #cfd5dc; color: #44515e; font-size: 12px; }
+.client-timeline { align-items: start; display: grid; grid-template-columns: repeat(5, 1fr); margin: 25px 5px 6px; position: relative; }
+.client-timeline::before { background: #dce1e6; content: ""; height: 2px; left: 10%; position: absolute; right: 10%; top: 14px; }
+.client-timeline-step { color: #9aa3ad; position: relative; text-align: center; z-index: 1; }
+.client-timeline-step span { align-items: center; background: #eef0f2; border: 3px solid #fff; border-radius: 50%; color: #7c8792; display: inline-flex; font: 700 11px/1 Arial, sans-serif; height: 28px; justify-content: center; width: 28px; }
+.client-timeline-step.is-complete span { background: #1d2732; color: #fff; }
+.client-timeline-step.is-current span { background: #b78935; box-shadow: 0 0 0 4px #f5ecd9; }
+.client-timeline-step small { display: block; font: 700 10px/1.3 Arial, sans-serif; margin: 9px auto 0; max-width: 100px; text-transform: capitalize; }
+.client-timeline-step.is-complete small { color: #374151; }
+.client-detail-grid { display: grid; gap: 12px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 16px; }
+.client-detail-grid > div { background: #f8f9fa; border-radius: 8px; padding: 13px; }
+.client-detail-grid strong { color: #334155; display: block; font: 600 13px/1.4 Arial, sans-serif; margin-top: 5px; }
+.client-detail-download { background: #f7f2e7; border: 1px solid #eadbb8; border-radius: 10px; margin-top: 24px; padding: 18px; }
+.client-detail-download h3 { color: #5f481c; font: 700 17px/1.3 Arial, sans-serif; margin: 6px 0 4px; }
+.client-detail-download p { color: #796638; font: 400 13px/1.4 Arial, sans-serif; margin: 0 0 14px; }
+.client-download-button { background: #1d2732; border: 1px solid #1d2732; border-radius: 7px; color: #fff; display: inline-block; font: 700 12px/1 Arial, sans-serif; padding: 11px 14px; text-decoration: none; }
+.client-download-button:hover { background: #b78935; border-color: #b78935; }
+.client-download-button.is-disabled { background: #aaa; border-color: #aaa; cursor: not-allowed; }
+.client-detail-legacy { color: #657180; }
+@media (max-width: 700px) { .client-dashboard-header, .client-dashboard-intro, .client-section-heading, .client-detail-section-heading { align-items: flex-start; flex-direction: column; } .client-header-actions { justify-content: space-between; width: 100%; } .client-header-actions > div { text-align: left; } .client-dashboard-stats { grid-template-columns: 1fr; } .client-timeline { gap: 16px; grid-template-columns: 1fr; margin-left: 0; } .client-timeline::before { bottom: 14px; height: auto; left: 13px; right: auto; top: 14px; width: 2px; } .client-timeline-step { align-items: center; display: flex; gap: 10px; text-align: left; } .client-timeline-step small { margin: 0; max-width: none; } .client-detail-grid { grid-template-columns: 1fr; } .client-outline-button { width: 100%; } }
