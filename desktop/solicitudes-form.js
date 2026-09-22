@@ -178,6 +178,8 @@
     const content = $(".public-entry-content");
     const home = $("#applicantHomePanel");
     if (!content || !home || !applicantSession) return;
+    const requestsTable = $("#applicantHomeRequestsTable");
+    if (requestsTable && !requestsTable.dataset.loaded) requestsTable.innerHTML = '<div class="client-loading-state" role="status"><span class="client-loading-spinner" aria-hidden="true"></span><span>Cargando tus solicitudes…</span></div>';
     content.hidden = true;
     home.hidden = false;
     $("#loginScreen")?.classList.add("applicant-dashboard-active");
@@ -209,6 +211,7 @@
     try {
       const own = await api(`/mis-solicitudes?email=${encodeURIComponent(applicantSession.email)}&usuario_id=${encodeURIComponent(applicantSession.id || "")}`);
       table.innerHTML = applicantOwnRequestsTable(own);
+      table.dataset.loaded = "true";
       if ($("#applicantTotalRequests")) $("#applicantTotalRequests").textContent = own.length;
       if ($("#applicantActiveRequests")) $("#applicantActiveRequests").textContent = own.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
       if ($("#applicantCompletedRequests")) $("#applicantCompletedRequests").textContent = own.filter((item) => String(item.estado || "").toLowerCase() === "concluida").length;
@@ -216,6 +219,12 @@
       table.querySelector("#clientEmptyNewRequest")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
       table.querySelectorAll(".client-request-card").forEach((card) => card.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); const item = own.find((candidate) => candidate.id === card.dataset.requestDetail); if (item) renderRequestDetail(item); } }));
     } catch (error) { table.innerHTML = `<p class="request-empty">${escapeHtml(error.message)}</p>`; }
+  }
+  function apiResourceUrl(source) {
+    const value = String(source || "");
+    if (!value || value.startsWith("data:") || /^https?:\/\//i.test(value)) return value;
+    if (value.startsWith("/")) return `${API.replace(/\/api\/?$/, "")}${value}`;
+    return `${API.replace(/\/$/, "")}/${value}`;
   }
   function safeFileData(file) {
     const data = String(file?.data || "");
@@ -226,7 +235,28 @@
   function requestFileUrl(item, index, download = false) {
     const file = Array.isArray(item.archivos) ? item.archivos[index] : null;
     const suffix = download ? (file?.url?.includes("?") ? "&download=1" : "?download=1") : "";
-    return file?.url ? `${file.url}${suffix}` : `${API}/service-requests/${encodeURIComponent(item.id)}/files/${index}${download ? "?download=1" : ""}`;
+    return file?.url ? `${apiResourceUrl(file.url)}${suffix}` : `${API}/service-requests/${encodeURIComponent(item.id)}/files/${index}${download ? "?download=1" : ""}`;
+  }
+  async function uploadFinalPdf(item) {
+    if (!item?.id) return;
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/pdf,.pdf";
+    input.addEventListener("change", async () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      const formData = new FormData();
+      formData.append("pdf", file, file.name);
+      try {
+        const result = await api(`/admin/solicitudes/${encodeURIComponent(item.id)}/subir-pdf-final`, { method: "POST", body: formData });
+        const updated = result.solicitud || { ...item, estado: "concluida", finalPdfUrl: result.archivoFinal?.url || "" };
+        requests = requests.map((request) => request.id === updated.id ? updated : request);
+        await renderRequests();
+        renderRequestDetail(updated);
+        window.alert("Avalúo final cargado. El trámite quedó como concluido y ya está disponible para el cliente.");
+      } catch (error) { window.alert(error.message || "No fue posible subir el avalúo final."); }
+    });
+    input.click();
   }
   async function annexDocuments(item) {
     if (!item?.id) return;
@@ -263,18 +293,22 @@
     const fileMarkup = files.length ? files.map((file, index) => {
       const name = escapeHtml(file.name || `Archivo ${index + 1}`);
       const data = safeFileData(file);
-      const source = file.url || data;
+      const source = apiResourceUrl(file.url || data);
       if (!source) return `<li class="request-file-card request-file-unavailable"><span>${name}</span><small>Archivo no disponible</small></li>`;
       const preview = String(file.type || "").startsWith("image/") ? `<img src="${escapeHtml(source)}" alt="${name}" />` : file.type === "application/pdf" ? `<iframe title="${name}" src="${escapeHtml(source)}"></iframe>` : `<div class="request-file-icon" aria-hidden="true">DOC</div>`;
       return `<li class="request-file-card request-file-document">${preview}<span>${name}</span><div class="request-file-actions"><button type="button" class="request-detail-button" data-view-file="${index}">Ver</button><button type="button" class="request-detail-button" data-download-file="${index}">Descargar</button></div></li>`;
     }).join("") : `<li class="request-file-empty">No hay documentos ni imágenes adjuntos.</li>`;
-    const finalPdf = item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "";
+    const finalPdf = apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "");
     const finalPdfAction = currentStatus === "concluida" ? (finalPdf ? `<a class="client-download-button" href="${escapeHtml(finalPdf)}" target="_blank" rel="noopener">Descargar Avalúo Final (PDF) ↗</a>` : `<button type="button" class="client-download-button is-disabled" disabled>Avalúo final en preparación</button>`) : "";
+    const activeRole = $("#appShell")?.dataset.role || "";
+    const canUploadFinal = !applicantSession && ["admin", "auditor"].includes(activeRole);
+    const adminFinalAction = canUploadFinal ? `<section class="client-detail-download admin-final-upload-section"><span class="section-kicker">ADMINISTRACIÓN</span><h3>Avalúo final</h3><p>Sube el PDF final para marcar este trámite como concluido.</p><button type="button" class="client-download-button" data-upload-final-pdf="${escapeHtml(item.id)}">Subir Avalúo Final (PDF)</button></section>` : "";
     $("#requestDetailTitle").textContent = `Seguimiento · ${item.folio || "Solicitud"}`;
-    detail.innerHTML = `<div class="client-detail-hero"><div><span class="client-folio">Folio ${escapeHtml(item.folio || "Pendiente")}</span><h3>${escapeHtml(item.tipoAvaluo || "Solicitud de avalúo")}</h3><p>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</p></div><span class="client-status-badge client-status-${requestStatusClass(item.estado)}">${escapeHtml(item.estado || "Recibida")}</span></div><section class="client-detail-section"><div class="client-detail-section-heading"><div><span class="section-kicker">MÓDULO 1</span><h3>Línea del tiempo</h3></div><strong>${escapeHtml(item.estado || "Recibida")}</strong></div>${timeline}</section><section class="client-detail-section"><div class="client-detail-section-heading"><div><span class="section-kicker">RESUMEN</span><h3>Datos del trámite</h3></div></div><div class="client-detail-grid"><div><small>Valuador asignado</small><strong>${escapeHtml(item.asesor || "En asignación")}</strong></div><div><small>Tipo de avalúo</small><strong>${escapeHtml(item.tipoAvaluo || "")}</strong></div><div><small>Contacto</small><strong>${escapeHtml(item.contactoVisita?.nombre || "Pendiente")}</strong></div></div></section><section class="client-detail-section"><div class="client-detail-section-heading"><div><span class="section-kicker">MÓDULO 3</span><h3>Expediente digital</h3><p>Documentos y fotografías entregados con tu solicitud.</p></div><button type="button" class="client-outline-button" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documento faltante</button></div><ul class="request-files-grid">${fileMarkup}</ul></section>${finalPdfAction ? `<section class="client-detail-download"><span class="section-kicker">MÓDULO 2</span><h3>Portal de descargas</h3><p>Tu avalúo final está disponible.</p>${finalPdfAction}</section>` : ""}<section class="request-detail-section client-detail-legacy"><h3>Información registrada</h3><dl>${Object.entries(info).filter(([key, value]) => key !== "archivos" && value && typeof value !== "object").map(([key, value]) => `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("") || "<p>No hay datos adicionales.</p>"}</dl></section>`;
+    detail.innerHTML = `<div class="client-detail-hero"><div><span class="client-folio">Folio ${escapeHtml(item.folio || "Pendiente")}</span><h3>${escapeHtml(item.tipoAvaluo || "Solicitud de avalúo")}</h3><p>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</p></div><span class="client-status-badge client-status-${requestStatusClass(item.estado)}">${escapeHtml(item.estado || "Recibida")}</span></div><section class="client-detail-section"><div class="client-detail-section-heading"><div><span class="section-kicker">MÓDULO 1</span><h3>Línea del tiempo</h3></div><strong>${escapeHtml(item.estado || "Recibida")}</strong></div>${timeline}</section><section class="client-detail-section"><div class="client-detail-section-heading"><div><span class="section-kicker">RESUMEN</span><h3>Datos del trámite</h3></div></div><div class="client-detail-grid"><div><small>Valuador asignado</small><strong>${escapeHtml(item.asesor || "En asignación")}</strong></div><div><small>Tipo de avalúo</small><strong>${escapeHtml(item.tipoAvaluo || "")}</strong></div><div><small>Contacto</small><strong>${escapeHtml(item.contactoVisita?.nombre || "Pendiente")}</strong></div></div></section><section class="client-detail-section"><div class="client-detail-section-heading"><div><span class="section-kicker">MÓDULO 3</span><h3>Expediente digital</h3><p>Documentos y fotografías entregados con tu solicitud.</p></div><button type="button" class="client-outline-button" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documento faltante</button></div><ul class="request-files-grid">${fileMarkup}</ul></section>${adminFinalAction}${finalPdfAction ? `<section class="client-detail-download"><span class="section-kicker">MÓDULO 2</span><h3>Portal de descargas</h3><p>Tu avalúo final está disponible.</p>${finalPdfAction}</section>` : ""}<section class="request-detail-section client-detail-legacy"><h3>Información registrada</h3><dl>${Object.entries(info).filter(([key, value]) => key !== "archivos" && value && typeof value !== "object").map(([key, value]) => `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("") || "<p>No hay datos adicionales.</p>"}</dl></section>`;
     detail.querySelectorAll("[data-view-file]").forEach((button) => button.addEventListener("click", () => { const index = Number(button.dataset.viewFile); const popup = window.open("about:blank", "_blank", "noopener"); if (popup) popup.location.href = requestFileUrl(item, index); else window.location.href = requestFileUrl(item, index); }));
     detail.querySelectorAll("[data-download-file]").forEach((button) => button.addEventListener("click", () => { const link = document.createElement("a"); link.href = requestFileUrl(item, Number(button.dataset.downloadFile), true); link.download = files[Number(button.dataset.downloadFile)]?.name || "archivo"; document.body.appendChild(link); link.click(); link.remove(); }));
     detail.querySelector("[data-attach-missing]")?.addEventListener("click", () => annexDocuments(item));
+    detail.querySelector("[data-upload-final-pdf]")?.addEventListener("click", () => uploadFinalPdf(item));
     openDialog(dialog);
   }
   function bindRequestDetailButtons(container, list) { container.querySelectorAll("[data-request-detail]").forEach((button) => button.addEventListener("click", () => { const item = list.find((candidate) => candidate.id === button.dataset.requestDetail); if (item) renderRequestDetail(item); })); }

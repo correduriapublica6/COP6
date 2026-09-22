@@ -1473,3 +1473,25 @@ body[data-server-status="online"] .sidebar-status-dot { box-shadow: 0 0 12px rgb
 #requestDetailDialog.client-luxury-detail .request-file-card img,
 #requestDetailDialog.client-luxury-detail .request-file-card iframe { border-color: rgba(197,160,89,.35); }
 @media (prefers-reduced-motion: reduce) { #loginScreen.applicant-dashboard-active .client-request-card, #loginScreen.applicant-dashboard-active .client-dashboard-stats article, #loginScreen.applicant-dashboard-active .client-history-section, #loginScreen.applicant-dashboard-active .client-primary-button, #requestDetailDialog.client-luxury-detail[open] { animation: none !important; } }
+
+
+/* Portal cliente: carga inicial rápida y discreta */
+.client-loading-state {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #64748b;
+  font-family: Inter, "Segoe UI", sans-serif;
+}
+.client-loading-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(197, 160, 89, 0.25);
+  border-top-color: #c5a059;
+  border-radius: 50%;
+  animation: client-loading-spin 0.75s linear infinite;
+}
+@keyframes client-loading-spin { to { transform: rotate(360deg); } }
+.admin-final-upload-section { border-color: rgba(197, 160, 89, 0.55) !important; }
