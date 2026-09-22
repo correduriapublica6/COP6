@@ -1731,3 +1731,136 @@ body > #appShell:not(.is-hidden):not([hidden]) {
   height: auto !important;
   overflow: visible !important;
 }
+
+
+/* Header administrativo y navegación en cápsula — ajuste de maquetación */
+.control-shell .app-sidebar {
+  align-items: stretch !important;
+  display: grid !important;
+  grid-template-columns: minmax(250px, 1fr) auto minmax(430px, 1fr) !important;
+  min-height: 92px !important;
+  padding: 14px 28px !important;
+  position: relative !important;
+  width: 100% !important;
+}
+.control-shell .sidebar-brand {
+  align-self: center !important;
+  justify-self: start !important;
+  padding: 0 !important;
+  position: static !important;
+  text-align: left !important;
+}
+.control-shell .sidebar-brand-copy {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+.control-shell .sidebar-brand strong {
+  color: #fffdf8 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 1rem !important;
+  line-height: 1.05 !important;
+}
+.control-shell .sidebar-brand strong small {
+  font-size: .86em !important;
+}
+.control-shell .sidebar-brand-copy > span {
+  color: #d4af37 !important;
+  font: 700 .58rem/1.1 Inter, "Segoe UI", sans-serif !important;
+  letter-spacing: .18em !important;
+}
+.control-shell .sidebar-nav {
+  align-items: center !important;
+  background: #fff !important;
+  border: 1px solid #d4af37 !important;
+  border-radius: 50px !important;
+  box-shadow: 0 7px 18px rgba(15, 23, 42, .12) !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 3px !important;
+  justify-content: center !important;
+  margin: 0 auto !important;
+  padding: 4px 8px !important;
+  width: max-content !important;
+}
+.control-shell .sidebar-nav .nav-capsule-leading {
+  color: #8a6823 !important;
+  display: inline-flex !important;
+  font: 700 1.35rem/1 Inter, "Segoe UI", sans-serif !important;
+  margin: 0 3px 0 2px !important;
+  padding: 0 4px !important;
+}
+.control-shell .sidebar-link {
+  border: 1px solid transparent !important;
+  border-radius: 999px !important;
+  color: #334155 !important;
+  font-size: .75rem !important;
+  font-weight: 750 !important;
+  padding: 8px 11px !important;
+  white-space: nowrap !important;
+}
+.control-shell .sidebar-link:hover,
+.control-shell .sidebar-link.is-active {
+  background: #fff7dc !important;
+  border-color: #d4af37 !important;
+  color: #8a6823 !important;
+  transform: none !important;
+}
+.control-shell .sidebar-link .nav-icon {
+  color: inherit !important;
+  font-size: .85rem !important;
+}
+.control-shell .sidebar-footer {
+  align-self: center !important;
+  justify-self: end !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: static !important;
+}
+.control-shell .sidebar-account-copy {
+  align-items: flex-end !important;
+}
+.control-shell .app-workspace {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+.control-shell .workspace-header {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 1200px !important;
+  width: 100% !important;
+}
+.control-shell .workspace-header-logo {
+  display: none !important;
+}
+.control-shell .app-workspace > .app-view {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 1200px !important;
+  width: 100% !important;
+}
+.control-shell .app-workspace > .chat-widget {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 1200px !important;
+}
+@media (max-width: 1180px) {
+  .control-shell .app-sidebar {
+    grid-template-columns: minmax(210px, 1fr) auto minmax(300px, 1fr) !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+  .control-shell .sidebar-link { padding-left: 8px !important; padding-right: 8px !important; }
+}
+@media (max-width: 920px) {
+  .control-shell .app-sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    min-height: 0 !important;
+  }
+  .control-shell .sidebar-brand { align-self: flex-start !important; }
+  .control-shell .sidebar-nav { align-self: center !important; max-width: 100%; overflow-x: auto; }
+  .control-shell .sidebar-footer { align-self: stretch !important; justify-self: auto !important; }
+  .control-shell .sidebar-account-copy { align-items: flex-start !important; }
+}
