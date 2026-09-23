@@ -2618,3 +2618,59 @@ html,
   background: #c5a059 !important;
   color: #111111 !important;
 }
+
+
+/* v31 — navbar ajustada a pestañas visibles y acciones técnicas con íconos */
+#appShell.control-shell header.app-sidebar nav.sidebar-nav.floating-nav-capsule,
+#appShell.control-shell .app-sidebar > nav.sidebar-nav.floating-nav-capsule {
+  flex: 0 0 auto !important;
+  min-width: auto !important;
+  width: fit-content !important;
+  max-width: 80% !important;
+  margin: 0 auto !important;
+}
+#technicalAppraisalList .technical-row-actions {
+  align-items: center !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+  justify-content: center !important;
+  min-width: max-content !important;
+}
+#technicalAppraisalList .technical-row-actions .action-icon-button {
+  align-items: center !important;
+  border: 1px solid currentColor !important;
+  border-radius: 6px !important;
+  display: inline-flex !important;
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+  font-size: .76rem !important;
+  font-weight: 800 !important;
+  height: 30px !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  min-width: 30px !important;
+  padding: 0 6px !important;
+  text-decoration: none !important;
+  width: auto !important;
+}
+#technicalAppraisalList .technical-row-actions .action-icon-button:hover {
+  filter: brightness(.92) !important;
+  transform: translateY(-1px) !important;
+}
+#technicalAppraisalList .technical-row-actions .action-edit {
+  color: #356b82 !important;
+}
+#technicalAppraisalList .technical-row-actions .action-pdf {
+  color: #c0392b !important;
+}
+#technicalAppraisalList .technical-row-actions .action-word {
+  color: #1769aa !important;
+}
+#technicalAppraisalList .technical-row-actions .action-delete {
+  color: #b42318 !important;
+}
+#technicalAppraisalList .technical-row-actions .action-icon-button span {
+  color: inherit !important;
+  line-height: 1 !important;
+}
