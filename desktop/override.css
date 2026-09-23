@@ -2529,3 +2529,67 @@ html,
     width: 100% !important;
   }
 }
+
+
+/* v29 — cápsula de navegación negra, dorada y compacta */
+.control-shell .app-sidebar > .floating-nav-capsule,
+.navbar-capsule,
+.nav.floating-menu,
+.floating-nav,
+.nav-pills {
+  background: #111111 !important;
+  background-color: #111111 !important;
+  border: 1px solid #c5a059 !important;
+  border-radius: 9999px !important;
+  box-sizing: border-box !important;
+  color: #ffffff !important;
+  margin: 0 auto !important;
+  max-width: 80% !important;
+  width: fit-content !important;
+}
+.control-shell .app-sidebar > .floating-nav-capsule .sidebar-link,
+.navbar-capsule .sidebar-link,
+.nav.floating-menu .sidebar-link,
+.floating-nav .sidebar-link,
+.nav-pills button,
+.nav-pills a {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+.control-shell .app-sidebar > .floating-nav-capsule .sidebar-link .nav-icon,
+.control-shell .app-sidebar > .floating-nav-capsule .sidebar-link span:last-child,
+.navbar-capsule .nav-icon,
+.navbar-capsule span,
+.nav.floating-menu .nav-icon,
+.nav.floating-menu span,
+.floating-nav .nav-icon,
+.floating-nav span,
+.nav-pills button,
+.nav-pills a {
+  color: #ffffff !important;
+}
+.control-shell .app-sidebar > .floating-nav-capsule .sidebar-link.is-active,
+.control-shell .app-sidebar > .floating-nav-capsule .sidebar-link.is-active .nav-icon,
+.control-shell .app-sidebar > .floating-nav-capsule .sidebar-link.is-active span:last-child,
+.navbar-capsule .is-active,
+.nav.floating-menu .is-active,
+.floating-nav .is-active,
+.nav-pills .active,
+.nav-pills [aria-current="page"] {
+  background: #c5a059 !important;
+  border-color: #d4af37 !important;
+  color: #111111 !important;
+  font-weight: 700 !important;
+}
+.control-shell .app-sidebar > .floating-nav-capsule .sidebar-link.is-active .nav-icon,
+.control-shell .app-sidebar > .floating-nav-capsule .sidebar-link.is-active span:last-child,
+.navbar-capsule .is-active .nav-icon,
+.navbar-capsule .is-active span,
+.nav.floating-menu .is-active .nav-icon,
+.nav.floating-menu .is-active span,
+.floating-nav .is-active .nav-icon,
+.floating-nav .is-active span,
+.nav-pills .active,
+.nav-pills [aria-current="page"] {
+  color: #111111 !important;
+}
