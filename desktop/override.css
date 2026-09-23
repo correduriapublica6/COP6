@@ -2382,3 +2382,47 @@ table {
     max-width: calc(100vw - 24px) !important;
   }
 }
+
+
+/* v35 — tabla de Gestión de Avalúos: acciones compactas con iconos */
+.technical-row-actions {
+  align-items: center !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+  justify-content: center !important;
+  min-width: 180px !important;
+  white-space: nowrap !important;
+}
+.technical-icon-button {
+  align-items: center !important;
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  height: 32px !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  width: 34px !important;
+}
+.technical-icon-button .action-icon {
+  font-family: "Segoe UI Symbol", "Segoe UI", Arial, sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+.technical-icon-button .action-icon-label {
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+  font-size: 10px !important;
+  letter-spacing: -.2px !important;
+}
+.technical-icon-button.action-edit { color: #2563eb !important; }
+.technical-icon-button.action-pdf { color: #dc2626 !important; }
+.technical-icon-button.action-word { color: #2563eb !important; }
+.technical-icon-button.action-delete { color: #dc2626 !important; }
+.technical-icon-button:hover {
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+  transform: translateY(-1px) !important;
+}
