@@ -2236,3 +2236,72 @@ body > #appShell:not(.is-hidden):not([hidden]) {
   }
   .control-shell > .floating-nav-capsule .sidebar-link { padding: 6px 11px !important; }
 }
+
+
+/* v24 — tablas amplias y cápsula compacta */
+.main-content,
+.container,
+.dashboard-container,
+#appShell main {
+  width: 96% !important;
+  max-width: 1600px !important;
+  margin: 0 auto !important;
+}
+.control-shell > .app-workspace.main-content {
+  box-sizing: border-box !important;
+  padding: 20px !important;
+  width: 96% !important;
+  max-width: 1600px !important;
+}
+.table-container,
+.table-responsive,
+.operational-table-wrap,
+.request-table-wrap,
+.technical-table-wrap,
+.values-table-wrap,
+#statusRecordList,
+#technicalAppraisalList {
+  max-width: none !important;
+  overflow-x: auto !important;
+  width: 100% !important;
+}
+.table-container table,
+.table-responsive table,
+.operational-table,
+.request-table,
+.technical-table,
+.values-table,
+table {
+  table-layout: auto !important;
+  width: 100% !important;
+  min-width: max-content !important;
+}
+.operational-table th,
+.operational-table td,
+.request-table th,
+.request-table td,
+.technical-table th,
+.technical-table td {
+  white-space: nowrap !important;
+}
+.control-shell > .floating-nav-capsule {
+  margin: 15px auto !important;
+  max-width: 95% !important;
+  padding: 6px 20px !important;
+  width: fit-content !important;
+}
+.control-shell > .floating-nav-capsule .sidebar-link {
+  flex: 0 0 auto !important;
+  min-width: max-content !important;
+  white-space: nowrap !important;
+}
+@media (max-width: 920px) {
+  .control-shell > .app-workspace.main-content {
+    padding: 14px !important;
+    width: 100% !important;
+  }
+  .control-shell > .floating-nav-capsule {
+    max-width: calc(100% - 24px) !important;
+    overflow-x: auto !important;
+  }
+}
