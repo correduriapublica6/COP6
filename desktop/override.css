@@ -2593,3 +2593,28 @@ html,
 .nav-pills [aria-current="page"] {
   color: #111111 !important;
 }
+
+
+/* v30 — selector exacto para impedir que reglas heredadas vuelvan blanca la cápsula */
+#appShell.control-shell header.app-sidebar nav.sidebar-nav.floating-nav-capsule,
+#appShell.control-shell .app-sidebar > nav.sidebar-nav.floating-nav-capsule {
+  background: #111111 !important;
+  background-color: #111111 !important;
+  background-image: none !important;
+  border: 1px solid #c5a059 !important;
+  color: #ffffff !important;
+  margin: 0 auto !important;
+  max-width: 80% !important;
+  width: fit-content !important;
+}
+#appShell.control-shell header.app-sidebar nav.sidebar-nav.floating-nav-capsule > .sidebar-link:not(.is-active),
+#appShell.control-shell header.app-sidebar nav.sidebar-nav.floating-nav-capsule > .sidebar-link:not(.is-active) * {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+}
+#appShell.control-shell header.app-sidebar nav.sidebar-nav.floating-nav-capsule > .sidebar-link.is-active,
+#appShell.control-shell header.app-sidebar nav.sidebar-nav.floating-nav-capsule > .sidebar-link.is-active * {
+  background: #c5a059 !important;
+  color: #111111 !important;
+}
