@@ -2418,3 +2418,114 @@ main,
   width: 100% !important;
   max-width: 100% !important;
 }
+
+
+/* v28 — navbar integrada al header, pantalla completa y tabla técnica compacta */
+body,
+html,
+#appShell {
+  background: #f8fafc !important;
+  margin: 0 !important;
+  min-width: 100% !important;
+  width: 100% !important;
+}
+.control-shell {
+  background: #f8fafc !important;
+  box-sizing: border-box !important;
+  min-height: 100vh !important;
+  padding-top: 78px !important;
+  width: 100% !important;
+}
+.control-shell .app-sidebar {
+  align-items: center !important;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 18px !important;
+  justify-content: space-between !important;
+  min-height: 78px !important;
+  padding: 0 24px !important;
+  width: 100% !important;
+}
+.control-shell .app-sidebar > .sidebar-brand {
+  flex: 0 0 auto !important;
+}
+.control-shell .app-sidebar > .floating-nav-capsule {
+  align-items: center !important;
+  display: flex !important;
+  flex: 1 1 auto !important;
+  justify-content: center !important;
+  margin: 0 auto !important;
+  max-width: 58% !important;
+  min-width: 0 !important;
+  overflow-x: auto !important;
+  position: static !important;
+  width: auto !important;
+}
+.control-shell .app-sidebar > .sidebar-footer {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+}
+.main-content,
+#appShell main,
+.card,
+.container,
+.app-container,
+.dashboard-container,
+.view-container {
+  box-sizing: border-box !important;
+  margin: 20px auto !important;
+  max-width: 1800px !important;
+  width: 98% !important;
+}
+.table-responsive,
+.operational-table-wrap,
+#technicalAppraisalList {
+  max-width: none !important;
+  overflow-x: auto !important;
+  width: 100% !important;
+}
+#technicalAppraisalList table {
+  min-width: 0 !important;
+  table-layout: auto !important;
+  width: 100% !important;
+}
+#technicalAppraisalList th,
+#technicalAppraisalList td {
+  white-space: nowrap !important;
+}
+#technicalAppraisalList .technical-row-actions {
+  align-items: center !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 6px !important;
+}
+@media (max-width: 1180px) {
+  .control-shell .app-sidebar > .floating-nav-capsule {
+    max-width: 48% !important;
+  }
+}
+@media (max-width: 920px) {
+  .control-shell { padding-top: 142px !important; }
+  .control-shell .app-sidebar {
+    align-items: stretch !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    height: auto !important;
+    padding: 12px 16px !important;
+  }
+  .control-shell .app-sidebar > .floating-nav-capsule {
+    flex-basis: 100% !important;
+    max-width: 100% !important;
+    order: 3 !important;
+  }
+  .main-content,
+  #appShell main,
+  .card,
+  .container,
+  .app-container,
+  .dashboard-container,
+  .view-container {
+    margin: 14px auto !important;
+    width: 100% !important;
+  }
+}
