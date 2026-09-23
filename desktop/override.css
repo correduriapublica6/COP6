@@ -2305,3 +2305,63 @@ table {
     overflow-x: auto !important;
   }
 }
+
+
+/* v25 — navbar sticky y contenedor de tablas a ancho completo */
+.control-shell > .floating-nav-capsule,
+.navbar-capsule,
+nav.floating-menu,
+.floating-nav {
+  position: sticky !important;
+  top: 15px !important;
+  z-index: 1000 !important;
+  width: fit-content !important;
+  max-width: 95% !important;
+  margin: 15px auto !important;
+  padding: 6px 20px !important;
+}
+.container,
+.main-content,
+.app-container,
+#appShell main,
+.card,
+.control-shell > .app-workspace.main-content {
+  box-sizing: border-box !important;
+  width: 95% !important;
+  max-width: 1700px !important;
+  margin: 20px auto !important;
+}
+.table-responsive,
+.table-responsive table,
+.table-container,
+.table-container table,
+.operational-table-wrap,
+.operational-table,
+.request-table-wrap,
+.request-table,
+table {
+  width: 100% !important;
+}
+.operational-table-wrap,
+.request-table-wrap,
+.table-responsive,
+.table-container {
+  max-width: none !important;
+  overflow-x: auto !important;
+}
+@media (max-width: 920px) {
+  .control-shell > .app-workspace.main-content,
+  .main-content,
+  .app-container,
+  #appShell main {
+    width: 100% !important;
+    margin: 14px auto !important;
+  }
+  .control-shell > .floating-nav-capsule,
+  .navbar-capsule,
+  nav.floating-menu,
+  .floating-nav {
+    max-width: calc(100% - 24px) !important;
+    padding: 6px 12px !important;
+  }
+}
