@@ -2350,3 +2350,35 @@ table {
   max-width: 280px !important;
   margin-bottom: 12px !important;
 }
+
+
+/* v34 — navbar centrada respecto a toda la pantalla */
+#appShell.control-shell > .floating-nav-capsule {
+  position: fixed !important;
+  top: 18px !important;
+  left: 50vw !important;
+  right: auto !important;
+  inset-inline-start: 50vw !important;
+  inset-inline-end: auto !important;
+  margin: 0 !important;
+  transform: translateX(-50%) !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: max-content !important;
+  max-width: 90vw !important;
+  z-index: 1100 !important;
+}
+#appShell.control-shell > .floating-nav-capsule .sidebar-link {
+  flex: 0 0 auto !important;
+  text-align: center !important;
+}
+@media (max-width: 920px) {
+  #appShell.control-shell > .floating-nav-capsule {
+    position: fixed !important;
+    top: 12px !important;
+    left: 50vw !important;
+    inset-inline-start: 50vw !important;
+    width: max-content !important;
+    max-width: calc(100vw - 24px) !important;
+  }
+}
