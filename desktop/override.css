@@ -2426,3 +2426,16 @@ table {
   border-color: #94a3b8 !important;
   transform: translateY(-1px) !important;
 }
+
+
+/* v36 — estado activo blanco con texto negro en la navbar */
+#appShell.control-shell > .floating-nav-capsule .sidebar-link.is-active,
+#appShell.control-shell > .floating-nav-capsule .sidebar-link.is-active:hover {
+  background: #ffffff !important;
+  border: none !important;
+  color: #111111 !important;
+  font-weight: 700 !important;
+}
+#appShell.control-shell > .floating-nav-capsule .sidebar-link.is-active span {
+  color: #111111 !important;
+}
