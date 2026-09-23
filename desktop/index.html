@@ -65,19 +65,19 @@
     <dialog id="applicantRegisterDialog" class="record-dialog applicant-register-dialog"><form id="applicantRegisterForm" class="applicant-register-form" novalidate><div class="dialog-heading"><div><p class="eyebrow">REGISTRARSE</p><h2>Registrarse</h2></div><button id="closeApplicantRegisterButton" class="icon-button" type="button" aria-label="Cerrar">×</button></div><div class="form-grid"><label>Nombre completo *<input name="nombre" required /></label><label>Correo electrónico *<input name="correo" type="email" required /></label><label>Teléfono<input name="telefono" /></label><label>Notaría <select name="notaria" id="applicantRegisterNotary"><option value="">Selecciona una notaría (opcional)</option></select></label><label>Contraseña *<input name="password" type="password" minlength="6" required /></label><label class="full-width">Confirmar contraseña *<input name="passwordConfirm" type="password" minlength="6" required /></label></div><p id="applicantRegisterMessage" class="form-message" role="alert"></p><div class="dialog-actions"><button id="cancelApplicantRegisterButton" class="secondary-button" type="button">Cancelar</button><button class="primary-button" type="submit">Registrar solicitante</button></div></form></dialog>
 
     <main id="appShell" class="app-shell control-shell is-hidden" hidden>
-      <header class="app-sidebar" aria-label="Navegación principal">
+      <aside class="app-sidebar" aria-label="Navegación principal">
         <div class="sidebar-brand"><div class="sidebar-brand-copy"><strong>Correduría Pública No. 6</strong></div></div>
-        <nav class="sidebar-nav floating-nav-capsule" aria-label="Secciones">
-          <span class="nav-capsule-leading" aria-hidden="true">‹</span>
-          <button id="homeButton" class="sidebar-link" data-app-view="inicio" type="button"><span class="nav-icon">⌂</span><span>Home</span></button>
-          <button class="sidebar-link is-active" data-app-view="avaluos" type="button"><span class="nav-icon">▦</span><span>Avalúos</span></button>
-          <button class="sidebar-link fe-publica-access" data-app-view="fe-publica" type="button"><span class="nav-icon">⌁</span><span>Fe Pública</span></button>
-          <button class="sidebar-link summary-access" data-app-view="resumen" type="button"><span class="nav-icon">▤</span><span>Resumen general</span></button>
-          <button class="sidebar-link admin-only" data-app-view="usuarios" type="button"><span class="nav-icon">◉</span><span>Usuarios</span></button>
-          <button class="sidebar-link admin-only" data-app-view="configuracion" type="button"><span class="nav-icon">⚙</span><span>Configuración</span></button>
-        </nav>
         <div class="sidebar-footer"><div class="sidebar-account"><div class="sidebar-account-copy"><strong id="activeUser" class="active-user"></strong><span id="activeUserRole" class="active-user-role"></span><span id="serverConnectionStatus" class="sidebar-online" role="status" aria-live="polite" title="Comprobando conexión con el servidor de Recepción"><span class="sidebar-status-dot"></span><span id="serverStatusLabel">Comprobando servidor</span></span></div></div><div class="admin-header-actions"><button id="logoutButton" class="client-logout-button" type="button">Cerrar sesión</button></div></div>
-      </header>
+      </aside>
+
+      <nav class="sidebar-nav floating-nav-capsule" aria-label="Secciones">
+        <button id="homeButton" class="sidebar-link" data-app-view="inicio" type="button"><span>Home</span></button>
+        <button class="sidebar-link is-active" data-app-view="avaluos" type="button"><span>Avalúos</span></button>
+        <button class="sidebar-link fe-publica-access" data-app-view="fe-publica" type="button"><span>Fe Pública</span></button>
+        <button class="sidebar-link summary-access" data-app-view="resumen" type="button"><span>Resumen general</span></button>
+        <button class="sidebar-link admin-only" data-app-view="usuarios" type="button"><span>Usuarios</span></button>
+        <button class="sidebar-link admin-only" data-app-view="configuracion" type="button"><span>Configuración</span></button>
+      </nav>
 
       <section class="app-workspace main-content">
         <header class="workspace-header">
