@@ -2365,3 +2365,39 @@ table {
     padding: 6px 12px !important;
   }
 }
+
+
+/* v26 — contenedor principal de tablas a ancho casi completo.
+   La navbar actual se conserva sin cambios. */
+.card,
+.container,
+.main-content,
+.app-container,
+#appShell main,
+.view-container {
+  box-sizing: border-box !important;
+  width: 96% !important;
+  max-width: 1800px !important;
+  margin: 20px auto !important;
+}
+.table-responsive,
+.table-responsive table,
+table {
+  width: 100% !important;
+  table-layout: auto !important;
+}
+.table-responsive {
+  max-width: none !important;
+  overflow-x: auto !important;
+}
+@media (max-width: 920px) {
+  .card,
+  .container,
+  .main-content,
+  .app-container,
+  #appShell main,
+  .view-container {
+    width: 100% !important;
+    margin: 14px auto !important;
+  }
+}
