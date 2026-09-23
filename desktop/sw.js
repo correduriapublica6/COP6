@@ -1,4 +1,4 @@
-const CACHE_NAME = "control-operativo-cp6-v36-grupo1-navbar-activo";
+const CACHE_NAME = "control-operativo-cp6-v37-solo-detalles";
 const APP_SHELL = ["./", "./index.html", "./styles.css", "./dashboard.css", "./override.css", "./app.js", "./automotriz-form.js", "./automotriz-model.js", "./mobiliario-form.js", "./solicitudes-form.js", "./image-utils.js", "./word-export.js", "./vendor/html-docx.js", "./manifest.webmanifest", "./assets/fondo.jpg", "./assets/pwa-icon-512.png"];
 
 self.addEventListener("install", (event) => {
