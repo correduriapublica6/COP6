@@ -2674,3 +2674,133 @@ html,
   color: inherit !important;
   line-height: 1 !important;
 }
+
+
+/* v32 — tarjetas blancas, header ejecutivo y navbar centrada sin marco dorado */
+:root {
+  --ui-modern-sans: Inter, "Segoe UI", Arial, sans-serif;
+  --ui-formal-serif: Georgia, "Times New Roman", serif;
+}
+
+/* Tarjetas de la aplicación: eliminar beige y unificar en blanco puro. */
+.control-shell .welcome-card,
+.control-shell .welcome-tasks,
+.control-shell .home-action-card,
+.control-shell .action-card,
+.control-shell .tasks-card,
+.control-shell .card,
+.control-shell .panel,
+.control-shell .inline-panel,
+.control-shell .search-panel,
+.control-shell .technical-list-panel,
+.control-shell .technical-form-section,
+.control-shell .setting-card,
+.control-shell .users-admin-card,
+.control-shell .users-external-card,
+.control-shell .validation-pending-section,
+.control-shell .registered-applicants-panel,
+.control-shell .public-entry-panel {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #1e293b !important;
+}
+.control-shell .welcome-card {
+  border: 1px solid #e2e8f0 !important;
+  border-left: 5px solid #c5a059 !important;
+  border-radius: 12px !important;
+}
+.control-shell .home-action-card,
+.control-shell .action-card,
+.control-shell .tasks-card,
+.control-shell .welcome-tasks {
+  border-color: #e2e8f0 !important;
+}
+
+/* Header negro degradado con acento dorado inferior. */
+#appShell.control-shell > header.app-sidebar,
+#appShell.control-shell header.app-sidebar,
+#appShell.control-shell .top-navbar {
+  background: linear-gradient(180deg, #18181b 0%, #09090b 100%) !important;
+  border-bottom: 2px solid #c5a059 !important;
+}
+#appShell.control-shell .sidebar-brand strong,
+#appShell.control-shell .sidebar-brand,
+#appShell.control-shell .sidebar-brand * {
+  color: #ffffff !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-weight: 700 !important;
+  letter-spacing: .01em !important;
+}
+
+/* Navbar: sin marco dorado, centrada dentro del header y ajustada al contenido. */
+#appShell.control-shell > header.app-sidebar > .floating-nav-capsule,
+#appShell.control-shell header.app-sidebar > nav.floating-nav-capsule,
+#appShell.control-shell .app-sidebar > .floating-nav-capsule,
+#appShell.control-shell .navbar-capsule,
+#appShell.control-shell nav.floating-menu,
+#appShell.control-shell .floating-nav,
+#appShell.control-shell .nav-pills {
+  align-items: center !important;
+  background: #111111 !important;
+  background-color: #111111 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+  gap: 4px !important;
+  left: 50% !important;
+  margin: 0 !important;
+  max-width: 80% !important;
+  min-width: auto !important;
+  overflow-x: auto !important;
+  padding: 5px 8px !important;
+  position: absolute !important;
+  transform: translateX(-50%) !important;
+  width: fit-content !important;
+}
+#appShell.control-shell .floating-nav-capsule .sidebar-link,
+#appShell.control-shell .navbar-capsule .sidebar-link,
+#appShell.control-shell nav.floating-menu .sidebar-link,
+#appShell.control-shell .floating-nav .sidebar-link,
+#appShell.control-shell .nav-pills button,
+#appShell.control-shell .nav-pills a {
+  color: #ffffff !important;
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+  font-size: .92rem !important;
+  font-weight: 600 !important;
+}
+
+/* Títulos y textos de secciones con sans-serif moderna y alto contraste. */
+.control-shell .home-actions-heading h3,
+.control-shell .welcome-tasks h3,
+.control-shell .section-heading h2,
+.control-shell .section-heading h3,
+.control-shell .technical-section-heading h2,
+.control-shell .technical-section-heading h3,
+.control-shell .section-title,
+.control-shell .card-title {
+  color: #1e293b !important;
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+  font-weight: 700 !important;
+}
+.control-shell .home-actions-heading p,
+.control-shell .welcome-tasks p,
+.control-shell .home-action-card small,
+.control-shell .welcome-copy {
+  color: #334155 !important;
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+}
+
+@media (max-width: 920px) {
+  #appShell.control-shell > header.app-sidebar > .floating-nav-capsule,
+  #appShell.control-shell header.app-sidebar > nav.floating-nav-capsule,
+  #appShell.control-shell .app-sidebar > .floating-nav-capsule {
+    left: auto !important;
+    max-width: 100% !important;
+    position: static !important;
+    transform: none !important;
+    width: fit-content !important;
+  }
+}
