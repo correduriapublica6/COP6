@@ -632,7 +632,7 @@
   }
 
   const VIEW_DETAILS = {
-    inicio: { title: "Correduría Pública 6", kicker: "", description: "" },
+    inicio: { title: "", kicker: "", description: "" },
     solicitudes: { title: "Solicitudes de servicio", kicker: "CONTROL DE SOLICITUDES", description: "Administra solicitudes, asesores y estados del proceso." },
     avaluos: { title: "Avalúos", kicker: "", description: "Registra, consulta, filtra, edita y da seguimiento a cada avalúo." },
     "fe-publica": { title: "Fe Pública", kicker: "", description: "" },

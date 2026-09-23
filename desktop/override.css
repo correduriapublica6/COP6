@@ -2401,3 +2401,20 @@ table {
     margin: 14px auto !important;
   }
 }
+
+
+/* v27 — ancho completo efectivo del contenido principal */
+main,
+.main-content,
+.container,
+.dashboard-container {
+  width: 98% !important;
+  max-width: 1800px !important;
+  margin: 0 auto !important;
+}
+.card,
+.welcome-card,
+.table-responsive {
+  width: 100% !important;
+  max-width: 100% !important;
+}
