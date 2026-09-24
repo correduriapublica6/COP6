@@ -39,6 +39,7 @@
   let saved = new Set();
   let editingItemId = null;
   let itemPhotoDataUrl = '';
+  let activeTechnicalType = 'mobiliario';
 
   const esc = (value) => String(value ?? '').replace(/[&<>'"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[c]));
   const money = (value) => new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(Number(value) || 0);
@@ -69,18 +70,24 @@
     const pricing = valueInputs.get(item.id) || { unidad: 'Pieza', valorUnitario: '', factorDepreciacion: '1' };
     const total = number(pricing.valorUnitario) * number(item.cantidad);
     const actual = total * number(pricing.factorDepreciacion ?? 1);
+    const itemFactor = (number(pricing.obsolescenciaFuncional ?? 1) + number(pricing.obsolescenciaEconomica ?? 1)) / 2;
     row.querySelector('[data-value-output="total"]').textContent = money(total);
     row.querySelector('[data-value-output="actual"]').textContent = money(actual);
+    row.querySelector('[data-value-output="factor"]')?.replaceChildren(document.createTextNode(itemFactor.toFixed(2)));
+    row.querySelector('[data-value-output="aplicable"]')?.replaceChildren(document.createTextNode(money(actual * itemFactor)));
     updateValueSummary();
   }
 
   function renderValues() {
+    const isMachinery = activeTechnicalType === 'maquinaria';
+    if (isMachinery) { const head = values.closest('table')?.querySelector('thead tr'); if (head) head.innerHTML = '<th>Descripción</th><th>Unidad</th><th>Cantidad</th><th>Valor unitario</th><th>Total</th><th>Depreciación</th><th>Valor actual</th><th>Obsolescencia funcional</th><th>Obsolescencia económica</th><th>Factor</th><th>Valor aplicable</th>'; } else { const head = values.closest('table')?.querySelector('thead tr'); if (head) head.innerHTML = '<th>Descripción</th><th>Unidad</th><th>Cantidad</th><th>Valor unitario</th><th>Total</th><th>Factor de depreciación</th><th>Valor actual</th>'; }
     values.innerHTML = itemRecords.length ? itemRecords.map((item) => {
       const pricing = valueInputs.get(item.id) || { unidad: 'Pieza', valorUnitario: '', factorDepreciacion: '1' };
       const total = number(pricing.valorUnitario) * number(item.cantidad);
       const actual = total * number(pricing.factorDepreciacion ?? 1);
-      return `<tr data-value-id="${esc(item.id)}"><td>${esc(item.descripcion || 'Sin descripción')}</td><td><input data-field="unidad" value="${esc(pricing.unidad || 'Pieza')}" /></td><td>${item.cantidad}</td><td><input data-field="valorUnitario" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(pricing.valorUnitario ?? '')}" /></td><td data-value-output="total">${money(total)}</td><td><input data-field="factorDepreciacion" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(pricing.factorDepreciacion ?? '1')}" /></td><td data-value-output="actual">${money(actual)}</td></tr>`;
-    }).join('') : '<tr><td colspan="7" class="values-empty">Agrega al menos un bien en Características para capturar sus valores.</td></tr>';
+      const machineryCells = isMachinery ? `<td><input data-field="obsolescenciaFuncional" type="number" min="0" step="0.01" value="${esc(pricing.obsolescenciaFuncional ?? '1')}" /></td><td><input data-field="obsolescenciaEconomica" type="number" min="0" step="0.01" value="${esc(pricing.obsolescenciaEconomica ?? '1')}" /></td><td data-value-output="factor">${((number(pricing.obsolescenciaFuncional ?? 1) + number(pricing.obsolescenciaEconomica ?? 1)) / 2).toFixed(2)}</td><td data-value-output="aplicable">${money(actual * ((number(pricing.obsolescenciaFuncional ?? 1) + number(pricing.obsolescenciaEconomica ?? 1)) / 2))}</td>` : '';
+      return `<tr data-value-id="${esc(item.id)}"><td>${esc(item.descripcion || 'Sin descripción')}</td><td><input data-field="unidad" value="${esc(pricing.unidad || 'Pieza')}" /></td><td>${item.cantidad}</td><td><input data-field="valorUnitario" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(pricing.valorUnitario ?? '')}" /></td><td data-value-output="total">${money(total)}</td><td><input data-field="factorDepreciacion" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(pricing.factorDepreciacion ?? '1')}" /></td><td data-value-output="actual">${money(actual)}</td>${machineryCells}</tr>`;
+    }).join('') : `<tr><td colspan="${isMachinery ? 11 : 7}" class="values-empty">Agrega al menos un bien en Características para capturar sus valores.</td></tr>`;
     values.querySelectorAll('tr[data-value-id]').forEach((row) => {
       row.querySelectorAll('input').forEach((input) => input.addEventListener('input', () => {
         const pricing = valueInputs.get(row.dataset.valueId) || { unidad: 'Pieza', valorUnitario: '', factorDepreciacion: '1' };
@@ -120,7 +127,7 @@
   function addItem(item = {}) {
     const id = item.id || `bien-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     itemRecords.push({ id, cantidad: Math.min(999, Math.max(1, number(item.cantidad) || 1)), descripcion: item.descripcion || '', marca: item.marca || '', serie: item.serie || '', condiciones: item.condiciones || '', fotografia: item.fotografia || item.foto || '' });
-    valueInputs.set(id, { unidad: item.unidad || 'Pieza', valorUnitario: item.valorUnitario ?? '', factorDepreciacion: item.factorDepreciacion ?? '1' });
+    valueInputs.set(id, { unidad: item.unidad || 'Pieza', valorUnitario: item.valorUnitario ?? '', factorDepreciacion: item.factorDepreciacion ?? '1', obsolescenciaFuncional: item.obsolescenciaFuncional ?? item.obsolescencia?.funcional ?? '1', obsolescenciaEconomica: item.obsolescenciaEconomica ?? item.obsolescencia?.economica ?? '1' });
     renderItems();
     renderValues();
   }
@@ -201,12 +208,13 @@
 
   function buildAppraisal(estadoExpediente = 'borrador') {
     const data = new FormData(form);
-    const bienes = readItems().map((item) => { const pricing = valueInputs.get(item.id) || {}; const valorUnitario = number(pricing.valorUnitario); const factorDepreciacion = number(pricing.factorDepreciacion ?? 1); const total = valorUnitario * item.cantidad; return { ...item, unidad: pricing.unidad || 'Pieza', valorUnitario, factorDepreciacion, total, valorActual: total * factorDepreciacion }; });
+    const bienes = readItems().map((item) => { const pricing = valueInputs.get(item.id) || {}; const valorUnitario = number(pricing.valorUnitario); const factorDepreciacion = number(pricing.factorDepreciacion ?? 1); const total = valorUnitario * item.cantidad; const obsolescenciaFuncional = number(pricing.obsolescenciaFuncional ?? 1); const obsolescenciaEconomica = number(pricing.obsolescenciaEconomica ?? 1); const factorObsolescencia = (obsolescenciaFuncional + obsolescenciaEconomica) / 2; return { ...item, unidad: pricing.unidad || 'Pieza', valorUnitario, factorDepreciacion, total, valorActual: total * factorDepreciacion, obsolescenciaFuncional, obsolescenciaEconomica, factorObsolescencia, valorAplicable: total * factorDepreciacion * factorObsolescencia }; });
     const valorActualTotal = bienes.reduce((sum, item) => sum + item.valorActual, 0);
+    const valorAplicableMaquinaria = bienes.reduce((sum, item) => sum + item.valorAplicable, 0);
     const functional = number(document.querySelector('#mobiliarioFunctional').value || 1);
     const economic = number(document.querySelector('#mobiliarioEconomic').value || 1);
     const factor = (functional + economic) / 2;
-    return { id: editingId || `mobiliario-${Date.now()}-${Math.random().toString(16).slice(2)}`, tipo: 'mobiliario', tipoAvaluo: 'Mobiliario y Bienes Diversos', estadoExpediente, numeroAvaluo: folio.value, solicitante: String(data.get('solicitante') || '').trim(), fechaSolicitud: String(data.get('fechaSolicitud') || ''), fechaVisita: String(data.get('fechaVisita') || ''), fechaAvaluo: String(data.get('fechaAvaluo') || ''), bienesAValuar: String(data.get('bienesAValuar') || '').trim(), propietario: String(data.get('propietario') || '').trim(), ubicacionBienes: String(data.get('ubicacionBienes') || '').trim(), objetivoAvaluo: currentObjective(), propositoAvaluo: String(data.get('propositoAvaluo') || '').trim(), localizacionFoto: locationDataUrl, bienes, valoresMobiliario: bienes, valorActualTotal, valorMercado: Math.round(valorActualTotal), valorMercadoAplicable: Math.round(valorActualTotal) * factor, obsolescencia: { descripcion: document.querySelector('#mobiliarioReplacementDescription').value, cantidad: number(document.querySelector('#mobiliarioReplacementQuantity').value || 1), funcional: functional, economica: economic, factor }, consideraciones: [...considerations.before], consideracionesConclusion: [...considerations.conclusion], creadoPor: app.getActiveUser(), creadoEn: editingCreatedAt || undefined };
+    return { id: editingId || `mobiliario-${Date.now()}-${Math.random().toString(16).slice(2)}`, tipo: activeTechnicalType === 'maquinaria' ? 'maquinaria' : 'mobiliario', tipoAvaluo: activeTechnicalType === 'maquinaria' ? 'Maquinaria y equipo' : 'Mobiliario y Bienes Diversos', estadoExpediente, numeroAvaluo: folio.value, solicitante: String(data.get('solicitante') || '').trim(), fechaSolicitud: String(data.get('fechaSolicitud') || ''), fechaVisita: String(data.get('fechaVisita') || ''), fechaAvaluo: String(data.get('fechaAvaluo') || ''), bienesAValuar: String(data.get('bienesAValuar') || '').trim(), propietario: String(data.get('propietario') || '').trim(), ubicacionBienes: String(data.get('ubicacionBienes') || '').trim(), objetivoAvaluo: currentObjective(), propositoAvaluo: String(data.get('propositoAvaluo') || '').trim(), localizacionFoto: locationDataUrl, bienes, valoresMobiliario: bienes, valorActualTotal, valorMercado: Math.round(valorActualTotal), valorMercadoAplicable: activeTechnicalType === 'maquinaria' ? Math.round(valorAplicableMaquinaria) : Math.round(valorActualTotal) * factor, obsolescencia: { descripcion: document.querySelector('#mobiliarioReplacementDescription').value, cantidad: number(document.querySelector('#mobiliarioReplacementQuantity').value || 1), funcional: functional, economica: economic, factor }, consideraciones: [...considerations.before], consideracionesConclusion: [...considerations.conclusion], creadoPor: app.getActiveUser(), creadoEn: editingCreatedAt || undefined };
   }
 
   async function persistMobiliarioImages(appraisal) {
@@ -246,10 +254,13 @@
   function reset() { form.reset(); objectiveSelect.value = ''; objectiveSelect.dispatchEvent(new Event('change', { bubbles: true })); editingId = null; editingCreatedAt = null; editingItemId = null; itemRecords.splice(0, itemRecords.length); valueInputs.clear(); locationDataUrl = ''; setLocationPreview(); itemPhotoDataUrl = ''; renderItemPhotoPreview(); considerations.before.length = 0; considerations.conclusion.length = 0; renderConsiderations('before'); renderConsiderations('conclusion'); clearItemEditor(); renderItems(); renderValues(); saved = new Set(); step = 0; form._mobiliarioRender?.(); refreshFolio(); }
 
   function openEditor(appraisal = null) {
+    activeTechnicalType = appraisal?.tipo === 'maquinaria' ? 'maquinaria' : (typeSelect.value === 'maquinaria-equipo' ? 'maquinaria' : 'mobiliario');
     if (!app.canEdit()) { window.alert('Tu rol no tiene permiso para crear o editar avalúos técnicos.'); return; }
-    document.querySelector('#technicalListPanel').hidden = true; document.querySelector('#technicalCreationPanel').hidden = false; typePanel.classList.add('is-hidden'); hint.hidden = true; editor.hidden = false; document.querySelector('#automotrizEditor').hidden = true; typeSelect.value = 'muebles-varios'; createWizard();
+    document.querySelector('#technicalListPanel').hidden = true;
+    document.querySelectorAll('#mobiliarioEditor .technical-section-heading h3').forEach((heading) => { if (heading.textContent === 'Valores') heading.textContent = activeTechnicalType === 'maquinaria' ? 'Valores de Maquinaria y equipo' : 'Valores'; }); document.querySelector('#technicalCreationPanel').hidden = false; typePanel.classList.add('is-hidden'); hint.hidden = true; editor.hidden = false; document.querySelector('#automotrizEditor').hidden = true; typeSelect.value = 'muebles-varios'; createWizard();
     reset();
     if (!appraisal) return;
+    if (appraisal?.tipo === 'maquinaria') { activeTechnicalType = 'maquinaria'; typeSelect.value = 'maquinaria-equipo'; }
     editingId = appraisal.id; editingCreatedAt = appraisal.creadoEn || appraisal.createdAt || null; valueInputs.clear(); const set = (name, value) => { const field = form.elements.namedItem(name); if (field) field.value = value || ''; };
     folio.value = appraisal.numeroAvaluo || ''; set('solicitante', appraisal.solicitante); set('fechaSolicitud', appraisal.fechaSolicitud); set('fechaVisita', appraisal.fechaVisita); set('fechaAvaluo', appraisal.fechaAvaluo); set('bienesAValuar', appraisal.bienesAValuar); set('propietario', appraisal.propietario); set('ubicacionBienes', appraisal.ubicacionBienes); set('propositoAvaluo', appraisal.propositoAvaluo); if ([...objectiveSelect.options].some((option) => option.value === appraisal.objetivoAvaluo)) { objectiveSelect.value = appraisal.objetivoAvaluo || ''; otherObjectiveField.hidden = objectiveSelect.value !== 'Otro'; otherObjectiveInput.value = ''; } else { objectiveSelect.value = 'Otro'; otherObjectiveField.hidden = false; otherObjectiveInput.value = appraisal.objetivoAvaluo || ''; } objectiveSelect.dispatchEvent(new Event('change', { bubbles: true })); locationDataUrl = appraisal.localizacionFoto || ''; setLocationPreview(); itemRecords.splice(0, itemRecords.length); items.innerHTML = ''; (appraisal.bienes || []).forEach((item) => addItem(item)); renderItems(); renderValues(); considerations.before.push(...(appraisal.consideraciones || [])); considerations.conclusion.push(...(appraisal.consideracionesConclusion || [])); renderConsiderations('before'); renderConsiderations('conclusion'); saved = new Set([0, ...(appraisal.bienes?.length ? [1] : []), ...(appraisal.consideraciones?.length ? [2] : []), ...(appraisal.valoresMobiliario?.length ? [3] : []), ...(appraisal.consideracionesConclusion?.length ? [4] : [])]); form._mobiliarioRender?.(); message.textContent = `Editando el avalúo ${appraisal.numeroAvaluo}.`;
   }
@@ -292,11 +303,11 @@
   objectiveSelect.addEventListener('change', () => { const other = objectiveSelect.value === 'Otro'; otherObjectiveField.hidden = !other; otherObjectiveInput.required = other; if (!other) otherObjectiveInput.value = ''; });
   form.addEventListener('submit', async (event) => { event.preventDefault(); if (!app.canEdit()) return; if (!itemRecords.length) { message.textContent = 'Agrega al menos un bien en Características antes de guardar.'; form._mobiliarioGoTo?.(1); return; } if (!currentObjective()) { message.textContent = 'Especifica el objeto del avalúo.'; form._mobiliarioGoTo?.(0); return; } let appraisal = buildAppraisal('completo'); message.textContent = 'Guardando el expediente técnico…'; try { appraisal = await persistMobiliarioImages(appraisal); const stored = await app.saveTechnicalAppraisal(appraisal); editingId = stored.id; editingCreatedAt = stored.creadoEn || stored.createdAt || editingCreatedAt; folio.value = stored.numeroAvaluo || folio.value; message.classList.remove('is-error'); message.classList.add('is-success'); message.textContent = `Avalúo de Mobiliario y Bienes Diversos ${folio.value} guardado.`; window.setTimeout(() => { document.querySelector('#technicalListPanel').hidden = false; document.querySelector('#technicalCreationPanel').hidden = true; editor.hidden = true; typeSelect.value = ''; typeSelect.dispatchEvent(new Event('change', { bubbles: true })); typePanel.classList.remove('is-hidden'); }, 800); } catch (error) { message.classList.remove('is-success'); message.classList.add('is-error'); message.textContent = error.message || 'No se pudo guardar el avalúo.'; } });
 
-  window.addEventListener('control-avaluos:open-mobiliario-edit', (event) => openEditor(event.detail));
+  window.addEventListener('control-avaluos:open-mobiliario-edit', (event) => { if (event.detail?.tipo === 'maquinaria') activeTechnicalType = 'maquinaria'; openEditor(event.detail?.tipo && !event.detail.id ? null : event.detail); renderValues(); });
   window.addEventListener('control-avaluos:preview-mobiliario', (event) => printPdf(event.detail));
   window.addEventListener('control-avaluos:word-mobiliario', (event) => printPdf(event.detail, { word: true }));
   window.addEventListener('control-avaluos:open-technical-creation', () => { if (typeSelect.value === 'muebles-varios') openEditor(); });
   window.addEventListener('control-avaluos:technical-appraisals-updated', () => { if (typeSelect.value === 'muebles-varios') refreshFolio(); });
-  typeSelect.addEventListener('change', () => { if (typeSelect.value !== 'muebles-varios') return; typePanel.classList.add('is-hidden'); hint.hidden = true; editor.hidden = true; document.querySelector('#automotrizEditor').hidden = true; createWizard(); openEditor(); });
+  typeSelect.addEventListener('change', () => { if (!['muebles-varios', 'maquinaria-equipo'].includes(typeSelect.value)) return; activeTechnicalType = typeSelect.value === 'maquinaria-equipo' ? 'maquinaria' : 'mobiliario'; typePanel.classList.add('is-hidden'); hint.hidden = true; editor.hidden = false; document.querySelector('#automotrizEditor').hidden = true; createWizard(); openEditor(); renderValues(); });
   createWizard(); reset();
 })();

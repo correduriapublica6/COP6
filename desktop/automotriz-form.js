@@ -11,6 +11,7 @@
   const otherObjectiveInput = document.querySelector("#otroObjetivoInput");
   const typeSelect = document.querySelector("#technicalTypeSelect");
   const typeHint = document.querySelector("#technicalTypeHint");
+  const selectedTypeMessage = document.querySelector("#technicalSelectedType");
   const editor = document.querySelector("#automotrizEditor");
   const message = document.querySelector("#automotrizMessage");
   const folioInput = document.querySelector("#technicalFolioInput");
@@ -869,6 +870,7 @@
   function resetTechnicalForm() {
     form.reset();
     document.querySelector(".appraisal-type-panel")?.classList.remove("is-hidden");
+    if (selectedTypeMessage) { selectedTypeMessage.hidden = true; selectedTypeMessage.textContent = ""; }
     message.textContent = "";
     photoStore.clear();
     marketResearchStore.clear();
@@ -898,7 +900,7 @@
   }
 
   function openTechnicalEdit(appraisal) {
-    if (appraisal?.tipo === "mobiliario") { window.dispatchEvent(new CustomEvent("control-avaluos:open-mobiliario-edit", { detail: appraisal })); return; }
+    if (appraisal?.tipo === "mobiliario" || appraisal?.tipo === "maquinaria") { window.dispatchEvent(new CustomEvent("control-avaluos:open-mobiliario-edit", { detail: appraisal })); return; }
     if (!app.canEdit()) { window.alert("Tu rol es de solo lectura y no puede editar avalúos."); return; }
     form.reset();
     photoStore.clear();
@@ -911,7 +913,9 @@
     editingTechnicalCreatedAt = appraisal.creadoEn || appraisal.createdAt || null;
     setSubsection("crear");
     setTechnicalCreationMode(true);
-    typeSelect.value = "automotriz";
+    typeSelect.value = appraisal?.tipo === "maquinaria" ? "maquinaria-equipo" : "automotriz";
+    document.querySelector(".appraisal-type-panel")?.classList.add("is-hidden");
+    if (selectedTypeMessage) { selectedTypeMessage.hidden = false; selectedTypeMessage.textContent = `Tipo de avalúo: ${typeSelect.options[typeSelect.selectedIndex]?.text || "Automotriz"}`; }
     editor.hidden = false;
     typeHint.hidden = true;
     setupTechnicalWizard();
@@ -960,14 +964,16 @@
   typeSelect.addEventListener("change", () => {
     const automotriz = typeSelect.value === "automotriz";
     const mobiliario = typeSelect.value === "muebles-varios";
+    const maquinaria = typeSelect.value === "maquinaria-equipo";
     const mobiliarioEditor = document.querySelector("#mobiliarioEditor");
     editor.hidden = !automotriz;
     if (mobiliarioEditor) mobiliarioEditor.hidden = !mobiliario;
-    typeHint.hidden = automotriz || mobiliario;
+    typeHint.hidden = automotriz || mobiliario || maquinaria;
     document.querySelector(".appraisal-type-panel")?.classList.toggle("is-hidden", Boolean(typeSelect.value));
+    if (selectedTypeMessage) { selectedTypeMessage.hidden = !typeSelect.value; selectedTypeMessage.textContent = typeSelect.value ? `Tipo de avalúo: ${typeSelect.options[typeSelect.selectedIndex]?.text || typeSelect.value}` : ""; }
     if (automotriz) { setupTechnicalWizard(); form._technicalWizardGoTo?.(0); }
-    if (mobiliario) window.dispatchEvent(new CustomEvent("control-avaluos:open-mobiliario-edit"));
-    if (!automotriz && !mobiliario) typeHint.innerHTML = typeSelect.value ? `<strong>La ficha de ${escapeHtml(typeSelect.options[typeSelect.selectedIndex].text)} estará disponible próximamente.</strong><span>Por ahora puedes crear avalúos Automotrices y de Mobiliario.</span>` : "<strong>Selecciona una modalidad para comenzar.</strong><span>Las fichas técnicas disponibles son Automotriz y Mobiliario y Bienes Diversos.</span>";
+    if (mobiliario || maquinaria) window.dispatchEvent(new CustomEvent("control-avaluos:open-mobiliario-edit", { detail: { tipo: maquinaria ? "maquinaria" : "mobiliario" } }));
+    if (!automotriz && !mobiliario && !maquinaria) typeHint.innerHTML = typeSelect.value ? `<strong>La ficha de ${escapeHtml(typeSelect.options[typeSelect.selectedIndex].text)} estará disponible próximamente.</strong><span>Por ahora puedes crear avalúos Automotrices y de Mobiliario.</span>` : "<strong>Selecciona una modalidad para comenzar.</strong><span>Las fichas técnicas disponibles son Automotriz y Mobiliario y Bienes Diversos.</span>";
   });
   objectiveSelect.addEventListener("change", () => {
     const other = objectiveSelect.value === "Otro";
@@ -999,7 +1005,7 @@
     const data = new FormData(form);
     const appraisal = {
       id: editingTechnicalId || `tecnico-${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      tipo: "automotriz",
+      tipo: typeSelect.value === "maquinaria-equipo" ? "maquinaria" : "automotriz",
       solicitante: String(data.get("solicitante") || "").trim(),
       fechaSolicitud: String(data.get("fechaSolicitud") || ""),
       fechaVisita: String(data.get("fechaVisita") || ""),
