@@ -2439,3 +2439,31 @@ table {
 #appShell.control-shell > .floating-nav-capsule .sidebar-link.is-active span {
   color: #111111 !important;
 }
+
+
+/* Sección VI y selección del total del avalúo automotriz */
+.selected-total-panel {
+  align-items: center;
+  background: #fbfaf6;
+  border: 1px solid #d8c9aa;
+  border-left: 4px solid #b18a43;
+  border-radius: 8px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px) minmax(180px, 230px);
+  margin-top: 18px;
+  padding: 16px;
+}
+.selected-total-panel h4 { margin: 0 0 4px; }
+.selected-total-panel p { margin: 0; }
+.selected-total-result { display: grid; gap: 3px; text-align: right; }
+.selected-total-result strong { color: #173b38; font-size: 1.15rem; }
+.selected-total-result small { color: #556967; }
+.selected-report-total { border-left: 3px solid #b49355; margin: 16px 0; padding: 8px 12px; }
+.selected-report-total p { margin: 4px 0; }
+.pdf-legal-considerations p { margin: 9px 0; }
+.legal-value-statement { border-left: 3px solid #b49355; margin-top: 16px !important; padding: 8px 12px; }
+@media (max-width: 760px) {
+  .selected-total-panel { grid-template-columns: 1fr; }
+  .selected-total-result { text-align: left; }
+}

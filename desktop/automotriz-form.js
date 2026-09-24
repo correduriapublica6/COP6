@@ -30,6 +30,9 @@
   const replacementValueTotal = document.querySelector("#replacementValueTotal");
   const marketValueWords = document.querySelector("#marketValueWords");
   const replacementValueWords = document.querySelector("#replacementValueWords");
+  const selectedValueSource = document.querySelector("#selectedValueSource");
+  const selectedValueTotal = document.querySelector("#selectedValueTotal");
+  const selectedValueWords = document.querySelector("#selectedValueWords");
   const locationPhotoInput = document.querySelector("#automotrizLocationPhoto");
   const locationPreview = document.querySelector("#automotrizLocationPreview");
   const photoStore = new Map();
@@ -272,21 +275,35 @@
       const calculation = replacement.calculo || {};
       return `<tr><td>${escapeHtml(value.unidad || `Vehículo ${index + 1}`)}</td><td>${cleanNumber(calculation.quantity)}</td><td>${money(calculation.unitValue)}</td><td>${(Number(calculation.coefficient ?? 0) * 100).toFixed(2)} %</td><td>${money((Number(calculation.demeritAmount ?? 0)) * (Number(calculation.quantity ?? 0)))}</td><td>${escapeHtml(replacement.replacementReason || "Condiciones intrínsecas y extrínsecas")}</td><td>${money(calculation.netValue)}</td></tr>`;
     }).join("") : `<tr><td colspan="7">No se registraron valores para las unidades.</td></tr>`;
-    const marketTotal = values.reduce((sum, value) => sum + (Number(value.mercado?.calculo?.netValue) || 0), 0);
-    const replacementTotal = values.reduce((sum, value) => sum + (Number(value.reposicion?.calculo?.netValue) || 0), 0);
-    const roundedReplacementTotal = model.roundToPeso(replacementTotal);
-    const amountInWords = model.amountInWords(roundedReplacementTotal);
-    const marketTable = `<section class="report-value-table"><h3 class="report-subtitle">Valor de Mercado en la Zona</h3><p class="value-caption">VALOR PARA LICITACIÓN CONSIDERANDO EL USO, CONDICIONES Y ESTADO FÍSICO DE CADA BIEN</p><table class="appraisal-values-table"><thead><tr><th>Unidad</th><th>Cantidad</th><th>Valor unitario</th><th>Coeficiente</th><th>Total demérito</th><th>Motivo del coeficiente</th><th>Valor neto</th></tr></thead><tbody>${marketRows}</tbody><tfoot><tr><th colspan="6" aria-label="Total de mercado"></th><th>${money(marketTotal)}</th></tr></tfoot></table></section>`;
-    const replacementTable = `<section class="report-value-table"><h3 class="report-subtitle">Valor de Reposición de la Zona (Enfoque de Costos)</h3><p class="value-caption">VALOR PARA LICITACIÓN CONSIDERANDO EL USO, CONDICIONES Y ESTADO FÍSICO DE CADA BIEN</p><table class="appraisal-values-table"><thead><tr><th>Unidad</th><th>Cantidad</th><th>Valor unitario</th><th>Coeficiente</th><th>Total demérito</th><th>Motivo del coeficiente</th><th>Valor neto</th></tr></thead><tbody>${replacementRows}</tbody></table><div class="replacement-summary"><p><strong>Total:</strong> ${money(replacementTotal)}</p><p class="tax-note">(No incluye impuestos)</p><p><strong>Total en números redondos:</strong> ${money(roundedReplacementTotal)}</p><p class="amount-in-words">${escapeHtml(amountInWords)}</p></div></section>`;
-    return `<section class="pdf-values"><div class="section-title"><span>V.-</span><h2>VALORES</h2></div>${marketTable}${replacementTable}<p class="values-legal-notice">EL PRESENTE AVALÚO TIENE VALIDEZ ÚNICAMENTE PARA EL OBJETO ESPECIFICADO EN LA CARÁTULA. Y LA DEPRECIACIÓN SE UBICA EN EL PORCENTAJE REFERIDO EN VIRTUD DE LA DEMANDA DE ESE TIPO DE BIENES.</p></section>`;
+    const marketTotal = model.roundToPeso(values.reduce((sum, value) => sum + (Number(value.mercado?.calculo?.netValue) || 0), 0));
+    const replacementTotal = model.roundToPeso(values.reduce((sum, value) => sum + (Number(value.reposicion?.calculo?.netValue) || 0), 0));
+    const selectedSource = appraisal.enfoqueValor === "replacement" ? "replacement" : "market";
+    const selectedTotal = selectedSource === "replacement" ? replacementTotal : marketTotal;
+    const selectedLabel = selectedSource === "replacement" ? "Total valor de reposición" : "Total valor de mercado";
+    const amountInWords = model.amountInWords(selectedTotal);
+    const marketTable = `<section class="report-value-table"><h3 class="report-subtitle">Valor de Mercado en la Zona</h3><p class="value-caption">VALOR PARA LICITACIÓN CONSIDERANDO EL USO, CONDICIONES Y ESTADO FÍSICO DE CADA BIEN</p><table class="appraisal-values-table"><thead><tr><th>Unidad</th><th>Cantidad</th><th>Valor unitario</th><th>Coeficiente</th><th>Total demérito</th><th>Motivo del coeficiente</th><th>Valor neto</th></tr></thead><tbody>${marketRows}</tbody><tfoot><tr><th colspan="6">Total valor de mercado</th><th>${money(marketTotal)}</th></tr></tfoot></table></section>`;
+    const replacementTable = `<section class="report-value-table"><h3 class="report-subtitle">Valor de Reposición de la Zona (Enfoque de Costos)</h3><p class="value-caption">VALOR PARA LICITACIÓN CONSIDERANDO EL USO, CONDICIONES Y ESTADO FÍSICO DE CADA BIEN</p><table class="appraisal-values-table"><thead><tr><th>Unidad</th><th>Cantidad</th><th>Valor unitario</th><th>Coeficiente</th><th>Total demérito</th><th>Motivo del coeficiente</th><th>Valor neto</th></tr></thead><tbody>${replacementRows}</tbody><tfoot><tr><th colspan="6">Total valor de reposición</th><th>${money(replacementTotal)}</th></tr></tfoot></table></section>`;
+    return `<section class="pdf-values"><div class="section-title"><span>V.-</span><h2>VALORES</h2></div>${marketTable}${replacementTable}<div class="selected-report-total"><p><strong>Enfoque seleccionado:</strong> ${selectedLabel}</p><p><strong>Total (no incluye impuestos):</strong> ${money(selectedTotal)}</p><p><strong>Total en números redondos:</strong> ${money(selectedTotal)}</p><p class="amount-in-words">SON: ${escapeHtml(amountInWords)}, PESOS MEXICANOS.</p></div><p class="values-legal-notice">EL PRESENTE AVALÚO TIENE VALIDEZ ÚNICAMENTE PARA EL OBJETO ESPECIFICADO EN LA CARÁTULA. Y LA DEPRECIACIÓN SE UBICA EN EL PORCENTAJE REFERIDO EN VIRTUD DE LA DEMANDA DE ESE TIPO DE BIENES.</p></section>`;
+  }
+
+  function selectedPdfTotal(appraisal) {
+    const values = Array.isArray(appraisal.valores) ? appraisal.valores : [];
+    const market = model.roundToPeso(values.reduce((sum, value) => sum + (Number(value.mercado?.calculo?.netValue) || 0), 0));
+    const replacement = model.roundToPeso(values.reduce((sum, value) => sum + (Number(value.reposicion?.calculo?.netValue) || 0), 0));
+    return appraisal.enfoqueValor === "replacement" ? replacement : market;
+  }
+
+  function renderPdfLegalConsiderations(appraisal) {
+    const selectedSource = appraisal.enfoqueValor === "replacement" ? "Enfoque de costos / valor de reposición" : "Enfoque de mercado / valor de mercado";
+    const total = selectedPdfTotal(appraisal);
+    const words = model.amountInWords(total);
+    return `<section class="pdf-legal-considerations"><div class="section-title"><span>VI.-</span><h2>CONSIDERACIONES PREVIAS A LA CONCLUSIÓN</h2></div><h3 class="report-subtitle">FUNDAMENTO LEGAL</h3><p>El presente avalúo se realizó de conformidad a los métodos aplicados para la realización del presente trabajo de acuerdo a servicios de valuación, con aplicación de la norma mexicana.</p><p>Este trabajo de acuerdo a inspección ocular y observaciones llevadas a cabo por el Suscrito.</p><p>Se extiende el presente avalúo en los términos del artículo seis (06) fracción II (segunda) de la Ley Federal de Correduría Pública.</p><p>Se han obtenido valores con diferentes enfoques, por lo que, considerando el Objeto y Propósito del presente avalúo, se concluye que el valor que le corresponde es el de: <strong>${selectedSource}</strong>.</p><p class="legal-value-statement">ESTAS CANTIDADES REPRESENTAN EL VALOR COMERCIAL DE CADA CONCEPTO AL DÍA: <strong>${formatDate(appraisal.fechaAvaluo)}</strong>. EL VALOR DEL BIEN A ESTA FECHA ES DE: <strong>${money(total)}</strong>. SON: <strong>${escapeHtml(words)}, PESOS MEXICANOS.</strong></p></section>`;
   }
 
   function renderPdfConclusion(appraisal) {
-    const values = Array.isArray(appraisal.valores) ? appraisal.valores : [];
-    const replacementTotal = values.reduce((sum, value) => sum + (Number(value.reposicion?.calculo?.netValue) || 0), 0);
-    const roundedTotal = model.roundToPeso(replacementTotal);
+    const roundedTotal = selectedPdfTotal(appraisal);
     const amountInWords = model.amountInWords(roundedTotal);
-    return `<section class="pdf-conclusion"><div class="section-title"><span>VI.-</span><h2>CONCLUSIÓN</h2></div><p><strong>Valor de los bienes al:</strong> ${formatDate(appraisal.fechaAvaluo)}</p><p><strong>Lote de bienes:</strong> ${money(roundedTotal)} (${escapeHtml(amountInWords)}), PESOS MEXICANOS.</p><div class="signature-block"><p>Correduría Pública No. 6<br />Plaza Coahuila</p><p>Titular de la Correduría</p><div class="signature-space"></div><strong>Lic. Juan Manuel Barrera Martínez</strong></div><footer class="conclusion-legal"><p>EL PRESENTE AVALÚO NO ES VÁLIDO SIN LA FIRMA Y SELLO DEL TITULAR DE LA CORREDURÍA.</p><p>EL PRESENTE AVALÚO TIENE VALIDEZ DE 6 MESES.</p></footer></section>`;
+    return `<section class="pdf-conclusion"><div class="section-title"><span>VII.-</span><h2>CONCLUSIÓN</h2></div><p><strong>Valor de los bienes al:</strong> ${formatDate(appraisal.fechaAvaluo)}</p><p><strong>Lote de bienes:</strong> ${money(roundedTotal)} (${escapeHtml(amountInWords)}), PESOS MEXICANOS.</p><div class="signature-block"><p>Correduría Pública No. 6<br />Plaza Coahuila</p><p>Titular de la Correduría</p><div class="signature-space"></div><strong>Lic. Juan Manuel Barrera Martínez</strong></div><footer class="conclusion-legal"><p>EL PRESENTE AVALÚO NO ES VÁLIDO SIN LA FIRMA Y SELLO DEL TITULAR DE LA CORREDURÍA.</p><p>EL PRESENTE AVALÚO TIENE VALIDEZ DE 6 MESES.</p></footer></section>`;
   }
 
   function previewTechnicalPdf(appraisal, options = {}) {
@@ -460,7 +477,7 @@
     if (reportHeader) reportHeader.insertAdjacentHTML("afterend", `<p class="report-folio"><strong>Número de avalúo:</strong> ${escapeHtml(appraisal.numeroAvaluo)}</p>`);
     const antecedentesTitle = reportWindow.document.querySelector(".section-title h2");
     if (antecedentesTitle) antecedentesTitle.textContent = "ANTECEDENTES";
-    reportWindow.document.body.insertAdjacentHTML("beforeend", [renderPdfCharacteristics(appraisal), renderPdfConsiderations(appraisal), renderPdfMarketResearch(appraisal), renderPdfValues(appraisal), renderPdfConclusion(appraisal)].join(""));
+    reportWindow.document.body.insertAdjacentHTML("beforeend", [renderPdfCharacteristics(appraisal), renderPdfConsiderations(appraisal), renderPdfMarketResearch(appraisal), renderPdfValues(appraisal), renderPdfLegalConsiderations(appraisal), renderPdfConclusion(appraisal)].join(""));
     reportWindow.document.close();
     reportWindow.focus();
     if (options.word) window.setTimeout(() => { window.ControlAvaluosWord?.exportHtml(reportWindow.document.documentElement.outerHTML, appraisal.numeroAvaluo); reportWindow.close(); }, 250);
@@ -589,9 +606,15 @@
     replacementValueTotal.textContent = money(replacementTotal);
     marketValueWords.textContent = model.amountInWords(marketTotal);
     replacementValueWords.textContent = model.amountInWords(replacementTotal);
+    const selectedSource = selectedValueSource?.value === "replacement" ? "replacement" : "market";
+    const selectedTotal = selectedSource === "replacement" ? replacementTotal : marketTotal;
+    if (selectedValueTotal) selectedValueTotal.textContent = money(selectedTotal);
+    if (selectedValueWords) selectedValueWords.textContent = model.amountInWords(selectedTotal);
     bindValueControls(marketValueRows);
     bindValueControls(replacementValueRows);
   }
+
+  selectedValueSource?.addEventListener("change", renderValues);
 
   function updateMarketValue(id) {
     const entry = marketDataFor(id);
@@ -891,6 +914,7 @@
     populateObjectives(appraisal.objetivoAvaluo);
     if ([...objectiveSelect.options].some((option) => option.value === appraisal.objetivoAvaluo)) objectiveSelect.value = appraisal.objetivoAvaluo;
     else { objectiveSelect.value = "Otro"; otherObjectiveField.hidden = false; otherObjectiveInput.required = true; otherObjectiveInput.value = appraisal.objetivoAvaluo || ""; }
+    if (selectedValueSource) selectedValueSource.value = appraisal.enfoqueValor === "replacement" ? "replacement" : "market";
     (appraisal.vehiculos || []).forEach((vehicle, index) => addVehicle(vehicle, appraisal.valores?.[index]));
     if (!vehiclesContainer.children.length) addVehicle();
     renderConsiderations();
@@ -976,6 +1000,7 @@
       consideraciones: [...considerations],
       vehiculos: [...vehiclesContainer.querySelectorAll(".vehicle-card")].map(collectVehicle),
       valores: valueRows().map((row) => ({ unidad: row.name, mercado: { ...row.inputs, calculo: row.market }, reposicion: { ...row.inputs, calculo: row.replacement } })),
+      enfoqueValor: selectedValueSource?.value === "replacement" ? "replacement" : "market",
     };
     try {
       const saveButton = document.querySelector("#saveAutomotrizButton");
