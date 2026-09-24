@@ -2531,3 +2531,7 @@ table {
     width: min(210px, 55vw) !important;
   }
 }
+
+
+/* Expedientes guardados desde Antecedentes */
+.technical-record-status { display:block; color:#b45309; font-weight:600; margin-top:3px; }

@@ -105,6 +105,21 @@
     window.dispatchEvent(new CustomEvent("control-avaluos:technical-creation-state", { detail: creating }));
   }
 
+  async function saveAntecedentsDraft() {
+    if (!folioInput.value || folioInput.value === "Calculando…") await refreshTechnicalFolio();
+    const data = new FormData(form);
+    const objective = objectiveSelect.value === "Otro" ? otherObjectiveInput.value.trim() : objectiveSelect.value;
+    const draft = { id: editingTechnicalId || `tecnico-${Date.now()}-${Math.random().toString(16).slice(2)}`, tipo: "automotriz", tipoAvaluo: "Automotriz", estadoExpediente: "borrador", estado: "En proceso", solicitante: String(data.get("solicitante") || "").trim(), fechaSolicitud: String(data.get("fechaSolicitud") || ""), fechaVisita: String(data.get("fechaVisita") || ""), fechaAvaluo: String(data.get("fechaAvaluo") || ""), numeroAvaluo: folioInput.value, bienesAValuar: String(data.get("bienesAValuar") || "").trim(), propietario: String(data.get("propietario") || "").trim(), ubicacionBienes: String(data.get("ubicacionBienes") || "").trim(), objetivoAvaluo: objective, propositoAvaluo: String(data.get("propositoAvaluo") || "").trim(), creadoPor: app.getActiveUser(), creadoEn: editingTechnicalCreatedAt || undefined };
+    message.textContent = "Guardando Antecedentes y generando folio…";
+    const stored = await app.saveTechnicalAppraisal(draft);
+    editingTechnicalId = stored.id;
+    editingTechnicalCreatedAt = stored.creadoEn || stored.createdAt || editingTechnicalCreatedAt;
+    folioInput.value = stored.numeroAvaluo || folioInput.value;
+    message.classList.remove("is-error"); message.classList.add("is-success");
+    message.textContent = `Antecedentes guardados. Folio ${folioInput.value}; expediente En proceso.`;
+    return stored;
+  }
+
   function setupTechnicalWizard() {
     if (!form || form.dataset.wizardReady) return;
     const sections = [...form.querySelectorAll(":scope > .technical-form-section")];
@@ -139,7 +154,7 @@
       actions.querySelector(".technical-step-back")?.addEventListener("click", () => goTo(index - 1));
       actions.querySelector(".technical-step-save")?.addEventListener("click", async () => {
         if (index === 0 && ![...section.querySelectorAll("input,select,textarea")].every((control) => control.checkValidity())) { section.querySelector(":invalid")?.reportValidity(); return; }
-        if (index === 0 && (!folioInput.value || folioInput.value === "Calculando…")) await refreshTechnicalFolio();
+        if (index === 0) { try { await saveAntecedentsDraft(); } catch (error) { message.classList.add("is-error"); message.textContent = error.message || "No se pudo guardar Antecedentes."; return; } }
         completed.add(index); saveDraft(); if (index < sections.length - 1) goTo(index + 1); else form.requestSubmit();
       });
     });
@@ -166,7 +181,7 @@
     appraisals.sort((a, b) => { const na = Number(String(a.numeroAvaluo || "").split("/")[0].replace(/\D/g, "")) || 0; const nb = Number(String(b.numeroAvaluo || "").split("/")[0].replace(/\D/g, "")) || 0; return nb - na || String(b.creadoEn || b.createdAt || "").localeCompare(String(a.creadoEn || a.createdAt || "")); });
     document.querySelector("#technicalFilteredCount").textContent = `${appraisals.length} ${appraisals.length === 1 ? "resultado" : "resultados"}`;
     document.querySelector("#technicalListCount").textContent = String(appraisals.length);
-    technicalList.innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>Número de avalúo</th><th>Solicitante</th><th>Tipo</th><th>Fecha</th><th>Elaboró</th><th>Acciones</th></tr></thead><tbody>${appraisals.length ? appraisals.map((appraisal) => { const isMobiliario = appraisal.tipo === "mobiliario"; const label = isMobiliario ? "Mobiliario y Bienes Diversos" : "Automotriz"; const status = appraisal.estadoExpediente === "borrador" ? " · Borrador" : ""; const count = isMobiliario ? Number(appraisal.bienes?.length || 0) : Number(appraisal.vehiculos?.length || 0); return `<tr><td><strong class="avaluo-list-number">${escapeHtml(appraisal.numeroAvaluo)}</strong></td><td>${escapeHtml(appraisal.solicitante)}</td><td>${label}<small class="technical-record-status">${status}</small></td><td>${escapeHtml(formatDate(appraisal.fechaAvaluo))}</td><td>${escapeHtml(appraisal.creadoPor || "Sin registro")}</td><td><div class="technical-row-actions"><button class="technical-icon-button action-edit" data-edit-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Editar" aria-label="Editar"><span class="action-icon" aria-hidden="true">✎</span></button><button class="technical-icon-button action-pdf" data-preview-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Ver PDF" aria-label="Ver PDF"><span class="action-icon action-icon-label" aria-hidden="true">PDF</span></button><button class="technical-icon-button action-word" data-word-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Ver o descargar Word" aria-label="Ver o descargar Word"><span class="action-icon action-icon-label" aria-hidden="true">W</span></button><button class="technical-icon-button action-delete" data-delete-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Eliminar" aria-label="Eliminar"><span class="action-icon" aria-hidden="true">⌫</span></button></div></td></tr>`; }).join("") : `<tr><td colspan="6" class="empty">No hay expedientes técnicos para esta búsqueda.</td></tr>`}</tbody></table></div>`;
+    technicalList.innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>Número de avalúo</th><th>Solicitante</th><th>Tipo</th><th>Fecha</th><th>Elaboró</th><th>Acciones</th></tr></thead><tbody>${appraisals.length ? appraisals.map((appraisal) => { const isMobiliario = appraisal.tipo === "mobiliario"; const label = isMobiliario ? "Mobiliario y Bienes Diversos" : "Automotriz"; const status = appraisal.estadoExpediente === "borrador" ? " · Borrador" : ""; const count = isMobiliario ? Number(appraisal.bienes?.length || 0) : Number(appraisal.vehiculos?.length || 0); return `<tr><td><strong class="avaluo-list-number">${escapeHtml(appraisal.numeroAvaluo)}</strong></td><td>${escapeHtml(appraisal.solicitante)}</td><td>${label}<small class="technical-record-status">${status}</small></td><td>${escapeHtml(formatDate(appraisal.fechaAvaluo))}</td><td>${escapeHtml(appraisal.creadoPor || "Sin registro")}</td><td><div class="technical-row-actions"><button class="technical-icon-button action-edit" data-edit-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Editar" aria-label="Editar"><span class="action-icon" aria-hidden="true">✎</span></button>${appraisal.estadoExpediente === "borrador" ? "" : `<button class="technical-icon-button action-pdf" data-preview-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Ver PDF" aria-label="Ver PDF"><span class="action-icon action-icon-label" aria-hidden="true">PDF</span></button><button class="technical-icon-button action-word" data-word-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Ver o descargar Word" aria-label="Ver o descargar Word"><span class="action-icon action-icon-label" aria-hidden="true">W</span></button>`}<button class="technical-icon-button action-delete" data-delete-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Eliminar" aria-label="Eliminar"><span class="action-icon" aria-hidden="true">⌫</span></button></div></td></tr>`; }).join("") : `<tr><td colspan="6" class="empty">No hay expedientes técnicos para esta búsqueda.</td></tr>`}</tbody></table></div>`;
     technicalList.querySelectorAll("[data-edit-appraisal]").forEach((button) => button.addEventListener("click", () => {
       const appraisal = app.getTechnicalAppraisals().find((item) => item.id === button.dataset.editAppraisal);
       if (!appraisal) return;
@@ -1002,6 +1017,8 @@
       vehiculos: [...vehiclesContainer.querySelectorAll(".vehicle-card")].map(collectVehicle),
       valores: valueRows().map((row) => ({ unidad: row.name, mercado: { ...row.inputs, calculo: row.market }, reposicion: { ...row.inputs, calculo: row.replacement } })),
       enfoqueValor: selectedValueSource?.value === "replacement" ? "replacement" : "market",
+      estadoExpediente: "completo",
+      estado: "Concluido",
     };
     try {
       const saveButton = document.querySelector("#saveAutomotrizButton");
