@@ -2510,3 +2510,24 @@ table {
 .alerts-panel { right:24px; top:82px; width:min(390px,calc(100vw - 30px)); }.alerts-tabs{display:flex;gap:6px;padding:10px 14px 0}.alerts-list{max-height:420px;overflow:auto;padding:8px 14px}.alert-item{align-items:center;border-bottom:1px solid #f1f5f9;display:flex;gap:10px;padding:12px 0}
 @media (max-width:900px){.header-tools{gap:6px}.global-search-wrap{width:180px}.recent-activity-header{align-items:flex-start;flex-direction:column}.alerts-panel{right:15px}.control-shell .sidebar-footer{width:auto}}
 @media (max-width:600px){.global-search-wrap{display:none}.recent-activity-card{padding:14px}.activity-badge{display:none}.activity-filters{width:100%}}
+
+
+/* Buscador en el extremo izquierdo del encabezado */
+.control-shell .header-left-tools {
+  align-items: center !important;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+}
+.control-shell .header-left-tools .global-search-wrap {
+  width: min(300px, 28vw) !important;
+}
+.control-shell .sidebar-footer {
+  align-items: center !important;
+}
+@media (max-width: 600px) {
+  .control-shell .header-left-tools .global-search-wrap {
+    display: block !important;
+    width: min(210px, 55vw) !important;
+  }
+}
