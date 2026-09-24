@@ -224,8 +224,10 @@
     if (serverOnline) await apiRequest(`/records/${encodeURIComponent(id)}`, { method: "DELETE" });
   }
   async function saveTechnicalAppraisal(appraisal) {
-    const exists = technicalAppraisals.some((item) => item.id === appraisal.id);
-    const saved = await apiRequest(exists ? `/appraisals/${encodeURIComponent(appraisal.id)}` : "/appraisals", { method: exists ? "PUT" : "POST", body: JSON.stringify(appraisal) });
+    const existing = technicalAppraisals.find((item) => item.id === appraisal.id);
+    const payload = existing ? { ...appraisal, creadoPor: existing.creadoPor || appraisal.creadoPor, creadoPorNombre: existing.creadoPorNombre || appraisal.creadoPorNombre, creadoEn: existing.creadoEn || appraisal.creadoEn } : appraisal;
+    const exists = Boolean(existing);
+    const saved = await apiRequest(exists ? `/appraisals/${encodeURIComponent(appraisal.id)}` : "/appraisals", { method: exists ? "PUT" : "POST", body: JSON.stringify(payload) });
     technicalAppraisals = [saved, ...technicalAppraisals.filter((item) => item.id !== saved.id)];
     saveTechnicalAppraisals();
     window.dispatchEvent(new CustomEvent("control-avaluos:technical-appraisals-updated"));

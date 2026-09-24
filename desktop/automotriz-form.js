@@ -163,6 +163,7 @@
   function renderTechnicalList() {
     const query = technicalSearchInput.value.trim().toLocaleLowerCase("es-MX");
     const appraisals = app.getTechnicalAppraisals().filter((appraisal) => !query || [appraisal.numeroAvaluo, appraisal.solicitante, appraisal.bienesAValuar, appraisal.tipoAvaluo, appraisal.vehiculos?.map((vehicle) => `${vehicle.marca} ${vehicle.modelo} ${vehicle.placas}`).join(" "), appraisal.bienes?.map((item) => item.descripcion).join(" ")].join(" ").toLocaleLowerCase("es-MX").includes(query));
+    appraisals.sort((a, b) => { const na = Number(String(a.numeroAvaluo || "").split("/")[0].replace(/\D/g, "")) || 0; const nb = Number(String(b.numeroAvaluo || "").split("/")[0].replace(/\D/g, "")) || 0; return na - nb || String(a.creadoEn || a.createdAt || "").localeCompare(String(b.creadoEn || b.createdAt || "")); });
     document.querySelector("#technicalFilteredCount").textContent = `${appraisals.length} ${appraisals.length === 1 ? "resultado" : "resultados"}`;
     document.querySelector("#technicalListCount").textContent = String(appraisals.length);
     technicalList.innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>Número de avalúo</th><th>Solicitante</th><th>Tipo</th><th>Fecha</th><th>Elaboró</th><th>Acciones</th></tr></thead><tbody>${appraisals.length ? appraisals.map((appraisal) => { const isMobiliario = appraisal.tipo === "mobiliario"; const label = isMobiliario ? "Mobiliario y Bienes Diversos" : "Automotriz"; const status = appraisal.estadoExpediente === "borrador" ? " · Borrador" : ""; const count = isMobiliario ? Number(appraisal.bienes?.length || 0) : Number(appraisal.vehiculos?.length || 0); return `<tr><td><strong class="avaluo-list-number">${escapeHtml(appraisal.numeroAvaluo)}</strong></td><td>${escapeHtml(appraisal.solicitante)}</td><td>${label}<small class="technical-record-status">${status}</small></td><td>${escapeHtml(formatDate(appraisal.fechaAvaluo))}</td><td>${escapeHtml(appraisal.creadoPor || "Sin registro")}</td><td><div class="technical-row-actions"><button class="technical-icon-button action-edit" data-edit-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Editar" aria-label="Editar"><span class="action-icon" aria-hidden="true">✎</span></button><button class="technical-icon-button action-pdf" data-preview-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Ver PDF" aria-label="Ver PDF"><span class="action-icon action-icon-label" aria-hidden="true">PDF</span></button><button class="technical-icon-button action-word" data-word-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Ver o descargar Word" aria-label="Ver o descargar Word"><span class="action-icon action-icon-label" aria-hidden="true">W</span></button><button class="technical-icon-button action-delete" data-delete-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Eliminar" aria-label="Eliminar"><span class="action-icon" aria-hidden="true">⌫</span></button></div></td></tr>`; }).join("") : `<tr><td colspan="6" class="empty">No hay expedientes técnicos para esta búsqueda.</td></tr>`}</tbody></table></div>`;
@@ -283,7 +284,7 @@
     const amountInWords = model.amountInWords(selectedTotal);
     const marketTable = `<section class="report-value-table"><h3 class="report-subtitle">Valor de Mercado en la Zona</h3><p class="value-caption">VALOR PARA LICITACIÓN CONSIDERANDO EL USO, CONDICIONES Y ESTADO FÍSICO DE CADA BIEN</p><table class="appraisal-values-table"><thead><tr><th>Unidad</th><th>Cantidad</th><th>Valor unitario</th><th>Coeficiente</th><th>Total demérito</th><th>Motivo del coeficiente</th><th>Valor neto</th></tr></thead><tbody>${marketRows}</tbody><tfoot><tr><th colspan="6">Total valor de mercado</th><th>${money(marketTotal)}</th></tr></tfoot></table></section>`;
     const replacementTable = `<section class="report-value-table"><h3 class="report-subtitle">Valor de Reposición de la Zona (Enfoque de Costos)</h3><p class="value-caption">VALOR PARA LICITACIÓN CONSIDERANDO EL USO, CONDICIONES Y ESTADO FÍSICO DE CADA BIEN</p><table class="appraisal-values-table"><thead><tr><th>Unidad</th><th>Cantidad</th><th>Valor unitario</th><th>Coeficiente</th><th>Total demérito</th><th>Motivo del coeficiente</th><th>Valor neto</th></tr></thead><tbody>${replacementRows}</tbody><tfoot><tr><th colspan="6">Total valor de reposición</th><th>${money(replacementTotal)}</th></tr></tfoot></table></section>`;
-    return `<section class="pdf-values"><div class="section-title"><span>V.-</span><h2>VALORES</h2></div>${marketTable}${replacementTable}<div class="selected-report-total"><p><strong>Enfoque seleccionado:</strong> ${selectedLabel}</p><p><strong>Total (no incluye impuestos):</strong> ${money(selectedTotal)}</p><p><strong>Total en números redondos:</strong> ${money(selectedTotal)}</p><p class="amount-in-words">SON: ${escapeHtml(amountInWords)}, PESOS MEXICANOS.</p></div><p class="values-legal-notice">EL PRESENTE AVALÚO TIENE VALIDEZ ÚNICAMENTE PARA EL OBJETO ESPECIFICADO EN LA CARÁTULA. Y LA DEPRECIACIÓN SE UBICA EN EL PORCENTAJE REFERIDO EN VIRTUD DE LA DEMANDA DE ESE TIPO DE BIENES.</p></section>`;
+    return `<section class="pdf-values"><div class="section-title"><span>V.-</span><h2>VALORES</h2></div>${marketTable}${replacementTable}<div class="selected-report-total"><p><strong>Total (no incluye impuestos):</strong> ${money(selectedTotal)}</p><p><strong>Total en números redondos:</strong> ${money(selectedTotal)}</p><p class="amount-in-words">SON: ${escapeHtml(amountInWords)}, PESOS MEXICANOS.</p></div></section>`;
   }
 
   function selectedPdfTotal(appraisal) {
@@ -294,10 +295,10 @@
   }
 
   function renderPdfLegalConsiderations(appraisal) {
-    const selectedSource = appraisal.enfoqueValor === "replacement" ? "Enfoque de costos / valor de reposición" : "Enfoque de mercado / valor de mercado";
+    const selectedSource = appraisal.enfoqueValor === "replacement" ? "Enfoque de costos" : "Valor de mercado";
     const total = selectedPdfTotal(appraisal);
     const words = model.amountInWords(total);
-    return `<section class="pdf-legal-considerations"><div class="section-title"><span>VI.-</span><h2>CONSIDERACIONES PREVIAS A LA CONCLUSIÓN</h2></div><h3 class="report-subtitle">FUNDAMENTO LEGAL</h3><p>El presente avalúo se realizó de conformidad a los métodos aplicados para la realización del presente trabajo de acuerdo a servicios de valuación, con aplicación de la norma mexicana.</p><p>Este trabajo de acuerdo a inspección ocular y observaciones llevadas a cabo por el Suscrito.</p><p>Se extiende el presente avalúo en los términos del artículo seis (06) fracción II (segunda) de la Ley Federal de Correduría Pública.</p><p>Se han obtenido valores con diferentes enfoques, por lo que, considerando el Objeto y Propósito del presente avalúo, se concluye que el valor que le corresponde es el de: <strong>${selectedSource}</strong>.</p><p class="legal-value-statement">ESTAS CANTIDADES REPRESENTAN EL VALOR COMERCIAL DE CADA CONCEPTO AL DÍA: <strong>${formatDate(appraisal.fechaAvaluo)}</strong>. EL VALOR DEL BIEN A ESTA FECHA ES DE: <strong>${money(total)}</strong>. SON: <strong>${escapeHtml(words)}, PESOS MEXICANOS.</strong></p></section>`;
+    return `<section class="pdf-legal-considerations"><div class="section-title"><span>VI.-</span><h2>CONSIDERACIONES PREVIAS A LA CONCLUSIÓN</h2></div><h3 class="report-subtitle">FUNDAMENTO LEGAL</h3><p>El presente avalúo se realizó de conformidad a los métodos aplicados para la realización del presente trabajo de acuerdo a servicios de valuación, con aplicación de la norma mexicana.</p><p>Este trabajo de acuerdo a inspección ocular y observaciones llevadas a cabo por el Suscrito.</p><p>Se extiende el presente avalúo en los términos del artículo seis (06) fracción II (segunda) de la Ley Federal de Correduría Pública.</p><p>Se han obtenido valores con diferentes enfoques, por lo que, considerando el Objeto y Propósito del presente avalúo, se concluye que el valor que le corresponde es el de: <strong>${selectedSource}</strong>.</p><p class="legal-value-statement">ESTAS CANTIDADES REPRESENTAN EL VALOR COMERCIAL DE CADA CONCEPTO AL DÍA: <strong>${formatDate(appraisal.fechaAvaluo)}</strong>. EL VALOR DEL BIEN A ESTA FECHA ES DE: <strong>${money(total)}</strong>. SON: <strong>${escapeHtml(words)}, PESOS MEXICANOS.</strong></p><p class="values-legal-notice">EL PRESENTE AVALÚO TIENE VALIDEZ ÚNICAMENTE PARA EL OBJETO ESPECIFICADO EN LA CARÁTULA. Y LA DEPRECIACIÓN SE UBICA EN EL PORCENTAJE REFERIDO EN VIRTUD DE LA DEMANDA DE ESE TIPO DE BIENES.</p></section>`;
   }
 
   function renderPdfConclusion(appraisal) {
@@ -382,9 +383,9 @@
       .vehicle-characteristics-table td{border:1px solid #d7cdb9;padding:6px 5px;vertical-align:top;word-break:break-word}
       .vehicle-characteristics-table th:nth-child(1),.vehicle-characteristics-table th:nth-child(2){width:12%}
       .vehicle-characteristics-table th:nth-child(3){width:7%}
-      .vehicle-characteristics-table th:nth-child(4){width:20%}
+      .vehicle-characteristics-table th:nth-child(4){width:25%}
       .vehicle-characteristics-table th:nth-child(5){width:12%}
-      .vehicle-characteristics-table th:nth-child(6){width:37%}
+      .vehicle-characteristics-table th:nth-child(6){width:25%;font-size:8.2pt}
       .vehicle-photos-title{border-bottom:1px solid #bfaa7f;font-size:9.5pt;font-weight:700;margin:12px 0 10px;padding-bottom:4px}
       .vehicle-photo-grid{display:grid;gap:9px;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
       .vehicle-report-photo{aspect-ratio:16/10;border:1px solid #cfc2a7;margin:0;overflow:hidden}
@@ -452,9 +453,9 @@
       .appraisal-values-table th{font-size:8.25pt;padding:5px}
       .appraisal-values-table td{padding:6px 5px}
       .appraisal-values-table th:nth-child(1){width:17%}
-      .appraisal-values-table th:nth-child(2){width:8%}
+      .appraisal-values-table th:nth-child(2){width:5%}
       .appraisal-values-table th:nth-child(3){width:15%}
-      .appraisal-values-table th:nth-child(4){width:11%}
+      .appraisal-values-table th:nth-child(4){width:6%}
       .appraisal-values-table th:nth-child(5){width:14%}
       .appraisal-values-table th:nth-child(6){width:21%}
       .appraisal-values-table th:nth-child(7){width:14%}
@@ -463,7 +464,7 @@
       .replacement-summary p{font-size:10.6pt;margin:0 0 5px}
       .replacement-summary .tax-note{color:#596763;font-size:9.5pt;font-style:italic}
       .replacement-summary .amount-in-words{font-size:10.8pt}
-      .values-legal-notice{border-top:1px solid #bfaa7f;font-size:10.1pt;font-weight:700;line-height:1.38;margin:18px 0 0;padding-top:10px}
+      .pdf-legal-considerations{break-before:page;page-break-before:always;min-height:230mm;font-size:13pt;line-height:1.65}.pdf-legal-considerations .section-title h2{font-size:19pt}.pdf-legal-considerations .section-title span{font-size:18pt}.pdf-legal-considerations .values-legal-notice{margin-top:30px}.values-legal-notice{border-top:1px solid #bfaa7f;font-size:10.1pt;font-weight:700;line-height:1.38;margin:18px 0 0;padding-top:10px}
       .pdf-conclusion{break-before:page;display:flex;flex-direction:column;font-size:11.2pt;line-height:1.42;min-height:246mm;page-break-before:always}
       .pdf-conclusion .section-title{padding-top:12px}
       .pdf-conclusion>p{margin:0 0 10px}

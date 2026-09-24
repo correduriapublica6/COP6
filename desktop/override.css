@@ -2467,3 +2467,14 @@ table {
   .selected-total-panel { grid-template-columns: 1fr; }
   .selected-total-result { text-align: left; }
 }
+
+
+/* Ajustes automotrices v39 */
+.pdf-legal-considerations { page-break-before: always !important; break-before: page !important; min-height: 215mm !important; font-size: 13pt !important; line-height: 1.65 !important; }
+.pdf-legal-considerations .section-title h2 { font-size: 19pt !important; }
+.pdf-legal-considerations .section-title span { font-size: 18pt !important; }
+.pdf-legal-considerations .values-legal-notice { margin-top: 28px !important; }
+.values-table th:nth-child(2), .values-table td:nth-child(2), .values-table th:nth-child(4), .values-table td:nth-child(4) { width: 7% !important; max-width: 86px !important; padding-left: 5px !important; padding-right: 5px !important; }
+.values-table th:nth-child(1), .values-table td:nth-child(1) { width: 18% !important; }
+.vehicle-characteristics-table th:nth-child(4), .vehicle-characteristics-table td:nth-child(4) { width: 23% !important; }
+.vehicle-characteristics-table th:nth-child(6), .vehicle-characteristics-table td:nth-child(6) { width: 13% !important; font-size: .9em !important; }
