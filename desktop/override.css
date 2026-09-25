@@ -3368,3 +3368,53 @@ html, body {
 #appShell.control-shell > .app-sidebar > .sidebar-footer {
   overflow: hidden !important;
 }
+
+/* El buscador es un dropdown directo; no se usa capa oscura ni bloqueo de pantalla. */
+#globalSearchBackdrop,
+#globalSearchBackdrop[hidden] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
+}
+body.global-search-active { overflow: auto !important; }
+#appShell.control-shell .global-search-wrap,
+#appShell.control-shell .global-search-palette,
+#appShell.control-shell .global-search-palette .search-result {
+  pointer-events: auto !important;
+}
+/* Navbar amplia y centrada, sin desbordamiento vertical. */
+#appShell.control-shell > .app-sidebar {
+  height: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
+  align-items: center !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-footer,
+#appShell.control-shell > .app-sidebar > .sidebar-footer .header-tools,
+#appShell.control-shell > .app-sidebar > .sidebar-footer .sidebar-account-copy {
+  height: 72px !important;
+  max-height: 72px !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-footer .sidebar-account-copy {
+  flex-direction: column !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-footer .client-logout-button {
+  padding: 6px 14px !important;
+  font-size: .85rem !important;
+  border-radius: 6px !important;
+}
+#appShell.control-shell > .app-workspace { padding-top: 88px !important; }
+/* El encabezado editorial no existe en Home; sólo Avalúos lo activa desde switchAppView(). */
+#appShell.control-shell .workspace-header:not(.avaluos-header) > div:first-child {
+  display: none !important;
+}
+#appShell.control-shell .workspace-header.avaluos-header > div:first-child {
+  display: block !important;
+}
+@media (max-width: 760px) {
+  #appShell.control-shell > .app-workspace { padding-top: 122px !important; }
+}
