@@ -265,18 +265,18 @@
     technicalList.querySelectorAll("[data-edit-appraisal]").forEach((button) => button.addEventListener("click", () => {
       const appraisal = app.getTechnicalAppraisals().find((item) => item.id === button.dataset.editAppraisal);
       if (!appraisal) return;
-      if (appraisal.tipo === "mobiliario") window.dispatchEvent(new CustomEvent("control-avaluos:open-mobiliario-edit", { detail: appraisal }));
+      if (appraisal.tipo === "mobiliario" || appraisal.tipo === "maquinaria" || /maquinaria/i.test(String(appraisal.tipoAvaluo || ""))) window.dispatchEvent(new CustomEvent("control-avaluos:open-mobiliario-edit", { detail: appraisal }));
       else openTechnicalEdit(appraisal);
     }));
     technicalList.querySelectorAll("[data-preview-appraisal]").forEach((button) => button.addEventListener("click", () => {
       const appraisal = app.getTechnicalAppraisals().find((item) => item.id === button.dataset.previewAppraisal);
       if (!appraisal) return;
-      if (appraisal.tipo === "mobiliario") window.dispatchEvent(new CustomEvent("control-avaluos:preview-mobiliario", { detail: appraisal }));
+      if (appraisal.tipo === "mobiliario" || appraisal.tipo === "maquinaria" || /maquinaria/i.test(String(appraisal.tipoAvaluo || ""))) window.dispatchEvent(new CustomEvent("control-avaluos:preview-mobiliario", { detail: appraisal }));
       else previewTechnicalPdf(appraisal);
     }));
     technicalList.querySelectorAll("[data-word-appraisal]").forEach((button) => button.addEventListener("click", () => {
       const appraisal = app.getTechnicalAppraisals().find((item) => item.id === button.dataset.wordAppraisal);
-      if (appraisal?.tipo === "mobiliario") window.dispatchEvent(new CustomEvent("control-avaluos:word-mobiliario", { detail: appraisal }));
+      if (appraisal?.tipo === "mobiliario" || appraisal?.tipo === "maquinaria" || /maquinaria/i.test(String(appraisal?.tipoAvaluo || ""))) window.dispatchEvent(new CustomEvent("control-avaluos:word-mobiliario", { detail: appraisal }));
       else if (appraisal) previewTechnicalPdf(appraisal, { word: true });
     }));
     technicalList.querySelectorAll("[data-delete-appraisal]").forEach((button) => button.addEventListener("click", async () => {
