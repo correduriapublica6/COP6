@@ -993,7 +993,7 @@
     setSubsection("crear");
     setTechnicalCreationMode(true);
     typeSelect.value = appraisal?.tipo === "maquinaria" ? "maquinaria-equipo" : "automotriz";
-    document.querySelector(".appraisal-type-panel")?.classList.remove("is-hidden");
+    document.querySelector(".appraisal-type-panel")?.classList.add("is-hidden");
     if (selectedTypeMessage) { selectedTypeMessage.hidden = false; selectedTypeMessage.textContent = `Tipo de avalúo: ${typeSelect.options[typeSelect.selectedIndex]?.text || "Automotriz"}`; }
     editor.hidden = false;
     typeHint.hidden = true;
@@ -1025,6 +1025,7 @@
   document.querySelectorAll("[data-avaluos-section]").forEach((button) => button.addEventListener("click", () => setSubsection(button.dataset.avaluosSection)));
   window.addEventListener("control-avaluos:section", (event) => setSubsection(event.detail));
   window.addEventListener("control-avaluos:open-technical-appraisal", openTechnicalCreation);
+  window.addEventListener("control-avaluos:open-technical-edit", (event) => { if (event.detail) openTechnicalEdit(event.detail); });
   window.addEventListener("control-avaluos:open-technical-creation", openTechnicalCreation);
   window.addEventListener("control-avaluos:close-technical-creation", () => {
     typeSelect.value = "";
@@ -1048,7 +1049,7 @@
     editor.hidden = !automotriz;
     if (mobiliarioEditor) mobiliarioEditor.hidden = !mobiliario;
     typeHint.hidden = automotriz || mobiliario || maquinaria;
-    document.querySelector(".appraisal-type-panel")?.classList.remove("is-hidden");
+    document.querySelector(".appraisal-type-panel")?.classList.add("is-hidden");
     if (selectedTypeMessage) { selectedTypeMessage.hidden = !typeSelect.value; selectedTypeMessage.textContent = typeSelect.value ? `Tipo de avalúo: ${typeSelect.options[typeSelect.selectedIndex]?.text || typeSelect.value}` : ""; }
     if (automotriz) { setupTechnicalWizard(); form._technicalWizardGoTo?.(0); }
     if (mobiliario || maquinaria) window.dispatchEvent(new CustomEvent("control-avaluos:open-mobiliario-edit", { detail: { tipo: maquinaria ? "maquinaria" : "mobiliario" } }));

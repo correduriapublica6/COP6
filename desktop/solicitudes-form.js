@@ -564,6 +564,6 @@
     fillNotaries();
     window.addEventListener("control-avaluos:notarias-updated", (event) => { window.__controlNotarias = event.detail || []; fillNotaries(); });
   }
-  window.SolicitudesControl = { renderRequests, renderWelcomeRequests, renderApplicantRequests, open: () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); fillNotaries(); } };
+  window.SolicitudesControl = { renderRequests, renderWelcomeRequests, renderApplicantRequests, openDetail: (id) => { const item = requests.find((candidate) => candidate.id === id); if (item) renderRequestDetail(item); }, open: () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); fillNotaries(); } };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind); else bind();
 })();

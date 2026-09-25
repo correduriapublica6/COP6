@@ -2814,3 +2814,40 @@ body, #loginScreen, #appShell, #appShell main, #appShell .app-sidebar, #appShell
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
+
+/* Header: buscador a la izquierda, navbar centrada y usuario a la derecha. */
+#appShell.control-shell > .floating-nav-capsule {
+  position: fixed !important;
+  top: 18px !important;
+  left: 50vw !important;
+  right: auto !important;
+  inset-inline-start: 50vw !important;
+  transform: translateX(-50%) !important;
+  margin: 0 !important;
+  width: max-content !important;
+  max-width: min(60vw, 760px) !important;
+  z-index: 1401 !important;
+}
+#appShell.control-shell .app-sidebar { z-index: 1400 !important; }
+#appShell.control-shell .header-left-tools { position: relative !important; z-index: 1403 !important; }
+#appShell.control-shell .sidebar-footer { position: relative !important; z-index: 1403 !important; }
+
+/* Durante la captura se conserva sólo Volver, el tipo elegido y el stepper. */
+#technicalCreationPanel > .appraisal-type-panel.is-hidden { display: none !important; }
+#technicalCreationPanel > .technical-selected-type:not([hidden]) {
+  position: sticky !important;
+  top: 62px !important;
+  z-index: 23 !important;
+  background: #f8fbfc !important;
+}
+#technicalCreationPanel .technical-stepper,
+#technicalCreationPanel .mobiliario-stepper {
+  top: 112px !important;
+  z-index: 22 !important;
+}
+@media (max-width: 920px) {
+  #appShell.control-shell > .floating-nav-capsule { top: 12px !important; max-width: 46vw !important; }
+  #technicalCreationPanel > .technical-selected-type:not([hidden]) { top: 58px !important; }
+  #technicalCreationPanel .technical-stepper,
+  #technicalCreationPanel .mobiliario-stepper { top: 106px !important; }
+}
