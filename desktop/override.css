@@ -2727,3 +2727,24 @@ table input, table select, table textarea {
 }
 
 #pageDescription:empty { display: none !important; }
+
+/* Creación técnica: sin encabezado general repetido; selector y pestañas siempre accesibles. */
+.workspace-header.technical-creation-header > div:first-child { display: none !important; }
+#technicalCreationPanel > .appraisal-type-panel {
+  position: sticky !important;
+  top: 76px !important;
+  z-index: 22 !important;
+}
+#technicalCreationPanel .technical-stepper,
+#technicalCreationPanel .mobiliario-stepper {
+  position: sticky !important;
+  top: 168px !important;
+  z-index: 21 !important;
+  background: #f8fbfc !important;
+  padding: 8px 2px !important;
+}
+@media (max-width: 760px) {
+  #technicalCreationPanel > .appraisal-type-panel { top: 70px !important; }
+  #technicalCreationPanel .technical-stepper,
+  #technicalCreationPanel .mobiliario-stepper { top: 152px !important; }
+}

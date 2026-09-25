@@ -1048,7 +1048,7 @@
     editor.hidden = !automotriz;
     if (mobiliarioEditor) mobiliarioEditor.hidden = !mobiliario;
     typeHint.hidden = automotriz || mobiliario || maquinaria;
-    document.querySelector(".appraisal-type-panel")?.classList.toggle("is-hidden", Boolean(typeSelect.value));
+    document.querySelector(".appraisal-type-panel")?.classList.remove("is-hidden");
     if (selectedTypeMessage) { selectedTypeMessage.hidden = !typeSelect.value; selectedTypeMessage.textContent = typeSelect.value ? `Tipo de avalúo: ${typeSelect.options[typeSelect.selectedIndex]?.text || typeSelect.value}` : ""; }
     if (automotriz) { setupTechnicalWizard(); form._technicalWizardGoTo?.(0); }
     if (mobiliario || maquinaria) window.dispatchEvent(new CustomEvent("control-avaluos:open-mobiliario-edit", { detail: { tipo: maquinaria ? "maquinaria" : "mobiliario" } }));

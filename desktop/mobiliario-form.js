@@ -259,7 +259,7 @@
     activeTechnicalType = appraisal?.tipo === 'maquinaria' ? 'maquinaria' : (typeSelect.value === 'maquinaria-equipo' ? 'maquinaria' : 'mobiliario');
     if (!app.canEdit()) { window.alert('Tu rol no tiene permiso para crear o editar avalúos técnicos.'); return; }
     document.querySelector('#technicalListPanel').hidden = true;
-    document.querySelectorAll('#mobiliarioEditor .technical-section-heading h3').forEach((heading) => { if (heading.textContent === 'Valores') heading.textContent = activeTechnicalType === 'maquinaria' ? 'Valores de Maquinaria y equipo' : 'Valores'; }); document.querySelector('#technicalCreationPanel').hidden = false; typePanel.classList.add('is-hidden'); hint.hidden = true; editor.hidden = false; document.querySelector('#automotrizEditor').hidden = true; typeSelect.value = 'muebles-varios'; createWizard();
+    document.querySelectorAll('#mobiliarioEditor .technical-section-heading h3').forEach((heading) => { if (heading.textContent === 'Valores') heading.textContent = activeTechnicalType === 'maquinaria' ? 'Valores de Maquinaria y equipo' : 'Valores'; }); document.querySelector('#technicalCreationPanel').hidden = false; typePanel.classList.remove('is-hidden'); hint.hidden = true; editor.hidden = false; document.querySelector('#automotrizEditor').hidden = true; typeSelect.value = 'muebles-varios'; createWizard();
     reset();
     if (!appraisal) return;
     if (appraisal?.tipo === 'maquinaria') { activeTechnicalType = 'maquinaria'; typeSelect.value = 'maquinaria-equipo'; }
@@ -310,6 +310,6 @@
   window.addEventListener('control-avaluos:word-mobiliario', (event) => printPdf(event.detail, { word: true }));
   window.addEventListener('control-avaluos:open-technical-creation', () => { if (typeSelect.value === 'muebles-varios') openEditor(); });
   window.addEventListener('control-avaluos:technical-appraisals-updated', () => { if (typeSelect.value === 'muebles-varios') refreshFolio(); });
-  typeSelect.addEventListener('change', () => { if (!['muebles-varios', 'maquinaria-equipo'].includes(typeSelect.value)) return; activeTechnicalType = typeSelect.value === 'maquinaria-equipo' ? 'maquinaria' : 'mobiliario'; typePanel.classList.add('is-hidden'); hint.hidden = true; editor.hidden = false; document.querySelector('#automotrizEditor').hidden = true; createWizard(); openEditor(); renderValues(); });
+  typeSelect.addEventListener('change', () => { if (!['muebles-varios', 'maquinaria-equipo'].includes(typeSelect.value)) return; activeTechnicalType = typeSelect.value === 'maquinaria-equipo' ? 'maquinaria' : 'mobiliario'; typePanel.classList.remove('is-hidden'); hint.hidden = true; editor.hidden = false; document.querySelector('#automotrizEditor').hidden = true; createWizard(); openEditor(); renderValues(); });
   createWizard(); reset();
 })();
