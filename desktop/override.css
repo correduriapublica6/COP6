@@ -2655,3 +2655,24 @@ table input, table select, table textarea {
   overflow-wrap: anywhere !important;
   white-space: normal !important;
 }
+
+
+/* Valores automotrices: encabezados compactos y columnas equilibradas */
+.automotriz-editor .values-table th:nth-child(1),
+.automotriz-editor .values-table td:nth-child(1) { width: 15% !important; }
+.automotriz-editor .values-table th:nth-child(2),
+.automotriz-editor .values-table td:nth-child(2) { width: 7% !important; max-width: 78px !important; }
+.automotriz-editor .values-table th:nth-child(3),
+.automotriz-editor .values-table td:nth-child(3) { width: 14% !important; }
+.automotriz-editor .values-table th:nth-child(4),
+.automotriz-editor .values-table td:nth-child(4) { width: 10% !important; max-width: 112px !important; }
+.automotriz-editor .values-table th:nth-child(5),
+.automotriz-editor .values-table td:nth-child(5) { width: 9% !important; max-width: 105px !important; }
+.automotriz-editor .values-table th:nth-child(6),
+.automotriz-editor .values-table td:nth-child(6) { width: 31% !important; }
+.automotriz-editor .values-table th:nth-child(7),
+.automotriz-editor .values-table td:nth-child(7) { width: 14% !important; }
+.automotriz-editor .values-table th,
+.automotriz-editor .values-table td { overflow-wrap: anywhere !important; white-space: normal !important; }
+.automotriz-editor .values-table th:nth-child(2),
+.automotriz-editor .values-table th:nth-child(5) { white-space: nowrap !important; }

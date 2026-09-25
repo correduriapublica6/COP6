@@ -298,7 +298,7 @@
     const selectedTotal = selectedSource === "replacement" ? replacementTotal : marketTotal;
     const selectedLabel = selectedSource === "replacement" ? "Total valor de reposición" : "Total valor de mercado";
     const amountInWords = model.amountInWords(selectedTotal);
-    const marketTable = `<section class="report-value-table"><h3 class="report-subtitle">Valor de Mercado en la Zona</h3><p class="value-caption">VALOR PARA LICITACIÓN CONSIDERANDO EL USO, CONDICIONES Y ESTADO FÍSICO DE CADA BIEN</p><table class="appraisal-values-table"><thead><tr><th>Unidad</th><th>Cantidad</th><th>Valor unitario</th><th>Coeficiente</th><th>Total demérito</th><th>Motivo del coeficiente</th><th>Valor neto</th></tr></thead><tbody>${marketRows}</tbody><tfoot><tr><th colspan="6">Total valor de mercado</th><th>${money(marketTotal)}</th></tr></tfoot></table></section>`;
+    const marketTable = `<section class="report-value-table"><h3 class="report-subtitle">Valor de Mercado en la Zona</h3><p class="value-caption">VALOR PARA LICITACIÓN CONSIDERANDO EL USO, CONDICIONES Y ESTADO FÍSICO DE CADA BIEN</p><table class="appraisal-values-table"><thead><tr><th>Unidad</th><th>Cant.</th><th>Valor unitario</th><th>Coeficiente</th><th>Demerito</th><th>Motivo del coeficiente</th><th>Valor neto</th></tr></thead><tbody>${marketRows}</tbody><tfoot><tr><th colspan="6">Total valor de mercado</th><th>${money(marketTotal)}</th></tr></tfoot></table></section>`;
     const replacementTable = `<section class="report-value-table"><h3 class="report-subtitle">Valor de Reposición de la Zona (Enfoque de Costos)</h3><p class="value-caption">VALOR PARA LICITACIÓN CONSIDERANDO EL USO, CONDICIONES Y ESTADO FÍSICO DE CADA BIEN</p><table class="appraisal-values-table"><thead><tr><th>Unidad</th><th>Cantidad</th><th>Valor unitario</th><th>Coeficiente</th><th>Total demérito</th><th>Motivo del coeficiente</th><th>Valor neto</th></tr></thead><tbody>${replacementRows}</tbody><tfoot><tr><th colspan="6">Total valor de reposición</th><th>${money(replacementTotal)}</th></tr></tfoot></table></section>`;
     return `<section class="pdf-values"><div class="section-title"><span>V.-</span><h2>VALORES</h2></div>${marketTable}${replacementTable}<div class="selected-report-total"><p><strong>Total (no incluye impuestos):</strong> ${money(selectedTotal)}</p><p><strong>Total en números redondos:</strong> ${money(selectedTotal)}</p><p class="amount-in-words">SON: ${escapeHtml(amountInWords)}, PESOS MEXICANOS.</p></div><p class="values-legal-notice">EL PRESENTE AVALÚO TIENE VALIDEZ ÚNICAMENTE PARA EL OBJETO ESPECIFICADO EN LA CARÁTULA. Y LA DEPRECIACIÓN SE UBICA EN EL PORCENTAJE REFERIDO EN VIRTUD DE LA DEMANDA DE ESE TIPO DE BIENES.</p></section>`;
   }
@@ -468,12 +468,12 @@
       .appraisal-values-table{font-size:8.9pt}
       .appraisal-values-table th{font-size:8.25pt;padding:5px}
       .appraisal-values-table td{padding:6px 5px}
-      .appraisal-values-table th:nth-child(1){width:17%}
-      .appraisal-values-table th:nth-child(2){width:5%}
-      .appraisal-values-table th:nth-child(3){width:15%}
-      .appraisal-values-table th:nth-child(4){width:6%}
-      .appraisal-values-table th:nth-child(5){width:14%}
-      .appraisal-values-table th:nth-child(6){width:21%}
+      .appraisal-values-table th:nth-child(1){width:15%}
+      .appraisal-values-table th:nth-child(2){width:7%}
+      .appraisal-values-table th:nth-child(3){width:14%}
+      .appraisal-values-table th:nth-child(4){width:10%}
+      .appraisal-values-table th:nth-child(5){width:9%}
+      .appraisal-values-table th:nth-child(6){width:31%}
       .appraisal-values-table th:nth-child(7){width:14%}
       .amount-in-words{color:#354744;font-size:10.3pt;font-weight:700;margin:6px 0 0}
       .replacement-summary{border-top:2px solid #26443f;margin-top:3px;padding-top:9px}
