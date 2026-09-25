@@ -2748,3 +2748,38 @@ table input, table select, table textarea {
   #technicalCreationPanel .technical-stepper,
   #technicalCreationPanel .mobiliario-stepper { top: 152px !important; }
 }
+
+/* Gestión de Avalúos: Volver y Tipo de avalúo permanecen disponibles al desplazarse. */
+.workspace-header.technical-creation-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 24 !important;
+  background: #f8fbfc !important;
+}
+.workspace-header.technical-creation-header .workspace-actions {
+  align-items: center !important;
+  min-height: 42px !important;
+}
+#technicalCreationPanel > .appraisal-type-panel {
+  position: sticky !important;
+  top: 62px !important;
+  z-index: 23 !important;
+}
+#technicalCreationPanel .technical-stepper {
+  top: 154px !important;
+}
+
+/* El fondo de búsqueda vive dentro de appShell; el panel de resultados queda por encima y nítido. */
+#appShell #globalSearchBackdrop { z-index: 1290 !important; }
+#appShell .global-search-wrap,
+#appShell .global-search-palette { z-index: 1403 !important; }
+#loginScreen { filter: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+/* Tabla de valores del reporte de vehículos: columnas compactas y legibles. */
+.appraisal-values-table th:nth-child(1) { width: 15% !important; }
+.appraisal-values-table th:nth-child(2) { width: 6% !important; white-space: nowrap !important; }
+.appraisal-values-table th:nth-child(3) { width: 14% !important; }
+.appraisal-values-table th:nth-child(4) { width: 13% !important; }
+.appraisal-values-table th:nth-child(5) { width: 8% !important; white-space: nowrap !important; }
+.appraisal-values-table th:nth-child(6) { width: 27% !important; }
+.appraisal-values-table th:nth-child(7) { width: 17% !important; }

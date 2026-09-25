@@ -225,7 +225,7 @@
   }
   async function saveTechnicalAppraisal(appraisal) {
     const existing = technicalAppraisals.find((item) => item.id === appraisal.id);
-    const payload = existing ? { ...appraisal, creadoPor: existing.creadoPor || appraisal.creadoPor, creadoPorNombre: existing.creadoPorNombre || appraisal.creadoPorNombre, creadoEn: existing.creadoEn || appraisal.creadoEn } : appraisal;
+    const payload = existing ? { ...appraisal, numeroAvaluo: existing.numeroAvaluo || appraisal.numeroAvaluo, creadoPor: existing.creadoPor || appraisal.creadoPor, creadoPorNombre: existing.creadoPorNombre || appraisal.creadoPorNombre, creadoEn: existing.creadoEn || appraisal.creadoEn } : appraisal;
     const exists = Boolean(existing);
     const saved = await apiRequest(exists ? `/appraisals/${encodeURIComponent(appraisal.id)}` : "/appraisals", { method: exists ? "PUT" : "POST", body: JSON.stringify(payload) });
     technicalAppraisals = [saved, ...technicalAppraisals.filter((item) => item.id !== saved.id)];
