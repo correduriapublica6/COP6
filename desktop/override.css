@@ -3456,3 +3456,17 @@ body.global-search-active #globalSearchBackdrop {
 @media (max-width: 760px) {
   #appShell.control-shell > .app-sidebar > .sidebar-footer { transform: translateY(-2px) !important; }
 }
+
+/* Elevar un poco más el bloque de usuario, estado, notificaciones y sesión. */
+#appShell.control-shell > .app-sidebar > .sidebar-footer {
+  transform: translateY(-7px) !important;
+}
+@media (max-width: 760px) {
+  #appShell.control-shell > .app-sidebar > .sidebar-footer { transform: translateY(-3px) !important; }
+}
+/* El botón Crear avalúo desaparece mientras un técnico está abierto o editándose. */
+#appShell.control-shell:has(#technicalCreationPanel:not([hidden])) #newTechnicalAppraisalButton,
+#appShell.control-shell:has(#automotrizEditor:not([hidden])) #newTechnicalAppraisalButton,
+#appShell.control-shell:has(#mobiliarioEditor:not([hidden])) #newTechnicalAppraisalButton {
+  display: none !important;
+}
