@@ -121,6 +121,46 @@
     return stored;
   }
 
+  function buildAutomotivePayload() {
+    const data = new FormData(form);
+    const objective = objectiveSelect.value === "Otro" ? otherObjectiveInput.value.trim() : objectiveSelect.value;
+    return {
+      id: editingTechnicalId || `tecnico-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      tipo: "automotriz", tipoAvaluo: "Automotriz",
+      solicitante: String(data.get("solicitante") || "").trim(),
+      fechaSolicitud: String(data.get("fechaSolicitud") || ""),
+      fechaVisita: String(data.get("fechaVisita") || ""),
+      fechaAvaluo: String(data.get("fechaAvaluo") || ""), numeroAvaluo: folioInput.value,
+      bienesAValuar: String(data.get("bienesAValuar") || "").trim(),
+      propietario: String(data.get("propietario") || "").trim(),
+      ubicacionBienes: String(data.get("ubicacionBienes") || "").trim(),
+      objetivoAvaluo: objective, propositoAvaluo: String(data.get("propositoAvaluo") || "").trim(),
+      localizacionFoto: locationDataUrl, creadoPor: app.getActiveUser(), creadoEn: editingTechnicalCreatedAt || undefined,
+      consideraciones: [...considerations],
+      vehiculos: [...vehiclesContainer.querySelectorAll(".vehicle-card")].map(collectVehicle),
+      valores: valueRows().map((row) => ({ unidad: row.name, mercado: { ...row.inputs, calculo: row.market }, reposicion: { ...row.inputs, calculo: row.replacement } })),
+      enfoqueValor: selectedValueSource?.value === "replacement" ? "replacement" : "market",
+    };
+  }
+
+  async function saveAutomotiveProgress() {
+    const existing = app.getTechnicalAppraisals().find((item) => item.id === editingTechnicalId);
+    const isComplete = existing?.estadoExpediente === "completo";
+    const appraisal = {
+      ...buildAutomotivePayload(),
+      estadoExpediente: isComplete ? existing.estadoExpediente : "borrador",
+      estado: isComplete ? (existing.estado || "Concluido") : "En proceso",
+    };
+    message.textContent = "Guardando avance del expediente…";
+    const stored = await persistAutomotiveImages(appraisal).then((value) => app.saveTechnicalAppraisal(value));
+    editingTechnicalId = stored.id;
+    editingTechnicalCreatedAt = stored.creadoEn || stored.createdAt || editingTechnicalCreatedAt;
+    folioInput.value = stored.numeroAvaluo || folioInput.value;
+    message.classList.remove("is-error"); message.classList.add("is-success");
+    message.textContent = `Avance del avalúo ${folioInput.value} guardado.`;
+    return stored;
+  }
+
   function setupTechnicalWizard() {
     if (!form || form.dataset.wizardReady) return;
     const sections = [...form.querySelectorAll(":scope > .technical-form-section")];
@@ -155,7 +195,14 @@
       actions.querySelector(".technical-step-back")?.addEventListener("click", () => goTo(index - 1));
       actions.querySelector(".technical-step-save")?.addEventListener("click", async () => {
         if (index === 0 && ![...section.querySelectorAll("input,select,textarea")].every((control) => control.checkValidity())) { section.querySelector(":invalid")?.reportValidity(); return; }
-        if (index === 0) { try { await saveAntecedentsDraft(); } catch (error) { message.classList.add("is-error"); message.textContent = error.message || "No se pudo guardar Antecedentes."; return; } }
+        try {
+          if (index === 0) await saveAntecedentsDraft();
+          else await saveAutomotiveProgress();
+        } catch (error) {
+          message.classList.add("is-error");
+          message.textContent = error.message || "No se pudo guardar el avance del avalúo.";
+          return;
+        }
         completed.add(index); saveDraft(); if (index < sections.length - 1) goTo(index + 1); else form.requestSubmit();
       });
     });
