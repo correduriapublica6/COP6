@@ -3023,3 +3023,129 @@ html, body {
   margin-top: 0 !important;
   padding-top: 92px !important;
 }
+
+/* Header compacto: todos los bloques centrados dentro de 60px. */
+#appShell.control-shell > .app-sidebar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  height: 60px !important;
+  min-height: 60px !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 22px !important;
+  box-sizing: border-box !important;
+  background: #000000 !important;
+  z-index: 50 !important;
+  overflow: visible !important;
+}
+#appShell.control-shell > .app-sidebar > .header-left-tools {
+  flex: 0 0 min(300px, 28vw) !important;
+  align-self: center !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+#appShell.control-shell > .app-sidebar > .floating-nav-capsule {
+  position: static !important;
+  flex: 0 1 auto !important;
+  align-self: center !important;
+  margin: 0 auto !important;
+  max-width: min(58vw, 760px) !important;
+  transform: none !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-footer {
+  flex: 0 0 auto !important;
+  align-self: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 60px !important;
+  overflow: hidden !important;
+}
+#appShell.control-shell > .app-sidebar .sidebar-account,
+#appShell.control-shell > .app-sidebar .sidebar-account-copy,
+#appShell.control-shell > .app-sidebar .header-tools,
+#appShell.control-shell > .app-sidebar .admin-header-actions {
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#appShell.control-shell > .app-sidebar .sidebar-account-copy {
+  gap: 8px !important;
+  line-height: 1.15 !important;
+}
+#appShell.control-shell > .app-sidebar .header-tools {
+  gap: 8px !important;
+  height: 60px !important;
+}
+#appShell.control-shell > .app-sidebar .alerts-button,
+#appShell.control-shell > .app-sidebar .client-logout-button {
+  margin: 0 !important;
+  align-self: center !important;
+}
+/* Mantener visible el dropdown debajo del input: sólo el listado interno tiene scroll. */
+#appShell.control-shell .global-search-wrap {
+  position: relative !important;
+  overflow: visible !important;
+}
+#appShell.control-shell .global-search-palette {
+  top: calc(100% + 4px) !important;
+  left: 0 !important;
+  right: auto !important;
+  width: 100% !important;
+  max-height: none !important;
+  height: auto !important;
+  overflow: hidden !important;
+  z-index: 9999 !important;
+}
+#appShell.control-shell .global-search-results {
+  max-height: 350px !important;
+  height: auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+/* Los resultados siguen limitados a 10 por searchGlobal(); se evita cualquier scroll exterior. */
+#appShell.control-shell .global-search-palette[hidden] { display: none !important; }
+/* Quitar encabezados repetitivos de todas las vistas, conservando sus botones de acción. */
+#appShell.control-shell .app-workspace > .workspace-header > div:first-child {
+  display: none !important;
+}
+#appShell.control-shell .app-workspace > .workspace-header {
+  min-height: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 8px !important;
+  margin-top: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+#appShell.control-shell .app-workspace > .workspace-header .legacy-toolbar {
+  display: none !important;
+}
+#appShell.control-shell > .app-workspace {
+  padding-top: 76px !important;
+}
+@media (max-width: 760px) {
+  #appShell.control-shell > .app-sidebar {
+    height: auto !important;
+    min-height: 108px !important;
+    padding: 6px 10px !important;
+    flex-wrap: wrap !important;
+    align-content: center !important;
+  }
+  #appShell.control-shell > .app-sidebar > .header-left-tools { flex: 1 1 48% !important; }
+  #appShell.control-shell > .app-sidebar > .sidebar-footer { flex: 1 1 48% !important; height: 48px !important; }
+  #appShell.control-shell > .app-sidebar > .floating-nav-capsule {
+    flex: 1 1 100% !important;
+    justify-content: center !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+  }
+  #appShell.control-shell > .app-workspace { padding-top: 122px !important; }
+}
