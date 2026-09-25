@@ -647,9 +647,9 @@
   }
 
   const VIEW_DETAILS = {
-    inicio: { title: "Correduría Pública 6", kicker: "", description: "" },
+    inicio: { title: "Avalúos", kicker: "", description: "Consulta expedientes técnicos, administra solicitudes de servicio y gestiona el flujo de validación." },
     solicitudes: { title: "Solicitudes de servicio", kicker: "CONTROL DE SOLICITUDES", description: "Administra solicitudes, asesores y estados del proceso." },
-    avaluos: { title: "Avalúos", kicker: "", description: "Registra, consulta, filtra, edita y da seguimiento a cada avalúo." },
+    avaluos: { title: "Avalúos", kicker: "", description: "Consulta expedientes técnicos, administra solicitudes de servicio y gestiona el flujo de validación." },
     "fe-publica": { title: "Fe Pública", kicker: "", description: "" },
     resumen: { title: "Resumen general", kicker: "", description: "" },
     usuarios: { title: "Usuarios", kicker: "ACCESO LOCAL", description: "Gestiona usuarios administrativos y usuarios externos registrados." },
