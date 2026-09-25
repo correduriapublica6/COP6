@@ -2851,3 +2851,88 @@ body, #loginScreen, #appShell, #appShell main, #appShell .app-sidebar, #appShell
   #technicalCreationPanel .technical-stepper,
   #technicalCreationPanel .mobiliario-stepper { top: 106px !important; }
 }
+
+/* Encabezado definitivo: barra negra fija con buscador, navbar y usuario en una sola fila. */
+#appShell.control-shell > .app-sidebar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 76px !important;
+  min-height: 76px !important;
+  z-index: 1500 !important;
+  display: grid !important;
+  grid-template-columns: minmax(210px, 300px) minmax(280px, 1fr) auto !important;
+  align-items: center !important;
+  gap: 18px !important;
+  padding: 0 28px !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+#appShell.control-shell > .app-sidebar > .header-left-tools {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  min-width: 0 !important;
+  width: auto !important;
+}
+#appShell.control-shell > .app-sidebar > .floating-nav-capsule {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  position: static !important;
+  inset: auto !important;
+  transform: none !important;
+  justify-self: center !important;
+  align-self: center !important;
+  display: flex !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  z-index: 1501 !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-footer {
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+  justify-self: end !important;
+  min-width: max-content !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+#appShell.control-shell > .app-sidebar .global-search-wrap,
+#appShell.control-shell > .app-sidebar .sidebar-footer,
+#appShell.control-shell > .app-sidebar .floating-nav-capsule {
+  position: relative !important;
+  z-index: 1502 !important;
+}
+/* El contenido empieza debajo del encabezado fijo. */
+#appShell.control-shell > .app-workspace {
+  padding-top: 92px !important;
+}
+@media (max-width: 1080px) {
+  #appShell.control-shell > .app-sidebar {
+    grid-template-columns: minmax(180px, 235px) minmax(220px, 1fr) auto !important;
+    gap: 10px !important;
+    padding: 0 14px !important;
+  }
+  #appShell.control-shell > .app-sidebar > .floating-nav-capsule { max-width: 100% !important; }
+  #appShell.control-shell > .app-sidebar > .floating-nav-capsule .sidebar-link { padding-inline: 8px !important; }
+}
+@media (max-width: 760px) {
+  #appShell.control-shell > .app-sidebar {
+    height: auto !important;
+    min-height: 118px !important;
+    grid-template-columns: 1fr auto !important;
+    grid-template-rows: 54px 54px !important;
+    padding: 8px 12px !important;
+  }
+  #appShell.control-shell > .app-sidebar > .header-left-tools { grid-column: 1 !important; grid-row: 1 !important; }
+  #appShell.control-shell > .app-sidebar > .sidebar-footer { grid-column: 2 !important; grid-row: 1 !important; }
+  #appShell.control-shell > .app-sidebar > .floating-nav-capsule {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    justify-self: center !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+  }
+  #appShell.control-shell > .app-workspace { padding-top: 136px !important; }
+}
