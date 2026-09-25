@@ -3149,3 +3149,101 @@ html, body {
   }
   #appShell.control-shell > .app-workspace { padding-top: 122px !important; }
 }
+
+/* Header derecho contenido y centrado dentro de la barra negra. */
+#appShell.control-shell > .app-sidebar > .sidebar-footer {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  height: 60px !important;
+  max-height: 60px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-footer .sidebar-account,
+#appShell.control-shell > .app-sidebar > .sidebar-footer .sidebar-account-copy,
+#appShell.control-shell > .app-sidebar > .sidebar-footer .header-tools,
+#appShell.control-shell > .app-sidebar > .sidebar-footer .admin-header-actions,
+#appShell.control-shell > .app-sidebar > .sidebar-footer .alerts-button,
+#appShell.control-shell > .app-sidebar > .sidebar-footer .client-logout-button {
+  display: flex !important;
+  align-items: center !important;
+  align-self: center !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-footer .sidebar-account-copy {
+  gap: 12px !important;
+  line-height: 1 !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-footer .header-tools {
+  gap: 12px !important;
+  height: 60px !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-footer .sidebar-online {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+/* Buscador: clic visual y sólo scroll interno, sin barras dobles. */
+#appShell.control-shell .search-result {
+  cursor: pointer !important;
+  user-select: none !important;
+}
+#appShell.control-shell .global-search-palette,
+#appShell.control-shell .global-search-results {
+  scrollbar-width: none !important;
+}
+#appShell.control-shell .global-search-palette::-webkit-scrollbar,
+#appShell.control-shell .global-search-results::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+#appShell.control-shell .global-search-palette {
+  overflow: hidden !important;
+}
+#appShell.control-shell .global-search-results {
+  max-height: 350px !important;
+  overflow: hidden !important;
+}
+/* Banner de bienvenida limpio, sin tarjeta beige, bordes ni franja lateral. */
+#appShell.control-shell .welcome-card {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 0 22px !important;
+}
+#appShell.control-shell .welcome-card-main { padding: 0 !important; }
+/* Avalúos usa el mismo encabezado editorial limpio que Configuración. */
+#appShell.control-shell .workspace-header.avaluos-header > div:first-child {
+  display: block !important;
+}
+#appShell.control-shell .workspace-header.avaluos-header #pageTitle {
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(1.8rem, 3vw, 2.45rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  color: #1e293b !important;
+  margin: 0 !important;
+}
+#appShell.control-shell .workspace-header.avaluos-header #pageDescription {
+  display: block !important;
+  margin: 6px 0 0 !important;
+  color: #64748b !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .95rem !important;
+  line-height: 1.45 !important;
+}
