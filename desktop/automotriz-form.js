@@ -70,7 +70,7 @@
         alignItems: "center", borderRadius: "12px", boxShadow: "0 12px 30px rgba(15, 23, 42, .18)",
         color: "#fff", display: "flex", font: '600 14px/1.35 "Segoe UI", Arial, sans-serif',
         gap: "8px", maxWidth: "min(380px, calc(100vw - 32px))", opacity: "0", padding: "12px 16px",
-        pointerEvents: "none", position: "fixed", right: "20px", top: "20px", transform: "translateY(-8px)",
+        pointerEvents: "none", position: "fixed", right: "20px", top: "78px", transform: "translateY(-8px)",
         transition: "opacity .18s ease, transform .18s ease", zIndex: "3000"
       });
       document.body.appendChild(toast);
