@@ -551,8 +551,8 @@
       .appraisal-values-table th:nth-child(2){width:6%;white-space:nowrap}
       .appraisal-values-table th:nth-child(3){width:14%}
       .appraisal-values-table th:nth-child(4){width:13%}
-      .appraisal-values-table th:nth-child(5){width:8%;white-space:nowrap}
-      .appraisal-values-table th:nth-child(6){width:27%}
+      .appraisal-values-table th:nth-child(5){width:12%;white-space:nowrap}
+      .appraisal-values-table th:nth-child(6){width:23%}
       .appraisal-values-table th:nth-child(7){width:17%}
       .amount-in-words{color:#354744;font-size:10.3pt;font-weight:700;margin:6px 0 0}
       .replacement-summary{border-top:2px solid #26443f;margin-top:3px;padding-top:9px}

@@ -2780,6 +2780,37 @@ table input, table select, table textarea {
 .appraisal-values-table th:nth-child(2) { width: 6% !important; white-space: nowrap !important; }
 .appraisal-values-table th:nth-child(3) { width: 14% !important; }
 .appraisal-values-table th:nth-child(4) { width: 13% !important; }
-.appraisal-values-table th:nth-child(5) { width: 8% !important; white-space: nowrap !important; }
-.appraisal-values-table th:nth-child(6) { width: 27% !important; }
+.appraisal-values-table th:nth-child(5) { width: 12% !important; white-space: nowrap !important; }
+.appraisal-values-table th:nth-child(6) { width: 23% !important; }
 .appraisal-values-table th:nth-child(7) { width: 17% !important; }
+
+
+/* Corrección final del buscador: nunca difuminar login, barra ni resultados. */
+body, #loginScreen, #appShell, #appShell main, #appShell .app-sidebar, #appShell .global-search-wrap, #appShell .global-search-palette {
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+#globalSearchBackdrop {
+  background: rgba(2, 6, 23, .34) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  pointer-events: auto !important;
+}
+#appShell .global-search-wrap, #appShell .global-search-palette {
+  position: relative !important;
+  z-index: 1403 !important;
+}
+#appShell .global-search-palette .search-result {
+  pointer-events: auto !important;
+  user-select: text !important;
+}
+
+/* El buscador siempre queda por encima del sombreado, sin crear un efecto borroso. */
+#appShell .app-sidebar { position: relative !important; }
+#appShell .global-search-wrap { isolation: isolate !important; }
+#loginScreen, #loginScreen *, #loginScreen .glass-card, #loginScreen .glass-panel {
+  filter: none !important;
+  -webkit-filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
