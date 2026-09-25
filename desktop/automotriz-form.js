@@ -58,6 +58,35 @@
     return String(value ?? "").replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#039;", '"': "&quot;" })[character]);
   }
 
+  let saveToastTimer;
+  function showSaveToast(text, tone = "success") {
+    let toast = document.querySelector("#technicalSaveToast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "technicalSaveToast";
+      toast.setAttribute("role", "status");
+      toast.setAttribute("aria-live", "polite");
+      Object.assign(toast.style, {
+        alignItems: "center", borderRadius: "12px", boxShadow: "0 12px 30px rgba(15, 23, 42, .18)",
+        color: "#fff", display: "flex", font: '600 14px/1.35 "Segoe UI", Arial, sans-serif',
+        gap: "8px", maxWidth: "min(380px, calc(100vw - 32px))", opacity: "0", padding: "12px 16px",
+        pointerEvents: "none", position: "fixed", right: "20px", top: "20px", transform: "translateY(-8px)",
+        transition: "opacity .18s ease, transform .18s ease", zIndex: "3000"
+      });
+      document.body.appendChild(toast);
+    }
+    toast.textContent = `${tone === "error" ? "⚠" : "✓"} ${text}`;
+    toast.style.background = tone === "error" ? "#a33f36" : "#176b58";
+    toast.style.opacity = "1";
+    toast.style.transform = "translateY(0)";
+    window.clearTimeout(saveToastTimer);
+    saveToastTimer = window.setTimeout(() => {
+      toast.style.opacity = "0";
+      toast.style.transform = "translateY(-8px)";
+    }, 2600);
+  }
+  app.showTechnicalSaveToast = showSaveToast;
+
   function factorControls(factors, group) {
     const controls = factors.map((factor) => `<label>${escapeHtml(factor)}<select class="factor-select" data-factor-group="${group}" data-factor-name="${escapeHtml(factor)}">${depreciationOptions.map((option) => `<option value="${option.value}"${option.value === 1 ? " selected" : ""}>${option.label}</option>`).join("")}</select></label>`);
     if (group === "functionalGroupOne") {
@@ -118,6 +147,7 @@
     folioInput.value = stored.numeroAvaluo || folioInput.value;
     message.classList.remove("is-error"); message.classList.add("is-success");
     message.textContent = `Antecedentes guardados. Folio ${folioInput.value}; expediente En proceso.`;
+    showSaveToast(`Antecedentes guardados · Folio ${folioInput.value}`);
     return stored;
   }
 
@@ -158,6 +188,7 @@
     folioInput.value = stored.numeroAvaluo || folioInput.value;
     message.classList.remove("is-error"); message.classList.add("is-success");
     message.textContent = `Avance del avalúo ${folioInput.value} guardado.`;
+    showSaveToast(`Pestaña guardada · Folio ${folioInput.value}`);
     return stored;
   }
 
@@ -201,6 +232,7 @@
         } catch (error) {
           message.classList.add("is-error");
           message.textContent = error.message || "No se pudo guardar el avance del avalúo.";
+          showSaveToast(message.textContent, "error");
           return;
         }
         completed.add(index); saveDraft(); if (index < sections.length - 1) goTo(index + 1); else form.requestSubmit();

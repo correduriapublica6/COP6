@@ -243,10 +243,12 @@
       folio.value = stored.numeroAvaluo || folio.value;
       message.classList.add('is-success');
       message.textContent = index === 0 ? `Antecedentes guardados. Se generó el avalúo ${folio.value} y ya está disponible en Gestión.` : `Avance del avalúo ${folio.value} guardado.`;
+      app.showTechnicalSaveToast?.(index === 0 ? `Antecedentes guardados · Folio ${folio.value}` : `Pestaña guardada · Folio ${folio.value}`);
       return stored;
     } catch (error) {
       message.classList.add('is-error');
       message.textContent = error.message || 'No se pudo guardar el avance del avalúo.';
+      app.showTechnicalSaveToast?.(message.textContent, 'error');
       return null;
     }
   }
