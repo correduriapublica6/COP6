@@ -3418,3 +3418,41 @@ body.global-search-active { overflow: auto !important; }
 @media (max-width: 760px) {
   #appShell.control-shell > .app-workspace { padding-top: 122px !important; }
 }
+
+/* Ajuste final: bloque derecho ligeramente elevado y totalmente dentro del header. */
+#appShell.control-shell > .app-sidebar > .sidebar-footer {
+  transform: translateY(-4px) !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-footer .sidebar-account-copy {
+  justify-content: center !important;
+  align-items: flex-start !important;
+}
+/* No mostrar titulares de página repetidos en Home ni en módulos. */
+#appShell.control-shell .app-workspace > .workspace-header > div:first-child,
+#appShell.control-shell .app-workspace > .workspace-header.avaluos-header > div:first-child {
+  display: none !important;
+}
+#appShell.control-shell .app-workspace > .workspace-header {
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+/* El buscador no usa backdrop ni oscurece el contenido. */
+#globalSearchBackdrop,
+body.global-search-active #globalSearchBackdrop {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+#appShell.control-shell .global-search-wrap input {
+  z-index: 50 !important;
+}
+#appShell.control-shell .global-search-palette,
+#appShell.control-shell .global-search-palette .search-result {
+  z-index: 51 !important;
+  pointer-events: auto !important;
+}
+@media (max-width: 760px) {
+  #appShell.control-shell > .app-sidebar > .sidebar-footer { transform: translateY(-2px) !important; }
+}
