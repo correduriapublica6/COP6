@@ -3470,3 +3470,32 @@ body.global-search-active #globalSearchBackdrop {
 #appShell.control-shell:has(#mobiliarioEditor:not([hidden])) #newTechnicalAppraisalButton {
   display: none !important;
 }
+
+/* Elevar nuevamente el bloque derecho del header. */
+#appShell.control-shell > .app-sidebar > .sidebar-footer {
+  transform: translateY(-10px) !important;
+}
+/* Campana simple: sólo el icono blanco, sin círculo ni borde dorado. */
+#appShell.control-shell > .app-sidebar .alerts-button {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 24px !important;
+  padding: 0 !important;
+  font-size: 1.15rem !important;
+  line-height: 1 !important;
+}
+#appShell.control-shell > .app-sidebar .alerts-button span {
+  color: #ffffff !important;
+  filter: grayscale(1) brightness(0) invert(1) !important;
+}
+#appShell.control-shell > .app-sidebar .alerts-button b {
+  display: none !important;
+}
+@media (max-width: 760px) {
+  #appShell.control-shell > .app-sidebar > .sidebar-footer { transform: translateY(-4px) !important; }
+}
