@@ -27,7 +27,7 @@
     const functional = average([firstFunctionalAverage, secondFunctionalAverage]);
     const economicAverage = average(economic);
     const factor = (functional + economicAverage + economicAverage) / 3;
-    const demerit = 1 - factor;
+    const demerit = Math.max(0, 1 - factor);
 
     return {
       firstFunctionalAverage,

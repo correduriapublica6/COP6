@@ -3499,3 +3499,29 @@ body.global-search-active #globalSearchBackdrop {
 @media (max-width: 760px) {
   #appShell.control-shell > .app-sidebar > .sidebar-footer { transform: translateY(-4px) !important; }
 }
+
+
+/* Ajustes solicitados para fichas técnicas. */
+/* La tabla de reposición debe mostrar también el valor aplicable sin crecer verticalmente. */
+.mobiliario-replacement-summary { margin-top: 10px !important; }
+.mobiliario-replacement-summary .values-table-wrap { overflow-x: auto !important; max-height: none !important; }
+.mobiliario-replacement-summary .values-table { min-width: 0 !important; table-layout: fixed !important; }
+.mobiliario-replacement-summary .values-table th,
+.mobiliario-replacement-summary .values-table td { padding: 7px 8px !important; line-height: 1.15 !important; vertical-align: middle !important; }
+.mobiliario-replacement-summary .values-table th { font-size: .72rem !important; white-space: normal !important; }
+.mobiliario-replacement-summary .values-table td { font-size: .82rem !important; }
+.mobiliario-replacement-summary .values-table input { min-width: 0 !important; padding: 5px 6px !important; }
+.mobiliario-replacement-summary .values-table th:nth-child(1) { width: 20%; }
+.mobiliario-replacement-summary .values-table th:nth-child(2) { width: 8%; }
+.mobiliario-replacement-summary .values-table th:nth-child(3) { width: 10%; }
+.mobiliario-replacement-summary .values-table th:nth-child(4) { width: 16%; }
+.mobiliario-replacement-summary .values-table th:nth-child(5),
+.mobiliario-replacement-summary .values-table th:nth-child(6),
+.mobiliario-replacement-summary .values-table th:nth-child(7) { width: 10%; }
+.mobiliario-replacement-summary .values-table th:nth-child(8) { width: 16%; }
+/* Agregar otro vehículo: alineado a la derecha, dorado/negro y contraste invertido al pasar el cursor. */
+.vehicle-add-action { justify-content: flex-end !important; }
+.vehicle-add-action > span { margin-right: auto !important; }
+.technical-add-vehicle-button { background: linear-gradient(135deg, #d4af37, #c5a059) !important; border-color: #a9822d !important; color: #111111 !important; }
+.technical-add-vehicle-button:hover, .technical-add-vehicle-button:focus-visible { background: #111111 !important; border-color: #d4af37 !important; color: #ffffff !important; }
+@media (max-width: 640px) { .vehicle-add-action { align-items: center !important; } .vehicle-add-action > span { margin-right: 0 !important; } }
