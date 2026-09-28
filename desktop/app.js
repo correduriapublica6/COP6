@@ -59,6 +59,7 @@
   const credentialDialog = $("#credentialDialog");
   const credentialForm = $("#credentialForm");
   const credentialUser = $("#credentialUser");
+  const credentialCurrentPassword = $("#credentialCurrentPassword");
   const credentialPassword = $("#credentialPassword");
   const credentialPasswordConfirm = $("#credentialPasswordConfirm");
   const credentialMessage = $("#credentialMessage");
@@ -384,13 +385,14 @@
   async function openCredentialSetup() {
     const credentials = loadCredentials();
     const bootstrap = Object.keys(credentials).length === 0;
-    const selected = loginUser.value;
+    const selfChange = Boolean(activeSessionUser && !isAdmin());
+    const selected = selfChange ? activeSessionUser : loginUser.value;
     const firstAdminAccess = isFirstAdminAccess(selected);
-    if (!isAdmin() && roleFor(selected) !== "admin") {
+    if (!selfChange && !isAdmin() && roleFor(selected) !== "admin") {
       loginMessage.textContent = "Selecciona un perfil Administrador.";
       return;
     }
-    if (!isAdmin()) {
+    if (!selfChange && !isAdmin()) {
       const currentPassword = String(loginPassword.value || "");
       if (!currentPassword) {
         loginMessage.textContent = "Escribe la contraseña actual del Administrador antes de cambiarla.";
@@ -401,14 +403,15 @@
         if (serverOnline) await apiRequest("/auth/login", { method: "POST", body: JSON.stringify({ name: selected, password: currentPassword }) });
         else if (credentials[selected] !== currentPassword) throw new Error("La contraseña actual no es válida en modo sin conexión.");
         pendingCredentialAuthorization = { user: selected, currentPassword, expiresAt: Date.now() + 5 * 60 * 1000 };
-      } catch (error) {
-        loginMessage.textContent = error.message || "No fue posible verificar la contraseña actual.";
-        return;
-      }
+      } catch (error) { loginMessage.textContent = error.message || "No fue posible verificar la contraseña actual."; return; }
     }
     $$("#credentialUser option").forEach((option) => { option.disabled = Boolean(option.value) && (bootstrap || firstAdminAccess) && roleFor(option.value) !== "admin"; });
+    credentialUser.value = selected || (isAdmin() ? activeSessionUser : "");
+    credentialUser.disabled = selfChange;
+    credentialUser.closest("label")?.classList.toggle("is-hidden", selfChange);
+    $("#credentialCurrentPasswordLabel")?.classList.toggle("is-hidden", !selfChange);
+    if (credentialCurrentPassword) credentialCurrentPassword.value = "";
     credentialMessage.textContent = "";
-    credentialUser.value = isAdmin() ? activeSessionUser : selected;
     credentialPassword.value = "";
     credentialPasswordConfirm.value = "";
     credentialDialog.showModal();
@@ -420,14 +423,23 @@
     const credentials = loadCredentials();
     const bootstrap = Object.keys(credentials).length === 0;
     const firstAdminAccess = isFirstAdminAccess(user);
+    const selfChange = Boolean(activeSessionUser && !isAdmin() && user === activeSessionUser);
     const externalAuthorization = pendingCredentialAuthorization && pendingCredentialAuthorization.user === user && pendingCredentialAuthorization.expiresAt > Date.now();
-    if (!isAdmin() && !externalAuthorization) {
-      credentialMessage.textContent = "Verifica primero la contraseña actual del Administrador desde Acceso administrativo.";
+    if (!isAdmin() && !selfChange && !externalAuthorization) {
+      credentialMessage.textContent = "Solo puedes cambiar tu propia contraseña.";
       return;
     }
-    if ((bootstrap || firstAdminAccess || externalAuthorization) && roleFor(user) !== "admin") {
+    if ((bootstrap || firstAdminAccess || externalAuthorization) && !selfChange && roleFor(user) !== "admin") {
       credentialMessage.textContent = "Solo se pueden modificar credenciales de perfiles Administrador desde este acceso.";
       return;
+    }
+    if (selfChange) {
+      const currentPassword = String(credentialCurrentPassword?.value || "");
+      try {
+        if (serverOnline) await apiRequest("/auth/login", { method: "POST", body: JSON.stringify({ name: user, password: currentPassword }) });
+        else if (credentials[user] !== currentPassword) throw new Error("La contraseña actual no es válida en modo sin conexión.");
+        pendingCredentialAuthorization = { user, currentPassword, expiresAt: Date.now() + 5 * 60 * 1000 };
+      } catch (error) { credentialMessage.textContent = error.message || "La contraseña actual no es válida."; return; }
     }
     if (!user || password.length < 6) { credentialMessage.textContent = "Selecciona un usuario y usa una contraseña de al menos 6 caracteres."; return; }
     if (password !== credentialPasswordConfirm.value) { credentialMessage.textContent = "Las contraseñas no coinciden."; return; }

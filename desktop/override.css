@@ -3709,3 +3709,26 @@ body.global-search-active #globalSearchBackdrop {
 #serviceRequestsTable .request-table-compact .request-status-select { width: 100% !important; min-width: 0 !important; max-width: 100% !important; }
 #serviceRequestsTable .request-table-compact .request-action-cell { min-width: 0 !important; white-space: nowrap !important; }
 @media (max-width: 760px) { #serviceRequestsTable > .request-table-compact { min-width: 660px !important; } #appShell.control-shell > .app-sidebar .header-tools { gap: 8px !important; } }
+
+/* Header final: navegación desplegada al centro y bloque derecho ordenado. */
+#appShell.control-shell > .app-sidebar { display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: space-between !important; overflow: visible !important; min-height: 72px !important; height: 72px !important; max-height: none !important; }
+#appShell.control-shell > .app-sidebar > .header-left-tools { flex: 1 1 0 !important; min-width: 0 !important; display: flex !important; align-items: center !important; }
+#appShell.control-shell > .app-sidebar > .sidebar-nav,
+#appShell.control-shell > .app-sidebar > .floating-nav-capsule { display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: center !important; flex-wrap: nowrap !important; width: auto !important; min-width: max-content !important; flex: 0 0 auto !important; flex-shrink: 0 !important; overflow: visible !important; padding: 4px 8px !important; margin: 0 auto !important; }
+#appShell.control-shell > .app-sidebar > .sidebar-nav .sidebar-link { flex: 0 0 auto !important; white-space: nowrap !important; }
+#appShell.control-shell > .app-sidebar > .sidebar-footer { flex: 1 1 0 !important; min-width: 0 !important; width: auto !important; overflow: visible !important; }
+#appShell.control-shell > .app-sidebar .header-tools { width: 100% !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; gap: 14px !important; overflow: visible !important; }
+#appShell.control-shell > .app-sidebar .sidebar-account { order: 1 !important; }
+#appShell.control-shell > .app-sidebar #alertsButton { order: 2 !important; background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; width: 30px !important; height: 34px !important; min-width: 30px !important; padding: 4px !important; color: #fff !important; }
+#appShell.control-shell > .app-sidebar #alertsButton:hover { background: transparent !important; color: #fff !important; }
+#appShell.control-shell > .app-sidebar #alertsButton .bell-icon { display: inline-flex !important; width: 22px !important; height: 22px !important; color: #fff !important; }
+#appShell.control-shell > .app-sidebar #alertsButton .bell-icon svg { width: 100% !important; height: 100% !important; fill: none !important; stroke: currentColor !important; stroke-width: 1.8 !important; stroke-linecap: round !important; stroke-linejoin: round !important; }
+#appShell.control-shell > .app-sidebar #alertsButton:hover .bell-icon svg { fill: #fff !important; stroke: #fff !important; }
+#appShell.control-shell > .app-sidebar .profile-menu-wrap { order: 3 !important; }
+#appShell.control-shell > .app-sidebar .profile-button { background: transparent !important; border: 1px solid rgba(255,255,255,.8) !important; }
+#appShell.control-shell > .app-sidebar .profile-button .user-icon { display: inline-flex !important; width: 22px !important; height: 22px !important; color: #fff !important; }
+#appShell.control-shell > .app-sidebar .profile-button .user-icon svg { width: 100% !important; height: 100% !important; fill: none !important; stroke: currentColor !important; stroke-width: 1.8 !important; stroke-linecap: round !important; stroke-linejoin: round !important; }
+#appShell.control-shell > .app-sidebar .profile-button:hover { background: #111 !important; color: #fff !important; }
+#appShell.control-shell > .app-sidebar .profile-menu { overflow: visible !important; }
+#credentialUserLabel.is-hidden { display: none !important; }
+#credentialCurrentPasswordLabel.is-hidden { display: none !important; }
