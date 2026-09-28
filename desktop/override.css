@@ -3673,3 +3673,39 @@ body.global-search-active #globalSearchBackdrop {
 #requestDetailDialog.client-luxury-detail .client-timeline-step.is-complete::after { background: #22c55e !important; }
 #requestDetailDialog.client-luxury-detail [data-attach-missing] { background: #c5a059 !important; color: #111 !important; border-color: #c5a059 !important; font-weight: 800 !important; }
 @media (max-width: 600px) { .profile-data-grid { grid-template-columns: 1fr; } }
+
+/* Ajuste final del header: notificaciones, usuario y avatar en ese orden. */
+#appShell.control-shell > .app-sidebar,
+#appShell.control-shell > .app-sidebar .sidebar-footer,
+#appShell.control-shell > .app-sidebar .header-tools { overflow: visible !important; }
+#appShell.control-shell > .app-sidebar .sidebar-footer { width: 100% !important; }
+#appShell.control-shell > .app-sidebar .header-tools {
+  display: flex !important; align-items: center !important; justify-content: flex-end !important;
+  gap: 14px !important; width: 100% !important; margin-left: auto !important;
+}
+#appShell.control-shell > .app-sidebar .sidebar-account { order: 2 !important; min-width: 0 !important; }
+#appShell.control-shell > .app-sidebar #alertsButton { order: 1 !important; width: 32px !important; height: 32px !important; min-width: 32px !important; padding: 6px !important; border-radius: 8px !important; background: #000 !important; color: #fff !important; border: 1px solid #fff !important; }
+#appShell.control-shell > .app-sidebar #alertsButton:hover { background: #fff !important; color: #000 !important; border-color: #000 !important; }
+#appShell.control-shell > .app-sidebar .sidebar-account-copy { display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: flex-end !important; text-align: right !important; line-height: 1.15 !important; min-width: 0 !important; }
+#appShell.control-shell > .app-sidebar .active-user,
+#appShell.control-shell > .app-sidebar .active-user-role,
+#appShell.control-shell > .app-sidebar .sidebar-online { text-align: right !important; white-space: nowrap !important; }
+#appShell.control-shell > .app-sidebar .profile-menu-wrap { order: 3 !important; position: relative !important; flex: 0 0 auto !important; }
+#appShell.control-shell > .app-sidebar .profile-button { width: 38px !important; height: 38px !important; min-width: 38px !important; border-radius: 50% !important; padding: 0 !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; background: #111 !important; border: 1px solid #fff !important; color: #fff !important; font-weight: 800 !important; font-size: 12px !important; }
+#appShell.control-shell > .app-sidebar .profile-button:hover { background: #fff !important; color: #000 !important; }
+#appShell.control-shell > .app-sidebar .profile-menu { top: calc(100% + 8px) !important; right: 0 !important; z-index: 9999 !important; }
+
+/* Tabla administrativa: evita que folio y solicitante se empalmen. */
+#serviceRequestsTable { width: 100% !important; overflow-x: auto !important; overflow-y: visible !important; }
+#serviceRequestsTable > .request-table-compact { width: 100% !important; min-width: 720px !important; table-layout: fixed !important; }
+#serviceRequestsTable .request-table-compact th,
+#serviceRequestsTable .request-table-compact td { box-sizing: border-box !important; overflow: hidden !important; text-overflow: ellipsis !important; vertical-align: middle !important; }
+#serviceRequestsTable .request-table-compact th:nth-child(1), #serviceRequestsTable .request-table-compact td:nth-child(1) { width: 14% !important; }
+#serviceRequestsTable .request-table-compact th:nth-child(2), #serviceRequestsTable .request-table-compact td:nth-child(2) { width: 27% !important; white-space: normal !important; overflow-wrap: anywhere !important; line-height: 1.2 !important; }
+#serviceRequestsTable .request-table-compact th:nth-child(3), #serviceRequestsTable .request-table-compact td:nth-child(3) { width: 19% !important; white-space: normal !important; overflow-wrap: anywhere !important; }
+#serviceRequestsTable .request-table-compact th:nth-child(4), #serviceRequestsTable .request-table-compact td:nth-child(4) { width: 24% !important; }
+#serviceRequestsTable .request-table-compact th:nth-child(5), #serviceRequestsTable .request-table-compact td:nth-child(5) { width: 5% !important; }
+#serviceRequestsTable .request-table-compact th:nth-child(6), #serviceRequestsTable .request-table-compact td:nth-child(6) { width: 11% !important; }
+#serviceRequestsTable .request-table-compact .request-status-select { width: 100% !important; min-width: 0 !important; max-width: 100% !important; }
+#serviceRequestsTable .request-table-compact .request-action-cell { min-width: 0 !important; white-space: nowrap !important; }
+@media (max-width: 760px) { #serviceRequestsTable > .request-table-compact { min-width: 660px !important; } #appShell.control-shell > .app-sidebar .header-tools { gap: 8px !important; } }

@@ -599,6 +599,9 @@
     activeSessionUser = user;
     activeUser.textContent = user;
     activeUserRole.textContent = roleLabel(roleFor(user));
+    const initials = String(user || "Usuario").trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0].toUpperCase()).join("");
+    const profileInitials = $("#profileInitials");
+    if (profileInitials) profileInitials.textContent = initials || "U";
     $("#welcomeUserName").textContent = user || "usuario";
     const currentRole = roleFor(user);
     $("#welcomeRoleCopy").textContent = currentRole === "admin" ? "Tienes acceso administrativo para gestionar los avalúos, el resumen y la configuración local." : currentRole === "auditor" ? "Tienes acceso total a Avalúos, Fe Pública, Resumen general, Chat y Notas/Tareas." : currentRole === "valuador" ? "Puedes crear y editar avalúos técnicos, además de usar el Chat y registrar Notas/Tareas; Recepción es solo de consulta." : currentRole === "editor" ? "Puedes registrar y editar avalúos, además de consultar el Control de saldos." : "Puedes consultar los avalúos, recibos y listados disponibles en este equipo.";
