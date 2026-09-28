@@ -3525,3 +3525,95 @@ body.global-search-active #globalSearchBackdrop {
 .technical-add-vehicle-button { background: linear-gradient(135deg, #d4af37, #c5a059) !important; border-color: #a9822d !important; color: #111111 !important; }
 .technical-add-vehicle-button:hover, .technical-add-vehicle-button:focus-visible { background: #111111 !important; border-color: #d4af37 !important; color: #ffffff !important; }
 @media (max-width: 640px) { .vehicle-add-action { align-items: center !important; } .vehicle-add-action > span { margin-right: 0 !important; } }
+
+/* Solicitudes: tabla compacta, PDF visible y detalle administrativo claro */
+.request-table-compact {
+  table-layout: auto !important;
+  font-size: 12px !important;
+}
+.request-table-compact th,
+.request-table-compact td {
+  padding: 7px 8px !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+}
+.request-table-compact th:first-child,
+.request-table-compact td:first-child { width: 1%; }
+.request-table-compact .request-folio-cell { font-variant-numeric: tabular-nums; }
+.request-table-compact .request-status-select {
+  width: auto !important;
+  min-width: 124px !important;
+  max-width: 150px !important;
+  padding: 5px 22px 5px 7px !important;
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.request-table-compact .request-action-cell {
+  white-space: nowrap !important;
+  min-width: 190px !important;
+}
+.request-table-compact .request-detail-button {
+  margin: 2px !important;
+  padding: 5px 7px !important;
+  font-size: 11px !important;
+  white-space: nowrap !important;
+}
+.request-pdf-cell { text-align: center !important; }
+.request-pdf-ready {
+  display: inline-block;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 700;
+  font-size: 11px;
+}
+.request-pdf-pending { color: #94a3b8; }
+
+#requestDetailDialog.client-luxury-detail,
+#requestDetailDialog.client-luxury-detail::backdrop {
+  color-scheme: light;
+}
+#requestDetailDialog.client-luxury-detail {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, .24) !important;
+}
+#requestDetailDialog.client-luxury-detail * { color: inherit; }
+#requestDetailDialog.client-luxury-detail .client-detail-hero,
+#requestDetailDialog.client-luxury-detail .client-detail-section,
+#requestDetailDialog.client-luxury-detail .request-detail-section,
+#requestDetailDialog.client-luxury-detail .client-detail-download {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
+#requestDetailDialog.client-luxury-detail .client-folio,
+#requestDetailDialog.client-luxury-detail h3,
+#requestDetailDialog.client-luxury-detail h4,
+#requestDetailDialog.client-luxury-detail dt,
+#requestDetailDialog.client-luxury-detail dd,
+#requestDetailDialog.client-luxury-detail p,
+#requestDetailDialog.client-luxury-detail small,
+#requestDetailDialog.client-luxury-detail .section-kicker {
+  color: #0f172a !important;
+}
+#requestDetailDialog.client-luxury-detail .section-kicker { color: #475569 !important; }
+#requestDetailDialog.client-luxury-detail .client-timeline-step small { color: #334155 !important; }
+#requestDetailDialog.client-luxury-detail .client-status-badge { color: #ffffff !important; }
+#requestDetailDialog.client-luxury-detail .request-file-card,
+#requestDetailDialog.client-luxury-detail .request-file-empty {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+@media (max-width: 900px) {
+  .request-table-compact th,
+  .request-table-compact td { padding: 6px 5px !important; font-size: 11px !important; }
+  .request-table-compact .request-status-select { min-width: 112px !important; max-width: 128px !important; }
+  .request-table-compact .request-action-cell { min-width: 165px !important; }
+}
