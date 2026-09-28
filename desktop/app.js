@@ -1104,7 +1104,25 @@
   $("#cancelCredentialDialogButton").addEventListener("click", closeCredentialSetup);
   $("#inlineCredentialForm").addEventListener("submit", saveInlineCredential);
   $("#addUserForm").addEventListener("submit", registerUser);
-  $("#logoutButton").addEventListener("click", () => { sessionStorage.removeItem(SESSION_KEY); showLogin(); });
+  const profileButton = $("#profileButton");
+  const profileMenu = $("#profileMenu");
+  const adminProfileDialog = $("#adminProfileDialog");
+  const closeProfileMenu = () => { if (profileMenu) profileMenu.hidden = true; profileButton?.setAttribute("aria-expanded", "false"); };
+  const openAdminProfile = () => {
+    closeProfileMenu();
+    const user = String(activeSessionUser || "");
+    const remote = Array.isArray(remoteUsers) ? remoteUsers.find((item) => item.name === user) : null;
+    $("#adminProfileName") && ($("#adminProfileName").textContent = user || "—");
+    $("#adminProfileEmail") && ($("#adminProfileEmail").textContent = remote?.email || "No registrado");
+    $("#adminProfilePhone") && ($("#adminProfilePhone").textContent = remote?.phone || "No registrado");
+    $("#adminProfileRole") && ($("#adminProfileRole").textContent = roleLabel(roleFor(user)));
+    adminProfileDialog?.showModal();
+  };
+  profileButton?.addEventListener("click", (event) => { event.stopPropagation(); const opening = profileMenu?.hidden !== false; if (profileMenu) profileMenu.hidden = !opening; profileButton.setAttribute("aria-expanded", String(opening)); });
+  profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); sessionStorage.removeItem(SESSION_KEY); showLogin(); } }));
+  document.addEventListener("click", (event) => { if (profileMenu && !event.target.closest(".profile-menu-wrap")) closeProfileMenu(); });
+  $("#closeAdminProfileButton")?.addEventListener("click", () => adminProfileDialog?.close());
+  $("#cancelAdminProfileButton")?.addEventListener("click", () => adminProfileDialog?.close());
   $("#newRecordButton").addEventListener("click", () => openDialog());
   $("#newTechnicalAppraisalButton").addEventListener("click", () => window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-creation")));
   $("#backAvaluosButton").addEventListener("click", () => {

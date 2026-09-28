@@ -3617,3 +3617,59 @@ body.global-search-active #globalSearchBackdrop {
   .request-table-compact .request-status-select { min-width: 112px !important; max-width: 128px !important; }
   .request-table-compact .request-action-cell { min-width: 165px !important; }
 }
+
+/* Home minimalista: sólo saludo y permiso */
+#inicioView .welcome-card { margin-top: 0 !important; }
+#inicioView .recent-activity-card,
+#inicioView .welcome-tasks { display: none !important; }
+#appShell:has(#inicioView.is-active) .workspace-header { display: none !important; }
+
+/* Perfil en la barra superior */
+.sidebar-footer { align-items: center !important; }
+.header-tools { margin-left: auto !important; display: flex !important; align-items: center !important; justify-content: flex-end !important; gap: 8px !important; }
+.alerts-button, .profile-button {
+  width: 34px !important; height: 34px !important; min-width: 34px !important;
+  padding: 0 !important; display: inline-flex !important; align-items: center !important; justify-content: center !important;
+  border: 1px solid rgba(255,255,255,.45) !important; border-radius: 7px !important;
+  background: transparent !important; color: #fff !important; font-size: 16px !important; line-height: 1 !important;
+}
+.alerts-button b { font-size: 9px !important; min-width: 13px !important; height: 13px !important; }
+.profile-button span:last-child { display: none !important; }
+.profile-menu-wrap { position: relative !important; }
+.profile-menu {
+  position: absolute !important; top: calc(100% + 8px) !important; right: 0 !important; z-index: 5000 !important;
+  min-width: 170px !important; padding: 6px !important; background: #111827 !important;
+  border: 1px solid #c5a059 !important; border-radius: 9px !important; box-shadow: 0 14px 30px rgba(0,0,0,.28) !important;
+}
+.profile-menu[hidden] { display: none !important; }
+.profile-menu button { display: block !important; width: 100% !important; border: 0 !important; background: transparent !important; color: #fff !important; text-align: left !important; padding: 9px 10px !important; border-radius: 6px !important; cursor: pointer !important; }
+.profile-menu button:hover { background: #c5a059 !important; color: #111827 !important; }
+.profile-data-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; padding: 16px 0; }
+.profile-data-grid div { display: grid; gap: 4px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; }
+.profile-data-grid small { color: #64748b; font-weight: 700; }
+.profile-data-grid strong { color: #0f172a; word-break: break-word; }
+
+/* Tabla de solicitudes compacta e iconográfica */
+.request-table-compact th, .request-table-compact td { padding: 6px 7px !important; }
+.request-table-compact th:nth-child(1), .request-table-compact td:nth-child(1) { width: 1% !important; }
+.request-table-compact th:nth-child(5), .request-table-compact td:nth-child(5) { width: 34px !important; text-align: center !important; }
+.request-table-compact .request-action-cell { min-width: 96px !important; text-align: center !important; }
+.request-icon-button { width: 28px !important; height: 28px !important; padding: 5px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; border: 1px solid #cbd5e1 !important; border-radius: 6px !important; background: #fff !important; color: #334155 !important; cursor: pointer !important; margin: 1px !important; }
+.request-icon-button svg { width: 16px !important; height: 16px !important; fill: none !important; stroke: currentColor !important; stroke-width: 1.8 !important; stroke-linecap: round !important; stroke-linejoin: round !important; }
+.request-info-button { color: #2563eb !important; }
+.request-upload-pdf-button { color: #b45309 !important; }
+.request-delete-button { color: #dc2626 !important; }
+.request-pdf-ready { padding: 2px 5px !important; font-size: 10px !important; }
+
+/* Detalle claro y progreso verde */
+#requestDetailDialog.client-luxury-detail .client-detail-hero,
+#requestDetailDialog.client-luxury-detail .client-folio,
+#requestDetailDialog.client-luxury-detail .client-detail-hero h3,
+#requestDetailDialog.client-luxury-detail .client-detail-hero p { color: #000 !important; }
+#requestDetailDialog.client-luxury-detail .client-timeline-step.is-complete span { background: #16a34a !important; border-color: #16a34a !important; color: #fff !important; }
+#requestDetailDialog.client-luxury-detail .client-timeline-step.is-complete small,
+#requestDetailDialog.client-luxury-detail .client-timeline-step.is-current small { color: #15803d !important; font-weight: 700 !important; }
+#requestDetailDialog.client-luxury-detail .client-timeline-step::after { background: #d1d5db !important; }
+#requestDetailDialog.client-luxury-detail .client-timeline-step.is-complete::after { background: #22c55e !important; }
+#requestDetailDialog.client-luxury-detail [data-attach-missing] { background: #c5a059 !important; color: #111 !important; border-color: #c5a059 !important; font-weight: 800 !important; }
+@media (max-width: 600px) { .profile-data-grid { grid-template-columns: 1fr; } }
