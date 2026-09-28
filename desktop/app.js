@@ -9,6 +9,7 @@
   const TECHNICAL_OBJECTIVES_KEY = "control-avaluos.desktop.technical-objectives.v1";
   const TASKS_KEY = "control-avaluos.desktop.tasks.v1";
   const CHAT_MESSAGES_KEY = "control-avaluos.desktop.chat.v1";
+  const PROFILE_AVATARS_KEY = "control-avaluos.desktop.profile-avatars.v1";
   const BACKUP_VERSION = 1;
   const USERS = ["Juan Manuel Barrera Martínez", "Gabriel Barrera Martínez", "Cesar Delgado Armendáriz", "Diana Barrera Rivera", "Francisco Gabriel Hernández Estrada", "Emmanuel Barrera Atilano", "Caridad Rojas Vázquez", "Ivan de Luna Aldape"];
   const DEFAULT_ROLE_BY_USER = { "Juan Manuel Barrera Martínez": "admin", "Francisco Gabriel Hernández Estrada": "admin", "Caridad Rojas Vázquez": "editor", "Ivan de Luna Aldape": "valuador" };
@@ -64,6 +65,39 @@
   const credentialPasswordConfirm = $("#credentialPasswordConfirm");
   const credentialMessage = $("#credentialMessage");
   const manageUsersButton = $("#manageUsersButton");
+  const PROFILE_AVATAR_COLORS = ["#1e3a8a", "#0f766e", "#7c3aed", "#9f1239", "#92400e", "#334155", "#166534", "#374151"];
+  const PROFILE_AVATAR_ACCENTS = ["#93c5fd", "#99f6e4", "#ddd6fe", "#fda4af", "#fde68a", "#cbd5e1", "#bbf7d0", "#fbcfe8"];
+  const PROFILE_AVATAR_INITIALS = ["CP", "JM", "FH", "DG", "IV", "AB", "EM", "US"];
+  function profileAvatarSvg(index) {
+    const bg = PROFILE_AVATAR_COLORS[index % PROFILE_AVATAR_COLORS.length];
+    const accent = PROFILE_AVATAR_ACCENTS[index % PROFILE_AVATAR_ACCENTS.length];
+    const initials = PROFILE_AVATAR_INITIALS[index % PROFILE_AVATAR_INITIALS.length];
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="64" fill="${bg}"/><circle cx="64" cy="45" r="24" fill="${accent}" opacity=".96"/><path d="M25 111c4-25 19-38 39-38s35 13 39 38" fill="${accent}" opacity=".96"/><circle cx="102" cy="24" r="14" fill="#fff" opacity=".18"/><text x="64" y="121" fill="#fff" font-family="Arial,sans-serif" font-size="13" font-weight="700" text-anchor="middle">${initials}</text></svg>`;
+    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  }
+  const PROFILE_AVATARS = PROFILE_AVATAR_COLORS.map((_, index) => profileAvatarSvg(index));
+  function loadProfileAvatars() { try { return JSON.parse(localStorage.getItem(PROFILE_AVATARS_KEY) || "{}") || {}; } catch { return {}; } }
+  function saveProfileAvatar(user, avatar) { const saved = loadProfileAvatars(); saved[user] = avatar; localStorage.setItem(PROFILE_AVATARS_KEY, JSON.stringify(saved)); }
+  function getProfileAvatar(user) { return loadProfileAvatars()[user] || ""; }
+  function applyProfileAvatar(user, avatar = getProfileAvatar(user)) {
+    const image = $("#profileAvatarImage");
+    const fallback = $("#profileButton .user-icon");
+    if (!image) return;
+    if (avatar) { image.src = avatar; image.hidden = false; if (fallback) fallback.hidden = true; }
+    else { image.hidden = true; if (fallback) fallback.hidden = false; }
+  }
+  function renderProfileAvatarGallery(selected = getProfileAvatar(activeSessionUser)) {
+    const gallery = $("#profileAvatarGallery");
+    if (!gallery) return;
+    gallery.innerHTML = PROFILE_AVATARS.map((avatar, index) => `<button type="button" class="profile-avatar-option${avatar === selected ? " is-selected" : ""}" data-profile-avatar="${index}" aria-label="Seleccionar avatar ${index + 1}"><img src="${avatar}" alt="Avatar profesional ${index + 1}"></button>`).join("");
+    gallery.querySelectorAll("[data-profile-avatar]").forEach((button) => button.addEventListener("click", () => {
+      const avatar = PROFILE_AVATARS[Number(button.dataset.profileAvatar)];
+      gallery.querySelectorAll(".profile-avatar-option").forEach((item) => item.classList.toggle("is-selected", item === button));
+      gallery.dataset.selectedAvatar = avatar;
+      applyProfileAvatar(activeSessionUser, avatar);
+    }));
+    gallery.dataset.selectedAvatar = selected;
+  }
 
   function normalizeNumber(value) { return String(value || "").replace(/\D/g, "").slice(0, 4); }
   function normalizeRecord(record) {
@@ -611,9 +645,7 @@
     activeSessionUser = user;
     activeUser.textContent = user;
     activeUserRole.textContent = roleLabel(roleFor(user));
-    const initials = String(user || "Usuario").trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0].toUpperCase()).join("");
-    const profileInitials = $("#profileInitials");
-    if (profileInitials) profileInitials.textContent = initials || "U";
+    applyProfileAvatar(user);
     $("#welcomeUserName").textContent = user || "usuario";
     const currentRole = roleFor(user);
     $("#welcomeRoleCopy").textContent = currentRole === "admin" ? "Tienes acceso administrativo para gestionar los avalúos, el resumen y la configuración local." : currentRole === "auditor" ? "Tienes acceso total a Avalúos, Fe Pública, Resumen general, Chat y Notas/Tareas." : currentRole === "valuador" ? "Puedes crear y editar avalúos técnicos, además de usar el Chat y registrar Notas/Tareas; Recepción es solo de consulta." : currentRole === "editor" ? "Puedes registrar y editar avalúos, además de consultar el Control de saldos." : "Puedes consultar los avalúos, recibos y listados disponibles en este equipo.";
@@ -733,12 +765,15 @@
     const expired = isExpiredWithoutDeliveryOrPayment(record);
     const statusClass = paid ? "paid" : expired ? "expired" : "pending";
     const statusLabel = paid ? "Pagado" : expired ? "Vencido" : delivered ? "Entregado sin pago" : "Pendiente de entrega";
-    const receiptButton = paid ? `<button class="record-action receipt" data-receipt="${record.id}" type="button">Recibo</button>` : "";
-    const editButton = canEditReception() ? `<button class="record-action" data-edit="${record.id}" type="button">Editar</button>` : `<button class="record-action" data-view="${record.id}" type="button">Ver</button>`;
-    const deleteButton = isAdmin() ? `<button class="record-action delete" data-delete="${record.id}" type="button">Eliminar</button>` : "";
-    return `<tr><td><strong class="avaluo-list-number">${escapeHtml(record.numeroAvaluo)}</strong></td><td class="avaluo-list-requester">${escapeHtml(record.solicitante)}</td><td>${escapeHtml(record.usuario)}</td><td>${formatCurrency(record.valorAvaluo)}</td><td><span class="avaluo-status ${statusClass}">${statusLabel}</span></td><td class="table-action-cell">${editButton}</td><td class="table-action-cell">${receiptButton}</td><td class="table-action-cell">${deleteButton}</td></tr>`;
+    const editIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"></path><path d="m14 7 3 3"></path></svg>`;
+    const receiptIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"></path><path d="M9 8h6M9 12h6M9 16h3"></path></svg>`;
+    const deleteIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7l1-3h4l1 3"></path></svg>`;
+    const receiptButton = paid ? `<button class="record-action receipt icon-only" data-receipt="${record.id}" type="button" title="Recibo" aria-label="Abrir recibo">${receiptIcon}</button>` : "";
+    const editButton = canEditReception() ? `<button class="record-action icon-only" data-edit="${record.id}" type="button" title="Editar" aria-label="Editar avalúo">${editIcon}</button>` : `<button class="record-action icon-only" data-view="${record.id}" type="button" title="Ver" aria-label="Ver avalúo">${editIcon}</button>`;
+    const deleteButton = isAdmin() ? `<button class="record-action delete icon-only" data-delete="${record.id}" type="button" title="Eliminar" aria-label="Eliminar avalúo">${deleteIcon}</button>` : "";
+    return `<tr><td><strong class="avaluo-list-number">${escapeHtml(record.numeroAvaluo)}</strong></td><td class="avaluo-list-requester">${escapeHtml(record.solicitante)}</td><td class="avaluo-list-user">${escapeHtml(record.usuario)}</td><td>${formatCurrency(record.valorAvaluo)}</td><td><span class="avaluo-status ${statusClass}">${statusLabel}</span></td><td class="table-action-cell reception-actions">${editButton}${receiptButton}${deleteButton}</td></tr>`;
   }
-  function renderList(items, emptyCopy) { $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>#</th><th>Solicitante</th><th>Usuario</th><th>Valor del avalúo</th><th>Estado</th><th>Editar</th><th>Recibo</th><th>Eliminar</th></tr></thead><tbody>${items.length ? items.map(renderListRow).join("") : `<tr><td colspan="8" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>`; }
+  function renderList(items, emptyCopy) { $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>#</th><th>Solicitante</th><th>Usuario</th><th>Valor del avalúo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${items.length ? items.map(renderListRow).join("") : `<tr><td colspan="6" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>`; }
   function bindRecordActions() {
     $$('[data-edit]').forEach((button) => button.addEventListener("click", () => openDialog(button.dataset.edit)));
   $$('[data-view]').forEach((button) => button.addEventListener("click", () => openDialog(button.dataset.view, true)));
@@ -1131,11 +1166,20 @@
     $("#adminProfileEmail") && ($("#adminProfileEmail").textContent = remote?.email || "No registrado");
     $("#adminProfilePhone") && ($("#adminProfilePhone").textContent = remote?.phone || "No registrado");
     $("#adminProfileRole") && ($("#adminProfileRole").textContent = roleLabel(roleFor(user)));
+    renderProfileAvatarGallery(getProfileAvatar(user));
     adminProfileDialog?.showModal();
   };
   profileButton?.addEventListener("click", (event) => { event.stopPropagation(); const opening = profileMenu?.hidden !== false; if (profileMenu) profileMenu.hidden = !opening; profileButton.setAttribute("aria-expanded", String(opening)); });
   profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); sessionStorage.removeItem(SESSION_KEY); showLogin(); } }));
   document.addEventListener("click", (event) => { if (profileMenu && !event.target.closest(".profile-menu-wrap")) closeProfileMenu(); });
+  $("#adminProfileForm")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const gallery = $("#profileAvatarGallery");
+    const selected = gallery?.dataset.selectedAvatar || getProfileAvatar(activeSessionUser);
+    if (activeSessionUser && selected) saveProfileAvatar(activeSessionUser, selected);
+    applyProfileAvatar(activeSessionUser, selected);
+    adminProfileDialog?.close();
+  });
   $("#closeAdminProfileButton")?.addEventListener("click", () => adminProfileDialog?.close());
   $("#cancelAdminProfileButton")?.addEventListener("click", () => adminProfileDialog?.close());
   $("#newRecordButton").addEventListener("click", () => openDialog());

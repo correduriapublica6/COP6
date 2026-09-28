@@ -3732,3 +3732,52 @@ body.global-search-active #globalSearchBackdrop {
 #appShell.control-shell > .app-sidebar .profile-menu { overflow: visible !important; }
 #credentialUserLabel.is-hidden { display: none !important; }
 #credentialCurrentPasswordLabel.is-hidden { display: none !important; }
+
+
+/* Ajuste solicitado: notificaciones, avatar y datos del usuario en ese orden. */
+#appShell.control-shell > .app-sidebar .header-tools { display:flex !important; align-items:center !important; justify-content:flex-end !important; gap:12px !important; }
+#appShell.control-shell > .app-sidebar #alertsButton { order:1 !important; background:transparent !important; border:0 !important; box-shadow:none !important; color:#fff !important; width:30px !important; height:32px !important; padding:4px !important; }
+#appShell.control-shell > .app-sidebar .profile-menu-wrap { order:2 !important; }
+#appShell.control-shell > .app-sidebar .sidebar-account { order:3 !important; }
+#appShell.control-shell > .app-sidebar .sidebar-account-copy { align-items:flex-end !important; text-align:right !important; justify-content:center !important; line-height:1.14 !important; }
+#appShell.control-shell > .app-sidebar .active-user,
+#appShell.control-shell > .app-sidebar .active-user-role,
+#appShell.control-shell > .app-sidebar .sidebar-online { text-align:right !important; white-space:nowrap !important; }
+#appShell.control-shell > .app-sidebar .profile-button { width:38px !important; height:38px !important; border-radius:50% !important; overflow:hidden !important; }
+.profile-avatar-image { width:100% !important; height:100% !important; display:block !important; object-fit:cover !important; border-radius:50% !important; }
+#appShell.control-shell > .app-sidebar #alertsButton .bell-icon svg { fill:none !important; stroke:currentColor !important; stroke-width:1.8 !important; }
+#appShell.control-shell > .app-sidebar #alertsButton:hover .bell-icon svg { fill:#fff !important; stroke:#fff !important; }
+
+/* Galería de fotos de perfil profesionales. */
+.profile-avatar-section { margin-top:18px; padding-top:18px; border-top:1px solid #e2e8f0; }
+.profile-avatar-section h3 { margin:0; color:#0f172a; font-size:1rem; }
+.profile-avatar-section p { margin:5px 0 12px; color:#64748b; font-size:.82rem; }
+.profile-avatar-gallery { display:grid; grid-template-columns:repeat(8, minmax(42px, 1fr)); gap:10px; }
+.profile-avatar-option { aspect-ratio:1; padding:3px; border:2px solid transparent; border-radius:50%; background:#f8fafc; cursor:pointer; transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease; }
+.profile-avatar-option img { width:100%; height:100%; display:block; border-radius:50%; object-fit:cover; }
+.profile-avatar-option:hover { transform:translateY(-2px); border-color:#c5a059; }
+.profile-avatar-option.is-selected { border-color:#c5a059; box-shadow:0 0 0 3px rgba(197,160,89,.2); }
+
+/* Recepción: una sola línea, más espacio para solicitante/usuario y acciones sólo con iconos. */
+#statusRecordList .operational-table-wrap { width:100%; overflow-x:auto; }
+#statusRecordList .operational-table-compact { width:100%; min-width:900px; table-layout:fixed; }
+#statusRecordList .operational-table-compact th,
+#statusRecordList .operational-table-compact td { white-space:nowrap !important; overflow:hidden; text-overflow:ellipsis; vertical-align:middle; }
+#statusRecordList .operational-table-compact th:nth-child(1), #statusRecordList .operational-table-compact td:nth-child(1) { width:9%; }
+#statusRecordList .operational-table-compact th:nth-child(2), #statusRecordList .operational-table-compact td:nth-child(2) { width:26%; }
+#statusRecordList .operational-table-compact th:nth-child(3), #statusRecordList .operational-table-compact td:nth-child(3) { width:22%; }
+#statusRecordList .operational-table-compact th:nth-child(4), #statusRecordList .operational-table-compact td:nth-child(4) { width:14%; }
+#statusRecordList .operational-table-compact th:nth-child(5), #statusRecordList .operational-table-compact td:nth-child(5) { width:17%; }
+#statusRecordList .operational-table-compact th:nth-child(6), #statusRecordList .operational-table-compact td:nth-child(6) { width:12%; }
+#statusRecordList .reception-actions { display:flex !important; align-items:center !important; justify-content:center !important; gap:5px !important; overflow:visible !important; }
+#statusRecordList .record-action.icon-only { width:29px !important; height:29px !important; min-width:29px !important; flex:0 0 29px !important; padding:5px !important; display:inline-flex !important; align-items:center !important; justify-content:center !important; border-radius:6px !important; }
+#statusRecordList .record-action.icon-only svg { width:16px !important; height:16px !important; fill:none !important; stroke:currentColor !important; stroke-width:1.8 !important; stroke-linecap:round !important; stroke-linejoin:round !important; }
+#statusRecordList .record-action.icon-only:hover { transform:translateY(-1px); }
+@media (max-width:760px) { .profile-avatar-gallery { grid-template-columns:repeat(4, minmax(48px,1fr)); } #statusRecordList .operational-table-compact { min-width:760px; } }
+
+/* Compatibilidad con reglas heredadas: el avatar alternativo y la foto respetan hidden. */
+#appShell.control-shell > .app-sidebar .profile-button .user-icon { display:inline-flex !important; }
+#appShell.control-shell > .app-sidebar .profile-button .user-icon[hidden] { display:none !important; }
+#appShell.control-shell > .app-sidebar .profile-button #profileAvatarImage[hidden] { display:none !important; }
+#appShell.control-shell > .app-sidebar .profile-button #profileAvatarImage:not([hidden]) { display:block !important; }
+#appShell.control-shell > .app-sidebar #alertsCount { display:none !important; }
