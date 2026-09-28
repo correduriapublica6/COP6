@@ -67,18 +67,27 @@
   const manageUsersButton = $("#manageUsersButton");
   const PROFILE_AVATAR_COLORS = ["#1e3a8a", "#0f766e", "#7c3aed", "#9f1239", "#92400e", "#334155", "#166534", "#374151"];
   const PROFILE_AVATAR_ACCENTS = ["#93c5fd", "#99f6e4", "#ddd6fe", "#fda4af", "#fde68a", "#cbd5e1", "#bbf7d0", "#fbcfe8"];
-  const PROFILE_AVATAR_INITIALS = ["CP", "JM", "FH", "DG", "IV", "AB", "EM", "US"];
   function profileAvatarSvg(index) {
     const bg = PROFILE_AVATAR_COLORS[index % PROFILE_AVATAR_COLORS.length];
     const accent = PROFILE_AVATAR_ACCENTS[index % PROFILE_AVATAR_ACCENTS.length];
-    const initials = PROFILE_AVATAR_INITIALS[index % PROFILE_AVATAR_INITIALS.length];
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="64" fill="${bg}"/><circle cx="64" cy="45" r="24" fill="${accent}" opacity=".96"/><path d="M25 111c4-25 19-38 39-38s35 13 39 38" fill="${accent}" opacity=".96"/><circle cx="102" cy="24" r="14" fill="#fff" opacity=".18"/><text x="64" y="121" fill="#fff" font-family="Arial,sans-serif" font-size="13" font-weight="700" text-anchor="middle">${initials}</text></svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="64" fill="${bg}"/><circle cx="64" cy="43" r="25" fill="${accent}" opacity=".96"/><path d="M23 112c5-27 20-41 41-41s36 14 41 41" fill="${accent}" opacity=".96"/><circle cx="102" cy="24" r="14" fill="#fff" opacity=".18"/></svg>`;
     return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
   }
   const PROFILE_AVATARS = PROFILE_AVATAR_COLORS.map((_, index) => profileAvatarSvg(index));
   function loadProfileAvatars() { try { return JSON.parse(localStorage.getItem(PROFILE_AVATARS_KEY) || "{}") || {}; } catch { return {}; } }
-  function saveProfileAvatar(user, avatar) { const saved = loadProfileAvatars(); saved[user] = avatar; localStorage.setItem(PROFILE_AVATARS_KEY, JSON.stringify(saved)); }
-  function getProfileAvatar(user) { return loadProfileAvatars()[user] || ""; }
+  function saveProfileAvatarLocal(user, avatar) { const saved = loadProfileAvatars(); saved[user] = avatar; localStorage.setItem(PROFILE_AVATARS_KEY, JSON.stringify(saved)); }
+  function getProfileAvatar(user) { return remoteUsers?.find((item) => item.name === user)?.profileAvatar || loadProfileAvatars()[user] || ""; }
+  async function saveProfileAvatar(user, avatar) {
+    const remoteUser = remoteUsers?.find((item) => item.name === user);
+    if (serverOnline && remoteUser) {
+      const saved = await apiRequest(`/users/${encodeURIComponent(remoteUser.id)}/profile-avatar`, { method: "PUT", body: JSON.stringify({ profileAvatar: avatar }) });
+      remoteUsers = remoteUsers.map((item) => item.id === saved.id ? { ...item, ...saved } : item);
+      saveProfileAvatarLocal(user, avatar);
+      return saved;
+    }
+    saveProfileAvatarLocal(user, avatar);
+    return null;
+  }
   function applyProfileAvatar(user, avatar = getProfileAvatar(user)) {
     const image = $("#profileAvatarImage");
     const fallback = $("#profileButton .user-icon");
@@ -94,6 +103,8 @@
       const avatar = PROFILE_AVATARS[Number(button.dataset.profileAvatar)];
       gallery.querySelectorAll(".profile-avatar-option").forEach((item) => item.classList.toggle("is-selected", item === button));
       gallery.dataset.selectedAvatar = avatar;
+      const hero = $("#profileAvatarHeroImage");
+      if (hero) hero.src = avatar;
       applyProfileAvatar(activeSessionUser, avatar);
     }));
     gallery.dataset.selectedAvatar = selected;
@@ -768,9 +779,9 @@
     const editIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"></path><path d="m14 7 3 3"></path></svg>`;
     const receiptIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"></path><path d="M9 8h6M9 12h6M9 16h3"></path></svg>`;
     const deleteIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7l1-3h4l1 3"></path></svg>`;
-    const receiptButton = paid ? `<button class="record-action receipt icon-only" data-receipt="${record.id}" type="button" title="Recibo" aria-label="Abrir recibo">${receiptIcon}</button>` : "";
-    const editButton = canEditReception() ? `<button class="record-action icon-only" data-edit="${record.id}" type="button" title="Editar" aria-label="Editar avalúo">${editIcon}</button>` : `<button class="record-action icon-only" data-view="${record.id}" type="button" title="Ver" aria-label="Ver avalúo">${editIcon}</button>`;
-    const deleteButton = isAdmin() ? `<button class="record-action delete icon-only" data-delete="${record.id}" type="button" title="Eliminar" aria-label="Eliminar avalúo">${deleteIcon}</button>` : "";
+    const receiptButton = paid ? `<button class="record-action request-icon-button request-upload-pdf-button receipt icon-only" data-receipt="${record.id}" type="button" title="Recibo" aria-label="Abrir recibo">${receiptIcon}</button>` : "";
+    const editButton = canEditReception() ? `<button class="record-action request-icon-button request-info-button icon-only" data-edit="${record.id}" type="button" title="Editar" aria-label="Editar avalúo">${editIcon}</button>` : `<button class="record-action request-icon-button request-info-button icon-only" data-view="${record.id}" type="button" title="Ver" aria-label="Ver avalúo">${editIcon}</button>`;
+    const deleteButton = isAdmin() ? `<button class="record-action request-icon-button request-delete-button delete icon-only" data-delete="${record.id}" type="button" title="Eliminar" aria-label="Eliminar avalúo">${deleteIcon}</button>` : "";
     return `<tr><td><strong class="avaluo-list-number">${escapeHtml(record.numeroAvaluo)}</strong></td><td class="avaluo-list-requester">${escapeHtml(record.solicitante)}</td><td class="avaluo-list-user">${escapeHtml(record.usuario)}</td><td>${formatCurrency(record.valorAvaluo)}</td><td><span class="avaluo-status ${statusClass}">${statusLabel}</span></td><td class="table-action-cell reception-actions">${editButton}${receiptButton}${deleteButton}</td></tr>`;
   }
   function renderList(items, emptyCopy) { $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>#</th><th>Solicitante</th><th>Usuario</th><th>Valor del avalúo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${items.length ? items.map(renderListRow).join("") : `<tr><td colspan="6" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>`; }
@@ -1169,16 +1180,22 @@
     renderProfileAvatarGallery(getProfileAvatar(user));
     adminProfileDialog?.showModal();
   };
+  $("#profileAvatarHeroButton")?.addEventListener("click", () => $("#profileAvatarGallery")?.scrollIntoView({ behavior: "smooth", block: "nearest" }));
   profileButton?.addEventListener("click", (event) => { event.stopPropagation(); const opening = profileMenu?.hidden !== false; if (profileMenu) profileMenu.hidden = !opening; profileButton.setAttribute("aria-expanded", String(opening)); });
   profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); sessionStorage.removeItem(SESSION_KEY); showLogin(); } }));
   document.addEventListener("click", (event) => { if (profileMenu && !event.target.closest(".profile-menu-wrap")) closeProfileMenu(); });
-  $("#adminProfileForm")?.addEventListener("submit", (event) => {
+  $("#adminProfileForm")?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const gallery = $("#profileAvatarGallery");
     const selected = gallery?.dataset.selectedAvatar || getProfileAvatar(activeSessionUser);
-    if (activeSessionUser && selected) saveProfileAvatar(activeSessionUser, selected);
-    applyProfileAvatar(activeSessionUser, selected);
-    adminProfileDialog?.close();
+    const saveButton = $("#saveAdminProfileButton");
+    if (saveButton) { saveButton.disabled = true; saveButton.textContent = "Guardando…"; }
+    try {
+      if (activeSessionUser && selected) await saveProfileAvatar(activeSessionUser, selected);
+      applyProfileAvatar(activeSessionUser, selected);
+      adminProfileDialog?.close();
+    } catch (error) { window.alert(error.message || "No fue posible guardar la foto de perfil."); }
+    finally { if (saveButton) { saveButton.disabled = false; saveButton.textContent = "Guardar cambios"; } }
   });
   $("#closeAdminProfileButton")?.addEventListener("click", () => adminProfileDialog?.close());
   $("#cancelAdminProfileButton")?.addEventListener("click", () => adminProfileDialog?.close());
