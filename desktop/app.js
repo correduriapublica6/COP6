@@ -1090,7 +1090,7 @@
   $("#openInternalAccessButton").addEventListener("click", () => { loginMessage.textContent = ""; loginPassword.value = ""; syncCredentialSetupVisibility(); adminAccessDialog.showModal(); window.setTimeout(() => loginUser.focus(), 40); });
   $("#closeAdminAccessButton").addEventListener("click", () => adminAccessDialog.close());
   $("#cancelAdminAccessButton").addEventListener("click", () => adminAccessDialog.close());
-  $("#taskForm").addEventListener("submit", createTask);
+  $("#taskForm")?.addEventListener("submit", createTask);
   $("#homeButton").addEventListener("click", () => { switchAppView("inicio"); renderHomeActions(); });
   $$('[data-home-action]').forEach((card) => card.addEventListener('click', () => openHomeAction(card.dataset.homeAction)));
   $("#chatForm").addEventListener("submit", createChatMessage);
