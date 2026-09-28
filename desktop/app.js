@@ -106,6 +106,7 @@
       const hero = $("#profileAvatarHeroImage");
       if (hero) hero.src = avatar;
       applyProfileAvatar(activeSessionUser, avatar);
+      saveProfileAvatar(activeSessionUser, avatar).catch((error) => window.alert(error.message || "No fue posible guardar la imagen de perfil."));
     }));
     gallery.dataset.selectedAvatar = selected;
   }
@@ -779,10 +780,12 @@
     const editIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"></path><path d="m14 7 3 3"></path></svg>`;
     const receiptIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"></path><path d="M9 8h6M9 12h6M9 16h3"></path></svg>`;
     const deleteIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7l1-3h4l1 3"></path></svg>`;
+    const printIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v7H6zM17 12h.01"></path></svg>`;
     const receiptButton = paid ? `<button class="record-action request-icon-button request-upload-pdf-button receipt icon-only" data-receipt="${record.id}" type="button" title="Recibo" aria-label="Abrir recibo">${receiptIcon}</button>` : "";
     const editButton = canEditReception() ? `<button class="record-action request-icon-button request-info-button icon-only" data-edit="${record.id}" type="button" title="Editar" aria-label="Editar avalúo">${editIcon}</button>` : `<button class="record-action request-icon-button request-info-button icon-only" data-view="${record.id}" type="button" title="Ver" aria-label="Ver avalúo">${editIcon}</button>`;
     const deleteButton = isAdmin() ? `<button class="record-action request-icon-button request-delete-button delete icon-only" data-delete="${record.id}" type="button" title="Eliminar" aria-label="Eliminar avalúo">${deleteIcon}</button>` : "";
-    return `<tr><td><strong class="avaluo-list-number">${escapeHtml(record.numeroAvaluo)}</strong></td><td class="avaluo-list-requester">${escapeHtml(record.solicitante)}</td><td class="avaluo-list-user">${escapeHtml(record.usuario)}</td><td>${formatCurrency(record.valorAvaluo)}</td><td><span class="avaluo-status ${statusClass}">${statusLabel}</span></td><td class="table-action-cell reception-actions">${editButton}${receiptButton}${deleteButton}</td></tr>`;
+    const printButton = paid ? `<button class="record-action request-icon-button request-print-button icon-only" data-print="${record.id}" type="button" title="Imprimir" aria-label="Imprimir recibo">${printIcon}</button>` : "";
+    return `<tr><td><strong class="avaluo-list-number">${escapeHtml(record.numeroAvaluo)}</strong></td><td class="avaluo-list-requester">${escapeHtml(record.solicitante)}</td><td class="avaluo-list-user">${escapeHtml(record.usuario)}</td><td>${formatCurrency(record.valorAvaluo)}</td><td><span class="avaluo-status ${statusClass}">${statusLabel}</span></td><td class="table-action-cell reception-actions">${editButton}${receiptButton}${deleteButton}${printButton}</td></tr>`;
   }
   function renderList(items, emptyCopy) { $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>#</th><th>Solicitante</th><th>Usuario</th><th>Valor del avalúo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${items.length ? items.map(renderListRow).join("") : `<tr><td colspan="6" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>`; }
   function bindRecordActions() {
@@ -790,6 +793,7 @@
   $$('[data-view]').forEach((button) => button.addEventListener("click", () => openDialog(button.dataset.view, true)));
   $$('[data-delete]').forEach((button) => button.addEventListener("click", () => removeRecord(button.dataset.delete)));
   $$('[data-receipt]').forEach((button) => button.addEventListener("click", () => openReceipt(records.find((record) => record.id === button.dataset.receipt))));
+  $$('[data-print]').forEach((button) => button.addEventListener("click", () => openReceipt(records.find((record) => record.id === button.dataset.print))));
   }
   function render() {
     const visible = getVisibleRecords();
@@ -1184,21 +1188,7 @@
   profileButton?.addEventListener("click", (event) => { event.stopPropagation(); const opening = profileMenu?.hidden !== false; if (profileMenu) profileMenu.hidden = !opening; profileButton.setAttribute("aria-expanded", String(opening)); });
   profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); sessionStorage.removeItem(SESSION_KEY); showLogin(); } }));
   document.addEventListener("click", (event) => { if (profileMenu && !event.target.closest(".profile-menu-wrap")) closeProfileMenu(); });
-  $("#adminProfileForm")?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const gallery = $("#profileAvatarGallery");
-    const selected = gallery?.dataset.selectedAvatar || getProfileAvatar(activeSessionUser);
-    const saveButton = $("#saveAdminProfileButton");
-    if (saveButton) { saveButton.disabled = true; saveButton.textContent = "Guardando…"; }
-    try {
-      if (activeSessionUser && selected) await saveProfileAvatar(activeSessionUser, selected);
-      applyProfileAvatar(activeSessionUser, selected);
-      adminProfileDialog?.close();
-    } catch (error) { window.alert(error.message || "No fue posible guardar la foto de perfil."); }
-    finally { if (saveButton) { saveButton.disabled = false; saveButton.textContent = "Guardar cambios"; } }
-  });
   $("#closeAdminProfileButton")?.addEventListener("click", () => adminProfileDialog?.close());
-  $("#cancelAdminProfileButton")?.addEventListener("click", () => adminProfileDialog?.close());
   $("#newRecordButton").addEventListener("click", () => openDialog());
   $("#newTechnicalAppraisalButton").addEventListener("click", () => window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-creation")));
   $("#backAvaluosButton").addEventListener("click", () => {

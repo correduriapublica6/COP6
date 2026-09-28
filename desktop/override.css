@@ -3819,3 +3819,92 @@ body.global-search-active #globalSearchBackdrop {
 #statusRecordList .record-action.request-delete-button { color:#dc2626 !important; }
 #statusRecordList .record-action.request-icon-button:hover { background:#f8fafc !important; border-color:#94a3b8 !important; transform:translateY(-1px); }
 @media (max-width:600px) { #adminProfileDialog .profile-avatar-gallery { grid-template-columns:repeat(4, 1fr) !important; } #adminProfileDialog .profile-data-list strong { max-width:62%; } }
+
+/* Ajuste final: header en tres zonas para centrar la navegación en el viewport. */
+#appShell.control-shell > .app-sidebar {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  justify-content: initial !important;
+  width: 100% !important;
+  min-height: 72px !important;
+  height: 72px !important;
+  padding-inline: 18px !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell > .app-sidebar > .header-left-tools {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-nav,
+#appShell.control-shell > .app-sidebar > .floating-nav-capsule {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  justify-self: center !important;
+  margin: 0 !important;
+  width: max-content !important;
+  max-width: calc(100vw - 520px) !important;
+  min-width: 0 !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-footer {
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+  justify-self: end !important;
+  margin-left: 0 !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  flex: none !important;
+}
+#appShell.control-shell > .app-sidebar .header-tools {
+  width: max-content !important;
+  max-width: 100% !important;
+  margin-left: auto !important;
+  gap: 12px !important;
+  justify-content: flex-end !important;
+}
+/* Orden solicitado: campana, datos del usuario, avatar al extremo derecho. */
+#appShell.control-shell > .app-sidebar #alertsButton { order: 1 !important; }
+#appShell.control-shell > .app-sidebar .sidebar-account { order: 2 !important; }
+#appShell.control-shell > .app-sidebar .profile-menu-wrap { order: 3 !important; }
+#appShell.control-shell > .app-sidebar .sidebar-account-copy {
+  align-items: flex-end !important;
+  text-align: right !important;
+  justify-content: center !important;
+  line-height: 1.12 !important;
+}
+#appShell.control-shell > .app-sidebar .active-user,
+#appShell.control-shell > .app-sidebar .active-user-role,
+#appShell.control-shell > .app-sidebar .sidebar-online {
+  display: block !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+/* Modal de perfil: tipografía sans-serif, compacta y avatar sin borde/sombra blancos. */
+#adminProfileDialog.admin-profile-dialog,
+#adminProfileDialog.admin-profile-dialog * { font-family: Inter, Roboto, "Segoe UI", system-ui, sans-serif !important; }
+#adminProfileDialog .profile-dialog-heading h2 { display: none !important; }
+#adminProfileDialog .profile-avatar-hero-button,
+#adminProfileDialog .profile-avatar-hero-button:focus,
+#adminProfileDialog .profile-avatar-hero-button > img { border: none !important; box-shadow: none !important; outline: none !important; }
+#adminProfileDialog .profile-avatar-pencil { border: none !important; box-shadow: none !important; }
+#adminProfileDialog .profile-data-list small { font-size: .73rem !important; font-weight: 700 !important; }
+#adminProfileDialog .profile-data-list strong { font-size: .88rem !important; font-weight: 650 !important; }
+#adminProfileDialog .profile-avatar-section h3 { font-size: .82rem !important; font-weight: 700 !important; }
+#adminProfileDialog .profile-avatar-option { border-width: 1px !important; }
+#adminProfileDialog .profile-avatar-option.is-selected { border-width: 2px !important; }
+@media (max-width: 1050px) {
+  #appShell.control-shell > .app-sidebar { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important; }
+  #appShell.control-shell > .app-sidebar > .sidebar-nav { max-width: 42vw !important; overflow-x: auto !important; }
+  #appShell.control-shell > .app-sidebar > .sidebar-nav .sidebar-link { padding-inline: 6px !important; }
+}
+@media (max-width: 760px) {
+  #appShell.control-shell > .app-sidebar { grid-template-columns: 1fr auto !important; min-height: 86px !important; height: auto !important; row-gap: 6px !important; padding-block: 8px !important; }
+  #appShell.control-shell > .app-sidebar > .header-left-tools { grid-column: 1 !important; grid-row: 1 !important; }
+  #appShell.control-shell > .app-sidebar > .sidebar-footer { grid-column: 2 !important; grid-row: 1 !important; }
+  #appShell.control-shell > .app-sidebar > .sidebar-nav { grid-column: 1 / -1 !important; grid-row: 2 !important; max-width: 100% !important; justify-self: center !important; }
+}
+/* El botón de impresión queda como la última acción de cada fila. */
+#statusRecordList .request-print-button { color: #475569 !important; }
+#statusRecordList .request-print-button:hover { color: #111827 !important; }
