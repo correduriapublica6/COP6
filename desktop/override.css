@@ -4509,3 +4509,30 @@ body.global-search-active #globalSearchBackdrop {
   cursor: not-allowed !important;
   opacity: 1 !important;
 }
+
+/* Modal de detalle y visor: mismas dimensiones exactas y sin navegación externa. */
+#requestDetailDialog.client-luxury-detail,
+#fileViewerDialog {
+  box-sizing: border-box !important;
+  width: 90vw !important;
+  max-width: 64rem !important; /* max-w-4xl */
+  height: 85vh !important;
+  max-height: 85vh !important;
+}
+#requestDetailDialog.client-luxury-detail > form,
+#fileViewerDialog > form {
+  box-sizing: border-box !important;
+  height: 100% !important;
+  max-height: none !important;
+}
+#requestDetailDialog.client-luxury-detail .final-pdf-actions {
+  align-items: center !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+#requestDetailDialog.client-luxury-detail .final-pdf-actions .client-download-button {
+  cursor: pointer !important;
+  display: inline-flex !important;
+  text-decoration: none !important;
+}

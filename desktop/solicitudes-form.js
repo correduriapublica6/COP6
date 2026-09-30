@@ -313,22 +313,25 @@
     });
     input.click();
   }
-  function openFileViewer(item, index) {
+  function openResourceViewer(resourceUrl, resourceName = "Archivo", resourceType = "application/pdf", downloadUrl = resourceUrl) {
     const viewer = $("#fileViewerDialog");
     const content = $("#fileViewerContent");
-    const file = Array.isArray(item?.archivos) ? item.archivos[index] : null;
-    if (!viewer || !content || !file) return;
-    const source = apiResourceUrl(file.url || safeFileData(file));
-    if (!source) { window.alert("El archivo no está disponible para visualizar."); return; }
-    const name = escapeHtml(file.name || `Archivo ${index + 1}`);
-    const type = String(file.type || "").toLowerCase();
+    const source = apiResourceUrl(resourceUrl);
+    if (!viewer || !content || !source) { window.alert("El archivo no está disponible para visualizar."); return; }
+    const name = escapeHtml(resourceName);
+    const type = String(resourceType || "").toLowerCase();
     const media = type.startsWith("image/")
       ? `<img class="file-viewer-image" src="${escapeHtml(source)}" alt="${name}" />`
-      : type === "application/pdf" || /\.pdf$/i.test(file.name || "")
+      : type === "application/pdf" || /\.pdf$/i.test(resourceName)
         ? `<iframe class="file-viewer-frame" title="${name}" src="${escapeHtml(source)}"></iframe>`
         : `<div class="file-viewer-unavailable"><strong>${name}</strong><p>Este formato no tiene vista previa. Puedes descargarlo desde el expediente.</p></div>`;
-    content.innerHTML = `<div class="file-viewer-heading"><strong>${name}</strong><a class="file-viewer-download" href="${escapeHtml(requestFileUrl(item, index, true))}" download>Descargar</a></div>${media}`;
+    content.innerHTML = `<div class="file-viewer-heading"><strong>${name}</strong><a class="file-viewer-download" href="${escapeHtml(apiResourceUrl(downloadUrl))}" download>Descargar</a></div>${media}`;
     openDialog(viewer);
+  }
+  function openFileViewer(item, index) {
+    const file = Array.isArray(item?.archivos) ? item.archivos[index] : null;
+    if (!file) return;
+    openResourceViewer(file.url || safeFileData(file), file.name || `Archivo ${index + 1}`, file.type || "", requestFileUrl(item, index, true));
   }
   async function saveRequestInfo(item, form) {
     const values = Object.fromEntries(new FormData(form).entries());
@@ -379,7 +382,9 @@
       return `<li class="request-file-card request-file-document"><button type="button" class="request-file-preview" data-view-file="${index}" aria-label="Ver ${name}">${preview}</button><span title="${name}">${name}</span><div class="request-file-actions"><button type="button" class="request-detail-button" data-view-file="${index}">Ver</button><button type="button" class="request-detail-button" data-download-file="${index}">Descargar</button></div></li>`;
     }).join("") : `<li class="request-file-empty">No hay documentos ni imágenes adjuntos.</li>`;
     const finalPdf = apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "");
-    const finalPdfAction = finalPdf ? `<a class="client-download-button" href="${escapeHtml(finalPdf)}" download>Descargar Avalúo Final (PDF)</a>` : `<div class="client-download-pending">En elaboración</div>`;
+    const finalPdfAction = finalPdf
+      ? `<div class="final-pdf-actions"><button type="button" class="client-download-button final-pdf-view-button" data-view-final-pdf="${escapeHtml(finalPdf)}">Ver Avalúo Final</button><a class="client-download-button final-pdf-download-button" href="${escapeHtml(finalPdf)}" download>Descargar Avalúo Final (PDF)</a></div>`
+      : `<div class="client-download-pending">En elaboración</div>`;
     const activeRole = $("#appShell")?.dataset.role || "";
     const canUploadFinal = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
     const adminFinalAction = canUploadFinal ? `<button type="button" class="client-download-button admin-final-compact" data-upload-final-pdf="${escapeHtml(item.id)}">Subir PDF final</button>` : "";
@@ -396,6 +401,9 @@
     </form>`;
     detail.innerHTML = `<div class="request-detail-compact-head"><div><strong class="client-folio">${escapeHtml(item.folio || "Pendiente")} · ${escapeHtml(item.tipoAvaluo || "Avalúo")}</strong><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small></div><button type="button" class="client-outline-button" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div>${timeline}<div class="request-detail-compact-grid"><section class="request-detail-pane"><div class="request-pane-heading"><strong>Expediente digital</strong><small>${files.length} archivo(s)</small></div><ul class="request-files-grid">${fileMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${adminFinalAction}</div>${finalPdfAction}</section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong><button type="button" class="request-edit-info" data-enable-edit aria-label="Editar información" title="Editar información">✎</button></div>${infoRows}</section></div>`;
     detail.querySelectorAll("[data-view-file]").forEach((button) => button.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
+    detail.querySelector("[data-view-final-pdf]")?.addEventListener("click", (event) => {
+      openResourceViewer(event.currentTarget.dataset.viewFinalPdf, "Avalúo final.pdf", "application/pdf");
+    });
     detail.querySelectorAll("[data-download-file]").forEach((button) => button.addEventListener("click", () => { const link = document.createElement("a"); link.href = requestFileUrl(item, Number(button.dataset.downloadFile), true); link.download = files[Number(button.dataset.downloadFile)]?.name || "archivo"; document.body.appendChild(link); link.click(); link.remove(); }));
     detail.querySelector("[data-attach-missing]")?.addEventListener("click", () => annexDocuments(item));
     detail.querySelector("[data-edit-request-info]")?.addEventListener("submit", (event) => { event.preventDefault(); saveRequestInfo(item, event.currentTarget); });
