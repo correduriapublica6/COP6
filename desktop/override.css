@@ -3910,20 +3910,20 @@ body.global-search-active #globalSearchBackdrop {
 #statusRecordList .request-print-button:hover { color: #111827 !important; }
 
 /* Portal del solicitante: rediseño UX claro y corporativo */
-#applicantHomePanel .client-dashboard-header {
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-header {
   background: linear-gradient(135deg, #111827 0%, #1f2937 100%) !important;
   border-bottom: 2px solid #c5a059 !important;
   min-height: 76px !important;
   padding: 14px 28px !important;
 }
-#applicantHomePanel .client-brand img { display: none !important; }
-#applicantHomePanel .client-brand strong {
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-brand img { display: none !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-brand strong {
   color: #fff !important;
   font-family: Inter, "Segoe UI", sans-serif !important;
   font-size: 1.08rem !important;
   letter-spacing: .02em !important;
 }
-#applicantHomePanel .client-brand span {
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-brand span {
   display: block !important;
   color: #d4af37 !important;
   font-family: Inter, "Segoe UI", sans-serif !important;
@@ -3932,15 +3932,15 @@ body.global-search-active #globalSearchBackdrop {
   letter-spacing: .18em !important;
   margin-top: 2px !important;
 }
-#applicantHomePanel .client-request-table-wrap {
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-request-table-wrap {
   background: #fff !important;
   border: 1px solid #d4af37 !important;
   border-radius: 14px !important;
   box-shadow: 0 12px 30px rgba(15,23,42,.08) !important;
   overflow-x: auto !important;
 }
-#applicantHomePanel .client-request-table { min-width: 880px !important; table-layout: auto !important; }
-#applicantHomePanel .client-request-table th {
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-request-table { min-width: 880px !important; table-layout: auto !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-request-table th {
   background: #f8fafc !important;
   color: #475569 !important;
   font-size: .72rem !important;
@@ -3948,8 +3948,8 @@ body.global-search-active #globalSearchBackdrop {
   text-transform: uppercase !important;
   white-space: nowrap !important;
 }
-#applicantHomePanel .client-request-table td { color: #1e293b !important; background: #fff !important; }
-#applicantHomePanel .client-table-view-button {
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-request-table td { color: #1e293b !important; background: #fff !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-table-view-button {
   background: #1e293b !important;
   color: #fff !important;
   border: 1px solid #1e293b !important;
@@ -3958,8 +3958,8 @@ body.global-search-active #globalSearchBackdrop {
   font-weight: 700 !important;
   white-space: nowrap !important;
 }
-#applicantHomePanel .client-table-view-button:hover { background: #c5a059 !important; border-color: #c5a059 !important; color: #111827 !important; }
-#applicantHomePanel .client-pdf-link {
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-table-view-button:hover { background: #c5a059 !important; border-color: #c5a059 !important; color: #111827 !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-pdf-link {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -3971,7 +3971,7 @@ body.global-search-active #globalSearchBackdrop {
   font-weight: 900 !important;
   text-decoration: none !important;
 }
-#applicantHomePanel .client-pdf-disabled { color: #94a3b8 !important; font-size: .76rem !important; white-space: nowrap !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-pdf-disabled { color: #94a3b8 !important; font-size: .76rem !important; white-space: nowrap !important; }
 #requestDetailDialog.client-luxury-detail {
   width: min(860px, calc(100% - 24px)) !important;
   max-width: 860px !important;
@@ -4066,5 +4066,116 @@ body.global-search-active #globalSearchBackdrop {
 @media (max-width: 650px) {
   #requestDetailDialog.client-luxury-detail .client-timeline { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   #requestDetailDialog.client-luxury-detail .client-detail-info-grid { grid-template-columns: 1fr !important; }
-  #applicantHomePanel .client-dashboard-header { padding-inline: 16px !important; }
+  #loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-header { padding-inline: 16px !important; }
+}
+
+/* Portal solicitante — UI SaaS moderna */
+#loginScreen.applicant-dashboard-active #applicantHomePanel {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-intro {
+  margin: 28px auto 18px !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-intro h2 {
+  color: #0f172a !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: clamp(1.65rem, 3vw, 2.15rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -.035em !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-welcome-card {
+  align-items: center !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+  border: 1px solid #e2e8f0 !important;
+  border-left: 4px solid #8b6f39 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 4px 12px rgba(15,23,42,.05) !important;
+  display: flex !important;
+  gap: 14px !important;
+  margin: 0 auto 18px !important;
+  max-width: 1240px !important;
+  padding: 16px 20px !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-welcome-mark {
+  align-items: center !important;
+  background: #fef3c7 !important;
+  border-radius: 12px !important;
+  color: #8b6f39 !important;
+  display: flex !important;
+  flex: 0 0 38px !important;
+  font-size: 1.2rem !important;
+  height: 38px !important;
+  justify-content: center !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-welcome-eyebrow {
+  color: #64748b !important;
+  font-size: .7rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .12em !important;
+  margin: 0 0 3px !important;
+  text-transform: uppercase !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-welcome-message {
+  color: #334155 !important;
+  font-size: .94rem !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-welcome-message strong { color: #0f172a !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats {
+  gap: 14px !important;
+  margin: 0 auto 22px !important;
+  max-width: 1240px !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats article {
+  align-items: center !important;
+  background: #fff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-left: 4px solid transparent !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(15,23,42,.05) !important;
+  display: flex !important;
+  gap: 13px !important;
+  min-height: 92px !important;
+  padding: 16px 18px !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats article.metric-total { background: #eff6ff !important; border-left-color: #3b82f6 !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats article.metric-active { background: #fffbeb !important; border-left-color: #f59e0b !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats article.metric-completed { background: #f0fdf4 !important; border-left-color: #22c55e !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-icon {
+  align-items: center !important;
+  background: rgba(255,255,255,.75) !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  flex: 0 0 42px !important;
+  height: 42px !important;
+  justify-content: center !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-icon svg { fill: none !important; height: 23px !important; stroke: currentColor !important; stroke-linecap: round !important; stroke-linejoin: round !important; stroke-width: 1.8 !important; width: 23px !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-total .metric-icon { color: #2563eb !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-active .metric-icon { color: #d97706 !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-completed .metric-icon { color: #16a34a !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats span { color: #475569 !important; font-size: .7rem !important; font-weight: 800 !important; letter-spacing: .08em !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats strong { color: #0f172a !important; font-family: Inter, "Segoe UI", sans-serif !important; font-size: 1.9rem !important; font-weight: 800 !important; margin-top: 5px !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-history-section {
+  background: #fff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 22px rgba(15,23,42,.08) !important;
+  margin-top: 0 !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-request-table-wrap { border: 1px solid #e2e8f0 !important; border-radius: 16px !important; box-shadow: 0 4px 12px rgba(15,23,42,.06) !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-request-table th { background: #f8fafc !important; border-bottom: 1px solid #e2e8f0 !important; color: #475569 !important; font-size: .7rem !important; font-weight: 700 !important; letter-spacing: .1em !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-request-table td { color: #334155 !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-request-table td:first-child strong { color: #1e293b !important; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important; font-size: .875rem !important; font-weight: 700 !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-table-view-button { background: #f1f5f9 !important; border: 1px solid #e2e8f0 !important; border-radius: 8px !important; color: #0f172a !important; font-weight: 700 !important; padding: 6px 16px !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-table-view-button:hover { background: #e2e8f0 !important; border-color: #cbd5e1 !important; color: #0f172a !important; text-decoration: none !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-pdf-link { background: transparent !important; border: 1px solid #22c55e !important; border-radius: 8px !important; color: #15803d !important; font-size: 15px !important; height: 30px !important; width: 34px !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-pdf-link:hover { background: #dcfce7 !important; transform: translateY(-1px) !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-primary-button { background: #8b6f39 !important; border: 1px solid #8b6f39 !important; border-radius: 9px !important; box-shadow: 0 4px 10px rgba(139,111,57,.22) !important; color: #fff !important; font-weight: 800 !important; padding: 11px 16px !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-primary-button:hover { background: #725a2e !important; border-color: #725a2e !important; box-shadow: 0 6px 14px rgba(139,111,57,.3) !important; color: #fff !important; transform: translateY(-1px) !important; }
+@media (max-width: 650px) {
+  #loginScreen.applicant-dashboard-active #applicantHomePanel .client-welcome-card { align-items: flex-start !important; }
+  #loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats { grid-template-columns: 1fr !important; }
 }

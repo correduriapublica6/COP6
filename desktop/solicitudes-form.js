@@ -223,6 +223,7 @@
     $("#applicantVisualPanel")?.setAttribute("hidden", "true");
     $("#openInternalAccessButton")?.setAttribute("hidden", "true");
     $("#applicantWelcomeName").textContent = applicantSession.name || "solicitante";
+    $("#applicantWelcomeNameMessage") && ($("#applicantWelcomeNameMessage").textContent = applicantSession.name || "solicitante");
     $("#applicantWelcomeNameMirror").textContent = applicantSession.name || "solicitante";
     $("#applicantWelcomeContact").textContent = [applicantSession.phone, applicantSession.email].filter(Boolean).join(" · ");
     $("#publicRequestForm")?.elements.correo && ($("#publicRequestForm").elements.correo.readOnly = true);
@@ -435,6 +436,7 @@
       applicantSession = updated;
       sessionStorage.setItem("control-avaluos.applicant", JSON.stringify(updated));
       $("#applicantWelcomeName").textContent = updated.name;
+      $("#applicantWelcomeNameMessage") && ($("#applicantWelcomeNameMessage").textContent = updated.name);
       $("#applicantWelcomeContact").textContent = [updated.phone, updated.email].filter(Boolean).join(" · ");
       setMessage(message, "Perfil actualizado correctamente.", "success");
       window.setTimeout(() => closeDialog($("#applicantProfileDialog")), 700);

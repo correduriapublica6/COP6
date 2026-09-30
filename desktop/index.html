@@ -21,9 +21,9 @@
     <meta name="twitter:description" content="Plaza Coahuila">
     <meta name="twitter:image" content="https://cp6coahuila.com/desktop/preview.png">
 
-    <link rel="stylesheet" href="styles.css?v=20260930-1305" />
+    <link rel="stylesheet" href="styles.css?v=20260930-1310" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20260930-1305" />
+    <link rel="stylesheet" href="override.css?v=20260930-1310" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -44,7 +44,8 @@
     <div class="client-header-actions"><div><small>Bienvenido</small><strong id="applicantWelcomeName">solicitante</strong></div><button id="applicantHomeProfileButton" class="client-logout-button" type="button">Editar perfil</button><button id="applicantHomeLogoutButton" class="client-logout-button" type="button">Cerrar sesión</button></div>
   </header>
   <div class="client-dashboard-intro"><div><h2 id="applicantWelcomeTitle">Bandeja de solicitudes</h2></div><button id="applicantHomeNewRequestButton" class="client-primary-button" type="button">+ Solicitar un servicio</button></div>
-  <section class="client-dashboard-stats" aria-label="Resumen de solicitudes"><article><span>Total de solicitudes</span><strong id="applicantTotalRequests">0</strong></article><article><span>En proceso</span><strong id="applicantActiveRequests">0</strong></article><article><span>Concluidas</span><strong id="applicantCompletedRequests">0</strong></article></section>
+  <section class="client-welcome-card" aria-label="Bienvenida"><div class="client-welcome-mark" aria-hidden="true">✦</div><div><p class="client-welcome-eyebrow">Portal de trámites</p><p class="client-welcome-message">¡Hola, <strong id="applicantWelcomeNameMessage">solicitante</strong>! Bienvenido a tu portal de trámites. Aquí puedes consultar el estado de tus avalúos en tiempo real.</p></div></section>
+  <section class="client-dashboard-stats" aria-label="Resumen de solicitudes"><article class="metric-total"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3h8l3 3v15H7z"></path><path d="M15 3v4h4M10 12h5M10 16h5"></path></svg></span><div><span>Total de solicitudes</span><strong id="applicantTotalRequests">0</strong></div></article><article class="metric-active"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><path d="M12 8v5l3 2"></path></svg></span><div><span>En proceso</span><strong id="applicantActiveRequests">0</strong></div></article><article class="metric-completed"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.5 2.5L16 9"></path></svg></span><div><span>Concluidas</span><strong id="applicantCompletedRequests">0</strong></div></article></section>
   <section class="client-history-section"><div class="client-request-toolbar" role="search"><label class="client-request-search"><span class="sr-only">Buscar solicitudes</span><input id="applicantRequestSearchInput" type="search" placeholder="Buscar por folio o nombre de propietario..." autocomplete="off" /></label><label class="client-request-filter"><span class="sr-only">Filtrar por estatus</span><select id="applicantRequestStatusFilter"><option value="">Todos los estatus</option><option value="proceso">En proceso</option><option value="concluida">Concluidas</option><option value="recibida">Recibidas</option></select></label></div><div id="applicantHomeRequestsTable" class="client-request-grid"></div></section>
 </section>
         <div class="public-entry-internal"><button id="openInternalAccessButton" class="internal-access-button" type="button">Acceso administrativo</button></div>
@@ -236,16 +237,16 @@
     </main>
 
     <dialog id="reportDialog" class="record-dialog report-dialog"><form id="reportForm" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">REPORTE GENERAL</p><h2>Selecciona el periodo</h2></div><button id="closeReportDialogButton" class="icon-button" type="button" aria-label="Cerrar">×</button></div><p class="report-dialog-copy">Para generar un resumen primero selecciona las fechas y da clic en Generar resumen PDF.</p><div class="form-grid"><label>Desde *<input id="reportStartDate" type="date" required /></label><label>Hasta *<input id="reportEndDate" type="date" required /></label></div><p id="reportMessage" class="form-message" role="alert"></p><div class="dialog-actions"><button id="cancelReportDialogButton" class="secondary-button" type="button">Cancelar</button><button class="primary-button" type="submit">Generar resumen PDF</button></div></form></dialog>
-    <script src="automotriz-model.js?v=20260930-1305"></script>
-    <script src="app.js?v=20260930-1305"></script>
-    <script src="image-utils.js?v=20260930-1305"></script>
-    <script src="vendor/html-docx.js?v=20260930-1305"></script>
-    <script src="word-export.js?v=20260930-1305"></script>
+    <script src="automotriz-model.js?v=20260930-1310"></script>
+    <script src="app.js?v=20260930-1310"></script>
+    <script src="image-utils.js?v=20260930-1310"></script>
+    <script src="vendor/html-docx.js?v=20260930-1310"></script>
+    <script src="word-export.js?v=20260930-1310"></script>
     <script>
       if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
     </script>
-    <script src="automotriz-form.js?v=20260930-1305"></script>
-    <script src="mobiliario-form.js?v=20260930-1305"></script>
-    <script src="solicitudes-form.js?v=20260930-1305"></script>
+    <script src="automotriz-form.js?v=20260930-1310"></script>
+    <script src="mobiliario-form.js?v=20260930-1310"></script>
+    <script src="solicitudes-form.js?v=20260930-1310"></script>
   </body>
 </html>
