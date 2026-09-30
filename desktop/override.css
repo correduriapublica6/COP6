@@ -4282,3 +4282,123 @@ body.global-search-active #globalSearchBackdrop {
   #loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats { grid-template-columns: 1fr !important; }
   #loginScreen.applicant-dashboard-active #applicantHomePanel .client-welcome-card { padding: 20px !important; }
 }
+
+/* Modal de seguimiento compacto en una sola tarjeta y visor interno */
+#requestDetailDialog.client-luxury-detail {
+  width: min(980px, calc(100vw - 20px)) !important;
+  max-width: 980px !important;
+  max-height: calc(100vh - 20px) !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  border-radius: 14px !important;
+}
+#requestDetailDialog.client-luxury-detail > form {
+  max-height: calc(100vh - 20px) !important;
+  overflow: hidden !important;
+  padding: 14px !important;
+  position: relative !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-close,
+#fileViewerDialog .request-detail-close {
+  align-items: center !important;
+  background: #0f172a !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  display: grid !important;
+  font-size: 1.1rem !important;
+  height: 26px !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  place-items: center !important;
+  position: absolute !important;
+  right: 12px !important;
+  top: 10px !important;
+  width: 26px !important;
+  z-index: 5 !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-content { font-family: Inter, "Segoe UI", sans-serif !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-compact-head {
+  align-items: center !important;
+  display: flex !important;
+  gap: 10px !important;
+  justify-content: space-between !important;
+  min-height: 35px !important;
+  padding: 0 36px 4px 0 !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-compact-head > div { display: grid !important; gap: 2px !important; min-width: 0 !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-compact-head .client-folio { color: #111827 !important; font-size: .98rem !important; font-weight: 800 !important; white-space: nowrap !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-compact-head small { color: #64748b !important; font-size: .72rem !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-compact-head .client-outline-button { flex: 0 0 auto !important; font-size: .72rem !important; padding: 6px 9px !important; white-space: nowrap !important; }
+#requestDetailDialog.client-luxury-detail .client-timeline-compact {
+  gap: 5px !important;
+  margin: 5px 0 9px !important;
+  padding: 0 !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-compact .client-timeline-step {
+  align-items: center !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 7px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 5px !important;
+  justify-content: center !important;
+  min-height: 29px !important;
+  padding: 3px 4px !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-compact .client-timeline-step span { border: 0 !important; height: 19px !important; width: 19px !important; font-size: .65rem !important; }
+#requestDetailDialog.client-luxury-detail .client-timeline-compact .client-timeline-step small { font-size: .65rem !important; margin: 0 !important; max-width: none !important; white-space: nowrap !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-compact-grid {
+  display: grid !important;
+  gap: 9px !important;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr) !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-pane {
+  background: #fff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 9px !important;
+  min-width: 0 !important;
+  padding: 9px !important;
+}
+#requestDetailDialog.client-luxury-detail .request-pane-heading { align-items: center !important; display: flex !important; gap: 6px !important; justify-content: space-between !important; margin-bottom: 6px !important; }
+#requestDetailDialog.client-luxury-detail .request-pane-heading strong { color: #1e293b !important; font-size: .76rem !important; font-weight: 800 !important; }
+#requestDetailDialog.client-luxury-detail .request-pane-heading small { color: #64748b !important; font-size: .65rem !important; }
+#requestDetailDialog.client-luxury-detail .request-final-heading { border-top: 1px solid #e2e8f0 !important; margin-top: 8px !important; padding-top: 7px !important; }
+#requestDetailDialog.client-luxury-detail .request-files-grid { display: grid !important; gap: 5px !important; grid-template-columns: repeat(4, minmax(0, 1fr)) !important; margin: 0 !important; max-height: 105px !important; overflow: hidden !important; padding: 0 !important; }
+#requestDetailDialog.client-luxury-detail .request-file-card { align-items: center !important; border-radius: 6px !important; display: flex !important; flex-direction: column !important; gap: 3px !important; min-width: 0 !important; padding: 4px !important; }
+#requestDetailDialog.client-luxury-detail .request-file-card > span { color: #334155 !important; display: block !important; font-size: .58rem !important; max-width: 100% !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
+#requestDetailDialog.client-luxury-detail .request-file-preview { background: transparent !important; border: 0 !important; cursor: pointer !important; height: 42px !important; padding: 0 !important; width: 100% !important; }
+#requestDetailDialog.client-luxury-detail .request-file-preview img { border: 0 !important; border-radius: 4px !important; height: 42px !important; object-fit: cover !important; width: 100% !important; }
+#requestDetailDialog.client-luxury-detail .request-file-icon { align-items: center !important; background: #e2e8f0 !important; border-radius: 4px !important; color: #334155 !important; display: flex !important; font-size: .63rem !important; font-weight: 800 !important; height: 42px !important; justify-content: center !important; }
+#requestDetailDialog.client-luxury-detail .request-file-actions { display: flex !important; gap: 3px !important; }
+#requestDetailDialog.client-luxury-detail .request-file-actions .request-detail-button { font-size: .58rem !important; padding: 3px 4px !important; }
+#requestDetailDialog.client-luxury-detail .client-download-button { border-radius: 6px !important; font-size: .68rem !important; padding: 6px 8px !important; }
+#requestDetailDialog.client-luxury-detail .client-download-pending { background: #f1f5f9 !important; border: 1px solid #cbd5e1 !important; border-radius: 6px !important; color: #64748b !important; font-size: .7rem !important; padding: 7px 9px !important; }
+#requestDetailDialog.client-luxury-detail .client-detail-info-grid { gap: 5px !important; grid-template-columns: 1fr !important; margin: 0 !important; }
+#requestDetailDialog.client-luxury-detail .client-detail-info-card { align-items: center !important; display: grid !important; grid-template-columns: 82px minmax(0, 1fr) !important; gap: 5px !important; padding: 5px 7px !important; }
+#requestDetailDialog.client-luxury-detail .client-detail-info-card span { font-size: .61rem !important; }
+#requestDetailDialog.client-luxury-detail .client-detail-info-card strong { font-size: .72rem !important; line-height: 1.15 !important; }
+#requestDetailDialog.client-luxury-detail .request-edit-info { background: #2563eb !important; border: 0 !important; border-radius: 5px !important; color: #fff !important; cursor: pointer !important; font-size: .78rem !important; height: 24px !important; width: 26px !important; }
+#fileViewerDialog {
+  height: min(92vh, 820px) !important;
+  max-height: calc(100vh - 20px) !important;
+  padding: 0 !important;
+  width: min(960px, calc(100vw - 20px)) !important;
+}
+#fileViewerDialog > form { height: 100% !important; padding: 12px !important; position: relative !important; }
+#fileViewerDialog .file-viewer-content { display: flex !important; flex-direction: column !important; gap: 8px !important; height: 100% !important; padding-top: 4px !important; }
+#fileViewerDialog .file-viewer-heading { align-items: center !important; display: flex !important; gap: 10px !important; justify-content: space-between !important; padding-right: 35px !important; }
+#fileViewerDialog .file-viewer-heading strong { color: #0f172a !important; font-size: .82rem !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
+#fileViewerDialog .file-viewer-download { background: #0f172a !important; border-radius: 6px !important; color: #fff !important; font-size: .7rem !important; padding: 6px 9px !important; text-decoration: none !important; }
+#fileViewerDialog .file-viewer-image { display: block !important; height: calc(100% - 32px) !important; max-height: calc(100% - 32px) !important; object-fit: contain !important; width: 100% !important; }
+#fileViewerDialog .file-viewer-frame { border: 1px solid #cbd5e1 !important; height: calc(100% - 32px) !important; width: 100% !important; }
+#fileViewerDialog .file-viewer-unavailable { color: #475569 !important; margin: auto !important; text-align: center !important; }
+@media (max-width: 650px) {
+  #requestDetailDialog.client-luxury-detail .request-detail-compact-head { align-items: flex-start !important; flex-direction: column !important; padding-right: 30px !important; }
+  #requestDetailDialog.client-luxury-detail .request-detail-compact-head .client-outline-button { align-self: flex-end !important; }
+  #requestDetailDialog.client-luxury-detail .client-timeline-compact { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; overflow: hidden !important; }
+  #requestDetailDialog.client-luxury-detail .client-timeline-compact .client-timeline-step small { font-size: .5rem !important; }
+  #requestDetailDialog.client-luxury-detail .request-detail-compact-grid { grid-template-columns: 1fr !important; }
+}

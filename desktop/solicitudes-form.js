@@ -313,6 +313,23 @@
     });
     input.click();
   }
+  function openFileViewer(item, index) {
+    const viewer = $("#fileViewerDialog");
+    const content = $("#fileViewerContent");
+    const file = Array.isArray(item?.archivos) ? item.archivos[index] : null;
+    if (!viewer || !content || !file) return;
+    const source = apiResourceUrl(file.url || safeFileData(file));
+    if (!source) { window.alert("El archivo no está disponible para visualizar."); return; }
+    const name = escapeHtml(file.name || `Archivo ${index + 1}`);
+    const type = String(file.type || "").toLowerCase();
+    const media = type.startsWith("image/")
+      ? `<img class="file-viewer-image" src="${escapeHtml(source)}" alt="${name}" />`
+      : type === "application/pdf" || /\.pdf$/i.test(file.name || "")
+        ? `<iframe class="file-viewer-frame" title="${name}" src="${escapeHtml(source)}"></iframe>`
+        : `<div class="file-viewer-unavailable"><strong>${name}</strong><p>Este formato no tiene vista previa. Puedes descargarlo desde el expediente.</p></div>`;
+    content.innerHTML = `<div class="file-viewer-heading"><strong>${name}</strong><a class="file-viewer-download" href="${escapeHtml(requestFileUrl(item, index, true))}" download>Descargar</a></div>${media}`;
+    openDialog(viewer);
+  }
   function renderRequestDetail(item) {
     const detail = $("#requestDetailContent");
     const dialog = $("#requestDetailDialog");
@@ -321,33 +338,34 @@
     const files = Array.isArray(item.archivos) ? item.archivos : [];
     const info = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
     const currentStatus = String(item.estado || "recibida").toLowerCase();
-    const steps = ["recibida", "inspección programada", "en elaboración", "en firma", "concluida"];
+    const steps = ["Recibida", "Inspección", "Elaboración", "En firma", "Concluida"];
     const statusIndex = currentStatus === "en visita" ? 1 : currentStatus === "asignada" || currentStatus === "en revisión" ? 0 : currentStatus === "en elaboración" ? 2 : currentStatus === "en firma" ? 3 : currentStatus === "concluida" ? 4 : 0;
-    const timeline = `<div class="client-timeline">${steps.map((step, index) => `<div class="client-timeline-step ${index <= statusIndex ? "is-complete" : ""} ${index === statusIndex ? "is-current" : ""}"><span>${index < statusIndex ? "✓" : index + 1}</span><small>${step}</small></div>`).join("")}</div>`;
+    const timeline = `<div class="client-timeline client-timeline-compact" aria-label="Progreso de solicitud">${steps.map((step, index) => `<div class="client-timeline-step ${index <= statusIndex ? "is-complete" : ""} ${index === statusIndex ? "is-current" : ""}"><span>${index < statusIndex ? "✓" : index + 1}</span><small>${step}</small></div>`).join("")}</div>`;
     const fileMarkup = files.length ? files.map((file, index) => {
       const name = escapeHtml(file.name || `Archivo ${index + 1}`);
       const data = safeFileData(file);
       const source = apiResourceUrl(file.url || data);
-      if (!source) return `<li class="request-file-card request-file-unavailable"><span>${name}</span><small>Archivo no disponible</small></li>`;
-      const preview = String(file.type || "").startsWith("image/") ? `<img src="${escapeHtml(source)}" alt="${name}" />` : file.type === "application/pdf" ? `<iframe title="${name}" src="${escapeHtml(source)}"></iframe>` : `<div class="request-file-icon" aria-hidden="true">DOC</div>`;
-      return `<li class="request-file-card request-file-document">${preview}<span>${name}</span><div class="request-file-actions"><button type="button" class="request-detail-button" data-view-file="${index}">Ver</button><button type="button" class="request-detail-button" data-download-file="${index}">Descargar</button></div></li>`;
+      if (!source) return `<li class="request-file-card request-file-unavailable"><span>${name}</span></li>`;
+      const isImage = String(file.type || "").startsWith("image/");
+      const preview = isImage ? `<img src="${escapeHtml(source)}" alt="${name}" />` : `<div class="request-file-icon" aria-hidden="true">${/\.pdf$/i.test(file.name || "") ? "PDF" : "DOC"}</div>`;
+      return `<li class="request-file-card request-file-document"><button type="button" class="request-file-preview" data-view-file="${index}" aria-label="Ver ${name}">${preview}</button><span title="${name}">${name}</span><div class="request-file-actions"><button type="button" class="request-detail-button" data-view-file="${index}">Ver</button><button type="button" class="request-detail-button" data-download-file="${index}">Descargar</button></div></li>`;
     }).join("") : `<li class="request-file-empty">No hay documentos ni imágenes adjuntos.</li>`;
     const finalPdf = apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "");
-    const finalPdfAction = finalPdf ? `<a class="client-download-button" href="${escapeHtml(finalPdf)}" target="_blank" rel="noopener" download>Descargar Avalúo Final (PDF) ↗</a>` : `<div class="client-download-pending">Tu avalúo se encuentra actualmente en elaboración. Estará disponible para descarga una vez finalizado el dictamen.</div>`;
+    const finalPdfAction = finalPdf ? `<a class="client-download-button" href="${escapeHtml(finalPdf)}" download>Descargar Avalúo Final (PDF)</a>` : `<div class="client-download-pending">En elaboración</div>`;
     const activeRole = $("#appShell")?.dataset.role || "";
     const canUploadFinal = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
-    const adminFinalAction = canUploadFinal ? `<section class="client-detail-download admin-final-upload-section"><span class="section-kicker">ADMINISTRACIÓN</span><h3>Avalúo final</h3><p>Sube el PDF final para marcar este trámite como concluido.</p><button type="button" class="client-download-button" data-upload-final-pdf="${escapeHtml(item.id)}">Subir Avalúo Final (PDF)</button></section>` : "";
-    $("#requestDetailTitle").textContent = `Seguimiento · ${item.folio || "Solicitud"}`;
-    detail.innerHTML = `<div class="client-detail-hero"><div><span class="client-folio">Número de solicitud: ${escapeHtml(item.folio || "Pendiente")}</span><h3>${escapeHtml(item.tipoAvaluo || "Solicitud de avalúo")}</h3><p>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</p></div><span class="client-status-badge client-status-${requestStatusClass(item.estado)}">${escapeHtml(item.estado || "Recibida")}</span></div><section class="client-detail-section"><div class="client-detail-section-heading"><div><h3>Estado de la solicitud</h3></div><strong>${escapeHtml(item.estado || "Recibida")}</strong></div>${timeline}</section><section class="client-detail-section"><div class="client-detail-section-heading"><div><h3>Expediente digital</h3><p>Documentos y fotografías entregados con tu solicitud.</p></div><button type="button" class="client-outline-button" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div><ul class="request-files-grid">${fileMarkup}</ul></section>${adminFinalAction}<section class="client-detail-download"><h3>Descargar avalúo final</h3>${finalPdf ? "<p>Tu avalúo final está disponible.</p>" : ""}${finalPdfAction}</section><section class="request-detail-section client-detail-legacy"><h3>Información registrada</h3><div class="client-detail-info-grid">${[
+    const adminFinalAction = canUploadFinal ? `<button type="button" class="client-download-button admin-final-compact" data-upload-final-pdf="${escapeHtml(item.id)}">Subir PDF final</button>` : "";
+    const infoRows = [
       ["Nombre", item.solicitante?.nombre || item.solicitante?.name || item.nombre || info.nombre || info.nombreCompleto],
       ["Teléfono", item.solicitante?.telefono || item.telefono || info.telefono],
       ["Correo", item.solicitante?.email || item.email || info.email || info.correo],
       ["Asesor", item.asesor || item.valudor || info.asesor || info.valuador],
-      ["Tipo de avalúo", item.tipoAvaluo || info.tipoAvaluo || info.modalidad],
+      ["Tipo", item.tipoAvaluo || info.tipoAvaluo || info.modalidad],
       ["Propietario", applicantRequestOwner(item) || info.propietario],
-      ["Valor de operación", item.valorOperacion || info.valorOperacion || info.valor]
-    ].filter(([, value]) => value !== undefined && value !== null && String(value).trim()).map(([label, value]) => `<div class="client-detail-info-card"><span>${escapeHtml(label)}</span><strong>${escapeHtml(String(value))}</strong></div>`).join("") || "<p>No hay datos adicionales.</p>"}</div></section>`;
-    detail.querySelectorAll("[data-view-file]").forEach((button) => button.addEventListener("click", () => { const index = Number(button.dataset.viewFile); const popup = window.open("about:blank", "_blank", "noopener"); if (popup) popup.location.href = requestFileUrl(item, index); else window.location.href = requestFileUrl(item, index); }));
+      ["Valor", item.valorOperacion || info.valorOperacion || info.valor]
+    ].filter(([, value]) => value !== undefined && value !== null && String(value).trim()).map(([label, value]) => `<div class="client-detail-info-card"><span>${escapeHtml(label)}</span><strong>${escapeHtml(String(value))}</strong></div>`).join("") || "<p>No hay datos registrados.</p>";
+    detail.innerHTML = `<div class="request-detail-compact-head"><div><strong class="client-folio">${escapeHtml(item.folio || "Pendiente")} · ${escapeHtml(item.tipoAvaluo || "Avalúo")}</strong><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small></div><button type="button" class="client-outline-button" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div>${timeline}<div class="request-detail-compact-grid"><section class="request-detail-pane"><div class="request-pane-heading"><strong>Expediente digital</strong><small>${files.length} archivo(s)</small></div><ul class="request-files-grid">${fileMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${adminFinalAction}</div>${finalPdfAction}</section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong><button type="button" class="request-edit-info" aria-label="Editar información">✎</button></div><div class="client-detail-info-grid">${infoRows}</div></section></div>`;
+    detail.querySelectorAll("[data-view-file]").forEach((button) => button.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
     detail.querySelectorAll("[data-download-file]").forEach((button) => button.addEventListener("click", () => { const link = document.createElement("a"); link.href = requestFileUrl(item, Number(button.dataset.downloadFile), true); link.download = files[Number(button.dataset.downloadFile)]?.name || "archivo"; document.body.appendChild(link); link.click(); link.remove(); }));
     detail.querySelector("[data-attach-missing]")?.addEventListener("click", () => annexDocuments(item));
     detail.querySelector("[data-upload-final-pdf]")?.addEventListener("click", () => uploadFinalPdf(item));
@@ -574,7 +592,7 @@
     window.addEventListener("control-avaluos:users-view", renderRegisteredApplicants);
     window.addEventListener("control-avaluos:section", (event) => { if (event.detail === "solicitudes") renderRequests(); });
     $("#closeRequestDetailButton")?.addEventListener("click", () => closeDialog($("#requestDetailDialog")));
-    $("#cancelRequestDetailButton")?.addEventListener("click", () => closeDialog($("#requestDetailDialog")));
+    $("#closeFileViewerButton")?.addEventListener("click", () => closeDialog($("#fileViewerDialog")));
     try { const storedApplicant = JSON.parse(sessionStorage.getItem("control-avaluos.applicant") || "null"); if (storedApplicant?.email) { applicantSession = storedApplicant; showApplicantHome(); } } catch { sessionStorage.removeItem("control-avaluos.applicant"); }
     fillAdvisors();
     fillNotaries();
