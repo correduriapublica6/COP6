@@ -4179,3 +4179,106 @@ body.global-search-active #globalSearchBackdrop {
   #loginScreen.applicant-dashboard-active #applicantHomePanel .client-welcome-card { align-items: flex-start !important; }
   #loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats { grid-template-columns: 1fr !important; }
 }
+
+/* Portal solicitante — banner y métricas superiores */
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-welcome-card {
+  align-items: flex-start !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-left: 1px solid #e2e8f0 !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,.05) !important;
+  margin: 0 auto 20px !important;
+  padding: 24px !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-welcome-title {
+  color: #111827 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(1.5rem, 3vw, 1.875rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  margin: 0 0 8px !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-welcome-title strong { color: #111827 !important; font-weight: 700 !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-welcome-message {
+  color: #475569 !important;
+  font-size: .875rem !important;
+  line-height: 1.55 !important;
+  margin: 0 !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats {
+  gap: 16px !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  margin: 0 auto 28px !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats article {
+  align-items: stretch !important;
+  background: #eff6ff !important;
+  border: 1px solid #bfdbfe !important;
+  border-left: 1px solid #bfdbfe !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 2px 7px rgba(15,23,42,.04) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  justify-content: space-between !important;
+  min-height: 142px !important;
+  padding: 18px !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats article.metric-total { background: #eff6ff !important; border-color: #bfdbfe !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats article.metric-active { background: #fffbeb !important; border-color: #fde68a !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats article.metric-completed { background: #f0fdf4 !important; border-color: #bbf7d0 !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-stat-row {
+  align-items: center !important;
+  display: flex !important;
+  gap: 13px !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-icon {
+  align-items: center !important;
+  background: #bfdbfe !important;
+  border-radius: .75rem !important;
+  display: inline-flex !important;
+  flex: 0 0 48px !important;
+  height: 48px !important;
+  justify-content: center !important;
+  padding: 12px !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-active .metric-icon { background: #fde68a !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-completed .metric-icon { background: #bbf7d0 !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-icon svg { fill: none !important; height: 23px !important; stroke: #2563eb !important; stroke-linecap: round !important; stroke-linejoin: round !important; stroke-width: 1.8 !important; width: 23px !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-active .metric-icon svg { stroke: #d97706 !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-completed .metric-icon svg { stroke: #16a34a !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats article > .metric-stat-row > div > span {
+  color: #475569 !important;
+  display: block !important;
+  font-size: .7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .04em !important;
+  line-height: 1.25 !important;
+  text-transform: uppercase !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats article > .metric-stat-row strong {
+  color: #111827 !important;
+  display: block !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: 1.875rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  margin-top: 7px !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-progress {
+  background: rgba(147,197,253,.55) !important;
+  border-radius: 999px !important;
+  height: 5px !important;
+  overflow: hidden !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-progress span { background: #3b82f6 !important; border-radius: inherit !important; display: block !important; height: 100% !important; width: 72% !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-active .metric-progress { background: #fde68a !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-active .metric-progress span { background: #f59e0b !important; width: 48% !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-completed .metric-progress { background: #bbf7d0 !important; }
+#loginScreen.applicant-dashboard-active #applicantHomePanel .metric-completed .metric-progress span { background: #22c55e !important; width: 84% !important; }
+@media (max-width: 700px) {
+  #loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-stats { grid-template-columns: 1fr !important; }
+  #loginScreen.applicant-dashboard-active #applicantHomePanel .client-welcome-card { padding: 20px !important; }
+}
