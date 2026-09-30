@@ -4402,3 +4402,110 @@ body.global-search-active #globalSearchBackdrop {
   #requestDetailDialog.client-luxury-detail .client-timeline-compact .client-timeline-step small { font-size: .5rem !important; }
   #requestDetailDialog.client-luxury-detail .request-detail-compact-grid { grid-template-columns: 1fr !important; }
 }
+
+/* Solicitudes: modal amplio y edición directa de información registrada */
+#requestDetailDialog.client-luxury-detail {
+  width: min(1100px, calc(100vw - 24px)) !important;
+  max-width: 1100px !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-compact-grid {
+  grid-template-columns: minmax(0, 1.12fr) minmax(390px, .88fr) !important;
+}
+#requestDetailDialog.client-luxury-detail .request-info-pane { min-width: 0 !important; }
+#requestDetailDialog.client-luxury-detail .request-edit-info-label {
+  background: #eff6ff !important;
+  border: 1px solid #bfdbfe !important;
+  border-radius: 999px !important;
+  color: #1d4ed8 !important;
+  font-size: .62rem !important;
+  font-weight: 800 !important;
+  padding: 3px 7px !important;
+  text-transform: uppercase !important;
+}
+#requestDetailDialog.client-luxury-detail .client-edit-info-form {
+  display: grid !important;
+  gap: 7px 9px !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  margin: 0 !important;
+}
+#requestDetailDialog.client-luxury-detail .client-edit-info-form label {
+  color: #475569 !important;
+  display: grid !important;
+  font-size: .65rem !important;
+  font-weight: 800 !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+  text-transform: uppercase !important;
+}
+#requestDetailDialog.client-luxury-detail .client-edit-info-form input,
+#requestDetailDialog.client-luxury-detail .client-edit-info-form select {
+  background: #fff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px !important;
+  box-sizing: border-box !important;
+  color: #0f172a !important;
+  font-size: .76rem !important;
+  min-height: 31px !important;
+  padding: 6px 7px !important;
+  width: 100% !important;
+}
+#requestDetailDialog.client-luxury-detail .client-edit-info-form input:focus,
+#requestDetailDialog.client-luxury-detail .client-edit-info-form select:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37,99,235,.14) !important;
+  outline: none !important;
+}
+#requestDetailDialog.client-luxury-detail .client-edit-info-actions {
+  align-items: center !important;
+  display: flex !important;
+  gap: 7px !important;
+  grid-column: 1 / -1 !important;
+  justify-content: flex-end !important;
+  margin-top: 2px !important;
+}
+#requestDetailDialog.client-luxury-detail .client-edit-info-actions p {
+  color: #b91c1c !important;
+  flex: 1 1 auto !important;
+  font-size: .67rem !important;
+  margin: 0 !important;
+}
+#requestDetailDialog.client-luxury-detail .client-save-info-button {
+  background: #0f172a !important;
+  border: 1px solid #0f172a !important;
+  border-radius: 6px !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  font-size: .72rem !important;
+  font-weight: 800 !important;
+  padding: 7px 10px !important;
+}
+#requestDetailDialog.client-luxury-detail .client-save-info-button:hover { background: #2563eb !important; border-color: #2563eb !important; }
+#requestDetailDialog.client-luxury-detail .client-save-info-button:disabled { cursor: wait !important; opacity: .65 !important; }
+@media (max-width: 760px) {
+  #requestDetailDialog.client-luxury-detail .request-detail-compact-grid { grid-template-columns: 1fr !important; }
+  #requestDetailDialog.client-luxury-detail .client-edit-info-form { grid-template-columns: 1fr !important; }
+  #requestDetailDialog.client-luxury-detail .client-edit-info-actions { grid-column: auto !important; }
+}
+
+/* El lápiz habilita la edición; los campos permanecen legibles mientras están bloqueados. */
+#requestDetailDialog.client-luxury-detail .request-edit-info {
+  align-items: center !important;
+  background: #2563eb !important;
+  border: 0 !important;
+  border-radius: 5px !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  display: grid !important;
+  font-size: .78rem !important;
+  height: 24px !important;
+  place-items: center !important;
+  width: 26px !important;
+}
+#requestDetailDialog.client-luxury-detail .request-edit-info:hover { background: #1d4ed8 !important; }
+#requestDetailDialog.client-luxury-detail .client-edit-info-form input:disabled,
+#requestDetailDialog.client-luxury-detail .client-edit-info-form select:disabled {
+  background: #f8fafc !important;
+  color: #334155 !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+}

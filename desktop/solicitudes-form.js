@@ -330,6 +330,34 @@
     content.innerHTML = `<div class="file-viewer-heading"><strong>${name}</strong><a class="file-viewer-download" href="${escapeHtml(requestFileUrl(item, index, true))}" download>Descargar</a></div>${media}`;
     openDialog(viewer);
   }
+  async function saveRequestInfo(item, form) {
+    const values = Object.fromEntries(new FormData(form).entries());
+    const message = form.querySelector("[data-edit-message]");
+    const button = form.querySelector("[data-save-request-info]");
+    if (!values.nombre?.trim()) { if (message) { message.textContent = "El nombre es obligatorio."; message.hidden = false; } return; }
+    if (button) { button.disabled = true; button.textContent = "Guardando…"; }
+    try {
+      const result = await api(`/service-requests/${encodeURIComponent(item.id)}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo },
+          propietario: values.propietario,
+          valorOperacion: values.valorOperacion,
+          tipoAvaluo: values.tipoAvaluo,
+          datosEspecificos: { propietario: values.propietario, valorOperacion: values.valorOperacion, tipoAvaluo: values.tipoAvaluo }
+        })
+      });
+      const updated = result?.solicitud || result;
+      applicantRequestsCache = applicantRequestsCache.map((candidate) => candidate.id === updated.id ? updated : candidate);
+      filterApplicantRequests();
+      renderRequestDetail(updated);
+      window.alert("Los cambios de la solicitud se guardaron correctamente.");
+    } catch (error) {
+      if (message) { message.textContent = error.message || "No fue posible guardar los cambios."; message.hidden = false; }
+    } finally {
+      if (button) { button.disabled = false; button.textContent = "Guardar cambios"; }
+    }
+  }
   function renderRequestDetail(item) {
     const detail = $("#requestDetailContent");
     const dialog = $("#requestDetailDialog");
@@ -355,19 +383,30 @@
     const activeRole = $("#appShell")?.dataset.role || "";
     const canUploadFinal = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
     const adminFinalAction = canUploadFinal ? `<button type="button" class="client-download-button admin-final-compact" data-upload-final-pdf="${escapeHtml(item.id)}">Subir PDF final</button>` : "";
-    const infoRows = [
-      ["Nombre", item.solicitante?.nombre || item.solicitante?.name || item.nombre || info.nombre || info.nombreCompleto],
-      ["Teléfono", item.solicitante?.telefono || item.telefono || info.telefono],
-      ["Correo", item.solicitante?.email || item.email || info.email || info.correo],
-      ["Asesor", item.asesor || item.valudor || info.asesor || info.valuador],
-      ["Tipo", item.tipoAvaluo || info.tipoAvaluo || info.modalidad],
-      ["Propietario", applicantRequestOwner(item) || info.propietario],
-      ["Valor", item.valorOperacion || info.valorOperacion || info.valor]
-    ].filter(([, value]) => value !== undefined && value !== null && String(value).trim()).map(([label, value]) => `<div class="client-detail-info-card"><span>${escapeHtml(label)}</span><strong>${escapeHtml(String(value))}</strong></div>`).join("") || "<p>No hay datos registrados.</p>";
-    detail.innerHTML = `<div class="request-detail-compact-head"><div><strong class="client-folio">${escapeHtml(item.folio || "Pendiente")} · ${escapeHtml(item.tipoAvaluo || "Avalúo")}</strong><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small></div><button type="button" class="client-outline-button" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div>${timeline}<div class="request-detail-compact-grid"><section class="request-detail-pane"><div class="request-pane-heading"><strong>Expediente digital</strong><small>${files.length} archivo(s)</small></div><ul class="request-files-grid">${fileMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${adminFinalAction}</div>${finalPdfAction}</section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong><button type="button" class="request-edit-info" aria-label="Editar información">✎</button></div><div class="client-detail-info-grid">${infoRows}</div></section></div>`;
+    const currentApplicant = item.solicitante || {};
+    const currentSpecific = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
+    const infoRows = `<form class="client-edit-info-form" data-edit-request-info>
+      <label>Nombre<input name="nombre" value="${escapeHtml(currentApplicant.nombre || item.nombre || "")}" required disabled /></label>
+      <label>Teléfono<input name="telefono" value="${escapeHtml(currentApplicant.telefono || item.telefono || "")}" disabled /></label>
+      <label>Correo<input name="correo" type="email" value="${escapeHtml(currentApplicant.correo || item.requesterEmail || item.email || "")}" disabled /></label>
+      <label>Propietario<input name="propietario" value="${escapeHtml(applicantRequestOwner(item) === "No especificado" ? "" : applicantRequestOwner(item))}" disabled /></label>
+      <label>Valor operación<input name="valorOperacion" value="${escapeHtml(item.valorOperacion || currentSpecific.valorOperacion || "")}" disabled /></label>
+      <label>Tipo de avalúo<select name="tipoAvaluo" disabled><option ${item.tipoAvaluo === "Inmuebles" ? "selected" : ""}>Inmuebles</option><option ${item.tipoAvaluo === "Automotriz" ? "selected" : ""}>Automotriz</option><option ${item.tipoAvaluo === "Maquinaria y equipo" ? "selected" : ""}>Maquinaria y equipo</option><option ${item.tipoAvaluo === "Mobiliario y Bienes Diversos" ? "selected" : ""}>Mobiliario y Bienes Diversos</option><option ${item.tipoAvaluo === "Intangibles" ? "selected" : ""}>Intangibles</option></select></label>
+      <div class="client-edit-info-actions"><p data-edit-message hidden></p><button type="submit" class="client-save-info-button" data-save-request-info hidden>Guardar cambios</button></div>
+    </form>`;
+    detail.innerHTML = `<div class="request-detail-compact-head"><div><strong class="client-folio">${escapeHtml(item.folio || "Pendiente")} · ${escapeHtml(item.tipoAvaluo || "Avalúo")}</strong><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small></div><button type="button" class="client-outline-button" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div>${timeline}<div class="request-detail-compact-grid"><section class="request-detail-pane"><div class="request-pane-heading"><strong>Expediente digital</strong><small>${files.length} archivo(s)</small></div><ul class="request-files-grid">${fileMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${adminFinalAction}</div>${finalPdfAction}</section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong><button type="button" class="request-edit-info" data-enable-edit aria-label="Editar información" title="Editar información">✎</button></div>${infoRows}</section></div>`;
     detail.querySelectorAll("[data-view-file]").forEach((button) => button.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
     detail.querySelectorAll("[data-download-file]").forEach((button) => button.addEventListener("click", () => { const link = document.createElement("a"); link.href = requestFileUrl(item, Number(button.dataset.downloadFile), true); link.download = files[Number(button.dataset.downloadFile)]?.name || "archivo"; document.body.appendChild(link); link.click(); link.remove(); }));
     detail.querySelector("[data-attach-missing]")?.addEventListener("click", () => annexDocuments(item));
+    detail.querySelector("[data-edit-request-info]")?.addEventListener("submit", (event) => { event.preventDefault(); saveRequestInfo(item, event.currentTarget); });
+    detail.querySelector("[data-enable-edit]")?.addEventListener("click", (event) => {
+      const form = detail.querySelector("[data-edit-request-info]");
+      if (!form) return;
+      form.querySelectorAll("input, select").forEach((field) => { field.disabled = false; });
+      form.querySelector("[data-save-request-info]")?.removeAttribute("hidden");
+      event.currentTarget.setAttribute("hidden", "true");
+      form.querySelector("input[name=nombre]")?.focus();
+    });
     detail.querySelector("[data-upload-final-pdf]")?.addEventListener("click", () => uploadFinalPdf(item));
     openDialog(dialog);
   }
