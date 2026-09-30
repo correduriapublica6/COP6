@@ -3908,3 +3908,163 @@ body.global-search-active #globalSearchBackdrop {
 /* El botón de impresión queda como la última acción de cada fila. */
 #statusRecordList .request-print-button { color: #475569 !important; }
 #statusRecordList .request-print-button:hover { color: #111827 !important; }
+
+/* Portal del solicitante: rediseño UX claro y corporativo */
+#applicantHomePanel .client-dashboard-header {
+  background: linear-gradient(135deg, #111827 0%, #1f2937 100%) !important;
+  border-bottom: 2px solid #c5a059 !important;
+  min-height: 76px !important;
+  padding: 14px 28px !important;
+}
+#applicantHomePanel .client-brand img { display: none !important; }
+#applicantHomePanel .client-brand strong {
+  color: #fff !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: 1.08rem !important;
+  letter-spacing: .02em !important;
+}
+#applicantHomePanel .client-brand span {
+  display: block !important;
+  color: #d4af37 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .18em !important;
+  margin-top: 2px !important;
+}
+#applicantHomePanel .client-request-table-wrap {
+  background: #fff !important;
+  border: 1px solid #d4af37 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 12px 30px rgba(15,23,42,.08) !important;
+  overflow-x: auto !important;
+}
+#applicantHomePanel .client-request-table { min-width: 880px !important; table-layout: auto !important; }
+#applicantHomePanel .client-request-table th {
+  background: #f8fafc !important;
+  color: #475569 !important;
+  font-size: .72rem !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+#applicantHomePanel .client-request-table td { color: #1e293b !important; background: #fff !important; }
+#applicantHomePanel .client-table-view-button {
+  background: #1e293b !important;
+  color: #fff !important;
+  border: 1px solid #1e293b !important;
+  border-radius: 7px !important;
+  padding: 7px 12px !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+}
+#applicantHomePanel .client-table-view-button:hover { background: #c5a059 !important; border-color: #c5a059 !important; color: #111827 !important; }
+#applicantHomePanel .client-pdf-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 7px !important;
+  background: #b91c1c !important;
+  color: #fff !important;
+  font-weight: 900 !important;
+  text-decoration: none !important;
+}
+#applicantHomePanel .client-pdf-disabled { color: #94a3b8 !important; font-size: .76rem !important; white-space: nowrap !important; }
+#requestDetailDialog.client-luxury-detail {
+  width: min(860px, calc(100% - 24px)) !important;
+  max-width: 860px !important;
+  border-radius: 18px !important;
+}
+#requestDetailDialog.client-luxury-detail .client-detail-section-heading h3,
+#requestDetailDialog.client-luxury-detail .client-detail-download h3,
+#requestDetailDialog.client-luxury-detail .request-detail-section h3 {
+  color: #8b6f39 !important;
+  font-weight: 800 !important;
+  letter-spacing: -.01em !important;
+}
+#requestDetailDialog.client-luxury-detail .client-detail-section-heading p,
+#requestDetailDialog.client-luxury-detail .client-detail-download p { color: #475569 !important; }
+#requestDetailDialog.client-luxury-detail .client-timeline {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  padding: 12px 0 4px !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-step {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 10px 6px !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  text-align: center !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-step::after { display: none !important; }
+#requestDetailDialog.client-luxury-detail .client-timeline-step span {
+  width: 28px !important;
+  height: 28px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 50% !important;
+  background: #e2e8f0 !important;
+  color: #64748b !important;
+  font-weight: 800 !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-step.is-complete {
+  background: #f0fdf4 !important;
+  border-color: #86efac !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-step.is-complete span { background: #16a34a !important; color: #fff !important; }
+#requestDetailDialog.client-luxury-detail .client-timeline-step small { color: #334155 !important; font-weight: 700 !important; line-height: 1.2 !important; }
+#requestDetailDialog.client-luxury-detail .client-detail-download {
+  margin-top: 16px !important;
+  padding: 18px !important;
+  border-radius: 12px !important;
+  border: 1px solid #e2e8f0 !important;
+  background: #fff !important;
+}
+#requestDetailDialog.client-luxury-detail .client-download-pending {
+  padding: 14px 16px !important;
+  border-radius: 10px !important;
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #475569 !important;
+  line-height: 1.5 !important;
+}
+#requestDetailDialog.client-luxury-detail .client-detail-info-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  margin-top: 12px !important;
+}
+#requestDetailDialog.client-luxury-detail .client-detail-info-card {
+  display: grid !important;
+  gap: 5px !important;
+  padding: 12px 14px !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  min-width: 0 !important;
+}
+#requestDetailDialog.client-luxury-detail .client-detail-info-card span {
+  color: #64748b !important;
+  font-size: .72rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .06em !important;
+}
+#requestDetailDialog.client-luxury-detail .client-detail-info-card strong {
+  color: #1e293b !important;
+  font-size: .92rem !important;
+  overflow-wrap: anywhere !important;
+}
+@media (max-width: 650px) {
+  #requestDetailDialog.client-luxury-detail .client-timeline { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  #requestDetailDialog.client-luxury-detail .client-detail-info-grid { grid-template-columns: 1fr !important; }
+  #applicantHomePanel .client-dashboard-header { padding-inline: 16px !important; }
+}
