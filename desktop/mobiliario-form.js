@@ -89,7 +89,7 @@
     valuesWrap?.classList.toggle('is-machinery-values', isMachinery);
     const head = valuesTable?.querySelector('thead tr');
     if (head) head.innerHTML = isMachinery
-      ? '<th>Descripción</th><th>Unidad</th><th>Cantidad</th><th>Valor de mercado</th><th>Obsolescencia funcional</th><th>Obsolescencia económica</th><th>Factor</th><th>Valor de mercado aplicable</th>'
+      ? '<th>Descripción</th><th>Unidad</th><th>Cantidad</th><th>Valor de mercado</th><th>Funcional</th><th>Económica</th><th>Factor</th><th>Valor de mercado aplicable</th>'
       : '<th>Descripción</th><th>Unidad</th><th>Cantidad</th><th>Valor unitario</th><th>Total</th><th>Factor de depreciación</th><th>Valor actual</th>';
     values.innerHTML = itemRecords.length ? itemRecords.map((item) => {
       const pricing = valueInputs.get(item.id) || { unidad: 'Pieza', valorUnitario: '', factorDepreciacion: '1' };

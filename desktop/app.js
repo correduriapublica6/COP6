@@ -841,7 +841,16 @@
     $("#avaluosView").classList.add("is-registering");
     if (!viewOnly) window.setTimeout(() => numberInput.focus(), 120);
   }
-  function closeDialog() { recordEditor.hidden = true; $("#avaluosView").classList.remove("is-registering"); editingId = null; form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = false; }); }
+  function closeDialog() {
+    recordEditor.hidden = true;
+    $("#avaluosView").classList.remove("is-registering");
+    editingId = null;
+    form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = false; });
+    form.reset();
+    paidInput.checked = false;
+    paymentDetails.classList.add("is-hidden");
+    $("#formMessage").textContent = "";
+  }
   async function removeRecord(id) { if (!isAdmin()) return; const record = records.find((item) => item.id === id); if (!record || !window.confirm(`¿Eliminar el avalúo ${record.numeroAvaluo}? Esta acción no se puede deshacer.`)) return; try { await deleteRemoteRecord(id); records = records.filter((item) => item.id !== id); saveRecords(); render(); } catch (error) { window.alert(error.message); } }
   function formDraft() {
     const data = new FormData(form);

@@ -4618,3 +4618,40 @@ body.global-search-active #globalSearchBackdrop {
   min-width: 0 !important;
   box-sizing: border-box !important;
 }
+
+/* Ajustes finales de Maquinaria y Equipo: encabezados compactos y legibles. */
+.mobiliario-primary-values-wrap.is-machinery-values table {
+  table-layout: fixed !important;
+  width: 100% !important;
+}
+.mobiliario-primary-values-wrap.is-machinery-values th:nth-child(1),
+.mobiliario-primary-values-wrap.is-machinery-values td:nth-child(1) { width: 21% !important; }
+.mobiliario-primary-values-wrap.is-machinery-values th:nth-child(2),
+.mobiliario-primary-values-wrap.is-machinery-values td:nth-child(2) { width: 10% !important; }
+.mobiliario-primary-values-wrap.is-machinery-values th:nth-child(3),
+.mobiliario-primary-values-wrap.is-machinery-values td:nth-child(3) { width: 7% !important; }
+.mobiliario-primary-values-wrap.is-machinery-values th:nth-child(4),
+.mobiliario-primary-values-wrap.is-machinery-values td:nth-child(4) { width: 13% !important; }
+.mobiliario-primary-values-wrap.is-machinery-values th:nth-child(5),
+.mobiliario-primary-values-wrap.is-machinery-values td:nth-child(5),
+.mobiliario-primary-values-wrap.is-machinery-values th:nth-child(6),
+.mobiliario-primary-values-wrap.is-machinery-values td:nth-child(6),
+.mobiliario-primary-values-wrap.is-machinery-values th:nth-child(7),
+.mobiliario-primary-values-wrap.is-machinery-values td:nth-child(7) { width: 9% !important; }
+.mobiliario-primary-values-wrap.is-machinery-values th:nth-child(8),
+.mobiliario-primary-values-wrap.is-machinery-values td:nth-child(8) { width: 22% !important; }
+.mobiliario-primary-values-wrap.is-machinery-values th,
+.mobiliario-primary-values-wrap.is-machinery-values td { padding: 6px 5px !important; font-size: 0.78rem !important; line-height: 1.15 !important; }
+.mobiliario-primary-values-wrap.is-machinery-values input { min-width: 0 !important; width: 100% !important; padding: 5px 4px !important; font-size: 0.78rem !important; }
+.mobiliario-replacement-summary table { table-layout: fixed !important; width: 100% !important; }
+.mobiliario-replacement-summary th,
+.mobiliario-replacement-summary td { padding: 6px 5px !important; font-size: 0.78rem !important; white-space: nowrap !important; }
+.mobiliario-replacement-summary th:nth-child(1), .mobiliario-replacement-summary td:nth-child(1) { width: 28% !important; }
+.mobiliario-replacement-summary th:nth-child(2), .mobiliario-replacement-summary td:nth-child(2) { width: 9% !important; }
+.mobiliario-replacement-summary th:nth-child(3), .mobiliario-replacement-summary td:nth-child(3) { width: 8% !important; }
+.mobiliario-replacement-summary th:nth-child(4), .mobiliario-replacement-summary td:nth-child(4) { width: 22% !important; }
+.mobiliario-replacement-summary th:nth-child(5), .mobiliario-replacement-summary td:nth-child(5),
+.mobiliario-replacement-summary th:nth-child(6), .mobiliario-replacement-summary td:nth-child(6),
+.mobiliario-replacement-summary th:nth-child(7), .mobiliario-replacement-summary td:nth-child(7) { width: 9% !important; }
+.mobiliario-replacement-summary th:nth-child(8), .mobiliario-replacement-summary td:nth-child(8) { width: 16% !important; }
+.mobiliario-replacement-summary input { min-width: 0 !important; width: 100% !important; padding: 5px 4px !important; font-size: 0.78rem !important; }
