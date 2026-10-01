@@ -847,6 +847,8 @@
     editingId = null;
     form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = false; });
     form.reset();
+    // Los combobox personalizados no se actualizan solos con form.reset().
+    form.querySelectorAll("select").forEach((select) => select.dispatchEvent(new Event("change", { bubbles: true })));
     paidInput.checked = false;
     paymentDetails.classList.add("is-hidden");
     $("#formMessage").textContent = "";
