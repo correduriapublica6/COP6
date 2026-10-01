@@ -84,7 +84,10 @@
 
   function renderValues() {
     const isMachinery = activeTechnicalType === 'maquinaria';
-    const head = values.closest('table')?.querySelector('thead tr');
+    const valuesTable = values.closest('table');
+    const valuesWrap = valuesTable?.closest('.mobiliario-primary-values-wrap');
+    valuesWrap?.classList.toggle('is-machinery-values', isMachinery);
+    const head = valuesTable?.querySelector('thead tr');
     if (head) head.innerHTML = isMachinery
       ? '<th>Descripción</th><th>Unidad</th><th>Cantidad</th><th>Valor de mercado</th><th>Obsolescencia funcional</th><th>Obsolescencia económica</th><th>Factor</th><th>Valor de mercado aplicable</th>'
       : '<th>Descripción</th><th>Unidad</th><th>Cantidad</th><th>Valor unitario</th><th>Total</th><th>Factor de depreciación</th><th>Valor actual</th>';
