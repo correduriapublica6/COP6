@@ -851,12 +851,13 @@
     event.preventDefault();
     if (!canEditReception()) return;
     const draft = formDraft();
-    const required = [draft.numeroAvaluo, draft.usuario, draft.tipoBien, draft.tipoAvaluo, draft.asesorValuador, draft.solicitante, draft.fechaAvaluo];
+    const required = [draft.numeroAvaluo, draft.usuario, draft.tipoBien, draft.tipoAvaluo, draft.solicitante, draft.fechaAvaluo];
     if (!/^\d{4}$/.test(draft.numeroAvaluo)) { $("#formMessage").textContent = "El número de avalúo debe tener exactamente cuatro dígitos."; return; }
     if (!serverOnline) { $("#formMessage").textContent = "No fue posible comunicarse con el servidor de Recepción. Verifica la dirección, el puerto 3000 y /api/health antes de registrar."; return; }
     if (!authorizedAppraisalNumbers.includes(draft.numeroAvaluo)) { $("#formMessage").textContent = `El avalúo ${draft.numeroAvaluo} no ha sido autorizado para su registro por Administración o Auditoría. Autorízalo primero desde Avalúos > Validación.`; return; }
     if (records.some((record) => record.id !== editingId && normalizeNumber(record.numeroAvaluo) === draft.numeroAvaluo)) { $("#formMessage").textContent = `El avalúo ${draft.numeroAvaluo} ya se agregó.`; return; }
-    if (required.some((value) => !value) || (draft.pagado && (!draft.montoPagado || !draft.metodoPago || !draft.pagoEntregadoA || !draft.fechaPago))) { $("#formMessage").textContent = "Completa los campos obligatorios y los datos de pago, incluido a quién se entregó el pago."; return; }
+    if (required.some((value) => !value)) { $("#formMessage").textContent = "Completa los campos obligatorios: número de avalúo, fecha, tipo de bien, tipo de avalúo, usuario y solicitante."; return; }
+    if (draft.pagado && (!draft.montoPagado || !draft.metodoPago || !draft.pagoEntregadoA || !draft.fechaPago)) { $("#formMessage").textContent = "Completa los datos de pago, incluido a quién se entregó el pago."; return; }
     const now = new Date().toISOString();
     const candidate = editingId ? { ...records.find((record) => record.id === editingId), ...draft, id: editingId, actualizadoEn: now } : { ...draft, id: `${Date.now()}-${Math.random().toString(16).slice(2)}`, creadoEn: now, actualizadoEn: now };
     try {

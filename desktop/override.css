@@ -4579,3 +4579,42 @@ body.global-search-active #globalSearchBackdrop {
   font-size: 10px !important;
   box-sizing: border-box !important;
 }
+
+/* Correcciones finales: evitar empalme en obsolescencia y ampliar mercado aplicable. */
+.mobiliario-primary-values-wrap.is-machinery-values .values-table th:nth-child(5),
+.mobiliario-primary-values-wrap.is-machinery-values .values-table th:nth-child(6),
+.mobiliario-primary-values-wrap.is-machinery-values .values-table th:nth-child(7) {
+  width: 11% !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+  line-height: 1.05 !important;
+  font-size: 9px !important;
+}
+.mobiliario-primary-values-wrap.is-machinery-values .values-table td:nth-child(5),
+.mobiliario-primary-values-wrap.is-machinery-values .values-table td:nth-child(6),
+.mobiliario-primary-values-wrap.is-machinery-values .values-table td:nth-child(7) { width: 11% !important; }
+.mobiliario-primary-values-wrap.is-machinery-values .values-table th:nth-child(1),
+.mobiliario-primary-values-wrap.is-machinery-values .values-table td:nth-child(1) { width: 17% !important; }
+.mobiliario-primary-values-wrap.is-machinery-values .values-table th:nth-child(4),
+.mobiliario-primary-values-wrap.is-machinery-values .values-table td:nth-child(4) { width: 13% !important; }
+.mobiliario-primary-values-wrap.is-machinery-values .values-table th:nth-child(8),
+.mobiliario-primary-values-wrap.is-machinery-values .values-table td:nth-child(8) { width: 20% !important; }
+
+.mobiliario-replacement-summary .values-table th:nth-child(4),
+.mobiliario-replacement-summary .values-table td:nth-child(4) { width: 22% !important; }
+.mobiliario-replacement-summary .values-table th:nth-child(5),
+.mobiliario-replacement-summary .values-table td:nth-child(5),
+.mobiliario-replacement-summary .values-table th:nth-child(6),
+.mobiliario-replacement-summary .values-table td:nth-child(6),
+.mobiliario-replacement-summary .values-table th:nth-child(7),
+.mobiliario-replacement-summary .values-table td:nth-child(7) { width: 8% !important; }
+.mobiliario-replacement-summary .values-table th:nth-child(8),
+.mobiliario-replacement-summary .values-table td:nth-child(8) { width: 21% !important; }
+.mobiliario-replacement-summary .values-table td:nth-child(5) input,
+.mobiliario-replacement-summary .values-table td:nth-child(6) input {
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
