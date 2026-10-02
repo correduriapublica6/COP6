@@ -4750,3 +4750,36 @@ body.global-search-active #globalSearchBackdrop {
   background: linear-gradient(135deg, #e4c55b 0%, #d4af37 100%) !important;
   color: #111 !important;
 }
+
+/* Corrección de contraste: el botón maestro siempre es dorado, nunca negro. */
+.btn-copu-primary,
+.control-shell .btn-copu-primary,
+#loginScreen.applicant-dashboard-active .btn-copu-primary {
+  background: linear-gradient(135deg, #b8903c 0%, #d4af37 50%, #e5c158 100%) !important;
+  border: 1px solid #e5c158 !important;
+  color: #1a1a1a !important;
+  box-shadow: 0 7px 16px rgba(120, 86, 20, .22), inset 0 1px 0 rgba(255, 255, 255, .4) !important;
+  text-shadow: none !important;
+}
+.btn-copu-primary:hover,
+.control-shell .btn-copu-primary:hover,
+#loginScreen.applicant-dashboard-active .btn-copu-primary:hover {
+  background: linear-gradient(135deg, #d4af37 0%, #e5c158 52%, #f1d77a 100%) !important;
+  border-color: #f1d77a !important;
+  color: #111111 !important;
+  box-shadow: 0 10px 22px rgba(139, 111, 57, .32), inset 0 1px 0 rgba(255, 255, 255, .5) !important;
+}
+.btn-copu-primary:active,
+.control-shell .btn-copu-primary:active,
+#loginScreen.applicant-dashboard-active .btn-copu-primary:active {
+  background: linear-gradient(135deg, #a77c32 0%, #c5a059 52%, #d4af37 100%) !important;
+  color: #111111 !important;
+  box-shadow: 0 3px 8px rgba(80, 53, 9, .28) inset !important;
+}
+/* Mantener rojo únicamente en acciones destructivas, sin fondos negros. */
+.btn-copu-primary.is-danger,
+.control-shell .btn-copu-primary.is-danger {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+  border-color: #ef9a9a !important;
+  color: #ffffff !important;
+}
