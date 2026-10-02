@@ -5530,3 +5530,87 @@ body,
   #loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-intro-actions { justify-content: stretch !important; }
   #loginScreen.applicant-dashboard-active #applicantHomePanel .client-primary-button { width: 100% !important; }
 }
+
+/* Ajustes solicitados — navegación, formularios técnicos y fondo global */
+/* El lienzo radial se mantiene para cualquier sesión: administrador, valuador, auditor,
+   editor, auxiliar o solicitante. Las tarjetas internas siguen siendo blancas. */
+html,
+body,
+#appShell,
+#appShell .app-shell,
+#appShell .app-workspace,
+#appShell .main-content,
+#appShell main,
+#appShell .dashboard-container,
+#loginScreen,
+#loginScreen .public-entry-panel,
+#loginScreen .applicant-home-panel {
+  background: radial-gradient(circle, #dcdcd6 0%, #a2a2a2 60%, #7d7d7d 100%) !important;
+  background-attachment: fixed !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+
+/* La vista de selección de Avalúos se presenta como lista vertical centrada. */
+#appShell .avaluos-choice-grid {
+  align-items: center !important;
+  display: grid !important;
+  gap: 1.25rem !important;
+  grid-template-columns: minmax(0, 500px) !important;
+  justify-content: center !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+}
+#appShell .avaluos-choice-card {
+  box-sizing: border-box !important;
+  max-width: 500px !important;
+  width: 100% !important;
+}
+
+/* Guardar y continuar usa exactamente el mismo tratamiento dorado que Crear avalúo. */
+#appShell .technical-step-save.btn-copu-primary,
+#appShell .mobiliario-save.btn-copu-primary,
+#appShell .technical-actions .btn-copu-primary,
+#appShell .technical-step-actions .btn-copu-primary,
+#appShell .mobiliario-step-actions .btn-copu-primary {
+  background: linear-gradient(135deg, #b8903c 0%, #d4af37 50%, #e5c158 100%) !important;
+  border: 1px solid #e5c158 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 7px 16px rgba(120,86,20,.22), inset 0 1px 0 rgba(255,255,255,.4) !important;
+  color: #1a1a1a !important;
+  font-family: Georgia, 'Times New Roman', serif !important;
+  font-weight: 700 !important;
+}
+#appShell .technical-step-save.btn-copu-primary:hover,
+#appShell .mobiliario-save.btn-copu-primary:hover,
+#appShell .technical-actions .btn-copu-primary:hover,
+#appShell .technical-step-actions .btn-copu-primary:hover,
+#appShell .mobiliario-step-actions .btn-copu-primary:hover {
+  background: linear-gradient(135deg, #d4af37 0%, #e5c158 52%, #f1d77a 100%) !important;
+  border-color: #f1d77a !important;
+  color: #111 !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Navegación superior: un poco más amplia, sin negrita pesada. */
+#appShell.control-shell > .app-sidebar > .sidebar-nav .sidebar-link,
+#appShell.control-shell > .app-sidebar > .floating-nav-capsule .sidebar-link {
+  font-size: .92rem !important;
+  font-weight: 400 !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 8px 17px !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-nav,
+#appShell.control-shell > .app-sidebar > .floating-nav-capsule {
+  height: 42px !important;
+  min-height: 42px !important;
+}
+
+@media (max-width: 900px) {
+  #appShell .avaluos-choice-grid { grid-template-columns: minmax(0, 500px) !important; }
+}
+@media (max-width: 560px) {
+  #appShell .avaluos-choice-grid { grid-template-columns: minmax(0, 1fr) !important; padding-inline: 10px !important; }
+  #appShell .avaluos-choice-card { max-width: none !important; }
+}
