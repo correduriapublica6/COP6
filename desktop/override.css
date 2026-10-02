@@ -5407,3 +5407,126 @@ body:has(#appShell:not(.is-hidden)),
 #appShell [data-action="back"] * {
   color: #000000 !important;
 }
+
+/* Cierre visual CP6 — fondo radial consistente, portal y tarjetas administrativas */
+:root {
+  --cp6-gold-start: #b8903c;
+  --cp6-gold-mid: #d4af37;
+  --cp6-gold-end: #e5c158;
+  --cp6-radial-bg: radial-gradient(circle at 50% 0%, #dcdcd6 0%, #a2a2a2 60%, #7d7d7d 100%);
+}
+
+/* El lienzo gris queda fijo también durante el portal del solicitante. */
+body,
+#loginScreen.applicant-dashboard-active,
+#loginScreen.applicant-dashboard-active .public-entry-panel,
+#loginScreen.applicant-dashboard-active .applicant-home-panel {
+  background: var(--cp6-radial-bg) !important;
+  background-attachment: fixed !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+#loginScreen.applicant-dashboard-active .applicant-home-panel {
+  color: #1a1a1a !important;
+  min-height: 100vh !important;
+}
+
+/* Tarjetas principales con blanco limpio y sombra suave. */
+#appShell .avaluos-choice-card,
+#appShell .home-action-card,
+#appShell .welcome-card,
+#appShell .dashboard-tabs,
+#appShell .search-panel,
+#appShell .technical-list-panel,
+#appShell .development-card,
+#appShell .solicitudes-view > .request-table-wrap {
+  background: #fff !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,.15) !important;
+}
+#appShell .avaluos-choice-card {
+  align-items: flex-start !important;
+  border-left: 1px solid #e0e0e0 !important;
+  color: #1a1a1a !important;
+  display: grid !important;
+  gap: 14px !important;
+  grid-template-columns: 42px minmax(0, 1fr) auto !important;
+  min-height: 126px !important;
+  padding: 20px !important;
+  text-align: left !important;
+  transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease !important;
+}
+#appShell .avaluos-choice-card:hover {
+  border-color: rgba(197,160,89,.75) !important;
+  box-shadow: 0 14px 28px rgba(0,0,0,.2) !important;
+  transform: translateY(-4px) !important;
+}
+#appShell .avaluos-choice-icon {
+  align-items: center !important;
+  background: #f7f0df !important;
+  border: 1px solid #ead7a8 !important;
+  border-radius: 11px !important;
+  color: #8b6f39 !important;
+  display: inline-flex !important;
+  height: 42px !important;
+  justify-content: center !important;
+  width: 42px !important;
+}
+#appShell .avaluos-choice-icon svg { height: 23px !important; stroke: currentColor !important; width: 23px !important; }
+#appShell .avaluos-choice-copy strong { color: #1a1a1a !important; font-family: Georgia, 'Times New Roman', serif !important; }
+#appShell .avaluos-choice-copy small { color: #555 !important; }
+#appShell .avaluos-choice-arrow { align-self: end !important; color: #8b6f39 !important; font-size: 1.25rem !important; }
+
+/* El botón de servicio replica el degradado dorado institucional del login y queda a la derecha. */
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-intro-actions {
+  align-items: center !important;
+  justify-content: flex-end !important;
+  margin: 22px auto 18px !important;
+  max-width: 1240px !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-primary-button {
+  align-items: center !important;
+  background: linear-gradient(135deg, var(--cp6-gold-start) 0%, var(--cp6-gold-mid) 50%, var(--cp6-gold-end) 100%) !important;
+  border: 1px solid var(--cp6-gold-end) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 7px 16px rgba(120,86,20,.22), inset 0 1px 0 rgba(255,255,255,.4) !important;
+  color: #1a1a1a !important;
+  display: inline-flex !important;
+  font-family: Georgia, 'Times New Roman', serif !important;
+  font-weight: 700 !important;
+  justify-content: center !important;
+  min-height: 42px !important;
+  padding: 10px 20px !important;
+  text-align: center !important;
+  transition: background .2s ease, box-shadow .2s ease, transform .2s ease !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-primary-button:hover {
+  background: linear-gradient(135deg, #d4af37 0%, #e5c158 52%, #f1d77a 100%) !important;
+  box-shadow: 0 10px 22px rgba(139,111,57,.32), inset 0 1px 0 rgba(255,255,255,.5) !important;
+  color: #111 !important;
+  transform: translateY(-1px) !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-primary-button:active { transform: translateY(1px) !important; }
+
+/* Menús desplegables sin recorte y sólo debajo de su avatar. */
+#appShell.control-shell > .app-sidebar { overflow: visible !important; }
+#appShell .profile-menu-wrap { position: relative !important; }
+#appShell .profile-menu-wrap .profile-menu {
+  left: 0 !important;
+  right: auto !important;
+  top: calc(100% + 8px) !important;
+  z-index: 9999 !important;
+}
+/* Regresar/Volver conserva texto negro sobre el dorado. */
+#appShell #backAvaluosButton,
+#appShell #backRequestsToAvaluosButton,
+#appShell #backAvaluosButton *,
+#appShell #backRequestsToAvaluosButton * { color: #000 !important; }
+
+@media (max-width: 700px) {
+  #appShell .avaluos-choice-card { grid-template-columns: 38px minmax(0,1fr) auto !important; padding: 16px !important; }
+  #loginScreen.applicant-dashboard-active #applicantHomePanel .client-dashboard-intro-actions { justify-content: stretch !important; }
+  #loginScreen.applicant-dashboard-active #applicantHomePanel .client-primary-button { width: 100% !important; }
+}
