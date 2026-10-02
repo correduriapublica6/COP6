@@ -5247,3 +5247,163 @@ body:has(#appShell:not(.is-hidden)),
     padding-inline: 10px !important;
   }
 }
+
+/* Fondo gris radial fijo para el área principal de la aplicación */
+body:has(#appShell:not(.is-hidden)),
+#appShell,
+#appShell .app-shell,
+#appShell .app-workspace,
+#appShell .main-content,
+#appShell main,
+#appShell .dashboard-container {
+  background: radial-gradient(circle at center, #dcdcd6 0%, #a2a2a2 60%, #7d7d7d 100%) !important;
+  background-attachment: fixed !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+
+#appShell {
+  min-height: 100vh !important;
+}
+
+/* Tarjetas, tablas y formularios blancos sobre el lienzo gris */
+#appShell .card,
+#appShell .panel,
+#appShell .section-card,
+#appShell .table-card,
+#appShell .form-card,
+#appShell .data-card,
+#appShell .module-card,
+#appShell .welcome-card,
+#appShell .action-card,
+#appShell .tasks-card,
+#appShell .setting-card,
+#appShell .inline-panel,
+#appShell .request-table-wrap,
+#appShell .table-responsive,
+#appShell .table-container,
+#appShell .form-section,
+#appShell .technical-form-card,
+#appShell .technical-editor-card,
+#appShell .workspace-card {
+  background: #ffffff !important;
+  color: #1a1a1a !important;
+  border: 1px solid #d4af37 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+#appShell table,
+#appShell thead,
+#appShell tbody,
+#appShell tr,
+#appShell td,
+#appShell th {
+  color: #1a1a1a !important;
+}
+
+#appShell table,
+#appShell tbody,
+#appShell tbody tr,
+#appShell tbody td {
+  background: #ffffff !important;
+}
+
+#appShell thead,
+#appShell th {
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+}
+
+#appShell input,
+#appShell select,
+#appShell textarea {
+  background: #ffffff !important;
+  color: #1a1a1a !important;
+  border-color: #cbd5e1 !important;
+}
+
+#appShell .card h1,
+#appShell .card h2,
+#appShell .card h3,
+#appShell .card h4,
+#appShell .panel h1,
+#appShell .panel h2,
+#appShell .panel h3,
+#appShell .panel h4,
+#appShell .section-card h1,
+#appShell .section-card h2,
+#appShell .section-card h3,
+#appShell .section-card h4,
+#appShell .table-card h1,
+#appShell .table-card h2,
+#appShell .table-card h3,
+#appShell .table-card h4,
+#appShell .form-card h1,
+#appShell .form-card h2,
+#appShell .form-card h3,
+#appShell .form-card h4,
+#appShell .inline-panel h1,
+#appShell .inline-panel h2,
+#appShell .inline-panel h3,
+#appShell .inline-panel h4,
+#appShell .welcome-card h1,
+#appShell .welcome-card h2,
+#appShell .welcome-card h3,
+#appShell .welcome-card h4 {
+  color: #1a1a1a !important;
+}
+
+#appShell .card p,
+#appShell .panel p,
+#appShell .section-card p,
+#appShell .table-card p,
+#appShell .form-card p,
+#appShell .inline-panel p,
+#appShell .welcome-card p,
+#appShell .setting-card p,
+#appShell .card label,
+#appShell .panel label,
+#appShell .form-card label,
+#appShell .inline-panel label {
+  color: #1a1a1a !important;
+}
+
+/* La marca CP6 y las pestañas superiores permanecen blancas */
+#appShell .header-brand,
+#appShell .brand-title,
+#appShell .client-brand,
+#appShell .institution-name,
+#appShell .floating-nav-capsule a,
+#appShell .floating-nav-capsule button,
+#appShell .sidebar-nav a,
+#appShell .sidebar-nav button,
+#appShell .nav-pills a,
+#appShell .nav-pills button,
+#appShell .navbar-capsule a,
+#appShell .navbar-capsule button {
+  color: #ffffff !important;
+}
+
+/* Sólo Volver/Regresar usa texto negro */
+#appShell .back-to-users,
+#appShell .back-to-avaluos,
+#appShell .back-to-home,
+#appShell .back-button,
+#appShell .return-button,
+#appShell [data-users-back],
+#appShell [data-back],
+#appShell [data-action="back"] {
+  color: #000000 !important;
+}
+
+#appShell .back-to-users *,
+#appShell .back-to-avaluos *,
+#appShell .back-to-home *,
+#appShell .back-button *,
+#appShell .return-button *,
+#appShell [data-users-back] *,
+#appShell [data-back] *,
+#appShell [data-action="back"] * {
+  color: #000000 !important;
+}
