@@ -5004,3 +5004,246 @@ body.global-search-active #globalSearchBackdrop {
   font-size: .62rem !important;
   letter-spacing: .22em !important;
 }
+
+/* Tema grafito institucional: lienzo oscuro y bloques administrativos claros */
+body:has(#appShell:not(.is-hidden)),
+#appShell,
+#appShell .app-shell,
+#appShell .app-workspace,
+#appShell .main-content,
+#appShell .dashboard-container {
+  background: #1e1f23 !important;
+}
+
+#appShell .app-workspace,
+#appShell .main-content,
+#appShell main,
+#appShell .view-container,
+#appShell .app-view {
+  color: #f8fafc !important;
+}
+
+/* Tarjetas y paneles: blanco puro sobre el lienzo grafito */
+#appShell .card,
+#appShell .panel,
+#appShell .section-card,
+#appShell .table-card,
+#appShell .form-card,
+#appShell .data-card,
+#appShell .module-card,
+#appShell .welcome-card,
+#appShell .action-card,
+#appShell .tasks-card,
+#appShell .setting-card,
+#appShell .inline-panel,
+#appShell .request-table-wrap,
+#appShell .table-responsive,
+#appShell .table-container,
+#appShell .form-section,
+#appShell .technical-form-card,
+#appShell .technical-editor-card,
+#appShell .workspace-card {
+  background: #ffffff !important;
+  color: #1a1a1a !important;
+  border-color: #d4af37 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.30) !important;
+}
+
+#appShell .card h1,
+#appShell .card h2,
+#appShell .card h3,
+#appShell .card h4,
+#appShell .panel h1,
+#appShell .panel h2,
+#appShell .panel h3,
+#appShell .panel h4,
+#appShell .section-card h1,
+#appShell .section-card h2,
+#appShell .section-card h3,
+#appShell .section-card h4,
+#appShell .table-card h1,
+#appShell .table-card h2,
+#appShell .table-card h3,
+#appShell .table-card h4,
+#appShell .form-card h1,
+#appShell .form-card h2,
+#appShell .form-card h3,
+#appShell .form-card h4,
+#appShell .inline-panel h1,
+#appShell .inline-panel h2,
+#appShell .inline-panel h3,
+#appShell .inline-panel h4,
+#appShell .welcome-card h1,
+#appShell .welcome-card h2,
+#appShell .welcome-card h3,
+#appShell .welcome-card h4 {
+  color: #1a1a1a !important;
+}
+
+#appShell .card p,
+#appShell .panel p,
+#appShell .section-card p,
+#appShell .table-card p,
+#appShell .form-card p,
+#appShell .inline-panel p,
+#appShell .welcome-card p,
+#appShell .setting-card p,
+#appShell .card label,
+#appShell .panel label,
+#appShell .form-card label,
+#appShell .inline-panel label {
+  color: #334155 !important;
+}
+
+/* Tablas y formularios quedan contenidos en tarjetas blancas */
+#appShell table,
+#appShell thead,
+#appShell tbody,
+#appShell tr,
+#appShell td,
+#appShell th {
+  color: #1a1a1a !important;
+}
+
+#appShell table {
+  background: #ffffff !important;
+}
+
+#appShell thead,
+#appShell th {
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+}
+
+#appShell tbody,
+#appShell tbody tr,
+#appShell tbody td {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+#appShell input,
+#appShell select,
+#appShell textarea {
+  background: #ffffff !important;
+  color: #1a1a1a !important;
+  border-color: #cbd5e1 !important;
+}
+
+#appShell input::placeholder,
+#appShell textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Marca y navegación: botones independientes sobre la barra negra */
+#appShell .floating-nav-capsule,
+#appShell .sidebar-nav,
+#appShell .nav-pills,
+#appShell .navbar-capsule {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+#appShell .floating-nav-capsule a,
+#appShell .floating-nav-capsule button,
+#appShell .sidebar-nav a,
+#appShell .sidebar-nav button,
+#appShell .nav-pills a,
+#appShell .nav-pills button,
+#appShell .navbar-capsule a,
+#appShell .navbar-capsule button {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: #ffffff !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}
+
+#appShell .floating-nav-capsule a:hover,
+#appShell .floating-nav-capsule button:hover,
+#appShell .sidebar-nav a:hover,
+#appShell .sidebar-nav button:hover,
+#appShell .nav-pills a:hover,
+#appShell .nav-pills button:hover,
+#appShell .navbar-capsule a:hover,
+#appShell .navbar-capsule button:hover {
+  background: rgba(212, 175, 55, 0.22) !important;
+  border-color: #c5a059 !important;
+  color: #ffffff !important;
+}
+
+#appShell .floating-nav-capsule .active,
+#appShell .floating-nav-capsule [aria-current="page"],
+#appShell .sidebar-nav .active,
+#appShell .sidebar-nav [aria-current="page"],
+#appShell .nav-pills .active,
+#appShell .nav-pills [aria-current="page"],
+#appShell .navbar-capsule .active,
+#appShell .navbar-capsule [aria-current="page"] {
+  background: #b8903c !important;
+  border-color: #d4af37 !important;
+  color: #ffffff !important;
+}
+
+#appShell .floating-nav-capsule .active *,
+#appShell .sidebar-nav .active *,
+#appShell .nav-pills .active *,
+#appShell .navbar-capsule .active * {
+  color: #ffffff !important;
+}
+
+#appShell .header-brand,
+#appShell .brand-title,
+#appShell .client-brand,
+#appShell .institution-name {
+  color: #ffffff !important;
+}
+
+/* Únicamente las acciones de regreso llevan texto negro */
+#appShell .back-to-users,
+#appShell .back-to-avaluos,
+#appShell .back-to-home,
+#appShell .back-button,
+#appShell .return-button,
+#appShell [data-users-back],
+#appShell [data-back],
+#appShell [data-action="back"] {
+  color: #000000 !important;
+}
+
+#appShell .back-to-users *,
+#appShell .back-to-avaluos *,
+#appShell .back-to-home *,
+#appShell .back-button *,
+#appShell .return-button *,
+#appShell [data-users-back] *,
+#appShell [data-back] *,
+#appShell [data-action="back"] * {
+  color: #000000 !important;
+}
+
+@media (max-width: 900px) {
+  #appShell .floating-nav-capsule,
+  #appShell .sidebar-nav,
+  #appShell .nav-pills,
+  #appShell .navbar-capsule {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+
+  #appShell .floating-nav-capsule a,
+  #appShell .floating-nav-capsule button,
+  #appShell .sidebar-nav a,
+  #appShell .sidebar-nav button,
+  #appShell .nav-pills a,
+  #appShell .nav-pills button,
+  #appShell .navbar-capsule a,
+  #appShell .navbar-capsule button {
+    padding-inline: 10px !important;
+  }
+}
