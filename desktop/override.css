@@ -4947,3 +4947,60 @@ body.global-search-active #globalSearchBackdrop {
   #appShell.control-shell > .app-sidebar > .header-left-tools .global-search-wrap { width: min(210px, 44vw) !important; }
   #appShell.control-shell > .app-sidebar .sidebar-account-copy { display: none !important; }
 }
+
+
+/* Ajustes finales solicitados: header administrativo y marca del portal solicitante. */
+#appShell.control-shell > .app-sidebar > .sidebar-footer {
+  padding-left: 20px !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell > .app-sidebar .profile-menu-wrap {
+  position: relative !important;
+}
+#appShell.control-shell > .app-sidebar .profile-menu {
+  position: absolute !important;
+  top: calc(100% + 8px) !important;
+  left: 0 !important;
+  right: auto !important;
+  z-index: 9999 !important;
+  overflow: visible !important;
+}
+/* La navegación no queda dentro de una caja común; cada pestaña es independiente. */
+#appShell.control-shell > .app-sidebar > .sidebar-nav,
+#appShell.control-shell > .app-sidebar > .floating-nav-capsule {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 !important;
+  gap: 6px !important;
+  overflow: visible !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-nav .sidebar-link,
+#appShell.control-shell > .app-sidebar > .floating-nav-capsule .sidebar-link {
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 6px 14px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+/* Marca compacta del portal solicitante. */
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-brand strong {
+  color: #f4e8c9 !important;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+  font-size: 1.45rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel .client-brand span {
+  color: #d4af37 !important;
+  font-family: Inter, 'Segoe UI', sans-serif !important;
+  font-size: .62rem !important;
+  letter-spacing: .22em !important;
+}
