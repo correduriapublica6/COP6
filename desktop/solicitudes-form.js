@@ -13,6 +13,8 @@
   let archivosExistentesEnEdicion = [];
   let applicantRefreshTimer = null;
   let applicantRequestsCache = [];
+  const REQUEST_DRAFT_KEY = "control-avaluos.public-request-draft.v1";
+  let requestDraftTimer = null;
 
   const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
   async function api(endpoint, options = {}) {
@@ -145,6 +147,43 @@
   function setBusy(form, busy, label) { const button = form?.querySelector('button[type="submit"]'); if (!button) return; if (!button.dataset.defaultLabel) button.dataset.defaultLabel = button.textContent; button.disabled = busy; button.textContent = busy ? label : button.dataset.defaultLabel; }
   function requireFields(form, names) { const missing = names.find((name) => !String(form.elements[name]?.value || "").trim()); if (missing) { form.elements[missing]?.focus(); return false; } return true; }
   function getRequestForm() { return $("#publicRequestForm"); }
+  function saveRequestDraft() {
+    const form = getRequestForm();
+    if (!form || editingRequestId) return;
+    try {
+      const values = Object.fromEntries(new FormData(form).entries());
+      delete values.archivos;
+      localStorage.setItem(REQUEST_DRAFT_KEY, JSON.stringify({ values, savedAt: new Date().toISOString() }));
+    } catch {}
+  }
+  function scheduleRequestDraftSave() {
+    window.clearTimeout(requestDraftTimer);
+    requestDraftTimer = window.setTimeout(saveRequestDraft, 250);
+  }
+  function restoreRequestDraft() {
+    const form = getRequestForm();
+    if (!form || editingRequestId) return;
+    try {
+      const draft = JSON.parse(localStorage.getItem(REQUEST_DRAFT_KEY) || "null");
+      const values = draft?.values;
+      if (!values || typeof values !== "object") return;
+      Object.entries(values).forEach(([name, value]) => {
+        const field = form.elements[name];
+        if (field && typeof value === "string" && !field.readOnly) field.value = value;
+      });
+      if (form.elements.tipoAvaluo?.value) renderDynamicFields();
+      Object.entries(values).forEach(([name, value]) => {
+        const field = form.elements[name];
+        if (field && typeof value === "string" && !field.readOnly) field.value = value;
+      });
+      if (form.elements.tipoAvaluo?.value) fillNotaries();
+      setMessage($("#publicRequestMessage"), "Se restauró el borrador guardado localmente. Revisa los datos antes de enviar.", "success");
+    } catch {}
+  }
+  function clearRequestDraft() {
+    window.clearTimeout(requestDraftTimer);
+    try { localStorage.removeItem(REQUEST_DRAFT_KEY); } catch {}
+  }
   function resetRequestForm() {
     const form = getRequestForm();
     if (!form) return;
@@ -433,6 +472,7 @@
       const files = await readFiles(archivosSeleccionados);
       const payload = { solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo }, tipoAvaluo: values.tipoAvaluo, asesor: values.asesor, notaria: values.notaria || values.notariaReferida || "", modalidad: values.modalidadInmueble || "", datosEspecificos: values, archivos: [...archivosExistentesEnEdicion, ...files], contactoVisita: { nombre: values.contactoVisitaNombre, telefono: values.contactoVisitaTelefono }, observaciones: values.observaciones, usuario_id: applicantSession?.id || values.usuario_id || "", requesterEmail: values.correo || applicantSession?.email || "" };
       const result = await api(editingRequestId ? `/service-requests/${encodeURIComponent(editingRequestId)}` : "/service-requests", { method: editingRequestId ? "PUT" : "POST", body: JSON.stringify(payload) });
+      clearRequestDraft();
       const actionLabel = editingRequestId ? "Solicitud actualizada" : "Solicitud registrada";
       setMessage(message, `${actionLabel} con folio ${result.folio}. Conserva este número para consultar el avance.`, "success");
       window.setTimeout(() => { resetRequestForm(); closeDialog(requestDialog); if (applicantSession) renderApplicantHomeRequests(); }, 2600);
@@ -609,12 +649,14 @@
     $("#publicRequestAttachments")?.addEventListener("change", (event) => addSelectedFiles(event.target.files));
     window.addEventListener("control-avaluos:notarias-updated", () => { if (selectedNotaryValue() || $("#requestNotaryMunicipality")) renderNotarySearch(selectedNotaryValue()); });
     $("#publicRequestForm")?.addEventListener("submit", submitPublicRequest);
+    $("#publicRequestForm")?.addEventListener("input", scheduleRequestDraftSave);
+    $("#publicRequestForm")?.addEventListener("change", scheduleRequestDraftSave);
     $("#applicantRegisterForm")?.addEventListener("submit", registerApplicant);
     $("#applicantLoginForm")?.addEventListener("submit", loginApplicant);
     $("#closeApplicantRequestsButton")?.addEventListener("click", () => closeDialog(applicantRequestsDialog));
     $("#cancelApplicantRequestsButton")?.addEventListener("click", () => closeDialog(applicantRequestsDialog));
-    $("#newApplicantRequestButton")?.addEventListener("click", () => { closeDialog(applicantRequestsDialog); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
-    $("#openPublicRequestButton")?.addEventListener("click", () => { applicantSession = null; resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
+    $("#newApplicantRequestButton")?.addEventListener("click", () => { closeDialog(applicantRequestsDialog); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
+    $("#openPublicRequestButton")?.addEventListener("click", () => { applicantSession = null; resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
     $("#openApplicantRegisterButton")?.addEventListener("click", () => { setMessage($("#applicantRegisterMessage"), ""); openDialog(applicantRegisterDialog); });
     $("#openApplicantLoginButton")?.addEventListener("click", () => applicantSession ? showApplicantHome() : openDialog(applicantLoginDialog));
     ["closePublicRequestButton", "cancelPublicRequestButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(requestDialog)));
@@ -624,10 +666,11 @@
     $("#openRequestsViewButton")?.addEventListener("click", () => $("[data-app-view=solicitudes]")?.click());
     $("#backRequestsToAvaluosButton")?.addEventListener("click", () => $("[data-app-view=avaluos]")?.click());
     $("#applicantProfileForm")?.addEventListener("submit", saveApplicantProfile);
-    $("#applicantHomeNewRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
+    $("#applicantHomeNewRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
     $("#applicantRequestSearchInput")?.addEventListener("input", filterApplicantRequests);
     $("#applicantRequestStatusFilter")?.addEventListener("change", filterApplicantRequests);
-    $("#applicantVisualNewRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
+    $("#applicantVisualNewRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
+    window.addEventListener("pagehide", saveRequestDraft);
     $("#applicantVisualProfileButton")?.addEventListener("click", openApplicantProfile);
     $("#applicantHomeProfileButton")?.addEventListener("click", openApplicantProfile);
     $("#closeApplicantProfileButton")?.addEventListener("click", () => closeDialog($("#applicantProfileDialog")));

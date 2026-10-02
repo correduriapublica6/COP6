@@ -1162,6 +1162,17 @@
   const selectObserver = new MutationObserver(enhanceAllSelects);
   selectObserver.observe(document.body, { childList: true, subtree: true });
   enhanceAllSelects();
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      const activeForm = document.querySelector("#publicRequestForm:not([hidden])") || document.querySelector("form:focus-within");
+      const message = document.querySelector("#publicRequestMessage") || document.querySelector("#formMessage");
+      if (activeForm && message) {
+        message.textContent = "Hay una actualización disponible. Tus datos siguen en esta pantalla; termina o guarda el formulario antes de recargar.";
+        message.className = "form-message is-success";
+        message.hidden = false;
+      }
+    });
+  }
   loginForm.addEventListener("submit", authenticate);
   loginUser.addEventListener("change", syncCredentialSetupVisibility);
   $("#openInternalAccessButton").addEventListener("click", () => { loginMessage.textContent = ""; loginPassword.value = ""; syncCredentialSetupVisibility(); adminAccessDialog.showModal(); window.setTimeout(() => loginUser.focus(), 40); });
