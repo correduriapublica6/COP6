@@ -4783,3 +4783,167 @@ body.global-search-active #globalSearchBackdrop {
   border-color: #ef9a9a !important;
   color: #ffffff !important;
 }
+
+/* Header administrativo: usuario a la izquierda, navegación al centro y búsqueda a la derecha. */
+#appShell.control-shell > .app-sidebar {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  width: 100% !important;
+  min-height: 72px !important;
+  height: 72px !important;
+  padding: 0 18px !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-footer {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  justify-self: start !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  order: initial !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-nav,
+#appShell.control-shell > .app-sidebar > .floating-nav-capsule {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  justify-self: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  width: max-content !important;
+  max-width: calc(100vw - 560px) !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 4px 8px !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  order: initial !important;
+}
+#appShell.control-shell > .app-sidebar > .header-left-tools {
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+  justify-self: end !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  order: initial !important;
+}
+#appShell.control-shell > .app-sidebar > .header-left-tools .global-search-wrap {
+  width: min(260px, 24vw) !important;
+  min-width: 150px !important;
+  margin: 0 !important;
+}
+/* La información del usuario permanece agrupada y pegada al lado izquierdo. */
+#appShell.control-shell > .app-sidebar .header-tools {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+#appShell.control-shell > .app-sidebar .sidebar-account { order: 2 !important; }
+#appShell.control-shell > .app-sidebar #alertsButton { order: 3 !important; }
+#appShell.control-shell > .app-sidebar .profile-menu-wrap { order: 1 !important; }
+#appShell.control-shell > .app-sidebar .sidebar-account-copy {
+  align-items: flex-start !important;
+  text-align: left !important;
+}
+#appShell.control-shell > .app-sidebar .active-user,
+#appShell.control-shell > .app-sidebar .active-user-role,
+#appShell.control-shell > .app-sidebar .sidebar-online {
+  text-align: left !important;
+  white-space: nowrap !important;
+}
+/* Navegación central: activo sólido dorado; inactivos transparentes con borde dorado. */
+#appShell.control-shell > .app-sidebar > .sidebar-nav .sidebar-link,
+#appShell.control-shell > .app-sidebar > .floating-nav-capsule .sidebar-link {
+  background: transparent !important;
+  border: 1px solid rgba(197, 160, 89, .78) !important;
+  border-radius: 8px !important;
+  color: #f4e8c9 !important;
+  font-weight: 700 !important;
+  margin: 0 3px !important;
+  padding: 7px 11px !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-nav .sidebar-link:hover,
+#appShell.control-shell > .app-sidebar > .floating-nav-capsule .sidebar-link:hover,
+#appShell.control-shell > .app-sidebar > .sidebar-nav .sidebar-link.is-active,
+#appShell.control-shell > .app-sidebar > .floating-nav-capsule .sidebar-link.is-active {
+  background: #b8903c !important;
+  border-color: #e5c158 !important;
+  color: #1a1a1a !important;
+  box-shadow: 0 5px 12px rgba(120, 86, 20, .24) !important;
+}
+#appShell.control-shell > .app-sidebar > .sidebar-nav .sidebar-link span,
+#appShell.control-shell > .app-sidebar > .floating-nav-capsule .sidebar-link span {
+  color: inherit !important;
+}
+/* Variante secundaria para controles; acciones primarias permanecen en dorado sólido. */
+#appShell.control-shell .secondary-button.btn-copu-primary,
+#appShell.control-shell .subtle-action-button.btn-copu-primary,
+#appShell.control-shell .back-to-users.btn-copu-primary,
+#appShell.control-shell .back-to-avaluos.btn-copu-primary {
+  background: transparent !important;
+  border: 1px solid rgba(197, 160, 89, .82) !important;
+  color: #f4e8c9 !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell .secondary-button.btn-copu-primary:hover,
+#appShell.control-shell .subtle-action-button.btn-copu-primary:hover,
+#appShell.control-shell .back-to-users.btn-copu-primary:hover,
+#appShell.control-shell .back-to-avaluos.btn-copu-primary:hover {
+  background: #b8903c !important;
+  border-color: #e5c158 !important;
+  color: #1a1a1a !important;
+  box-shadow: 0 7px 16px rgba(120, 86, 20, .22) !important;
+}
+#appShell.control-shell #newRecordButton.btn-copu-primary,
+#appShell.control-shell #newTechnicalAppraisalButton.btn-copu-primary,
+#appShell.control-shell #newInternalRequestButton.btn-copu-primary,
+#appShell.control-shell #generateInlineReportButton.btn-copu-primary,
+#appShell.control-shell #exportCsvSettingsButton.btn-copu-primary,
+#appShell.control-shell #importDataButton.btn-copu-primary {
+  background: linear-gradient(135deg, #b8903c 0%, #d4af37 50%, #e5c158 100%) !important;
+  border-color: #e5c158 !important;
+  color: #1a1a1a !important;
+}
+@media (max-width: 1050px) {
+  #appShell.control-shell > .app-sidebar > .sidebar-nav,
+  #appShell.control-shell > .app-sidebar > .floating-nav-capsule { max-width: 46vw !important; }
+  #appShell.control-shell > .app-sidebar > .header-left-tools .global-search-wrap { width: min(220px, 22vw) !important; }
+}
+@media (max-width: 760px) {
+  #appShell.control-shell > .app-sidebar {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-rows: auto auto !important;
+    height: auto !important;
+    min-height: 86px !important;
+    row-gap: 7px !important;
+    padding: 8px 12px !important;
+  }
+  #appShell.control-shell > .app-sidebar > .sidebar-footer { grid-column: 1 !important; grid-row: 1 !important; }
+  #appShell.control-shell > .app-sidebar > .header-left-tools { grid-column: 2 !important; grid-row: 1 !important; }
+  #appShell.control-shell > .app-sidebar > .sidebar-nav,
+  #appShell.control-shell > .app-sidebar > .floating-nav-capsule {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    justify-self: center !important;
+    max-width: 100% !important;
+  }
+  #appShell.control-shell > .app-sidebar > .header-left-tools .global-search-wrap { width: min(210px, 44vw) !important; }
+  #appShell.control-shell > .app-sidebar .sidebar-account-copy { display: none !important; }
+}
