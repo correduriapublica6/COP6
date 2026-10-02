@@ -4656,22 +4656,21 @@ body.global-search-active #globalSearchBackdrop {
 .mobiliario-replacement-summary th:nth-child(8), .mobiliario-replacement-summary td:nth-child(8) { width: 16% !important; }
 .mobiliario-replacement-summary input { min-width: 0 !important; width: 100% !important; padding: 5px 4px !important; font-size: 0.78rem !important; }
 
-/* Estilo de Botón Moderno - Button 86
+/* Estilo de Botón Moderno - Button Custom
    Aplicado únicamente a acciones administrativas; Home y Login conservan su diseño. */
-.button-86 {
+.button-custom {
   all: unset;
   width: auto;
-  height: 36px;
-  box-sizing: border-box;
+  height: 38px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
+  color: #ffffff !important;
   background: transparent;
   border: none;
   position: relative;
-  color: #f0f0f0;
   cursor: pointer;
   z-index: 1;
-  padding: 8px 18px;
+  padding: 8px 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -4679,60 +4678,69 @@ body.global-search-active #globalSearchBackdrop {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  box-sizing: border-box;
   line-height: 1;
 }
-.button-86::after,
-.button-86::before {
+.button-custom::before {
   content: '';
   position: absolute;
-  bottom: 0;
-  right: 0;
-  z-index: -1;
-  transition: all .4s ease;
-}
-.button-86::before {
-  transform: translate(0%, 0%);
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: #28282d;
-  border-radius: 10px;
+  background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5468ff 100%);
+  border-radius: 8px;
+  box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,
+    rgba(45, 35, 66, .3) 0 7px 13px -3px,
+    rgba(58, 65, 111, .5) 0 -3px 0 inset;
+  z-index: -2;
+  transition: all .3s ease;
 }
-.button-86::after {
-  transform: translate(8px, 8px);
-  width: 30px;
-  height: 30px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+.button-custom::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border-radius: 50px;
+  z-index: -1;
+  transition: all .35s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.button-86:hover::before {
-  transform: translate(2%, 10%);
-  width: 104%;
-  height: 104%;
+.button-custom:hover::before {
+  box-shadow: rgba(45, 35, 66, .4) 0 4px 10px,
+    rgba(45, 35, 66, .3) 0 7px 13px -3px,
+    #3c4fe0 0 -3px 0 inset;
+  transform: translateY(-2px);
 }
-.button-86:hover::after {
-  border-radius: 10px;
+.button-custom:hover::after {
+  border-radius: 8px;
   transform: translate(0, 0);
   width: 100%;
   height: 100%;
+  bottom: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.15);
 }
-.button-86:active::after {
-  transition: 0s;
-  transform: translate(0, 5%);
+.button-custom:active::before {
+  transform: translateY(1px);
+  box-shadow: #3c4fe0 0 3px 7px inset;
 }
-.button-86:focus-visible {
-  outline: 2px solid #c5a059;
+.button-custom:focus-visible {
+  outline: 2px solid #5adaff;
   outline-offset: 3px;
 }
-.button-86:disabled,
-.button-86.is-hidden {
+.button-custom:disabled,
+.button-custom.is-hidden {
   pointer-events: none;
   opacity: .55;
 }
 /* Las acciones iconográficas de tablas conservan su tamaño compacto. */
-.request-icon-button.button-86,
-.record-action.button-86,
-.technical-icon-button.button-86 {
+.request-icon-button.button-custom,
+.record-action.button-custom,
+.technical-icon-button.button-custom {
   all: revert;
 }
