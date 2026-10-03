@@ -14,7 +14,11 @@
   let archivosSeleccionados = [];
   let archivosExistentesEnEdicion = [];
   let applicantRefreshTimer = null;
+  let applicantNotificationTimer = null;
   let applicantRequestsCache = [];
+  let applicantNotifications = [];
+  let applicantHighlightRequestId = "";
+  const APPLICANT_APP_VERSION_KEY = "control-avaluos.app_version.applicant";
   const REQUEST_DRAFT_KEY = "control-avaluos.public-request-draft.v1";
   let requestDraftTimer = null;
 
@@ -240,9 +244,45 @@
   function applicantRequestAssetType(item) { return item.tipoBien || item.datosEspecificos?.tipoBien || item.datosEspecificos?.tipoBienSolicitado || item.modalidad || item.datosEspecificos?.modalidadInmueble || "No especificado"; }
   function applicantRequestAppraisalType(item) { return item.modalidad || item.datosEspecificos?.modalidadInmueble || item.datosEspecificos?.tipoAvaluo || item.tipoAvaluo || "No especificado"; }
   function applicantPdfUrl(item) { return apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || ""); }
+  function renderApplicantNotifications() {
+    const list = $("#applicantNotificationsList");
+    const count = $("#applicantNotificationsCount");
+    if (!list) return;
+    const unread = applicantNotifications.filter((item) => !item.leida).length;
+    if (count) { count.textContent = String(unread); count.hidden = unread < 1; }
+    list.innerHTML = applicantNotifications.length ? applicantNotifications.slice(0, 50).map((item) => `<button type="button" class="applicant-notification-item${item.leida ? " is-read" : ""}" data-applicant-notification-id="${escapeHtml(item.id)}"><span class="applicant-notification-icon">${item.tipo === "cambio_estatus" ? "↻" : item.tipo === "actualizacion" ? "↻" : "✓"}</span><span><strong>${escapeHtml(item.titulo)}</strong><small>${escapeHtml(item.mensaje)}<br />${escapeHtml(requestDate(item.created_at))}</small></span></button>`).join("") : "<p>No hay notificaciones.</p>";
+    list.querySelectorAll("[data-applicant-notification-id]").forEach((button) => button.addEventListener("click", async () => {
+      const item = applicantNotifications.find((candidate) => candidate.id === button.dataset.applicantNotificationId);
+      if (!item) return;
+      try {
+        await api(`/notifications/${encodeURIComponent(item.id)}/read`, { method: "PUT" });
+        item.leida = true;
+        renderApplicantNotifications();
+        if (item.url_destino === "app://refresh") { const version = item.mensaje.match(/app_version:([^\)]+)/)?.[1] || ""; if (version) localStorage.setItem(APPLICANT_APP_VERSION_KEY, version); window.location.reload(true); return; }
+        if (item.tipo === "cambio_estatus" && item.url_destino?.startsWith("solicitud:")) {
+          applicantHighlightRequestId = item.url_destino.slice("solicitud:".length);
+          $("#applicantNotificationsPanel").hidden = true;
+          $("#applicantNotificationsButton")?.setAttribute("aria-expanded", "false");
+          filterApplicantRequests();
+          window.setTimeout(() => { const row = document.querySelector(`[data-applicant-request-row="${CSS.escape(applicantHighlightRequestId)}"]`); row?.scrollIntoView({ behavior: "smooth", block: "center" }); }, 80);
+        }
+      } catch (error) { window.alert(error.message || "No fue posible marcar la notificación."); }
+    }));
+  }
+  async function refreshApplicantNotifications() {
+    if (!applicantSession) return;
+    try {
+      const clientVersion = localStorage.getItem(APPLICANT_APP_VERSION_KEY) || "";
+      const serverVersion = await api("/app-version");
+      if (serverVersion?.version && clientVersion && clientVersion !== serverVersion.version) await api("/notifications/system-version", { method: "POST", body: JSON.stringify({ clientVersion }) });
+      if (serverVersion?.version) localStorage.setItem(APPLICANT_APP_VERSION_KEY, serverVersion.version);
+      applicantNotifications = await api("/notifications");
+      renderApplicantNotifications();
+    } catch { /* Se conserva el contador anterior durante una caída momentánea. */ }
+  }
   function applicantOwnRequestsTable(list) {
     if (!list.length) return `<div class="client-empty-state"><div class="client-empty-icon">＋</div><h4>Aún no tienes solicitudes</h4><p>Inicia tu primer trámite y consulta aquí todo su avance.</p><button type="button" class="client-primary-button btn-copu-primary" id="clientEmptyNewRequest">Solicitar un servicio</button></div>`;
-    return `<div class="client-request-table-wrap"><table class="client-request-table"><thead><tr><th>Folio</th><th>Tipo de bien</th><th>Tipo de avalúo</th><th>Propietario</th><th>Estatus</th><th>Detalles</th><th>PDF</th></tr></thead><tbody>${list.map((item) => { const group=applicantRequestStatusGroup(item.estado); const pdf=applicantPdfUrl(item); const pdfAction=pdf ? `<a class="client-pdf-link" href="${escapeHtml(pdf)}" target="_blank" rel="noopener" download>⇩</a>` : `<span class="client-pdf-disabled" title="Avalúo en proceso">En proceso</span>`; return `<tr><td><strong>${escapeHtml(item.folio || "Pendiente")}</strong></td><td>${escapeHtml(applicantRequestAssetType(item))}</td><td>${escapeHtml(applicantRequestAppraisalType(item))}</td><td>${escapeHtml(applicantRequestOwner(item))}</td><td><span class="client-status-badge client-status-${requestStatusClass(item.estado)}">${escapeHtml(item.estado || "Recibida")}</span></td><td><button type="button" class="client-table-view-button" data-request-detail="${escapeHtml(item.id)}">Detalles</button></td><td class="client-pdf-cell">${pdfAction}</td></tr>`; }).join("")}</tbody></table></div>`;
+    return `<div class="client-request-table-wrap"><table class="client-request-table"><thead><tr><th>Folio</th><th>Tipo de bien</th><th>Tipo de avalúo</th><th>Propietario</th><th>Estatus</th><th>Detalles</th><th>PDF</th></tr></thead><tbody>${list.map((item) => { const group=applicantRequestStatusGroup(item.estado); const pdf=applicantPdfUrl(item); const pdfAction=pdf ? `<a class="client-pdf-link" href="${escapeHtml(pdf)}" target="_blank" rel="noopener" download>⇩</a>` : `<span class="client-pdf-disabled" title="Avalúo en proceso">En proceso</span>`; return `<tr data-applicant-request-row="${escapeHtml(item.id)}" class="${applicantHighlightRequestId === item.id ? "is-notification-highlight" : ""}"><td><strong>${escapeHtml(item.folio || "Pendiente")}</strong></td><td>${escapeHtml(applicantRequestAssetType(item))}</td><td>${escapeHtml(applicantRequestAppraisalType(item))}</td><td>${escapeHtml(applicantRequestOwner(item))}</td><td><span class="client-status-badge client-status-${requestStatusClass(item.estado)}">${escapeHtml(item.estado || "Recibida")}</span></td><td><button type="button" class="client-table-view-button" data-request-detail="${escapeHtml(item.id)}">Detalles</button></td><td class="client-pdf-cell">${pdfAction}</td></tr>`; }).join("")}</tbody></table></div>`;
   }
   function filterApplicantRequests() {
     const query=String($("#applicantRequestSearchInput")?.value || "").trim().toLowerCase(); const status=$("#applicantRequestStatusFilter")?.value || "";
@@ -260,6 +300,7 @@
     home.hidden = false;
     $("#loginScreen")?.classList.add("applicant-dashboard-active");
     if (!applicantRefreshTimer) applicantRefreshTimer = window.setInterval(() => renderApplicantHomeRequests(), 2500);
+    if (!applicantNotificationTimer) applicantNotificationTimer = window.setInterval(() => refreshApplicantNotifications(), 10000);
     $("#loginVisualBrand")?.setAttribute("hidden", "true");
     $("#applicantVisualPanel")?.setAttribute("hidden", "true");
     $("#openInternalAccessButton")?.setAttribute("hidden", "true");
@@ -269,6 +310,7 @@
     $("#applicantWelcomeContact").textContent = [applicantSession.phone, applicantSession.email].filter(Boolean).join(" · ");
     $("#publicRequestForm")?.elements.correo && ($("#publicRequestForm").elements.correo.readOnly = true);
     renderApplicantHomeRequests();
+    refreshApplicantNotifications();
   }
   function showPublicEntry() {
     const content = $(".public-entry-content");
@@ -276,6 +318,9 @@
     if (content) content.hidden = false;
     if (home) home.hidden = true;
     if (applicantRefreshTimer) { window.clearInterval(applicantRefreshTimer); applicantRefreshTimer = null; }
+    if (applicantNotificationTimer) { window.clearInterval(applicantNotificationTimer); applicantNotificationTimer = null; }
+    applicantNotifications = [];
+    renderApplicantNotifications();
     $("#loginScreen")?.classList.remove("applicant-dashboard-active");
     $("#loginVisualBrand")?.removeAttribute("hidden");
     $("#applicantVisualPanel")?.setAttribute("hidden", "true");
@@ -686,6 +731,8 @@
     window.addEventListener("pagehide", saveRequestDraft);
     $("#applicantVisualProfileButton")?.addEventListener("click", openApplicantProfile);
     $("#applicantHomeProfileButton")?.addEventListener("click", openApplicantProfile);
+    $("#applicantNotificationsButton")?.addEventListener("click", () => { const panel = $("#applicantNotificationsPanel"), button = $("#applicantNotificationsButton"); if (!panel || !button) return; panel.hidden = !panel.hidden; button.setAttribute("aria-expanded", String(!panel.hidden)); if (!panel.hidden) { renderApplicantNotifications(); refreshApplicantNotifications(); } });
+    $("#applicantMarkNotificationsRead")?.addEventListener("click", async () => { try { await api("/notifications/read-all", { method: "PUT" }); applicantNotifications = applicantNotifications.map((item) => ({ ...item, leida: true })); renderApplicantNotifications(); } catch (error) { window.alert(error.message); } });
     $("#closeApplicantProfileButton")?.addEventListener("click", () => closeDialog($("#applicantProfileDialog")));
     $("#cancelApplicantProfileButton")?.addEventListener("click", () => closeDialog($("#applicantProfileDialog")));
     $("#applicantHomeLogoutButton")?.addEventListener("click", () => { applicantSession = null; sessionStorage.removeItem("control-avaluos.applicant"); showPublicEntry(); });

@@ -5920,3 +5920,145 @@ body,
   #appShell.control-shell > .app-sidebar > .header-left-tools { gap: 6px !important; }
   #appShell.control-shell > .app-sidebar > .header-left-tools .header-alerts-button { flex-basis: 28px !important; width: 28px !important; min-width: 28px !important; }
 }
+
+/* Portal externo: lienzo radial CP6 y centro de notificaciones del solicitante. */
+#loginScreen.applicant-dashboard-active,
+#loginScreen.applicant-dashboard-active .applicant-home-panel,
+#loginScreen.applicant-dashboard-active .client-dashboard-header {
+  background: radial-gradient(circle, #dcdcd6 0%, #a2a2a2 60%, #7d7d7d 100%) !important;
+  background-attachment: fixed !important;
+  background-size: cover !important;
+}
+#loginScreen.applicant-dashboard-active .applicant-home-panel {
+  min-height: 100vh !important;
+  color: #1a1a1a !important;
+}
+#loginScreen.applicant-dashboard-active .client-dashboard-header {
+  position: relative !important;
+  background: #111827 !important;
+  border-bottom: 2px solid #c5a059 !important;
+  box-shadow: 0 8px 24px rgba(15,23,42,.18) !important;
+}
+#loginScreen.applicant-dashboard-active .client-header-actions {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+#loginScreen.applicant-dashboard-active .applicant-notifications-button {
+  position: relative !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  padding: 6px !important;
+  border: 1px solid rgba(255,255,255,.72) !important;
+  border-radius: 9px !important;
+  background: transparent !important;
+  color: #fff !important;
+  cursor: pointer !important;
+}
+#loginScreen.applicant-dashboard-active .applicant-notifications-button:hover {
+  background: #fff !important;
+  color: #111827 !important;
+}
+#loginScreen.applicant-dashboard-active .applicant-notifications-button svg {
+  width: 21px !important;
+  height: 21px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  stroke-width: 1.8 !important;
+}
+#loginScreen.applicant-dashboard-active .applicant-notifications-button b {
+  position: absolute !important;
+  top: -6px !important;
+  right: -6px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  min-width: 17px !important;
+  height: 17px !important;
+  padding: 0 4px !important;
+  border-radius: 999px !important;
+  background: #dc2626 !important;
+  color: #fff !important;
+  font: 700 10px/1 system-ui, sans-serif !important;
+}
+#loginScreen.applicant-dashboard-active .applicant-notifications-panel {
+  position: absolute !important;
+  top: calc(100% + 10px) !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  width: min(390px, calc(100vw - 28px)) !important;
+  max-height: min(480px, calc(100vh - 100px)) !important;
+  overflow: hidden !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  box-shadow: 0 18px 45px rgba(15,23,42,.25) !important;
+  color: #1e293b !important;
+}
+#loginScreen.applicant-dashboard-active .applicant-notifications-heading {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  padding: 14px 16px !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+#loginScreen.applicant-dashboard-active .applicant-notifications-heading strong { font: 700 15px/1.2 Inter, system-ui, sans-serif !important; }
+#loginScreen.applicant-dashboard-active .applicant-notifications-heading button {
+  border: 0 !important;
+  background: transparent !important;
+  color: #8b6f39 !important;
+  cursor: pointer !important;
+  font: 700 11px/1.2 Inter, system-ui, sans-serif !important;
+}
+#loginScreen.applicant-dashboard-active .applicant-notifications-list {
+  max-height: 410px !important;
+  overflow-y: auto !important;
+}
+#loginScreen.applicant-dashboard-active .applicant-notifications-list > p { margin: 0 !important; padding: 24px 16px !important; color: #64748b !important; text-align: center !important; }
+#loginScreen.applicant-dashboard-active .applicant-notification-item {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  width: 100% !important;
+  padding: 13px 15px !important;
+  border: 0 !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  background: #fff !important;
+  color: #1e293b !important;
+  cursor: pointer !important;
+  text-align: left !important;
+}
+#loginScreen.applicant-dashboard-active .applicant-notification-item:hover { background: #f8fafc !important; }
+#loginScreen.applicant-dashboard-active .applicant-notification-item.is-read { opacity: .58 !important; }
+#loginScreen.applicant-dashboard-active .applicant-notification-icon {
+  display: inline-grid !important;
+  flex: 0 0 28px !important;
+  width: 28px !important;
+  height: 28px !important;
+  place-items: center !important;
+  border-radius: 9px !important;
+  background: #fef3c7 !important;
+  color: #8b6f39 !important;
+  font-weight: 800 !important;
+}
+#loginScreen.applicant-dashboard-active .applicant-notification-item strong,
+#loginScreen.applicant-dashboard-active .applicant-notification-item small { display: block !important; }
+#loginScreen.applicant-dashboard-active .applicant-notification-item strong { margin-bottom: 4px !important; color: #1e293b !important; font: 700 13px/1.25 Inter, system-ui, sans-serif !important; }
+#loginScreen.applicant-dashboard-active .applicant-notification-item small { color: #64748b !important; font: 400 12px/1.45 Inter, system-ui, sans-serif !important; }
+#loginScreen.applicant-dashboard-active .client-request-table tbody tr.is-notification-highlight td {
+  background: #fffbeb !important;
+  box-shadow: inset 0 3px 0 #d4af37, inset 0 -3px 0 #d4af37 !important;
+}
+#loginScreen.applicant-dashboard-active .client-request-table tbody tr.is-notification-highlight td:first-child { box-shadow: inset 3px 0 0 #d4af37, inset 0 3px 0 #d4af37, inset 0 -3px 0 #d4af37 !important; }
+#loginScreen.applicant-dashboard-active .client-request-table tbody tr.is-notification-highlight td:last-child { box-shadow: inset -3px 0 0 #d4af37, inset 0 3px 0 #d4af37, inset 0 -3px 0 #d4af37 !important; }
+@media (max-width: 640px) {
+  #loginScreen.applicant-dashboard-active .client-header-actions { gap: 7px !important; }
+  #loginScreen.applicant-dashboard-active .client-header-actions > div:not(.applicant-notifications-panel) { max-width: 130px !important; }
+  #loginScreen.applicant-dashboard-active .client-header-actions .client-logout-button { padding-inline: 8px !important; }
+  #loginScreen.applicant-dashboard-active .applicant-notifications-panel { right: -8px !important; }
+}

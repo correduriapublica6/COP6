@@ -21,9 +21,9 @@
     <meta name="twitter:description" content="Plaza Coahuila">
     <meta name="twitter:image" content="https://cp6coahuila.com/desktop/preview.png">
 
-    <link rel="stylesheet" href="styles.css?v=20261003-1215" />
+    <link rel="stylesheet" href="styles.css?v=20261003-1335" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261003-1215" />
+    <link rel="stylesheet" href="override.css?v=20261003-1335" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -41,7 +41,7 @@
         <section id="applicantHomePanel" class="applicant-home-panel" hidden aria-labelledby="applicantWelcomeTitle">
   <header class="client-dashboard-header">
     <div class="client-brand"><div><strong>CP6</strong><span>MI PORTAL</span></div></div>
-    <div class="client-header-actions"><div><small>Bienvenido</small><strong id="applicantWelcomeName">solicitante</strong></div><button id="applicantHomeProfileButton" class="client-logout-button" type="button">Editar perfil</button><button id="applicantHomeLogoutButton" class="client-logout-button" type="button">Cerrar sesión</button></div>
+    <div class="client-header-actions"><button id="applicantNotificationsButton" class="applicant-notifications-button" type="button" aria-label="Notificaciones" aria-expanded="false"><span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg></span><b id="applicantNotificationsCount" hidden>0</b></button><div><small>Bienvenido</small><strong id="applicantWelcomeName">solicitante</strong></div><button id="applicantHomeProfileButton" class="client-logout-button" type="button">Editar perfil</button><button id="applicantHomeLogoutButton" class="client-logout-button" type="button">Cerrar sesión</button><div id="applicantNotificationsPanel" class="applicant-notifications-panel" hidden><div class="applicant-notifications-heading"><strong>Notificaciones</strong><button id="applicantMarkNotificationsRead" type="button">Marcar como leídas</button></div><div id="applicantNotificationsList" class="applicant-notifications-list"><p>No hay notificaciones.</p></div></div></div>
   </header>
   <div class="client-dashboard-intro client-dashboard-intro-actions"><button id="applicantHomeNewRequestButton" class="client-primary-button" type="button">+ Solicitar un servicio</button></div>
   <section class="client-welcome-card" aria-label="Bienvenida"><div><h3 class="client-welcome-title">¡Hola, <strong id="applicantWelcomeNameMessage">Kenneth</strong>!</h3><p class="client-welcome-message">Bienvenido a tu portal de trámites. Aquí puedes consultar el estado de tus avalúos en tiempo real y gestionar tus solicitudes.</p></div></section>
@@ -236,16 +236,16 @@
     </main>
 
     <dialog id="reportDialog" class="record-dialog report-dialog"><form id="reportForm" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">REPORTE GENERAL</p><h2>Selecciona el periodo</h2></div><button id="closeReportDialogButton" class="icon-button" type="button" aria-label="Cerrar">×</button></div><p class="report-dialog-copy">Para generar un resumen primero selecciona las fechas y da clic en Generar resumen PDF.</p><div class="form-grid"><label>Desde *<input id="reportStartDate" type="date" required /></label><label>Hasta *<input id="reportEndDate" type="date" required /></label></div><p id="reportMessage" class="form-message" role="alert"></p><div class="dialog-actions"><button id="cancelReportDialogButton" class="secondary-button btn-copu-primary" type="button">Cancelar</button><button class="primary-button" type="submit">Generar resumen PDF</button></div></form></dialog>
-    <script src="automotriz-model.js?v=20261003-1215"></script>
-    <script src="app.js?v=20261003-1215"></script>
-    <script src="image-utils.js?v=20261003-1215"></script>
-    <script src="vendor/html-docx.js?v=20261003-1215"></script>
-    <script src="word-export.js?v=20261003-1215"></script>
+    <script src="automotriz-model.js?v=20261003-1335"></script>
+    <script src="app.js?v=20261003-1335"></script>
+    <script src="image-utils.js?v=20261003-1335"></script>
+    <script src="vendor/html-docx.js?v=20261003-1335"></script>
+    <script src="word-export.js?v=20261003-1335"></script>
     <script>
       if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
     </script>
-    <script src="automotriz-form.js?v=20261003-1215"></script>
-    <script src="mobiliario-form.js?v=20261003-1215"></script>
-    <script src="solicitudes-form.js?v=20261003-1215"></script>
+    <script src="automotriz-form.js?v=20261003-1335"></script>
+    <script src="mobiliario-form.js?v=20261003-1335"></script>
+    <script src="solicitudes-form.js?v=20261003-1335"></script>
   </body>
 </html>
