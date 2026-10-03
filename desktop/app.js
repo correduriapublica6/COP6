@@ -37,6 +37,7 @@
   let pendingCredentialAuthorization = null;
   let editingId = null;
   let serverMonitorId = null;
+  let versionMonitorId = null;
 
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -669,12 +670,31 @@
     if (!activeSessionUser || !serverOnline) return;
     try {
       const clientVersion = localStorage.getItem("app_version") || "";
-      const versionResponse = await apiRequest("/app-version");
+      const versionResponse = await apiRequest("/version");
+      if (versionResponse?.version && !clientVersion) localStorage.setItem("app_version", versionResponse.version);
       if (versionResponse?.version && clientVersion && clientVersion !== versionResponse.version) await apiRequest("/notifications/system-version", { method: "POST", body: JSON.stringify({ clientVersion }) });
-      if (versionResponse?.version) localStorage.setItem("app_version", versionResponse.version);
       notifications = await apiRequest("/notifications");
       renderAlerts();
     } catch { /* La interfaz conserva la última lectura local si el servidor está reiniciando. */ }
+  }
+  async function checkAppVersion() {
+    try {
+      const response = await apiRequest("/version");
+      const serverVersion = String(response?.version || "").trim();
+      if (!serverVersion) return;
+      const clientVersion = localStorage.getItem("app_version") || "";
+      if (!clientVersion) { localStorage.setItem("app_version", serverVersion); return; }
+      if (clientVersion !== serverVersion && activeSessionUser) {
+        await apiRequest("/notifications/system-version", { method: "POST", body: JSON.stringify({ clientVersion }) });
+        notifications = await apiRequest("/notifications");
+        renderAlerts();
+      }
+    } catch { /* El servidor puede estar reiniciándose; se reintentará en la siguiente revisión. */ }
+  }
+  function startVersionMonitor() {
+    if (versionMonitorId) return;
+    checkAppVersion();
+    versionMonitorId = window.setInterval(() => { if (!document.hidden) checkAppVersion(); }, 5 * 60 * 1000);
   }
   function bindHomeIntelligence() { document.body.classList.remove("global-search-active"); const searchInput=$("#globalSearchInput"), palette=$("#globalSearchPalette"), searchWrap=searchInput?.closest(".global-search-wrap"); let searchBackdrop=document.querySelector("#globalSearchBackdrop"); if (palette && searchWrap && palette.parentElement !== searchWrap) searchWrap.appendChild(palette); if (!searchBackdrop) { searchBackdrop=document.createElement("div"); searchBackdrop.id="globalSearchBackdrop"; searchBackdrop.hidden=true; (document.querySelector("#appShell") || document.body).appendChild(searchBackdrop); } const setSearchActive=(active)=>{ palette.hidden=!active; searchBackdrop.hidden=true; document.body.classList.toggle("global-search-active", active); }; window.__setGlobalSearchActive=setSearchActive; searchInput?.addEventListener("input", event=>{ const value=event.target.value.trim(); if (value) { searchGlobal(value); setSearchActive(true); } else setSearchActive(false); }); searchInput?.addEventListener("focus", ()=>{ if (searchInput.value.trim()) setSearchActive(true); }); searchInput?.addEventListener("keydown", event=>{ if (event.key === "Escape") { searchInput.value=""; setSearchActive(false); searchInput.blur(); } }); searchBackdrop.addEventListener("click", ()=>{ setSearchActive(false); }); $("#alertsButton")?.addEventListener("click",()=>{const panel=$("#alertsPanel"), button=$("#alertsButton"); panel.hidden=!panel.hidden; button.setAttribute("aria-expanded",String(!panel.hidden)); if(!panel.hidden) { renderAlerts(); refreshNotifications(); }}); $("#markAlertsReadButton")?.addEventListener("click",async()=>{ try { await apiRequest("/notifications/read-all", { method: "PUT" }); notifications = notifications.map(item => ({ ...item, leida: true })); renderAlerts(); } catch (error) { window.alert(error.message); }}); $$("[data-activity-filter]").forEach(button=>button.addEventListener("click",()=>{$$("[data-activity-filter]").forEach(item=>item.classList.toggle("is-active",item===button)); renderRecentActivity(button.dataset.activityFilter);})); $$("[data-alert-filter]").forEach(button=>button.addEventListener("click",()=>{$$("[data-alert-filter]").forEach(item=>item.classList.toggle("is-active",item===button)); renderAlerts(button.dataset.alertFilter);})); document.addEventListener("keydown",event=>{if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==="k"){event.preventDefault(); $("#globalSearchInput")?.focus();}}); window.addEventListener("control-avaluos:technical-appraisals-updated",()=>{renderRecentActivity();renderAlerts();}); window.addEventListener("control-avaluos:request-updated",()=>{renderRecentActivity();renderAlerts();}); }
   function showAuthenticatedApp(user) {
@@ -698,6 +718,7 @@
     window.dispatchEvent(new CustomEvent("control-avaluos:authenticated", { detail: { user } }));
     render();
     refreshNotifications();
+    checkAppVersion();
   }
   function showLogin() {
     if (adminAccessDialog?.open) adminAccessDialog.close();
@@ -1315,6 +1336,7 @@
   $("#refreshPendingSummaryButton")?.addEventListener("click", renderPendingReceptionSummary);
 
   bindHomeIntelligence();
+  startVersionMonitor();
   syncUserOptions();
   bindMoneyInputs();
   renderNotarySettings();

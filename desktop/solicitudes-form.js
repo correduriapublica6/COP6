@@ -18,7 +18,7 @@
   let applicantRequestsCache = [];
   let applicantNotifications = [];
   let applicantHighlightRequestId = "";
-  const APPLICANT_APP_VERSION_KEY = "control-avaluos.app_version.applicant";
+  const APPLICANT_APP_VERSION_KEY = "app_version";
   const REQUEST_DRAFT_KEY = "control-avaluos.public-request-draft.v1";
   let requestDraftTimer = null;
 
@@ -273,9 +273,9 @@
     if (!applicantSession) return;
     try {
       const clientVersion = localStorage.getItem(APPLICANT_APP_VERSION_KEY) || "";
-      const serverVersion = await api("/app-version");
+      const serverVersion = await api("/version");
+      if (serverVersion?.version && !clientVersion) localStorage.setItem(APPLICANT_APP_VERSION_KEY, serverVersion.version);
       if (serverVersion?.version && clientVersion && clientVersion !== serverVersion.version) await api("/notifications/system-version", { method: "POST", body: JSON.stringify({ clientVersion }) });
-      if (serverVersion?.version) localStorage.setItem(APPLICANT_APP_VERSION_KEY, serverVersion.version);
       applicantNotifications = await api("/notifications");
       renderApplicantNotifications();
     } catch { /* Se conserva el contador anterior durante una caída momentánea. */ }
@@ -300,7 +300,7 @@
     home.hidden = false;
     $("#loginScreen")?.classList.add("applicant-dashboard-active");
     if (!applicantRefreshTimer) applicantRefreshTimer = window.setInterval(() => renderApplicantHomeRequests(), 2500);
-    if (!applicantNotificationTimer) applicantNotificationTimer = window.setInterval(() => refreshApplicantNotifications(), 10000);
+    if (!applicantNotificationTimer) applicantNotificationTimer = window.setInterval(() => refreshApplicantNotifications(), 5 * 60 * 1000);
     $("#loginVisualBrand")?.setAttribute("hidden", "true");
     $("#applicantVisualPanel")?.setAttribute("hidden", "true");
     $("#openInternalAccessButton")?.setAttribute("hidden", "true");
