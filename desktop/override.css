@@ -5849,3 +5849,74 @@ body,
   box-shadow: none !important;
   margin: 0 !important;
 }
+
+/* Centro de notificaciones persistente junto al buscador. */
+#appShell.control-shell > .app-sidebar > .header-left-tools {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  overflow: visible !important;
+}
+#appShell.control-shell > .app-sidebar > .header-left-tools .header-alerts-button {
+  position: relative !important;
+  flex: 0 0 32px !important;
+  width: 32px !important;
+  min-width: 32px !important;
+  height: 32px !important;
+  padding: 5px !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell > .app-sidebar > .header-left-tools .header-alerts-button:hover {
+  background: rgba(255,255,255,.14) !important;
+  color: #fff !important;
+}
+#appShell.control-shell > .app-sidebar > .header-left-tools .header-alerts-button .bell-icon,
+#appShell.control-shell > .app-sidebar > .header-left-tools .header-alerts-button .bell-icon svg {
+  display: block !important;
+  width: 22px !important;
+  height: 22px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 1.8 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+#appShell.control-shell > .app-sidebar > .header-left-tools .header-alerts-button:hover .bell-icon svg { fill: #fff !important; }
+#appShell.control-shell > .app-sidebar > .header-left-tools #alertsCount:not([hidden]) {
+  display: inline-flex !important;
+  position: absolute !important;
+  top: -5px !important;
+  right: -5px !important;
+  min-width: 16px !important;
+  height: 16px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 4px !important;
+  border-radius: 999px !important;
+  background: #dc2626 !important;
+  color: #fff !important;
+  font: 700 10px/1 system-ui, sans-serif !important;
+}
+.alerts-panel .alert-item {
+  width: 100% !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  background: transparent !important;
+  color: inherit !important;
+  cursor: pointer !important;
+  text-align: left !important;
+}
+.alerts-panel .alert-item:hover { background: #f8fafc !important; }
+.alerts-panel .alert-item.is-read { opacity: .62 !important; }
+.alerts-panel .alert-item strong { color: #1e293b !important; }
+.alerts-panel .alert-item small { color: #64748b !important; }
+@media (max-width: 760px) {
+  #appShell.control-shell > .app-sidebar > .header-left-tools { gap: 6px !important; }
+  #appShell.control-shell > .app-sidebar > .header-left-tools .header-alerts-button { flex-basis: 28px !important; width: 28px !important; min-width: 28px !important; }
+}
