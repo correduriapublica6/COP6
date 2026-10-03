@@ -21,9 +21,9 @@
     <meta name="twitter:description" content="Plaza Coahuila">
     <meta name="twitter:image" content="https://cp6coahuila.com/desktop/preview.png">
 
-    <link rel="stylesheet" href="styles.css?v=20261003-1135" />
+    <link rel="stylesheet" href="styles.css?v=20261003-1200" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261003-1135" />
+    <link rel="stylesheet" href="override.css?v=20261003-1200" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -115,21 +115,20 @@
           </section>
 
           <section id="recepcionAvaluosSection" class="avaluos-subsection" aria-label="Recepción" hidden>
-            <section class="search-panel" aria-label="Búsqueda de avalúos recibidos">
-              <div class="search-topline"><label for="searchInput">Buscar por número de avalúo o solicitante</label><span id="filteredCount" class="filtered-count">0 resultados</span></div>
-              <div class="search-row"><input id="searchInput" type="search" placeholder="Ej. 3311 o Inmobiliaria Central" autocomplete="off" /></div>
+            <section class="search-panel request-style-filter-panel" aria-label="Búsqueda y filtros de avalúos recibidos">
+              <div class="search-row"><input id="searchInput" type="search" placeholder="Buscar por folio, solicitante o tipo" autocomplete="off" /><select id="statusViewSelect" aria-label="Filtrar avalúos recibidos"><option value="todos">Todos los estados</option><option value="pendientes-entrega">Pendientes de entrega</option><option value="entregados-sin-pago">Entregados sin pago</option><option value="pagados">Pagados</option><option value="vencidos">Vencidos</option></select></div>
             </section>
 
             <section id="recordEditor" class="inline-record-editor" aria-labelledby="dialogTitle" hidden>
               <form id="recordForm">
                 <div class="dialog-heading"><div><p class="eyebrow">RECEPCIÓN</p><h2 id="dialogTitle">Editar registro recibido</h2></div><button id="closeDialogButton" class="icon-button" type="button" aria-label="Cerrar formulario">×</button></div>
-                <div class="form-grid record-form-grid"><div class="record-primary-fields"><label>Número de avalúo *<input id="numeroInput" name="numeroAvaluo" required inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="Ej. 3311" /></label><label>Fecha del avalúo *<input id="avaluoDateInput" name="fechaAvaluo" required type="date" /></label><label>Tipo de bien *<select name="tipoBien" required><option value="">Selecciona el tipo de bien</option><option>Terreno y Construcción</option><option>Terreno</option><option>Construcción</option><option>Vehículo Automotriz</option><option>Maquinaria y equipo</option><option>Marca</option><option>Otro</option></select></label><label>Tipo de avalúo *<select name="tipoAvaluo" required><option value="">Selecciona el tipo de avalúo</option><option>Referido</option><option>Comercial</option><option>Otro</option></select></label></div><div class="record-secondary-fields"><label>Usuario *<select name="usuario" required><option value="">Selecciona un usuario</option><option>Juan Manuel Barrera Martínez</option><option>Gabriel Barrera Martínez</option><option>Cesar Delgado Armendáriz</option><option>Diana Barrera Rivera</option><option>Francisco Gabriel Hernández Estrada</option><option>Emmanuel Barrera Atilano</option><option>Caridad Rojas Vázquez</option></select></label><label>Solicitante *<input name="solicitante" required placeholder="Nombre o empresa" /></label><label>Valor del avalúo<input id="appraisalValueInput" name="valorAvaluo" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></label></div><label>Quién recibe<input name="seEntregoA" placeholder="Nombre de quien recibe el avalúo" /></label><label class="checkbox-label"><input id="paidInput" name="pagado" type="checkbox" /> Ya se pagó</label><div id="paymentDetails" class="payment-details is-hidden"><label>Cantidad pagada *<input id="amountInput" name="montoPagado" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></label><label>Método de pago *<select id="methodInput" name="metodoPago"><option value="">Selecciona el método</option><option>Efectivo</option><option>Transferencia</option></select></label><label>Pago entregado a *<select id="paymentDeliveredToInput" name="pagoEntregadoA"><option value="">Selecciona a quién se entrega</option><option>Juan Manuel Barrera Martínez</option><option>Diana Barrera Rivera</option><option>Cesar Delgado Armendáriz</option><option>Caridad Rojas Vázquez</option></select></label><label>Fecha de pago *<input id="paymentDateInput" name="fechaPago" type="date" /></label></div><label class="full-width">Observación<textarea name="observacion" rows="3" placeholder="Notas relevantes del avalúo"></textarea></label></div>
+                <div class="form-grid record-form-grid"><div class="record-primary-fields"><label> # Avaluo *<input id="numeroInput" name="numeroAvaluo" required inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="Ej. 3311" /></label><label> Fecha *<input id="avaluoDateInput" name="fechaAvaluo" required type="date" /></label><label>Tipo de bien *<select name="tipoBien" required><option value="">Selecciona el tipo de bien</option><option>Terreno y Construcción</option><option>Terreno</option><option>Construcción</option><option>Vehículo Automotriz</option><option>Maquinaria y equipo</option><option>Marca</option><option>Otro</option></select></label><label>Tipo de avalúo *<select name="tipoAvaluo" required><option value="">Selecciona el tipo de avalúo</option><option>Referido</option><option>Comercial</option><option>Otro</option></select></label></div><div class="record-secondary-fields"><label>Usuario *<select name="usuario" required><option value="">Selecciona un usuario</option><option>Juan Manuel Barrera Martínez</option><option>Gabriel Barrera Martínez</option><option>Cesar Delgado Armendáriz</option><option>Diana Barrera Rivera</option><option>Francisco Gabriel Hernández Estrada</option><option>Emmanuel Barrera Atilano</option><option>Caridad Rojas Vázquez</option></select></label><label>Solicitante *<input name="solicitante" required placeholder="Nombre o empresa" /></label><label>Valor del avalúo<input id="appraisalValueInput" name="valorAvaluo" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></label></div><label>Quién recibe<input name="seEntregoA" placeholder="Nombre de quien recibe el avalúo" /></label><label class="checkbox-label"><input id="paidInput" name="pagado" type="checkbox" /> Ya se pagó</label><div id="paymentDetails" class="payment-details is-hidden"><label>Cantidad pagada *<input id="amountInput" name="montoPagado" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></label><label>Método de pago *<select id="methodInput" name="metodoPago"><option value=""></option><option>Efectivo</option><option>Transferencia</option></select></label><label>Pago entregado a *<select id="paymentDeliveredToInput" name="pagoEntregadoA"><option value=""></option><option>Juan Manuel Barrera Martínez</option><option>Diana Barrera Rivera</option><option>Cesar Delgado Armendáriz</option><option>Caridad Rojas Vázquez</option></select></label><label>Fecha de pago *<input id="paymentDateInput" name="fechaPago" type="date" /></label></div><label class="full-width">Observación<textarea name="observacion" rows="3" placeholder="Notas relevantes del avalúo"></textarea></label></div>
                 <p id="formMessage" class="form-message" role="alert"></p><div class="dialog-actions"><button id="previewReceiptButton" class="receipt-button form-receipt-button is-hidden" type="button">Generar recibo</button><button id="cancelDialogButton" class="secondary-button btn-copu-primary" type="button">Cancelar</button><button id="saveRecordButton" class="primary-button btn-copu-primary" type="submit">Guardar cambios</button></div>
               </form>
             </section>
 
             <section class="dashboard-tabs" aria-label="Estados de avalúos recibidos">
-<div class="dashboard-tab-buttons" role="tablist" aria-label="Filtrar avalúos por estado"><label class="status-filter-select-label">Mostrar<select id="statusViewSelect"><option value="todos">Todos los avalúos</option><option value="pendientes-entrega">Pendientes de entrega</option><option value="entregados-sin-pago">Entregados sin pago</option><option value="pagados">Pagados</option><option value="vencidos">Vencidos</option></select></label></div>
+
               <div class="section-heading status-list-heading"><h2 id="statusListTitle">Registros Recientes</h2><span id="statusListCount" class="section-count">0</span></div>
               <div id="statusRecordList" class="record-list operational-record-list"></div>
             </section>
@@ -238,16 +237,16 @@
     </main>
 
     <dialog id="reportDialog" class="record-dialog report-dialog"><form id="reportForm" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">REPORTE GENERAL</p><h2>Selecciona el periodo</h2></div><button id="closeReportDialogButton" class="icon-button" type="button" aria-label="Cerrar">×</button></div><p class="report-dialog-copy">Para generar un resumen primero selecciona las fechas y da clic en Generar resumen PDF.</p><div class="form-grid"><label>Desde *<input id="reportStartDate" type="date" required /></label><label>Hasta *<input id="reportEndDate" type="date" required /></label></div><p id="reportMessage" class="form-message" role="alert"></p><div class="dialog-actions"><button id="cancelReportDialogButton" class="secondary-button btn-copu-primary" type="button">Cancelar</button><button class="primary-button" type="submit">Generar resumen PDF</button></div></form></dialog>
-    <script src="automotriz-model.js?v=20261003-1135"></script>
-    <script src="app.js?v=20261003-1135"></script>
-    <script src="image-utils.js?v=20261003-1135"></script>
-    <script src="vendor/html-docx.js?v=20261003-1135"></script>
-    <script src="word-export.js?v=20261003-1135"></script>
+    <script src="automotriz-model.js?v=20261003-1200"></script>
+    <script src="app.js?v=20261003-1200"></script>
+    <script src="image-utils.js?v=20261003-1200"></script>
+    <script src="vendor/html-docx.js?v=20261003-1200"></script>
+    <script src="word-export.js?v=20261003-1200"></script>
     <script>
       if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
     </script>
-    <script src="automotriz-form.js?v=20261003-1135"></script>
-    <script src="mobiliario-form.js?v=20261003-1135"></script>
-    <script src="solicitudes-form.js?v=20261003-1135"></script>
+    <script src="automotriz-form.js?v=20261003-1200"></script>
+    <script src="mobiliario-form.js?v=20261003-1200"></script>
+    <script src="solicitudes-form.js?v=20261003-1200"></script>
   </body>
 </html>

@@ -5714,3 +5714,61 @@ body,
   #appShell .record-primary-fields,
   #appShell .record-secondary-fields { grid-template-columns: 1fr !important; }
 }
+
+/* Ajustes 2026-10-03: Recepción y Gestión comparten la barra de Solicitudes. */
+#appShell .request-style-filter-panel,
+#appShell .technical-search-panel {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 0 18px !important;
+  padding: 0 !important;
+}
+#appShell .request-style-filter-panel .search-row,
+#appShell .technical-search-panel .search-row {
+  align-items: center !important;
+  display: grid !important;
+  gap: 12px !important;
+  grid-template-columns: minmax(0, 1fr) 220px !important;
+  justify-content: stretch !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+#appShell .request-style-filter-panel .search-row input,
+#appShell .request-style-filter-panel .search-row select,
+#appShell .technical-search-panel .search-row input,
+#appShell .technical-search-panel .search-row select {
+  box-sizing: border-box !important;
+  min-height: 48px !important;
+  width: 100% !important;
+}
+#appShell .request-style-filter-panel .search-row input,
+#appShell .technical-search-panel .search-row input {
+  background: #fff !important;
+  border: 1px solid #d4d9dc !important;
+  border-radius: 3px !important;
+  color: #263238 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  padding: 0 14px !important;
+}
+#appShell .request-style-filter-panel .search-row select,
+#appShell .technical-search-panel .search-row select {
+  appearance: auto !important;
+  background: #fff !important;
+  border: 1px solid #d4d9dc !important;
+  border-radius: 3px !important;
+  color: #263238 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  padding: 0 10px !important;
+}
+#appShell .record-primary-fields {
+  grid-template-columns: 78px 112px minmax(0, 1fr) minmax(0, 1fr) !important;
+}
+#appShell .record-primary-fields label:nth-child(3),
+#appShell .record-primary-fields label:nth-child(4) { min-width: 0 !important; }
+@media (max-width: 700px) {
+  #appShell .request-style-filter-panel .search-row,
+  #appShell .technical-search-panel .search-row { grid-template-columns: 1fr !important; }
+  #appShell .record-primary-fields { grid-template-columns: 1fr !important; }
+}
