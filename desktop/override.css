@@ -5772,3 +5772,21 @@ body,
   #appShell .technical-search-panel .search-row { grid-template-columns: 1fr !important; }
   #appShell .record-primary-fields { grid-template-columns: 1fr !important; }
 }
+
+/* Corrección Recepción: el contador acompaña al buscador sin ocupar otra columna. */
+#appShell .reception-search-input-wrap {
+  min-width: 0;
+  position: relative;
+  width: 100%;
+}
+#appShell .reception-search-input-wrap input { width: 100% !important; }
+#appShell .reception-search-input-wrap .filtered-count {
+  color: #64748b !important;
+  display: block !important;
+  font-size: .72rem !important;
+  line-height: 1 !important;
+  margin: 4px 2px 0 !important;
+  min-height: 0 !important;
+  text-align: right !important;
+}
+#appShell #recepcionAvaluosSection[hidden] { display: none !important; }

@@ -813,7 +813,8 @@
     const visible = getVisibleRecords();
     const operationalRecords = getRecordsForOperationalView(operationalView, visible);
     const titles = { todos: "Registros Recientes", "pendientes-entrega": "Pendientes de entrega", "entregados-sin-pago": "Entregados sin registro de pago", pagados: "Pagados", vencidos: "Vencidos" };
-    $("#filteredCount").textContent = `${visible.length} ${visible.length === 1 ? "resultado" : "resultados"}`;
+    const filteredCount = $("#filteredCount");
+    if (filteredCount) filteredCount.textContent = `${visible.length} ${visible.length === 1 ? "resultado" : "resultados"}`;
     $("#statusListTitle").textContent = titles[operationalView];
     $("#statusListCount").textContent = String(operationalRecords.length);
     renderList(operationalRecords, "No hay avalúos para este estado, búsqueda o periodo.");
@@ -1251,9 +1252,13 @@
     const workspaceHeader = $("#pageTitle").closest(".workspace-header");
     workspaceHeader?.classList.toggle("technical-creation-header", inAvaluos && section === "crear");
     workspaceHeader?.classList.toggle("avaluos-header", inAvaluos && section === "inicio");
-    $("#backAvaluosButton").classList.toggle("is-hidden", !inAvaluos || section === "inicio");
-    $("#newRecordButton").classList.toggle("is-hidden", !inAvaluos || section !== "recepcion" || !canEditReception());
-    $("#newTechnicalAppraisalButton").classList.toggle("is-hidden", !inAvaluos || section !== "crear" || !canEdit());
+    const backButton = $("#backAvaluosButton");
+    const registerButton = $("#newRecordButton");
+    const createButton = $("#newTechnicalAppraisalButton");
+    backButton?.classList.toggle("is-hidden", !inAvaluos || section === "inicio");
+    registerButton?.classList.toggle("is-hidden", !inAvaluos || section !== "recepcion" || !canEditReception());
+    createButton?.classList.toggle("is-hidden", !inAvaluos || section !== "crear" || !canEdit());
+    if (section === "recepcion") createButton?.classList.add("is-hidden");
   });
   window.addEventListener("control-avaluos:technical-creation-state", (event) => {
     if (activeAppView !== "avaluos") return;
