@@ -5818,3 +5818,34 @@ body,
     min-width: 0 !important;
   }
 }
+
+/* Gestión: la barra de búsqueda vive fuera de la tarjeta blanca de Expedientes técnicos. */
+#appShell #crearAvaluoSection > .technical-search-panel {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  margin: 0 auto 22px !important;
+  max-width: none !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+#appShell #crearAvaluoSection > #technicalListPanel {
+  background: #fff !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,.15) !important;
+  margin: 0 auto !important;
+  max-width: none !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+#appShell #crearAvaluoSection > .technical-search-panel .search-row {
+  margin: 0 !important;
+  width: 100% !important;
+}
+#appShell #crearAvaluoSection > #technicalListPanel .dashboard-tabs {
+  border: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
