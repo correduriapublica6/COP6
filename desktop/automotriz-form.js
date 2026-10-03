@@ -19,7 +19,10 @@
   const technicalListPanel = document.querySelector("#technicalListPanel");
   const technicalCreationPanel = document.querySelector("#technicalCreationPanel");
   const technicalSearchInput = document.querySelector("#technicalSearchInput");
+  const technicalStatusFilter = document.querySelector("#technicalStatusFilter");
   const technicalList = document.querySelector("#technicalAppraisalList");
+  let technicalPage = 1;
+  const TECHNICAL_PAGE_SIZE = 12;
   const considerationInput = document.querySelector("#considerationInput");
   const addConsiderationButton = document.querySelector("#addConsiderationButton");
   const considerationList = document.querySelector("#considerationList");
@@ -257,11 +260,29 @@
 
   function renderTechnicalList() {
     const query = technicalSearchInput.value.trim().toLocaleLowerCase("es-MX");
-    const appraisals = app.getTechnicalAppraisals().filter((appraisal) => !query || [appraisal.numeroAvaluo, appraisal.solicitante, appraisal.bienesAValuar, appraisal.tipoAvaluo, appraisal.vehiculos?.map((vehicle) => `${vehicle.marca} ${vehicle.modelo} ${vehicle.placas}`).join(" "), appraisal.bienes?.map((item) => item.descripcion).join(" ")].join(" ").toLocaleLowerCase("es-MX").includes(query));
+    const filter = technicalStatusFilter?.value || "todos";
+    const allAppraisals = app.getTechnicalAppraisals();
+    const matchesQuery = (appraisal) => !query || [appraisal.numeroAvaluo, appraisal.solicitante, appraisal.bienesAValuar, appraisal.tipoAvaluo, appraisal.vehiculos?.map((vehicle) => `${vehicle.marca} ${vehicle.modelo} ${vehicle.placas}`).join(" "), appraisal.bienes?.map((item) => item.descripcion).join(" ")].join(" ").toLocaleLowerCase("es-MX").includes(query);
+    const matchesFilter = (appraisal) => {
+      const isMaquinaria = appraisal.tipo === "maquinaria" || /maquinaria/i.test(String(appraisal.tipoAvaluo || appraisal.tipo || ""));
+      const isMobiliario = appraisal.tipo === "mobiliario" && !isMaquinaria;
+      if (filter === "borradores") return appraisal.estadoExpediente === "borrador";
+      if (filter === "completos") return appraisal.estadoExpediente !== "borrador";
+      if (filter === "maquinaria") return isMaquinaria;
+      if (filter === "mobiliario") return isMobiliario;
+      if (filter === "automotriz") return !isMaquinaria && !isMobiliario;
+      return true;
+    };
+    const appraisals = allAppraisals.filter((appraisal) => matchesQuery(appraisal) && matchesFilter(appraisal));
     appraisals.sort((a, b) => { const na = Number(String(a.numeroAvaluo || "").split("/")[0].replace(/\D/g, "")) || 0; const nb = Number(String(b.numeroAvaluo || "").split("/")[0].replace(/\D/g, "")) || 0; return nb - na || String(b.creadoEn || b.createdAt || "").localeCompare(String(a.creadoEn || a.createdAt || "")); });
     document.querySelector("#technicalFilteredCount").textContent = `${appraisals.length} ${appraisals.length === 1 ? "resultado" : "resultados"}`;
     document.querySelector("#technicalListCount").textContent = String(appraisals.length);
-    technicalList.innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>Número de avalúo</th><th>Solicitante</th><th>Tipo</th><th>Fecha</th><th>Elaboró</th><th>Acciones</th></tr></thead><tbody>${appraisals.length ? appraisals.map((appraisal) => { const isMaquinaria = appraisal.tipo === "maquinaria" || /maquinaria/i.test(String(appraisal.tipoAvaluo || appraisal.tipo || "")); const isMobiliario = appraisal.tipo === "mobiliario" && !isMaquinaria; const label = isMaquinaria ? "Maquinaria y Equipo" : (isMobiliario ? "Mobiliario y Bienes Diversos" : "Automotriz"); const status = appraisal.estadoExpediente === "borrador" ? " · Borrador" : ""; const count = (isMobiliario || isMaquinaria) ? Number(appraisal.bienes?.length || 0) : Number(appraisal.vehiculos?.length || 0); return `<tr><td><strong class="avaluo-list-number">${escapeHtml(appraisal.numeroAvaluo)}</strong></td><td>${escapeHtml(appraisal.solicitante)}</td><td>${label}<small class="technical-record-status">${status}</small></td><td>${escapeHtml(formatDate(appraisal.fechaAvaluo))}</td><td>${escapeHtml(appraisal.creadoPor || "Sin registro")}</td><td><div class="technical-row-actions"><button class="technical-icon-button action-edit" data-edit-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Editar" aria-label="Editar"><span class="action-icon" aria-hidden="true">✎</span></button>${appraisal.estadoExpediente === "borrador" ? "" : `<button class="technical-icon-button action-pdf" data-preview-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Ver PDF" aria-label="Ver PDF"><span class="action-icon action-icon-label" aria-hidden="true">PDF</span></button><button class="technical-icon-button action-word" data-word-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Ver o descargar Word" aria-label="Ver o descargar Word"><span class="action-icon action-icon-label" aria-hidden="true">W</span></button>`}<button class="technical-icon-button action-delete" data-delete-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Eliminar" aria-label="Eliminar"><span class="action-icon" aria-hidden="true">⌫</span></button></div></td></tr>`; }).join("") : `<tr><td colspan="6" class="empty">No hay expedientes técnicos para esta búsqueda.</td></tr>`}</tbody></table></div>`;
+    const pages = Math.max(1, Math.ceil(appraisals.length / TECHNICAL_PAGE_SIZE));
+    technicalPage = Math.min(Math.max(1, technicalPage), pages);
+    const pageItems = appraisals.slice((technicalPage - 1) * TECHNICAL_PAGE_SIZE, technicalPage * TECHNICAL_PAGE_SIZE);
+    const pagination = pages > 1 ? `<nav class="table-pagination" aria-label="Paginación de expedientes técnicos"><span>Mostrando ${Math.min((technicalPage - 1) * TECHNICAL_PAGE_SIZE + 1, appraisals.length)}-${Math.min(technicalPage * TECHNICAL_PAGE_SIZE, appraisals.length)} de ${appraisals.length}</span><div>${Array.from({ length: pages }, (_, index) => { const number = index + 1; return `<button type="button" class="table-page-button${number === technicalPage ? " is-active" : ""}" data-technical-page="${number}" aria-current="${number === technicalPage ? "page" : "false"}">${number}</button>`; }).join("")}</div></nav>` : "";
+    technicalList.innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>Número de avalúo</th><th>Solicitante</th><th>Tipo</th><th>Fecha</th><th>Elaboró</th><th>Acciones</th></tr></thead><tbody>${pageItems.length ? pageItems.map((appraisal) => { const isMaquinaria = appraisal.tipo === "maquinaria" || /maquinaria/i.test(String(appraisal.tipoAvaluo || appraisal.tipo || "")); const isMobiliario = appraisal.tipo === "mobiliario" && !isMaquinaria; const label = isMaquinaria ? "Maquinaria y Equipo" : (isMobiliario ? "Mobiliario y Bienes Diversos" : "Automotriz"); const status = appraisal.estadoExpediente === "borrador" ? " · Borrador" : ""; return `<tr><td><strong class="avaluo-list-number">${escapeHtml(appraisal.numeroAvaluo)}</strong></td><td>${escapeHtml(appraisal.solicitante)}</td><td>${label}<small class="technical-record-status">${status}</small></td><td>${escapeHtml(formatDate(appraisal.fechaAvaluo))}</td><td>${escapeHtml(appraisal.creadoPor || "Sin registro")}</td><td><div class="technical-row-actions"><button class="technical-icon-button action-edit" data-edit-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Editar" aria-label="Editar"><span class="action-icon" aria-hidden="true">✎</span></button>${appraisal.estadoExpediente === "borrador" ? "" : `<button class="technical-icon-button action-pdf" data-preview-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Ver PDF" aria-label="Ver PDF"><span class="action-icon action-icon-label" aria-hidden="true">PDF</span></button><button class="technical-icon-button action-word" data-word-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Ver o descargar Word" aria-label="Ver o descargar Word"><span class="action-icon action-icon-label" aria-hidden="true">W</span></button>`}<button class="technical-icon-button action-delete" data-delete-appraisal="${escapeHtml(appraisal.id)}" type="button" title="Eliminar" aria-label="Eliminar"><span class="action-icon" aria-hidden="true">⌫</span></button></div></td></tr>`; }).join("") : `<tr><td colspan="6" class="empty">No hay expedientes técnicos para esta búsqueda o filtro.</td></tr>`}</tbody></table></div>${pagination}`;
+    technicalList.querySelectorAll("[data-technical-page]").forEach((button) => button.addEventListener("click", () => { technicalPage = Number(button.dataset.technicalPage) || 1; renderTechnicalList(); }));
     technicalList.querySelectorAll("[data-edit-appraisal]").forEach((button) => button.addEventListener("click", () => {
       const appraisal = app.getTechnicalAppraisals().find((item) => item.id === button.dataset.editAppraisal);
       if (!appraisal) return;
@@ -287,7 +308,6 @@
       catch (error) { window.alert(error.message || "No se pudo eliminar el avalúo técnico."); }
     }));
   }
-
   function pdfField(label, value) { return `<div class="pdf-field"><strong>${escapeHtml(label)}</strong><span>${escapeHtml(value || "No especificado")}</span></div>`; }
 
   function renderPdfCharacteristics(appraisal) {
@@ -1039,7 +1059,8 @@
     renderTechnicalList();
   });
   window.addEventListener("control-avaluos:technical-appraisals-updated", () => { refreshTechnicalFolio(); renderTechnicalList(); });
-  technicalSearchInput.addEventListener("input", renderTechnicalList);
+  technicalSearchInput.addEventListener("input", () => { technicalPage = 1; renderTechnicalList(); });
+  technicalStatusFilter?.addEventListener("change", () => { technicalPage = 1; renderTechnicalList(); });
   technicalDateInput.addEventListener("change", refreshTechnicalFolio);
   typeSelect.addEventListener("change", () => {
     const automotriz = typeSelect.value === "automotriz";

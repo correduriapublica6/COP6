@@ -29,6 +29,8 @@
   let notarias = [];
   let authorizedAppraisalNumbers = [];
   let operationalView = "todos";
+  let receptionPage = 1;
+  const AVALUOS_PAGE_SIZE = 12;
   let activeAppView = "avaluos";
   let activeSessionUser = "";
   let pendingCredentialAuthorization = null;
@@ -787,7 +789,19 @@
     const printButton = paid ? `<button class="record-action request-icon-button request-print-button icon-only" data-print="${record.id}" type="button" title="Imprimir" aria-label="Imprimir recibo">${printIcon}</button>` : "";
     return `<tr><td><strong class="avaluo-list-number">${escapeHtml(record.numeroAvaluo)}</strong></td><td class="avaluo-list-requester">${escapeHtml(record.solicitante)}</td><td class="avaluo-list-user">${escapeHtml(record.usuario)}</td><td>${formatCurrency(record.valorAvaluo)}</td><td><span class="avaluo-status ${statusClass}">${statusLabel}</span></td><td class="table-action-cell reception-actions">${editButton}${receiptButton}${deleteButton}${printButton}</td></tr>`;
   }
-  function renderList(items, emptyCopy) { $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>#</th><th>Solicitante</th><th>Usuario</th><th>Valor del avalúo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${items.length ? items.map(renderListRow).join("") : `<tr><td colspan="6" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>`; }
+  function paginationMarkup(scope, page, totalItems) {
+    const pages = Math.max(1, Math.ceil(totalItems / AVALUOS_PAGE_SIZE));
+    if (pages <= 1) return "";
+    const current = Math.min(Math.max(1, page), pages);
+    const buttons = Array.from({ length: pages }, (_, index) => { const number = index + 1; return `<button type="button" class="table-page-button${number === current ? " is-active" : ""}" data-${scope}-page="${number}" aria-label="Página ${number}" aria-current="${number === current ? "page" : "false"}">${number}</button>`; }).join("");
+    return `<nav class="table-pagination" aria-label="Paginación de avalúos"><span>Mostrando ${Math.min((current - 1) * AVALUOS_PAGE_SIZE + 1, totalItems)}-${Math.min(current * AVALUOS_PAGE_SIZE, totalItems)} de ${totalItems}</span><div><button type="button" class="table-page-button" data-${scope}-page="${current - 1}" ${current === 1 ? "disabled" : ""} aria-label="Página anterior">‹</button>${buttons}<button type="button" class="table-page-button" data-${scope}-page="${current + 1}" ${current === pages ? "disabled" : ""} aria-label="Página siguiente">›</button></div></nav>`;
+  }
+  function renderList(items, emptyCopy) {
+    const pages = Math.max(1, Math.ceil(items.length / AVALUOS_PAGE_SIZE));
+    receptionPage = Math.min(Math.max(1, receptionPage), pages);
+    const pageItems = items.slice((receptionPage - 1) * AVALUOS_PAGE_SIZE, receptionPage * AVALUOS_PAGE_SIZE);
+    $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>#</th><th>Solicitante</th><th>Usuario</th><th>Valor del avalúo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${pageItems.length ? pageItems.map(renderListRow).join("") : `<tr><td colspan="6" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>${paginationMarkup("reception", receptionPage, items.length)}`;
+  }
   function bindRecordActions() {
     $$('[data-edit]').forEach((button) => button.addEventListener("click", () => openDialog(button.dataset.edit)));
   $$('[data-view]').forEach((button) => button.addEventListener("click", () => openDialog(button.dataset.view, true)));
@@ -805,6 +819,7 @@
     renderList(operationalRecords, "No hay avalúos para este estado, búsqueda o periodo.");
     renderAuthorizedFolios();
     bindRecordActions();
+    $$('[data-reception-page]').forEach((button) => button.addEventListener("click", () => { if (button.disabled) return; receptionPage = Number(button.dataset.receptionPage) || 1; render(); }));
   }
 
   function setPaymentVisibility() {
@@ -1249,7 +1264,7 @@
   $("#previewReceiptButton").addEventListener("click", () => openReceipt(formDraft()));
   paidInput.addEventListener("change", setPaymentVisibility);
   numberInput.addEventListener("input", () => { numberInput.value = normalizeNumber(numberInput.value); });
-  searchInput.addEventListener("input", () => { if (searchInput.value.trim()) { operationalView = "todos"; $$("[data-view]").forEach((item) => item.classList.toggle("is-active", item.dataset.view === "todos")); } render(); });
+  searchInput.addEventListener("input", () => { receptionPage = 1; if (searchInput.value.trim()) { operationalView = "todos"; $$("[data-view]").forEach((item) => item.classList.toggle("is-active", item.dataset.view === "todos")); } render(); });
   $$("[data-view]").forEach((button) => button.addEventListener("click", () => { operationalView = button.dataset.view; $$("[data-view]").forEach((item) => item.classList.toggle("is-active", item === button)); render(); }));
   $$("[data-app-view]").forEach((button) => button.addEventListener("click", () => switchAppView(button.dataset.appView)));
   $("#generateInlineReportButton").addEventListener("click", prepareInlineReport);
@@ -1261,7 +1276,7 @@
   $("#importDataButton").addEventListener("click", importBackup);
   $("#exportButton").addEventListener("click", () => switchAppView("configuracion"));
   $("#reportButton").addEventListener("click", () => switchAppView("resumen"));
-  $("#statusViewSelect")?.addEventListener("change", (event) => { operationalView = event.target.value; render(); });
+  $("#statusViewSelect")?.addEventListener("change", (event) => { operationalView = event.target.value; receptionPage = 1; render(); });
   $("#notaryForm")?.addEventListener("submit", async (event) => { event.preventDefault(); if (!isAdmin()) return; const id = $("#notaryEditId").value.trim(); const payload = { municipio: $("#notaryMunicipalityInput").value.trim(), numero: $("#notaryNumberInput").value, nombre: $("#notaryNameInput").value.trim(), direccion: $("#notaryAddressInput").value.trim(), telefono: $("#notaryPhoneInput").value.trim() }; const message = $("#notaryMessage"); try { const saved = await apiRequest(id ? `/notarias/${encodeURIComponent(id)}` : "/notarias", { method: id ? "PUT" : "POST", body: JSON.stringify(payload) }); notarias = Array.isArray(saved) ? saved : (id ? notarias.map((item) => item.id === id ? saved : item) : [...notarias, saved]); $("#notaryForm").reset(); $("#notaryEditId").value = ""; message.textContent = "Notaría guardada correctamente."; message.className = "form-message is-success"; renderNotarySettings(); window.dispatchEvent(new CustomEvent("control-avaluos:notarias-updated", { detail: notarias })); } catch (error) { message.textContent = error.message; message.className = "form-message is-error"; } });
   $("#toggleNotariesRecordsButton")?.addEventListener("click", () => { const target = $("#notariesSettingsList"); const button = $("#toggleNotariesRecordsButton"); if (!target || !button) return; const willShow = target.hidden; target.hidden = !willShow; button.setAttribute("aria-expanded", String(willShow)); button.textContent = willShow ? "Ocultar registros" : "Ver registros"; if (willShow) renderNotarySettings(); });
   $("#cancelNotaryEditButton")?.addEventListener("click", () => { $("#notaryForm").reset(); $("#notaryEditId").value = ""; });

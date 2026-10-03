@@ -21,9 +21,9 @@
     <meta name="twitter:description" content="Plaza Coahuila">
     <meta name="twitter:image" content="https://cp6coahuila.com/desktop/preview.png">
 
-    <link rel="stylesheet" href="styles.css?v=20261002-1310" />
+    <link rel="stylesheet" href="styles.css?v=20261003-1105" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261002-1310" />
+    <link rel="stylesheet" href="override.css?v=20261003-1105" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -137,7 +137,7 @@
 
           <section id="crearAvaluoSection" class="avaluos-subsection technical-appraisal-section" aria-label="Gestión de Avalúos" hidden>
             <section id="technicalListPanel" class="technical-list-panel">
-              <section class="search-panel technical-search-panel" aria-label="Búsqueda de expedientes técnicos"><div class="search-topline"><label for="technicalSearchInput">Buscar por número de avalúo, solicitante o vehículo</label><span id="technicalFilteredCount" class="filtered-count">0 resultados</span></div><div class="search-row"><input id="technicalSearchInput" type="search" placeholder="Ej. 0015/2026 o nombre del solicitante" autocomplete="off" /></div></section>
+              <section class="search-panel technical-search-panel" aria-label="Búsqueda y filtros de expedientes técnicos"><div class="search-topline"><label for="technicalSearchInput">Buscar por número de avalúo, solicitante o vehículo</label><span id="technicalFilteredCount" class="filtered-count">0 resultados</span></div><div class="search-row"><input id="technicalSearchInput" type="search" placeholder="Ej. 0015/2026 o nombre del solicitante" autocomplete="off" /><select id="technicalStatusFilter" aria-label="Filtrar expedientes técnicos"><option value="todos">Todos los expedientes</option><option value="borradores">En proceso</option><option value="completos">Concluidos</option><option value="automotriz">Automotriz</option><option value="maquinaria">Maquinaria y equipo</option><option value="mobiliario">Mobiliario y Bienes Diversos</option></select></div></section>
               <section class="dashboard-tabs"><div class="section-heading status-list-heading"><h2>Expedientes técnicos</h2><span id="technicalListCount" class="section-count">0</span></div><div id="technicalAppraisalList" class="record-list operational-record-list"></div></section>
             </section>
             <section id="technicalCreationPanel" hidden>

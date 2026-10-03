@@ -5614,3 +5614,71 @@ body,
   #appShell .avaluos-choice-grid { grid-template-columns: minmax(0, 1fr) !important; padding-inline: 10px !important; }
   #appShell .avaluos-choice-card { max-width: none !important; }
 }
+
+/* Ajustes 2026-10-03: Avalúos en dos columnas y listados con búsqueda/filtro/paginación. */
+#appShell .avaluos-choice-grid {
+  align-items: stretch !important;
+  display: grid !important;
+  gap: 18px !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  justify-content: center !important;
+  margin: 0 auto !important;
+  max-width: 1040px !important;
+  width: 100% !important;
+}
+#appShell .avaluos-choice-card {
+  max-width: none !important;
+  width: 100% !important;
+}
+#appShell .technical-search-panel .search-row {
+  display: grid !important;
+  gap: 12px !important;
+  grid-template-columns: minmax(0, 1fr) 220px !important;
+}
+#appShell .technical-search-panel .search-row input,
+#appShell .technical-search-panel .search-row select {
+  box-sizing: border-box !important;
+  min-height: 48px !important;
+  width: 100% !important;
+}
+#appShell .technical-search-panel .search-row select {
+  background: #fff !important;
+  border: 1px solid #cbd8df !important;
+  border-radius: 11px !important;
+  color: #202124 !important;
+  padding: 0 10px !important;
+}
+.table-pagination {
+  align-items: center;
+  background: #fff;
+  border-top: 1px solid #e2e8f0;
+  color: #64748b;
+  display: flex;
+  font-size: .78rem;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 10px 14px;
+}
+.table-pagination > div { align-items: center; display: flex; gap: 4px; }
+.table-page-button {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  color: #334155;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: .78rem;
+  height: 30px;
+  justify-content: center;
+  min-width: 30px;
+  padding: 0 7px;
+}
+.table-page-button:hover:not(:disabled) { background: #f1f5f9; border-color: #94a3b8; }
+.table-page-button.is-active { background: #b8903c; border-color: #b8903c; color: #111827; font-weight: 700; }
+.table-page-button:disabled { cursor: not-allowed; opacity: .45; }
+@media (max-width: 760px) {
+  #appShell .avaluos-choice-grid { grid-template-columns: 1fr !important; }
+  #appShell .technical-search-panel .search-row { grid-template-columns: 1fr !important; }
+  .table-pagination { align-items: flex-start; flex-direction: column; }
+}
