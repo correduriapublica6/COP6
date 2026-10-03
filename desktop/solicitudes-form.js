@@ -7,6 +7,8 @@
   const applicantRegisterDialog = $("#applicantRegisterDialog");
   const applicantRequestsDialog = $("#applicantRequestsDialog");
   let requests = [];
+  let requestsPage = 1;
+  const REQUESTS_PAGE_SIZE = 12;
   let editingRequestId = "";
   let applicantSession = null;
   let archivosSeleccionados = [];
@@ -612,6 +614,13 @@
     if (!window.confirm("¿Eliminar esta solicitud? Esta acción no se puede deshacer.")) return;
     try { await api(`/service-requests/${encodeURIComponent(id)}`, { method: "DELETE" }); await renderRequests(); } catch (error) { window.alert(error.message); }
   }
+  function requestsPagination(page, total) {
+    const pages = Math.max(1, Math.ceil(total / REQUESTS_PAGE_SIZE));
+    if (pages <= 1) return "";
+    const current = Math.min(Math.max(1, page), pages);
+    const buttons = Array.from({ length: pages }, (_, index) => { const number = index + 1; return `<button type="button" class="table-page-button${number === current ? " is-active" : ""}" data-requests-page="${number}" aria-current="${number === current ? "page" : "false"}">${number}</button>`; }).join("");
+    return `<nav class="table-pagination request-table-pagination" aria-label="Paginación de solicitudes"><span>Mostrando ${Math.min((current - 1) * REQUESTS_PAGE_SIZE + 1, total)}-${Math.min(current * REQUESTS_PAGE_SIZE, total)} de ${total}</span><div><button type="button" class="table-page-button" data-requests-page="${current - 1}" ${current === 1 ? "disabled" : ""} aria-label="Página anterior">‹</button>${buttons}<button type="button" class="table-page-button" data-requests-page="${current + 1}" ${current === pages ? "disabled" : ""} aria-label="Página siguiente">›</button></div></nav>`;
+  }
   async function renderRequests() {
     const table = $("#serviceRequestsTable");
     if (!table) return;
@@ -622,8 +631,12 @@
     const query = String($("#requestSearchInput")?.value || "").toLowerCase();
     const status = $("#requestStatusFilter")?.value || "";
     visible = visible.filter((item) => (!query || JSON.stringify(item).toLowerCase().includes(query)) && (!status || item.estado === status));
-    table.innerHTML = requestRows(visible, ["admin", "auditor", "valuador"].includes(role), true, role === "admin");
-    bindRequestDetailButtons(table, visible);
+    const pages = Math.max(1, Math.ceil(visible.length / REQUESTS_PAGE_SIZE));
+    requestsPage = Math.min(Math.max(1, requestsPage), pages);
+    const pageItems = visible.slice((requestsPage - 1) * REQUESTS_PAGE_SIZE, requestsPage * REQUESTS_PAGE_SIZE);
+    table.innerHTML = `${requestRows(pageItems, ["admin", "auditor", "valuador"].includes(role), true, role === "admin")}${requestsPagination(requestsPage, visible.length)}`;
+    bindRequestDetailButtons(table, pageItems);
+    table.querySelectorAll("[data-requests-page]").forEach((button) => button.addEventListener("click", () => { if (button.disabled) return; requestsPage = Number(button.dataset.requestsPage) || 1; renderRequests(); }));
     table.querySelectorAll("[data-request-status]").forEach((select) => select.addEventListener("change", async () => { const item = requests.find((request) => request.id === select.dataset.requestStatus); if (!item) return; try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ estado: select.value }) });
         requests = requests.map((request) => request.id === item.id ? updated : request);
         await renderRequests();
@@ -676,8 +689,8 @@
     $("#closeApplicantProfileButton")?.addEventListener("click", () => closeDialog($("#applicantProfileDialog")));
     $("#cancelApplicantProfileButton")?.addEventListener("click", () => closeDialog($("#applicantProfileDialog")));
     $("#applicantHomeLogoutButton")?.addEventListener("click", () => { applicantSession = null; sessionStorage.removeItem("control-avaluos.applicant"); showPublicEntry(); });
-    $("#requestSearchInput")?.addEventListener("input", renderRequests);
-    $("#requestStatusFilter")?.addEventListener("change", renderRequests);
+    $("#requestSearchInput")?.addEventListener("input", () => { requestsPage = 1; renderRequests(); });
+    $("#requestStatusFilter")?.addEventListener("change", () => { requestsPage = 1; renderRequests(); });
     window.addEventListener("control-avaluos:authenticated", () => { renderWelcomeRequests(); renderRequests(); });
     window.addEventListener("control-avaluos:users-view", renderRegisteredApplicants);
     window.addEventListener("control-avaluos:section", (event) => { if (event.detail === "solicitudes") renderRequests(); });

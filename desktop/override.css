@@ -5682,3 +5682,35 @@ body,
   #appShell .technical-search-panel .search-row { grid-template-columns: 1fr !important; }
   .table-pagination { align-items: flex-start; flex-direction: column; }
 }
+
+/* Ajustes 2026-10-03: solicitudes a 12 por hoja, filtros compactos y formulario de Recepción en una línea. */
+#appShell .technical-search-panel .search-row {
+  align-items: center !important;
+  grid-template-columns: minmax(360px, 470px) 220px !important;
+  justify-content: start !important;
+  max-width: 710px !important;
+}
+#appShell .technical-search-panel .search-row input { min-width: 0 !important; }
+#appShell .record-primary-fields {
+  gap: 10px !important;
+  grid-template-columns: 90px 135px minmax(0, 1fr) minmax(0, 1fr) !important;
+}
+#appShell .record-primary-fields input,
+#appShell .record-primary-fields select,
+#appShell .record-secondary-fields input,
+#appShell .record-secondary-fields select { min-width: 0 !important; width: 100% !important; }
+#appShell .record-secondary-fields {
+  gap: 10px !important;
+  grid-template-columns: minmax(180px, 1.15fr) minmax(180px, 1.15fr) minmax(120px, .7fr) !important;
+}
+#appShell .record-secondary-fields label { min-width: 0 !important; }
+#appShell .request-table-pagination { margin-top: 0 !important; }
+@media (max-width: 900px) {
+  #appShell .record-primary-fields { grid-template-columns: 90px 135px minmax(0, 1fr) minmax(0, 1fr) !important; }
+  #appShell .record-secondary-fields { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 700px) {
+  #appShell .technical-search-panel .search-row { grid-template-columns: 1fr !important; max-width: 100% !important; }
+  #appShell .record-primary-fields,
+  #appShell .record-secondary-fields { grid-template-columns: 1fr !important; }
+}
