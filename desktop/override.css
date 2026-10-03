@@ -5790,3 +5790,31 @@ body,
   text-align: right !important;
 }
 #appShell #recepcionAvaluosSection[hidden] { display: none !important; }
+
+/* Gestión de Avalúos: barra externa con buscador compacto y filtro más amplio, igual que Solicitudes. */
+#appShell .technical-search-panel {
+  margin-bottom: 22px !important;
+}
+#appShell .technical-search-panel .search-topline {
+  display: none !important;
+}
+#appShell .technical-search-panel .search-row {
+  grid-template-columns: minmax(360px, 620px) minmax(260px, 300px) !important;
+  justify-content: start !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+#appShell .technical-search-panel .search-row select {
+  min-width: 260px !important;
+}
+#appShell .request-style-filter-panel .reception-search-input-wrap .filtered-count {
+  display: none !important;
+}
+@media (max-width: 760px) {
+  #appShell .technical-search-panel .search-row {
+    grid-template-columns: 1fr !important;
+  }
+  #appShell .technical-search-panel .search-row select {
+    min-width: 0 !important;
+  }
+}

@@ -275,7 +275,8 @@
     };
     const appraisals = allAppraisals.filter((appraisal) => matchesQuery(appraisal) && matchesFilter(appraisal));
     appraisals.sort((a, b) => { const na = Number(String(a.numeroAvaluo || "").split("/")[0].replace(/\D/g, "")) || 0; const nb = Number(String(b.numeroAvaluo || "").split("/")[0].replace(/\D/g, "")) || 0; return nb - na || String(b.creadoEn || b.createdAt || "").localeCompare(String(a.creadoEn || a.createdAt || "")); });
-    document.querySelector("#technicalFilteredCount").textContent = `${appraisals.length} ${appraisals.length === 1 ? "resultado" : "resultados"}`;
+    const technicalFilteredCount = document.querySelector("#technicalFilteredCount");
+    if (technicalFilteredCount) technicalFilteredCount.textContent = `${appraisals.length} ${appraisals.length === 1 ? "resultado" : "resultados"}`;
     document.querySelector("#technicalListCount").textContent = String(appraisals.length);
     const pages = Math.max(1, Math.ceil(appraisals.length / TECHNICAL_PAGE_SIZE));
     technicalPage = Math.min(Math.max(1, technicalPage), pages);

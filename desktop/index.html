@@ -21,9 +21,9 @@
     <meta name="twitter:description" content="Plaza Coahuila">
     <meta name="twitter:image" content="https://cp6coahuila.com/desktop/preview.png">
 
-    <link rel="stylesheet" href="styles.css?v=20261003-1205" />
+    <link rel="stylesheet" href="styles.css?v=20261003-1210" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261003-1205" />
+    <link rel="stylesheet" href="override.css?v=20261003-1210" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -116,7 +116,7 @@
 
           <section id="recepcionAvaluosSection" class="avaluos-subsection" aria-label="Recepción" hidden>
             <section class="search-panel request-style-filter-panel" aria-label="Búsqueda y filtros de avalúos recibidos">
-              <div class="search-row"><div class="reception-search-input-wrap"><input id="searchInput" type="search" placeholder="Buscar por folio, solicitante o tipo" autocomplete="off" /><span id="filteredCount" class="filtered-count" aria-live="polite">0 resultados</span></div><select id="statusViewSelect" aria-label="Filtrar avalúos recibidos"><option value="todos">Todos los estados</option><option value="pendientes-entrega">Pendientes de entrega</option><option value="entregados-sin-pago">Entregados sin pago</option><option value="pagados">Pagados</option><option value="vencidos">Vencidos</option></select></div>
+              <div class="search-row"><div class="reception-search-input-wrap"><input id="searchInput" type="search" placeholder="Buscar por folio, solicitante o tipo" autocomplete="off" /></div><select id="statusViewSelect" aria-label="Filtrar avalúos recibidos"><option value="todos">Todos los estados</option><option value="pendientes-entrega">Pendientes de entrega</option><option value="entregados-sin-pago">Entregados sin pago</option><option value="pagados">Pagados</option><option value="vencidos">Vencidos</option></select></div>
             </section>
 
             <section id="recordEditor" class="inline-record-editor" aria-labelledby="dialogTitle" hidden>
@@ -136,7 +136,7 @@
 
           <section id="crearAvaluoSection" class="avaluos-subsection technical-appraisal-section" aria-label="Gestión de Avalúos" hidden>
             <section id="technicalListPanel" class="technical-list-panel">
-              <section class="search-panel technical-search-panel" aria-label="Búsqueda y filtros de expedientes técnicos"><div class="search-topline"><label for="technicalSearchInput">Buscar por número de avalúo, solicitante o vehículo</label><span id="technicalFilteredCount" class="filtered-count">0 resultados</span></div><div class="search-row"><input id="technicalSearchInput" type="search" placeholder="Ej. 0015/2026 o nombre del solicitante" autocomplete="off" /><select id="technicalStatusFilter" aria-label="Filtrar expedientes técnicos"><option value="todos">Todos los expedientes</option><option value="borradores">En proceso</option><option value="completos">Concluidos</option><option value="automotriz">Automotriz</option><option value="maquinaria">Maquinaria y equipo</option><option value="mobiliario">Mobiliario y Bienes Diversos</option></select></div></section>
+              <section class="search-panel technical-search-panel" aria-label="Búsqueda y filtros de expedientes técnicos"><div class="search-row"><input id="technicalSearchInput" type="search" placeholder="Buscar por folio, solicitante o tipo" autocomplete="off" /><select id="technicalStatusFilter" aria-label="Filtrar expedientes técnicos"><option value="todos">Todos los expedientes</option><option value="borradores">En proceso</option><option value="completos">Concluidos</option><option value="automotriz">Automotriz</option><option value="maquinaria">Maquinaria y equipo</option><option value="mobiliario">Mobiliario y Bienes Diversos</option></select></div></section>
               <section class="dashboard-tabs"><div class="section-heading status-list-heading"><h2>Expedientes técnicos</h2><span id="technicalListCount" class="section-count">0</span></div><div id="technicalAppraisalList" class="record-list operational-record-list"></div></section>
             </section>
             <section id="technicalCreationPanel" hidden>
@@ -237,16 +237,16 @@
     </main>
 
     <dialog id="reportDialog" class="record-dialog report-dialog"><form id="reportForm" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">REPORTE GENERAL</p><h2>Selecciona el periodo</h2></div><button id="closeReportDialogButton" class="icon-button" type="button" aria-label="Cerrar">×</button></div><p class="report-dialog-copy">Para generar un resumen primero selecciona las fechas y da clic en Generar resumen PDF.</p><div class="form-grid"><label>Desde *<input id="reportStartDate" type="date" required /></label><label>Hasta *<input id="reportEndDate" type="date" required /></label></div><p id="reportMessage" class="form-message" role="alert"></p><div class="dialog-actions"><button id="cancelReportDialogButton" class="secondary-button btn-copu-primary" type="button">Cancelar</button><button class="primary-button" type="submit">Generar resumen PDF</button></div></form></dialog>
-    <script src="automotriz-model.js?v=20261003-1205"></script>
-    <script src="app.js?v=20261003-1205"></script>
-    <script src="image-utils.js?v=20261003-1205"></script>
-    <script src="vendor/html-docx.js?v=20261003-1205"></script>
-    <script src="word-export.js?v=20261003-1205"></script>
+    <script src="automotriz-model.js?v=20261003-1210"></script>
+    <script src="app.js?v=20261003-1210"></script>
+    <script src="image-utils.js?v=20261003-1210"></script>
+    <script src="vendor/html-docx.js?v=20261003-1210"></script>
+    <script src="word-export.js?v=20261003-1210"></script>
     <script>
       if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
     </script>
-    <script src="automotriz-form.js?v=20261003-1205"></script>
-    <script src="mobiliario-form.js?v=20261003-1205"></script>
-    <script src="solicitudes-form.js?v=20261003-1205"></script>
+    <script src="automotriz-form.js?v=20261003-1210"></script>
+    <script src="mobiliario-form.js?v=20261003-1210"></script>
+    <script src="solicitudes-form.js?v=20261003-1210"></script>
   </body>
 </html>
