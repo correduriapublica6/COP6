@@ -6062,3 +6062,50 @@ body,
   #loginScreen.applicant-dashboard-active .client-header-actions .client-logout-button { padding-inline: 8px !important; }
   #loginScreen.applicant-dashboard-active .applicant-notifications-panel { right: -8px !important; }
 }
+
+/* Ajuste final del portal externo: fondo radial forzado y campana sin marco. */
+html body,
+body,
+body #loginScreen,
+body #loginScreen.applicant-dashboard-active,
+body #loginScreen.applicant-dashboard-active #applicantHomePanel,
+body #loginScreen.applicant-dashboard-active .applicant-home-panel,
+body #loginScreen.applicant-dashboard-active .public-entry-content,
+body #loginScreen.applicant-dashboard-active .public-entry-panel,
+body #loginScreen.applicant-dashboard-active .client-dashboard-content {
+  background: radial-gradient(circle, #dcdcd6 0%, #a2a2a2 60%, #7d7d7d 100%) !important;
+  background-attachment: fixed !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+body #loginScreen.applicant-dashboard-active .applicant-notifications-button,
+body #loginScreen.applicant-dashboard-active .applicant-notifications-button:hover,
+body #loginScreen.applicant-dashboard-active .applicant-notifications-button:focus-visible,
+body #loginScreen.applicant-dashboard-active .applicant-notifications-button:active {
+  width: 30px !important;
+  height: 30px !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #fff !important;
+  outline-offset: 4px !important;
+}
+body #loginScreen.applicant-dashboard-active .applicant-notifications-button:hover,
+body #loginScreen.applicant-dashboard-active .applicant-notifications-button:focus-visible {
+  color: #f4e8c9 !important;
+}
+body #loginScreen.applicant-dashboard-active .applicant-notifications-button svg {
+  width: 23px !important;
+  height: 23px !important;
+}
+body #loginScreen.applicant-dashboard-active .applicant-notifications-button b {
+  top: -3px !important;
+  right: -4px !important;
+  min-width: 15px !important;
+  height: 15px !important;
+  padding: 0 3px !important;
+  border: 2px solid #111827 !important;
+  font-size: 9px !important;
+}
