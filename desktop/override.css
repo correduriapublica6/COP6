@@ -6459,3 +6459,29 @@ body #loginScreen.applicant-dashboard-active .applicant-notifications-button b {
 @media (max-width: 760px) {
   #requestDetailDialog.client-luxury-detail .client-read-info-grid { grid-template-columns: 1fr !important; }
 }
+
+/* Clase reutilizable puntual: acciones ejecutivas crema/dorado CP6. */
+.btn-gold-cream {
+  background: #fbf6e8 !important;
+  border: 1px solid #c5a059 !important;
+  border-radius: 999px !important;
+  box-shadow: 0 3px 9px rgba(111,86,39,.12) !important;
+  color: #6f5627 !important;
+  cursor: pointer !important;
+  font-weight: 700 !important;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease !important;
+}
+.btn-gold-cream:hover {
+  background: #8b6f39 !important;
+  border-color: #8b6f39 !important;
+  box-shadow: 0 7px 15px rgba(111,86,39,.2) !important;
+  color: #fff !important;
+  transform: translateY(-1px) !important;
+}
+.btn-gold-cream:active { transform: scale(.98) !important; }
+.btn-gold-cream:disabled { cursor: not-allowed !important; opacity: .6 !important; transform: none !important; }
+/* Los buscadores solo pertenecen a la lista; no ocupan espacio en el stepper. */
+.technical-appraisal-section.is-technical-creating .technical-search-panel,
+.technical-search-panel[hidden] { display: none !important; }
+/* La etiqueta de carga conserva proporción de control sin afectar el input de archivos. */
+.photo-upload-button.btn-gold-cream { display: inline-flex !important; align-items: center !important; justify-content: center !important; }

@@ -281,7 +281,7 @@
     } catch { /* Se conserva el contador anterior durante una caída momentánea. */ }
   }
   function applicantOwnRequestsTable(list) {
-    if (!list.length) return `<div class="client-empty-state"><div class="client-empty-icon">＋</div><h4>Aún no tienes solicitudes</h4><p>Inicia tu primer trámite y consulta aquí todo su avance.</p><button type="button" class="client-primary-button btn-copu-primary" id="clientEmptyNewRequest">Solicitar un servicio</button></div>`;
+    if (!list.length) return `<div class="client-empty-state"><div class="client-empty-icon">＋</div><h4>Aún no tienes solicitudes</h4><p>Inicia tu primer trámite y consulta aquí todo su avance.</p><button type="button" class="client-primary-button btn-copu-primary btn-gold-cream" id="clientEmptyNewRequest">Solicitar un servicio</button></div>`;
     return `<div class="client-request-table-wrap"><table class="client-request-table"><thead><tr><th>Folio</th><th>Tipo de bien</th><th>Tipo de avalúo</th><th>Propietario</th><th>Estatus</th><th>Detalles</th><th>PDF</th></tr></thead><tbody>${list.map((item) => { const group=applicantRequestStatusGroup(item.estado); const pdf=applicantPdfUrl(item); const pdfAction=pdf ? `<a class="client-pdf-link" href="${escapeHtml(pdf)}" target="_blank" rel="noopener" download>⇩</a>` : `<span class="client-pdf-disabled" title="Avalúo en proceso">En proceso</span>`; return `<tr data-applicant-request-row="${escapeHtml(item.id)}" class="${applicantHighlightRequestId === item.id ? "is-notification-highlight" : ""}"><td><strong>${escapeHtml(item.folio || "Pendiente")}</strong></td><td>${escapeHtml(applicantRequestAssetType(item))}</td><td>${escapeHtml(applicantRequestAppraisalType(item))}</td><td>${escapeHtml(applicantRequestOwner(item))}</td><td><span class="client-status-badge client-status-${requestStatusClass(item.estado)}">${escapeHtml(item.estado || "Recibida")}</span></td><td><button type="button" class="client-table-view-button" data-request-detail="${escapeHtml(item.id)}">Detalles</button></td><td class="client-pdf-cell">${pdfAction}</td></tr>`; }).join("")}</tbody></table></div>`;
   }
   function filterApplicantRequests() {
@@ -469,7 +469,7 @@
     }).join("") : `<li class="request-file-empty">No hay documentos ni imágenes adjuntos.</li>`;
     const finalPdf = apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "");
     const finalPdfAction = finalPdf
-      ? `<div class="final-pdf-actions"><button type="button" class="client-download-button final-pdf-view-button" data-view-final-pdf="${escapeHtml(finalPdf)}">Ver Avalúo Final</button></div>`
+      ? `<div class="final-pdf-actions"><button type="button" class="client-download-button final-pdf-view-button btn-gold-cream" data-view-final-pdf="${escapeHtml(finalPdf)}">Ver Avalúo Final</button></div>`
       : `<div class="client-download-pending">En elaboración</div>`;
     const activeRole = $("#appShell")?.dataset.role || "";
     const canUploadFinal = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
