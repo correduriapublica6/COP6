@@ -6543,3 +6543,29 @@ body #loginScreen.applicant-dashboard-active .applicant-notifications-button b {
     color: #ffffff !important;
     box-shadow: 0 6px 16px rgba(163, 124, 30, 0.45) !important;
 }
+
+/* Ajustes finales solicitados: filtros y contraste de acciones técnicas. */
+.technical-search-panel[hidden] { display: none !important; }
+.technical-step-actions .technical-step-save,
+.mobiliario-step-actions .mobiliario-save {
+  color: #6d5228 !important;
+}
+.technical-step-actions .technical-step-save:hover,
+.mobiliario-step-actions .mobiliario-save:hover {
+  color: #6d5228 !important;
+}
+/* El nombre del usuario en la bienvenida debe conservar contraste sobre el lienzo. */
+#welcomeUserName { color: #ffffff !important; }
+/* Navegación administrativa siempre en blanco, también en estado activo/hover. */
+.control-shell .sidebar-nav .sidebar-link,
+.control-shell .sidebar-nav .sidebar-link span,
+.control-shell .sidebar-nav .sidebar-link .nav-icon,
+.control-shell > .floating-nav-capsule .sidebar-link,
+.control-shell > .floating-nav-capsule .sidebar-link span,
+.control-shell > .floating-nav-capsule .sidebar-link .nav-icon,
+.control-shell > .floating-nav-capsule .sidebar-link:hover,
+.control-shell > .floating-nav-capsule .sidebar-link:hover span,
+.control-shell > .floating-nav-capsule .sidebar-link.is-active,
+.control-shell > .floating-nav-capsule .sidebar-link.is-active span {
+  color: #ffffff !important;
+}

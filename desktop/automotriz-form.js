@@ -1047,6 +1047,10 @@
 
   document.querySelectorAll("[data-avaluos-section]").forEach((button) => button.addEventListener("click", () => setSubsection(button.dataset.avaluosSection)));
   window.addEventListener("control-avaluos:section", (event) => setSubsection(event.detail));
+  window.addEventListener("control-avaluos:technical-creation-state", (event) => {
+    const sharedTechnicalSearchPanel = document.querySelector(".technical-search-panel");
+    if (sharedTechnicalSearchPanel) sharedTechnicalSearchPanel.hidden = Boolean(event.detail);
+  });
   window.addEventListener("control-avaluos:open-technical-appraisal", openTechnicalCreation);
   window.addEventListener("control-avaluos:open-technical-edit", (event) => { if (event.detail) openTechnicalEdit(event.detail); });
   window.addEventListener("control-avaluos:open-technical-creation", openTechnicalCreation);
@@ -1069,6 +1073,8 @@
     const automotriz = typeSelect.value === "automotriz";
     const mobiliario = typeSelect.value === "muebles-varios";
     const maquinaria = typeSelect.value === "maquinaria-equipo";
+    const sharedTechnicalSearchPanel = document.querySelector(".technical-search-panel");
+    if (sharedTechnicalSearchPanel && typeSelect.value) sharedTechnicalSearchPanel.hidden = true;
     const mobiliarioEditor = document.querySelector("#mobiliarioEditor");
     editor.hidden = !automotriz;
     if (mobiliarioEditor) mobiliarioEditor.hidden = !mobiliario;
