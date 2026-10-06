@@ -6504,3 +6504,42 @@ body #loginScreen.applicant-dashboard-active .applicant-notifications-button b {
   color: #4a371a !important;
   box-shadow: 0 4px 10px rgba(0,0,0,0.12) !important;
 }
+
+/* BOTÓN SECUNDARIO / REPOSO (Estilo Crema + Anexar Documentos) */
+.btn-crema {
+    background: #fdfaf5 !important;
+    color: #6d5228 !important;
+    border: 1px solid #d4af37 !important;
+    border-radius: 50px !important;
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-weight: 600 !important;
+    padding: 8px 20px !important;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.15) !important;
+    transition: all 0.25s ease !important;
+    cursor: pointer !important;
+}
+.btn-crema:hover {
+    background: linear-gradient(135deg, #e6c875 0%, #c59b27 100%) !important;
+    color: #ffffff !important;
+    border-color: #b8860b !important;
+    box-shadow: 0 4px 12px rgba(184, 134, 11, 0.35) !important;
+}
+
+/* BOTÓN PRIMARIO / ACCIÓN DESTACADA (Estilo Dorado Gradiente Activo) */
+.btn-dorado {
+    background: linear-gradient(135deg, #e6c875 0%, #c59b27 100%) !important;
+    color: #1a1a1a !important;
+    border: 1px solid #b8860b !important;
+    border-radius: 50px !important;
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-weight: 700 !important;
+    padding: 9px 22px !important;
+    box-shadow: 0 4px 12px rgba(197, 155, 39, 0.3) !important;
+    transition: all 0.25s ease !important;
+    cursor: pointer !important;
+}
+.btn-dorado:hover {
+    background: linear-gradient(135deg, #d4af37 0%, #a37c1e 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 16px rgba(163, 124, 30, 0.45) !important;
+}
