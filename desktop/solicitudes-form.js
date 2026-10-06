@@ -465,42 +465,32 @@
       if (!source) return `<li class="request-file-card request-file-unavailable"><span>${name}</span></li>`;
       const isImage = String(file.type || "").startsWith("image/");
       const preview = isImage ? `<img src="${escapeHtml(source)}" alt="${name}" />` : `<div class="request-file-icon" aria-hidden="true">${/\.pdf$/i.test(file.name || "") ? "PDF" : "DOC"}</div>`;
-      return `<li class="request-file-card request-file-document"><button type="button" class="request-file-preview" data-view-file="${index}" aria-label="Ver ${name}">${preview}</button><span title="${name}">${name}</span><div class="request-file-actions"><button type="button" class="request-detail-button" data-view-file="${index}">Ver</button><button type="button" class="request-detail-button" data-download-file="${index}">Descargar</button></div></li>`;
+      return `<li class="request-file-card request-file-document"><button type="button" class="request-file-preview" data-view-file="${index}" aria-label="Ver ${name}">${preview}</button><span title="${name}">${name}</span><div class="request-file-actions"><button type="button" class="request-detail-button" data-view-file="${index}">Ver</button></div></li>`;
     }).join("") : `<li class="request-file-empty">No hay documentos ni imágenes adjuntos.</li>`;
     const finalPdf = apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "");
     const finalPdfAction = finalPdf
-      ? `<div class="final-pdf-actions"><button type="button" class="client-download-button final-pdf-view-button" data-view-final-pdf="${escapeHtml(finalPdf)}">Ver Avalúo Final</button><a class="client-download-button final-pdf-download-button" href="${escapeHtml(finalPdf)}" download>Descargar Avalúo Final (PDF)</a></div>`
+      ? `<div class="final-pdf-actions"><button type="button" class="client-download-button final-pdf-view-button" data-view-final-pdf="${escapeHtml(finalPdf)}">Ver Avalúo Final</button></div>`
       : `<div class="client-download-pending">En elaboración</div>`;
     const activeRole = $("#appShell")?.dataset.role || "";
     const canUploadFinal = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
     const adminFinalAction = canUploadFinal ? `<button type="button" class="client-download-button btn-copu-primary admin-final-compact" data-upload-final-pdf="${escapeHtml(item.id)}">Subir PDF final</button>` : "";
     const currentApplicant = item.solicitante || {};
     const currentSpecific = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
-    const infoRows = `<form class="client-edit-info-form" data-edit-request-info>
-      <label>Nombre<input name="nombre" value="${escapeHtml(currentApplicant.nombre || item.nombre || "")}" required disabled /></label>
-      <label>Teléfono<input name="telefono" value="${escapeHtml(currentApplicant.telefono || item.telefono || "")}" disabled /></label>
-      <label>Correo<input name="correo" type="email" value="${escapeHtml(currentApplicant.correo || item.requesterEmail || item.email || "")}" disabled /></label>
-      <label>Propietario<input name="propietario" value="${escapeHtml(applicantRequestOwner(item) === "No especificado" ? "" : applicantRequestOwner(item))}" disabled /></label>
-      <label>Valor operación<input name="valorOperacion" value="${escapeHtml(item.valorOperacion || currentSpecific.valorOperacion || "")}" disabled /></label>
-      <label>Tipo de avalúo<select name="tipoAvaluo" disabled><option ${item.tipoAvaluo === "Inmuebles" ? "selected" : ""}>Inmuebles</option><option ${item.tipoAvaluo === "Automotriz" ? "selected" : ""}>Automotriz</option><option ${item.tipoAvaluo === "Maquinaria y equipo" ? "selected" : ""}>Maquinaria y equipo</option><option ${item.tipoAvaluo === "Mobiliario y Bienes Diversos" ? "selected" : ""}>Mobiliario y Bienes Diversos</option><option ${item.tipoAvaluo === "Intangibles" ? "selected" : ""}>Intangibles</option></select></label>
-      <div class="client-edit-info-actions"><p data-edit-message hidden></p><button type="submit" class="client-save-info-button btn-copu-primary" data-save-request-info hidden>Guardar cambios</button></div>
-    </form>`;
-    detail.innerHTML = `<div class="request-detail-compact-head"><div><strong class="client-folio">${escapeHtml(item.folio || "Pendiente")} · ${escapeHtml(item.tipoAvaluo || "Avalúo")}</strong><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small></div><button type="button" class="client-outline-button btn-copu-primary" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div>${timeline}<div class="request-detail-compact-grid"><section class="request-detail-pane"><div class="request-pane-heading"><strong>Expediente digital</strong><small>${files.length} archivo(s)</small></div><ul class="request-files-grid">${fileMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${adminFinalAction}</div>${finalPdfAction}</section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong><button type="button" class="request-edit-info" data-enable-edit aria-label="Editar información" title="Editar información">✎</button></div>${infoRows}</section></div>`;
+    const readValue = (value) => escapeHtml(value || "No especificado");
+    const infoRows = `<div class="client-read-info-grid" aria-label="Información registrada">
+      <div class="client-read-info-field"><span>Nombre</span><strong>${readValue(currentApplicant.nombre || item.nombre)}</strong></div>
+      <div class="client-read-info-field"><span>Teléfono</span><strong>${readValue(currentApplicant.telefono || item.telefono)}</strong></div>
+      <div class="client-read-info-field"><span>Correo</span><strong>${readValue(currentApplicant.correo || item.requesterEmail || item.email)}</strong></div>
+      <div class="client-read-info-field"><span>Propietario</span><strong>${readValue(applicantRequestOwner(item) === "No especificado" ? "" : applicantRequestOwner(item))}</strong></div>
+      <div class="client-read-info-field"><span>Valor operación</span><strong>${readValue(item.valorOperacion || currentSpecific.valorOperacion)}</strong></div>
+      <div class="client-read-info-field"><span>Tipo de avalúo</span><strong>${readValue(item.tipoAvaluo)}</strong></div>
+    </div>`;
+    detail.innerHTML = `<div class="request-detail-compact-head"><div><strong class="client-folio">${escapeHtml(item.folio || "Pendiente")} · ${escapeHtml(item.tipoAvaluo || "Avalúo")}</strong><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small></div><button type="button" class="client-outline-button btn-copu-primary" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div>${timeline}<div class="request-detail-compact-grid"><section class="request-detail-pane"><div class="request-pane-heading"><strong>Expediente digital</strong><small>${files.length} archivo(s)</small></div><ul class="request-files-grid">${fileMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${adminFinalAction}</div>${finalPdfAction}</section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong></div>${infoRows}</section></div>`;
     detail.querySelectorAll("[data-view-file]").forEach((button) => button.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
     detail.querySelector("[data-view-final-pdf]")?.addEventListener("click", (event) => {
       openResourceViewer(event.currentTarget.dataset.viewFinalPdf, "Avalúo final.pdf", "application/pdf");
     });
-    detail.querySelectorAll("[data-download-file]").forEach((button) => button.addEventListener("click", () => { const link = document.createElement("a"); link.href = requestFileUrl(item, Number(button.dataset.downloadFile), true); link.download = files[Number(button.dataset.downloadFile)]?.name || "archivo"; document.body.appendChild(link); link.click(); link.remove(); }));
     detail.querySelector("[data-attach-missing]")?.addEventListener("click", () => annexDocuments(item));
-    detail.querySelector("[data-edit-request-info]")?.addEventListener("submit", (event) => { event.preventDefault(); saveRequestInfo(item, event.currentTarget); });
-    detail.querySelector("[data-enable-edit]")?.addEventListener("click", (event) => {
-      const form = detail.querySelector("[data-edit-request-info]");
-      if (!form) return;
-      form.querySelectorAll("input, select").forEach((field) => { field.disabled = false; });
-      form.querySelector("[data-save-request-info]")?.removeAttribute("hidden");
-      event.currentTarget.setAttribute("hidden", "true");
-      form.querySelector("input[name=nombre]")?.focus();
-    });
     detail.querySelector("[data-upload-final-pdf]")?.addEventListener("click", () => uploadFinalPdf(item));
     openDialog(dialog);
   }

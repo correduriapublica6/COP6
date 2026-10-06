@@ -6418,3 +6418,83 @@ body #loginScreen.applicant-dashboard-active .applicant-notifications-button b {
   #requestDetailDialog.client-luxury-detail .request-detail-compact-head .client-outline-button { align-self: flex-start !important; }
   #requestDetailDialog.client-luxury-detail .request-detail-compact-grid { grid-template-columns: 1fr !important; }
 }
+
+/* Estandarización global CP6: crema y dorado suave, excluyendo completamente el Login. */
+#appShell button:not(.icon-button),
+#appShell a.client-download-button,
+#loginScreen.applicant-dashboard-active button:not(.icon-button),
+#loginScreen.applicant-dashboard-active a.client-download-button {
+  background: #fbf6e8 !important;
+  border: 1px solid #c5a059 !important;
+  border-radius: 999px !important;
+  box-shadow: 0 3px 9px rgba(111,86,39,.12) !important;
+  color: #6f5627 !important;
+  font-weight: 700 !important;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease !important;
+}
+#appShell button:not(.icon-button):hover,
+#appShell a.client-download-button:hover,
+#loginScreen.applicant-dashboard-active button:not(.icon-button):hover,
+#loginScreen.applicant-dashboard-active a.client-download-button:hover {
+  background: #8b6f39 !important;
+  border-color: #8b6f39 !important;
+  box-shadow: 0 7px 15px rgba(111,86,39,.2) !important;
+  color: #fff !important;
+  transform: translateY(-1px) !important;
+}
+#appShell button:not(.icon-button):active,
+#loginScreen.applicant-dashboard-active button:not(.icon-button):active { transform: scale(.98) !important; }
+/* Excepciones funcionales: controles compactos conservan sus dimensiones, no el color. */
+#appShell .sidebar-link,
+#appShell .alerts-button,
+#appShell .profile-button,
+#appShell .request-status-select,
+#appShell .custom-select-trigger,
+#appShell .custom-select-option,
+#appShell .global-search-wrap button,
+#loginScreen.applicant-dashboard-active .applicant-notifications-button,
+#loginScreen.applicant-dashboard-active .client-logout-button { border-radius: inherit !important; }
+#appShell .sidebar-link,
+#appShell .alerts-button,
+#appShell .profile-button,
+#loginScreen.applicant-dashboard-active .applicant-notifications-button { background: transparent !important; box-shadow: none !important; }
+/* Información registrada en modo lectura: sin inputs, marcos ni edición. */
+#requestDetailDialog.client-luxury-detail .request-info-pane .request-pane-heading { border-bottom: 1px solid #eeeae2 !important; }
+#requestDetailDialog.client-luxury-detail .client-read-info-grid {
+  display: grid !important;
+  gap: 17px 20px !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  margin: 0 !important;
+}
+#requestDetailDialog.client-luxury-detail .client-read-info-field {
+  border-bottom: 1px solid #f0ede7 !important;
+  display: grid !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  padding: 0 0 9px !important;
+}
+#requestDetailDialog.client-luxury-detail .client-read-info-field span {
+  color: #77746d !important;
+  font-size: .66rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .045em !important;
+  text-transform: uppercase !important;
+}
+#requestDetailDialog.client-luxury-detail .client-read-info-field strong {
+  color: #111 !important;
+  font-size: .86rem !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  overflow-wrap: anywhere !important;
+}
+#requestDetailDialog.client-luxury-detail .request-edit-info,
+#requestDetailDialog.client-luxury-detail [data-edit-request-info],
+#requestDetailDialog.client-luxury-detail .client-edit-info-form { display: none !important; }
+#requestDetailDialog.client-luxury-detail .request-file-actions .request-detail-button {
+  min-width: 43px !important;
+  padding: 5px 10px !important;
+}
+#requestDetailDialog.client-luxury-detail .final-pdf-actions { justify-content: flex-start !important; }
+@media (max-width: 760px) {
+  #requestDetailDialog.client-luxury-detail .client-read-info-grid { grid-template-columns: 1fr !important; }
+}
