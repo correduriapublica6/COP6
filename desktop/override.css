@@ -6626,3 +6626,49 @@ body #loginScreen.applicant-dashboard-active .applicant-notifications-button b {
     padding: 1.25rem 0 !important;
   }
 }
+
+/* Reversión del centrado vertical global: formularios, tablas y módulos vuelven al flujo natural. */
+#appShell.control-shell .app-workspace > .app-view#avaluosView,
+#appShell.control-shell .app-workspace > .app-view#solicitudesView,
+#appShell.control-shell .app-workspace > .app-view#fe-publicaView,
+#appShell.control-shell .app-workspace > .app-view#resumenView,
+#appShell.control-shell .app-workspace > .app-view#usuariosView,
+#appShell.control-shell .app-workspace > .app-view#configuracionView {
+  min-height: 0 !important;
+  display: block !important;
+  flex-direction: initial !important;
+  justify-content: initial !important;
+  align-items: initial !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Único ajuste vertical permitido: menú de las cuatro tarjetas de Avalúos. */
+#appShell.control-shell #avaluosView > #avaluosMenuSection {
+  display: block !important;
+  margin: 0 auto !important;
+  padding-top: 5vh !important;
+  padding-bottom: 2rem !important;
+}
+
+#appShell.control-shell #avaluosView > #avaluosMenuSection .avaluos-choice-grid {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+@media (max-width: 760px) {
+  #appShell.control-shell .app-workspace > .app-view#avaluosView,
+  #appShell.control-shell .app-workspace > .app-view#solicitudesView,
+  #appShell.control-shell .app-workspace > .app-view#fe-publicaView,
+  #appShell.control-shell .app-workspace > .app-view#resumenView,
+  #appShell.control-shell .app-workspace > .app-view#usuariosView,
+  #appShell.control-shell .app-workspace > .app-view#configuracionView {
+    min-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  #appShell.control-shell #avaluosView > #avaluosMenuSection {
+    padding-top: 3vh !important;
+    padding-bottom: 1.5rem !important;
+  }
+}
