@@ -6485,3 +6485,22 @@ body #loginScreen.applicant-dashboard-active .applicant-notifications-button b {
 .technical-search-panel[hidden] { display: none !important; }
 /* La etiqueta de carga conserva proporción de control sin afectar el input de archivos. */
 .photo-upload-button.btn-gold-cream { display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+
+/* Override final solicitado: .btn-gold-cream con máxima prioridad visual. */
+.btn-gold-cream {
+  background: #f4ece1 !important;
+  color: #6d5228 !important;
+  border: 1px solid #c8a364 !important;
+  border-radius: 50px !important;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+  font-weight: 600 !important;
+  padding: 8px 18px !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08) !important;
+  transition: all 0.2s ease-in-out !important;
+  cursor: pointer !important;
+}
+.btn-gold-cream:hover {
+  background: #e8dbca !important;
+  color: #4a371a !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12) !important;
+}
