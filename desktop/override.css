@@ -6569,3 +6569,60 @@ body #loginScreen.applicant-dashboard-active .applicant-notifications-button b {
 .control-shell > .floating-nav-capsule .sidebar-link.is-active span {
   color: #ffffff !important;
 }
+
+/* Centrado vertical de los módulos principales bajo el header fijo. */
+#appShell.control-shell .app-workspace > .app-view#avaluosView,
+#appShell.control-shell .app-workspace > .app-view#solicitudesView,
+#appShell.control-shell .app-workspace > .app-view#fe-publicaView,
+#appShell.control-shell .app-workspace > .app-view#resumenView,
+#appShell.control-shell .app-workspace > .app-view#usuariosView,
+#appShell.control-shell .app-workspace > .app-view#configuracionView {
+  box-sizing: border-box !important;
+  min-height: calc(100vh - 80px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 0 auto !important;
+  padding: 2rem 0 !important;
+}
+
+/* Las vistas de módulo conservan el ancho de sus paneles internos. */
+#appShell.control-shell .app-workspace > .app-view#avaluosView > *,
+#appShell.control-shell .app-workspace > .app-view#solicitudesView > *,
+#appShell.control-shell .app-workspace > .app-view#fe-publicaView > *,
+#appShell.control-shell .app-workspace > .app-view#resumenView > *,
+#appShell.control-shell .app-workspace > .app-view#usuariosView > *,
+#appShell.control-shell .app-workspace > .app-view#configuracionView > * {
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Rejilla de Recepción, Gestión, Validación y Solicitudes: sin empuje superior. */
+#appShell.control-shell #avaluosMenuSection {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+#appShell.control-shell #avaluosMenuSection .avaluos-choice-grid {
+  box-sizing: border-box !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  margin-bottom: 0 !important;
+  width: 100% !important;
+}
+
+@media (max-width: 760px) {
+  #appShell.control-shell .app-workspace > .app-view#avaluosView,
+  #appShell.control-shell .app-workspace > .app-view#solicitudesView,
+  #appShell.control-shell .app-workspace > .app-view#fe-publicaView,
+  #appShell.control-shell .app-workspace > .app-view#resumenView,
+  #appShell.control-shell .app-workspace > .app-view#usuariosView,
+  #appShell.control-shell .app-workspace > .app-view#configuracionView {
+    min-height: calc(100vh - 122px) !important;
+    padding: 1.25rem 0 !important;
+  }
+}
