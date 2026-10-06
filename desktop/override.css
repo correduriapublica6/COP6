@@ -6109,3 +6109,312 @@ body #loginScreen.applicant-dashboard-active .applicant-notifications-button b {
   border: 2px solid #111827 !important;
   font-size: 9px !important;
 }
+
+/* Rediseño ejecutivo CP6 — detalle de solicitud / seguimiento. */
+#requestDetailDialog.client-luxury-detail {
+  background: #f8f7f3 !important;
+  border: 1px solid rgba(139,111,57,.32) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 28px 90px rgba(15,23,42,.32), 0 0 0 1px rgba(255,255,255,.72) inset !important;
+  color: #111111 !important;
+  overflow: hidden !important;
+}
+#requestDetailDialog.client-luxury-detail > form {
+  background: linear-gradient(180deg, #fff 0%, #fbfaf7 100%) !important;
+  overflow-y: auto !important;
+  padding: 28px 30px 30px !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-content {
+  color: #111111 !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-close {
+  background: #fff !important;
+  border: 1px solid rgba(139,111,57,.42) !important;
+  color: #55431e !important;
+  height: 32px !important;
+  right: 18px !important;
+  top: 16px !important;
+  width: 32px !important;
+  box-shadow: 0 4px 12px rgba(15,23,42,.08) !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-close:hover {
+  background: #8b6f39 !important;
+  color: #fff !important;
+  transform: rotate(4deg) !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-compact-head {
+  align-items: flex-start !important;
+  border-bottom: 1px solid #e8e2d5 !important;
+  gap: 18px !important;
+  min-height: 58px !important;
+  padding: 0 46px 17px 0 !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-compact-head > div {
+  gap: 5px !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-compact-head .client-folio {
+  color: #111827 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(1.15rem, 2vw, 1.55rem) !important;
+  font-weight: 600 !important;
+  letter-spacing: -.015em !important;
+  white-space: normal !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-compact-head small {
+  color: #7a7a76 !important;
+  font-size: .76rem !important;
+  letter-spacing: .02em !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-compact-head .client-outline-button {
+  align-self: center !important;
+  background: #fbf6e8 !important;
+  border: 1px solid #c5a059 !important;
+  border-radius: 999px !important;
+  color: #6f5627 !important;
+  font-size: .74rem !important;
+  font-weight: 700 !important;
+  padding: 9px 14px !important;
+  transition: background .18s ease, color .18s ease, transform .18s ease !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-compact-head .client-outline-button:hover {
+  background: #8b6f39 !important;
+  color: #fff !important;
+  transform: translateY(-1px) !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-compact {
+  align-items: start !important;
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 0 !important;
+  margin: 21px 2px 25px !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  position: relative !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-compact::before {
+  background: #dedbd2 !important;
+  content: "" !important;
+  height: 2px !important;
+  left: 10% !important;
+  position: absolute !important;
+  right: 10% !important;
+  top: 13px !important;
+  width: auto !important;
+  z-index: 0 !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-compact .client-timeline-step {
+  align-items: center !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 7px !important;
+  min-height: 47px !important;
+  padding: 0 !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-compact .client-timeline-step span {
+  align-items: center !important;
+  background: #fff !important;
+  border: 2px solid #d8d4ca !important;
+  border-radius: 50% !important;
+  color: #918d84 !important;
+  display: inline-flex !important;
+  font-size: .68rem !important;
+  font-weight: 800 !important;
+  height: 27px !important;
+  justify-content: center !important;
+  width: 27px !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-compact .client-timeline-step.is-complete span {
+  background: #e9f5ec !important;
+  border-color: #71ae7b !important;
+  color: #2e7d40 !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-compact .client-timeline-step.is-current span {
+  background: #c5a059 !important;
+  border-color: #a4813e !important;
+  box-shadow: 0 0 0 5px rgba(197,160,89,.16) !important;
+  color: #fff !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-compact .client-timeline-step small {
+  color: #77756f !important;
+  font-size: .68rem !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+#requestDetailDialog.client-luxury-detail .client-timeline-compact .client-timeline-step.is-complete small,
+#requestDetailDialog.client-luxury-detail .client-timeline-compact .client-timeline-step.is-current small { color: #315e3b !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-compact-grid {
+  display: grid !important;
+  gap: 18px !important;
+  grid-template-columns: minmax(0, 1.12fr) minmax(330px, .88fr) !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-pane {
+  background: #fff !important;
+  border: 1px solid #e7e2d8 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 22px rgba(50,43,29,.06) !important;
+  padding: 18px !important;
+}
+#requestDetailDialog.client-luxury-detail .request-pane-heading {
+  border-bottom: 1px solid #eeeae2 !important;
+  margin-bottom: 13px !important;
+  padding-bottom: 11px !important;
+}
+#requestDetailDialog.client-luxury-detail .request-pane-heading strong {
+  color: #242424 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+}
+#requestDetailDialog.client-luxury-detail .request-pane-heading small {
+  color: #88857d !important;
+  font-size: .7rem !important;
+}
+#requestDetailDialog.client-luxury-detail .request-files-grid {
+  display: grid !important;
+  gap: 10px !important;
+  grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)) !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+#requestDetailDialog.client-luxury-detail .request-file-card {
+  background: #fff !important;
+  border: 1px solid #e5e1d8 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 7px rgba(15,23,42,.04) !important;
+  gap: 7px !important;
+  min-height: 116px !important;
+  padding: 8px !important;
+  transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease !important;
+}
+#requestDetailDialog.client-luxury-detail .request-file-card:hover {
+  border-color: #c5a059 !important;
+  box-shadow: 0 9px 20px rgba(50,43,29,.14) !important;
+  transform: translateY(-2px) !important;
+}
+#requestDetailDialog.client-luxury-detail .request-file-preview,
+#requestDetailDialog.client-luxury-detail .request-file-preview img,
+#requestDetailDialog.client-luxury-detail .request-file-icon {
+  border-radius: 6px !important;
+  height: 66px !important;
+  width: 100% !important;
+}
+#requestDetailDialog.client-luxury-detail .request-file-preview { background: #f6f5f1 !important; }
+#requestDetailDialog.client-luxury-detail .request-file-preview img { object-fit: cover !important; }
+#requestDetailDialog.client-luxury-detail .request-file-icon { background: #f3eee1 !important; color: #80662e !important; font-size: .72rem !important; }
+#requestDetailDialog.client-luxury-detail .request-file-card > span {
+  color: #55534d !important;
+  font-size: .65rem !important;
+  max-width: 100% !important;
+}
+#requestDetailDialog.client-luxury-detail .request-file-actions { gap: 4px !important; }
+#requestDetailDialog.client-luxury-detail .request-file-actions .request-detail-button {
+  background: #f8f7f3 !important;
+  border: 1px solid #ddd7ca !important;
+  border-radius: 999px !important;
+  color: #635128 !important;
+  font-size: .62rem !important;
+  padding: 4px 7px !important;
+}
+#requestDetailDialog.client-luxury-detail .request-file-actions .request-detail-button:hover {
+  background: #8b6f39 !important;
+  border-color: #8b6f39 !important;
+  color: #fff !important;
+}
+#requestDetailDialog.client-luxury-detail .request-final-heading {
+  border-top: 1px solid #eeeae2 !important;
+  margin-top: 18px !important;
+  padding-top: 14px !important;
+}
+#requestDetailDialog.client-luxury-detail .final-pdf-actions {
+  background: linear-gradient(135deg, #fffaf0, #f8f0d9) !important;
+  border: 1px solid #e5d2a0 !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 9px !important;
+  padding: 13px !important;
+}
+#requestDetailDialog.client-luxury-detail .client-download-button {
+  background: linear-gradient(135deg, #b8903c 0%, #d4af37 52%, #e5c158 100%) !important;
+  border: 1px solid #b8903c !important;
+  border-radius: 8px !important;
+  box-shadow: 0 5px 12px rgba(139,111,57,.2) !important;
+  color: #191611 !important;
+  font-size: .72rem !important;
+  font-weight: 800 !important;
+  padding: 9px 12px !important;
+  text-decoration: none !important;
+  transition: filter .18s ease, transform .18s ease, box-shadow .18s ease !important;
+}
+#requestDetailDialog.client-luxury-detail .client-download-button:hover {
+  box-shadow: 0 8px 17px rgba(139,111,57,.3) !important;
+  filter: brightness(1.06) saturate(1.05) !important;
+  transform: translateY(-1px) !important;
+}
+#requestDetailDialog.client-luxury-detail .client-download-pending {
+  background: #f5f5f2 !important;
+  border: 1px dashed #c9c5bb !important;
+  border-radius: 9px !important;
+  color: #77756f !important;
+  padding: 11px 13px !important;
+}
+#requestDetailDialog.client-luxury-detail .request-info-pane .request-pane-heading { align-items: center !important; }
+#requestDetailDialog.client-luxury-detail .request-edit-info {
+  background: #fffaf0 !important;
+  border: 1px solid #c5a059 !important;
+  border-radius: 7px !important;
+  color: #80662e !important;
+  height: 30px !important;
+  width: 32px !important;
+}
+#requestDetailDialog.client-luxury-detail .request-edit-info:hover { background: #8b6f39 !important; color: #fff !important; }
+#requestDetailDialog.client-luxury-detail .client-edit-info-form {
+  gap: 15px 20px !important;
+}
+#requestDetailDialog.client-luxury-detail .client-edit-info-form label {
+  color: #666 !important;
+  font-size: .68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .045em !important;
+}
+#requestDetailDialog.client-luxury-detail .client-edit-info-form input:disabled,
+#requestDetailDialog.client-luxury-detail .client-edit-info-form select:disabled {
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid #ece9e2 !important;
+  border-radius: 0 !important;
+  color: #111 !important;
+  cursor: default !important;
+  font-size: .86rem !important;
+  font-weight: 600 !important;
+  min-height: 28px !important;
+  padding: 4px 0 7px !important;
+}
+#requestDetailDialog.client-luxury-detail .client-edit-info-form input:not(:disabled),
+#requestDetailDialog.client-luxury-detail .client-edit-info-form select:not(:disabled) {
+  border: 1px solid #d7c9a8 !important;
+  border-radius: 7px !important;
+  color: #111 !important;
+  min-height: 34px !important;
+}
+#requestDetailDialog.client-luxury-detail .client-save-info-button {
+  background: linear-gradient(135deg, #b8903c 0%, #d4af37 52%, #e5c158 100%) !important;
+  border: 1px solid #b8903c !important;
+  border-radius: 8px !important;
+  color: #191611 !important;
+  font-weight: 800 !important;
+}
+#requestDetailDialog.client-luxury-detail .client-save-info-button:hover { background: #8b6f39 !important; color: #fff !important; }
+@media (max-width: 760px) {
+  #requestDetailDialog.client-luxury-detail > form { padding: 22px 18px 24px !important; }
+  #requestDetailDialog.client-luxury-detail .request-detail-compact-head { flex-direction: column !important; }
+  #requestDetailDialog.client-luxury-detail .request-detail-compact-head .client-outline-button { align-self: flex-start !important; }
+  #requestDetailDialog.client-luxury-detail .request-detail-compact-grid { grid-template-columns: 1fr !important; }
+}

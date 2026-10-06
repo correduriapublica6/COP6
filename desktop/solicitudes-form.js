@@ -455,7 +455,7 @@
     const files = Array.isArray(item.archivos) ? item.archivos : [];
     const info = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
     const currentStatus = String(item.estado || "recibida").toLowerCase();
-    const steps = ["Recibida", "Inspección", "Elaboración", "En firma", "Concluida"];
+    const steps = ["Recibida", "Inspección", "Elaboración", "En Firma", "Concluida"];
     const statusIndex = currentStatus === "en visita" ? 1 : currentStatus === "asignada" || currentStatus === "en revisión" ? 0 : currentStatus === "en elaboración" ? 2 : currentStatus === "en firma" ? 3 : currentStatus === "concluida" ? 4 : 0;
     const timeline = `<div class="client-timeline client-timeline-compact" aria-label="Progreso de solicitud">${steps.map((step, index) => `<div class="client-timeline-step ${index <= statusIndex ? "is-complete" : ""} ${index === statusIndex ? "is-current" : ""}"><span>${index < statusIndex ? "✓" : index + 1}</span><small>${step}</small></div>`).join("")}</div>`;
     const fileMarkup = files.length ? files.map((file, index) => {
