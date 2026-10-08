@@ -6712,3 +6712,14 @@ body #loginScreen.applicant-dashboard-active .applicant-notifications-button b {
 .messaging-toast { position: fixed; right: 25px; bottom: 25px; z-index: 10000; display: grid; gap: 5px; width: min(420px, calc(100vw - 32px)); padding: 14px 16px; background: #fff; border: 1px solid #d4af37; border-radius: 12px; box-shadow: 0 12px 30px rgba(0,0,0,.2); cursor: pointer; }.messaging-toast strong { color: #b8860b; }.messaging-toast span { color: #4a402e; font-size: .84rem; }
 .messaging-external-overlay { position: fixed; inset: 0; z-index: 9500; display: grid; place-items: center; padding: 20px; background: rgba(18,18,18,.72); backdrop-filter: blur(4px); }.messaging-external-window { position: relative; width: min(1180px, 96vw); }.messaging-external-content .messaging-shell { height: min(82vh, 760px); }.messaging-external-close { position: absolute; top: -14px; right: -14px; z-index: 3; width: 34px; height: 34px; border: 1px solid #d4af37; border-radius: 50%; background: #181818; color: #fff; font-size: 1.3rem; cursor: pointer; }.applicant-messaging-button { border: 1px solid #d4af37; border-radius: 999px; background: transparent; color: #fff; padding: 7px 12px; cursor: pointer; }.applicant-messaging-button:hover { background: #d4af37; color: #211a0d; }
 @media (max-width: 800px) { .messaging-shell { grid-template-columns: 1fr; height: 78vh; min-height: 560px; }.messaging-sidebar { max-height: 230px; border-right: 0; border-bottom: 1px solid #e6dfd2; }.messaging-contact { display: none; }.messaging-contact:nth-child(-n+4) { display: grid; }.messaging-message { max-width: 88%; }.messaging-external-overlay { padding: 10px; } }
+
+/* Ajustes finales de Mensajería: escritura siempre disponible y búsqueda limpia. */
+.messaging-search > span { display: none !important; }
+.messaging-search::before, .messaging-search::after { content: none !important; display: none !important; }
+.messaging-search input { appearance: none; -webkit-appearance: none; }
+.messaging-compose { position: sticky; bottom: 0; z-index: 2; flex: 0 0 auto; }
+.messaging-compose textarea { display: block !important; visibility: visible !important; pointer-events: auto !important; }
+.messaging-contacts { min-height: 0; max-height: none; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #c8a364 #f7f4ee; }
+.messaging-contacts::-webkit-scrollbar { width: 8px; }.messaging-contacts::-webkit-scrollbar-thumb { background: #c8a364; border-radius: 8px; }.messaging-contacts::-webkit-scrollbar-track { background: #f7f4ee; }
+.messaging-profile-card span, .messaging-profile-card small { display: block; }
+.messaging-profile-card span:empty, .messaging-profile-card small:empty { display: none; }
