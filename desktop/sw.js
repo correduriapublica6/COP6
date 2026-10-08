@@ -1,5 +1,5 @@
-const CACHE_NAME = "control-operativo-cp6-home-inteligente-v56";
-const APP_SHELL = ["./", "./index.html", "./styles.css", "./dashboard.css", "./override.css", "./app.js", "./automotriz-form.js", "./automotriz-model.js", "./mobiliario-form.js", "./solicitudes-form.js", "./image-utils.js", "./word-export.js", "./vendor/html-docx.js", "./manifest.webmanifest", "./assets/fondo.jpg", "./assets/pwa-icon-512.png"];
+const CACHE_NAME = "control-operativo-cp6-home-inteligente-v57";
+const APP_SHELL = ["./", "./index.html", "./styles.css", "./dashboard.css", "./override.css", "./app.js", "./automotriz-form.js", "./automotriz-model.js", "./mobiliario-form.js", "./solicitudes-form.js", "./messaging.js", "./image-utils.js", "./word-export.js", "./vendor/html-docx.js", "./manifest.webmanifest", "./assets/fondo.jpg", "./assets/pwa-icon-512.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));

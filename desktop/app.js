@@ -760,6 +760,7 @@
     resumen: { title: "Resumen general", kicker: "", description: "" },
     usuarios: { title: "Usuarios", kicker: "ACCESO LOCAL", description: "Gestiona usuarios administrativos y usuarios externos registrados." },
     configuracion: { title: "Configuración", kicker: "", description: "Exporta, importa y respalda la información del equipo." },
+    mensajeria: { title: "Mensajería", kicker: "COMUNICACIÓN INSTITUCIONAL", description: "Conecta con el equipo CP6 y los usuarios externos en conversaciones seguras." },
   };
   function setUsersSection(section = "menu") {
     const menu = $("#usuariosMenuSection");
@@ -776,7 +777,7 @@
   }
 
   function switchAppView(view) {
-    if (!VIEW_DETAILS[view] || (view === "resumen" ? !canViewSummary() : view === "fe-publica" ? !canViewFePublica() : view === "solicitudes" ? !canViewRequests() : view !== "avaluos" && view !== "inicio" && !isAdmin())) return;
+    if (!VIEW_DETAILS[view] || (view === "resumen" ? !canViewSummary() : view === "fe-publica" ? !canViewFePublica() : view === "solicitudes" ? !canViewRequests() : view !== "avaluos" && view !== "inicio" && view !== "mensajeria" && !isAdmin())) return;
     activeAppView = view;
     $("#pageTitle").closest(".workspace-header")?.classList.toggle("avaluos-header", view === "avaluos");
     $$(".app-view").forEach((section) => { const active = section.id === `${view}View`; section.hidden = !active; section.classList.toggle("is-active", active); });
