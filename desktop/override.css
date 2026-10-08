@@ -6734,3 +6734,15 @@ body #loginScreen.applicant-dashboard-active .applicant-notifications-button b {
 @media (max-width: 800px) { .applicant-messaging-view .messaging-shell { min-height: 650px; } }
 
 .messaging-pending-invites { margin: 0 14px 10px; padding: 10px; border: 1px solid #e2cf9e; border-radius: 10px; background: #fffaf0; color: #5e481f; font-size: .78rem; }.messaging-pending-invites > strong { display: block; margin-bottom: 7px; }.messaging-pending-invites > div { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 5px; }.messaging-pending-invites button { border: 1px solid #b8860b; border-radius: 999px; background: #e6c875; color: #2a210f; padding: 4px 9px; font-size: .72rem; cursor: pointer; }
+
+/* Mensajería: acceso administrativo como icono junto a la campana. */
+#appShell.control-shell .messaging-header-button { display: inline-flex !important; align-items: center; justify-content: center; width: 30px !important; height: 32px !important; padding: 4px !important; border: 0 !important; border-radius: 0 !important; background: transparent !important; color: #fff !important; cursor: pointer !important; }
+#appShell.control-shell .messaging-header-button svg { width: 22px !important; height: 22px !important; fill: none !important; stroke: currentColor !important; stroke-width: 1.8 !important; stroke-linecap: round !important; stroke-linejoin: round !important; }
+#appShell.control-shell .messaging-header-button:hover { color: #f4e8c9 !important; }
+#appShell.control-shell .messaging-nav-link.is-icon-only { display: none !important; }
+/* El campo de composición permanece en una sola línea compacta. */
+.messaging-compose { align-items: center !important; }
+.messaging-compose textarea { height: 40px !important; min-height: 40px !important; max-height: 40px !important; overflow-x: auto !important; overflow-y: hidden !important; white-space: nowrap !important; line-height: 18px !important; padding-block: 10px !important; }
+/* Los mensajes recibidos usan un amarillo institucional muy claro y desvanecido. */
+.messaging-message.is-received .messaging-bubble { background: linear-gradient(135deg, #fffdf4 0%, #fbf4d9 52%, #f8edc8 100%) !important; border-color: #ead9a7 !important; color: #3d311d !important; }
+.messaging-message.is-sent .messaging-bubble { background: linear-gradient(135deg, #fdfbf2 0%, #f7f1db 100%) !important; }
