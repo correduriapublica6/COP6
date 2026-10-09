@@ -9396,3 +9396,295 @@ html body #appShell.control-shell .app-workspace {
     margin-top: 24px !important;
   }
 }
+
+/* ============================================================================
+   VISTAS INTERIORES — Recepción, Gestión, Validación y Solicitudes
+   SaaS frío azul/grafito, sin acentos dorados
+   ============================================================================ */
+#appShell.control-shell #recepcionAvaluosSection,
+#appShell.control-shell #crearAvaluoSection,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel,
+#appShell.control-shell #solicitudesView {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 1280px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 32px 24px !important;
+}
+#appShell.control-shell #recepcionAvaluosSection > *,
+#appShell.control-shell #crearAvaluoSection > *,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel > *,
+#appShell.control-shell #solicitudesView > * {
+  max-width: none !important;
+}
+
+/* Acciones principales y navegación secundaria */
+#appShell.control-shell #newRecordButton,
+#appShell.control-shell #newTechnicalAppraisalButton,
+#appShell.control-shell #newInternalRequestButton,
+#appShell.control-shell #refreshPendingSummaryButton,
+#appShell.control-shell .primary-button,
+#appShell.control-shell .technical-add-vehicle-button {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(37,99,235,.2) !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: .875rem !important;
+  font-weight: 500 !important;
+  padding: 10px 18px !important;
+}
+#appShell.control-shell #newRecordButton:hover,
+#appShell.control-shell #newTechnicalAppraisalButton:hover,
+#appShell.control-shell #newInternalRequestButton:hover,
+#appShell.control-shell #refreshPendingSummaryButton:hover,
+#appShell.control-shell .primary-button:hover,
+#appShell.control-shell .technical-add-vehicle-button:hover {
+  background: #1d4ed8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 5px 12px rgba(37,99,235,.24) !important;
+}
+#appShell.control-shell #backAvaluosButton,
+#appShell.control-shell #backRequestsToAvaluosButton,
+#appShell.control-shell .back-to-users,
+#appShell.control-shell .subtle-action-button {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-weight: 500 !important;
+  padding: 10px 18px !important;
+}
+#appShell.control-shell #backAvaluosButton:hover,
+#appShell.control-shell #backRequestsToAvaluosButton:hover,
+#appShell.control-shell .back-to-users:hover,
+#appShell.control-shell .subtle-action-button:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Buscadores y filtros */
+#appShell.control-shell .request-filter-row,
+#appShell.control-shell .technical-search-panel {
+  width: 100% !important;
+  max-width: 1280px !important;
+  margin: 0 auto 20px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell .request-filter-row input,
+#appShell.control-shell .request-filter-row select,
+#appShell.control-shell .technical-search-panel input,
+#appShell.control-shell .technical-search-panel select,
+#appShell.control-shell #receptionSearchInput {
+  box-sizing: border-box !important;
+  min-height: 44px !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  padding: 10px 14px !important;
+}
+#appShell.control-shell .request-filter-row input:focus,
+#appShell.control-shell .request-filter-row select:focus,
+#appShell.control-shell .technical-search-panel input:focus,
+#appShell.control-shell .technical-search-panel select:focus,
+#appShell.control-shell #receptionSearchInput:focus {
+  border-color: #93c5fd !important;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.10) !important;
+  outline: none !important;
+}
+
+/* Tarjetas y envoltorios de datos */
+#appShell.control-shell .operational-table-wrap,
+#appShell.control-shell .request-table-wrap,
+#appShell.control-shell #technicalListPanel,
+#appShell.control-shell .settings-data-list,
+#appShell.control-shell .validation-pending-section {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 1280px !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px -2px rgba(15,23,42,.04) !important;
+}
+#appShell.control-shell .operational-table,
+#appShell.control-shell .request-table-wrap table,
+#appShell.control-shell #technicalListPanel table,
+#appShell.control-shell .settings-data-list table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  table-layout: auto !important;
+  background: #ffffff !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+}
+#appShell.control-shell .operational-table thead th,
+#appShell.control-shell .request-table-wrap thead th,
+#appShell.control-shell #technicalListPanel thead th,
+#appShell.control-shell .settings-data-list thead th {
+  background: #f8fafc !important;
+  color: #64748b !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: .75rem !important;
+  font-weight: 600 !important;
+  letter-spacing: .5px !important;
+  padding: 14px 18px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell .operational-table tbody td,
+#appShell.control-shell .request-table-wrap tbody td,
+#appShell.control-shell #technicalListPanel tbody td,
+#appShell.control-shell .settings-data-list tbody td {
+  background: #ffffff !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: #0f172a !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: .875rem !important;
+  padding: 14px 18px !important;
+}
+#appShell.control-shell .operational-table tbody tr:hover td,
+#appShell.control-shell .request-table-wrap tbody tr:hover td,
+#appShell.control-shell #technicalListPanel tbody tr:hover td,
+#appShell.control-shell .settings-data-list tbody tr:hover td {
+  background: #f8fafc !important;
+}
+
+/* Estados suaves */
+#appShell.control-shell .avaluo-status,
+#appShell.control-shell .request-status-badge,
+#appShell.control-shell .status-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  border-radius: 20px !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: .8rem !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  padding: 4px 10px !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell .avaluo-status.paid,
+#appShell.control-shell .avaluo-status.delivered,
+#appShell.control-shell .status-paid,
+#appShell.control-shell .status-delivered {
+  background: #dcfce7 !important;
+  color: #15803d !important;
+}
+#appShell.control-shell .avaluo-status.pending,
+#appShell.control-shell .avaluo-status.expired,
+#appShell.control-shell .status-pending,
+#appShell.control-shell .status-in-progress {
+  background: #fef3c7 !important;
+  color: #b45309 !important;
+}
+#appShell.control-shell .avaluo-status.unpaid,
+#appShell.control-shell .status-unpaid,
+#appShell.control-shell .status-delivered-without-payment {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+}
+
+/* Acciones por icono */
+#appShell.control-shell .technical-icon-button,
+#appShell.control-shell .record-action,
+#appShell.control-shell .request-icon-button {
+  box-sizing: border-box !important;
+  align-items: center !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 6px !important;
+  color: #64748b !important;
+  display: inline-flex !important;
+  height: 32px !important;
+  justify-content: center !important;
+  min-height: 32px !important;
+  min-width: 32px !important;
+  padding: 0 !important;
+  width: 32px !important;
+}
+#appShell.control-shell .technical-icon-button:hover,
+#appShell.control-shell .record-action:hover,
+#appShell.control-shell .request-icon-button:hover {
+  background: #eff6ff !important;
+  border-color: #93c5fd !important;
+  color: #2563eb !important;
+}
+#appShell.control-shell .technical-icon-button.action-delete:hover,
+#appShell.control-shell .record-action.delete:hover,
+#appShell.control-shell .request-delete-button:hover {
+  background: #fef2f2 !important;
+  border-color: #fca5a5 !important;
+  color: #ef4444 !important;
+}
+#appShell.control-shell .technical-icon-button .action-icon,
+#appShell.control-shell .record-action svg,
+#appShell.control-shell .request-icon-button svg {
+  color: currentColor !important;
+  fill: none !important;
+  height: 17px !important;
+  stroke: currentColor !important;
+  width: 17px !important;
+}
+#appShell.control-shell .technical-row-actions,
+#appShell.control-shell .reception-actions {
+  align-items: center !important;
+  display: inline-flex !important;
+  flex-wrap: nowrap !important;
+  gap: 6px !important;
+}
+
+/* Paginación */
+#appShell.control-shell .table-pagination {
+  align-items: center !important;
+  background: #ffffff !important;
+  border-top: 1px solid #e2e8f0 !important;
+  color: #64748b !important;
+  display: flex !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: .8rem !important;
+  justify-content: space-between !important;
+  padding: 12px 16px !important;
+}
+#appShell.control-shell .table-page-button {
+  align-items: center !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 6px !important;
+  color: #64748b !important;
+  display: inline-flex !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  height: 32px !important;
+  justify-content: center !important;
+  min-width: 32px !important;
+  padding: 0 8px !important;
+}
+#appShell.control-shell .table-page-button:hover:not(:disabled) {
+  background: #eff6ff !important;
+  border-color: #93c5fd !important;
+  color: #2563eb !important;
+}
+#appShell.control-shell .table-page-button.is-active {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  border-radius: 6px !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+@media (max-width: 760px) {
+  #appShell.control-shell #recepcionAvaluosSection,
+  #appShell.control-shell #crearAvaluoSection,
+  #appShell.control-shell #avaluosAuthorizedFoliosPanel,
+  #appShell.control-shell #solicitudesView { padding: 24px 12px !important; }
+  #appShell.control-shell .table-pagination { align-items: flex-start !important; flex-direction: column !important; gap: 10px !important; }
+}
