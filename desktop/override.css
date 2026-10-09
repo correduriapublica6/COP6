@@ -10243,3 +10243,156 @@ html body #appShell.control-shell .app-workspace {
   #appShell.control-shell .messaging-shell,
   #loginScreen.applicant-dashboard-active .messaging-shell { min-height: 560px !important; }
 }
+
+/* ============================================================================
+   LAYOUT FLUIDO RESPONSIVO — TABLAS Y MENSAJERÍA
+   ============================================================================ */
+/* Las vistas de datos usan 95% del viewport, sin quedar cargadas a la izquierda. */
+#appShell.control-shell #recepcionAvaluosSection,
+#appShell.control-shell #crearAvaluoSection,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel,
+#appShell.control-shell #solicitudesView {
+  box-sizing: border-box !important;
+  width: 95% !important;
+  max-width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .operational-table-wrap,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel,
+#appShell.control-shell #solicitudesView .request-table-wrap,
+#appShell.control-shell #recepcionAvaluosSection table,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table,
+#appShell.control-shell #solicitudesView .request-table-wrap table {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table,
+#appShell.control-shell #solicitudesView .request-table-wrap table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table thead tr,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table thead tr,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table thead tr,
+#appShell.control-shell #solicitudesView .request-table-wrap table thead tr {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #2563eb 100%) !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table thead th,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table thead th,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table thead th,
+#appShell.control-shell #solicitudesView .request-table-wrap table thead th {
+  background: transparent !important;
+  color: #ffffff !important;
+  font-size: .82rem !important;
+  font-weight: 600 !important;
+  letter-spacing: .5px !important;
+  padding: 16px 18px !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table th:nth-child(2),
+#appShell.control-shell #recepcionAvaluosSection table td:nth-child(2),
+#appShell.control-shell #recepcionAvaluosSection table th:nth-child(5),
+#appShell.control-shell #recepcionAvaluosSection table td:nth-child(5),
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table th:nth-child(2),
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table td:nth-child(2),
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table th:nth-child(5),
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table td:nth-child(5),
+#appShell.control-shell #solicitudesView .request-table-wrap table th:nth-child(2),
+#appShell.control-shell #solicitudesView .request-table-wrap table td:nth-child(2),
+#appShell.control-shell #solicitudesView .request-table-wrap table th:nth-child(5),
+#appShell.control-shell #solicitudesView .request-table-wrap table td:nth-child(5) {
+  min-width: 220px !important;
+}
+
+/* Mensajería fluida tipo WhatsApp Web / Telegram Web. */
+#appShell.control-shell .messaging-shell,
+#loginScreen.applicant-dashboard-active .messaging-shell {
+  display: grid !important;
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: calc(100vh - 120px) !important;
+  min-height: 560px !important;
+  margin: 0 auto !important;
+  border-radius: 16px !important;
+  border: 1px solid #e2e8f0 !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+}
+#appShell.control-shell .messaging-sidebar,
+#loginScreen.applicant-dashboard-active .messaging-sidebar {
+  width: auto !important;
+  min-width: 0 !important;
+  flex-shrink: 0 !important;
+  background-color: #f8fafc !important;
+  border-right: 1px solid #e2e8f0 !important;
+  overflow-y: auto !important;
+}
+#appShell.control-shell .messaging-conversation,
+#loginScreen.applicant-dashboard-active .messaging-conversation {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background-color: #ffffff !important;
+}
+#appShell.control-shell .messaging-messages,
+#loginScreen.applicant-dashboard-active .messaging-messages {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  background-color: #ffffff !important;
+}
+#appShell.control-shell .messaging-message.is-sent .messaging-bubble,
+#loginScreen.applicant-dashboard-active .messaging-message.is-sent .messaging-bubble {
+  background-color: #2563eb !important;
+  border-radius: 18px 18px 4px 18px !important;
+  color: #ffffff !important;
+  padding: 10px 16px !important;
+}
+#appShell.control-shell .messaging-message.is-received .messaging-bubble,
+#loginScreen.applicant-dashboard-active .messaging-message.is-received .messaging-bubble {
+  background-color: #f1f5f9 !important;
+  border-radius: 18px 18px 18px 4px !important;
+  color: #0f172a !important;
+  padding: 10px 16px !important;
+}
+#appShell.control-shell .messaging-compose,
+#loginScreen.applicant-dashboard-active .messaging-compose {
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  background: #ffffff !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+@media (max-width: 800px) {
+  #appShell.control-shell #recepcionAvaluosSection,
+  #appShell.control-shell #crearAvaluoSection,
+  #appShell.control-shell #avaluosAuthorizedFoliosPanel,
+  #appShell.control-shell #solicitudesView { width: 100% !important; padding-left: 8px !important; padding-right: 8px !important; }
+  #appShell.control-shell .messaging-shell,
+  #loginScreen.applicant-dashboard-active .messaging-shell {
+    grid-template-columns: 1fr !important;
+    height: calc(100vh - 100px) !important;
+    min-height: 560px !important;
+  }
+  #appShell.control-shell .messaging-sidebar,
+  #loginScreen.applicant-dashboard-active .messaging-sidebar {
+    max-height: 220px !important;
+    border-right: none !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+}
