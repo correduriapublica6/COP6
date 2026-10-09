@@ -9688,3 +9688,237 @@ html body #appShell.control-shell .app-workspace {
   #appShell.control-shell #solicitudesView { padding: 24px 12px !important; }
   #appShell.control-shell .table-pagination { align-items: flex-start !important; flex-direction: column !important; gap: 10px !important; }
 }
+
+/* ============================================================================
+   VISTAS INTERIORES — TABLAS, FILTROS Y ACCIONES SaaS AZUL/GRAFITО
+   Alcance deliberado: Recepción, Gestión, Validación y Solicitudes.
+   No modifica Login, Home ni los formularios de captura.
+   ============================================================================ */
+#appShell.control-shell #recepcionAvaluosSection,
+#appShell.control-shell #crearAvaluoSection,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel,
+#appShell.control-shell #solicitudesView {
+  box-sizing: border-box !important;
+  max-width: 1280px !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Barras de búsqueda y filtros, fuera de la tarjeta de datos. */
+#appShell.control-shell #recepcionAvaluosSection .request-style-filter-panel,
+#appShell.control-shell #crearAvaluoSection .technical-search-panel,
+#appShell.control-shell #solicitudesView .request-filter-row {
+  align-items: center !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  display: flex !important;
+  gap: 16px !important;
+  margin: 0 auto 20px !important;
+  max-width: 1280px !important;
+  padding: 0 !important;
+  width: 95% !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .request-style-filter-panel .search-row,
+#appShell.control-shell #crearAvaluoSection .technical-search-panel .search-row {
+  align-items: center !important;
+  display: grid !important;
+  gap: 16px !important;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, 280px) !important;
+  width: 100% !important;
+}
+#appShell.control-shell #solicitudesView .request-filter-row input,
+#appShell.control-shell #solicitudesView .request-filter-row select,
+#appShell.control-shell #recepcionAvaluosSection .request-style-filter-panel input,
+#appShell.control-shell #recepcionAvaluosSection .request-style-filter-panel select,
+#appShell.control-shell #crearAvaluoSection .technical-search-panel input,
+#appShell.control-shell #crearAvaluoSection .technical-search-panel select {
+  box-sizing: border-box !important;
+  min-height: 44px !important;
+  width: 100% !important;
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  color: #0f172a !important;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: .88rem !important;
+  outline: none !important;
+  padding: 10px 16px !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,.03) !important;
+  transition: all .2s ease !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .request-style-filter-panel select,
+#appShell.control-shell #crearAvaluoSection .technical-search-panel select,
+#appShell.control-shell #solicitudesView .request-filter-row select {
+  appearance: none !important;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364758b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+  background-position: right 12px center !important;
+  background-repeat: no-repeat !important;
+  background-size: 16px !important;
+  padding-right: 36px !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .request-style-filter-panel input:focus,
+#appShell.control-shell #recepcionAvaluosSection .request-style-filter-panel select:focus,
+#appShell.control-shell #crearAvaluoSection .technical-search-panel input:focus,
+#appShell.control-shell #crearAvaluoSection .technical-search-panel select:focus,
+#appShell.control-shell #solicitudesView .request-filter-row input:focus,
+#appShell.control-shell #solicitudesView .request-filter-row select:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.15) !important;
+}
+
+/* Tarjetas de datos: blanco, borde frío y cabecera grafito. */
+#appShell.control-shell #recepcionAvaluosSection .operational-table-wrap,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel,
+#appShell.control-shell #solicitudesView .request-table-wrap {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px -2px rgba(15,23,42,.05) !important;
+  margin: 24px auto !important;
+  max-width: 1280px !important;
+  overflow: hidden !important;
+  width: 95% !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .inline-panel-heading,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel .inline-panel-heading,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .inline-panel-heading,
+#appShell.control-shell #solicitudesView .solicitudes-heading {
+  align-items: center !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  color: #ffffff !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  padding: 16px 24px !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .inline-panel-heading h2,
+#appShell.control-shell #recepcionAvaluosSection .inline-panel-heading h3,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel .inline-panel-heading h2,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel .inline-panel-heading h3,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .inline-panel-heading h2,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .inline-panel-heading h3,
+#appShell.control-shell #solicitudesView .solicitudes-heading h2 {
+  color: #ffffff !important;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: .2px !important;
+  margin: 0 !important;
+}
+
+#appShell.control-shell #recepcionAvaluosSection table,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table,
+#appShell.control-shell #solicitudesView .request-table-wrap table {
+  background: #ffffff !important;
+  border-collapse: collapse !important;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  table-layout: auto !important;
+  width: 100% !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table th,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table th,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table th,
+#appShell.control-shell #solicitudesView .request-table-wrap table th {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #64748b !important;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: .75rem !important;
+  font-weight: 600 !important;
+  letter-spacing: .5px !important;
+  padding: 12px 18px !important;
+  text-align: left !important;
+  text-transform: uppercase !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table td,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table td,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table td,
+#appShell.control-shell #solicitudesView .request-table-wrap table td {
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: #0f172a !important;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: .88rem !important;
+  padding: 14px 18px !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table tbody tr:hover td,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table tbody tr:hover td,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table tbody tr:hover td,
+#appShell.control-shell #solicitudesView .request-table-wrap table tbody tr:hover td {
+  background-color: #f8fafc !important;
+}
+
+/* Acciones azules, sin herencia de botones dorados antiguos. */
+#appShell.control-shell #recepcionAvaluosSection button[class*="create"],
+#appShell.control-shell #recepcionAvaluosSection button[class*="new"],
+#appShell.control-shell #crearAvaluoSection button[class*="create"],
+#appShell.control-shell #crearAvaluoSection button[class*="new"],
+#appShell.control-shell #solicitudesView button[class*="create"],
+#appShell.control-shell #solicitudesView button[class*="new"],
+#appShell.control-shell #newRecordButton,
+#appShell.control-shell #newTechnicalAppraisalButton,
+#appShell.control-shell #newInternalRequestButton {
+  background: #2563eb !important;
+  background-color: #2563eb !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(37,99,235,.2) !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: .88rem !important;
+  font-weight: 500 !important;
+  padding: 10px 20px !important;
+  transition: all .2s ease !important;
+}
+#appShell.control-shell #recepcionAvaluosSection button[class*="create"]:hover,
+#appShell.control-shell #crearAvaluoSection button[class*="create"]:hover,
+#appShell.control-shell #solicitudesView button[class*="create"]:hover,
+#appShell.control-shell #newRecordButton:hover,
+#appShell.control-shell #newTechnicalAppraisalButton:hover,
+#appShell.control-shell #newInternalRequestButton:hover {
+  background: #1d4ed8 !important;
+  transform: translateY(-1px) !important;
+}
+#appShell.control-shell #recepcionAvaluosSection button[class*="back"],
+#appShell.control-shell #crearAvaluoSection button[class*="back"],
+#appShell.control-shell #solicitudesView button[class*="back"],
+#appShell.control-shell #backAvaluosButton,
+#appShell.control-shell #backRequestsToAvaluosButton {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  color: #475569 !important;
+  font-size: .88rem !important;
+  padding: 10px 16px !important;
+}
+
+/* Paginación azul */
+#appShell.control-shell #recepcionAvaluosSection .table-page-button,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel .table-page-button,
+#appShell.control-shell #solicitudesView .table-page-button {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 6px !important;
+  color: #64748b !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .table-page-button.is-active,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel .table-page-button.is-active,
+#appShell.control-shell #solicitudesView .table-page-button.is-active {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+}
+@media (max-width: 760px) {
+  #appShell.control-shell #recepcionAvaluosSection .request-style-filter-panel,
+  #appShell.control-shell #crearAvaluoSection .technical-search-panel,
+  #appShell.control-shell #solicitudesView .request-filter-row { flex-direction: column !important; align-items: stretch !important; width: 100% !important; }
+  #appShell.control-shell #recepcionAvaluosSection .request-style-filter-panel .search-row,
+  #appShell.control-shell #crearAvaluoSection .technical-search-panel .search-row { grid-template-columns: 1fr !important; }
+  #appShell.control-shell #recepcionAvaluosSection .operational-table-wrap,
+  #appShell.control-shell #crearAvaluosSection #technicalListPanel,
+  #appShell.control-shell #avaluosAuthorizedFoliosPanel,
+  #appShell.control-shell #solicitudesView .request-table-wrap { margin-left: auto !important; margin-right: auto !important; width: 100% !important; overflow-x: auto !important; }
+}
