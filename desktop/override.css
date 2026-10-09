@@ -7345,3 +7345,79 @@ body :where(.app-view, .app-sidebar, .record-dialog, .messaging-shell) h3 { font
   }
   #loginScreen:not(.applicant-dashboard-active) .public-entry-internal { right: 28px !important; bottom: 24px !important; }
 }
+
+/* Ajuste final Login: branding limpio y modal administrativo minimalista */
+#loginScreen:not(.applicant-dashboard-active) .login-visual-copy h2 {
+  white-space: nowrap !important;
+  font-size: clamp(1.7rem, 3vw, 3rem) !important;
+  letter-spacing: -.035em !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-copy h2 br { display: none !important; }
+#loginScreen:not(.applicant-dashboard-active) .login-visual-logo {
+  left: auto !important;
+  right: 48px !important;
+  width: 112px !important;
+  height: 112px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-logo img {
+  width: 100% !important;
+  height: 100% !important;
+  filter: grayscale(1) brightness(0) invert(1) !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-copy {
+  width: min(100%, 560px) !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-copy span {
+  color: #cbd5e1 !important;
+}
+
+/* Modal administrativo: solo título principal, sin etiquetas auxiliares. */
+#adminAccessDialog .admin-login-card .eyebrow,
+#adminAccessDialog .admin-login-card .login-copy {
+  display: none !important;
+}
+#adminAccessDialog .admin-login-card .dialog-heading h2 {
+  margin: 0 !important;
+  color: #0f172a !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+}
+#adminAccessDialog .admin-login-card input,
+#adminAccessDialog .admin-login-card select,
+#adminAccessDialog .admin-login-card textarea {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: none !important;
+  color: #1e293b !important;
+}
+#adminAccessDialog .admin-login-card input:hover,
+#adminAccessDialog .admin-login-card select:hover,
+#adminAccessDialog .admin-login-card textarea:hover {
+  border-color: #94a3b8 !important;
+}
+#adminAccessDialog .admin-login-card input:focus,
+#adminAccessDialog .admin-login-card select:focus,
+#adminAccessDialog .admin-login-card textarea:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.10) !important;
+  outline: none !important;
+}
+#adminAccessDialog .admin-login-card label {
+  color: #475569 !important;
+}
+@media (max-width: 800px) {
+  #loginScreen:not(.applicant-dashboard-active) .login-visual-logo {
+    top: 24px !important;
+    right: 28px !important;
+    left: auto !important;
+    width: 78px !important;
+    height: 78px !important;
+  }
+  #loginScreen:not(.applicant-dashboard-active) .login-visual-copy h2 {
+    font-size: clamp(1.5rem, 7vw, 2.4rem) !important;
+  }
+}
