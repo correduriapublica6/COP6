@@ -7421,3 +7421,279 @@ body :where(.app-view, .app-sidebar, .record-dialog, .messaging-shell) h3 { font
     font-size: clamp(1.5rem, 7vw, 2.4rem) !important;
   }
 }
+
+/* ============================================================================
+   NAVBAR DASHBOARD — grafito frío, 64px, sin dorados ni bordes cálidos
+   ============================================================================ */
+#appShell.control-shell .app-sidebar {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  height: 64px !important;
+  min-height: 64px !important;
+  box-sizing: border-box !important;
+  padding: 0 24px !important;
+  overflow: visible !important;
+  background: #0f172a !important;
+  border: 0 !important;
+  border-bottom: 1px solid #1e293b !important;
+  border-radius: 0 !important;
+  box-shadow: 0 4px 14px rgba(15,23,42,.12) !important;
+  z-index: 50 !important;
+}
+#appShell.control-shell .app-sidebar::before {
+  content: "Correduría Pública 6" !important;
+  display: block !important;
+  flex: 0 0 auto !important;
+  min-width: max-content !important;
+  color: #f8fafc !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  letter-spacing: -.01em !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell .sidebar-brand { display: none !important; }
+#appShell.control-shell .header-left-tools {
+  position: absolute !important;
+  left: 230px !important;
+  top: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: 64px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#appShell.control-shell .global-search-wrap {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 174px !important;
+  height: 34px !important;
+}
+#appShell.control-shell #globalSearchInput {
+  width: 100% !important;
+  height: 34px !important;
+  box-sizing: border-box !important;
+  padding: 8px 58px 8px 12px !important;
+  border: 1px solid #334155 !important;
+  border-radius: 8px !important;
+  background: #1e293b !important;
+  color: #f8fafc !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .78rem !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell #globalSearchInput::placeholder { color: #94a3b8 !important; }
+#appShell.control-shell #globalSearchInput:focus {
+  border-color: #64748b !important;
+  box-shadow: 0 0 0 3px rgba(148,163,184,.14) !important;
+}
+#appShell.control-shell .global-search-wrap kbd {
+  position: absolute !important;
+  right: 8px !important;
+  color: #94a3b8 !important;
+  background: transparent !important;
+  border: 0 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .62rem !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell .alerts-button,
+#appShell.control-shell .messaging-header-button {
+  display: grid !important;
+  place-items: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: #cbd5e1 !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell .alerts-button:hover,
+#appShell.control-shell .messaging-header-button:hover {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #ffffff !important;
+}
+#appShell.control-shell .alerts-button svg,
+#appShell.control-shell .messaging-header-button svg { width: 18px !important; height: 18px !important; }
+#appShell.control-shell .sidebar-nav {
+  position: absolute !important;
+  left: 50% !important;
+  top: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  width: max-content !important;
+  height: 64px !important;
+  max-width: calc(100% - 640px) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  transform: translateX(-50%) !important;
+  overflow: visible !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell .sidebar-link {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  min-height: 36px !important;
+  padding: 8px 11px !important;
+  border: 0 !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  color: #94a3b8 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .78rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+#appShell.control-shell .sidebar-link:hover,
+#appShell.control-shell .sidebar-link:focus-visible {
+  background: #1e293b !important;
+  color: #ffffff !important;
+  outline: none !important;
+}
+#appShell.control-shell .sidebar-link.is-active {
+  background: rgba(148,163,184,.14) !important;
+  color: #ffffff !important;
+  font-weight: 400 !important;
+}
+#appShell.control-shell .sidebar-link.is-active::after {
+  content: "" !important;
+  position: absolute !important;
+  right: 11px !important;
+  bottom: 2px !important;
+  left: 11px !important;
+  height: 2px !important;
+  border-radius: 2px !important;
+  background: #cbd5e1 !important;
+}
+#appShell.control-shell .sidebar-link .nav-icon { color: inherit !important; }
+#appShell.control-shell .sidebar-footer {
+  position: absolute !important;
+  top: 0 !important;
+  right: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  height: 64px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+#appShell.control-shell .sidebar-account {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+  padding: 7px 10px !important;
+  border: 1px solid #334155 !important;
+  border-radius: 999px !important;
+  background: #111c2e !important;
+}
+#appShell.control-shell .sidebar-account-copy {
+  display: flex !important;
+  align-items: flex-end !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+#appShell.control-shell .active-user {
+  max-width: 164px !important;
+  overflow: hidden !important;
+  color: #f8fafc !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .75rem !important;
+  font-weight: 500 !important;
+  line-height: 1.1 !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell .active-user-role,
+#appShell.control-shell .sidebar-online {
+  color: #94a3b8 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .62rem !important;
+  font-weight: 400 !important;
+  line-height: 1.1 !important;
+}
+#appShell.control-shell .sidebar-status-dot { box-shadow: none !important; }
+#appShell.control-shell .profile-menu-wrap { position: relative !important; }
+#appShell.control-shell .profile-button {
+  display: grid !important;
+  place-items: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  border: 1px solid #475569 !important;
+  border-radius: 50% !important;
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell .profile-button:hover {
+  background: #334155 !important;
+  border-color: #94a3b8 !important;
+  color: #ffffff !important;
+}
+#appShell.control-shell .profile-button img,
+#appShell.control-shell .profile-avatar-image { border-radius: 50% !important; }
+#appShell.control-shell .profile-menu {
+  top: calc(100% + 8px) !important;
+  right: 0 !important;
+  min-width: 190px !important;
+  padding: 6px !important;
+  border: 1px solid #334155 !important;
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  box-shadow: 0 12px 28px rgba(15,23,42,.16) !important;
+}
+#appShell.control-shell .profile-menu button {
+  width: 100% !important;
+  padding: 9px 10px !important;
+  border: 0 !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  color: #334155 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .8rem !important;
+  font-weight: 400 !important;
+  text-align: left !important;
+}
+#appShell.control-shell .profile-menu button:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+@media (max-width: 1100px) {
+  #appShell.control-shell .header-left-tools { left: 214px !important; }
+  #appShell.control-shell .sidebar-nav { max-width: calc(100% - 570px) !important; }
+  #appShell.control-shell .sidebar-link { padding-inline: 8px !important; }
+  #appShell.control-shell .sidebar-footer { right: 14px !important; }
+  #appShell.control-shell .active-user { max-width: 120px !important; }
+}
+@media (max-width: 820px) {
+  #appShell.control-shell .app-sidebar { height: auto !important; min-height: 118px !important; flex-wrap: wrap !important; padding: 12px 16px !important; }
+  #appShell.control-shell .app-sidebar::before { width: 100% !important; height: 22px !important; }
+  #appShell.control-shell .header-left-tools { left: 16px !important; top: 64px !important; height: 42px !important; }
+  #appShell.control-shell .global-search-wrap { width: 150px !important; }
+  #appShell.control-shell .sidebar-nav { left: auto !important; right: 16px !important; top: 64px !important; width: auto !important; max-width: calc(100% - 190px) !important; height: 42px !important; transform: none !important; overflow-x: auto !important; justify-content: flex-start !important; }
+  #appShell.control-shell .sidebar-footer { top: 12px !important; right: 16px !important; height: 32px !important; }
+  #appShell.control-shell .sidebar-account { display: none !important; }
+}
