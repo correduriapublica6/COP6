@@ -9288,3 +9288,42 @@ html body #appShell.control-shell .app-workspace {
   #appShell.control-shell #avaluosView .avaluos-choice-grid { grid-template-columns: 1fr !important; }
   #appShell.control-shell #avaluosView .avaluos-choice-card { min-height: 132px !important; }
 }
+
+
+/* ============================================================================
+   AVALÚOS — ajuste de posición superior y ancho del contenedor
+   ============================================================================ */
+#appShell.control-shell #avaluosView > #avaluosMenuSection {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 1240px !important;
+  margin-top: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-top: 48px !important;
+  padding-right: 32px !important;
+  padding-bottom: 48px !important;
+  padding-left: 32px !important;
+}
+#appShell.control-shell #avaluosView .avaluos-section-heading,
+#appShell.control-shell #avaluosView .avaluos-choice-grid {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+#appShell.control-shell #avaluosView .avaluos-section-heading {
+  margin-top: 0 !important;
+  margin-bottom: 24px !important;
+}
+#appShell.control-shell #avaluosView .avaluos-choice-grid {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+@media (max-width: 720px) {
+  #appShell.control-shell #avaluosView > #avaluosMenuSection {
+    padding-top: 28px !important;
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+  }
+}
