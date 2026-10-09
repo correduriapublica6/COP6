@@ -8931,3 +8931,76 @@ body :where(.app-view, .app-sidebar, .record-dialog, .messaging-shell) h3 { font
   #appShell.control-shell .cp6-nav-tools { flex: 0 0 auto !important; height: 34px !important; }
   #appShell.control-shell .cp6-nav-center { order: 4 !important; flex: 1 0 100% !important; justify-content: flex-start !important; height: 34px !important; overflow-x: auto !important; overflow-y: hidden !important; }
 }
+
+
+/* ============================================================================
+   HOME SAAS — bienvenida clara, sans-serif y sin marca visible en Navbar
+   ============================================================================ */
+#appShell.control-shell > .cp6-navbar-modern .cp6-brand {
+  display: none !important;
+}
+#appShell.control-shell > .cp6-navbar-modern .cp6-nav-center {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+#appShell.control-shell > .cp6-navbar-modern .cp6-nav-tools {
+  margin-left: auto !important;
+}
+html body,
+html body #appShell.control-shell,
+html body #appShell.control-shell .app-workspace {
+  background: #f8fafc !important;
+}
+#appShell.control-shell .welcome-view {
+  display: block !important;
+  width: 100% !important;
+  max-width: 1180px !important;
+  min-height: 0 !important;
+  padding: 32px 0 !important;
+  margin: 0 auto !important;
+  background: transparent !important;
+}
+#appShell.control-shell .welcome-card {
+  width: 100% !important;
+  min-height: 0 !important;
+  box-sizing: border-box !important;
+  padding: 32px !important;
+  margin: 0 !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,.03), 0 2px 4px -1px rgba(0,0,0,.02) !important;
+}
+#appShell.control-shell .welcome-card-main {
+  display: block !important;
+}
+#appShell.control-shell #welcomeTitle {
+  margin: 0 !important;
+  color: #64748b !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 400 !important;
+  line-height: 1.35 !important;
+}
+#appShell.control-shell #welcomeUserName {
+  display: block !important;
+  margin-top: 6px !important;
+  color: #0f172a !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: 1.85rem !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+}
+#appShell.control-shell #welcomeRoleCopy {
+  margin: 14px 0 0 !important;
+  color: #64748b !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: .95rem !important;
+  font-weight: 400 !important;
+  line-height: 1.55 !important;
+}
+@media (max-width: 720px) {
+  #appShell.control-shell .welcome-view { padding: 20px 16px !important; }
+  #appShell.control-shell .welcome-card { padding: 24px !important; }
+  #appShell.control-shell #welcomeUserName { font-size: 1.55rem !important; }
+}
