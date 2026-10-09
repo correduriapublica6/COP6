@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261009-1444" />
+    <link rel="stylesheet" href="override.css?v=20261009-1500" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -125,6 +125,10 @@
 
         <section id="avaluosView" class="app-view is-active" aria-labelledby="pageTitle">
           <section id="avaluosMenuSection" class="avaluos-menu" aria-label="Opciones de Avalúos">
+            <div class="avaluos-section-heading">
+              <h2>Gestión y Módulos de Avalúos</h2>
+              <p>Selecciona una herramienta para acceder a los formularios, solicitudes y registros.</p>
+            </div>
             <div class="avaluos-choice-grid">
               <button class="avaluos-choice-card recepcion-choice" data-avaluos-section="recepcion" type="button"><span class="avaluos-choice-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span class="avaluos-choice-copy"><strong>Recepción</strong><small>Registra, busca y controla pagos de los avalúos entregados.</small></span><span class="avaluos-choice-arrow">→</span></button>
               <button class="avaluos-choice-card crear-choice" data-avaluos-section="crear" type="button"><span class="avaluos-choice-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="m3 7.5 9 4.5 9-4.5M12 12v9"/></svg></span><span class="avaluos-choice-copy"><strong>Gestión de Avalúos</strong><small>Consulta los expedientes técnicos y elabora un avalúo nuevo.</small></span><span class="avaluos-choice-arrow">→</span></button><button class="avaluos-choice-card validation-choice folio-authorizer-only is-hidden" data-avaluos-section="validacion" type="button"><span class="avaluos-choice-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 6v5c0 5-3.3 8.4-8 10-4.7-1.6-8-5-8-10V6z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg></span><span class="avaluos-choice-copy"><strong>Validación</strong><small>Autoriza folios y verifica si ya fueron registrados en Recepción.</small></span><span class="avaluos-choice-arrow">→</span></button><button class="avaluos-choice-card solicitudes-choice" data-app-view="solicitudes" type="button"><span class="avaluos-choice-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span class="avaluos-choice-copy"><strong>Solicitudes</strong><small>Consulta, asigna y actualiza las solicitudes de servicio.</small></span><span class="avaluos-choice-arrow">→</span></button>
