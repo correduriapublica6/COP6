@@ -9922,3 +9922,88 @@ html body #appShell.control-shell .app-workspace {
   #appShell.control-shell #avaluosAuthorizedFoliosPanel,
   #appShell.control-shell #solicitudesView .request-table-wrap { margin-left: auto !important; margin-right: auto !important; width: 100% !important; overflow-x: auto !important; }
 }
+
+/* Ajuste final de tablas: encabezado azul degradado y tarjeta de 16px. */
+#appShell.control-shell #recepcionAvaluosSection .operational-table-wrap,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel,
+#appShell.control-shell #solicitudesView .request-table-wrap {
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 25px -5px rgba(15,23,42,.08) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 1280px !important;
+  overflow: hidden !important;
+  width: 100% !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table thead,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table thead,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table thead,
+#appShell.control-shell #solicitudesView .request-table-wrap table thead {
+  border-radius: 16px 16px 0 0 !important;
+  overflow: hidden !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table thead tr,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table thead tr,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table thead tr,
+#appShell.control-shell #solicitudesView .request-table-wrap table thead tr,
+#appShell.control-shell #recepcionAvaluosSection table thead th,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table thead th,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table thead th,
+#appShell.control-shell #solicitudesView .request-table-wrap table thead th {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #2563eb 100%) !important;
+  border: none !important;
+  border-top-left-radius: 16px !important;
+  border-top-right-radius: 16px !important;
+  color: #ffffff !important;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-size: .8rem !important;
+  font-weight: 600 !important;
+  letter-spacing: .8px !important;
+  padding: 14px 18px !important;
+  text-transform: uppercase !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table tbody td,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table tbody td,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table tbody td,
+#appShell.control-shell #solicitudesView .request-table-wrap table tbody td {
+  background: #ffffff !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: #0f172a !important;
+  padding: 14px 18px !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table tbody tr:hover td,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table tbody tr:hover td,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table tbody tr:hover td,
+#appShell.control-shell #solicitudesView .request-table-wrap table tbody tr:hover td {
+  background-color: #f8fafc !important;
+}
+/* Encabezados de sección planos; el degradado vive únicamente en la fila TH. */
+#appShell.control-shell #recepcionAvaluosSection .inline-panel-heading,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel .inline-panel-heading,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .inline-panel-heading,
+#appShell.control-shell #solicitudesView .solicitudes-heading {
+  background: transparent !important;
+  color: #0f172a !important;
+  padding: 0 0 16px !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .inline-panel-heading h2,
+#appShell.control-shell #recepcionAvaluosSection .inline-panel-heading h3,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel .inline-panel-heading h2,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel .inline-panel-heading h3,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .inline-panel-heading h2,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .inline-panel-heading h3,
+#appShell.control-shell #solicitudesView .solicitudes-heading h2 {
+  color: #0f172a !important;
+}
+#appShell.control-shell #newRecordButton,
+#appShell.control-shell #newTechnicalAppraisalButton,
+#appShell.control-shell #newInternalRequestButton {
+  background: #2563eb !important;
+  border: none !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  padding: 10px 20px !important;
+}
