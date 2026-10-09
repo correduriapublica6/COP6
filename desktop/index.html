@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261009-1335" />
+    <link rel="stylesheet" href="override.css?v=20261009-1352" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -83,15 +83,15 @@
           <button id="messagingHeaderButton" class="messaging-header-button navbar-icon-button" data-app-view="mensajeria" type="button" aria-label="Abrir Mensajería" title="Mensajería">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H9l-4 4V5Z"></path><path d="M8 9h8M8 12h5"></path></svg>
           </button>
-          <button id="alertsButton" class="alerts-button header-alerts-button navbar-icon-button" type="button" aria-label="Centro de alertas" aria-expanded="false" title="Notificaciones">
-            <span class="bell-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg></span><b id="alertsCount" hidden>0</b>
-          </button>
           <div class="profile-menu-wrap navbar-profile-wrap">
             <button id="profileButton" class="profile-button navbar-icon-button" type="button" aria-label="Abrir menú de perfil" aria-expanded="false" title="Perfil">
-              <img id="profileAvatarImage" class="profile-avatar-image" alt="Foto de perfil" hidden /><span class="user-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20c.8-3.5 3.1-5.5 7-5.5s6.2 2 7 5.5"></path></svg></span>
+              <img id="profileAvatarImage" class="profile-avatar-image" alt="Foto de perfil" hidden /><span class="user-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20c.8-3.5 3.1-5.5 7-5.5s6.2 2 7 5.5"></path></svg></span><span class="profile-status-dot" aria-label="En línea"></span>
             </button>
             <div id="profileMenu" class="profile-menu" hidden><button type="button" data-profile-action="data">Mi perfil</button><button type="button" data-profile-action="password">Cambiar contraseña</button><button type="button" data-profile-action="logout">Cerrar sesión</button></div>
           </div>
+          <button id="alertsButton" class="alerts-button header-alerts-button navbar-icon-button" type="button" aria-label="Centro de alertas" aria-expanded="false" title="Notificaciones">
+            <span class="bell-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg></span><b id="alertsCount" hidden>0</b>
+          </button>
         </div>
       <nav class="sidebar-nav floating-nav-capsule" aria-label="Secciones">
         <button id="homeButton" class="sidebar-link" data-app-view="inicio" type="button"><span>Home</span></button>
