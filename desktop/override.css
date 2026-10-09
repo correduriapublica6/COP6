@@ -9004,3 +9004,62 @@ html body #appShell.control-shell .app-workspace {
   #appShell.control-shell .welcome-card { padding: 24px !important; }
   #appShell.control-shell #welcomeUserName { font-size: 1.55rem !important; }
 }
+
+
+/* ============================================================================
+   HOME PLANO — bienvenida abierta y navegación alineada a la izquierda
+   ============================================================================ */
+#appShell.control-shell > .cp6-navbar-modern .cp6-nav-center {
+  justify-content: flex-start !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+#appShell.control-shell .welcome-view {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  padding: 48px 40px !important;
+  margin: 0 !important;
+  background: transparent !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell .welcome-card {
+  width: 100% !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell #welcomeTitle {
+  margin: 0 0 2px !important;
+  color: #64748b !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: 1.1rem !important;
+  font-weight: 400 !important;
+  line-height: 1.35 !important;
+}
+#appShell.control-shell #welcomeUserName {
+  display: block !important;
+  margin-top: 4px !important;
+  color: #0f172a !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: 1.85rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -.5px !important;
+  line-height: 1.2 !important;
+}
+#appShell.control-shell #welcomeRoleCopy {
+  margin: 6px 0 0 !important;
+  color: #64748b !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: .9rem !important;
+  font-weight: 400 !important;
+  line-height: 1.55 !important;
+}
+@media (max-width: 720px) {
+  #appShell.control-shell .welcome-view { padding: 32px 20px !important; }
+}
