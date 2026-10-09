@@ -10007,3 +10007,239 @@ html body #appShell.control-shell .app-workspace {
   font-weight: 500 !important;
   padding: 10px 20px !important;
 }
+
+/* ============================================================================
+   AJUSTE ESTRUCTURAL FINAL — FRANJA CONTINUA DE TABLAS Y MESSENGER CP6
+   ============================================================================ */
+/* Las tarjetas de estas vistas ocupan todo el ancho útil y quedan centradas. */
+#appShell.control-shell #recepcionAvaluosSection .operational-table-wrap,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel,
+#appShell.control-shell #solicitudesView .request-table-wrap {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table,
+#appShell.control-shell #solicitudesView .request-table-wrap table {
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  table-layout: auto !important;
+}
+/* El degradado se aplica sólo a la fila: th queda transparente para formar una franja única. */
+#appShell.control-shell #recepcionAvaluosSection table thead tr,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table thead tr,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table thead tr,
+#appShell.control-shell #solicitudesView .request-table-wrap table thead tr {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #2563eb 100%) !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table thead th,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table thead th,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table thead th,
+#appShell.control-shell #solicitudesView .request-table-wrap table thead th {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  color: #ffffff !important;
+  font-size: .82rem !important;
+  font-weight: 600 !important;
+  letter-spacing: .5px !important;
+  padding: 16px 18px !important;
+  text-align: left !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+/* Aumenta espacio para nombres y columnas informativas sin encajonar el contenido. */
+#appShell.control-shell #recepcionAvaluosSection table th:nth-child(2),
+#appShell.control-shell #recepcionAvaluosSection table td:nth-child(2),
+#appShell.control-shell #recepcionAvaluosSection table th:nth-child(5),
+#appShell.control-shell #recepcionAvaluosSection table td:nth-child(5),
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table th:nth-child(2),
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table td:nth-child(2),
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table th:nth-child(5),
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table td:nth-child(5),
+#appShell.control-shell #solicitudesView .request-table-wrap table th:nth-child(2),
+#appShell.control-shell #solicitudesView .request-table-wrap table td:nth-child(2),
+#appShell.control-shell #solicitudesView .request-table-wrap table th:nth-child(5),
+#appShell.control-shell #solicitudesView .request-table-wrap table td:nth-child(5) {
+  min-width: 220px !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table tbody td,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table tbody td,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table tbody td,
+#appShell.control-shell #solicitudesView .request-table-wrap table tbody td {
+  background: #ffffff !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: #0f172a !important;
+  padding: 14px 18px !important;
+}
+
+/* Mensajería: interfaz plana tipo Messenger, sin crema ni dorado. */
+#appShell.control-shell .messaging-shell,
+#appShell.control-shell .messaging-wrapper,
+#loginScreen.applicant-dashboard-active .messaging-shell,
+#loginScreen.applicant-dashboard-active .messaging-wrapper {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 1300px !important;
+  min-height: 640px !important;
+  margin: 0 auto !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+  box-shadow: 0 10px 25px -5px rgba(15,23,42,.08) !important;
+}
+#appShell.control-shell .messaging-sidebar,
+#loginScreen.applicant-dashboard-active .messaging-sidebar {
+  background: #f8fafc !important;
+  border-right: 1px solid #e2e8f0 !important;
+}
+#appShell.control-shell .messaging-sidebar-head,
+#loginScreen.applicant-dashboard-active .messaging-sidebar-head {
+  background: #0f172a !important;
+  border-bottom: 1px solid #1e293b !important;
+  color: #ffffff !important;
+}
+#appShell.control-shell .messaging-search-row,
+#loginScreen.applicant-dashboard-active .messaging-search-row {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  padding: 14px !important;
+}
+#appShell.control-shell .messaging-search input,
+#loginScreen.applicant-dashboard-active .messaging-search input {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 24px !important;
+  color: #0f172a !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+  padding: 10px 16px !important;
+}
+#appShell.control-shell .messaging-search input:focus,
+#loginScreen.applicant-dashboard-active .messaging-search input:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.12) !important;
+  outline: none !important;
+}
+#appShell.control-shell .messaging-conversation,
+#appShell.control-shell .messaging-messages,
+#loginScreen.applicant-dashboard-active .messaging-conversation,
+#loginScreen.applicant-dashboard-active .messaging-messages {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+#appShell.control-shell .messaging-conversation-head,
+#loginScreen.applicant-dashboard-active .messaging-conversation-head {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+#appShell.control-shell .messaging-message.is-sent .messaging-bubble,
+#loginScreen.applicant-dashboard-active .messaging-message.is-sent .messaging-bubble {
+  background: #2563eb !important;
+  border: 1px solid #2563eb !important;
+  border-radius: 18px 18px 4px 18px !important;
+  color: #ffffff !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+  padding: 10px 16px !important;
+}
+#appShell.control-shell .messaging-message.is-received .messaging-bubble,
+#loginScreen.applicant-dashboard-active .messaging-message.is-received .messaging-bubble {
+  background: #f1f5f9 !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 18px 18px 18px 4px !important;
+  color: #0f172a !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+  padding: 10px 16px !important;
+}
+#appShell.control-shell .messaging-meta,
+#loginScreen.applicant-dashboard-active .messaging-meta {
+  color: #94a3b8 !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+#appShell.control-shell .messaging-compose,
+#loginScreen.applicant-dashboard-active .messaging-compose {
+  align-items: center !important;
+  background: #ffffff !important;
+  border-top: 1px solid #e2e8f0 !important;
+  padding: 14px 18px !important;
+}
+#appShell.control-shell .messaging-compose textarea,
+#loginScreen.applicant-dashboard-active .messaging-compose textarea {
+  box-sizing: border-box !important;
+  flex: 1 1 auto !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  max-height: 42px !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 24px !important;
+  color: #0f172a !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
+  overflow: hidden !important;
+  padding: 11px 20px !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell .messaging-compose textarea:focus,
+#loginScreen.applicant-dashboard-active .messaging-compose textarea:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.12) !important;
+  outline: none !important;
+}
+#appShell.control-shell .messaging-compose button,
+#loginScreen.applicant-dashboard-active .messaging-compose button {
+  align-items: center !important;
+  background: #2563eb !important;
+  border: none !important;
+  border-radius: 50% !important;
+  color: #ffffff !important;
+  display: inline-flex !important;
+  height: 42px !important;
+  justify-content: center !important;
+  min-width: 42px !important;
+  padding: 0 !important;
+  width: 42px !important;
+}
+#appShell.control-shell .messaging-compose button:hover,
+#loginScreen.applicant-dashboard-active .messaging-compose button:hover {
+  background: #1d4ed8 !important;
+}
+#appShell.control-shell .messaging-contacts,
+#loginScreen.applicant-dashboard-active .messaging-contacts {
+  scrollbar-color: #cbd5e1 #f8fafc !important;
+}
+#appShell.control-shell .messaging-invite-results,
+#loginScreen.applicant-dashboard-active .messaging-invite-results {
+  border-color: #e2e8f0 !important;
+  background: #ffffff !important;
+  box-shadow: 0 10px 24px rgba(15,23,42,.12) !important;
+}
+#appShell.control-shell .messaging-invite-results button:hover,
+#loginScreen.applicant-dashboard-active .messaging-invite-results button:hover {
+  background: #eff6ff !important;
+}
+#appShell.control-shell .messaging-invite-results strong,
+#appShell.control-shell .messaging-invite-results span,
+#loginScreen.applicant-dashboard-active .messaging-invite-results strong,
+#loginScreen.applicant-dashboard-active .messaging-invite-results span {
+  color: #2563eb !important;
+}
+@media (max-width: 800px) {
+  #appShell.control-shell .messaging-shell,
+  #loginScreen.applicant-dashboard-active .messaging-shell { min-height: 560px !important; }
+}
