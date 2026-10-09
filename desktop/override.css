@@ -7056,3 +7056,292 @@ body :where(.app-view, .app-sidebar, .record-dialog, .messaging-shell) b { font-
 body :where(.app-view, .app-sidebar, .record-dialog, .messaging-shell) h1,
 body :where(.app-view, .app-sidebar, .record-dialog, .messaging-shell) h2,
 body :where(.app-view, .app-sidebar, .record-dialog, .messaging-shell) h3 { font-weight: 600 !important; }
+
+/* ============================================================================
+   LOGIN SPLIT SCREEN — diseño institucional frío, sin cambiar autenticación
+   ============================================================================ */
+#loginScreen:not(.applicant-dashboard-active) {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  grid-template-rows: 1fr !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+  background: #f8fafc !important;
+  overflow: hidden !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  display: flex !important;
+  position: relative !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 100vh !important;
+  padding: 48px !important;
+  overflow: hidden !important;
+  background: #0f172a !important;
+  background-image: none !important;
+  color: #ffffff !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: radial-gradient(circle at 20% 20%, rgba(59,130,246,.18), transparent 38%), linear-gradient(145deg, #0f172a 0%, #111827 62%, #1e293b 100%) !important;
+  pointer-events: none !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-logo,
+#loginScreen:not(.applicant-dashboard-active) .login-visual-copy,
+#loginScreen:not(.applicant-dashboard-active) .login-visual-footer {
+  position: relative !important;
+  z-index: 1 !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-logo {
+  position: absolute !important;
+  top: 48px !important;
+  left: 48px !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 72px !important;
+  height: 72px !important;
+  padding: 12px !important;
+  border: 1px solid rgba(226,232,240,.24) !important;
+  border-radius: 16px !important;
+  background: rgba(255,255,255,.06) !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-logo img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  filter: grayscale(1) brightness(0) invert(1) !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-copy {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  width: min(100%, 420px) !important;
+  margin: 0 !important;
+  transform: none !important;
+  text-align: left !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-copy h2 {
+  margin: 0 !important;
+  color: #ffffff !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: clamp(2.25rem, 4vw, 4rem) !important;
+  font-weight: 600 !important;
+  letter-spacing: -.045em !important;
+  line-height: 1.05 !important;
+  text-transform: none !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-copy span {
+  display: block !important;
+  margin-top: 18px !important;
+  color: #cbd5e1 !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  letter-spacing: .02em !important;
+  text-transform: none !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-copy small,
+#loginScreen:not(.applicant-dashboard-active) .login-visual-footer {
+  color: #94a3b8 !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: .78rem !important;
+  font-weight: 400 !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-copy small {
+  display: none !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-footer {
+  position: absolute !important;
+  bottom: 38px !important;
+  left: 48px !important;
+  margin: 0 !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .public-entry-panel {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 100vh !important;
+  padding: 48px !important;
+  background: #f8fafc !important;
+  background-image: none !important;
+  color: #1e293b !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .public-entry-content {
+  width: min(100%, 400px) !important;
+  max-width: 400px !important;
+  margin: 0 auto !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .public-entry-panel h1 {
+  margin: 0 0 10px !important;
+  color: #0f172a !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -.02em !important;
+  line-height: 1.2 !important;
+  text-transform: none !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .public-entry-copy {
+  margin: 0 !important;
+  color: #64748b !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: .875rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .public-entry-actions {
+  width: 100% !important;
+  max-width: 400px !important;
+  gap: 10px !important;
+  margin-top: 28px !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .public-entry-actions button {
+  width: 100% !important;
+  min-height: 46px !important;
+  border-radius: 8px !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: .9rem !important;
+  font-weight: 500 !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .public-main-cta {
+  background: #0f172a !important;
+  border: 1px solid #0f172a !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(15,23,42,.12) !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .public-main-cta:hover {
+  background: #1e293b !important;
+  border-color: #1e293b !important;
+  transform: translateY(-1px) !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .public-secondary-cta {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #334155 !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .public-secondary-cta:hover {
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+  color: #0f172a !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .public-entry-internal {
+  position: absolute !important;
+  right: 48px !important;
+  bottom: 34px !important;
+  left: auto !important;
+  top: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .internal-access-button {
+  color: #64748b !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: .75rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .internal-access-button:hover { color: #2563eb !important; }
+
+/* Modal de credenciales administrativo: misma jerarquía visual limpia. */
+#adminAccessDialog,
+#credentialDialog {
+  width: min(460px, calc(100vw - 32px)) !important;
+  max-width: 460px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  background: #ffffff !important;
+  box-shadow: 0 20px 50px rgba(15,23,42,.18) !important;
+}
+#adminAccessDialog::backdrop,
+#credentialDialog::backdrop { background: rgba(15,23,42,.28) !important; backdrop-filter: blur(3px) !important; }
+#adminAccessDialog .admin-login-card,
+#credentialDialog > form {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  padding: 32px !important;
+  background: #ffffff !important;
+  color: #1e293b !important;
+}
+#adminAccessDialog .dialog-heading,
+#credentialDialog .dialog-heading { margin-bottom: 8px !important; border-bottom: 0 !important; }
+#adminAccessDialog .dialog-heading h2,
+#credentialDialog .dialog-heading h2 {
+  color: #0f172a !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+}
+#adminAccessDialog .login-copy,
+#credentialDialog .credential-copy { color: #64748b !important; font-size: .875rem !important; font-weight: 400 !important; }
+#adminAccessDialog label,
+#credentialDialog label { color: #475569 !important; font-size: .85rem !important; font-weight: 500 !important; }
+#adminAccessDialog input,
+#adminAccessDialog select,
+#credentialDialog input,
+#credentialDialog select {
+  width: 100% !important;
+  min-height: 46px !important;
+  box-sizing: border-box !important;
+  padding: 12px 16px !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  background: #ffffff !important;
+  color: #1e293b !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: .9rem !important;
+}
+#adminAccessDialog input:focus,
+#adminAccessDialog select:focus,
+#credentialDialog input:focus,
+#credentialDialog select:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.1) !important;
+  outline: none !important;
+}
+#adminAccessDialog .login-button,
+#credentialDialog .primary-button {
+  width: 100% !important;
+  min-height: 46px !important;
+  border-radius: 8px !important;
+  background: #0f172a !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+}
+#adminAccessDialog .credential-setup-button,
+#adminAccessDialog .login-hint { color: #64748b !important; font-weight: 400 !important; }
+
+@media (max-width: 800px) {
+  #loginScreen:not(.applicant-dashboard-active) {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: minmax(280px, 42vh) 1fr !important;
+    min-height: 100svh !important;
+    overflow-y: auto !important;
+  }
+  #loginScreen:not(.applicant-dashboard-active) .login-visual {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    min-height: 280px !important;
+    padding: 32px 28px !important;
+  }
+  #loginScreen:not(.applicant-dashboard-active) .login-visual-logo { top: 24px !important; left: 28px !important; width: 56px !important; height: 56px !important; }
+  #loginScreen:not(.applicant-dashboard-active) .login-visual-copy { width: min(100%, 360px) !important; margin-top: 30px !important; }
+  #loginScreen:not(.applicant-dashboard-active) .login-visual-copy h2 { font-size: clamp(2rem, 10vw, 3rem) !important; }
+  #loginScreen:not(.applicant-dashboard-active) .login-visual-footer { display: none !important; }
+  #loginScreen:not(.applicant-dashboard-active) .public-entry-panel {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    min-height: 58vh !important;
+    padding: 40px 28px 76px !important;
+  }
+  #loginScreen:not(.applicant-dashboard-active) .public-entry-internal { right: 28px !important; bottom: 24px !important; }
+}
