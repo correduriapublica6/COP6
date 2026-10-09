@@ -9209,3 +9209,82 @@ html body #appShell.control-shell .app-workspace {
   #appShell.control-shell #avaluosView .avaluos-choice-grid { grid-template-columns: 1fr !important; }
   #appShell.control-shell #avaluosView .avaluos-choice-card { min-height: 112px !important; padding: 20px !important; }
 }
+
+
+/* ============================================================================
+   AVALÚOS — layout horizontal de cuatro columnas, azul y grafito
+   ============================================================================ */
+#appShell.control-shell #avaluosView .avaluos-section-heading {
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  padding-top: 0 !important;
+}
+#appShell.control-shell #avaluosView .avaluos-section-heading h2 {
+  color: #0f172a !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-weight: 600 !important;
+}
+#appShell.control-shell #avaluosView .avaluos-section-heading h2 span {
+  color: #2563eb !important;
+}
+#appShell.control-shell #avaluosView .avaluos-choice-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+  max-width: 1100px !important;
+}
+#appShell.control-shell #avaluosView .avaluos-choice-card {
+  grid-template-columns: 42px minmax(0, 1fr) !important;
+  align-content: start !important;
+  min-height: 186px !important;
+  padding: 24px !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 12px rgba(15,23,42,.04) !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+#appShell.control-shell #avaluosView .avaluos-choice-card:hover {
+  border-color: #3b82f6 !important;
+  border-bottom-color: #3b82f6 !important;
+  box-shadow: 0 10px 20px rgba(37,99,235,.09) !important;
+  transform: translateY(-3px) !important;
+}
+#appShell.control-shell #avaluosView .avaluos-choice-icon {
+  width: 42px !important;
+  height: 42px !important;
+  background: #eff6ff !important;
+  color: #2563eb !important;
+  border-radius: 10px !important;
+}
+#appShell.control-shell #avaluosView .avaluos-choice-arrow {
+  grid-column: 2 !important;
+  align-self: end !important;
+  justify-self: end !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  margin-top: 12px !important;
+  color: #ffffff !important;
+  background: #2563eb !important;
+  border-radius: 50% !important;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif !important;
+  font-size: 1.15rem !important;
+  line-height: 1 !important;
+  transition: background .2s ease, transform .2s ease, box-shadow .2s ease !important;
+}
+#appShell.control-shell #avaluosView .avaluos-choice-card:hover .avaluos-choice-arrow {
+  color: #ffffff !important;
+  background: #0f172a !important;
+  box-shadow: 0 4px 10px rgba(37,99,235,.22) !important;
+  transform: translateX(4px) !important;
+}
+@media (max-width: 1100px) {
+  #appShell.control-shell #avaluosView .avaluos-choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 720px) {
+  #appShell.control-shell #avaluosView .avaluos-choice-grid { grid-template-columns: 1fr !important; }
+  #appShell.control-shell #avaluosView .avaluos-choice-card { min-height: 132px !important; }
+}
