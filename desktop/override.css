@@ -6746,3 +6746,313 @@ body #loginScreen.applicant-dashboard-active .applicant-notifications-button b {
 /* Los mensajes recibidos usan un amarillo institucional muy claro y desvanecido. */
 .messaging-message.is-received .messaging-bubble { background: linear-gradient(135deg, #fffdf4 0%, #fbf4d9 52%, #f8edc8 100%) !important; border-color: #ead9a7 !important; color: #3d311d !important; }
 .messaging-message.is-sent .messaging-bubble { background: linear-gradient(135deg, #fdfbf2 0%, #f7f1db 100%) !important; }
+
+/* ============================================================================
+   REDISEÑO FRÍO CP6 — capa visual sin alterar estructura, IDs ni funcionalidad
+   ============================================================================ */
+:root {
+  --cold-bg: #f8fafc;
+  --cold-surface: #ffffff;
+  --cold-border: #e2e8f0;
+  --cold-border-strong: #cbd5e1;
+  --cold-ink: #1e293b;
+  --cold-muted: #64748b;
+  --cold-primary: #0f172a;
+  --cold-blue: #2563eb;
+  --cold-blue-soft: #eff6ff;
+  --cold-shadow: 0 1px 3px rgba(15,23,42,.05), 0 10px 15px -3px rgba(15,23,42,.03);
+}
+
+html, body,
+body #loginScreen,
+body #appShell,
+body #appShell .app-workspace,
+body #appShell .app-view,
+body #loginScreen.applicant-dashboard-active {
+  background: var(--cold-bg) !important;
+  background-image: none !important;
+  color: var(--cold-ink) !important;
+  font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif !important;
+}
+body { color: var(--cold-ink) !important; }
+
+/* Navegación y encabezados */
+#appShell.control-shell .app-sidebar {
+  background: #0f172a !important;
+  border-color: #1e293b !important;
+  box-shadow: 2px 0 14px rgba(15,23,42,.12) !important;
+}
+#appShell.control-shell .sidebar-nav,
+#appShell.control-shell .floating-nav-capsule {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell .sidebar-link {
+  color: #cbd5e1 !important;
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-weight: 500 !important;
+  transition: background .2s ease, color .2s ease, transform .2s ease !important;
+}
+#appShell.control-shell .sidebar-link:hover,
+#appShell.control-shell .sidebar-link.is-active {
+  background: #1e293b !important;
+  color: #ffffff !important;
+  border-color: #334155 !important;
+}
+.workspace-header,
+.welcome-card,
+.development-card,
+.setting-card,
+.users-admin-card,
+.users-external-card,
+.new-user-panel,
+.user-access-panel,
+.inline-panel,
+.technical-list-panel,
+.technical-form-section,
+.request-table-wrap,
+.request-style-filter-panel,
+.search-panel,
+.values-table-block,
+.notary-card,
+.export-card,
+.selected-total-panel {
+  background: var(--cold-surface) !important;
+  border: 1px solid var(--cold-border) !important;
+  border-radius: 10px !important;
+  box-shadow: var(--cold-shadow) !important;
+  color: var(--cold-ink) !important;
+}
+.workspace-header h1,
+.workspace-header h2,
+.welcome-card h2,
+.development-card h2,
+.inline-panel-heading h3,
+.technical-form-section h3,
+.setting-card h3,
+.values-table-heading h3 {
+  color: var(--cold-ink) !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-weight: 600 !important;
+}
+.workspace-description,
+.welcome-copy,
+.development-card p,
+.setting-card p,
+.inline-panel-heading p,
+.section-kicker,
+.eyebrow {
+  color: var(--cold-muted) !important;
+}
+
+/* Tarjetas de módulos */
+.avaluos-choice-grid,
+.usuarios-choice-grid { gap: 16px !important; }
+.avaluos-choice-card,
+.usuarios-choice-card {
+  background: #ffffff !important;
+  border: 1px solid var(--cold-border) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--cold-shadow) !important;
+  color: var(--cold-ink) !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-weight: 400 !important;
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease !important;
+}
+.avaluos-choice-card:hover,
+.usuarios-choice-card:hover {
+  border-color: #93c5fd !important;
+  box-shadow: 0 8px 20px rgba(37,99,235,.10) !important;
+  transform: translateY(-2px) !important;
+}
+.avaluos-choice-card strong,
+.usuarios-choice-card strong,
+.avaluos-choice-card small,
+.usuarios-choice-card small { color: inherit !important; }
+.avaluos-choice-icon,
+.usuarios-choice-icon { color: var(--cold-blue) !important; background: var(--cold-blue-soft) !important; }
+.avaluos-choice-arrow,
+.usuarios-choice-arrow { color: var(--cold-blue) !important; }
+
+/* Formularios, controles y etiquetas */
+label,
+.form-grid label,
+.record-form-grid label,
+.request-form-grid label,
+.inline-form-row label {
+  color: #475569 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .85rem !important;
+  font-weight: 500 !important;
+}
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+select,
+textarea {
+  background: #ffffff !important;
+  color: var(--cold-ink) !important;
+  border: 1px solid var(--cold-border-strong) !important;
+  border-radius: 8px !important;
+  padding: 10px 14px !important;
+  box-shadow: none !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-weight: 400 !important;
+}
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.10) !important;
+}
+input::placeholder,
+textarea::placeholder { color: var(--cold-muted) !important; }
+
+/* Botones: principales grafito/azul, secundarios neutros, peligrosos rojos. */
+button:not(.icon-button):not(.request-detail-close):not(.applicant-notifications-button):not(.applicant-messaging-button),
+.primary-button,
+.subtle-action-button,
+.secondary-button,
+.btn-copu-primary,
+.btn-gold-cream,
+.btn-crema,
+.btn-dorado {
+  border-radius: 8px !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-weight: 500 !important;
+  transition: background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease !important;
+}
+.primary-button,
+.btn-copu-primary,
+.btn-dorado,
+.client-primary-button,
+.login-button {
+  background: #0f172a !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: 1px solid #0f172a !important;
+  box-shadow: 0 1px 2px rgba(15,23,42,.12) !important;
+}
+.primary-button:hover,
+.btn-copu-primary:hover,
+.btn-dorado:hover,
+.client-primary-button:hover,
+.login-button:hover {
+  background: #1e293b !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(15,23,42,.14) !important;
+  transform: translateY(-1px) !important;
+}
+.secondary-button,
+.subtle-action-button,
+.btn-gold-cream,
+.btn-crema {
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #334155 !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 1px 2px rgba(15,23,42,.04) !important;
+}
+.secondary-button:hover,
+.subtle-action-button:hover,
+.btn-gold-cream:hover,
+.btn-crema:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #94a3b8 !important;
+}
+button[class*="delete"],
+button[id*="delete"],
+.delete-button,
+.remove-button {
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
+  border-color: #fecaca !important;
+}
+
+/* Tablas y paginación */
+table,
+thead,
+tbody,
+tr,
+th,
+td {
+  border-color: var(--cold-border) !important;
+}
+thead,
+thead tr,
+th {
+  background: #f8fafc !important;
+  color: #475569 !important;
+  font-weight: 500 !important;
+}
+td { color: var(--cold-ink) !important; background: #ffffff !important; }
+tbody tr:hover td { background: #f8fafc !important; }
+.request-filter-row,
+.technical-search-panel,
+.client-request-toolbar {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Diálogos y visor */
+.record-dialog,
+.record-dialog::backdrop,
+dialog {
+  font-family: Inter, "Segoe UI", sans-serif !important;
+}
+.record-dialog {
+  background: #ffffff !important;
+  color: var(--cold-ink) !important;
+  border: 1px solid var(--cold-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 20px 50px rgba(15,23,42,.18) !important;
+}
+.record-dialog::backdrop { background: rgba(15,23,42,.28) !important; }
+.dialog-heading { border-color: var(--cold-border) !important; }
+.dialog-heading h2,
+.request-detail-content h2,
+.request-detail-content h3 { color: var(--cold-ink) !important; font-weight: 600 !important; }
+
+/* Portal solicitante */
+#loginScreen.applicant-dashboard-active .client-dashboard-header,
+#loginScreen.applicant-dashboard-active .client-welcome-card,
+#loginScreen.applicant-dashboard-active .client-dashboard-stats article,
+#loginScreen.applicant-dashboard-active .client-history-section {
+  background: #ffffff !important;
+  border-color: var(--cold-border) !important;
+  box-shadow: var(--cold-shadow) !important;
+}
+#loginScreen.applicant-dashboard-active .client-brand strong,
+#loginScreen.applicant-dashboard-active .client-brand span,
+#loginScreen.applicant-dashboard-active .client-welcome-title,
+#loginScreen.applicant-dashboard-active .client-welcome-message,
+#loginScreen.applicant-dashboard-active .metric-stat-row,
+#loginScreen.applicant-dashboard-active .client-history-section { color: var(--cold-ink) !important; }
+#loginScreen.applicant-dashboard-active .metric-total,
+#loginScreen.applicant-dashboard-active .metric-active,
+#loginScreen.applicant-dashboard-active .metric-completed { border: 1px solid var(--cold-border) !important; }
+#loginScreen.applicant-dashboard-active .metric-icon { color: var(--cold-blue) !important; background: var(--cold-blue-soft) !important; }
+#loginScreen.applicant-dashboard-active .client-request-search,
+#loginScreen.applicant-dashboard-active .client-request-filter { background: #ffffff !important; }
+
+/* Mensajería */
+.messaging-shell,
+.messaging-conversation,
+.messaging-sidebar,
+.messaging-messages { background: #ffffff !important; border-color: var(--cold-border) !important; color: var(--cold-ink) !important; }
+.messaging-sidebar { background: #f8fafc !important; }
+.messaging-sidebar-head { background: #0f172a !important; }
+.messaging-contact:hover,
+.messaging-contact.is-active { background: #eff6ff !important; }
+.messaging-compose { background: #f8fafc !important; border-color: var(--cold-border) !important; }
+.messaging-compose button { background: #0f172a !important; color: #ffffff !important; border-color: #0f172a !important; border-radius: 8px !important; }
+
+/* Reduce el abuso de negritas fuera de títulos principales. */
+body :where(.app-view, .app-sidebar, .record-dialog, .messaging-shell) strong,
+body :where(.app-view, .app-sidebar, .record-dialog, .messaging-shell) b { font-weight: 500 !important; }
+body :where(.app-view, .app-sidebar, .record-dialog, .messaging-shell) h1,
+body :where(.app-view, .app-sidebar, .record-dialog, .messaging-shell) h2,
+body :where(.app-view, .app-sidebar, .record-dialog, .messaging-shell) h3 { font-weight: 600 !important; }
