@@ -8146,3 +8146,109 @@ body :where(.app-view, .app-sidebar, .record-dialog, .messaging-shell) h3 { font
   #appShell.control-shell .sidebar-nav { order: 4 !important; flex: 1 0 100% !important; justify-content: flex-start !important; width: 100% !important; height: 38px !important; gap: 20px !important; overflow-x: auto !important; overflow-y: hidden !important; }
   #appShell.control-shell .global-search-wrap { width: 170px !important; }
 }
+
+/* Corrección final de contraste Navbar clara */
+#appShell.control-shell .app-sidebar,
+#appShell.control-shell .header-left-tools,
+#appShell.control-shell .sidebar-nav,
+#appShell.control-shell .sidebar-footer {
+  align-items: center !important;
+}
+#appShell.control-shell .app-sidebar { gap: 16px !important; }
+#appShell.control-shell .sidebar-nav {
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+}
+#appShell.control-shell .sidebar-link,
+#appShell.control-shell .sidebar-link span,
+#appShell.control-shell .sidebar-nav button {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #334155 !important;
+  font-weight: 500 !important;
+  font-size: .9rem !important;
+  padding: 8px 12px !important;
+}
+#appShell.control-shell .sidebar-link:hover,
+#appShell.control-shell .sidebar-link:hover span,
+#appShell.control-shell .sidebar-nav button:hover {
+  background: transparent !important;
+  border: none !important;
+  color: #2563eb !important;
+}
+#appShell.control-shell .sidebar-link.is-active,
+#appShell.control-shell .sidebar-link.is-active span {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 2px solid #2563eb !important;
+  border-radius: 0 !important;
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+#appShell.control-shell .sidebar-link.is-active::after { display: none !important; }
+#appShell.control-shell .alerts-button,
+#appShell.control-shell .messaging-header-button,
+#appShell.control-shell .profile-button {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell .alerts-button,
+#appShell.control-shell .messaging-header-button,
+#appShell.control-shell .alerts-button svg,
+#appShell.control-shell .messaging-header-button svg,
+#appShell.control-shell .profile-button,
+#appShell.control-shell .profile-button svg,
+#appShell.control-shell .user-icon,
+#appShell.control-shell .user-icon svg {
+  color: #334155 !important;
+  fill: none !important;
+  stroke: #334155 !important;
+}
+#appShell.control-shell .alerts-button svg path,
+#appShell.control-shell .messaging-header-button svg path,
+#appShell.control-shell .profile-button svg path,
+#appShell.control-shell .profile-button svg circle {
+  fill: none !important;
+  stroke: #334155 !important;
+}
+#appShell.control-shell .alerts-button:hover,
+#appShell.control-shell .messaging-header-button:hover,
+#appShell.control-shell .profile-button:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+#appShell.control-shell .alerts-button:hover svg,
+#appShell.control-shell .messaging-header-button:hover svg,
+#appShell.control-shell .profile-button:hover svg,
+#appShell.control-shell .alerts-button:hover svg path,
+#appShell.control-shell .messaging-header-button:hover svg path,
+#appShell.control-shell .profile-button:hover svg path,
+#appShell.control-shell .profile-button:hover svg circle {
+  color: #0f172a !important;
+  stroke: #0f172a !important;
+}
+#appShell.control-shell #globalSearchInput,
+#appShell.control-shell .search-input,
+#appShell.control-shell input[type="search"],
+#appShell.control-shell input[type="text"] {
+  background-color: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  color: #0f172a !important;
+  padding: 8px 14px !important;
+}
+#appShell.control-shell #globalSearchInput::placeholder,
+#appShell.control-shell .search-input::placeholder,
+#appShell.control-shell input[type="search"]::placeholder,
+#appShell.control-shell input[type="text"]::placeholder { color: #64748b !important; }
+#appShell.control-shell .sidebar-account-copy,
+#appShell.control-shell .active-user,
+#appShell.control-shell .active-user-role,
+#appShell.control-shell .sidebar-online,
+#appShell.control-shell #serverStatusLabel {
+  color: #0f172a !important;
+}
+#appShell.control-shell .active-user-role,
+#appShell.control-shell .sidebar-online { color: #64748b !important; }
