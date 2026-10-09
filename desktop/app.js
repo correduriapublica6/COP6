@@ -1317,7 +1317,7 @@
   numberInput.addEventListener("input", () => { numberInput.value = normalizeNumber(numberInput.value); });
   searchInput.addEventListener("input", () => { receptionPage = 1; if (searchInput.value.trim()) { operationalView = "todos"; $$("[data-view]").forEach((item) => item.classList.toggle("is-active", item.dataset.view === "todos")); } render(); });
   $$("[data-view]").forEach((button) => button.addEventListener("click", () => { operationalView = button.dataset.view; $$("[data-view]").forEach((item) => item.classList.toggle("is-active", item === button)); render(); }));
-  $$("[data-app-view]").forEach((button) => button.addEventListener("click", () => switchAppView(button.dataset.appView)));
+  $$("[data-app-view]").forEach((button) => button.addEventListener("click", (event) => { event.preventDefault(); switchAppView(button.dataset.appView); }));
   $("#generateInlineReportButton").addEventListener("click", prepareInlineReport);
   $$('[data-users-section]').forEach((button) => button.addEventListener("click", () => setUsersSection(button.dataset.usersSection)));
   $$('[data-users-back]').forEach((button) => button.addEventListener("click", () => setUsersSection("menu")));
