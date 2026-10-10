@@ -22,7 +22,7 @@
   const technicalStatusFilter = document.querySelector("#technicalStatusFilter");
   const technicalList = document.querySelector("#technicalAppraisalList");
   let technicalPage = 1;
-  const TECHNICAL_PAGE_SIZE = 10;
+  const TECHNICAL_PAGE_SIZE = 9;
   const considerationInput = document.querySelector("#considerationInput");
   const addConsiderationButton = document.querySelector("#addConsiderationButton");
   const considerationList = document.querySelector("#considerationList");

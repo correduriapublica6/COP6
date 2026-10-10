@@ -11678,3 +11678,46 @@ thead th {
   #appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap,
   #appShell.control-shell #recepcionAvaluosSection #statusViewSelect { flex: 1 1 280px !important; max-width: none !important; width: auto !important; }
 }
+
+
+/* ============================================================================
+   TABLAS — ELIMINAR FRANJA SUPERIOR Y PAGINACIÓN DE 9 REGISTROS
+   ============================================================================ */
+.card-table,
+.table-container,
+.data-card {
+  padding-top: 0 !important;
+  overflow: hidden !important;
+}
+.card-table table,
+.table-container table,
+.data-card table,
+#appShell.control-shell .operational-table-wrap > table,
+#appShell.control-shell .request-table-wrap > table {
+  margin-top: 0 !important;
+  border-collapse: collapse !important;
+}
+.card-table thead tr:first-child th,
+.card-table thead tr:first-child,
+.table-container thead tr:first-child th,
+.table-container thead tr:first-child,
+.data-card thead tr:first-child th,
+.data-card thead tr:first-child,
+#appShell.control-shell .operational-table-wrap thead tr:first-child th,
+#appShell.control-shell .operational-table-wrap thead tr:first-child,
+#appShell.control-shell .request-table-wrap thead tr:first-child th,
+#appShell.control-shell .request-table-wrap thead tr:first-child {
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+}
+/* Estos envoltorios son los que contienen las tablas operativas actuales. */
+#appShell.control-shell .dashboard-tabs,
+#appShell.control-shell .technical-list-panel .dashboard-tabs,
+#appShell.control-shell .operational-table-wrap,
+#appShell.control-shell .request-table-wrap {
+  padding-top: 0 !important;
+}
+#appShell.control-shell .operational-table-wrap > table,
+#appShell.control-shell .request-table-wrap > table {
+  margin-top: 0 !important;
+}

@@ -30,7 +30,7 @@
   let authorizedAppraisalNumbers = [];
   let operationalView = "todos";
   let receptionPage = 1;
-  const AVALUOS_PAGE_SIZE = 10;
+  const AVALUOS_PAGE_SIZE = 9;
   let activeAppView = "avaluos";
   let activeSessionUser = "";
   let notifications = [];
