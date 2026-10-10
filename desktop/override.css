@@ -10854,3 +10854,81 @@ nav,
   .profile-info-row { align-items: flex-start !important; flex-direction: column !important; gap: 4px !important; }
   .profile-info-row .value { max-width: 100% !important; text-align: left !important; }
 }
+
+/* ============================================================================
+   CORRECCIÓN FINAL: NAVBAR Y CONTENIDO DE ORILLA A ORILLA
+   ============================================================================ */
+html, body {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+}
+#appShell.control-shell {
+  width: 100vw !important;
+  max-width: none !important;
+  min-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell > .cp6-navbar-modern {
+  width: 100vw !important;
+  max-width: none !important;
+  min-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 32px !important;
+  box-sizing: border-box !important;
+  border-radius: 0 !important;
+}
+#appShell.control-shell > .app-workspace {
+  width: 100vw !important;
+  max-width: none !important;
+  min-width: 100% !important;
+  margin: 0 !important;
+  padding: 32px !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell > .app-workspace > .app-view {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+#appShell.control-shell #recepcionAvaluosSection,
+#appShell.control-shell #crearAvaluoSection,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel,
+#appShell.control-shell #solicitudesView,
+#appShell.control-shell #technicalListPanel,
+#appShell.control-shell .request-table-wrap,
+#appShell.control-shell .operational-table-wrap,
+#appShell.control-shell .inline-panel,
+#appShell.control-shell .form-container,
+#appShell.control-shell .table-container,
+#appShell.control-shell .card-table {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table,
+#appShell.control-shell #crearAvaluoSection table,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table,
+#appShell.control-shell #solicitudesView table,
+#appShell.control-shell .table-container table,
+#appShell.control-shell .card-table table {
+  width: 100% !important;
+  max-width: none !important;
+  table-layout: auto !important;
+}
+#appShell.control-shell .cp6-nav-tools { gap: 14px !important; }
+#appShell.control-shell .logout-header-button { color: #cbd5e1 !important; }
+#appShell.control-shell .logout-header-button:hover { color: #ffffff !important; }
+@media (max-width: 800px) {
+  #appShell.control-shell > .cp6-navbar-modern { padding: 0 16px !important; }
+  #appShell.control-shell > .app-workspace { padding: 20px 16px !important; }
+}

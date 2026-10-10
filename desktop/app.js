@@ -1270,6 +1270,7 @@
     switchAppView("perfil");
   };
   profileButton?.addEventListener("click", (event) => { event.stopPropagation(); openAdminProfile(); });
+  $("#logoutHeaderButton")?.addEventListener("click", () => { sessionStorage.removeItem(SESSION_KEY); showLogin(); });
   profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); sessionStorage.removeItem(SESSION_KEY); showLogin(); } }));
   document.addEventListener("click", (event) => { if (profileMenu && !event.target.closest(".profile-menu-wrap")) closeProfileMenu(); });
   $("#profilePageBackButton")?.addEventListener("click", () => switchAppView("inicio"));
