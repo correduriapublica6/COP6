@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261010-1026" />
+    <link rel="stylesheet" href="override.css?v=20261010-1032" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -227,18 +227,17 @@
 
         </section>
 
-        <section id="perfilView" class="app-view profile-page-view" aria-labelledby="profilePageTitle" hidden>
-          <div class="profile-page-card">
-            <div class="profile-page-avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-            <h2 id="profilePageTitle">Mi Perfil</h2>
-            <h3 id="profilePageName">—</h3>
-            <p id="profilePageRole" class="profile-page-role">Administrador</p>
+        <section id="perfilView" class="app-view profile-page-view profile-page-container" aria-labelledby="profilePageName" hidden>
+          <div class="profile-page-card profile-card">
+            <div class="profile-page-avatar avatar-wrapper" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+            <h2 id="profilePageName">—</h2>
+            <p id="profilePageRole" class="profile-page-role role-subtitle">Administrador</p>
             <div class="profile-page-info">
-              <div><small>CORREO</small><strong id="profilePageEmail">No registrado</strong></div>
-              <div><small>TELÉFONO</small><strong id="profilePagePhone">No registrado</strong></div>
-              <div><small>CORREDURÍA ASOCIADA</small><strong id="profilePageBrokerage">Correduría Pública 6 - Torreón</strong></div>
+              <div class="profile-info-row"><span class="label">CORREO</span><strong id="profilePageEmail" class="value">No registrado</strong></div>
+              <div class="profile-info-row"><span class="label">TELÉFONO</span><strong id="profilePagePhone" class="value">No registrado</strong></div>
+              <div class="profile-info-row"><span class="label">CORREDURÍA</span><strong id="profilePageBrokerage" class="value">Correduría Pública 6 - Torreón</strong></div>
             </div>
-            <button id="profilePageBackButton" class="profile-page-back" type="button">← Volver</button>
+            <button id="profilePageBackButton" class="profile-page-back btn-back" type="button">← Volver</button>
           </div>
         </section>
         <section id="resumenView" class="app-view admin-view" aria-labelledby="summaryViewTitle" hidden>
