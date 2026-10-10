@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261010-1317" />
+    <link rel="stylesheet" href="override.css?v=20261010-1331" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -139,7 +139,7 @@
             </div>
             <section id="avaluosAuthorizedFoliosPanel" class="inline-panel folio-authorizer-only is-hidden" aria-label="Validación de folios">
               <div class="inline-panel-heading"><div><h3>Validación</h3><p>Autoriza el folio antes de registrarlo en Recepción y consulta su estado.</p></div></div>
-              <form id="authorizedFolioFormAvaluos" class="compact-settings-form validation-authorize-form"><label for="authorizedFolioInputAvaluos">Número de avalúo<input id="authorizedFolioInputAvaluos" type="text" inputmode="numeric" maxlength="4" placeholder="Ej. 3010" autocomplete="off" required /></label><div class="validation-actions"><button class="primary-button btn-copu-primary" type="submit">Validar folio</button><button id="searchAuthorizedFolioButton" class="secondary-button btn-copu-primary" type="button">Buscar</button></div></form>
+              <form id="authorizedFolioFormAvaluos" class="compact-settings-form validation-authorize-form"><label class="validation-field" for="authorizedFolioInputAvaluos"><span class="validation-field-label"><span class="validation-field-icon" aria-hidden="true">✓</span>Número de avalúo para validar</span><input id="authorizedFolioInputAvaluos" type="text" inputmode="numeric" maxlength="4" placeholder="Ej. 3010" autocomplete="off" required /></label><label class="validation-field" for="authorizedFolioSearchInputAvaluos"><span class="validation-field-label"><span class="validation-field-icon" aria-hidden="true">⌕</span>Número de avalúo para buscar</span><input id="authorizedFolioSearchInputAvaluos" type="text" inputmode="numeric" maxlength="4" placeholder="Ej. 3010" autocomplete="off" /></label><div class="validation-actions"><button class="primary-button btn-copu-primary" type="submit">Validar</button><button id="searchAuthorizedFolioButton" class="secondary-button btn-copu-primary" type="button">Buscar</button></div></form>
               <p id="authorizedFolioMessageAvaluos" class="form-message" role="alert"></p><div id="authorizedFoliosListAvaluos" class="settings-data-list validation-hidden-list"></div><section class="validation-pending-section validation-hidden-list"><div class="inline-panel-heading"><div><h4>Avalúos autorizados pendientes de Recepción</h4><p>Folios autorizados o expedientes técnicos que todavía no aparecen registrados en Recepción.</p></div><button id="refreshPendingSummaryButton" class="secondary-button btn-copu-primary" type="button">Actualizar</button></div><div id="pendingReceptionSummary" class="settings-data-list"></div></section>
             </section>
           </section>
