@@ -10642,3 +10642,87 @@ main,
 @media (max-width: 600px) {
   main, .page-content { padding-left: 16px !important; padding-right: 16px !important; }
 }
+
+/* ============================================================================
+   NAVBAR EDGE-TO-EDGE Y VISTA INDEPENDIENTE DE MI PERFIL
+   ============================================================================ */
+html,
+body,
+#appShell,
+#appShell.control-shell,
+#appShell.control-shell > .cp6-navbar-modern,
+#appShell.control-shell > .app-workspace {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell > .cp6-navbar-modern {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 0 32px !important;
+  background-color: #0f172a !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+}
+#appShell.control-shell > .app-workspace {
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+}
+#appShell.control-shell > .app-workspace #perfilView {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: calc(100vh - 70px) !important;
+  margin: 0 !important;
+  padding: 40px 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  background: linear-gradient(180deg, #0f172a 0%, #090d16 100%) !important;
+}
+#appShell.control-shell > .app-workspace #perfilView[hidden] { display: none !important; }
+.profile-page-card {
+  width: 460px !important;
+  max-width: 90vw !important;
+  margin: 40px auto !important;
+  padding: 40px 32px !important;
+  box-sizing: border-box !important;
+  background: rgba(30, 41, 59, 0.7) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+  color: #ffffff !important;
+  text-align: center !important;
+}
+.profile-page-avatar {
+  width: 120px !important;
+  height: 120px !important;
+  margin: 0 auto 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+.profile-page-avatar svg { width: 58px !important; height: 58px !important; fill: none !important; stroke: currentColor !important; stroke-width: 1.7 !important; stroke-linecap: round !important; stroke-linejoin: round !important; }
+.profile-page-card h2 { margin: 0 0 20px !important; color: #60a5fa !important; font-size: .85rem !important; font-weight: 600 !important; letter-spacing: .12em !important; text-transform: uppercase !important; }
+.profile-page-card h3 { margin: 0 0 4px !important; color: #ffffff !important; font-family: system-ui, sans-serif !important; font-size: 1.4rem !important; font-weight: 700 !important; line-height: 1.25 !important; }
+.profile-page-role { margin: 0 0 24px !important; color: #94a3b8 !important; font-size: 1rem !important; text-align: center !important; }
+.profile-page-info { display: grid !important; gap: 12px !important; text-align: left !important; }
+.profile-page-info > div { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 16px !important; margin: 0 !important; padding: 14px 18px !important; background: rgba(15, 23, 42, 0.6) !important; border-radius: 12px !important; }
+.profile-page-info small { color: #60a5fa !important; font-size: .68rem !important; font-weight: 700 !important; letter-spacing: .08em !important; }
+.profile-page-info strong { max-width: 68% !important; color: #ffffff !important; font-size: .88rem !important; font-weight: 500 !important; text-align: right !important; overflow-wrap: anywhere !important; }
+.profile-page-back { margin-top: 24px !important; padding: 9px 18px !important; border: 1px solid rgba(255,255,255,.25) !important; border-radius: 999px !important; background: transparent !important; color: #ffffff !important; cursor: pointer !important; }
+.profile-page-back:hover { background: #ffffff !important; color: #0f172a !important; }
+#profileMenu { display: none !important; }
+@media (max-width: 600px) {
+  #appShell.control-shell > .cp6-navbar-modern { padding: 0 16px !important; }
+  #appShell.control-shell > .app-workspace { padding-left: 16px !important; padding-right: 16px !important; }
+  .profile-page-card { padding: 32px 20px !important; }
+  .profile-page-info > div { align-items: flex-start !important; flex-direction: column !important; gap: 4px !important; }
+  .profile-page-info strong { max-width: 100% !important; text-align: left !important; }
+}

@@ -761,6 +761,7 @@
     usuarios: { title: "Usuarios", kicker: "ACCESO LOCAL", description: "Gestiona usuarios administrativos y usuarios externos registrados." },
     configuracion: { title: "Configuración", kicker: "", description: "Exporta, importa y respalda la información del equipo." },
     mensajeria: { title: "Mensajería", kicker: "COMUNICACIÓN INSTITUCIONAL", description: "Conecta con el equipo CP6 y los usuarios externos en conversaciones seguras." },
+    perfil: { title: "Mi Perfil", kicker: "CUENTA", description: "Información de la cuenta activa." },
   };
   function setUsersSection(section = "menu") {
     const menu = $("#usuariosMenuSection");
@@ -777,7 +778,7 @@
   }
 
   function switchAppView(view) {
-    if (!VIEW_DETAILS[view] || (view === "resumen" ? !canViewSummary() : view === "fe-publica" ? !canViewFePublica() : view === "solicitudes" ? !canViewRequests() : view !== "avaluos" && view !== "inicio" && view !== "mensajeria" && !isAdmin())) return;
+    if (!VIEW_DETAILS[view] || (view === "resumen" ? !canViewSummary() : view === "fe-publica" ? !canViewFePublica() : view === "solicitudes" ? !canViewRequests() : view !== "avaluos" && view !== "inicio" && view !== "mensajeria" && view !== "perfil" && !isAdmin())) return;
     activeAppView = view;
     $("#pageTitle").closest(".workspace-header")?.classList.toggle("avaluos-header", view === "avaluos");
     $$(".app-view").forEach((section) => { const active = section.id === `${view}View`; section.hidden = !active; section.classList.toggle("is-active", active); });
@@ -1256,29 +1257,22 @@
   $("#addUserForm").addEventListener("submit", registerUser);
   const profileButton = $("#profileButton");
   const profileMenu = $("#profileMenu");
-  const adminProfileDialog = $("#adminProfileDialog");
   const closeProfileMenu = () => { if (profileMenu) profileMenu.hidden = true; profileButton?.setAttribute("aria-expanded", "false"); };
   const openAdminProfile = () => {
     closeProfileMenu();
     const user = String(activeSessionUser || "");
     const remote = Array.isArray(remoteUsers) ? remoteUsers.find((item) => item.name === user) : null;
-    $("#adminProfileName") && ($("#adminProfileName").textContent = user || "—");
-    $("#adminProfileEmail") && ($("#adminProfileEmail").textContent = remote?.email || "No registrado");
-    $("#adminProfilePhone") && ($("#adminProfilePhone").textContent = remote?.phone || "No registrado");
-    $("#adminProfileRole") && ($("#adminProfileRole").textContent = roleLabel(roleFor(user)));
-    $("#adminProfileBrokerage") && ($("#adminProfileBrokerage").textContent = remote?.brokerage || "Correduría Pública 6 - Torreón");
-    const selectedAvatar = getProfileAvatar(user);
-    const heroImage = $("#profileAvatarHeroImage");
-    if (heroImage) heroImage.src = selectedAvatar || PROFILE_AVATARS[0];
-    adminProfileDialog?.showModal();
+    $("#profilePageName") && ($("#profilePageName").textContent = user || "—");
+    $("#profilePageEmail") && ($("#profilePageEmail").textContent = remote?.email || "No registrado");
+    $("#profilePagePhone") && ($("#profilePagePhone").textContent = remote?.phone || "No registrado");
+    $("#profilePageRole") && ($("#profilePageRole").textContent = roleLabel(roleFor(user)));
+    $("#profilePageBrokerage") && ($("#profilePageBrokerage").textContent = remote?.brokerage || "Correduría Pública 6 - Torreón");
+    switchAppView("perfil");
   };
-  $("#profileAvatarHeroButton")?.addEventListener("click", () => $("#profileAvatarGallery")?.scrollIntoView({ behavior: "smooth", block: "nearest" }));
   profileButton?.addEventListener("click", (event) => { event.stopPropagation(); openAdminProfile(); });
   profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); sessionStorage.removeItem(SESSION_KEY); showLogin(); } }));
   document.addEventListener("click", (event) => { if (profileMenu && !event.target.closest(".profile-menu-wrap")) closeProfileMenu(); });
-  $("#closeAdminProfileButton")?.addEventListener("click", () => adminProfileDialog?.close());
-  adminProfileDialog?.addEventListener("click", (event) => { if (event.target === adminProfileDialog) adminProfileDialog.close(); });
-  $("#adminProfileForm")?.addEventListener("submit", (event) => { event.preventDefault(); adminProfileDialog?.close(); });
+  $("#profilePageBackButton")?.addEventListener("click", () => switchAppView("inicio"));
   $("#newRecordButton").addEventListener("click", () => openDialog());
   $("#newTechnicalAppraisalButton").addEventListener("click", () => window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-creation")));
   $("#backAvaluosButton").addEventListener("click", () => {

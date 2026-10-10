@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261010-1017" />
+    <link rel="stylesheet" href="override.css?v=20261010-1026" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -64,7 +64,6 @@
     <dialog id="requestDetailDialog" class="record-dialog request-detail-dialog"><form method="dialog"><button id="closeRequestDetailButton" class="request-detail-close" type="button" aria-label="Cerrar detalle">×</button><div id="requestDetailContent" class="request-detail-content"></div></form></dialog>
     <dialog id="fileViewerDialog" class="record-dialog file-viewer-dialog"><form method="dialog"><button id="closeFileViewerButton" class="request-detail-close" type="button" aria-label="Cerrar visor">×</button><div id="fileViewerContent" class="file-viewer-content"></div></form></dialog>
     <dialog id="applicantProfileDialog" class="record-dialog applicant-profile-dialog"><form id="applicantProfileForm" novalidate><div class="dialog-heading"><div><p class="eyebrow">MI PERFIL</p><h2>Editar perfil</h2></div><button id="closeApplicantProfileButton" class="icon-button" type="button" aria-label="Cerrar">×</button></div><div class="form-grid"><label>Nombre completo *<input name="nombre" required /></label><label>Correo electrónico<input name="correo" type="email" readonly /></label><label>Teléfono<input name="telefono" /></label><label>Nueva contraseña<input name="password" type="password" minlength="6" autocomplete="new-password" /></label><label class="full-width">Confirmar contraseña<input name="passwordConfirm" type="password" minlength="6" autocomplete="new-password" /></label></div><p id="applicantProfileMessage" class="form-message" role="alert"></p><div class="dialog-actions"><button id="cancelApplicantProfileButton" class="secondary-button btn-gold-cream" type="button">Cancelar</button><button class="primary-button btn-gold-cream" type="submit">Guardar perfil</button></div></form></dialog>
-    <dialog id="adminProfileDialog" class="record-dialog admin-profile-dialog"><form id="adminProfileForm" class="profile-modal-card" method="dialog"><div class="dialog-heading profile-dialog-heading"><div></div><button id="closeAdminProfileButton" class="icon-button" type="button" aria-label="Cerrar">×</button></div><section class="profile-avatar-hero" aria-label="Foto de perfil"><button id="profileAvatarHeroButton" class="profile-avatar-hero-button profile-avatar-circle" type="button" aria-label="Perfil"><img id="profileAvatarHeroImage" alt="Foto de perfil" hidden /><span class="profile-avatar-user-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span></button></section><div class="profile-data-list"><div><small>Nombre</small><strong id="adminProfileName">—</strong></div><div><small>Correo</small><strong id="adminProfileEmail">No registrado</strong></div><div><small>Teléfono</small><strong id="adminProfilePhone">No registrado</strong></div><div><small>Rol</small><strong id="adminProfileRole">—</strong></div><div><small>Correduría asociada</small><strong id="adminProfileBrokerage">Correduría Pública 6 - Torreón</strong></div></div></form></dialog>
 
     <dialog id="applicantRegisterDialog" class="record-dialog applicant-register-dialog"><form id="applicantRegisterForm" class="applicant-register-form" novalidate><div class="dialog-heading"><div><p class="eyebrow">REGISTRARSE</p><h2>Registrarse</h2></div><button id="closeApplicantRegisterButton" class="icon-button" type="button" aria-label="Cerrar">×</button></div><div class="form-grid"><label>Nombre completo *<input name="nombre" required /></label><label>Correo electrónico *<input name="correo" type="email" required /></label><label>Teléfono<input name="telefono" /></label><label>Notaría <select name="notaria" id="applicantRegisterNotary"><option value="">Selecciona una notaría (opcional)</option></select></label><label>Contraseña *<input name="password" type="password" minlength="6" required /></label><label class="full-width">Confirmar contraseña *<input name="passwordConfirm" type="password" minlength="6" required /></label></div><p id="applicantRegisterMessage" class="form-message" role="alert"></p><div class="dialog-actions"><button id="cancelApplicantRegisterButton" class="secondary-button" type="button">Cancelar</button><button class="primary-button" type="submit">Registrar solicitante</button></div></form></dialog>
 
@@ -228,6 +227,20 @@
 
         </section>
 
+        <section id="perfilView" class="app-view profile-page-view" aria-labelledby="profilePageTitle" hidden>
+          <div class="profile-page-card">
+            <div class="profile-page-avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+            <h2 id="profilePageTitle">Mi Perfil</h2>
+            <h3 id="profilePageName">—</h3>
+            <p id="profilePageRole" class="profile-page-role">Administrador</p>
+            <div class="profile-page-info">
+              <div><small>CORREO</small><strong id="profilePageEmail">No registrado</strong></div>
+              <div><small>TELÉFONO</small><strong id="profilePagePhone">No registrado</strong></div>
+              <div><small>CORREDURÍA ASOCIADA</small><strong id="profilePageBrokerage">Correduría Pública 6 - Torreón</strong></div>
+            </div>
+            <button id="profilePageBackButton" class="profile-page-back" type="button">← Volver</button>
+          </div>
+        </section>
         <section id="resumenView" class="app-view admin-view" aria-labelledby="summaryViewTitle" hidden>
           <div class="admin-intro"><h2 id="summaryViewTitle">Control de saldos</h2></div>
           <section class="inline-panel report-controls">
