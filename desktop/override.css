@@ -11271,3 +11271,93 @@ body,
   #appShell.control-shell #perfilView .profile-sidebar .btn-back { margin-top: 24px !important; }
   #appShell.control-shell #perfilView .profile-content-area { min-height: 260px !important; padding: 28px 20px !important; }
 }
+
+/* ============================================================================
+   RESET FINAL — CONTENEDORES FLUIDOS Y TABLAS A TODO EL ANCHO ÚTIL
+   ============================================================================ */
+html,
+body,
+#app,
+.app-container,
+main,
+.main-content,
+.page-wrapper,
+.view-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.page-content,
+.table-wrapper,
+.data-card,
+.filters-bar {
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  box-sizing: border-box !important;
+}
+
+.card-table,
+.table-container,
+.table-wrapper table,
+table {
+  width: 100% !important;
+  max-width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+thead tr {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #2563eb 100%) !important;
+}
+
+thead th {
+  background: transparent !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 0.82rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  padding: 16px 18px !important;
+  border: none !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+}
+
+.table-container,
+.card-table {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  border-radius: 12px !important;
+}
+
+.table-container > table,
+.card-table > table,
+.table-wrapper > table {
+  min-width: 0 !important;
+}
+
+@media (max-width: 720px) {
+  .page-content,
+  .table-wrapper,
+  .data-card,
+  .filters-bar {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  thead th {
+    padding: 12px 10px !important;
+    font-size: 0.72rem !important;
+  }
+}
