@@ -30,7 +30,7 @@
   let authorizedAppraisalNumbers = [];
   let operationalView = "todos";
   let receptionPage = 1;
-  const AVALUOS_PAGE_SIZE = 12;
+  const AVALUOS_PAGE_SIZE = 10;
   let activeAppView = "avaluos";
   let activeSessionUser = "";
   let notifications = [];
@@ -1379,9 +1379,9 @@
   let dragging = false;
   let offsetX = 0;
   let offsetY = 0;
-  const show = (visible) => { panel.hidden = !visible; toggle.setAttribute("aria-expanded", String(visible)); };
-  toggle.addEventListener("click", () => show(panel.hidden));
-  close?.addEventListener("click", () => show(false));
+  const show = (visible) => { panel.hidden = !visible; panel.style.display = visible ? "" : "none"; toggle.setAttribute("aria-expanded", String(visible)); };
+  toggle.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); show(panel.hidden); });
+  close?.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); show(false); panel.hidden = true; panel.style.display = "none"; });
   const calculate = () => {
     if (!expression || !/^[0-9+*/().% -]+$/.test(expression)) return;
     try { const result = Function(`"use strict"; return (${expression})`)(); if (Number.isFinite(result)) { expression = String(result); display.value = expression; } } catch { display.value = "Error"; expression = ""; }

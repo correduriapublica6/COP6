@@ -8,7 +8,7 @@
   const applicantRequestsDialog = $("#applicantRequestsDialog");
   let requests = [];
   let requestsPage = 1;
-  const REQUESTS_PAGE_SIZE = 12;
+  const REQUESTS_PAGE_SIZE = 10;
   let editingRequestId = "";
   let applicantSession = null;
   let archivosSeleccionados = [];

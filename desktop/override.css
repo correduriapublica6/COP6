@@ -11621,3 +11621,60 @@ thead th {
   #appShell.control-shell .validation-authorize-form .validation-actions { max-width: none !important; width: 100% !important; }
   #appShell.control-shell #authorizedFolioMessageAvaluos { grid-column: auto !important; }
 }
+
+
+/* ============================================================================
+   RECEPCIÓN / SOLICITUDES — AJUSTE FINAL
+   ============================================================================ */
+/* Recepción usa exactamente la misma barra externa que Gestión. */
+#appShell.control-shell #recepcionAvaluosSection > .search-panel.request-style-filter-panel {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+#appShell.control-shell #recepcionAvaluosSection > .search-panel .search-row {
+  align-items: center !important;
+  display: flex !important;
+  gap: 12px !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap {
+  flex: 0 1 430px !important;
+  max-width: 430px !important;
+  min-width: 220px !important;
+  width: 430px !important;
+}
+#appShell.control-shell #recepcionAvaluosSection #searchInput {
+  width: 100% !important;
+  max-width: none !important;
+}
+#appShell.control-shell #recepcionAvaluosSection #statusViewSelect {
+  flex: 0 1 430px !important;
+  max-width: 430px !important;
+  min-width: 220px !important;
+  width: 430px !important;
+}
+/* Recepción ya no muestra el rótulo ni el contador de registros recientes. */
+#appShell.control-shell #recepcionAvaluosSection > .dashboard-tabs > .status-list-heading { display: none !important; }
+/* Solicitudes conserva sólo la tabla y controles; las acciones quedan a la derecha. */
+#appShell.control-shell #solicitudesView > .solicitudes-heading > div:first-child { display: none !important; }
+#appShell.control-shell #solicitudesView > .solicitudes-heading {
+  align-items: center !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  margin-bottom: 16px !important;
+  min-height: 42px !important;
+}
+#appShell.control-shell #solicitudesView .solicitudes-heading-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  margin-left: auto !important;
+}
+@media (max-width: 900px) {
+  #appShell.control-shell #recepcionAvaluosSection > .search-panel .search-row { flex-wrap: wrap !important; }
+  #appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap,
+  #appShell.control-shell #recepcionAvaluosSection #statusViewSelect { flex: 1 1 280px !important; max-width: none !important; width: auto !important; }
+}
