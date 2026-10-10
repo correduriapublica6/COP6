@@ -10396,3 +10396,167 @@ html body #appShell.control-shell .app-workspace {
     border-bottom: 1px solid #e2e8f0 !important;
   }
 }
+
+/* ============================================================================
+   MODAL MI PERFIL — TARJETA AZUL/GRAFIT0 CENTRADA
+   ============================================================================ */
+#adminProfileDialog.admin-profile-dialog {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  padding: 20px !important;
+  border: none !important;
+  background: transparent !important;
+  overflow: auto !important;
+}
+#adminProfileDialog.admin-profile-dialog::backdrop {
+  background: rgba(15, 23, 42, 0.6) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+#adminProfileDialog .profile-modal-card {
+  width: 380px !important;
+  max-width: 90vw !important;
+  background: linear-gradient(180deg, #091322 0%, #0f172a 60%, #080d1a 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 24px !important;
+  padding: 32px 24px !important;
+  color: #ffffff !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
+  text-align: center !important;
+  position: relative !important;
+  margin: auto !important;
+}
+#adminProfileDialog .profile-dialog-heading {
+  position: absolute !important;
+  inset: 14px 14px auto auto !important;
+  z-index: 3 !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+#adminProfileDialog #closeAdminProfileButton {
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(255,255,255,.2) !important;
+  border-radius: 50% !important;
+  background: rgba(255,255,255,.08) !important;
+  color: #ffffff !important;
+}
+#adminProfileDialog #closeAdminProfileButton:hover { background: #ffffff !important; color: #0f172a !important; }
+#adminProfileDialog .profile-edit-btn {
+  position: absolute !important;
+  top: 20px !important;
+  right: 20px !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,.2) !important;
+  z-index: 2 !important;
+}
+#adminProfileDialog .profile-avatar-circle {
+  width: 110px !important;
+  height: 110px !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  margin: 12px auto 20px auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #1e3a5f !important;
+  overflow: visible !important;
+}
+#adminProfileDialog .profile-avatar-circle > img,
+#adminProfileDialog #profileAvatarHeroImage {
+  width: 110px !important;
+  height: 110px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+}
+#adminProfileDialog .profile-avatar-hero { margin: 0 !important; padding: 0 !important; }
+#adminProfileDialog .profile-name,
+#adminProfileDialog #adminProfileName {
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  margin-bottom: 4px !important;
+  line-height: 1.2 !important;
+}
+#adminProfileDialog .profile-role,
+#adminProfileDialog #adminProfileRole {
+  font-size: 1rem !important;
+  color: #e2e8f0 !important;
+  font-weight: 400 !important;
+  margin-bottom: 2px !important;
+}
+#adminProfileDialog .profile-id { font-size: .8rem !important; color: #94a3b8 !important; margin-bottom: 24px !important; }
+#adminProfileDialog .profile-data-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  margin: 16px 0 24px !important;
+  text-align: left !important;
+}
+#adminProfileDialog .profile-data-list > div {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  padding: 10px 12px !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  border-radius: 12px !important;
+  background: rgba(255,255,255,.05) !important;
+}
+#adminProfileDialog .profile-data-list small {
+  color: #ffffff !important;
+  font-size: .75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .5px !important;
+  text-transform: uppercase !important;
+}
+#adminProfileDialog .profile-data-list strong {
+  max-width: 66% !important;
+  color: #ffffff !important;
+  font-size: .9rem !important;
+  font-weight: 500 !important;
+  text-align: right !important;
+  overflow-wrap: anywhere !important;
+}
+#adminProfileDialog .profile-avatar-section { margin-top: 18px !important; }
+#adminProfileDialog .profile-avatar-section h3 {
+  color: #ffffff !important;
+  font-size: .85rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 12px !important;
+}
+#adminProfileDialog .profile-avatar-gallery {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 10px !important;
+}
+#adminProfileDialog .profile-avatar-option {
+  width: 52px !important;
+  height: 52px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  border: 2px solid transparent !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+}
+#adminProfileDialog .profile-avatar-option img { width: 100% !important; height: 100% !important; display: block !important; object-fit: cover !important; border-radius: 50% !important; }
+#adminProfileDialog .profile-avatar-option.is-selected { border-color: #ffffff !important; box-shadow: 0 0 0 3px rgba(147,197,253,.55) !important; }
+@media (max-width: 520px) {
+  #adminProfileDialog { padding: 10px !important; }
+  #adminProfileDialog .profile-modal-card { padding: 28px 18px !important; }
+  #adminProfileDialog .profile-data-list strong { max-width: 60% !important; }
+}

@@ -1266,14 +1266,19 @@
     $("#adminProfileEmail") && ($("#adminProfileEmail").textContent = remote?.email || "No registrado");
     $("#adminProfilePhone") && ($("#adminProfilePhone").textContent = remote?.phone || "No registrado");
     $("#adminProfileRole") && ($("#adminProfileRole").textContent = roleLabel(roleFor(user)));
-    renderProfileAvatarGallery(getProfileAvatar(user));
+    const selectedAvatar = getProfileAvatar(user);
+    const heroImage = $("#profileAvatarHeroImage");
+    if (heroImage) heroImage.src = selectedAvatar || PROFILE_AVATARS[0];
+    renderProfileAvatarGallery(selectedAvatar);
     adminProfileDialog?.showModal();
   };
   $("#profileAvatarHeroButton")?.addEventListener("click", () => $("#profileAvatarGallery")?.scrollIntoView({ behavior: "smooth", block: "nearest" }));
-  profileButton?.addEventListener("click", (event) => { event.stopPropagation(); const opening = profileMenu?.hidden !== false; if (profileMenu) profileMenu.hidden = !opening; profileButton.setAttribute("aria-expanded", String(opening)); });
+  profileButton?.addEventListener("click", (event) => { event.stopPropagation(); openAdminProfile(); });
   profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); sessionStorage.removeItem(SESSION_KEY); showLogin(); } }));
   document.addEventListener("click", (event) => { if (profileMenu && !event.target.closest(".profile-menu-wrap")) closeProfileMenu(); });
   $("#closeAdminProfileButton")?.addEventListener("click", () => adminProfileDialog?.close());
+  adminProfileDialog?.addEventListener("click", (event) => { if (event.target === adminProfileDialog) adminProfileDialog.close(); });
+  $("#adminProfileForm")?.addEventListener("submit", (event) => { event.preventDefault(); adminProfileDialog?.close(); });
   $("#newRecordButton").addEventListener("click", () => openDialog());
   $("#newTechnicalAppraisalButton").addEventListener("click", () => window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-creation")));
   $("#backAvaluosButton").addEventListener("click", () => {
