@@ -10560,3 +10560,85 @@ html body #appShell.control-shell .app-workspace {
   #adminProfileDialog .profile-modal-card { padding: 28px 18px !important; }
   #adminProfileDialog .profile-data-list strong { max-width: 60% !important; }
 }
+
+/* ============================================================================
+   MI PERFIL LIMPIO — SIN SELECTOR DE IMÁGENES NI EDICIÓN
+   ============================================================================ */
+#adminProfileDialog .profile-avatar-section,
+#adminProfileDialog .profile-avatar-gallery,
+#adminProfileDialog .profile-edit-btn,
+#adminProfileDialog .profile-avatar-pencil,
+#adminProfileDialog hr,
+#adminProfileDialog .avatar-selection,
+#adminProfileDialog .avatar-picker,
+#adminProfileDialog .profile-avatar-edit { display: none !important; }
+#adminProfileDialog .profile-avatar-user-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  color: #1e3a5f !important;
+}
+#adminProfileDialog .profile-avatar-user-icon svg {
+  width: 54px !important;
+  height: 54px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 1.7 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+#adminProfileDialog #profileAvatarHeroImage { display: none !important; }
+#adminProfileDialog .profile-modal-card {
+  background: linear-gradient(180deg, #091322 0%, #0f172a 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 20px !important;
+  padding: 32px 24px !important;
+  max-width: 420px !important;
+  width: 90% !important;
+  color: #ffffff !important;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important;
+  text-align: center !important;
+}
+#adminProfileDialog .profile-data-list > div { grid-template-columns: 1fr !important; }
+#adminProfileDialog .profile-data-list small { color: #cbd5e1 !important; }
+#adminProfileDialog .profile-data-list strong { color: #ffffff !important; }
+
+/* ============================================================================
+   CONTENEDORES FLUIDOS AL 100% — TABLAS, FORMULARIOS Y VISTAS
+   ============================================================================ */
+body,
+main,
+.main-content,
+.container,
+.page-wrapper,
+.table-container,
+.card-table,
+form,
+.form-container {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+.table-container,
+.card-table,
+table {
+  width: 100% !important;
+  table-layout: auto !important;
+}
+main,
+.page-content {
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+}
+/* Excepciones necesarias para que los diálogos sigan siendo tarjetas centradas. */
+#adminProfileDialog .profile-data-list,
+#adminProfileDialog .profile-avatar-hero,
+#adminProfileDialog .profile-dialog-heading { width: auto !important; max-width: none !important; margin-left: auto !important; margin-right: auto !important; }
+#adminProfileDialog .profile-modal-card { width: 90% !important; max-width: 420px !important; margin: auto !important; }
+@media (max-width: 600px) {
+  main, .page-content { padding-left: 16px !important; padding-right: 16px !important; }
+}

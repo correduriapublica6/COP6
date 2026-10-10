@@ -1266,10 +1266,10 @@
     $("#adminProfileEmail") && ($("#adminProfileEmail").textContent = remote?.email || "No registrado");
     $("#adminProfilePhone") && ($("#adminProfilePhone").textContent = remote?.phone || "No registrado");
     $("#adminProfileRole") && ($("#adminProfileRole").textContent = roleLabel(roleFor(user)));
+    $("#adminProfileBrokerage") && ($("#adminProfileBrokerage").textContent = remote?.brokerage || "Correduría Pública 6 - Torreón");
     const selectedAvatar = getProfileAvatar(user);
     const heroImage = $("#profileAvatarHeroImage");
     if (heroImage) heroImage.src = selectedAvatar || PROFILE_AVATARS[0];
-    renderProfileAvatarGallery(selectedAvatar);
     adminProfileDialog?.showModal();
   };
   $("#profileAvatarHeroButton")?.addEventListener("click", () => $("#profileAvatarGallery")?.scrollIntoView({ behavior: "smooth", block: "nearest" }));
