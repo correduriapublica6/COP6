@@ -11469,3 +11469,87 @@ thead th {
   #appShell.control-shell .validation-authorize-form { grid-template-columns: 1fr !important; }
   #appShell.control-shell .validation-actions { grid-column: auto !important; }
 }
+
+/* ============================================================================
+   AJUSTE FINAL DE LIENZO Y PANELES SUPERIORES
+   ============================================================================ */
+/* El ancho lo define el viewport, no el max-width heredado de la plantilla ni
+   el margen lateral de la antigua barra lateral. */
+#appShell.control-shell {
+  display: block !important;
+  width: 100vw !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell > .app-workspace,
+#appShell.control-shell .app-workspace.main-content {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 88px 24px 54px !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell .app-workspace > .app-view,
+#appShell.control-shell .app-workspace > .app-view > *,
+#appShell.control-shell .technical-list-panel .dashboard-tabs,
+#appShell.control-shell .technical-list-panel .operational-table-wrap,
+#appShell.control-shell .inline-record-editor,
+#appShell.control-shell .request-table-wrap,
+#appShell.control-shell .request-filter-row,
+#appShell.control-shell .search-panel,
+#appShell.control-shell .setting-card,
+#appShell.control-shell .admin-grid,
+#appShell.control-shell .settings-grid,
+#appShell.control-shell .form-grid {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell .app-workspace > .app-view { margin-left: auto !important; margin-right: auto !important; }
+#appShell.control-shell .operational-table-wrap,
+#appShell.control-shell .request-table-wrap { overflow-x: auto !important; }
+#appShell.control-shell .operational-table-wrap > table,
+#appShell.control-shell .request-table-wrap > table { width: 100% !important; max-width: none !important; }
+
+/* Cada panel conserva su posición después de abrirse; nunca se superponen. */
+#appShell.control-shell .global-search-wrap { position: static !important; width: auto !important; }
+#appShell.control-shell .global-search-wrap input { width: 250px !important; }
+#appShell.control-shell .global-search-palette {
+  position: fixed !important;
+  top: 76px !important;
+  right: 430px !important;
+  left: auto !important;
+  width: 360px !important;
+  max-width: calc(100vw - 470px) !important;
+  max-height: min(420px, calc(100vh - 92px)) !important;
+  transform: none !important;
+  z-index: 20010 !important;
+}
+#appShell.control-shell .alerts-panel {
+  position: fixed !important;
+  top: 76px !important;
+  right: 24px !important;
+  left: auto !important;
+  width: 390px !important;
+  max-width: calc(100vw - 48px) !important;
+  max-height: calc(100vh - 92px) !important;
+  overflow: hidden !important;
+  z-index: 20020 !important;
+}
+#appShell.control-shell .alerts-list { max-height: calc(100vh - 190px) !important; overflow-y: auto !important; }
+#appShell.control-shell .global-search-results { max-height: calc(100vh - 110px) !important; overflow-y: auto !important; }
+@media (max-width: 900px) {
+  #appShell.control-shell .global-search-palette { right: 220px !important; width: 330px !important; max-width: calc(100vw - 245px) !important; }
+}
+@media (max-width: 620px) {
+  #appShell.control-shell > .app-workspace,
+  #appShell.control-shell .app-workspace.main-content { padding: 80px 12px 36px !important; }
+  #appShell.control-shell .global-search-palette { top: 76px !important; right: 12px !important; width: calc(100vw - 24px) !important; max-width: none !important; }
+  #appShell.control-shell .alerts-panel { top: 76px !important; right: 12px !important; width: calc(100vw - 24px) !important; max-width: none !important; }
+}
