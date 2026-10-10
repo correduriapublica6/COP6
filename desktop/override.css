@@ -10932,3 +10932,61 @@ html, body {
   #appShell.control-shell > .cp6-navbar-modern { padding: 0 16px !important; }
   #appShell.control-shell > .app-workspace { padding: 20px 16px !important; }
 }
+
+/* ============================================================================
+   ICONO DE PERFIL — MISMO TRATAMIENTO QUE BÚSQUEDA, MENSAJES Y SALIR
+   ============================================================================ */
+#appShell.control-shell .cp6-nav-tools .navbar-profile-wrap {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#appShell.control-shell .cp6-nav-tools .profile-button {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+  padding: 6px !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+  color: #cbd5e1 !important;
+  cursor: pointer !important;
+  transition: color .2s ease, background .2s ease, transform .2s ease !important;
+}
+#appShell.control-shell .cp6-nav-tools .profile-button:hover {
+  background: rgba(255,255,255,.08) !important;
+  color: #ffffff !important;
+  transform: scale(1.08) !important;
+}
+#appShell.control-shell .cp6-nav-tools .profile-button .profile-avatar-image,
+#appShell.control-shell .cp6-nav-tools .profile-button .profile-status-dot {
+  display: none !important;
+}
+#appShell.control-shell .cp6-nav-tools .profile-button .user-icon,
+#appShell.control-shell .cp6-nav-tools .profile-button .user-icon path,
+#appShell.control-shell .cp6-nav-tools .profile-button .user-icon circle {
+  display: block !important;
+  width: 20px !important;
+  height: 20px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 1.7 !important;
+  color: inherit !important;
+}
+#appShell.control-shell .cp6-nav-tools .profile-menu {
+  top: calc(100% + 8px) !important;
+  right: 0 !important;
+  left: auto !important;
+}
