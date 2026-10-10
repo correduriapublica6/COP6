@@ -11114,3 +11114,160 @@ html, body {
   #appShell.control-shell #perfilView .profile-data-item { grid-template-columns: 24px minmax(70px, auto) minmax(0, 1fr) !important; }
   #appShell.control-shell #perfilView .profile-data-item .value { text-align: right !important; }
 }
+
+/* ============================================================================
+   MI PERFIL — DASHBOARD LATERAL SIN MARCO BLANCO
+   ============================================================================ */
+html,
+body,
+#appShell.control-shell,
+#appShell.control-shell > .app-workspace,
+#appShell.control-shell > .app-workspace #perfilView.profile-layout-container {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+html,
+body,
+#appShell.control-shell > .app-workspace #perfilView.profile-layout-container {
+  background-color: #0f172a !important;
+}
+#appShell.control-shell > .app-workspace #perfilView.profile-layout-container {
+  min-height: calc(100vh - 60px) !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  background: #0f172a !important;
+}
+#appShell.control-shell > .app-workspace #perfilView.profile-layout-container[hidden] { display: none !important; }
+#appShell.control-shell #perfilView .profile-sidebar {
+  width: 340px !important;
+  flex: 0 0 340px !important;
+  min-height: calc(100vh - 60px) !important;
+  background: #1e293b !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding: 32px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  color: #ffffff !important;
+}
+#appShell.control-shell #perfilView .profile-sidebar .avatar-container {
+  width: 88px !important;
+  height: 88px !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto 16px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+#appShell.control-shell #perfilView .profile-sidebar .avatar-container svg { width: 48px !important; height: 48px !important; }
+#appShell.control-shell #perfilView .profile-sidebar h2 {
+  font-family: system-ui, -apple-system, sans-serif !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  margin: 0 0 6px !important;
+  text-align: center !important;
+  line-height: 1.3 !important;
+}
+#appShell.control-shell #perfilView .profile-sidebar .role-badge {
+  display: inline-block !important;
+  background: rgba(37, 99, 235, 0.2) !important;
+  color: #60a5fa !important;
+  padding: 4px 12px !important;
+  border-radius: 20px !important;
+  font-size: .78rem !important;
+  font-weight: 600 !important;
+  margin: 0 0 32px !important;
+  border: 1px solid rgba(37,99,235,.25) !important;
+}
+#appShell.control-shell #perfilView .profile-sidebar .info-list {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+#appShell.control-shell #perfilView .profile-sidebar .info-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 4px !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,.06) !important;
+  border-radius: 0 !important;
+  padding: 0 0 12px !important;
+  margin: 0 !important;
+  background: transparent !important;
+  text-align: left !important;
+}
+#appShell.control-shell #perfilView .profile-sidebar .info-item .profile-data-icon { display: none !important; }
+#appShell.control-shell #perfilView .profile-sidebar .info-item .label {
+  color: #94a3b8 !important;
+  font-size: .72rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .05em !important;
+}
+#appShell.control-shell #perfilView .profile-sidebar .info-item .value {
+  max-width: 100% !important;
+  color: #f8fafc !important;
+  font-size: .88rem !important;
+  font-weight: 500 !important;
+  text-align: left !important;
+  overflow-wrap: anywhere !important;
+}
+#appShell.control-shell #perfilView .profile-sidebar .btn-back {
+  width: 100% !important;
+  margin-top: auto !important;
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  padding: 12px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(37,99,235,.3) !important;
+}
+#appShell.control-shell #perfilView .profile-content-area {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  min-height: calc(100vh - 60px) !important;
+  padding: 40px !important;
+  background: #0f172a !important;
+  color: #ffffff !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell #perfilView .profile-content-heading {
+  max-width: 720px !important;
+  margin: 0 !important;
+}
+#appShell.control-shell #perfilView .profile-content-kicker {
+  color: #60a5fa !important;
+  font-size: .72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .12em !important;
+}
+#appShell.control-shell #perfilView .profile-content-heading h3 {
+  margin: 10px 0 8px !important;
+  color: #ffffff !important;
+  font: 600 1.65rem/1.2 system-ui, -apple-system, sans-serif !important;
+}
+#appShell.control-shell #perfilView .profile-content-heading p {
+  margin: 0 !important;
+  color: #94a3b8 !important;
+  font: 400 .95rem/1.6 system-ui, -apple-system, sans-serif !important;
+}
+@media (max-width: 720px) {
+  #appShell.control-shell > .app-workspace #perfilView.profile-layout-container { flex-direction: column !important; }
+  #appShell.control-shell #perfilView .profile-sidebar { width: 100% !important; flex-basis: auto !important; min-height: auto !important; padding: 28px 20px !important; border-right: 0 !important; border-bottom: 1px solid rgba(255,255,255,.08) !important; }
+  #appShell.control-shell #perfilView .profile-sidebar .btn-back { margin-top: 24px !important; }
+  #appShell.control-shell #perfilView .profile-content-area { min-height: 260px !important; padding: 28px 20px !important; }
+}

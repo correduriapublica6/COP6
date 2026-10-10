@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261010-1054" />
+    <link rel="stylesheet" href="override.css?v=20261010-1109" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -231,18 +231,21 @@
 
         </section>
 
-        <section id="perfilView" class="app-view profile-page-view profile-page-container profile-view-wrapper profile-screen" aria-labelledby="profilePageName" hidden>
-          <div class="profile-page-card profile-card">
+        <section id="perfilView" class="app-view profile-page-view profile-page-container profile-view-wrapper profile-screen profile-layout-container" aria-labelledby="profilePageName" hidden>
+          <aside class="profile-sidebar">
             <div class="profile-page-avatar avatar-wrapper avatar-container" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
             <h2 id="profilePageName">—</h2>
             <p id="profilePageRole" class="profile-page-role role-subtitle role-badge">Administrador</p>
-            <div class="profile-page-info">
-              <div class="profile-info-row profile-data-item"><span class="profile-data-icon" aria-hidden="true">@</span><span class="label">CORREO</span><strong id="profilePageEmail" class="value">No registrado</strong></div>
-              <div class="profile-info-row profile-data-item"><span class="profile-data-icon" aria-hidden="true">☎</span><span class="label">TELÉFONO</span><strong id="profilePagePhone" class="value">No registrado</strong></div>
-              <div class="profile-info-row profile-data-item"><span class="profile-data-icon" aria-hidden="true">CP6</span><span class="label">CORREDURÍA</span><strong id="profilePageBrokerage" class="value">Correduría Pública 6 - Torreón</strong></div>
+            <div class="profile-page-info info-list">
+              <div class="profile-info-row profile-data-item info-item"><span class="profile-data-icon" aria-hidden="true">@</span><label class="label">CORREO</label><strong id="profilePageEmail" class="value">No registrado</strong></div>
+              <div class="profile-info-row profile-data-item info-item"><span class="profile-data-icon" aria-hidden="true">☎</span><label class="label">TELÉFONO</label><strong id="profilePagePhone" class="value">No registrado</strong></div>
+              <div class="profile-info-row profile-data-item info-item"><span class="profile-data-icon" aria-hidden="true">CP6</span><label class="label">CORREDURÍA ASOCIADA</label><strong id="profilePageBrokerage" class="value">Correduría Pública 6 - Torreón</strong></div>
             </div>
             <button id="profilePageBackButton" class="profile-page-back btn-back" type="button">← Volver</button>
-          </div>
+          </aside>
+          <main class="profile-content-area">
+            <div class="profile-content-heading"><span class="profile-content-kicker">CUENTA ACTIVA</span><h3>Mi espacio de trabajo</h3><p>Consulta la información asociada a tu cuenta y continúa operando en la plataforma CP6.</p></div>
+          </main>
         </section>
         <section id="resumenView" class="app-view admin-view" aria-labelledby="summaryViewTitle" hidden>
           <div class="admin-intro"><h2 id="summaryViewTitle">Control de saldos</h2></div>
