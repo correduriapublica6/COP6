@@ -754,7 +754,7 @@
 
   const VIEW_DETAILS = {
     inicio: { title: "Avalúos", kicker: "", description: "Consulta expedientes técnicos, administra solicitudes de servicio y gestiona el flujo de validación." },
-    solicitudes: { title: "Solicitudes de servicio", kicker: "CONTROL DE SOLICITUDES", description: "Administra solicitudes, asesores y estados del proceso." },
+    solicitudes: { title: "Solicitudes", kicker: "CONTROL DE SOLICITUDES", description: "Administra solicitudes, asesores y estados del proceso." },
     avaluos: { title: "Avalúos", kicker: "", description: "Consulta expedientes técnicos, administra solicitudes de servicio y gestiona el flujo de validación." },
     "fe-publica": { title: "Fe Pública", kicker: "", description: "" },
     resumen: { title: "Resumen general", kicker: "", description: "" },
@@ -1287,10 +1287,10 @@
   window.addEventListener("control-avaluos:subsection-change", (event) => {
     const section = event.detail;
     const details = {
-      inicio: { title: "Avalúos", description: "Consulta expedientes técnicos, administra solicitudes de servicio y gestiona el flujo de validación." },
-      recepcion: { title: "Avalúos - Recepción", description: "Registra y controla los avalúos recibidos, sus pagos y entregas." },
+      inicio: { title: "Gestión de Avalúos", description: "Consulta y administra los expedientes técnicos de la Correduría Pública No. 6." },
+      recepcion: { title: "Recepción", description: "Registra y controla los avalúos recibidos, sus pagos y entregas." },
       crear: { title: "Tipo de avalúo", description: "Selecciona el tipo de avalúo y continúa con las pestañas de avance." },
-      validacion: { title: "Avalúos - Validación", description: "Autoriza folios y verifica cuáles siguen pendientes de Recepción." },
+      validacion: { title: "Validación", description: "Autoriza folios y verifica cuáles siguen pendientes de Recepción." },
     }[section] || { title: "Avalúos", description: "" };
     const inAvaluos = activeAppView === "avaluos";
     $("#pageTitle").textContent = details.title;
@@ -1334,6 +1334,7 @@
   async function saveAuthorizedFolioFrom(inputSelector, messageSelector) { if (!canAuthorizeFolios()) return; const value = normalizeNumber($(inputSelector)?.value || ""); const message = $(messageSelector); if (!/^\d{4}$/.test(value)) { if (message) message.textContent = "Escribe un número de avalúo de cuatro dígitos."; return; }     try { const response = await apiRequest("/authorized-folios", { method: "POST", body: JSON.stringify({ numeroAvaluo: value }) }); authorizedAppraisalNumbers = Array.isArray(response.values) ? response.values : [...new Set([...authorizedAppraisalNumbers, value])].sort(); $(inputSelector).value = ""; if (message) { message.textContent = `El avalúo ${value} quedó autorizado para Recepción.`; message.className = "form-message is-success"; } renderAuthorizedFolios(); await renderPendingReceptionSummary(); } catch (error) { if (message) { message.textContent = error.message; message.className = "form-message is-error"; } } }
   $("#authorizedFolioForm")?.addEventListener("submit", async (event) => { event.preventDefault(); await saveAuthorizedFolioFrom("#authorizedFolioInput", "#authorizedFolioMessage"); });
   $("#authorizedFolioFormAvaluos")?.addEventListener("submit", async (event) => { event.preventDefault(); await saveAuthorizedFolioFrom("#authorizedFolioInputAvaluos", "#authorizedFolioMessageAvaluos"); });
+  $("#searchAuthorizedFolioButton")?.addEventListener("click", () => { const value = normalizeNumber($("#authorizedFolioInputAvaluos")?.value || ""); const message = $("#authorizedFolioMessageAvaluos"); if (!/^\d{4}$/.test(value)) { if (message) message.textContent = "Escribe un número de avalúo de cuatro dígitos para buscar."; return; } const authorized = authorizedAppraisalNumbers.some((item) => normalizeNumber(item) === value); const technical = technicalAppraisals.some((item) => normalizeNumber(item.numeroAvaluo || item.numero) === value); const received = records.some((item) => normalizeNumber(item.numeroAvaluo) === value); if (message) { message.textContent = authorized || technical || received ? `El avalúo ${value} fue localizado${received ? " y ya está en Recepción" : technical ? " en expedientes técnicos" : " como folio autorizado"}.` : `No se encontró el avalúo ${value}.`; message.className = `form-message ${authorized || technical || received ? "is-success" : "is-error"}`; } });
   $("#refreshPendingSummaryButton")?.addEventListener("click", renderPendingReceptionSummary);
 
   bindHomeIntelligence();
@@ -1364,4 +1365,46 @@
     renderPendingReceptionSummary,
     refreshRecords: render,
   };
+})();
+
+/* Herramientas flotantes: cierre externo de alertas y calculadora movible. */
+(() => {
+  const $ = (selector) => document.querySelector(selector);
+  const alertsPanel = $("#alertsPanel");
+  const alertsButton = $("#alertsButton");
+  document.addEventListener("pointerdown", (event) => {
+    if (alertsPanel && !alertsPanel.hidden && !event.target.closest("#alertsPanel") && !event.target.closest("#alertsButton")) {
+      alertsPanel.hidden = true;
+      alertsButton?.setAttribute("aria-expanded", "false");
+    }
+  });
+  const panel = $("#calculatorPanel");
+  const toggle = $("#calculatorToggleButton");
+  const close = $("#calculatorCloseButton");
+  const display = $("#calculatorDisplay");
+  if (!panel || !toggle || !display) return;
+  let expression = "";
+  let dragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+  const show = (visible) => { panel.hidden = !visible; toggle.setAttribute("aria-expanded", String(visible)); };
+  toggle.addEventListener("click", () => show(panel.hidden));
+  close?.addEventListener("click", () => show(false));
+  const calculate = () => {
+    if (!expression || !/^[0-9+*/().% -]+$/.test(expression)) return;
+    try { const result = Function(`"use strict"; return (${expression})`)(); if (Number.isFinite(result)) { expression = String(result); display.value = expression; } } catch { display.value = "Error"; expression = ""; }
+  };
+  panel.querySelectorAll("[data-calc-key]").forEach((button) => button.addEventListener("click", () => {
+    const key = button.dataset.calcKey;
+    if (key === "C") { expression = ""; display.value = "0"; return; }
+    if (key === "backspace") { expression = expression.slice(0, -1); display.value = expression || "0"; return; }
+    if (key === "=") { calculate(); return; }
+    expression += key;
+    display.value = expression;
+  }));
+  const dragHandle = panel.querySelector("[data-calculator-drag]");
+  dragHandle?.addEventListener("pointerdown", (event) => { dragging = true; const rect = panel.getBoundingClientRect(); offsetX = event.clientX - rect.left; offsetY = event.clientY - rect.top; dragHandle.setPointerCapture?.(event.pointerId); panel.classList.add("is-dragging"); });
+  dragHandle?.addEventListener("pointermove", (event) => { if (!dragging) return; panel.style.left = `${Math.max(8, event.clientX - offsetX)}px`; panel.style.top = `${Math.max(68, event.clientY - offsetY)}px`; panel.style.right = "auto"; });
+  dragHandle?.addEventListener("pointerup", () => { dragging = false; panel.classList.remove("is-dragging"); });
+  document.addEventListener("keydown", (event) => { if (panel.hidden) return; if (event.key === "Escape") show(false); if (/^[0-9+*/().%-]$/.test(event.key)) { expression += event.key; display.value = expression; } if (event.key === "Enter") calculate(); if (event.key === "Backspace") { expression = expression.slice(0, -1); display.value = expression || "0"; } });
 })();

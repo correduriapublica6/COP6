@@ -11361,3 +11361,48 @@ thead th {
     font-size: 0.72rem !important;
   }
 }
+
+/* ============================================================================
+   VISTAS INTERNAS FLUIDAS, TÍTULOS CONTEXTUALES Y VALIDACIÓN COMPACTA
+   ============================================================================ */
+#appShell.control-shell > .app-workspace {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin: 0 auto !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell > .app-workspace > .app-view,
+#appShell.control-shell > .app-workspace .admin-view,
+#appShell.control-shell > .app-workspace .avaluos-subsection,
+#appShell.control-shell > .app-workspace .inline-panel,
+#appShell.control-shell > .app-workspace .form-container,
+#appShell.control-shell > .app-workspace .table-container,
+#appShell.control-shell > .app-workspace .operational-table-wrap,
+#appShell.control-shell > .app-workspace .request-table-wrap {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel { width: 100% !important; max-width: none !important; }
+#appShell.control-shell .validation-authorize-form { display: flex !important; align-items: end !important; gap: 14px !important; width: 100% !important; }
+#appShell.control-shell .validation-authorize-form > label { flex: 1 1 320px !important; max-width: 520px !important; }
+#appShell.control-shell .validation-actions { display: flex !important; gap: 10px !important; align-items: center !important; }
+#appShell.control-shell .validation-hidden-list { display: none !important; }
+#appShell.control-shell #authorizedFolioMessageAvaluos { min-height: 1.3em !important; }
+
+/* Calculadora persistente y movible */
+.calculator-panel { position: fixed !important; z-index: 10050 !important; top: 76px !important; right: 28px !important; width: 260px !important; padding: 14px !important; background: #ffffff !important; border: 1px solid #cbd5e1 !important; border-radius: 14px !important; box-shadow: 0 20px 45px rgba(15,23,42,.25) !important; }
+.calculator-panel[hidden] { display: none !important; }
+.calculator-heading { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 10px !important; color: #0f172a !important; cursor: move !important; user-select: none !important; }
+.calculator-heading button { border: 0 !important; background: transparent !important; color: #64748b !important; font-size: 1.4rem !important; line-height: 1 !important; cursor: pointer !important; }
+.calculator-display { width: 100% !important; box-sizing: border-box !important; margin-bottom: 10px !important; padding: 10px 12px !important; border: 1px solid #cbd5e1 !important; border-radius: 8px !important; background: #f8fafc !important; color: #0f172a !important; text-align: right !important; font-size: 1.25rem !important; }
+.calculator-keys { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 7px !important; }
+.calculator-keys button { min-height: 38px !important; border: 1px solid #e2e8f0 !important; border-radius: 8px !important; background: #f8fafc !important; color: #0f172a !important; cursor: pointer !important; font-weight: 600 !important; }
+.calculator-keys button:hover { background: #dbeafe !important; border-color: #93c5fd !important; }
+.calculator-keys .calc-equals { grid-row: span 2 !important; background: #2563eb !important; color: #ffffff !important; border-color: #2563eb !important; }
+.calculator-keys .calc-zero { grid-column: span 2 !important; }
+@media (max-width: 720px) { #appShell.control-shell > .app-workspace { padding-left: 12px !important; padding-right: 12px !important; } .calculator-panel { right: 12px !important; width: min(260px, calc(100vw - 24px)) !important; } }
