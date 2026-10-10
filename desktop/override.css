@@ -11553,3 +11553,71 @@ thead th {
   #appShell.control-shell .global-search-palette { top: 76px !important; right: 12px !important; width: calc(100vw - 24px) !important; max-width: none !important; }
   #appShell.control-shell .alerts-panel { top: 76px !important; right: 12px !important; width: calc(100vw - 24px) !important; max-width: none !important; }
 }
+
+
+/* ============================================================================
+   INTERACCIÓN Y AJUSTES FINALES DE VALIDACIÓN / GESTIÓN
+   ============================================================================ */
+/* Click Outside sólo aplica al buscador y al centro de alertas. La calculadora
+   no se incluye aquí y permanece abierta hasta su X o su propio icono. */
+#appShell.control-shell .validation-authorize-form {
+  display: grid !important;
+  grid-template-columns: minmax(190px, 230px) auto minmax(300px, 1fr) !important;
+  align-items: end !important;
+  gap: 12px !important;
+}
+#appShell.control-shell .validation-authorize-form .validation-field { max-width: 230px !important; }
+#appShell.control-shell .validation-authorize-form .validation-field input {
+  min-height: 42px !important;
+  width: 100% !important;
+}
+#appShell.control-shell .validation-authorize-form .validation-actions {
+  height: 42px !important;
+  align-items: stretch !important;
+}
+#appShell.control-shell #authorizedFolioMessageAvaluos {
+  align-self: center !important;
+  color: #166534 !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  margin: 0 !important;
+  min-height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+#appShell.control-shell #technicalListPanel .status-list-heading { display: none !important; }
+#appShell.control-shell .technical-search-panel { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }
+#appShell.control-shell .technical-search-panel .search-row {
+  align-items: center !important;
+  display: flex !important;
+  gap: 12px !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+}
+#appShell.control-shell #technicalSearchInput {
+  flex: 0 1 430px !important;
+  max-width: 430px !important;
+  min-width: 220px !important;
+  width: 430px !important;
+}
+#appShell.control-shell #technicalStatusFilter {
+  flex: 0 1 430px !important;
+  max-width: 430px !important;
+  min-width: 220px !important;
+  width: 430px !important;
+}
+#appShell.control-shell #technicalListPanel { margin-top: 14px !important; }
+@media (max-width: 900px) {
+  #appShell.control-shell .validation-authorize-form { grid-template-columns: minmax(190px, 230px) auto !important; }
+  #appShell.control-shell #authorizedFolioMessageAvaluos { grid-column: 1 / -1 !important; }
+  #appShell.control-shell .technical-search-panel .search-row { flex-wrap: wrap !important; }
+  #appShell.control-shell #technicalSearchInput,
+  #appShell.control-shell #technicalStatusFilter { flex: 1 1 280px !important; max-width: none !important; width: auto !important; }
+}
+@media (max-width: 620px) {
+  #appShell.control-shell .validation-authorize-form { grid-template-columns: 1fr !important; }
+  #appShell.control-shell .validation-authorize-form .validation-field,
+  #appShell.control-shell .validation-authorize-form .validation-actions { max-width: none !important; width: 100% !important; }
+  #appShell.control-shell #authorizedFolioMessageAvaluos { grid-column: auto !important; }
+}
