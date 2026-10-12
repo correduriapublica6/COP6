@@ -9918,7 +9918,7 @@ html body #appShell.control-shell .app-workspace {
   #appShell.control-shell #recepcionAvaluosSection .request-style-filter-panel .search-row,
   #appShell.control-shell #crearAvaluoSection .technical-search-panel .search-row { grid-template-columns: 1fr !important; }
   #appShell.control-shell #recepcionAvaluosSection .operational-table-wrap,
-  #appShell.control-shell #crearAvaluosSection #technicalListPanel,
+  #appShell.control-shell #crearAvaluoSection #technicalListPanel,
   #appShell.control-shell #avaluosAuthorizedFoliosPanel,
   #appShell.control-shell #solicitudesView .request-table-wrap { margin-left: auto !important; margin-right: auto !important; width: 100% !important; overflow-x: auto !important; }
 }
@@ -11825,3 +11825,25 @@ thead th {
 /* Recepción: #statusRecordList es solo un host; la tarjeta visible es la tabla interna. */
 #appShell.control-shell #statusRecordList { background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; overflow: visible !important; padding: 0 !important; margin-top: 0 !important; }
 #appShell.control-shell #statusRecordList > .operational-table-wrap { background: #ffffff !important; border: 1px solid #e2e8f0 !important; border-radius: 16px !important; box-shadow: 0 4px 12px rgba(0,0,0,.03) !important; overflow: hidden !important; padding: 0 !important; margin-top: 0 !important; }
+
+/* Ajustes finales CP6: folio vinculado en Recepción y acciones más accesibles. */
+#appShell.control-shell #recepcionAvaluosSection table th:nth-child(2),
+#appShell.control-shell #recepcionAvaluosSection table td:nth-child(2) {
+  min-width: 150px !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .record-action,
+#appShell.control-shell #recepcionAvaluosSection .request-icon-button,
+#appShell.control-shell #crearAvaluoSection .technical-icon-button,
+#appShell.control-shell #solicitudesView .request-icon-button {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .record-action svg,
+#appShell.control-shell #crearAvaluoSection .technical-icon-button svg,
+#appShell.control-shell #solicitudesView .request-icon-button svg {
+  width: 21px !important;
+  height: 21px !important;
+}
