@@ -263,6 +263,7 @@
       syncCredentialSetupVisibility();
       if (activeSessionUser) { applyRoleUi(); renderAuthorizedFolios(); }
       render();
+      renderProfileDashboard();
     } catch {
       setServerStatus("offline");
       render();
@@ -707,6 +708,7 @@
       }
       renderRecentActivity();
       renderAlerts();
+      renderProfileDashboard();
       render();
     }); }
   function showAuthenticatedApp(user) {
@@ -865,7 +867,7 @@
     const pages = Math.max(1, Math.ceil(items.length / AVALUOS_PAGE_SIZE));
     receptionPage = Math.min(Math.max(1, receptionPage), pages);
     const pageItems = items.slice((receptionPage - 1) * AVALUOS_PAGE_SIZE, receptionPage * AVALUOS_PAGE_SIZE);
-    $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th># Avalúo</th><th>Folio de solicitud</th><th>Solicitante</th><th>Usuario</th><th>Valor del avalúo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${pageItems.length ? pageItems.map(renderListRow).join("") : `<tr><td colspan="7" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>${paginationMarkup("reception", receptionPage, items.length)}`;
+    $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>No.</th><th>Folio de solicitud</th><th>Solicitante</th><th>Usuario</th><th>Valor del avalúo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${pageItems.length ? pageItems.map(renderListRow).join("") : `<tr><td colspan="7" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>${paginationMarkup("reception", receptionPage, items.length)}`;
   }
   function bindRecordActions() {
     $$('[data-edit]').forEach((button) => button.addEventListener("click", () => openDialog(button.dataset.edit)));
@@ -1320,6 +1322,24 @@
   const profileButton = $("#profileButton");
   const profileMenu = $("#profileMenu");
   const closeProfileMenu = () => { if (profileMenu) profileMenu.hidden = true; profileButton?.setAttribute("aria-expanded", "false"); };
+  function renderProfileDashboard() {
+    const list = Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : [];
+    const total = list.length;
+    const completed = list.filter((item) => String(item.estado || "").toLowerCase() === "concluida").length;
+    const pending = list.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
+    const points = completed * 100 + pending * 10;
+    $("#profileTotalRequests") && ($("#profileTotalRequests").textContent = String(total));
+    $("#profilePendingRequests") && ($("#profilePendingRequests").textContent = String(pending));
+    $("#profileCompletedRequests") && ($("#profileCompletedRequests").textContent = String(completed));
+    $("#profilePoints") && ($("#profilePoints").textContent = String(points));
+    const chart = $("#profileRequestsChart");
+    if (!chart) return;
+    const max = Math.max(pending, completed, 1);
+    chart.innerHTML = [
+      { label: "Pendientes", value: pending, className: "pending" },
+      { label: "Concluidas", value: completed, className: "completed" },
+    ].map((item) => `<div class="profile-chart-column"><span class="profile-chart-value">${item.value}</span><div class="profile-chart-bar ${item.className}" style="height:${Math.max(8, Math.round((item.value / max) * 150))}px"></div><span class="profile-chart-label">${item.label}</span></div>`).join("");
+  }
   const openAdminProfile = () => {
     closeProfileMenu();
     const user = String(activeSessionUser || "");

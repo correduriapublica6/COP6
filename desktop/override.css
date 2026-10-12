@@ -11847,3 +11847,87 @@ thead th {
   width: 21px !important;
   height: 21px !important;
 }
+
+
+/* ============================================================================
+   PERFIL / MI ESPACIO DE TRABAJO — DASHBOARD CLARO CP6
+   ============================================================================ */
+#appShell.control-shell #perfilView.profile-screen {
+  display: grid !important;
+  grid-template-columns: minmax(240px, 290px) minmax(0, 1fr) !important;
+  gap: 28px !important;
+  align-items: stretch !important;
+  min-height: calc(100vh - 128px) !important;
+  padding: 28px 32px 40px !important;
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}
+#appShell.control-shell #perfilView.profile-screen[hidden] { display: none !important; }
+#appShell.control-shell #perfilView .profile-sidebar {
+  min-height: 620px !important;
+  padding: 32px 24px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 20px !important;
+  background: #ffffff !important;
+  box-shadow: 0 12px 30px rgba(15,23,42,.06) !important;
+  color: #0f172a !important;
+}
+#appShell.control-shell #perfilView .profile-page-avatar {
+  width: 92px !important; height: 92px !important; margin: 0 auto 20px !important;
+  background: #eff6ff !important; border: 1px solid #dbeafe !important;
+  color: #1d4ed8 !important; box-shadow: 0 8px 18px rgba(37,99,235,.12) !important;
+}
+#appShell.control-shell #perfilView .profile-page-avatar svg { width: 48px !important; height: 48px !important; stroke: currentColor !important; }
+#appShell.control-shell #perfilView .profile-sidebar h2 { color: #0f172a !important; font-size: 1.18rem !important; line-height: 1.3 !important; }
+#appShell.control-shell #perfilView .profile-page-role { color: #2563eb !important; background: #eff6ff !important; border: 1px solid #dbeafe !important; }
+#appShell.control-shell #perfilView .profile-page-info { margin-top: 28px !important; gap: 14px !important; }
+#appShell.control-shell #perfilView .profile-info-row { display: grid !important; grid-template-columns: 28px 1fr !important; column-gap: 10px !important; padding: 12px 0 !important; border-bottom: 1px solid #f1f5f9 !important; }
+#appShell.control-shell #perfilView .profile-data-icon { grid-row: span 2 !important; display: grid !important; place-items: center !important; width: 28px !important; height: 28px !important; border-radius: 8px !important; background: #f1f5f9 !important; color: #2563eb !important; font-size: .72rem !important; font-weight: 700 !important; }
+#appShell.control-shell #perfilView .profile-info-row .label { color: #64748b !important; font-size: .66rem !important; letter-spacing: .08em !important; }
+#appShell.control-shell #perfilView .profile-info-row .value { color: #1e293b !important; font-size: .82rem !important; overflow-wrap: anywhere !important; }
+#appShell.control-shell #perfilView .profile-page-back { margin-top: 30px !important; color: #1e293b !important; background: #f8fafc !important; border: 1px solid #cbd5e1 !important; }
+#appShell.control-shell #perfilView .profile-content-area { min-width: 0 !important; padding: 12px 0 0 !important; background: transparent !important; }
+#appShell.control-shell #perfilView .profile-content-heading { margin-bottom: 24px !important; }
+#appShell.control-shell #perfilView .profile-content-kicker,
+#appShell.control-shell #perfilView .profile-card-kicker { color: #2563eb !important; font-size: .68rem !important; font-weight: 800 !important; letter-spacing: .12em !important; }
+#appShell.control-shell #perfilView .profile-content-heading h3 { margin: 6px 0 6px !important; color: #0f172a !important; font-size: clamp(1.6rem, 3vw, 2.25rem) !important; }
+#appShell.control-shell #perfilView .profile-content-heading p { color: #64748b !important; font-size: .92rem !important; }
+#appShell.control-shell #perfilView .profile-kpi-grid { display: grid !important; grid-template-columns: repeat(3, minmax(0,1fr)) !important; gap: 16px !important; margin-bottom: 20px !important; }
+#appShell.control-shell #perfilView .profile-kpi-card,
+#appShell.control-shell #perfilView .profile-dashboard-card { background: #ffffff !important; border: 1px solid #e2e8f0 !important; border-radius: 16px !important; box-shadow: 0 8px 22px rgba(15,23,42,.05) !important; }
+#appShell.control-shell #perfilView .profile-kpi-card { min-height: 138px !important; padding: 20px !important; }
+#appShell.control-shell #perfilView .profile-kpi-label { display:block !important; color:#64748b !important; font-size:.78rem !important; font-weight:650 !important; }
+#appShell.control-shell #perfilView .profile-kpi-card strong { display:block !important; margin: 10px 0 6px !important; color:#0f172a !important; font-size:2rem !important; line-height:1 !important; }
+#appShell.control-shell #perfilView .profile-kpi-card small { color:#94a3b8 !important; font-size:.72rem !important; }
+#appShell.control-shell #perfilView .profile-kpi-pending { border-top: 3px solid #f59e0b !important; }
+#appShell.control-shell #perfilView .profile-kpi-completed { border-top: 3px solid #22c55e !important; }
+#appShell.control-shell #perfilView .profile-status-dot-badge { color:#f59e0b !important; }
+#appShell.control-shell #perfilView .profile-kpi-completed .profile-status-dot-badge { color:#22c55e !important; }
+#appShell.control-shell #perfilView .profile-dashboard-grid { display:grid !important; grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr) !important; gap:20px !important; }
+#appShell.control-shell #perfilView .profile-dashboard-card { min-height: 330px !important; padding: 22px !important; }
+#appShell.control-shell #perfilView .profile-dashboard-card-heading { display:flex !important; align-items:flex-start !important; justify-content:space-between !important; gap:12px !important; }
+#appShell.control-shell #perfilView .profile-dashboard-card h4 { margin:5px 0 0 !important; color:#0f172a !important; font-size:1.05rem !important; }
+#appShell.control-shell #perfilView .profile-chart-legend { display:flex !important; align-items:center !important; flex-wrap:wrap !important; gap:5px !important; color:#64748b !important; font-size:.68rem !important; }
+#appShell.control-shell #perfilView .profile-chart-legend i { width:8px !important; height:8px !important; border-radius:50% !important; display:inline-block !important; margin-left:7px !important; }
+#appShell.control-shell #perfilView .profile-legend-pending { background:#f59e0b !important; } #appShell.control-shell #perfilView .profile-legend-completed { background:#22c55e !important; }
+#appShell.control-shell #perfilView .profile-requests-chart { display:flex !important; align-items:flex-end !important; justify-content:center !important; gap:clamp(36px,10vw,110px) !important; height:215px !important; margin-top:24px !important; padding: 18px 18px 0 !important; border-bottom:1px solid #e2e8f0 !important; background: repeating-linear-gradient(to top, transparent 0 52px, #f1f5f9 53px) !important; }
+#appShell.control-shell #perfilView .profile-chart-column { display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:flex-end !important; height:100% !important; min-width:62px !important; }
+#appShell.control-shell #perfilView .profile-chart-value { color:#334155 !important; font-weight:750 !important; font-size:.8rem !important; margin-bottom:6px !important; }
+#appShell.control-shell #perfilView .profile-chart-bar { width:50px !important; min-height:8px !important; border-radius:10px 10px 0 0 !important; transition:height .25s ease !important; }
+#appShell.control-shell #perfilView .profile-chart-bar.pending { background:linear-gradient(180deg,#fbbf24,#f59e0b) !important; }
+#appShell.control-shell #perfilView .profile-chart-bar.completed { background:linear-gradient(180deg,#4ade80,#16a34a) !important; }
+#appShell.control-shell #perfilView .profile-chart-label { margin-top:10px !important; color:#64748b !important; font-size:.72rem !important; }
+#appShell.control-shell #perfilView .profile-chart-empty { align-self:center !important; color:#94a3b8 !important; font-size:.8rem !important; }
+#appShell.control-shell #perfilView .profile-level-badge { padding:6px 10px !important; border-radius:999px !important; background:#eff6ff !important; color:#2563eb !important; font-size:.7rem !important; font-weight:750 !important; }
+#appShell.control-shell #perfilView .profile-score-row { display:flex !important; align-items:center !important; gap:16px !important; margin:28px 0 20px !important; }
+#appShell.control-shell #perfilView .profile-score-ring { display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:center !important; flex:0 0 94px !important; height:94px !important; border:8px solid #dbeafe !important; border-right-color:#2563eb !important; border-radius:50% !important; }
+#appShell.control-shell #perfilView .profile-score-ring strong { color:#0f172a !important; font-size:1.35rem !important; } #appShell.control-shell #perfilView .profile-score-ring span { color:#64748b !important; font-size:.64rem !important; }
+#appShell.control-shell #perfilView .profile-score-row > div:last-child strong { color:#1e293b !important; font-size:.9rem !important; } #appShell.control-shell #perfilView .profile-score-row p { margin-top:5px !important; color:#64748b !important; font-size:.75rem !important; line-height:1.45 !important; }
+#appShell.control-shell #perfilView .profile-badges-row { display:flex !important; flex-wrap:wrap !important; gap:7px !important; }
+#appShell.control-shell #perfilView .profile-achievement-badge { padding:6px 9px !important; border-radius:8px !important; background:#eff6ff !important; color:#2563eb !important; font-size:.68rem !important; font-weight:700 !important; } #appShell.control-shell #perfilView .profile-achievement-badge.is-muted { background:#f1f5f9 !important; color:#94a3b8 !important; }
+#appShell.control-shell #perfilView .profile-coming-soon { display:flex !important; align-items:center !important; gap:10px !important; margin-top:25px !important; padding:12px !important; border:1px dashed #cbd5e1 !important; border-radius:12px !important; background:#f8fafc !important; } #appShell.control-shell #perfilView .profile-coming-soon > span { color:#2563eb !important; font-size:1.25rem !important; } #appShell.control-shell #perfilView .profile-coming-soon strong { display:block !important; color:#334155 !important; font-size:.75rem !important; } #appShell.control-shell #perfilView .profile-coming-soon small { color:#94a3b8 !important; font-size:.68rem !important; }
+@media (max-width: 900px) { #appShell.control-shell #perfilView.profile-screen { grid-template-columns:1fr !important; } #appShell.control-shell #perfilView .profile-sidebar { min-height:auto !important; } #appShell.control-shell #perfilView .profile-dashboard-grid { grid-template-columns:1fr !important; } }
+@media (max-width: 560px) { #appShell.control-shell #perfilView.profile-screen { padding:20px 16px 30px !important; } #appShell.control-shell #perfilView .profile-kpi-grid { grid-template-columns:1fr !important; } #appShell.control-shell #perfilView .profile-dashboard-card { padding:16px !important; } }
+
+#appShell.control-shell #recepcionAvaluosSection table th:nth-child(2),
+#appShell.control-shell #recepcionAvaluosSection table td:nth-child(2) { width: 120px !important; min-width: 0 !important; max-width: 130px !important; font-size: .76rem !important; }

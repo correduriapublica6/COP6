@@ -250,7 +250,26 @@
             <button id="profilePageBackButton" class="profile-page-back btn-back" type="button">← Volver</button>
           </aside>
           <main class="profile-content-area">
-            <div class="profile-content-heading"><span class="profile-content-kicker">CUENTA ACTIVA</span><h3>Mi espacio de trabajo</h3><p>Consulta la información asociada a tu cuenta y continúa operando en la plataforma CP6.</p></div>
+            <div class="profile-content-heading"><span class="profile-content-kicker">CUENTA ACTIVA</span><h3>Mi espacio de trabajo</h3><p>Consulta el estado de tus solicitudes, métricas y próximos logros en CP6.</p></div>
+            <section class="profile-dashboard" aria-label="Resumen de actividad">
+              <div class="profile-kpi-grid">
+                <article class="profile-kpi-card"><span class="profile-kpi-label">Total de solicitudes</span><strong id="profileTotalRequests">0</strong><small>Registradas en tu cuenta</small></article>
+                <article class="profile-kpi-card profile-kpi-pending"><span class="profile-kpi-label">Solicitudes pendientes</span><strong id="profilePendingRequests">0</strong><small><span class="profile-status-dot-badge">●</span> Requieren seguimiento</small></article>
+                <article class="profile-kpi-card profile-kpi-completed"><span class="profile-kpi-label">Solicitudes concluidas</span><strong id="profileCompletedRequests">0</strong><small><span class="profile-status-dot-badge">●</span> Procesos finalizados</small></article>
+              </div>
+              <div class="profile-dashboard-grid">
+                <section class="profile-dashboard-card profile-chart-card" aria-labelledby="profileChartTitle">
+                  <div class="profile-dashboard-card-heading"><div><span class="profile-card-kicker">ACTIVIDAD</span><h4 id="profileChartTitle">Distribución de solicitudes</h4></div><span class="profile-chart-legend"><i class="profile-legend-pending"></i>Pendientes <i class="profile-legend-completed"></i>Concluidas</span></div>
+                  <div id="profileRequestsChart" class="profile-requests-chart" role="img" aria-label="Gráfica de solicitudes pendientes y concluidas"><div class="profile-chart-empty">Cargando actividad…</div></div>
+                </section>
+                <section class="profile-dashboard-card profile-achievements-card" aria-labelledby="profileAchievementsTitle">
+                  <div class="profile-dashboard-card-heading"><div><span class="profile-card-kicker">PROGRESO</span><h4 id="profileAchievementsTitle">Puntuación y Logros</h4></div><span class="profile-level-badge">Nivel 1</span></div>
+                  <div class="profile-score-row"><div class="profile-score-ring"><strong id="profilePoints">0</strong><span>puntos</span></div><div><strong>Perfil en crecimiento</strong><p>Completa solicitudes y mantén tus datos actualizados para avanzar.</p></div></div>
+                  <div class="profile-badges-row"><span class="profile-achievement-badge">Primer acceso</span><span class="profile-achievement-badge is-muted">Constancia</span><span class="profile-achievement-badge is-muted">Experto CP6</span></div>
+                  <div class="profile-coming-soon"><span aria-hidden="true">✦</span><div><strong>Próximamente: Juegos y Desafíos</strong><small>Gana puntos y medallas con nuevas actividades.</small></div></div>
+                </section>
+              </div>
+            </section>
           </main>
         </section>
         <section id="resumenView" class="app-view admin-view" aria-labelledby="summaryViewTitle" hidden>
