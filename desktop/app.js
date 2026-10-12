@@ -779,6 +779,9 @@
 
   function switchAppView(view) {
     if (!VIEW_DETAILS[view] || (view === "resumen" ? !canViewSummary() : view === "fe-publica" ? !canViewFePublica() : view === "solicitudes" ? !canViewRequests() : view !== "avaluos" && view !== "inicio" && view !== "mensajeria" && view !== "perfil" && !isAdmin())) return;
+    if (view !== "avaluos" && !$("#recordEditor")?.hidden) {
+      window.dispatchEvent(new CustomEvent("control-avaluos:close-reception-editor"));
+    }
     activeAppView = view;
     $("#pageTitle").closest(".workspace-header")?.classList.toggle("avaluos-header", view === "avaluos");
     $$(".app-view").forEach((section) => { const active = section.id === `${view}View`; section.hidden = !active; section.classList.toggle("is-active", active); });
@@ -888,7 +891,15 @@
     if (!record) return;
     const viewOnly = readOnly || !canEditReception();
     form.reset();
-    Object.entries(initialDraft).forEach(([key, value]) => { const field = form.elements.namedItem(key); if (field && field.type !== "checkbox") field.value = key === "valorAvaluo" ? (record[key] ? formatCurrency(record[key]) : "") : record[key] ?? value; });
+    Object.entries(initialDraft).forEach(([key, value]) => {
+      const field = form.elements.namedItem(key);
+      if (!field || field.type === "checkbox") return;
+      const savedValue = key === "valorAvaluo" ? (record[key] ? formatCurrency(record[key]) : "") : (record[key] ?? value);
+      if (field.tagName === "SELECT" && savedValue && !Array.from(field.options).some((option) => option.value === String(savedValue))) {
+        field.add(new Option(String(savedValue), String(savedValue)));
+      }
+      field.value = savedValue;
+    });
     paidInput.checked = Boolean(record.pagado);
     amountInput.value = record.pagado ? formatCurrency(record.montoPagado || 0) : "";
     methodInput.value = record.pagado ? record.metodoPago || "" : "";
@@ -921,6 +932,26 @@
     const data = new FormData(form);
     return { numeroAvaluo: normalizeNumber(data.get("numeroAvaluo")), usuario: String(data.get("usuario") || "").trim(), asesorValuador: String(data.get("asesorValuador") || "").trim(), tipoBien: String(data.get("tipoBien") || "").trim(), tipoAvaluo: String(data.get("tipoAvaluo") || "").trim(), solicitante: String(data.get("solicitante") || "").trim(), valorAvaluo: parseMoney(data.get("valorAvaluo")), seEntregoA: String(data.get("seEntregoA") || "").trim(), pagoEntregadoA: paidInput.checked ? String(data.get("pagoEntregadoA") || "") : "", observacion: String(data.get("observacion") || "").trim(), fechaAvaluo: String(data.get("fechaAvaluo") || ""), pagado: paidInput.checked, montoPagado: paidInput.checked ? parseMoney(data.get("montoPagado")) : 0, metodoPago: paidInput.checked ? String(data.get("metodoPago") || "") : "", fechaPago: paidInput.checked ? String(data.get("fechaPago") || "") : "" };
   }
+  let receptionLookupTimer = null;
+  numberInput?.addEventListener("input", () => {
+    window.clearTimeout(receptionLookupTimer);
+    const number = normalizeNumber(numberInput.value || "");
+    if (!/^\d{4}$/.test(number)) return;
+    receptionLookupTimer = window.setTimeout(async () => {
+      try {
+        const requests = await apiRequest("/service-requests");
+        const match = (Array.isArray(requests) ? requests : []).find((item) => normalizeNumber(item.numeroAvaluo) === number);
+        if (!match) return;
+        const setField = (name, value) => { const field = form.elements.namedItem(name); if (field && value) { if (field.tagName === "SELECT" && !Array.from(field.options).some((option) => option.value === String(value))) field.add(new Option(String(value), String(value))); field.value = value; } };
+        setField("tipoBien", match.tipoBien || match.tipoAvaluo);
+        setField("tipoAvaluo", match.tipoAvaluo || "");
+        setField("usuario", match.asesor || "");
+        const requester = match.solicitante?.nombre || match.nombreSolicitante || "";
+        setField("solicitante", requester);
+        $("#formMessage").textContent = `Datos de la solicitud ${match.folio || number} cargados.`;
+      } catch { /* La captura manual sigue disponible si el servidor no responde. */ }
+    }, 250);
+  });
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!canEditReception()) return;
@@ -1310,6 +1341,7 @@
     if (activeAppView !== "avaluos") return;
     $("#newTechnicalAppraisalButton").classList.toggle("is-hidden", Boolean(event.detail) || !canEdit());
   });
+  window.addEventListener("control-avaluos:close-reception-editor", closeDialog);
   $("#closeDialogButton").addEventListener("click", closeDialog);
   $("#cancelDialogButton").addEventListener("click", closeDialog);
   $("#previewReceiptButton").addEventListener("click", () => openReceipt(formDraft()));

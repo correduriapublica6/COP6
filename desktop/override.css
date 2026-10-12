@@ -11721,3 +11721,14 @@ thead th {
 #appShell.control-shell .request-table-wrap > table {
   margin-top: 0 !important;
 }
+
+/* Ajustes de solicitud vinculada y formularios de Recepción */
+.request-detail-head-actions { display: inline-flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.request-appraisal-assignment { display: inline-flex; align-items: center; gap: 6px; color: #64748b; font-size: .72rem; font-weight: 600; }
+.request-appraisal-assignment input { width: 86px !important; min-width: 86px !important; padding: 7px 9px !important; text-align: center; letter-spacing: .08em; }
+.request-assigned-folio { color: #2563eb; font-size: .78rem; font-weight: 700; }
+#avaluosView.is-registering .technical-search-panel,
+#avaluosView.is-registering .reception-search-panel,
+#avaluosView.is-registering #statusViewSelect,
+#avaluosView.is-registering [for="statusViewSelect"] { display: none !important; }
+@media (max-width: 700px) { .request-detail-head-actions { width: 100%; justify-content: flex-start; } }

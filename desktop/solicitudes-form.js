@@ -485,10 +485,18 @@
       <div class="client-read-info-field"><span>Valor operación</span><strong>${readValue(item.valorOperacion || currentSpecific.valorOperacion)}</strong></div>
       <div class="client-read-info-field"><span>Tipo de avalúo</span><strong>${readValue(item.tipoAvaluo)}</strong></div>
     </div>`;
-    detail.innerHTML = `<div class="request-detail-compact-head"><div><strong class="client-folio">${escapeHtml(item.folio || "Pendiente")} · ${escapeHtml(item.tipoAvaluo || "Avalúo")}</strong><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small></div><button type="button" class="client-outline-button btn-copu-primary" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div>${timeline}<div class="request-detail-compact-grid"><section class="request-detail-pane"><div class="request-pane-heading"><strong>Expediente digital</strong><small>${files.length} archivo(s)</small></div><ul class="request-files-grid">${fileMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${adminFinalAction}</div>${finalPdfAction}</section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong></div>${infoRows}</section></div>`;
+    const canAssignAppraisal = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
+    const appraisalAssignment = canAssignAppraisal ? `<label class="request-appraisal-assignment">Número de avalúo<input type="text" inputmode="numeric" maxlength="4" pattern="\d{4}" value="${escapeHtml(item.numeroAvaluo || "")}" data-request-appraisal-number /></label><button type="button" class="request-detail-button" data-save-request-appraisal>Asignar</button>` : (item.numeroAvaluo ? `<span class="request-assigned-folio">Avalúo: ${escapeHtml(item.numeroAvaluo)}</span>` : "");
+    detail.innerHTML = `<div class="request-detail-compact-head"><div><strong class="client-folio">${escapeHtml(item.folio || "Pendiente")} · ${escapeHtml(item.tipoBien || item.tipoAvaluo || "Avalúo")}</strong><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small></div><div class="request-detail-head-actions">${appraisalAssignment}<button type="button" class="client-outline-button btn-copu-primary" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div></div>${timeline}<div class="request-detail-compact-grid"><section class="request-detail-pane"><div class="request-pane-heading"><strong>Expediente digital</strong><small>${files.length} archivo(s)</small></div><ul class="request-files-grid">${fileMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${adminFinalAction}</div>${finalPdfAction}</section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong></div>${infoRows}</section></div>`;
     detail.querySelectorAll("[data-view-file]").forEach((button) => button.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
     detail.querySelector("[data-view-final-pdf]")?.addEventListener("click", (event) => {
       openResourceViewer(event.currentTarget.dataset.viewFinalPdf, "Avalúo final.pdf", "application/pdf");
+    });
+    detail.querySelector("[data-save-request-appraisal]")?.addEventListener("click", async () => {
+      const input = detail.querySelector("[data-request-appraisal-number]");
+      const value = String(input?.value || "").replace(/\D/g, "");
+      if (!/^\d{4}$/.test(value)) { window.alert("El número de avalúo debe tener exactamente 4 dígitos."); return; }
+      try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ numeroAvaluo: value }) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); } catch (error) { window.alert(error.message); }
     });
     detail.querySelector("[data-attach-missing]")?.addEventListener("click", () => annexDocuments(item));
     detail.querySelector("[data-upload-final-pdf]")?.addEventListener("click", () => uploadFinalPdf(item));
@@ -502,8 +510,10 @@
     const form = event.currentTarget;
     const message = $("#publicRequestMessage");
     setMessage(message, "");
-    if (!requireFields(form, ["nombre", "telefono", "tipoAvaluo"])) { setMessage(message, "Completa nombre, teléfono y tipo de avalúo."); return; }
+    if (!requireFields(form, ["nombre", "telefono", "tipoBien"])) { setMessage(message, "Completa nombre, teléfono y tipo de avalúo."); return; }
     const values = formObject(form);
+    values.tipoBien = values.tipoBien || values.tipoAvaluo || "";
+    if (!values.tipoAvaluo || ["Inmuebles", "Vehículo Automotriz", "Automotriz", "Maquinaria y equipo", "Mobiliario y Bienes Diversos", "Intangibles"].includes(values.tipoAvaluo)) values.tipoAvaluo = values.tipoBien;
     setBusy(form, true, "Enviando…");
     try {
       const files = await readFiles(archivosSeleccionados);
