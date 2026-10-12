@@ -237,38 +237,36 @@
 
         </section>
 
-        <section id="perfilView" class="app-view profile-page-view profile-page-container profile-view-wrapper profile-screen profile-layout-container" aria-labelledby="profilePageName" hidden>
-          <aside class="profile-sidebar">
-            <div class="profile-page-avatar avatar-wrapper avatar-container" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+        <section id="perfilView" class="app-view profile-root-light" aria-labelledby="profilePageName" hidden>
+          <aside class="profile-card-light" aria-label="Información del perfil">
+            <div class="profile-avatar-light" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
             <h2 id="profilePageName">—</h2>
-            <p id="profilePageRole" class="profile-page-role role-subtitle role-badge">Administrador</p>
-            <div class="profile-page-info info-list">
-              <div class="profile-info-row profile-data-item info-item"><span class="profile-data-icon" aria-hidden="true">@</span><label class="label">CORREO</label><strong id="profilePageEmail" class="value">No registrado</strong></div>
-              <div class="profile-info-row profile-data-item info-item"><span class="profile-data-icon" aria-hidden="true">☎</span><label class="label">TELÉFONO</label><strong id="profilePagePhone" class="value">No registrado</strong></div>
-              <div class="profile-info-row profile-data-item info-item"><span class="profile-data-icon" aria-hidden="true">CP6</span><label class="label">CORREDURÍA ASOCIADA</label><strong id="profilePageBrokerage" class="value">Correduría Pública 6 - Torreón</strong></div>
+            <p id="profilePageRole" class="profile-role-light">Administrador</p>
+            <div class="profile-contact-list">
+              <div class="profile-contact-item"><span class="profile-contact-icon" aria-hidden="true">@</span><div><span class="profile-contact-label">CORREO</span><strong id="profilePageEmail" class="profile-contact-value">No registrado</strong></div></div>
+              <div class="profile-contact-item"><span class="profile-contact-icon" aria-hidden="true">☎</span><div><span class="profile-contact-label">TELÉFONO</span><strong id="profilePagePhone" class="profile-contact-value">No registrado</strong></div></div>
+              <div class="profile-contact-item"><span class="profile-contact-icon" aria-hidden="true">CP6</span><div><span class="profile-contact-label">CORREDURÍA ASOCIADA</span><strong id="profilePageBrokerage" class="profile-contact-value">Correduría Pública 6 - Torreón</strong></div></div>
             </div>
-            <section class="profile-sidebar-achievements" aria-labelledby="profileAchievementsTitle">
-              <div class="profile-dashboard-card-heading"><div><span class="profile-card-kicker">PROGRESO</span><h4 id="profileAchievementsTitle">Puntuación y Logros</h4></div><span class="profile-level-badge">Nivel 1</span></div>
-              <div class="profile-score-row"><div class="profile-score-ring"><strong id="profilePoints">0</strong><span>puntos</span></div><div><strong>Perfil en crecimiento</strong><p>Completa solicitudes y mantén tus datos actualizados para avanzar.</p></div></div>
-              <div class="profile-badges-row"><span class="profile-achievement-badge">Primer acceso</span><span class="profile-achievement-badge is-muted">Constancia</span><span class="profile-achievement-badge is-muted">Experto CP6</span></div>
-              <div class="profile-coming-soon"><span aria-hidden="true">✦</span><div><strong>Próximamente: Juegos y Desafíos</strong><small>Gana puntos y medallas con nuevas actividades.</small></div></div>
+            <section class="profile-progress-light" aria-labelledby="profileAchievementsTitle">
+              <div class="profile-progress-heading"><div><span>PROGRESO</span><h3 id="profileAchievementsTitle">Puntuación y Logros</h3></div><b>Nivel 1</b></div>
+              <div class="profile-score-line"><div class="profile-score-ring"><strong id="profilePoints">0</strong><span>puntos</span></div><div><strong>Perfil en crecimiento</strong><p>Completa solicitudes y mantén tus datos actualizados.</p></div></div>
+              <div class="profile-badges-light"><span>Primer acceso</span><span>Constancia</span><span>Experto CP6</span></div>
+              <div class="profile-coming-light"><strong>Próximamente: Juegos y Desafíos</strong><small>Gana puntos y medallas con nuevas actividades.</small></div>
             </section>
-            <button id="profilePageBackButton" class="profile-page-back btn-back" type="button">← Volver</button>
+            <button id="profilePageBackButton" class="profile-back-light" type="button">← Volver</button>
           </aside>
-          <main class="profile-content-area">
-            <div class="profile-content-heading"><div><span class="profile-content-kicker">CUENTA ACTIVA</span><h3>Mi espacio de trabajo</h3><p>Consulta el estado de tus solicitudes y métricas en CP6.</p></div><label id="profileMetricsFilterWrap" class="profile-metrics-filter" hidden>Ver métricas de:<select id="profileMetricsFilter" aria-label="Seleccionar usuario para métricas"><option value="__all">Todos los usuarios</option></select></label></div>
-            <section class="profile-dashboard" aria-label="Resumen de actividad">
-              <div class="profile-dashboard-layout">
-                <div class="profile-kpi-stack" aria-label="Métricas de solicitudes">
-                  <article class="profile-kpi-card profile-kpi-total"><div class="profile-kpi-ring" id="profileTotalRing" style="--progress:0%;"><div><strong id="profileTotalRequests">0</strong><span>total</span></div></div><div class="profile-kpi-copy"><span class="profile-kpi-label">Total de solicitudes</span><small>Registradas en tu cuenta</small></div></article>
-                  <article class="profile-kpi-card profile-kpi-pending"><div class="profile-kpi-ring" id="profilePendingRing" style="--progress:0%;"><div><strong id="profilePendingRequests">0</strong><span>pendientes</span></div></div><div class="profile-kpi-copy"><span class="profile-kpi-label">Solicitudes pendientes</span><small><span class="profile-status-dot-badge">●</span> Requieren seguimiento</small></div></article>
-                  <article class="profile-kpi-card profile-kpi-completed"><div class="profile-kpi-ring" id="profileCompletedRing" style="--progress:0%;"><div><strong id="profileCompletedRequests">0</strong><span>concluidas</span></div></div><div class="profile-kpi-copy"><span class="profile-kpi-label">Solicitudes concluidas</span><small><span class="profile-status-dot-badge">●</span> Procesos finalizados</small></div></article>
-                </div>
-                <section class="profile-dashboard-card profile-chart-card" aria-labelledby="profileChartTitle">
-                  <div class="profile-dashboard-card-heading"><div><span class="profile-card-kicker">ACTIVIDAD</span><h4 id="profileChartTitle">Distribución de solicitudes</h4></div><span class="profile-chart-legend"><i class="profile-legend-pending"></i>Pendientes <i class="profile-legend-completed"></i>Concluidas</span></div>
-                  <div class="profile-chart-visuals"><div id="profileRequestsChart" class="profile-requests-chart" role="img" aria-label="Gráfica de barras de solicitudes pendientes y concluidas"><div class="profile-chart-empty">Cargando actividad…</div></div><div class="profile-donut-area"><div id="profileRequestsDonut" class="profile-requests-donut" style="--pending-angle:0deg;"><div><strong id="profileDonutTotal">0</strong><span>total</span></div></div><div class="profile-donut-caption"><span><i class="profile-legend-pending"></i>Pendientes</span><span><i class="profile-legend-completed"></i>Concluidas</span></div></div></div>
-                </section>
+          <main class="profile-main-light">
+            <header class="profile-heading-light"><div><span>CUENTA ACTIVA</span><h1>Mi espacio de trabajo</h1><p>Consulta el estado de tus solicitudes y métricas en CP6.</p></div><label id="profileMetricsFilterWrap" class="profile-filter-light" hidden>Ver métricas de:<select id="profileMetricsFilter" aria-label="Seleccionar usuario para métricas"><option value="__all">Todos los usuarios</option></select></label></header>
+            <section class="profile-dashboard-light" aria-label="Resumen de actividad">
+              <div class="profile-kpis-light" aria-label="Métricas de solicitudes">
+                <article class="profile-metric-light"><div class="profile-metric-ring ring-total" id="profileTotalRing" style="--progress:0%;"><div><strong id="profileTotalRequests">0</strong><span>total</span></div></div><div><b>Total de solicitudes</b><small>Registradas en tu cuenta</small></div></article>
+                <article class="profile-metric-light"><div class="profile-metric-ring ring-pending" id="profilePendingRing" style="--progress:0%;"><div><strong id="profilePendingRequests">0</strong><span>pendientes</span></div></div><div><b>Solicitudes pendientes</b><small>Requieren seguimiento</small></div></article>
+                <article class="profile-metric-light"><div class="profile-metric-ring ring-completed" id="profileCompletedRing" style="--progress:0%;"><div><strong id="profileCompletedRequests">0</strong><span>concluidas</span></div></div><div><b>Solicitudes concluidas</b><small>Procesos finalizados</small></div></article>
               </div>
+              <section class="profile-visual-light" aria-labelledby="profileChartTitle">
+                <div class="profile-visual-heading"><div><span>ACTIVIDAD</span><h2 id="profileChartTitle">Distribución de solicitudes</h2></div><div class="profile-legend-light"><span><i class="legend-pending"></i>Pendientes</span><span><i class="legend-completed"></i>Concluidas</span></div></div>
+                <div class="profile-visual-grid"><div id="profileRequestsChart" class="profile-bars-light" role="img" aria-label="Gráfica de barras de solicitudes pendientes y concluidas"><div class="profile-chart-empty">Cargando actividad…</div></div><div class="profile-donut-panel-light"><div id="profileRequestsDonut" class="profile-donut-light" style="--pending-angle:0deg;"><div><strong id="profileDonutTotal">0</strong><span>total</span></div></div><div class="profile-donut-label-light">Pendientes vs. concluidas</div></div></div>
+              </section>
             </section>
           </main>
         </section>
