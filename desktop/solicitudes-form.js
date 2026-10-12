@@ -512,7 +512,11 @@
     setMessage(message, "");
     if (!requireFields(form, ["nombre", "telefono", "tipoBien"])) { setMessage(message, "Completa nombre, teléfono y tipo de avalúo."); return; }
     const values = formObject(form);
-    values.tipoBien = values.tipoBien || values.tipoAvaluo || "";
+    // El formulario puede crear un segundo campo dinámico llamado tipoBien.
+    // Siempre tomamos el selector principal para no dejar que el campo dinámico
+    // vacío sobrescriba el tipo de bien seleccionado por el usuario.
+    const primaryType = String(form.querySelector("#publicRequestType")?.value || "").trim();
+    values.tipoBien = primaryType || String(values.tipoBien || "").trim();
     if (!values.tipoAvaluo || ["Inmuebles", "Vehículo Automotriz", "Automotriz", "Maquinaria y equipo", "Mobiliario y Bienes Diversos", "Intangibles"].includes(values.tipoAvaluo)) values.tipoAvaluo = values.tipoBien;
     setBusy(form, true, "Enviando…");
     try {
