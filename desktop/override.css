@@ -11047,3 +11047,77 @@ html body #appShell.control-shell .app-workspace {
 #appShell.control-shell .cp6-nav-center > [data-app-view="mensajeria"] {
   display: none !important;
 }
+
+/* ============================================================================
+   AJUSTE FINAL — GESTIÓN A ANCHO TOTAL, FOLIO COMPACTO Y FILTRO AMPLIADO
+   ============================================================================ */
+#appShell.control-shell #crearAvaluoSection,
+#appShell.control-shell #crearAvaluoSection > .technical-search-panel,
+#appShell.control-shell #crearAvaluoSection > #technicalListPanel,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel .dashboard-tabs,
+#appShell.control-shell #crearAvaluoSection #technicalAppraisalList,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel .operational-table-wrap,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+/* Recepción: la columna mide únicamente lo necesario para “Folio de solicitud”. */
+#appShell.control-shell #recepcionAvaluosSection .operational-table-compact {
+  table-layout: fixed !important;
+  width: 100% !important;
+  min-width: 100% !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .operational-table-compact th:nth-child(2),
+#appShell.control-shell #recepcionAvaluosSection .operational-table-compact td:nth-child(2) {
+  width: 150px !important;
+  min-width: 150px !important;
+  max-width: 150px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .operational-table-compact td:nth-child(2) {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+/* Validación: ocultar cualquier listado residual y mantener visible únicamente el formulario. */
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-registry-section,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-hidden-list,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel #authorizedFoliosListAvaluos,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel #authorizedFoliosList,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-pending-section {
+  display: none !important;
+}
+/* Selector “Ver métricas de”: más ancho y alto para nombres largos y mejor lectura. */
+#appShell.control-shell #perfilView .profile-filter-light {
+  min-height: 46px !important;
+  font-size: .98rem !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell #perfilView .profile-filter-light select {
+  width: 480px !important;
+  min-width: 420px !important;
+  max-width: min(480px, 58vw) !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  padding: 10px 14px !important;
+  font-size: .88rem !important;
+  line-height: 1.25 !important;
+}
+#appShell.control-shell #perfilView .profile-filter-light select option {
+  min-height: 34px !important;
+  padding: 8px 12px !important;
+  font-size: .88rem !important;
+}
+@media (max-width: 900px) {
+  #appShell.control-shell #perfilView .profile-filter-light { white-space: normal !important; }
+  #appShell.control-shell #perfilView .profile-filter-light select {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+}
