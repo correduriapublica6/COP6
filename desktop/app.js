@@ -1206,6 +1206,22 @@
     }).join("") : '<p class="settings-empty">Aún no hay folios autorizados.</p>';
     targets.forEach((target) => { target.innerHTML = markup; target.querySelectorAll("[data-delete-authorized-folio]").forEach((button) => button.addEventListener("click", async () => { try { await apiRequest(`/authorized-folios/${encodeURIComponent(button.dataset.deleteAuthorizedFolio)}`, { method: "DELETE" }); authorizedAppraisalNumbers = authorizedAppraisalNumbers.filter((value) => value !== button.dataset.deleteAuthorizedFolio); renderAuthorizedFolios(); } catch (error) { const message = $("#authorizedFolioMessage") || $("#authorizedFolioMessageAvaluos"); if (message) message.textContent = error.message; } })); });
   }
+  async function renderValidationRegistry() {
+    const target = $("#validationRegistryList");
+    if (!target || !serverOnline || !canAuthorizeFolios()) return;
+    try {
+      const rows = await apiRequest("/authorized-folios/registry");
+      const filter = $("#validationRegistryFilter")?.value || "todos";
+      const visible = (Array.isArray(rows) ? rows : []).filter((item) => filter === "todos" || (filter === "registrado" ? item.registrado : !item.registrado));
+      target.innerHTML = visible.length ? visible.map((item) => {
+        const date = item.fechaRegistro ? new Date(item.fechaRegistro).toLocaleDateString("es-MX", { day: "2-digit", month: "2-digit", year: "numeric" }) : "—";
+        return `<article class="settings-data-row validation-registry-row"><div><strong>#${escapeHtml(item.numeroAvaluo)}</strong><span>Fecha de registro: ${escapeHtml(date)}</span><span class="folio-validation-status ${item.registrado ? "is-registered" : "is-pending"}">${escapeHtml(item.estado)}</span></div><button type="button" class="text-action-button btn-copu-primary is-danger" data-delete-validation-folio="${escapeHtml(item.numeroAvaluo)}" aria-label="Eliminar folio ${escapeHtml(item.numeroAvaluo)}">Eliminar</button></article>`;
+      }).join("") : '<p class="settings-empty">No hay avalúos para este filtro.</p>';
+      target.querySelectorAll("[data-delete-validation-folio]").forEach((button) => button.addEventListener("click", async () => {
+        try { await apiRequest(`/authorized-folios/${encodeURIComponent(button.dataset.deleteValidationFolio)}`, { method: "DELETE" }); authorizedAppraisalNumbers = authorizedAppraisalNumbers.filter((value) => normalizeNumber(value) !== normalizeNumber(button.dataset.deleteValidationFolio)); renderAuthorizedFolios(); renderValidationRegistry(); } catch (error) { window.alert(error.message); }
+      }));
+    } catch (error) { target.innerHTML = `<p class="settings-empty">${escapeHtml(error.message)}</p>`; }
+  }
   async function renderPendingReceptionSummary() {
     const target = $("#pendingReceptionSummary");
     if (!target || !serverOnline) return;
@@ -1372,6 +1388,7 @@
   $("#authorizedFolioFormAvaluos")?.addEventListener("submit", async (event) => { event.preventDefault(); await saveAuthorizedFolioFrom("#authorizedFolioInputAvaluos", "#authorizedFolioMessageAvaluos"); });
   $("#searchAuthorizedFolioButton")?.addEventListener("click", () => { const value = normalizeNumber($("#authorizedFolioSearchInputAvaluos")?.value || ""); const message = $("#authorizedFolioMessageAvaluos"); if (!/^\d{4}$/.test(value)) { if (message) message.textContent = "Escribe un número de avalúo de cuatro dígitos para buscar."; return; } const authorized = authorizedAppraisalNumbers.some((item) => normalizeNumber(item) === value); const technical = technicalAppraisals.some((item) => normalizeNumber(item.numeroAvaluo || item.numero) === value); const received = records.some((item) => normalizeNumber(item.numeroAvaluo) === value); if (message) { message.textContent = authorized || technical || received ? `El avalúo ${value} fue localizado${received ? " y ya está en Recepción" : technical ? " en expedientes técnicos" : " como folio autorizado"}.` : `No se encontró el avalúo ${value}.`; message.className = `form-message ${authorized || technical || received ? "is-success" : "is-error"}`; } });
   $("#refreshPendingSummaryButton")?.addEventListener("click", renderPendingReceptionSummary);
+  $("#validationRegistryFilter")?.addEventListener("change", renderValidationRegistry);
 
   bindHomeIntelligence();
   startVersionMonitor();
@@ -1379,6 +1396,7 @@
   bindMoneyInputs();
   renderNotarySettings();
   renderAuthorizedFolios();
+  renderValidationRegistry();
   loadRemoteState();
   syncCredentialSetupVisibility();
   const storedSession = sessionStorage.getItem(SESSION_KEY);
@@ -1399,6 +1417,7 @@
     canViewRequests,
     renderAuthorizedFolios,
     renderPendingReceptionSummary,
+    renderValidationRegistry,
     refreshRecords: render,
   };
 })();

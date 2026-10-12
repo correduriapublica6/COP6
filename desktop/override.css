@@ -11781,3 +11781,47 @@ thead th {
 #appShell.control-shell #recordEditor:not([hidden]) > .form-full-page-container .dialog-heading {
   position: static !important;
 }
+
+
+/* Validación: registro visible de avalúos autorizados y su estado en Recepción. */
+.validation-registry-section { margin-top: 22px !important; padding-top: 18px !important; border-top: 1px solid #e2e8f0 !important; }
+.validation-registry-toolbar { display: flex !important; justify-content: flex-end !important; margin: 12px 0 !important; }
+.validation-registry-toolbar select { min-width: 230px !important; }
+.validation-registry-row { align-items: center !important; }
+.validation-registry-row > div { display: flex !important; flex-direction: column !important; gap: 3px !important; }
+.validation-registry-row > div > span { color: #64748b !important; font-size: .78rem !important; }
+
+/* Recepción y Gestión comparten exactamente el mismo envoltorio de tabla. */
+#appShell.control-shell .request-style-filter-panel,
+#appShell.control-shell .technical-search-panel { margin-bottom: 16px !important; margin-top: 0 !important; }
+#appShell.control-shell #statusRecordList,
+#appShell.control-shell #technicalListPanel,
+#appShell.control-shell .operational-table-wrap,
+#appShell.control-shell .request-table-wrap { background: #ffffff !important; border: 1px solid #e2e8f0 !important; border-radius: 16px !important; box-shadow: 0 4px 12px rgba(0,0,0,.03) !important; overflow: hidden !important; padding: 0 !important; margin-top: 0 !important; }
+#appShell.control-shell #statusRecordList table,
+#appShell.control-shell #technicalListPanel table,
+#appShell.control-shell .operational-table-wrap table,
+#appShell.control-shell .request-table-wrap table { width: 100% !important; margin: 0 !important; border-collapse: collapse !important; }
+#appShell.control-shell #statusRecordList thead tr,
+#appShell.control-shell #technicalListPanel thead tr,
+#appShell.control-shell .operational-table-wrap thead tr,
+#appShell.control-shell .request-table-wrap thead tr { background: linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#2563eb 100%) !important; }
+#appShell.control-shell #statusRecordList thead th,
+#appShell.control-shell #technicalListPanel thead th,
+#appShell.control-shell .operational-table-wrap thead th,
+#appShell.control-shell .request-table-wrap thead th { padding: 16px 18px !important; color: #fff !important; font-size: .82rem !important; font-weight: 600 !important; text-transform: uppercase !important; border: 0 !important; }
+
+/* Módulos de Avalúos: iconos más visibles y tarjetas con mayor respiración vertical. */
+#appShell.control-shell .avaluos-choice-card { min-height: 250px !important; padding: 30px 26px 38px !important; }
+#appShell.control-shell .avaluos-choice-icon { width: 64px !important; height: 64px !important; min-width: 64px !important; margin: 0 auto 20px !important; }
+#appShell.control-shell .avaluos-choice-icon svg { width: 34px !important; height: 34px !important; }
+
+/* Acciones de tablas un poco más grandes para mejorar el uso táctil. */
+#appShell.control-shell .record-action,
+#appShell.control-shell .technical-icon-button,
+#appShell.control-shell .request-icon-button { width: 36px !important; height: 36px !important; min-width: 36px !important; min-height: 36px !important; }
+
+
+/* Recepción: #statusRecordList es solo un host; la tarjeta visible es la tabla interna. */
+#appShell.control-shell #statusRecordList { background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; overflow: visible !important; padding: 0 !important; margin-top: 0 !important; }
+#appShell.control-shell #statusRecordList > .operational-table-wrap { background: #ffffff !important; border: 1px solid #e2e8f0 !important; border-radius: 16px !important; box-shadow: 0 4px 12px rgba(0,0,0,.03) !important; overflow: hidden !important; padding: 0 !important; margin-top: 0 !important; }
