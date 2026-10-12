@@ -10745,3 +10745,104 @@ html body #appShell.control-shell .app-workspace {
 @media (min-width: 1024px) {
   #appShell.control-shell #perfilView.profile-root-light { padding-left: 32px !important; padding-right: 32px !important; }
 }
+
+/* ============================================================================
+   LAYOUT FLUIDO CP6 — TABLAS, TARJETAS Y FORMULARIOS DE AVALÚOS
+   ============================================================================ */
+#appShell.control-shell > .app-workspace.main-content,
+#appShell.control-shell > .app-workspace,
+#appShell.control-shell > main.app-workspace {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell > .app-workspace.main-content {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+#appShell.control-shell #avaluosView,
+#appShell.control-shell #recepcionView,
+#appShell.control-shell #crearAvaluoView,
+#appShell.control-shell #solicitudesView,
+#appShell.control-shell #avaluosMenuSection,
+#appShell.control-shell #recepcionAvaluosSection,
+#appShell.control-shell #crearAvaluoSection,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel,
+#appShell.control-shell #solicitudesView .solicitudes-content,
+#appShell.control-shell #validacionView {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell #avaluosView .avaluos-section-heading,
+#appShell.control-shell #avaluosView .avaluos-choice-grid,
+#appShell.control-shell #avaluosView .avaluos-menu,
+#appShell.control-shell #recepcionView .request-style-filter-panel,
+#appShell.control-shell #recepcionAvaluosSection .operational-table-wrap,
+#appShell.control-shell #crearAvaluoSection .technical-search-panel,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel,
+#appShell.control-shell #solicitudesView .request-filter-row,
+#appShell.control-shell #solicitudesView .request-table-wrap,
+#appShell.control-shell #validacionView .validation-panel {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell #avaluosView .avaluos-choice-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .operational-table-wrap,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel,
+#appShell.control-shell #solicitudesView .request-table-wrap {
+  max-width: none !important;
+  width: 100% !important;
+}
+#appShell.control-shell #recepcionAvaluosSection table,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel table,
+#appShell.control-shell #solicitudesView .request-table-wrap table,
+#appShell.control-shell #recepcionAvaluosSection .data-table,
+#appShell.control-shell #crearAvaluoSection .data-table,
+#appShell.control-shell #solicitudesView .data-table {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  table-layout: auto !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .request-style-filter-panel,
+#appShell.control-shell #recepcionAvaluosSection .operational-table-wrap,
+#appShell.control-shell #crearAvaluoSection .technical-search-panel,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel,
+#appShell.control-shell #solicitudesView .request-filter-row,
+#appShell.control-shell #solicitudesView .request-table-wrap,
+#appShell.control-shell #avaluosAuthorizedFoliosPanel {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+#appShell.control-shell #crearAvaluoSection form,
+#appShell.control-shell #crearAvaluoSection .technical-form-section,
+#appShell.control-shell #crearAvaluoSection .form-full-page-container,
+#appShell.control-shell #recepcionAvaluosSection form,
+#appShell.control-shell #solicitudesView form {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+@media (max-width: 1000px) {
+  #appShell.control-shell #avaluosView .avaluos-choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 620px) {
+  #appShell.control-shell > .app-workspace.main-content { padding-left: 12px !important; padding-right: 12px !important; }
+  #appShell.control-shell #avaluosView .avaluos-choice-grid { grid-template-columns: 1fr !important; }
+}
