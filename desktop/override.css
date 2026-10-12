@@ -12006,3 +12006,69 @@ thead th {
   #appShell.control-shell #perfilView .profile-metrics-filter { width:100% !important; }
   #appShell.control-shell #perfilView .profile-metrics-filter select { flex:1 !important; min-width:0 !important; }
 }
+
+/* ============================================================================
+   PERFIL — MÉTRICAS CIRCULARES Y GRÁFICA DOBLE
+   ============================================================================ */
+#appShell.control-shell #perfilView .profile-kpi-card {
+  display: flex !important;
+  align-items: center !important;
+  gap: 13px !important;
+  min-height: 88px !important;
+  padding: 12px 14px !important;
+}
+#appShell.control-shell #perfilView .profile-kpi-ring {
+  --progress: 0%;
+  --ring-color: #2563eb;
+  position: relative !important;
+  flex: 0 0 60px !important;
+  width: 60px !important;
+  height: 60px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 50% !important;
+  background: conic-gradient(var(--ring-color) var(--progress), #e2e8f0 0) !important;
+}
+#appShell.control-shell #perfilView .profile-kpi-ring::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 6px !important;
+  border-radius: 50% !important;
+  background: #ffffff !important;
+}
+#appShell.control-shell #perfilView .profile-kpi-ring > div { position: relative !important; z-index: 1 !important; display:flex !important; flex-direction:column !important; align-items:center !important; line-height:1 !important; }
+#appShell.control-shell #perfilView .profile-kpi-ring strong { margin: 0 !important; font-size: 1.05rem !important; line-height: 1 !important; }
+#appShell.control-shell #perfilView .profile-kpi-ring span { margin-top: 3px !important; color:#64748b !important; font-size:.48rem !important; text-transform:uppercase !important; letter-spacing:.02em !important; }
+#appShell.control-shell #perfilView .profile-kpi-copy { min-width:0 !important; }
+#appShell.control-shell #perfilView .profile-kpi-copy .profile-kpi-label { font-size:.72rem !important; line-height:1.2 !important; }
+#appShell.control-shell #perfilView .profile-kpi-copy small { display:block !important; margin-top:6px !important; font-size:.62rem !important; line-height:1.25 !important; }
+#appShell.control-shell #perfilView .profile-kpi-pending .profile-kpi-ring { --ring-color:#f59e0b; }
+#appShell.control-shell #perfilView .profile-kpi-completed .profile-kpi-ring { --ring-color:#16a34a; }
+#appShell.control-shell #perfilView .profile-chart-visuals { display:grid !important; grid-template-columns:minmax(0,1fr) 170px !important; align-items:center !important; gap:14px !important; min-height:0 !important; }
+#appShell.control-shell #perfilView .profile-requests-chart { width:100% !important; height:150px !important; margin-top:10px !important; gap:clamp(28px,8vw,90px) !important; }
+#appShell.control-shell #perfilView .profile-donut-area { display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:center !important; gap:10px !important; }
+#appShell.control-shell #perfilView .profile-requests-donut {
+  --pending-angle: 0deg;
+  width: 132px !important;
+  height: 132px !important;
+  display:grid !important;
+  place-items:center !important;
+  border-radius:50% !important;
+  background: conic-gradient(#f59e0b 0deg var(--pending-angle), #16a34a var(--pending-angle) 360deg) !important;
+  position:relative !important;
+}
+#appShell.control-shell #perfilView .profile-requests-donut::after { content:"" !important; position:absolute !important; inset:17px !important; border-radius:50% !important; background:#ffffff !important; }
+#appShell.control-shell #perfilView .profile-requests-donut > div { position:relative !important; z-index:1 !important; display:flex !important; flex-direction:column !important; align-items:center !important; }
+#appShell.control-shell #perfilView .profile-requests-donut strong { color:#0f172a !important; font-size:1.35rem !important; line-height:1 !important; }
+#appShell.control-shell #perfilView .profile-requests-donut span { color:#64748b !important; font-size:.62rem !important; margin-top:4px !important; }
+#appShell.control-shell #perfilView .profile-donut-caption { display:flex !important; flex-direction:column !important; gap:5px !important; color:#64748b !important; font-size:.64rem !important; }
+#appShell.control-shell #perfilView .profile-donut-caption span { display:flex !important; align-items:center !important; gap:5px !important; }
+#appShell.control-shell #perfilView .profile-donut-caption i { width:8px !important; height:8px !important; border-radius:50% !important; display:inline-block !important; }
+#appShell.control-shell #perfilView .profile-donut-caption .profile-legend-pending { background:#f59e0b !important; }
+#appShell.control-shell #perfilView .profile-donut-caption .profile-legend-completed { background:#16a34a !important; }
+@media (max-width: 700px) {
+  #appShell.control-shell #perfilView .profile-chart-visuals { grid-template-columns:1fr !important; }
+  #appShell.control-shell #perfilView .profile-donut-area { flex-direction:row !important; justify-content:center !important; }
+  #appShell.control-shell #perfilView .profile-requests-donut { width:108px !important; height:108px !important; }
+  #appShell.control-shell #perfilView .profile-requests-donut::after { inset:14px !important; }
+}

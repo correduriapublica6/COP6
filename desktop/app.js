@@ -1355,10 +1355,17 @@
     $("#profilePendingRequests") && ($("#profilePendingRequests").textContent = String(pending));
     $("#profileCompletedRequests") && ($("#profileCompletedRequests").textContent = String(completed));
     $("#profilePoints") && ($("#profilePoints").textContent = String(points));
+    const setRingProgress = (id, value, color) => { const ring = $(id); if (!ring) return; ring.style.setProperty("--progress", `${Math.round(value * 100)}%`); ring.style.setProperty("--ring-color", color); };
+    setRingProgress("#profileTotalRing", total ? 1 : 0, "#2563eb");
+    setRingProgress("#profilePendingRing", total ? pending / total : 0, "#f59e0b");
+    setRingProgress("#profileCompletedRing", total ? completed / total : 0, "#16a34a");
     const chart = $("#profileRequestsChart");
     if (!chart) return;
     const max = Math.max(pending, completed, 1);
     chart.innerHTML = [{ label: "Pendientes", value: pending, className: "pending" }, { label: "Concluidas", value: completed, className: "completed" }].map((item) => `<div class="profile-chart-column"><span class="profile-chart-value">${item.value}</span><div class="profile-chart-bar ${item.className}" style="height:${Math.max(8, Math.round((item.value / max) * 120))}px"></div><span class="profile-chart-label">${item.label}</span></div>`).join("");
+    const donut = $("#profileRequestsDonut");
+    if (donut) { donut.style.setProperty("--pending-angle", `${total ? Math.round((pending / total) * 360) : 0}deg`); donut.style.background = total ? "" : "#e2e8f0"; donut.setAttribute("aria-label", `Distribución: ${pending} pendientes y ${completed} concluidas`); }
+    $("#profileDonutTotal") && ($("#profileDonutTotal").textContent = String(total));
   }
   const openAdminProfile = () => {
     closeProfileMenu();
