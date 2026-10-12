@@ -11732,3 +11732,27 @@ thead th {
 #avaluosView.is-registering #statusViewSelect,
 #avaluosView.is-registering [for="statusViewSelect"] { display: none !important; }
 @media (max-width: 700px) { .request-detail-head-actions { width: 100%; justify-content: flex-start; } }
+
+/* Recepción: el formulario de registrar/editar avalúo es una vista normal, no un popup. */
+#appShell.control-shell #recordEditor:not([hidden]) {
+  position: static !important;
+  inset: auto !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  z-index: auto !important;
+}
+#appShell.control-shell #recordEditor:not([hidden]) > form,
+#appShell.control-shell #recordEditor:not([hidden]) .inline-panel {
+  position: static !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+#appShell.control-shell #recordEditor::backdrop { display: none !important; }
