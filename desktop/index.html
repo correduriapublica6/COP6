@@ -238,6 +238,8 @@
         </section>
 
         <section id="perfilView" class="app-view profile-root-light" aria-labelledby="profilePageName" hidden>
+          <div class="profile-left-column">
+            <header class="profile-left-heading"><h1>Mi espacio de trabajo</h1><p>Consulta tus solicitudes y métricas en CP6.</p></header>
           <aside class="profile-card-light" aria-label="Información del perfil">
             <div class="profile-avatar-light" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
             <h2 id="profilePageName">—</h2>
@@ -255,8 +257,9 @@
             </section>
             <button id="profilePageBackButton" class="profile-back-light" type="button">← Volver</button>
           </aside>
+          </div>
           <main class="profile-main-light">
-            <header class="profile-heading-light"><div><span>CUENTA ACTIVA</span><h1>Mi espacio de trabajo</h1><p>Consulta el estado de tus solicitudes y métricas en CP6.</p></div><label id="profileMetricsFilterWrap" class="profile-filter-light" hidden>Ver métricas de:<select id="profileMetricsFilter" aria-label="Seleccionar usuario para métricas"><option value="__all">Todos los usuarios</option></select></label></header>
+            <header class="profile-heading-light"><label id="profileMetricsFilterWrap" class="profile-filter-light" hidden>Ver métricas de:<select id="profileMetricsFilter" aria-label="Seleccionar usuario para métricas"><option value="__all">Todos los usuarios</option></select></label></header>
             <section class="profile-dashboard-light" aria-label="Resumen de actividad">
               <div class="profile-kpis-light" aria-label="Métricas de solicitudes">
                 <article class="profile-metric-light"><div class="profile-metric-ring ring-total" id="profileTotalRing" style="--progress:0%;"><div><strong id="profileTotalRequests">0</strong><span>total</span></div></div><div><b>Total de solicitudes</b><small>Registradas en tu cuenta</small></div></article>
@@ -265,7 +268,7 @@
               </div>
               <section class="profile-visual-light" aria-labelledby="profileChartTitle">
                 <div class="profile-visual-heading"><div><span>ACTIVIDAD</span><h2 id="profileChartTitle">Distribución de solicitudes</h2></div><div class="profile-legend-light"><span><i class="legend-pending"></i>Pendientes</span><span><i class="legend-completed"></i>Concluidas</span></div></div>
-                <div class="profile-visual-grid"><div id="profileRequestsChart" class="profile-bars-light" role="img" aria-label="Gráfica de barras de solicitudes pendientes y concluidas"><div class="profile-chart-empty">Cargando actividad…</div></div><div class="profile-donut-panel-light"><div id="profileRequestsDonut" class="profile-donut-light" style="--pending-angle:0deg;"><div><strong id="profileDonutTotal">0</strong><span>total</span></div></div><div class="profile-donut-label-light">Pendientes vs. concluidas</div></div></div>
+                <div class="profile-visual-grid profile-donut-only"><div class="profile-donut-panel-light"><div id="profileRequestsDonut" class="profile-donut-light" style="--pending-angle:0deg;"><div><strong id="profileDonutTotal">0</strong><span>total</span></div></div><div class="profile-donut-label-light">Pendientes vs. concluidas</div></div></div>
               </section>
             </section>
           </main>
