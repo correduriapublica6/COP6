@@ -521,7 +521,7 @@
     setBusy(form, true, "Enviando…");
     try {
       const files = await readFiles(archivosSeleccionados);
-      const payload = { solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo }, tipoAvaluo: values.tipoAvaluo, asesor: values.asesor, notaria: values.notaria || values.notariaReferida || "", modalidad: values.modalidadInmueble || "", datosEspecificos: values, archivos: [...archivosExistentesEnEdicion, ...files], contactoVisita: { nombre: values.contactoVisitaNombre, telefono: values.contactoVisitaTelefono }, observaciones: values.observaciones, usuario_id: applicantSession?.id || values.usuario_id || "", requesterEmail: values.correo || applicantSession?.email || "" };
+      const payload = { solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo }, tipoBien: values.tipoBien, tipoAvaluo: values.tipoAvaluo, asesor: values.asesor, notaria: values.notaria || values.notariaReferida || "", modalidad: values.modalidadInmueble || "", datosEspecificos: { ...values, tipoBien: values.tipoBien }, archivos: [...archivosExistentesEnEdicion, ...files], contactoVisita: { nombre: values.contactoVisitaNombre, telefono: values.contactoVisitaTelefono }, observaciones: values.observaciones, usuario_id: applicantSession?.id || values.usuario_id || "", requesterEmail: values.correo || applicantSession?.email || "" };
       const result = await api(editingRequestId ? `/service-requests/${encodeURIComponent(editingRequestId)}` : "/service-requests", { method: editingRequestId ? "PUT" : "POST", body: JSON.stringify(payload) });
       clearRequestDraft();
       const actionLabel = editingRequestId ? "Solicitud actualizada" : "Solicitud registrada";
