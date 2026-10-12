@@ -1501,8 +1501,19 @@
   toggle.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); show(panel.hidden); });
   close?.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); show(false); panel.hidden = true; panel.style.display = "none"; });
   const calculate = () => {
-    if (!expression || !/^[0-9+*/().% -]+$/.test(expression)) return;
-    try { const result = Function(`"use strict"; return (${expression})`)(); if (Number.isFinite(result)) { expression = String(result); display.value = expression; } } catch { display.value = "Error"; expression = ""; }
+    const candidate = expression.trim();
+    if (!candidate || !/^[0-9+*/().% -]+$/.test(candidate)) return false;
+    try {
+      const result = Function(`"use strict"; return (${candidate})`)();
+      if (!Number.isFinite(result)) return false;
+      expression = String(result);
+      display.value = expression;
+      return true;
+    } catch {
+      display.value = "Error";
+      expression = "";
+      return false;
+    }
   };
   panel.querySelectorAll("[data-calc-key]").forEach((button) => button.addEventListener("click", () => {
     const key = button.dataset.calcKey;
@@ -1516,5 +1527,26 @@
   dragHandle?.addEventListener("pointerdown", (event) => { dragging = true; const rect = panel.getBoundingClientRect(); offsetX = event.clientX - rect.left; offsetY = event.clientY - rect.top; dragHandle.setPointerCapture?.(event.pointerId); panel.classList.add("is-dragging"); });
   dragHandle?.addEventListener("pointermove", (event) => { if (!dragging) return; panel.style.setProperty("left", `${Math.max(8, event.clientX - offsetX)}px`, "important"); panel.style.setProperty("top", `${Math.max(68, event.clientY - offsetY)}px`, "important"); panel.style.setProperty("right", "auto", "important"); });
   dragHandle?.addEventListener("pointerup", () => { dragging = false; panel.classList.remove("is-dragging"); });
-  document.addEventListener("keydown", (event) => { if (panel.hidden) return; if (event.key === "Escape") show(false); if (/^[0-9+*/().%-]$/.test(event.key)) { expression += event.key; display.value = expression; } if (event.key === "Enter") calculate(); if (event.key === "Backspace") { expression = expression.slice(0, -1); display.value = expression || "0"; } });
+  document.addEventListener("keydown", (event) => {
+    if (panel.hidden) return;
+    if (event.key === "Enter") {
+      event.preventDefault();
+      event.stopPropagation();
+      calculate();
+      return;
+    }
+    if (event.key === "Backspace") {
+      if (panel.contains(document.activeElement)) {
+        event.preventDefault();
+        expression = expression.slice(0, -1);
+        display.value = expression || "0";
+      }
+      return;
+    }
+    if (/^[0-9+*/().%-]$/.test(event.key) && panel.contains(document.activeElement)) {
+      event.preventDefault();
+      expression += event.key;
+      display.value = expression;
+    }
+  }, true);
 })();
