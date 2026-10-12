@@ -12072,3 +12072,126 @@ thead th {
   #appShell.control-shell #perfilView .profile-requests-donut { width:108px !important; height:108px !important; }
   #appShell.control-shell #perfilView .profile-requests-donut::after { inset:14px !important; }
 }
+
+/* ============================================================================
+   PERFIL — DISTRIBUCIÓN FINAL: PERFIL ANCHO + MÉTRICAS APILADAS + GRÁFICA
+   ============================================================================ */
+#appShell.control-shell #perfilView.profile-screen,
+#appShell.control-shell #perfilView.profile-screen .profile-content-area,
+#appShell.control-shell #perfilView.profile-screen .profile-dashboard,
+#appShell.control-shell #perfilView.profile-screen .profile-dashboard-layout {
+  background: #f8fafc !important;
+  background-color: #f8fafc !important;
+}
+#appShell.control-shell #perfilView.profile-screen {
+  grid-template-columns: minmax(320px, 360px) minmax(0, 1fr) !important;
+  height: calc(100vh - 128px) !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  gap: 24px !important;
+  padding: 18px 32px 20px !important;
+}
+#appShell.control-shell #perfilView .profile-sidebar {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #0f172a !important;
+  padding: 24px 24px !important;
+}
+#appShell.control-shell #perfilView .profile-sidebar h2,
+#appShell.control-shell #perfilView .profile-sidebar h2#profilePageName {
+  color: #0f172a !important;
+  font-weight: 400 !important;
+}
+#appShell.control-shell #perfilView .profile-info-row .label,
+#appShell.control-shell #perfilView .profile-info-row .value,
+#appShell.control-shell #perfilView .profile-info-row strong {
+  color: #0f172a !important;
+  font-weight: 400 !important;
+}
+#appShell.control-shell #perfilView .profile-info-row .label {
+  font-size: .68rem !important;
+  letter-spacing: .07em !important;
+}
+#appShell.control-shell #perfilView .profile-info-row .value {
+  font-size: .82rem !important;
+}
+#appShell.control-shell #perfilView .profile-dashboard-layout {
+  display: grid !important;
+  grid-template-columns: minmax(185px, 220px) minmax(0, 1fr) !important;
+  align-items: stretch !important;
+  gap: 16px !important;
+  width: 100% !important;
+  height: calc(100vh - 255px) !important;
+  min-height: 0 !important;
+}
+#appShell.control-shell #perfilView .profile-kpi-stack {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+}
+#appShell.control-shell #perfilView .profile-kpi-stack .profile-kpi-card {
+  flex: 1 1 0 !important;
+  min-height: 0 !important;
+  width: 100% !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 18px rgba(15,23,42,.05) !important;
+  padding: 14px !important;
+}
+#appShell.control-shell #perfilView .profile-kpi-stack .profile-kpi-ring {
+  flex: 0 0 60px !important;
+  width: 60px !important;
+  height: 60px !important;
+}
+#appShell.control-shell #perfilView .profile-kpi-copy .profile-kpi-label,
+#appShell.control-shell #perfilView .profile-kpi-copy small {
+  font-weight: 400 !important;
+}
+#appShell.control-shell #perfilView .profile-chart-card {
+  min-height: 0 !important;
+  height: 100% !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 18px rgba(15,23,42,.05) !important;
+  padding: 18px !important;
+}
+#appShell.control-shell #perfilView .profile-chart-visuals {
+  height: calc(100% - 38px) !important;
+  grid-template-columns: minmax(0, 1fr) 170px !important;
+  gap: 18px !important;
+}
+#appShell.control-shell #perfilView .profile-requests-chart {
+  height: 100% !important;
+  min-height: 150px !important;
+  max-height: 250px !important;
+  margin-top: 12px !important;
+}
+#appShell.control-shell #perfilView .profile-donut-area { max-height: 220px !important; }
+#appShell.control-shell #perfilView .profile-content-heading { margin-bottom: 14px !important; }
+#appShell.control-shell #perfilView .profile-content-heading h3 { font-weight: 500 !important; }
+@media (max-width: 900px) {
+  #appShell.control-shell #perfilView.profile-screen {
+    height: auto !important;
+    min-height: calc(100vh - 128px) !important;
+    overflow: visible !important;
+    grid-template-columns: 1fr !important;
+  }
+  #appShell.control-shell #perfilView .profile-sidebar { height: auto !important; }
+  #appShell.control-shell #perfilView .profile-dashboard-layout { height: auto !important; grid-template-columns: 1fr !important; }
+  #appShell.control-shell #perfilView .profile-kpi-stack { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  #appShell.control-shell #perfilView .profile-kpi-stack .profile-kpi-card { min-height: 88px !important; }
+  #appShell.control-shell #perfilView .profile-chart-card { height: 300px !important; }
+}
+@media (max-width: 620px) {
+  #appShell.control-shell #perfilView .profile-kpi-stack { grid-template-columns: 1fr !important; }
+  #appShell.control-shell #perfilView .profile-chart-visuals { grid-template-columns: 1fr !important; height: auto !important; }
+  #appShell.control-shell #perfilView .profile-chart-card { height: auto !important; }
+}
