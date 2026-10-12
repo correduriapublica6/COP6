@@ -486,7 +486,8 @@
       <div class="client-read-info-field"><span>Tipo de avalúo</span><strong>${readValue(item.tipoAvaluo)}</strong></div>
     </div>`;
     const canAssignAppraisal = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
-    const appraisalAssignment = canAssignAppraisal ? `<label class="request-appraisal-assignment">Número de avalúo<input type="text" inputmode="numeric" maxlength="4" pattern="\d{4}" value="${escapeHtml(item.numeroAvaluo || "")}" data-request-appraisal-number /></label><button type="button" class="request-detail-button" data-save-request-appraisal>Asignar</button>` : (item.numeroAvaluo ? `<span class="request-assigned-folio">Avalúo: ${escapeHtml(item.numeroAvaluo)}</span>` : "");
+    const currentAppraisalNumber = String(item.numeroAvaluo || "").replace(/\D/g, "").slice(0, 4);
+    const appraisalAssignment = canAssignAppraisal ? `<label class="request-appraisal-assignment">Número de avalúo<input type="text" inputmode="numeric" maxlength="4" pattern="\d{4}" value="${escapeHtml(currentAppraisalNumber)}" placeholder="4 dígitos" data-request-appraisal-number aria-label="Número de avalúo" /></label><button type="button" class="request-detail-button" data-save-request-appraisal>${currentAppraisalNumber ? "Cambiar" : "Asignar"}</button>` : (currentAppraisalNumber ? `<span class="request-assigned-folio">Avalúo: ${escapeHtml(currentAppraisalNumber)}</span>` : "");
     detail.innerHTML = `<div class="request-detail-compact-head"><div><strong class="client-folio">${escapeHtml(item.folio || "Pendiente")} · ${escapeHtml(item.tipoBien || item.tipoAvaluo || "Avalúo")}</strong><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small></div><div class="request-detail-head-actions">${appraisalAssignment}<button type="button" class="client-outline-button btn-copu-primary" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div></div>${timeline}<div class="request-detail-compact-grid"><section class="request-detail-pane"><div class="request-pane-heading"><strong>Expediente digital</strong><small>${files.length} archivo(s)</small></div><ul class="request-files-grid">${fileMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${adminFinalAction}</div>${finalPdfAction}</section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong></div>${infoRows}</section></div>`;
     detail.querySelectorAll("[data-view-file]").forEach((button) => button.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
     detail.querySelector("[data-view-final-pdf]")?.addEventListener("click", (event) => {
@@ -494,9 +495,19 @@
     });
     detail.querySelector("[data-save-request-appraisal]")?.addEventListener("click", async () => {
       const input = detail.querySelector("[data-request-appraisal-number]");
-      const value = String(input?.value || "").replace(/\D/g, "");
-      if (!/^\d{4}$/.test(value)) { window.alert("El número de avalúo debe tener exactamente 4 dígitos."); return; }
-      try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ numeroAvaluo: value }) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); } catch (error) { window.alert(error.message); }
+      const currentValue = String(item.numeroAvaluo || "").replace(/\D/g, "").slice(0, 4);
+      const value = String(input?.value || "").replace(/\D/g, "").slice(0, 4);
+      if (value && !/^\d{4}$/.test(value)) { window.alert("El número de avalúo debe tener exactamente 4 dígitos."); return; }
+      if (value === currentValue) { window.alert(currentValue ? "Ese número ya está asignado a esta solicitud." : "Escribe un número de 4 dígitos o déjalo vacío para quitar la asignación."); return; }
+      if (currentValue) {
+        const action = value ? `cambiar el número de avalúo ${currentValue} por ${value}` : `quitar el número de avalúo ${currentValue}`;
+        if (!window.confirm(`¿Estás seguro de ${action} en esta solicitud?`)) return;
+      }
+      try {
+        const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ numeroAvaluo: value }) });
+        requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate);
+        renderRequestDetail(updated);
+      } catch (error) { window.alert(error.message || "No se pudo guardar el número de avalúo."); }
     });
     detail.querySelector("[data-attach-missing]")?.addEventListener("click", () => annexDocuments(item));
     detail.querySelector("[data-upload-final-pdf]")?.addEventListener("click", () => uploadFinalPdf(item));
