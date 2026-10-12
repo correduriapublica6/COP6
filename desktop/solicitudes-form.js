@@ -128,7 +128,7 @@
     const container = $("#publicRequestDynamicFields");
     if (!container) return;
     if (type === "Inmuebles") {
-      container.innerHTML = `<div class="request-subgrid"><label>Modalidad *<select name="modalidadInmueble" id="requestInmuebleMode"><option value="">Selecciona</option><option>Referido</option><option>Comercial</option><option>Otro</option></select></label><div id="requestInmuebleModeFields"></div><label>Tipo de bien *<select name="tipoBien"><option value="">Selecciona</option><option>Terreno</option><option>Construcción</option></select></label><label>Valor de la operación<input name="valorOperacion" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></label><label>Número de enajenantes<input name="numeroEnajenantes" type="number" min="0" step="1" /></label><label>Propietario<input name="propietario" /></label></div>`;
+      container.innerHTML = `<div class="request-subgrid"><label>Modalidad *<select name="modalidadInmueble" id="requestInmuebleMode"><option value="">Selecciona</option><option>Referido</option><option>Comercial</option><option>Otro</option></select></label><div id="requestInmuebleModeFields"></div><label>Subtipo de bien *<select name="subtipoBien"><option value="">Selecciona</option><option>Terreno</option><option>Construcción</option></select></label><label>Valor de la operación<input name="valorOperacion" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></label><label>Número de enajenantes<input name="numeroEnajenantes" type="number" min="0" step="1" /></label><label>Propietario<input name="propietario" /></label></div>`;
       $("#requestInmuebleMode").addEventListener("change", renderInmuebleModeFields);
     } else if (["Automotriz", "Maquinaria y equipo", "Mobiliario y Bienes Diversos"].includes(type)) {
       container.innerHTML = `<div class="request-subgrid"><label>Calle<input name="calle" /></label><label>Número<input name="numero" /></label><label>Colonia<input name="colonia" /></label><label>Ciudad<input name="ciudad" /></label><label>Propietario<input name="propietario" /></label></div>`;
@@ -151,7 +151,7 @@
   function formObject(form) { return Object.fromEntries(new FormData(form).entries()); }
   function setMessage(element, text, tone = "error") { if (!element) return; element.textContent = text; element.dataset.tone = tone; element.hidden = !text; }
   function setBusy(form, busy, label) { const button = form?.querySelector('button[type="submit"]'); if (!button) return; if (!button.dataset.defaultLabel) button.dataset.defaultLabel = button.textContent; button.disabled = busy; button.textContent = busy ? label : button.dataset.defaultLabel; }
-  function requireFields(form, names) { const missing = names.find((name) => !String(form.elements[name]?.value || "").trim()); if (missing) { form.elements[missing]?.focus(); return false; } return true; }
+  function requireFields(form, names) { const missing = names.find((name) => { const field = name === "tipoBien" ? form.querySelector("#publicRequestType") : form.elements[name]; return !String(field?.value || "").trim(); }); if (missing) { const field = missing === "tipoBien" ? form.querySelector("#publicRequestType") : form.elements[missing]; field?.focus(); return false; } return true; }
   function getRequestForm() { return $("#publicRequestForm"); }
   function saveRequestDraft() {
     const form = getRequestForm();
@@ -573,7 +573,7 @@
     form.elements.tipoAvaluo.value = item.tipoAvaluo || "";
     renderDynamicFields();
     form.elements.asesor.value = item.asesor || "";
-    if (item.datosEspecificos) Object.entries(item.datosEspecificos).forEach(([key, value]) => { if (form.elements[key]) form.elements[key].value = value; });
+    if (item.datosEspecificos) Object.entries(item.datosEspecificos).forEach(([key, value]) => { const field = key === "tipoBien" ? (form.elements.subtipoBien || form.querySelector("#publicRequestType")) : form.elements[key]; if (field && !field.length) field.value = value; });
     if (item.notaria || item.datosEspecificos?.notariaReferida) renderNotarySearch(item.notaria || item.datosEspecificos.notariaReferida);
     closeDialog(applicantRequestsDialog); openDialog(requestDialog); fillAdvisors();
   }
