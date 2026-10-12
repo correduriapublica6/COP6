@@ -10846,3 +10846,66 @@ html body #appShell.control-shell .app-workspace {
   #appShell.control-shell > .app-workspace.main-content { padding-left: 12px !important; padding-right: 12px !important; }
   #appShell.control-shell #avaluosView .avaluos-choice-grid { grid-template-columns: 1fr !important; }
 }
+
+/* ============================================================================
+   PERFIL — WRAPPER RAÍZ A ANCHO COMPLETO Y VISUALIZACIÓN HORIZONTAL
+   ============================================================================ */
+#appShell.control-shell > .app-workspace,
+#appShell.control-shell > .app-workspace.main-content {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell #perfilView.profile-root-light {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: calc(100vh - 108px) !important;
+  height: calc(100vh - 108px) !important;
+  margin: 0 !important;
+  padding: 24px 16px !important;
+  background: #f8fafc !important;
+  background-color: #f8fafc !important;
+}
+#appShell.control-shell #perfilView .profile-main-light {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+/* El área de encabezado y las tarjetas superiores quedan transparentes sobre el fondo general. */
+#appShell.control-shell #perfilView .profile-main-light,
+#appShell.control-shell #perfilView .profile-dashboard-light,
+#appShell.control-shell #perfilView .profile-heading-light,
+#appShell.control-shell #perfilView .profile-kpis-light {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+#appShell.control-shell #perfilView .profile-visual-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 24px !important;
+  width: 100% !important;
+}
+#appShell.control-shell #perfilView .profile-bars-light,
+#appShell.control-shell #perfilView .profile-donut-panel-light {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+#appShell.control-shell #perfilView .profile-donut-panel-light {
+  min-height: 180px !important;
+  justify-content: center !important;
+}
+@media (min-width: 1024px) {
+  #appShell.control-shell #perfilView.profile-root-light { padding-left: 32px !important; padding-right: 32px !important; }
+}
+@media (max-width: 900px) {
+  #appShell.control-shell #perfilView.profile-root-light {
+    height: auto !important;
+    min-height: calc(100vh - 108px) !important;
+    padding: 20px 16px !important;
+  }
+}
+@media (max-width: 620px) {
+  #appShell.control-shell #perfilView .profile-visual-grid { grid-template-columns: 1fr !important; }
+}
