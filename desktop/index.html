@@ -247,10 +247,16 @@
               <div class="profile-info-row profile-data-item info-item"><span class="profile-data-icon" aria-hidden="true">☎</span><label class="label">TELÉFONO</label><strong id="profilePagePhone" class="value">No registrado</strong></div>
               <div class="profile-info-row profile-data-item info-item"><span class="profile-data-icon" aria-hidden="true">CP6</span><label class="label">CORREDURÍA ASOCIADA</label><strong id="profilePageBrokerage" class="value">Correduría Pública 6 - Torreón</strong></div>
             </div>
+            <section class="profile-sidebar-achievements" aria-labelledby="profileAchievementsTitle">
+              <div class="profile-dashboard-card-heading"><div><span class="profile-card-kicker">PROGRESO</span><h4 id="profileAchievementsTitle">Puntuación y Logros</h4></div><span class="profile-level-badge">Nivel 1</span></div>
+              <div class="profile-score-row"><div class="profile-score-ring"><strong id="profilePoints">0</strong><span>puntos</span></div><div><strong>Perfil en crecimiento</strong><p>Completa solicitudes y mantén tus datos actualizados para avanzar.</p></div></div>
+              <div class="profile-badges-row"><span class="profile-achievement-badge">Primer acceso</span><span class="profile-achievement-badge is-muted">Constancia</span><span class="profile-achievement-badge is-muted">Experto CP6</span></div>
+              <div class="profile-coming-soon"><span aria-hidden="true">✦</span><div><strong>Próximamente: Juegos y Desafíos</strong><small>Gana puntos y medallas con nuevas actividades.</small></div></div>
+            </section>
             <button id="profilePageBackButton" class="profile-page-back btn-back" type="button">← Volver</button>
           </aside>
           <main class="profile-content-area">
-            <div class="profile-content-heading"><span class="profile-content-kicker">CUENTA ACTIVA</span><h3>Mi espacio de trabajo</h3><p>Consulta el estado de tus solicitudes, métricas y próximos logros en CP6.</p></div>
+            <div class="profile-content-heading"><div><span class="profile-content-kicker">CUENTA ACTIVA</span><h3>Mi espacio de trabajo</h3><p>Consulta el estado de tus solicitudes y métricas en CP6.</p></div><label id="profileMetricsFilterWrap" class="profile-metrics-filter" hidden>Ver métricas de:<select id="profileMetricsFilter" aria-label="Seleccionar usuario para métricas"><option value="__all">Todos los usuarios</option></select></label></div>
             <section class="profile-dashboard" aria-label="Resumen de actividad">
               <div class="profile-kpi-grid">
                 <article class="profile-kpi-card"><span class="profile-kpi-label">Total de solicitudes</span><strong id="profileTotalRequests">0</strong><small>Registradas en tu cuenta</small></article>
@@ -262,12 +268,7 @@
                   <div class="profile-dashboard-card-heading"><div><span class="profile-card-kicker">ACTIVIDAD</span><h4 id="profileChartTitle">Distribución de solicitudes</h4></div><span class="profile-chart-legend"><i class="profile-legend-pending"></i>Pendientes <i class="profile-legend-completed"></i>Concluidas</span></div>
                   <div id="profileRequestsChart" class="profile-requests-chart" role="img" aria-label="Gráfica de solicitudes pendientes y concluidas"><div class="profile-chart-empty">Cargando actividad…</div></div>
                 </section>
-                <section class="profile-dashboard-card profile-achievements-card" aria-labelledby="profileAchievementsTitle">
-                  <div class="profile-dashboard-card-heading"><div><span class="profile-card-kicker">PROGRESO</span><h4 id="profileAchievementsTitle">Puntuación y Logros</h4></div><span class="profile-level-badge">Nivel 1</span></div>
-                  <div class="profile-score-row"><div class="profile-score-ring"><strong id="profilePoints">0</strong><span>puntos</span></div><div><strong>Perfil en crecimiento</strong><p>Completa solicitudes y mantén tus datos actualizados para avanzar.</p></div></div>
-                  <div class="profile-badges-row"><span class="profile-achievement-badge">Primer acceso</span><span class="profile-achievement-badge is-muted">Constancia</span><span class="profile-achievement-badge is-muted">Experto CP6</span></div>
-                  <div class="profile-coming-soon"><span aria-hidden="true">✦</span><div><strong>Próximamente: Juegos y Desafíos</strong><small>Gana puntos y medallas con nuevas actividades.</small></div></div>
-                </section>
+
               </div>
             </section>
           </main>

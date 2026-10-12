@@ -1322,8 +1322,31 @@
   const profileButton = $("#profileButton");
   const profileMenu = $("#profileMenu");
   const closeProfileMenu = () => { if (profileMenu) profileMenu.hidden = true; profileButton?.setAttribute("aria-expanded", "false"); };
+  function profileRequestMatches(item, selectedUser) {
+    const normalizedSelected = String(selectedUser || "").trim().toLowerCase();
+    if (normalizedSelected === "__all") return true;
+    const candidates = [item.asesor, item.usuario, item.creadoPor, item.creadoPorNombre, item.asignadoA, item.responsable, item.solicitante?.nombre, item.solicitante?.correo].map((value) => String(value || "").trim().toLowerCase()).filter(Boolean);
+    const selected = Array.isArray(remoteUsers) ? remoteUsers.find((user) => String(user.name || "").toLowerCase() === normalizedSelected) : null;
+    return candidates.includes(normalizedSelected) || Boolean(selected?.email && candidates.includes(String(selected.email).toLowerCase()));
+  }
+  function syncProfileMetricsFilter(user) {
+    const wrap = $("#profileMetricsFilterWrap");
+    const select = $("#profileMetricsFilter");
+    const isAdmin = roleFor(user) === "admin";
+    if (!wrap || !select) return;
+    wrap.hidden = !isAdmin;
+    if (!isAdmin) return;
+    const selected = select.value || "__all";
+    const users = Array.isArray(remoteUsers) ? remoteUsers : [];
+    select.innerHTML = `<option value="__all">Todos los usuarios</option>${users.map((item) => `<option value="${escapeHtml(item.name)}">${escapeHtml(item.name)}</option>`).join("")}`;
+    select.value = users.some((item) => item.name === selected) || selected === "__all" ? selected : "__all";
+  }
   function renderProfileDashboard() {
-    const list = Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : [];
+    const user = String(activeSessionUser || "");
+    syncProfileMetricsFilter(user);
+    const selected = roleFor(user) === "admin" ? ($( "#profileMetricsFilter")?.value || "__all") : user;
+    const allRequests = Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : [];
+    const list = roleFor(user) === "admin" && selected === "__all" ? allRequests : allRequests.filter((item) => profileRequestMatches(item, selected));
     const total = list.length;
     const completed = list.filter((item) => String(item.estado || "").toLowerCase() === "concluida").length;
     const pending = list.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
@@ -1335,10 +1358,7 @@
     const chart = $("#profileRequestsChart");
     if (!chart) return;
     const max = Math.max(pending, completed, 1);
-    chart.innerHTML = [
-      { label: "Pendientes", value: pending, className: "pending" },
-      { label: "Concluidas", value: completed, className: "completed" },
-    ].map((item) => `<div class="profile-chart-column"><span class="profile-chart-value">${item.value}</span><div class="profile-chart-bar ${item.className}" style="height:${Math.max(8, Math.round((item.value / max) * 150))}px"></div><span class="profile-chart-label">${item.label}</span></div>`).join("");
+    chart.innerHTML = [{ label: "Pendientes", value: pending, className: "pending" }, { label: "Concluidas", value: completed, className: "completed" }].map((item) => `<div class="profile-chart-column"><span class="profile-chart-value">${item.value}</span><div class="profile-chart-bar ${item.className}" style="height:${Math.max(8, Math.round((item.value / max) * 120))}px"></div><span class="profile-chart-label">${item.label}</span></div>`).join("");
   }
   const openAdminProfile = () => {
     closeProfileMenu();
@@ -1352,6 +1372,7 @@
     switchAppView("perfil");
   };
   profileButton?.addEventListener("click", (event) => { event.stopPropagation(); openAdminProfile(); });
+  $("#profileMetricsFilter")?.addEventListener("change", renderProfileDashboard);
   $("#logoutHeaderButton")?.addEventListener("click", () => { sessionStorage.removeItem(SESSION_KEY); showLogin(); });
   profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); sessionStorage.removeItem(SESSION_KEY); showLogin(); } }));
   document.addEventListener("click", (event) => { if (profileMenu && !event.target.closest(".profile-menu-wrap")) closeProfileMenu(); });
