@@ -10994,3 +10994,56 @@ html body #appShell.control-shell .app-workspace {
   #appShell.control-shell #perfilView .profile-filter-light { width: 100% !important; align-items: flex-start !important; flex-direction: column !important; }
   #appShell.control-shell #perfilView .profile-filter-light select { width: 100% !important; min-width: 0 !important; }
 }
+
+/* ============================================================================
+   LIMPIEZA DE TABLAS Y ACCESOS — GESTIÓN, RECEPCIÓN Y VALIDACIÓN
+   ============================================================================ */
+/* Gestión y Recepción se extienden completamente dentro del workspace. */
+#appShell.control-shell #crearAvaluoSection,
+#appShell.control-shell #crearAvaluoSection > .technical-search-panel,
+#appShell.control-shell #crearAvaluoSection > #technicalListPanel,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel .dashboard-tabs,
+#appShell.control-shell #crearAvaluoSection #technicalAppraisalList,
+#appShell.control-shell #recepcionAvaluosSection,
+#appShell.control-shell #recepcionAvaluosSection .dashboard-tabs,
+#appShell.control-shell #statusRecordList {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+#appShell.control-shell #crearAvaluoSection #technicalListPanel,
+#appShell.control-shell #recepcionAvaluosSection .operational-table-wrap {
+  width: 100% !important;
+  max-width: none !important;
+}
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table,
+#appShell.control-shell #recepcionAvaluosSection .operational-table-wrap table {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 100% !important;
+}
+/* No mostrar títulos de bloque ni números de registros encima de las tablas. */
+#appShell.control-shell #recepcionAvaluosSection .status-list-heading,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel .status-list-heading,
+#appShell.control-shell #recepcionAvaluosSection #statusListTitle,
+#appShell.control-shell #recepcionAvaluosSection #statusListCount,
+#appShell.control-shell #crearAvaluoSection #technicalListCount {
+  display: none !important;
+}
+/* La búsqueda de Gestión conserva su funcionalidad, pero sin el encabezado “Expedientes técnicos”. */
+#appShell.control-shell #crearAvaluoSection #technicalListPanel .dashboard-tabs {
+  padding-top: 0 !important;
+}
+/* El registro histórico de folios ya no se muestra en Validación. */
+#appShell.control-shell #validationRegistrySection,
+#appShell.control-shell .validation-registry-section,
+#appShell.control-shell #validationRegistryList,
+#appShell.control-shell #validationRegistryFilter {
+  display: none !important;
+}
+/* Mensajería se abre exclusivamente con el icono de mensajes del navbar. */
+#appShell.control-shell .cp6-nav-center > [data-app-view="mensajeria"] {
+  display: none !important;
+}
