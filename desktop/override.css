@@ -11756,3 +11756,28 @@ thead th {
   max-width: none !important;
 }
 #appShell.control-shell #recordEditor::backdrop { display: none !important; }
+
+
+/* Recepción: intercambio inline de tabla y formulario, sin popup ni estado persistente. */
+#appShell.control-shell #recepcionAvaluosSection.is-registering > .dashboard-tabs,
+#appShell.control-shell #recepcionAvaluosSection.is-registering > .search-panel,
+#appShell.control-shell #avaluosView.is-registering #recepcionAvaluosSection > .dashboard-tabs,
+#appShell.control-shell #avaluosView.is-registering #recepcionAvaluosSection > .search-panel {
+  display: none !important;
+}
+#appShell.control-shell #recordEditor:not([hidden]) > .form-full-page-container {
+  width: 100% !important;
+  max-width: 1200px !important;
+  min-width: 0 !important;
+  margin: 0 auto !important;
+  padding: 32px !important;
+  box-sizing: border-box !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+#appShell.control-shell #recordEditor:not([hidden]) > .form-full-page-container .dialog-heading {
+  position: static !important;
+}

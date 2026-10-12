@@ -779,9 +779,10 @@
 
   function switchAppView(view) {
     if (!VIEW_DETAILS[view] || (view === "resumen" ? !canViewSummary() : view === "fe-publica" ? !canViewFePublica() : view === "solicitudes" ? !canViewRequests() : view !== "avaluos" && view !== "inicio" && view !== "mensajeria" && view !== "perfil" && !isAdmin())) return;
-    if (view !== "avaluos" && !$("#recordEditor")?.hidden) {
-      window.dispatchEvent(new CustomEvent("control-avaluos:close-reception-editor"));
-    }
+    // Toda navegación del Navbar inicia las subsecciones en modo lista.
+    // El formulario de Recepción y cualquier ficha técnica nunca se arrastran a otra vista.
+    window.dispatchEvent(new CustomEvent("control-avaluos:close-reception-editor"));
+    window.dispatchEvent(new CustomEvent("control-avaluos:close-technical-creation"));
     activeAppView = view;
     $("#pageTitle").closest(".workspace-header")?.classList.toggle("avaluos-header", view === "avaluos");
     $$(".app-view").forEach((section) => { const active = section.id === `${view}View`; section.hidden = !active; section.classList.toggle("is-active", active); });
@@ -1317,6 +1318,9 @@
   });
   window.addEventListener("control-avaluos:subsection-change", (event) => {
     const section = event.detail;
+    // Cambiar entre Recepción, Gestión o Validación siempre abandona el formulario.
+    if (section !== "recepcion") window.dispatchEvent(new CustomEvent("control-avaluos:close-reception-editor"));
+    if (section !== "crear") window.dispatchEvent(new CustomEvent("control-avaluos:close-technical-creation"));
     const details = {
       inicio: { title: "Gestión de Avalúos", description: "Consulta y administra los expedientes técnicos de la Correduría Pública No. 6." },
       recepcion: { title: "Recepción", description: "Registra y controla los avalúos recibidos, sus pagos y entregas." },
