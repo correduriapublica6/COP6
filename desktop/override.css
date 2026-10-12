@@ -10685,3 +10685,63 @@ html body #appShell.control-shell .app-workspace {
   #appShell.control-shell #perfilView .profile-visual-grid { grid-template-columns:1fr !important; }
   #appShell.control-shell #perfilView .profile-donut-panel-light { flex-direction:row !important; justify-content:center !important; }
 }
+
+/* ============================================================================
+   PERFIL — AJUSTE DE ANCHO COMPLETO Y DISTRIBUCIÓN PROPORCIONAL
+   ============================================================================ */
+#appShell.control-shell #perfilView.profile-root-light {
+  width: 100% !important;
+  max-width: 1280px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 16px 16px !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) !important;
+  gap: 24px !important;
+}
+#appShell.control-shell #perfilView .profile-card-light,
+#appShell.control-shell #perfilView .profile-main-light,
+#appShell.control-shell #perfilView .profile-visual-light,
+#appShell.control-shell #perfilView .profile-metric-light {
+  max-width: none !important;
+}
+#appShell.control-shell #perfilView .profile-avatar-light {
+  width: 58px !important;
+  height: 58px !important;
+  margin: 0 auto 12px !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell #perfilView .profile-avatar-light svg {
+  width: 42px !important;
+  height: 42px !important;
+  color: #2563eb !important;
+  stroke: currentColor !important;
+}
+#appShell.control-shell #perfilView .profile-back-light {
+  width: 100% !important;
+  padding: 10px 16px !important;
+  color: #ffffff !important;
+  background: #2563eb !important;
+  border: 1px solid #2563eb !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 6px rgba(37,99,235,.18) !important;
+  font-weight: 500 !important;
+  transition: background-color .2s ease, box-shadow .2s ease !important;
+}
+#appShell.control-shell #perfilView .profile-back-light:hover {
+  color: #ffffff !important;
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+  box-shadow: 0 4px 10px rgba(29,78,216,.24) !important;
+}
+#appShell.control-shell #perfilView .profile-contact-label,
+#appShell.control-shell #perfilView .profile-contact-value,
+#appShell.control-shell #perfilView .profile-card-light h2 {
+  font-weight: 400 !important;
+}
+#appShell.control-shell #perfilView .profile-contact-value { color: #0f172a !important; }
+@media (min-width: 1024px) {
+  #appShell.control-shell #perfilView.profile-root-light { padding-left: 32px !important; padding-right: 32px !important; }
+}
