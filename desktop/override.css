@@ -11457,3 +11457,19 @@ html body #appShell.control-shell .app-workspace {
 #appShell.control-shell .request-external-assignment { min-width: 230px !important; }
 #appShell.control-shell .request-external-assignment select { display:block !important; width:100% !important; margin-top:4px !important; padding:7px 9px !important; border:1px solid #cbd5e1 !important; border-radius:8px !important; background:#fff !important; color:#0f172a !important; font:400 .78rem Inter,"Segoe UI",sans-serif !important; }
 #appShell.control-shell .request-external-assignment + [data-save-request-external] { align-self:end !important; white-space:nowrap !important; }
+
+/* Detalle de solicitud: creador y asignación externa */
+#appShell.control-shell .request-creator-summary { display:flex !important; flex-direction:column !important; gap:2px !important; margin-top:6px !important; }
+#appShell.control-shell .request-creator-summary > span { color:#94a3b8 !important; font-size:.68rem !important; text-transform:uppercase !important; letter-spacing:.04em !important; }
+#appShell.control-shell .request-creator-summary > strong { color:#0f172a !important; font-size:.82rem !important; font-weight:600 !important; }
+#appShell.control-shell .request-creator-summary > small { color:#64748b !important; font-size:.72rem !important; }
+#appShell.control-shell .request-external-assignment { display:flex !important; flex-direction:column !important; gap:7px !important; min-width:300px !important; padding:10px !important; border:1px solid #dbeafe !important; border-radius:10px !important; background:#f8fbff !important; }
+#appShell.control-shell .request-external-assignment > strong { color:#1e3a8a !important; font-size:.76rem !important; font-weight:600 !important; }
+#appShell.control-shell .request-external-search-grid { display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:5px !important; }
+#appShell.control-shell .request-external-search-grid input { width:100% !important; min-width:0 !important; box-sizing:border-box !important; padding:7px 8px !important; border:1px solid #cbd5e1 !important; border-radius:7px !important; background:#fff !important; color:#0f172a !important; font-size:.72rem !important; }
+#appShell.control-shell .request-external-results { display:flex !important; flex-direction:column !important; gap:3px !important; max-height:120px !important; overflow:auto !important; }
+#appShell.control-shell .request-external-result { display:flex !important; flex-direction:column !important; align-items:flex-start !important; padding:6px 8px !important; border:1px solid #e2e8f0 !important; border-radius:7px !important; background:#fff !important; color:#0f172a !important; text-align:left !important; cursor:pointer !important; }
+#appShell.control-shell .request-external-result:hover { border-color:#93c5fd !important; background:#eff6ff !important; }
+#appShell.control-shell .request-external-result strong { font-size:.73rem !important; font-weight:500 !important; }
+#appShell.control-shell .request-external-result small, #appShell.control-shell .request-external-empty, #appShell.control-shell .request-external-selected { color:#64748b !important; font-size:.68rem !important; }
+@media (max-width:800px) { #appShell.control-shell .request-external-search-grid { grid-template-columns:1fr !important; } #appShell.control-shell .request-external-assignment { min-width:220px !important; } }

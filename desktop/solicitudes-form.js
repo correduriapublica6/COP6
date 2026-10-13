@@ -447,21 +447,37 @@
       if (button) { button.disabled = false; button.textContent = "Guardar cambios"; }
     }
   }
-  async function bindExternalAssignment(detail, item, activeRole) {
-    const select = detail.querySelector("[data-request-external]");
+  async function bindExternalAssignment(detail, item) {
+    const nameInput = detail.querySelector("[data-external-name]");
+    const emailInput = detail.querySelector("[data-external-email]");
+    const phoneInput = detail.querySelector("[data-external-phone]");
+    const results = detail.querySelector("[data-external-results]");
     const save = detail.querySelector("[data-save-request-external]");
-    if (!select || !save) return;
+    if (!nameInput || !emailInput || !phoneInput || !results || !save) return;
+    let applicants = [];
+    let selected = item.asignadoExternoId ? { id: item.asignadoExternoId, name: item.asignadoExternoNombre || "", email: item.asignadoExternoEmail || "", phone: "" } : null;
+    const renderMatches = () => {
+      const query = [nameInput.value, emailInput.value, phoneInput.value].join(" ").trim().toLocaleLowerCase("es-MX");
+      const matches = !query ? applicants.slice(0, 8) : applicants.filter((user) => [user.name, user.email, user.phone].join(" ").toLocaleLowerCase("es-MX").includes(query)).slice(0, 8);
+      results.innerHTML = matches.length ? matches.map((user) => `<button type="button" class="request-external-result" data-external-result="${escapeHtml(user.id)}"><strong>${escapeHtml(user.name)}</strong><small>${escapeHtml(user.email || "")} · ${escapeHtml(user.phone || "Sin teléfono")}</small></button>`).join("") : `<small class="request-external-empty">No se encontraron usuarios externos.</small>`;
+      results.querySelectorAll("[data-external-result]").forEach((button) => button.addEventListener("click", () => {
+        selected = applicants.find((user) => user.id === button.dataset.externalResult) || null;
+        if (selected) { nameInput.value = selected.name || ""; emailInput.value = selected.email || ""; phoneInput.value = selected.phone || ""; }
+        results.innerHTML = selected ? `<small class="request-external-selected">Seleccionado: ${escapeHtml(selected.name)}</small>` : "";
+      }));
+    };
     try {
-      const applicants = await api("/applicants");
-      select.innerHTML = `<option value="">Sin usuario externo asignado</option>${(Array.isArray(applicants) ? applicants : []).map((user) => `<option value="${escapeHtml(user.id)}" data-email="${escapeHtml(user.email || "")}" data-name="${escapeHtml(user.name || "")}">${escapeHtml(user.name || user.email)} · ${escapeHtml(user.email || "")}</option>`).join("")}`;
-      select.value = item.asignadoExternoId || "";
+      applicants = await api("/applicants");
+      if (selected) { nameInput.value = selected.name; emailInput.value = selected.email; phoneInput.value = selected.phone; }
+      [nameInput, emailInput, phoneInput].forEach((input) => input.addEventListener("input", () => { selected = null; renderMatches(); }));
+      renderMatches();
       save.addEventListener("click", async () => {
-        const option = select.selectedOptions[0];
-        const payload = { asignadoExternoId: select.value, asignadoExternoEmail: option?.dataset.email || "", asignadoExternoNombre: option?.dataset.name || "" };
+        if (!selected) selected = applicants.find((user) => String(user.name || "").toLocaleLowerCase("es-MX") === nameInput.value.trim().toLocaleLowerCase("es-MX") || String(user.email || "").toLowerCase() === emailInput.value.trim().toLowerCase() || String(user.phone || "").trim() === phoneInput.value.trim()) || null;
+        if (!selected) { window.alert("Busca y selecciona un usuario externo antes de asignar."); return; }
         save.disabled = true;
-        try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify(payload) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); window.dispatchEvent(new CustomEvent("control-avaluos:request-updated", { detail: updated })); } catch (error) { window.alert(error.message || "No se pudo asignar el usuario externo."); } finally { save.disabled = false; }
+        try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ asignadoExternoId: selected.id, asignadoExternoEmail: selected.email || "", asignadoExternoNombre: selected.name || "" }) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); window.dispatchEvent(new CustomEvent("control-avaluos:request-updated", { detail: updated })); } catch (error) { window.alert(error.message || "No se pudo asignar el usuario externo."); } finally { save.disabled = false; }
       });
-    } catch (error) { select.innerHTML = `<option value="">No se pudieron cargar usuarios externos</option>`; save.disabled = true; }
+    } catch { results.innerHTML = `<small class="request-external-empty">No se pudieron cargar los usuarios externos.</small>`; save.disabled = true; }
   }
   function renderRequestDetail(item) {
     const detail = $("#requestDetailContent");
@@ -505,13 +521,16 @@
     const currentAppraisalNumber = String(item.numeroAvaluo || "").replace(/\D/g, "").slice(0, 4);
     const appraisalAssignment = canAssignAppraisal ? `<label class="request-appraisal-assignment">Número de avalúo<input type="text" inputmode="numeric" maxlength="4" pattern="\d{4}" value="${escapeHtml(currentAppraisalNumber)}" placeholder="4 dígitos" data-request-appraisal-number aria-label="Número de avalúo" /></label><button type="button" class="request-detail-button" data-save-request-appraisal>${currentAppraisalNumber ? "Cambiar" : "Asignar"}</button>` : (currentAppraisalNumber ? `<span class="request-assigned-folio">Avalúo: ${escapeHtml(currentAppraisalNumber)}</span>` : "");
     const canAssignExternal = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
-    const externalAssignment = canAssignExternal ? `<label class="request-appraisal-assignment request-external-assignment">Usuario externo<select data-request-external aria-label="Asignar usuario externo"><option value="">Cargando usuarios…</option></select></label><button type="button" class="request-detail-button" data-save-request-external>Guardar usuario</button>` : (item.asignadoExternoNombre ? `<span class="request-assigned-folio">Asignada a: ${escapeHtml(item.asignadoExternoNombre)}</span>` : "");
-    detail.innerHTML = `<div class="request-detail-compact-head"><div><strong class="client-folio">${escapeHtml(item.folio || "Pendiente")} · ${escapeHtml(item.tipoBien || item.tipoAvaluo || "Avalúo")}</strong><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small></div><div class="request-detail-head-actions">${appraisalAssignment}${externalAssignment}<button type="button" class="client-outline-button btn-copu-primary" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div></div>${timeline}<div class="request-detail-compact-grid"><section class="request-detail-pane"><div class="request-pane-heading"><strong>Expediente digital</strong><small>${files.length} archivo(s)</small></div><ul class="request-files-grid">${fileMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${adminFinalAction}</div>${finalPdfAction}</section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong></div>${infoRows}</section></div>`;
+    const externalAssignment = canAssignExternal ? `<div class="request-external-assignment"><strong>Asignar a usuario externo</strong><div class="request-external-search-grid"><input type="text" data-external-name placeholder="Nombre" aria-label="Buscar por nombre" /><input type="email" data-external-email placeholder="Correo" aria-label="Buscar por correo" /><input type="tel" data-external-phone placeholder="Teléfono" aria-label="Buscar por teléfono" /></div><div class="request-external-results" data-external-results></div><button type="button" class="request-detail-button" data-save-request-external>Asignar solicitud</button></div>` : (item.asignadoExternoNombre ? `<span class="request-assigned-folio">Asignada a: ${escapeHtml(item.asignadoExternoNombre)}</span>` : "");
+    const creatorName = item.creadoPorNombre || item.creadoPor || item.solicitante?.nombre || "Usuario externo";
+    const creatorRole = item.creadorRol ? ({ admin: "Administrador", auditor: "Auditor", valuador: "Valuador", editor: "Editor", viewer: "Solo lectura" }[item.creadorRol] || item.creadorRol) : "";
+    const creatorMarkup = `<div class="request-creator-summary"><span>Registró la solicitud</span><strong>${escapeHtml(creatorName)}</strong>${creatorRole ? `<small>${escapeHtml(creatorRole)}</small>` : ""}</div>`;
+    detail.innerHTML = `<div class="request-detail-compact-head"><div><strong class="client-folio">${escapeHtml(item.folio || "Pendiente")} · ${escapeHtml(item.tipoBien || item.tipoAvaluo || "Avalúo")}</strong><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small>${creatorMarkup}</div><div class="request-detail-head-actions">${appraisalAssignment}${externalAssignment}<button type="button" class="client-outline-button btn-copu-primary" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div></div>${timeline}<div class="request-detail-compact-grid"><section class="request-detail-pane"><div class="request-pane-heading"><strong>Expediente digital</strong><small>${files.length} archivo(s)</small></div><ul class="request-files-grid">${fileMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${adminFinalAction}</div>${finalPdfAction}</section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong></div>${infoRows}</section></div>`;
     detail.querySelectorAll("[data-view-file]").forEach((button) => button.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
     detail.querySelector("[data-view-final-pdf]")?.addEventListener("click", (event) => {
       openResourceViewer(event.currentTarget.dataset.viewFinalPdf, "Avalúo final.pdf", "application/pdf");
     });
-    if (canAssignExternal) bindExternalAssignment(detail, item, activeRole);
+    if (canAssignExternal) bindExternalAssignment(detail, item);
     detail.querySelector("[data-save-request-appraisal]")?.addEventListener("click", async () => {
       const input = detail.querySelector("[data-request-appraisal-number]");
       const currentValue = String(item.numeroAvaluo || "").replace(/\D/g, "").slice(0, 4);

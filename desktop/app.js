@@ -1420,9 +1420,9 @@
     const total = list.length;
     const completed = list.filter((item) => String(item.estado || "").toLowerCase() === "concluida").length;
     const pending = list.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
-    let gamePoints = 0;
-    try { gamePoints = Number(JSON.parse(localStorage.getItem(`cp6_game_stats_${user}`) || "{}").points || 0); } catch {}
-    const points = completed * 100 + pending * 10 + gamePoints;
+    const metricUsers = selected === "__all" ? [...new Set([...(Array.isArray(remoteUsers) ? remoteUsers.map((item) => item.name) : []), user].filter(Boolean))] : [selected];
+    const gamePoints = metricUsers.reduce((sum, metricUser) => { try { return sum + Number(JSON.parse(localStorage.getItem(`cp6_game_stats_${metricUser}`) || "{}").points || 0); } catch { return sum; } }, 0);
+    const points = total * 250 + completed * 250 + gamePoints;
     $("#profileTotalRequests") && ($("#profileTotalRequests").textContent = String(total));
     $("#profilePendingRequests") && ($("#profilePendingRequests").textContent = String(pending));
     $("#profileCompletedRequests") && ($("#profileCompletedRequests").textContent = String(completed));
