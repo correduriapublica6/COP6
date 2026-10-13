@@ -11275,3 +11275,78 @@ html body #appShell.control-shell .app-workspace {
 #appShell.control-shell .game-card-copy p { max-width: 34ch !important; margin: 0 !important; color: #64748b !important; font: 400 .88rem/1.55 Inter, "Segoe UI", sans-serif !important; }
 #appShell.control-shell .game-card-action { align-self: stretch !important; margin-top: 24px !important; padding: 9px 14px !important; border: 1px solid #dbeafe !important; border-radius: 8px !important; background: #f8fafc !important; color: #94a3b8 !important; font: 500 .8rem Inter, "Segoe UI", sans-serif !important; cursor: not-allowed !important; }
 @media (max-width: 900px) { #appShell.control-shell .games-card-grid { grid-template-columns: 1fr !important; } #appShell.control-shell .game-card { min-height: 220px !important; } }
+
+/* Tarjetas de juego mejoradas — identidad guinda CP6 */
+#appShell.control-shell .game-card {
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,.03) !important;
+  transition: all .3s cubic-bezier(.4,0,.2,1) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+#appShell.control-shell .game-card:hover {
+  transform: translateY(-5px) !important;
+  border-color: rgba(131,24,67,.3) !important;
+  box-shadow: 0 15px 30px rgba(131,24,67,.12) !important;
+}
+#appShell.control-shell .game-card .icon-wrapper {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 14px !important;
+  background: rgba(131,24,67,.08) !important;
+  border: 1px solid rgba(131,24,67,.2) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 28px !important;
+  margin-bottom: 16px !important;
+}
+#appShell.control-shell .game-card .category {
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.2px !important;
+  color: #831843 !important;
+  margin-bottom: 6px !important;
+}
+#appShell.control-shell .game-card .title {
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin: 0 0 8px !important;
+}
+#appShell.control-shell .game-card .description {
+  font-size: 14px !important;
+  color: #475569 !important;
+  line-height: 1.5 !important;
+  margin: 0 0 20px !important;
+}
+#appShell.control-shell .game-card .btn-play {
+  width: 100% !important;
+  height: 46px !important;
+  border: none !important;
+  border-radius: 10px !important;
+  background: linear-gradient(135deg,#831843 0%,#500724 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  letter-spacing: .5px !important;
+  cursor: not-allowed !important;
+  transition: all .2s ease !important;
+  box-shadow: 0 4px 10px rgba(131,24,67,.2) !important;
+  opacity: 1 !important;
+}
+#appShell.control-shell .game-card .btn-play:hover {
+  background: linear-gradient(135deg,#be185d 0%,#831843 100%) !important;
+  box-shadow: 0 6px 15px rgba(190,24,93,.35) !important;
+}
+#appShell.control-shell .game-card-solitaire .icon-wrapper span:nth-child(2) { color: #be185d !important; }
+#appShell.control-shell .game-card .sudoku-icon,
+#appShell.control-shell .game-card .mines-icon { background: rgba(131,24,67,.08) !important; color: #831843 !important; }
+@media (max-width: 900px) {
+  #appShell.control-shell .game-card .title { font-size: 20px !important; }
+}
