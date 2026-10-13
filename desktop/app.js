@@ -718,6 +718,18 @@
     checkAppVersion();
     versionMonitorId = window.setInterval(() => { if (!document.hidden) checkAppVersion(); }, 5 * 60 * 1000);
   }
+  function renderGamesStats() {
+    const list = $("#gamesStatsList");
+    const summary = $("#gamesStatsSummary");
+    if (!list) return;
+    const user = String(activeSessionUser || "Usuario CP6");
+    let stats = {};
+    try { stats = JSON.parse(localStorage.getItem(`cp6_game_stats_${user}`) || "{}") || {}; } catch { stats = {}; }
+    const history = Array.isArray(stats.history) ? stats.history : [];
+    const bestByGame = ["Solitario", "Sudoku", "Buscaminas"].map((game) => ({ game, best: history.filter((item) => item.game === game).reduce((max, item) => Math.max(max, Number(item.score || item.points || 0)), 0) }));
+    if (summary) summary.textContent = `${Number(stats.points || 0)} puntos acumulados · ${Number(stats.games || history.length || 0)} partidas completadas`;
+    list.innerHTML = `${bestByGame.map((item) => `<div class="games-best-item"><span>${escapeHtml(item.game)}</span><strong>${item.best} pts</strong></div>`).join("")}<div class="games-history-items">${history.slice(0, 5).map((item) => `<div class="games-history-item"><span>${escapeHtml(item.game)}</span><small>${Number(item.points || 0)} pts · ${new Date(item.completedAt).toLocaleDateString("es-MX")}</small></div>`).join("") || '<p class="games-stats-empty">Completa un juego para ver tus resultados.</p>'}</div>`;
+  }
   function bindGames() {
     const view = $("#juegosView");
     const grid = view?.querySelector(".games-card-grid");
@@ -726,13 +738,14 @@
     const title = $("#gameStageTitle");
     const close = $("#closeGameButton");
     if (!view || !grid || !stage || !frame || !title || !close || view.dataset.gamesBound) return;
+    renderGamesStats();
     view.dataset.gamesBound = "true";
     const games = [
       { card: ".game-card-solitaire", title: "Solitario", source: "games/cp6solitario.html" },
       { card: ".game-card-sudoku", title: "Sudoku", source: "games/cp6sudoku.html" },
       { card: ".game-card-mines", title: "Buscaminas", source: "games/cp6buscaminas.html" },
     ];
-    const closeGame = () => { stage.hidden = true; grid.hidden = false; frame.src = "about:blank"; };
+    const closeGame = () => { stage.hidden = true; grid.hidden = false; frame.src = "about:blank"; renderGamesStats(); };
     games.forEach((game) => {
       const card = view.querySelector(game.card);
       const button = card?.querySelector(".btn-play");
@@ -1402,7 +1415,9 @@
     const total = list.length;
     const completed = list.filter((item) => String(item.estado || "").toLowerCase() === "concluida").length;
     const pending = list.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
-    const points = completed * 100 + pending * 10;
+    let gamePoints = 0;
+    try { gamePoints = Number(JSON.parse(localStorage.getItem(`cp6_game_stats_${user}`) || "{}").points || 0); } catch {}
+    const points = completed * 100 + pending * 10 + gamePoints;
     $("#profileTotalRequests") && ($("#profileTotalRequests").textContent = String(total));
     $("#profilePendingRequests") && ($("#profilePendingRequests").textContent = String(pending));
     $("#profileCompletedRequests") && ($("#profileCompletedRequests").textContent = String(completed));

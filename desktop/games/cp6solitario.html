@@ -384,20 +384,37 @@
     </div>
 
     <script>
-        let globalScore = parseInt(localStorage.getItem('cp6_user_score')) || 0;
-        
-        function updateGlobalScore(points) {
-            globalScore += points;
-            localStorage.setItem('cp6_user_score', globalScore);
-            const scoreEl = document.getElementById('globalScore');
-            if(scoreEl) scoreEl.innerText = globalScore;
+        const CP6_GAME_NAME = 'Solitario';
+        const CP6_SESSION_KEY = 'control-avaluos.desktop.session.v1';
+        function cp6GameUser() { return sessionStorage.getItem(CP6_SESSION_KEY) || 'Usuario CP6'; }
+        function cp6StatsKey() { return `cp6_game_stats_${cp6GameUser()}`; }
+        function cp6ReadStats() { try { return JSON.parse(localStorage.getItem(cp6StatsKey()) || '{}') || {}; } catch { return {}; } }
+        function cp6WriteStats(stats) { localStorage.setItem(cp6StatsKey(), JSON.stringify(stats)); }
+        function recordGameResult(points) {
+            const stats = cp6ReadStats();
+            const history = Array.isArray(stats.history) ? stats.history : [];
+            const result = { game: CP6_GAME_NAME, points: Number(points) || 0, score: Number(points) || 0, completedAt: new Date().toISOString() };
+            history.unshift(result);
+            stats.history = history.slice(0, 30);
+            stats.points = Number(stats.points || 0) + result.points;
+            stats.games = Number(stats.games || 0) + 1;
+            stats.best = Math.max(Number(stats.best || 0), result.score);
+            cp6WriteStats(stats);
         }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const scoreEl = document.getElementById('globalScore');
-            if(scoreEl) scoreEl.innerText = globalScore;
-        });
-
+        let globalScore = Number(cp6ReadStats().points || 0);
+        function updateGlobalScore(points) {
+            recordGameResult(points);
+            globalScore += Number(points) || 0;
+            const score = document.getElementById('globalScore');
+            if (score) score.innerText = globalScore;
+        }
+        function syncCp6Player() {
+            const stats = cp6ReadStats();
+            const name = document.getElementById('userName');
+            const score = document.getElementById('globalScore');
+            if (name) name.innerText = cp6GameUser();
+            if (score) score.innerText = Number(stats.points || 0);
+        }
         const suits = ['♥', '♦', '♣', '♠'];
         const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
         const suitCodes = {'♥': 'H', '♦': 'D', '♣': 'C', '♠': 'S'};
