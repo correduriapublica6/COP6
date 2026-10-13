@@ -447,6 +447,22 @@
       if (button) { button.disabled = false; button.textContent = "Guardar cambios"; }
     }
   }
+  async function bindExternalAssignment(detail, item, activeRole) {
+    const select = detail.querySelector("[data-request-external]");
+    const save = detail.querySelector("[data-save-request-external]");
+    if (!select || !save) return;
+    try {
+      const applicants = await api("/applicants");
+      select.innerHTML = `<option value="">Sin usuario externo asignado</option>${(Array.isArray(applicants) ? applicants : []).map((user) => `<option value="${escapeHtml(user.id)}" data-email="${escapeHtml(user.email || "")}" data-name="${escapeHtml(user.name || "")}">${escapeHtml(user.name || user.email)} · ${escapeHtml(user.email || "")}</option>`).join("")}`;
+      select.value = item.asignadoExternoId || "";
+      save.addEventListener("click", async () => {
+        const option = select.selectedOptions[0];
+        const payload = { asignadoExternoId: select.value, asignadoExternoEmail: option?.dataset.email || "", asignadoExternoNombre: option?.dataset.name || "" };
+        save.disabled = true;
+        try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify(payload) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); window.dispatchEvent(new CustomEvent("control-avaluos:request-updated", { detail: updated })); } catch (error) { window.alert(error.message || "No se pudo asignar el usuario externo."); } finally { save.disabled = false; }
+      });
+    } catch (error) { select.innerHTML = `<option value="">No se pudieron cargar usuarios externos</option>`; save.disabled = true; }
+  }
   function renderRequestDetail(item) {
     const detail = $("#requestDetailContent");
     const dialog = $("#requestDetailDialog");
@@ -488,11 +504,14 @@
     const canAssignAppraisal = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
     const currentAppraisalNumber = String(item.numeroAvaluo || "").replace(/\D/g, "").slice(0, 4);
     const appraisalAssignment = canAssignAppraisal ? `<label class="request-appraisal-assignment">Número de avalúo<input type="text" inputmode="numeric" maxlength="4" pattern="\d{4}" value="${escapeHtml(currentAppraisalNumber)}" placeholder="4 dígitos" data-request-appraisal-number aria-label="Número de avalúo" /></label><button type="button" class="request-detail-button" data-save-request-appraisal>${currentAppraisalNumber ? "Cambiar" : "Asignar"}</button>` : (currentAppraisalNumber ? `<span class="request-assigned-folio">Avalúo: ${escapeHtml(currentAppraisalNumber)}</span>` : "");
-    detail.innerHTML = `<div class="request-detail-compact-head"><div><strong class="client-folio">${escapeHtml(item.folio || "Pendiente")} · ${escapeHtml(item.tipoBien || item.tipoAvaluo || "Avalúo")}</strong><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small></div><div class="request-detail-head-actions">${appraisalAssignment}<button type="button" class="client-outline-button btn-copu-primary" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div></div>${timeline}<div class="request-detail-compact-grid"><section class="request-detail-pane"><div class="request-pane-heading"><strong>Expediente digital</strong><small>${files.length} archivo(s)</small></div><ul class="request-files-grid">${fileMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${adminFinalAction}</div>${finalPdfAction}</section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong></div>${infoRows}</section></div>`;
+    const canAssignExternal = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
+    const externalAssignment = canAssignExternal ? `<label class="request-appraisal-assignment request-external-assignment">Usuario externo<select data-request-external aria-label="Asignar usuario externo"><option value="">Cargando usuarios…</option></select></label><button type="button" class="request-detail-button" data-save-request-external>Guardar usuario</button>` : (item.asignadoExternoNombre ? `<span class="request-assigned-folio">Asignada a: ${escapeHtml(item.asignadoExternoNombre)}</span>` : "");
+    detail.innerHTML = `<div class="request-detail-compact-head"><div><strong class="client-folio">${escapeHtml(item.folio || "Pendiente")} · ${escapeHtml(item.tipoBien || item.tipoAvaluo || "Avalúo")}</strong><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small></div><div class="request-detail-head-actions">${appraisalAssignment}${externalAssignment}<button type="button" class="client-outline-button btn-copu-primary" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div></div>${timeline}<div class="request-detail-compact-grid"><section class="request-detail-pane"><div class="request-pane-heading"><strong>Expediente digital</strong><small>${files.length} archivo(s)</small></div><ul class="request-files-grid">${fileMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${adminFinalAction}</div>${finalPdfAction}</section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong></div>${infoRows}</section></div>`;
     detail.querySelectorAll("[data-view-file]").forEach((button) => button.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
     detail.querySelector("[data-view-final-pdf]")?.addEventListener("click", (event) => {
       openResourceViewer(event.currentTarget.dataset.viewFinalPdf, "Avalúo final.pdf", "application/pdf");
     });
+    if (canAssignExternal) bindExternalAssignment(detail, item, activeRole);
     detail.querySelector("[data-save-request-appraisal]")?.addEventListener("click", async () => {
       const input = detail.querySelector("[data-request-appraisal-number]");
       const currentValue = String(item.numeroAvaluo || "").replace(/\D/g, "").slice(0, 4);

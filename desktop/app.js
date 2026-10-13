@@ -727,6 +727,7 @@
     try { stats = JSON.parse(localStorage.getItem(`cp6_game_stats_${user}`) || "{}") || {}; } catch { stats = {}; }
     const history = Array.isArray(stats.history) ? stats.history : [];
     const bestByGame = ["Solitario", "Sudoku", "Buscaminas"].map((game) => ({ game, best: history.filter((item) => item.game === game).reduce((max, item) => Math.max(max, Number(item.score || item.points || 0)), 0) }));
+    bestByGame.forEach((item) => { const score = document.querySelector(`[data-game-score="${item.game}"]`); if (score) score.textContent = `${item.best} pts`; });
     if (summary) summary.textContent = `${Number(stats.points || 0)} puntos acumulados · ${Number(stats.games || history.length || 0)} partidas completadas`;
     list.innerHTML = `${bestByGame.map((item) => `<div class="games-best-item"><span>${escapeHtml(item.game)}</span><strong>${item.best} pts</strong></div>`).join("")}<div class="games-history-items">${history.slice(0, 5).map((item) => `<div class="games-history-item"><span>${escapeHtml(item.game)}</span><small>${Number(item.points || 0)} pts · ${new Date(item.completedAt).toLocaleDateString("es-MX")}</small></div>`).join("") || '<p class="games-stats-empty">Completa un juego para ver tus resultados.</p>'}</div>`;
   }
@@ -737,6 +738,8 @@
     const frame = $("#gameFrame");
     const title = $("#gameStageTitle");
     const close = $("#closeGameButton");
+    const heading = view?.querySelector(".games-page-heading");
+    const statsPanel = view?.querySelector(".games-stats-panel");
     if (!view || !grid || !stage || !frame || !title || !close || view.dataset.gamesBound) return;
     renderGamesStats();
     view.dataset.gamesBound = "true";
@@ -745,7 +748,7 @@
       { card: ".game-card-sudoku", title: "Sudoku", source: "games/cp6sudoku.html" },
       { card: ".game-card-mines", title: "Buscaminas", source: "games/cp6buscaminas.html" },
     ];
-    const closeGame = () => { stage.hidden = true; grid.hidden = false; frame.src = "about:blank"; renderGamesStats(); };
+    const closeGame = () => { stage.hidden = true; grid.hidden = false; if (heading) heading.hidden = false; if (statsPanel) statsPanel.hidden = false; frame.src = "about:blank"; renderGamesStats(); };
     games.forEach((game) => {
       const card = view.querySelector(game.card);
       const button = card?.querySelector(".btn-play");
@@ -754,6 +757,8 @@
       button.textContent = "Jugar";
       button.addEventListener("click", () => {
         grid.hidden = true;
+        if (heading) heading.hidden = true;
+        if (statsPanel) statsPanel.hidden = true;
         stage.hidden = false;
         title.textContent = game.title;
         frame.title = `${game.title} CP6`;
@@ -1422,6 +1427,7 @@
     $("#profilePendingRequests") && ($("#profilePendingRequests").textContent = String(pending));
     $("#profileCompletedRequests") && ($("#profileCompletedRequests").textContent = String(completed));
     $("#profilePoints") && ($("#profilePoints").textContent = String(points));
+    $("#profileGamePoints") && ($("#profileGamePoints").textContent = String(gamePoints));
     const setRingProgress = (id, value, color) => { const ring = $(id); if (!ring) return; ring.style.setProperty("--progress", `${Math.round(value * 100)}%`); ring.style.setProperty("--ring-color", color); };
     setRingProgress("#profileTotalRing", total ? 1 : 0, "#2563eb");
     setRingProgress("#profilePendingRing", total ? pending / total : 0, "#f59e0b");
