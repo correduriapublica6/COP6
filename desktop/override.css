@@ -11251,3 +11251,27 @@ html body #appShell.control-shell .app-workspace {
 #appShell.control-shell #configuracionView .settings-grid > .setting-card { min-width: 0 !important; width: auto !important; }
 @media (max-width: 1100px) { #appShell.control-shell #configuracionView .settings-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
 @media (max-width: 680px) { .users-table-toolbar { align-items: stretch; flex-direction: column; } .users-table-toolbar input { width: 100%; } #appShell.control-shell #configuracionView .settings-grid { grid-template-columns: 1fr !important; } }
+
+/* ============================================================================
+   JUEGOS — acceso integrado en navbar y vista normal, sin popup
+   ============================================================================ */
+#appShell.control-shell .games-header-button { color: #94a3b8 !important; }
+#appShell.control-shell .games-header-button:hover,
+#appShell.control-shell .games-header-button.is-active { color: #ffffff !important; background: rgba(255,255,255,.10) !important; }
+#appShell.control-shell .games-view { width: 100% !important; padding: 0 0 48px !important; }
+#appShell.control-shell .games-page-heading { width: 100% !important; margin: 0 0 28px !important; }
+#appShell.control-shell .games-page-heading h2 { margin: 6px 0 8px !important; color: #0f172a !important; font: 600 1.65rem/1.15 Inter, "Segoe UI", sans-serif !important; }
+#appShell.control-shell .games-page-heading p { margin: 0 !important; color: #64748b !important; font: 400 .95rem/1.5 Inter, "Segoe UI", sans-serif !important; }
+#appShell.control-shell .games-card-grid { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 22px !important; width: 100% !important; }
+#appShell.control-shell .game-card { display: flex !important; flex-direction: column !important; align-items: flex-start !important; min-height: 290px !important; padding: 26px !important; box-sizing: border-box !important; border: 1px solid #e2e8f0 !important; border-radius: 16px !important; background: #ffffff !important; box-shadow: 0 4px 12px rgba(15,23,42,.05) !important; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease !important; }
+#appShell.control-shell .game-card:hover { border-color: #93c5fd !important; box-shadow: 0 12px 24px rgba(37,99,235,.10) !important; transform: translateY(-3px) !important; }
+#appShell.control-shell .game-card-icon { display: flex !important; align-items: center !important; justify-content: center !important; gap: 2px !important; width: 58px !important; height: 58px !important; margin-bottom: 24px !important; border-radius: 16px !important; background: #eff6ff !important; color: #2563eb !important; font: 700 1.65rem/1 Inter, "Segoe UI", sans-serif !important; }
+#appShell.control-shell .game-card-solitaire .game-card-icon span:nth-child(2) { color: #dc2626 !important; font-size: 1.35rem !important; }
+#appShell.control-shell .game-card-icon.sudoku-icon { font-size: 1.15rem !important; flex-direction: column !important; gap: 0 !important; }
+#appShell.control-shell .game-card-icon.mines-icon { background: #f1f5f9 !important; color: #334155 !important; }
+#appShell.control-shell .game-card-copy { flex: 1 !important; }
+#appShell.control-shell .game-card-kicker { color: #2563eb !important; font: 700 .68rem/1 Inter, "Segoe UI", sans-serif !important; letter-spacing: .12em !important; }
+#appShell.control-shell .game-card-copy h3 { margin: 8px 0 9px !important; color: #0f172a !important; font: 600 1.25rem/1.2 Inter, "Segoe UI", sans-serif !important; }
+#appShell.control-shell .game-card-copy p { max-width: 34ch !important; margin: 0 !important; color: #64748b !important; font: 400 .88rem/1.55 Inter, "Segoe UI", sans-serif !important; }
+#appShell.control-shell .game-card-action { align-self: stretch !important; margin-top: 24px !important; padding: 9px 14px !important; border: 1px solid #dbeafe !important; border-radius: 8px !important; background: #f8fafc !important; color: #94a3b8 !important; font: 500 .8rem Inter, "Segoe UI", sans-serif !important; cursor: not-allowed !important; }
+@media (max-width: 900px) { #appShell.control-shell .games-card-grid { grid-template-columns: 1fr !important; } #appShell.control-shell .game-card { min-height: 220px !important; } }

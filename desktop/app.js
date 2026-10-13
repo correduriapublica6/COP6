@@ -793,6 +793,7 @@
     usuarios: { title: "Usuarios", kicker: "ACCESO LOCAL", description: "Gestiona usuarios administrativos y usuarios externos registrados." },
     configuracion: { title: "Configuración", kicker: "", description: "Exporta, importa y respalda la información del equipo." },
     mensajeria: { title: "Mensajería", kicker: "COMUNICACIÓN INSTITUCIONAL", description: "Conecta con el equipo CP6 y los usuarios externos en conversaciones seguras." },
+    juegos: { title: "Juegos", kicker: "ESPACIO DE DESCANSO", description: "Elige una actividad para despejar la mente entre tus actividades de trabajo." },
     perfil: { title: "Mi Perfil", kicker: "CUENTA", description: "Información de la cuenta activa." },
   };
   function setUsersSection(section = "menu") {
@@ -810,7 +811,7 @@
   }
 
   function switchAppView(view) {
-    if (!VIEW_DETAILS[view] || (view === "resumen" ? !canViewSummary() : view === "fe-publica" ? !canViewFePublica() : view === "solicitudes" ? !canViewRequests() : view !== "avaluos" && view !== "inicio" && view !== "mensajeria" && view !== "perfil" && !isAdmin())) return;
+    if (!VIEW_DETAILS[view] || (view === "resumen" ? !canViewSummary() : view === "fe-publica" ? !canViewFePublica() : view === "solicitudes" ? !canViewRequests() : view !== "avaluos" && view !== "inicio" && view !== "mensajeria" && view !== "juegos" && view !== "perfil" && !isAdmin())) return;
     // Toda navegación del Navbar inicia las subsecciones en modo lista.
     // El formulario de Recepción y cualquier ficha técnica nunca se arrastran a otra vista.
     window.dispatchEvent(new CustomEvent("control-avaluos:close-reception-editor"));
