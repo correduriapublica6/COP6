@@ -1,0 +1,1626 @@
+(() => {
+  const STORAGE_KEY = "control-avaluos.desktop.v3";
+  const SESSION_KEY = "control-avaluos.desktop.session.v1";
+  const CREDENTIALS_KEY = "control-avaluos.desktop.credentials.v1";
+  const ROLE_STORAGE_KEY = "control-avaluos.desktop.roles.v1";
+  const USER_STORAGE_KEY = "control-avaluos.desktop.users.v1";
+  const RECEIPT_SEQUENCE_KEY = "control-avaluos.desktop.receipt-sequence.v1";
+  const TECHNICAL_APPRAISALS_KEY = "control-avaluos.desktop.technical-appraisals.v1";
+  const TECHNICAL_OBJECTIVES_KEY = "control-avaluos.desktop.technical-objectives.v1";
+  const TASKS_KEY = "control-avaluos.desktop.tasks.v1";
+  const CHAT_MESSAGES_KEY = "control-avaluos.desktop.chat.v1";
+  const PROFILE_AVATARS_KEY = "control-avaluos.desktop.profile-avatars.v1";
+  const BACKUP_VERSION = 1;
+  const USERS = ["Juan Manuel Barrera Martínez", "Gabriel Barrera Martínez", "Cesar Delgado Armendáriz", "Diana Barrera Rivera", "Francisco Gabriel Hernández Estrada", "Emmanuel Barrera Atilano", "Caridad Rojas Vázquez", "Ivan de Luna Aldape"];
+  const DEFAULT_ROLE_BY_USER = { "Juan Manuel Barrera Martínez": "admin", "Francisco Gabriel Hernández Estrada": "admin", "Caridad Rojas Vázquez": "editor", "Ivan de Luna Aldape": "valuador" };
+  const VALID_ROLES = ["admin", "editor", "viewer", "valuador", "auditor"];
+  const LEGACY_KEYS = ["control-avaluos.desktop.v2", "control-avaluos.desktop.v1"];
+  // API pública fija para despliegues externos como GitHub Pages.
+  const API_BASE_URL = "https://api.cp6coahuila.com/api";
+  const today = () => new Date().toISOString().slice(0, 10);
+  const initialDraft = { numeroAvaluo: "", usuario: "", asesorValuador: "", tipoBien: "", tipoAvaluo: "", solicitante: "", valorAvaluo: "", seEntregoA: "", pagoEntregadoA: "", observacion: "", fechaAvaluo: today(), pagado: false, montoPagado: 0, metodoPago: "", fechaPago: "" };
+
+  let records = loadRecords();
+  let technicalAppraisals = loadTechnicalAppraisals();
+  let tasks = loadTasks();
+  let chatMessages = loadChatMessages();
+  let serverOnline = false;
+  let remoteUsers = null;
+  let notarias = [];
+  let authorizedAppraisalNumbers = [];
+  let operationalView = "todos";
+  let receptionPage = 1;
+  const AVALUOS_PAGE_SIZE = 10;
+  let activeAppView = "avaluos";
+  let activeSessionUser = "";
+  let notifications = [];
+  let pendingCredentialAuthorization = null;
+  let editingId = null;
+  let serverMonitorId = null;
+  let versionMonitorId = null;
+
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => [...document.querySelectorAll(selector)];
+  const recordEditor = $("#recordEditor");
+  const form = $("#recordForm");
+  const paidInput = $("#paidInput");
+  const paymentDetails = $("#paymentDetails");
+  const numberInput = $("#numeroInput");
+  const avaluoDateInput = $("#avaluoDateInput");
+  const amountInput = $("#amountInput");
+  const methodInput = $("#methodInput");
+  const paymentDeliveredToInput = $("#paymentDeliveredToInput");
+  const paymentDateInput = $("#paymentDateInput");
+  const searchInput = $("#searchInput");
+  const loginScreen = $("#loginScreen");
+  const adminAccessDialog = $("#adminAccessDialog");
+  const loginForm = $("#loginForm");
+  const loginUser = $("#loginUser");
+  const loginPassword = $("#loginPassword");
+  const loginMessage = $("#loginMessage");
+  const appShell = $("#appShell");
+  const activeUser = $("#activeUser");
+  const activeUserRole = $("#activeUserRole");
+  const credentialDialog = $("#credentialDialog");
+  const credentialForm = $("#credentialForm");
+  const credentialUser = $("#credentialUser");
+  const credentialCurrentPassword = $("#credentialCurrentPassword");
+  const credentialPassword = $("#credentialPassword");
+  const credentialPasswordConfirm = $("#credentialPasswordConfirm");
+  const credentialMessage = $("#credentialMessage");
+  const manageUsersButton = $("#manageUsersButton");
+  const PROFILE_AVATAR_COLORS = ["#1e3a8a", "#0f766e", "#7c3aed", "#9f1239", "#92400e", "#334155", "#166534", "#374151"];
+  const PROFILE_AVATAR_ACCENTS = ["#93c5fd", "#99f6e4", "#ddd6fe", "#fda4af", "#fde68a", "#cbd5e1", "#bbf7d0", "#fbcfe8"];
+  function profileAvatarSvg(index) {
+    const bg = PROFILE_AVATAR_COLORS[index % PROFILE_AVATAR_COLORS.length];
+    const accent = PROFILE_AVATAR_ACCENTS[index % PROFILE_AVATAR_ACCENTS.length];
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="64" fill="${bg}"/><circle cx="64" cy="43" r="25" fill="${accent}" opacity=".96"/><path d="M23 112c5-27 20-41 41-41s36 14 41 41" fill="${accent}" opacity=".96"/><circle cx="102" cy="24" r="14" fill="#fff" opacity=".18"/></svg>`;
+    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  }
+  const PROFILE_AVATARS = PROFILE_AVATAR_COLORS.map((_, index) => profileAvatarSvg(index));
+  function loadProfileAvatars() { try { return JSON.parse(localStorage.getItem(PROFILE_AVATARS_KEY) || "{}") || {}; } catch { return {}; } }
+  function saveProfileAvatarLocal(user, avatar) { const saved = loadProfileAvatars(); saved[user] = avatar; localStorage.setItem(PROFILE_AVATARS_KEY, JSON.stringify(saved)); }
+  function getProfileAvatar(user) { return remoteUsers?.find((item) => item.name === user)?.profileAvatar || loadProfileAvatars()[user] || ""; }
+  async function saveProfileAvatar(user, avatar) {
+    const remoteUser = remoteUsers?.find((item) => item.name === user);
+    if (serverOnline && remoteUser) {
+      const saved = await apiRequest(`/users/${encodeURIComponent(remoteUser.id)}/profile-avatar`, { method: "PUT", body: JSON.stringify({ profileAvatar: avatar }) });
+      remoteUsers = remoteUsers.map((item) => item.id === saved.id ? { ...item, ...saved } : item);
+      saveProfileAvatarLocal(user, avatar);
+      return saved;
+    }
+    saveProfileAvatarLocal(user, avatar);
+    return null;
+  }
+  function applyProfileAvatar(user, avatar = getProfileAvatar(user)) {
+    const image = $("#profileAvatarImage");
+    const fallback = $("#profileButton .user-icon");
+    if (!image) return;
+    if (avatar) { image.src = avatar; image.hidden = false; if (fallback) fallback.hidden = true; }
+    else { image.hidden = true; if (fallback) fallback.hidden = false; }
+  }
+  function renderProfileAvatarGallery(selected = getProfileAvatar(activeSessionUser)) {
+    const gallery = $("#profileAvatarGallery");
+    if (!gallery) return;
+    gallery.innerHTML = PROFILE_AVATARS.map((avatar, index) => `<button type="button" class="profile-avatar-option${avatar === selected ? " is-selected" : ""}" data-profile-avatar="${index}" aria-label="Seleccionar avatar ${index + 1}"><img src="${avatar}" alt="Avatar profesional ${index + 1}"></button>`).join("");
+    gallery.querySelectorAll("[data-profile-avatar]").forEach((button) => button.addEventListener("click", () => {
+      const avatar = PROFILE_AVATARS[Number(button.dataset.profileAvatar)];
+      gallery.querySelectorAll(".profile-avatar-option").forEach((item) => item.classList.toggle("is-selected", item === button));
+      gallery.dataset.selectedAvatar = avatar;
+      const hero = $("#profileAvatarHeroImage");
+      if (hero) hero.src = avatar;
+      applyProfileAvatar(activeSessionUser, avatar);
+      saveProfileAvatar(activeSessionUser, avatar).catch((error) => window.alert(error.message || "No fue posible guardar la imagen de perfil."));
+    }));
+    gallery.dataset.selectedAvatar = selected;
+  }
+
+  function normalizeNumber(value) { return String(value || "").replace(/\D/g, "").slice(0, 4); }
+  function normalizeRecord(record) {
+    const now = today();
+    return { ...initialDraft, ...record, numeroAvaluo: normalizeNumber(record.numeroAvaluo), seEntregoA: record.seEntregoA ?? record.referencia ?? "", pagoEntregadoA: record.pagoEntregadoA ?? "", fechaAvaluo: record.fechaAvaluo ?? record.creadoEn?.slice(0, 10) ?? now, fechaPago: record.fechaPago ?? (record.pagado ? record.actualizadoEn?.slice(0, 10) ?? now : ""), metodoPago: record.metodoPago ?? "", creadoEn: record.creadoEn ?? new Date().toISOString(), actualizadoEn: record.actualizadoEn ?? record.creadoEn ?? new Date().toISOString() };
+  }
+  function loadRecords() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY) || LEGACY_KEYS.map((key) => localStorage.getItem(key)).find(Boolean);
+      const parsed = saved ? JSON.parse(saved) : [];
+      return Array.isArray(parsed) ? parsed.map(normalizeRecord) : [];
+    } catch { return []; }
+  }
+  const saveRecords = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+  function loadTechnicalAppraisals() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(TECHNICAL_APPRAISALS_KEY) || "[]");
+      return Array.isArray(saved) ? saved : [];
+    } catch { return []; }
+  }
+  function stripInlineImages(value) {
+    if (Array.isArray(value)) return value.map(stripInlineImages);
+    if (!value || typeof value !== "object") return value;
+    return Object.fromEntries(Object.entries(value).map(([key, nested]) => {
+      if (["dataUrl", "localizacionFoto", "fotografia", "foto", "data"].includes(key) && typeof nested === "string" && nested.startsWith("data:")) return [key, ""];
+      return [key, stripInlineImages(nested)];
+    }));
+  }
+  const saveTechnicalAppraisals = () => localStorage.setItem(TECHNICAL_APPRAISALS_KEY, JSON.stringify(technicalAppraisals.map(stripInlineImages)));
+  function loadTasks() { try { const saved = JSON.parse(localStorage.getItem(TASKS_KEY) || "[]"); return Array.isArray(saved) ? saved : []; } catch { return []; } }
+  const saveTasks = () => localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
+  function loadChatMessages() { try { const saved = JSON.parse(localStorage.getItem(CHAT_MESSAGES_KEY) || "[]"); return Array.isArray(saved) ? saved : []; } catch { return []; } }
+  const saveChatMessages = () => localStorage.setItem(CHAT_MESSAGES_KEY, JSON.stringify(chatMessages));
+  function setServerStatus(status) {
+    const normalized = status === "online" ? "online" : status === "checking" ? "checking" : "offline";
+    serverOnline = normalized === "online";
+    document.body.dataset.serverStatus = normalized;
+    const label = $("#serverStatusLabel");
+    const indicator = $("#serverConnectionStatus");
+    if (label) label.textContent = normalized === "online" ? "En línea" : normalized === "checking" ? "Comprobando servidor" : "Sin conexión";
+    if (indicator) indicator.title = normalized === "online" ? "Conectado al servidor de Recepción; los datos se sincronizan con la base central." : normalized === "checking" ? "Comprobando conexión con el servidor de Recepción." : "No se puede acceder al servidor de Recepción; los datos no se están sincronizando.";
+  }
+  function loadTechnicalObjectives() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(TECHNICAL_OBJECTIVES_KEY) || "[]");
+      const local = Array.isArray(saved) ? saved.map((value) => String(value).trim()).filter(Boolean) : [];
+      const shared = technicalAppraisals.map((appraisal) => String(appraisal?.objetivoAvaluo || "").trim()).filter(Boolean);
+      return [...new Set([...local, ...shared])];
+    } catch { return []; }
+  }
+  function saveTechnicalObjectives(values) { localStorage.setItem(TECHNICAL_OBJECTIVES_KEY, JSON.stringify([...new Set(values.map((value) => String(value).trim()).filter(Boolean))])); }
+  const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+  async function apiRequest(endpoint, options = {}) {
+    const maxAttempts = Number.isFinite(options.retries) ? Math.max(1, Math.min(4, options.retries + 1)) : 3;
+    const { retries: _retries, ...requestOptions } = options;
+    let response;
+    let lastError;
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      try {
+        const isFormData = typeof FormData !== "undefined" && requestOptions.body instanceof FormData;
+        const requestHeaders = { ...(isFormData ? {} : { "Content-Type": "application/json" }), ...(activeSessionUser ? { "X-User-Name": encodeURIComponent(activeSessionUser) } : {}), ...(requestOptions.headers || {}) };
+        response = await fetch(`${API_BASE_URL}${endpoint}`, { ...requestOptions, cache: "no-store", headers: requestHeaders });
+        if (response.ok || ![429, 502, 503, 504].includes(response.status) || attempt === maxAttempts) break;
+        lastError = new Error(`Servidor temporalmente no disponible (${response.status}).`);
+      } catch (error) {
+        lastError = error;
+        if (attempt === maxAttempts) break;
+      }
+      await wait(450 * attempt);
+    }
+    if (!response) {
+      setServerStatus("offline");
+      throw new Error("Sin conexión con el servidor de Recepción después de varios intentos. Verifica que esté encendido y que la dirección de red sea correcta.");
+    }
+    setServerStatus("online");
+    if (!response.ok) {
+      let detail = lastError?.message || "No se pudo completar la operación en el servidor.";
+      try { detail = (await response.json()).error || detail; } catch {}
+      if (/tipo de avalúo técnico no es válido/i.test(detail)) {
+        detail = "El servidor de Recepción está desactualizado y no reconoce Mobiliario y Bienes Diversos. Reemplaza local-server/server.mjs con la versión actualizada y reinícialo sin borrar la carpeta data.";
+      }
+      throw new Error(detail);
+    }
+    return response.status === 204 ? null : response.json();
+  }
+  function startServerMonitor() {
+    if (serverMonitorId) return;
+    serverMonitorId = window.setInterval(async () => {
+      if (editingId || document.hidden) return;
+      try {
+        const latestState = await apiRequest("/state");
+        const latestRecords = Array.isArray(latestState.records) ? latestState.records : [];
+        const latestAppraisals = Array.isArray(latestState.appraisals) ? latestState.appraisals : [];
+        const latestTasks = Array.isArray(latestState.tasks) ? latestState.tasks : [];
+        const latestChatMessages = Array.isArray(latestState.chatMessages) ? latestState.chatMessages : [];
+        const latestServiceRequests = Array.isArray(latestState.serviceRequests) ? latestState.serviceRequests : (Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : []);
+        const latestAuthorizedFolios = Array.isArray(latestState.authorizedAppraisalNumbers) ? latestState.authorizedAppraisalNumbers.map(normalizeNumber).sort() : [];
+        const latestSignature = JSON.stringify({ records: latestRecords.map((record) => `${record.id}:${record.actualizadoEn || record.updatedAt || ""}`), appraisals: latestAppraisals.map((appraisal) => `${appraisal.id}:${appraisal.actualizadoEn || appraisal.updatedAt || ""}`), tasks: latestTasks.map((task) => `${task.id}:${task.completed}:${task.actualizadoEn || task.updatedAt || ""}`), chat: latestChatMessages.map((item) => `${item.id}:${item.creadoEn || ""}`), serviceRequests: latestServiceRequests.map((item) => `${item.id}:${item.numeroAvaluo || ""}:${item.estado || ""}:${item.actualizadoEn || item.updatedAt || ""}`), authorizedFolios: latestAuthorizedFolios });
+        const currentSignature = JSON.stringify({ records: records.map((record) => `${record.id}:${record.actualizadoEn || record.updatedAt || ""}`), appraisals: technicalAppraisals.map((appraisal) => `${appraisal.id}:${appraisal.actualizadoEn || appraisal.updatedAt || ""}`), tasks: tasks.map((task) => `${task.id}:${task.completed}:${task.actualizadoEn || task.updatedAt || ""}`), chat: chatMessages.map((item) => `${item.id}:${item.creadoEn || ""}`), serviceRequests: (window.__controlSolicitudes || []).map((item) => `${item.id}:${item.numeroAvaluo || ""}:${item.estado || ""}:${item.actualizadoEn || item.updatedAt || ""}`), authorizedFolios: authorizedAppraisalNumbers.map(normalizeNumber).sort() });
+        if (latestSignature !== currentSignature) {
+          const previousChatId = chatMessages.at(-1)?.id || "";
+          const incomingChatMessage = latestChatMessages.at(-1);
+          const chatPanelClosed = $("#chatPanel")?.hidden !== false;
+          if (incomingChatMessage && incomingChatMessage.id !== previousChatId && incomingChatMessage.author !== activeSessionUser && chatPanelClosed) playChatNotification();
+          records = latestRecords.map(normalizeRecord);
+          technicalAppraisals = latestAppraisals;
+          tasks = latestTasks;
+          chatMessages = latestChatMessages;
+          window.__controlSolicitudes = latestServiceRequests;
+          authorizedAppraisalNumbers = latestAuthorizedFolios;
+          window.__controlAuthorizedFolios = authorizedAppraisalNumbers;
+          saveRecords();
+          saveTechnicalAppraisals();
+          saveTasks();
+          saveChatMessages();
+          window.dispatchEvent(new CustomEvent("control-avaluos:technical-appraisals-updated"));
+          renderWelcomeTasks();
+          render();
+        }
+      } catch {
+        setServerStatus("offline");
+      }
+    }, 2000);
+  }
+  async function loadRemoteState() {
+    setServerStatus("checking");
+    try {
+      const remoteState = await apiRequest("/state");
+      if (!Array.isArray(remoteState.records)) throw new Error("La respuesta del servidor no contiene registros válidos.");
+      records = remoteState.records.map(normalizeRecord);
+      technicalAppraisals = Array.isArray(remoteState.appraisals) ? remoteState.appraisals : loadTechnicalAppraisals();
+      tasks = Array.isArray(remoteState.tasks) ? remoteState.tasks : loadTasks();
+      chatMessages = Array.isArray(remoteState.chatMessages) ? remoteState.chatMessages : loadChatMessages();
+      window.__controlSolicitudes = Array.isArray(remoteState.serviceRequests) ? remoteState.serviceRequests : (window.__controlSolicitudes || []);
+      remoteUsers = Array.isArray(remoteState.users) ? remoteState.users : null;
+      notarias = Array.isArray(remoteState.notarias) ? remoteState.notarias : [];
+      authorizedAppraisalNumbers = Array.isArray(remoteState.authorizedAppraisalNumbers) ? remoteState.authorizedAppraisalNumbers : [];
+      window.__controlNotarias = notarias;
+      window.__controlAuthorizedFolios = authorizedAppraisalNumbers;
+      saveRecords();
+      saveTechnicalAppraisals();
+      saveTasks();
+      saveChatMessages();
+      setServerStatus("online");
+      if (activeSessionUser) refreshNotifications();
+      syncUserOptions();
+      syncCredentialSetupVisibility();
+      if (activeSessionUser) { applyRoleUi(); renderAuthorizedFolios(); }
+      render();
+      renderProfileDashboard();
+    } catch {
+      setServerStatus("offline");
+      render();
+    } finally {
+      startServerMonitor();
+    }
+  }
+  async function saveRemoteRecord(record, editing) {
+    if (!serverOnline) throw new Error("No fue posible comunicarse con el servidor de Recepción. Inicia el servidor y verifica /api/health antes de guardar.");
+    const saved = await apiRequest(editing ? `/records/${encodeURIComponent(record.id)}` : "/records", { method: editing ? "PUT" : "POST", body: JSON.stringify(record) });
+    return normalizeRecord(saved);
+  }
+  async function deleteRemoteRecord(id) {
+    if (serverOnline) await apiRequest(`/records/${encodeURIComponent(id)}`, { method: "DELETE" });
+  }
+  async function saveTechnicalAppraisal(appraisal) {
+    const existing = technicalAppraisals.find((item) => item.id === appraisal.id);
+    const payload = existing ? { ...appraisal, numeroAvaluo: existing.numeroAvaluo || appraisal.numeroAvaluo, creadoPor: existing.creadoPor || appraisal.creadoPor, creadoPorNombre: existing.creadoPorNombre || appraisal.creadoPorNombre, creadoEn: existing.creadoEn || appraisal.creadoEn } : appraisal;
+    const exists = Boolean(existing);
+    const saved = await apiRequest(exists ? `/appraisals/${encodeURIComponent(appraisal.id)}` : "/appraisals", { method: exists ? "PUT" : "POST", body: JSON.stringify(payload) });
+    technicalAppraisals = [saved, ...technicalAppraisals.filter((item) => item.id !== saved.id)];
+    saveTechnicalAppraisals();
+    window.dispatchEvent(new CustomEvent("control-avaluos:technical-appraisals-updated"));
+    return saved;
+  }
+  async function saveTask(task, editing = false) {
+    if (!serverOnline) {
+      tasks = editing ? tasks.map((item) => item.id === task.id ? task : item) : [task, ...tasks];
+      saveTasks();
+      return task;
+    }
+    const saved = await apiRequest(editing ? `/tasks/${encodeURIComponent(task.id)}` : "/tasks", { method: editing ? "PUT" : "POST", body: JSON.stringify(task) });
+    tasks = editing ? tasks.map((item) => item.id === saved.id ? saved : item) : [saved, ...tasks];
+    saveTasks();
+    return saved;
+  }
+  async function deleteTask(id) {
+    if (serverOnline) await apiRequest(`/tasks/${encodeURIComponent(id)}`, { method: "DELETE" });
+    tasks = tasks.filter((item) => item.id !== id);
+    saveTasks();
+  }
+  async function saveChatMessage(message) {
+    if (!serverOnline) {
+      chatMessages = [...chatMessages, message].slice(-100);
+      saveChatMessages();
+      return message;
+    }
+    const saved = await apiRequest("/chat", { method: "POST", body: JSON.stringify(message) });
+    chatMessages = [...chatMessages, saved].slice(-100);
+    saveChatMessages();
+    return saved;
+  }
+  async function deleteTechnicalAppraisal(id) {
+    if (!serverOnline) {
+      technicalAppraisals = technicalAppraisals.filter((item) => item.id !== id);
+      saveTechnicalAppraisals();
+      window.dispatchEvent(new CustomEvent("control-avaluos:technical-appraisals-updated"));
+      return;
+    }
+    await apiRequest(`/appraisals/${encodeURIComponent(id)}`, { method: "DELETE" });
+    technicalAppraisals = technicalAppraisals.filter((item) => item.id !== id);
+    saveTechnicalAppraisals();
+    window.dispatchEvent(new CustomEvent("control-avaluos:technical-appraisals-updated"));
+  }
+  async function getNextTechnicalFolio(year) {
+    const normalizedYear = String(year || new Date().getFullYear()).replace(/\D/g, "").slice(0, 4) || String(new Date().getFullYear());
+    if (serverOnline) {
+      try {
+        const response = await apiRequest(`/appraisals/next-folio?year=${encodeURIComponent(normalizedYear)}`);
+        return response.folio;
+      } catch {}
+    }
+    const matcher = new RegExp(`^(\\d{4})/${normalizedYear}$`);
+    const highest = technicalAppraisals.reduce((current, appraisal) => {
+      const match = String(appraisal.numeroAvaluo || "").match(matcher);
+      return match ? Math.max(current, Number(match[1])) : current;
+    }, 14);
+    return `${String(Math.max(15, highest + 1)).padStart(4, "0")}/${normalizedYear}`;
+  }
+  function normalizeUserName(value) { return String(value || "").trim().replace(/\s+/g, " "); }
+  function loadAddedUsers() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(USER_STORAGE_KEY) || "[]");
+      return Array.isArray(saved) ? [...new Set(saved.map(normalizeUserName).filter((user) => user.length >= 3 && user.length <= 90 && !USERS.includes(user)))] : [];
+    } catch { return []; }
+  }
+  function saveAddedUsers(users) { localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(users)); }
+  const prioritizeJuan = (names) => [...new Set(names)].sort((a, b) => (/juan manuel barrera mart[ií]nez/i.test(a) ? 0 : 1) - (/juan manuel barrera mart[ií]nez/i.test(b) ? 0 : 1) || a.localeCompare(b, "es"));
+  const allUsers = () => remoteUsers?.length ? prioritizeJuan(remoteUsers.map((user) => user.name)) : prioritizeJuan([...USERS, ...loadAddedUsers()]);
+  function loadRoles() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(ROLE_STORAGE_KEY) || "{}");
+      const roles = { ...DEFAULT_ROLE_BY_USER };
+      Object.entries(saved && typeof saved === "object" ? saved : {}).forEach(([user, role]) => {
+        if (allUsers().includes(user) && DEFAULT_ROLE_BY_USER[user] !== "admin" && VALID_ROLES.includes(role)) roles[user] = role;
+      });
+      return roles;
+    } catch { return { ...DEFAULT_ROLE_BY_USER }; }
+  }
+  function saveRoles(roles) { localStorage.setItem(ROLE_STORAGE_KEY, JSON.stringify(roles)); }
+  const roleFor = (user) => {
+    const normalizedUser = normalizeUserName(user).toLocaleLowerCase("es-MX");
+    const canonicalUser = Object.keys(DEFAULT_ROLE_BY_USER).find((name) => normalizeUserName(name).toLocaleLowerCase("es-MX") === normalizedUser) || user;
+    if (DEFAULT_ROLE_BY_USER[canonicalUser] === "admin") return "admin";
+    const remoteMatch = remoteUsers?.length ? remoteUsers.find((item) => normalizeUserName(item.name).toLocaleLowerCase("es-MX") === normalizedUser) : null;
+    const role = remoteMatch?.role || loadRoles()[canonicalUser];
+    return VALID_ROLES.includes(role) ? role : "viewer";
+  };
+  const roleLabel = (role) => ({ admin: "Administrador", editor: "Editor(a)", viewer: "Solo lectura", valuador: "Valuador", auditor: "Auditor" }[role] || "Solo lectura");
+  const isAdmin = () => roleFor(activeSessionUser) === "admin";
+  const canEdit = () => ["admin", "editor", "valuador", "auditor"].includes(roleFor(activeSessionUser));
+  const canEditReception = () => ["admin", "editor", "auditor"].includes(roleFor(activeSessionUser));
+  const canCreateTask = () => ["admin", "editor", "valuador", "auditor"].includes(roleFor(activeSessionUser));
+  const canViewSummary = () => ["admin", "editor", "auditor"].includes(roleFor(activeSessionUser));
+  const canAuthorizeFolios = () => ["admin", "auditor"].includes(roleFor(activeSessionUser));
+  const canViewFePublica = () => ["admin", "editor", "auditor"].includes(roleFor(activeSessionUser));
+  const canViewRequests = () => ["admin", "valuador", "auditor"].includes(roleFor(activeSessionUser));
+  const escapeHtml = (value) => String(value || "").replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#039;", '"': "&quot;" }[character]));
+  const formatCurrency = (amount) => new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(Number(amount) || 0);
+  const parseMoney = (value) => Number(String(value ?? "").replace(/[^0-9.-]/g, "")) || 0;
+  function formatMoneyInput(input) { if (!input) return; const raw = String(input.value || ""); const digits = raw.replace(/[^0-9.]/g, ""); if (!digits) { input.value = ""; return; } const parts = digits.split("."); const whole = parts.shift().replace(/^0+(?=\d)/, "") || "0"; const decimals = parts.join("").slice(0, 2); input.value = `$${Number(whole).toLocaleString("en-US")}${decimals ? `.${decimals}` : ""}`; }
+  function bindMoneyInputs() { document.querySelectorAll("[data-money-input], #appraisalValueInput, #amountInput").forEach((input) => { if (input.dataset.moneyBound === "true") return; input.dataset.moneyBound = "true"; input.addEventListener("input", () => formatMoneyInput(input)); input.addEventListener("blur", () => { if (input.value) formatMoneyInput(input); }); }); if (document.body.dataset.moneyDelegated !== "true") { document.body.dataset.moneyDelegated = "true"; document.addEventListener("input", (event) => { const input = event.target; if (input instanceof HTMLInputElement && input.matches("[data-money-input]")) formatMoneyInput(input); }); } }
+  const formatDate = (value) => value ? new Intl.DateTimeFormat("es-MX", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${value.slice(0, 10)}T12:00:00`)) : "Sin fecha";
+  const formatTaskDate = (value) => value ? formatDate(value) : "Pendiente";
+  let lastSeenChatId = chatMessages.at(-1)?.id || "";
+  function playChatNotification() {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const context = new AudioContext();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(740, context.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(980, context.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.0001, context.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.12, context.currentTime + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.22);
+      oscillator.connect(gain).connect(context.destination);
+      oscillator.start();
+      oscillator.stop(context.currentTime + 0.24);
+      oscillator.addEventListener("ended", () => context.close(), { once: true });
+    } catch {}
+  }
+
+  function syncUserOptions() {
+    const users = allUsers();
+    const targets = [loginUser, credentialUser, $("#inlineCredentialUser"), form.elements.namedItem("usuario"), $("#taskAssignedTo")].filter(Boolean);
+    targets.forEach((select) => {
+      const selected = select.value;
+      const firstOption = select.querySelector('option[value=""]');
+      const prompt = firstOption ? firstOption.textContent : "Selecciona un usuario";
+      select.innerHTML = `<option value="">${escapeHtml(prompt)}</option>${users.map((user) => `<option value="${escapeHtml(user)}">${escapeHtml(user)}</option>`).join("")}`;
+      if (users.includes(selected)) select.value = selected;
+    });
+  }
+
+  function loadCredentials() { try { return JSON.parse(localStorage.getItem(CREDENTIALS_KEY) || "{}") || {}; } catch { return {}; } }
+  function saveCredentials(credentials) { localStorage.setItem(CREDENTIALS_KEY, JSON.stringify(credentials)); }
+  function closeCredentialSetup() { credentialDialog.close(); }
+  function isFirstAdminAccess(user = loginUser.value) {
+    const credentials = loadCredentials();
+    return Boolean(user && roleFor(user) === "admin" && !credentials[user]);
+  }
+  function syncCredentialSetupVisibility() {
+    const button = $("#openCredentialSetupButton");
+    if (!button) return;
+    const selected = loginUser.value;
+    const visible = Boolean(selected && roleFor(selected) === "admin");
+    button.classList.toggle("is-hidden", !visible);
+    button.disabled = !visible;
+    button.title = visible ? "Configura o cambia la contraseña del Administrador seleccionado" : "Selecciona un perfil Administrador";
+  }
+  async function openCredentialSetup() {
+    const credentials = loadCredentials();
+    const bootstrap = Object.keys(credentials).length === 0;
+    const selfChange = Boolean(activeSessionUser && !isAdmin());
+    const selected = selfChange ? activeSessionUser : loginUser.value;
+    const firstAdminAccess = isFirstAdminAccess(selected);
+    if (!selfChange && !isAdmin() && roleFor(selected) !== "admin") {
+      loginMessage.textContent = "Selecciona un perfil Administrador.";
+      return;
+    }
+    if (!selfChange && !isAdmin()) {
+      const currentPassword = String(loginPassword.value || "");
+      if (!currentPassword) {
+        loginMessage.textContent = "Escribe la contraseña actual del Administrador antes de cambiarla.";
+        loginPassword.focus();
+        return;
+      }
+      try {
+        if (serverOnline) await apiRequest("/auth/login", { method: "POST", body: JSON.stringify({ name: selected, password: currentPassword }) });
+        else if (credentials[selected] !== currentPassword) throw new Error("La contraseña actual no es válida en modo sin conexión.");
+        pendingCredentialAuthorization = { user: selected, currentPassword, expiresAt: Date.now() + 5 * 60 * 1000 };
+      } catch (error) { loginMessage.textContent = error.message || "No fue posible verificar la contraseña actual."; return; }
+    }
+    $$("#credentialUser option").forEach((option) => { option.disabled = Boolean(option.value) && (bootstrap || firstAdminAccess) && roleFor(option.value) !== "admin"; });
+    credentialUser.value = selected || (isAdmin() ? activeSessionUser : "");
+    credentialUser.disabled = selfChange;
+    credentialUser.closest("label")?.classList.toggle("is-hidden", selfChange);
+    $("#credentialCurrentPasswordLabel")?.classList.toggle("is-hidden", !selfChange);
+    if (credentialCurrentPassword) credentialCurrentPassword.value = "";
+    credentialMessage.textContent = "";
+    credentialPassword.value = "";
+    credentialPasswordConfirm.value = "";
+    credentialDialog.showModal();
+  }
+  async function saveCredential(event) {
+    event.preventDefault();
+    const user = credentialUser.value;
+    const password = credentialPassword.value;
+    const credentials = loadCredentials();
+    const bootstrap = Object.keys(credentials).length === 0;
+    const firstAdminAccess = isFirstAdminAccess(user);
+    const selfChange = Boolean(activeSessionUser && !isAdmin() && user === activeSessionUser);
+    const externalAuthorization = pendingCredentialAuthorization && pendingCredentialAuthorization.user === user && pendingCredentialAuthorization.expiresAt > Date.now();
+    if (!isAdmin() && !selfChange && !externalAuthorization) {
+      credentialMessage.textContent = "Solo puedes cambiar tu propia contraseña.";
+      return;
+    }
+    if ((bootstrap || firstAdminAccess || externalAuthorization) && !selfChange && roleFor(user) !== "admin") {
+      credentialMessage.textContent = "Solo se pueden modificar credenciales de perfiles Administrador desde este acceso.";
+      return;
+    }
+    if (selfChange) {
+      const currentPassword = String(credentialCurrentPassword?.value || "");
+      try {
+        if (serverOnline) await apiRequest("/auth/login", { method: "POST", body: JSON.stringify({ name: user, password: currentPassword }) });
+        else if (credentials[user] !== currentPassword) throw new Error("La contraseña actual no es válida en modo sin conexión.");
+        pendingCredentialAuthorization = { user, currentPassword, expiresAt: Date.now() + 5 * 60 * 1000 };
+      } catch (error) { credentialMessage.textContent = error.message || "La contraseña actual no es válida."; return; }
+    }
+    if (!user || password.length < 6) { credentialMessage.textContent = "Selecciona un usuario y usa una contraseña de al menos 6 caracteres."; return; }
+    if (password !== credentialPasswordConfirm.value) { credentialMessage.textContent = "Las contraseñas no coinciden."; return; }
+    try {
+      const remoteUser = remoteUsers?.find((item) => item.name === user);
+      if (externalAuthorization) {
+        if (!serverOnline) throw new Error("Conecta el servidor de Recepción para cambiar la contraseña compartida.");
+        await apiRequest("/auth/change-password", { method: "POST", body: JSON.stringify({ name: user, currentPassword: pendingCredentialAuthorization.currentPassword, newPassword: password }) });
+      } else if (serverOnline && remoteUser) {
+        await apiRequest(`/users/${encodeURIComponent(remoteUser.id)}`, { method: "PUT", body: JSON.stringify({ password }) });
+      }
+      if (remoteUser) remoteUsers = remoteUsers.map((item) => item.id === remoteUser.id ? { ...item, hasPassword: true } : item);
+      credentials[user] = password;
+      saveCredentials(credentials);
+    } catch (error) { credentialMessage.textContent = error.message; return; }
+    loginUser.value = user;
+    loginPassword.value = "";
+    loginMessage.textContent = "Contraseña individual guardada. Ya puedes iniciar sesión.";
+    closeCredentialSetup();
+    syncCredentialSetupVisibility();
+    renderUserPermissions();
+  }
+  async function saveInlineCredential(event) {
+    event.preventDefault();
+    if (!isAdmin()) return;
+    const user = $("#inlineCredentialUser").value;
+    const password = $("#inlineCredentialPassword").value;
+    const confirmPassword = $("#inlineCredentialPasswordConfirm").value;
+    const message = $("#inlineCredentialMessage");
+    if (!user || password.length < 6) { message.textContent = "Selecciona un usuario y usa una contraseña de al menos 6 caracteres."; return; }
+    if (password !== confirmPassword) { message.textContent = "Las contraseñas no coinciden."; return; }
+    try {
+      if (serverOnline) {
+        const remoteUser = remoteUsers?.find((item) => item.name === user);
+        if (remoteUser) { await apiRequest(`/users/${encodeURIComponent(remoteUser.id)}`, { method: "PUT", body: JSON.stringify({ password }) }); remoteUsers = remoteUsers.map((item) => item.id === remoteUser.id ? { ...item, hasPassword: true } : item); }
+      }
+      const credentials = loadCredentials();
+      credentials[user] = password;
+      saveCredentials(credentials);
+    } catch (error) { message.textContent = error.message; message.classList.add("is-error"); return; }
+    $("#inlineCredentialPassword").value = "";
+    $("#inlineCredentialPasswordConfirm").value = "";
+    message.classList.remove("is-error");
+    message.textContent = `Contraseña guardada para ${user}.`;
+    renderUserPermissions();
+  }
+
+  function applyRoleUi() {
+    const admin = isAdmin();
+    $("#newRecordButton").disabled = !canEdit();
+    $("#newTechnicalAppraisalButton").disabled = !canEdit();
+    manageUsersButton.classList.toggle("is-hidden", !admin);
+    $$(".admin-only").forEach((button) => button.classList.toggle("is-hidden", !admin));
+    $$(".summary-access").forEach((button) => button.classList.toggle("is-hidden", !canViewSummary()));
+    $$(".folio-authorizer-only").forEach((panel) => panel.classList.toggle("is-hidden", !canAuthorizeFolios()));
+    $$(".fe-publica-access").forEach((button) => button.classList.toggle("is-hidden", !canViewFePublica()));
+    appShell.dataset.role = roleFor(activeSessionUser);
+    if ((activeAppView === "usuarios" || activeAppView === "configuracion") && !admin) switchAppView("avaluos");
+    if (activeAppView === "resumen" && !canViewSummary()) switchAppView("avaluos");
+    if (activeAppView === "fe-publica" && !canViewFePublica()) switchAppView("avaluos");
+    $$(".solicitudes-access").forEach((button) => button.classList.toggle("is-hidden", !canViewRequests()));
+    if (activeAppView === "solicitudes" && !canViewRequests()) switchAppView("avaluos");
+    renderHomeActions();
+  }
+  function renderWelcomeTasks() {
+    const assignedList = $("#taskList");
+    const createdList = $("#createdTaskList");
+    const count = $("#taskCount");
+    const formElement = $("#taskForm");
+    if (!assignedList || !createdList || !count) return;
+    const sortTasks = (items) => items.sort((left, right) => Number(left.completed) - Number(right.completed) || new Date(right.creadoEn || 0).getTime() - new Date(left.creadoEn || 0).getTime());
+    const assignedTasks = sortTasks(tasks.filter((task) => task.assignedTo === activeSessionUser));
+    const createdTasks = sortTasks(tasks.filter((task) => task.createdBy === activeSessionUser && task.assignedTo !== activeSessionUser));
+    count.textContent = String(assignedTasks.filter((task) => !task.completed).length);
+    if (formElement) formElement.hidden = !canCreateTask();
+    const renderItems = (items, createdByMe = false) => items.length ? items.map((task) => `<article class="task-item${task.completed ? " is-complete" : ""}"><label><input type="checkbox" data-complete-task="${escapeHtml(task.id)}" ${task.completed ? "checked" : ""} ${createdByMe ? "disabled" : ""} /><span><strong>${escapeHtml(task.title)}</strong>${task.details ? `<small>${escapeHtml(task.details)}</small>` : ""}<em>${createdByMe ? `Asignada a ${escapeHtml(task.assignedTo || "usuario")}` : `Asignada por ${escapeHtml(task.createdBy || "usuario")}`} · ${task.completed ? "Concluida" : "Pendiente"}</em><small class="task-dates">Creada: ${escapeHtml(formatTaskDate(task.creadoEn))} · Concluida: ${escapeHtml(formatTaskDate(task.completedAt))}</small></span></label>${(isAdmin() || task.createdBy === activeSessionUser || task.assignedTo === activeSessionUser) ? `<button class="task-remove" data-remove-task="${escapeHtml(task.id)}" type="button" aria-label="Quitar tarea">Quitar</button>` : ""}</article>`).join("") : `<p class="task-empty">${createdByMe ? "No hay tareas en esta categoría." : "No tienes tareas asignadas."}</p>`;
+    const splitCreated = (items) => `<div class="task-status-group"><span class="task-status-label">Pendientes</span>${renderItems(items.filter((task) => !task.completed), true)}<span class="task-status-label task-status-label-complete">Completadas</span>${renderItems(items.filter((task) => task.completed), true)}</div>`;
+    assignedList.innerHTML = renderItems(assignedTasks);
+    createdList.innerHTML = splitCreated(createdTasks);
+    [assignedList, createdList].forEach((list) => {
+      list.querySelectorAll("[data-complete-task]:not(:disabled)").forEach((checkbox) => checkbox.addEventListener("change", () => toggleTask(checkbox.dataset.completeTask, checkbox.checked)));
+      list.querySelectorAll("[data-remove-task]").forEach((button) => button.addEventListener("click", () => removeTask(button.dataset.removeTask)));
+    });
+  }
+  function renderHomeActions() {
+    const permissions = { recepcion: Boolean(activeSessionUser), gestion: canEdit(), solicitudes: canViewRequests(), crear: canEdit(), validacion: canAuthorizeFolios(), buscar: canViewRequests() };
+    $$("[data-home-action]").forEach((card) => {
+      const visible = Boolean(permissions[card.dataset.homeAction]);
+      card.classList.toggle("is-hidden", !visible);
+      card.disabled = !visible;
+    });
+  }
+  function openHomeAction(action) {
+    if (action === "solicitudes" || action === "buscar") { if (canViewRequests()) switchAppView("solicitudes"); return; }
+    if (action === "recepcion") { switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:section", { detail: "recepcion" })); return; }
+    if (["gestion", "crear", "validacion"].includes(action)) {
+      switchAppView("avaluos");
+      window.dispatchEvent(new CustomEvent("control-avaluos:section", { detail: action === "validacion" ? "validacion" : "crear" }));
+      if (action === "crear") window.setTimeout(() => window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-creation")), 0);
+    }
+  }
+  async function toggleTask(id, completed) {
+    const task = tasks.find((item) => item.id === id);
+    if (!task || task.assignedTo !== activeSessionUser) return;
+    try { await saveTask({ ...task, completed, completedAt: completed ? new Date().toISOString() : null }, true); renderWelcomeTasks(); } catch (error) { window.alert(error.message); }
+  }
+  async function removeTask(id) {
+    const task = tasks.find((item) => item.id === id);
+    if (!task || (task.assignedTo !== activeSessionUser && task.createdBy !== activeSessionUser && !isAdmin())) return;
+    if (!window.confirm("¿Quitar esta tarea?")) return;
+    try { await deleteTask(id); renderWelcomeTasks(); } catch (error) { window.alert(error.message); }
+  }
+  async function createTask(event) {
+    event.preventDefault();
+    if (!canCreateTask()) return;
+    const formElement = event.currentTarget;
+    const title = String($("#taskTitle").value || "").trim();
+    const details = String($("#taskDetails").value || "").trim();
+    const assignedTo = String($("#taskAssignedTo").value || "").trim();
+    const messageElement = $("#taskMessage");
+    const buttonElement = $("#taskSubmitButton");
+    if (!title || !assignedTo) { messageElement.textContent = "Escribe la tarea y selecciona un usuario."; return; }
+    try {
+      buttonElement.disabled = true;
+      await saveTask({ id: `${Date.now()}-${Math.random().toString(16).slice(2)}`, title, details, assignedTo, completed: false, createdBy: activeSessionUser, creadoEn: new Date().toISOString() });
+      formElement.reset();
+      messageElement.textContent = "Tarea asignada correctamente.";
+      renderWelcomeTasks();
+    } catch (error) { messageElement.textContent = error.message; }
+    finally { buttonElement.disabled = false; }
+  }
+  function renderChat() {
+    const container = $("#chatMessages");
+    const widget = $("#chatWidget");
+    if (!container || !widget || !activeSessionUser) return;
+    widget.hidden = false;
+    container.innerHTML = chatMessages.length ? chatMessages.slice(-100).map((item) => `<article class="chat-message${item.author === activeSessionUser ? " is-mine" : ""}"><div class="chat-message-meta"><strong>${escapeHtml(item.author)}</strong><time>${escapeHtml(formatDate(item.creadoEn))}</time></div><p>${escapeHtml(item.message)}</p></article>`).join("") : `<p class="chat-empty">Aún no hay mensajes.</p>`;
+    container.scrollTop = container.scrollHeight;
+  }
+  async function createChatMessage(event) {
+    event.preventDefault();
+    const input = $("#chatMessageInput");
+    const button = $("#chatSendButton");
+    const message = String(input?.value || "").trim();
+    if (!message || !activeSessionUser) return;
+    try {
+      button.disabled = true;
+      await saveChatMessage({ id: `${Date.now()}-${Math.random().toString(16).slice(2)}`, author: activeSessionUser, message, creadoEn: new Date().toISOString() });
+      input.value = "";
+      renderChat();
+    } catch (error) { window.alert(error.message); }
+    finally { button.disabled = false; input.focus(); }
+  }
+  const activityIcon = (kind) => kind === "creation" ? "＋" : kind === "status" ? "↔" : kind === "request" ? "▤" : "✎";
+  const relativeTime = (value) => { const time = new Date(value || 0).getTime(); if (!time) return "ahora"; const minutes = Math.max(0, Math.floor((Date.now() - time) / 60000)); return minutes < 1 ? "ahora" : minutes < 60 ? `hace ${minutes} min` : minutes < 1440 ? `hace ${Math.floor(minutes / 60)} h` : `hace ${Math.floor(minutes / 1440)} d`; };
+  function buildActivity() {
+    const items = [];
+    records.forEach((item) => { const created = item.creadoEn || item.fechaAvaluo; items.push({ id:`record-${item.id}-create`, kind:"creation", category:"avaluos", text:`Avalúo ${item.numeroAvaluo || "s/n"} creado`, user:item.creadoPorNombre || item.usuario || "Usuario", at:created }); if (item.actualizadoEn && item.actualizadoEn !== created) items.push({ id:`record-${item.id}-edit`, kind:"edit", category:"avaluos", text:`Avalúo ${item.numeroAvaluo || "s/n"} editado`, user:item.actualizadoPorNombre || item.usuario || "Usuario", at:item.actualizadoEn }); });
+    technicalAppraisals.forEach((item) => { const created = item.creadoEn || item.fechaAvaluo; items.push({ id:`appraisal-${item.id}-create`, kind:"creation", category:"avaluos", text:`Avalúo ${item.numeroAvaluo || item.numero || "s/n"} creado`, user:item.creadoPorNombre || item.creadoPor || "Usuario", at:created }); if (item.actualizadoEn && item.actualizadoEn !== created) items.push({ id:`appraisal-${item.id}-edit`, kind:"edit", category:"avaluos", text:`Avalúo ${item.numeroAvaluo || item.numero || "s/n"} editado`, user:item.actualizadoPorNombre || item.actualizadoPor || "Usuario", at:item.actualizadoEn }); });
+    (window.__controlSolicitudes || []).forEach((item) => { const created=item.creadoEn || item.fecha; items.push({ id:`request-${item.id}-create`, kind:"request", category:"solicitudes", text:`Solicitud ${item.folio || item.id} creada`, user:item.solicitante?.nombre || "Cliente", at:created }); if (item.estado && item.actualizadoEn && item.actualizadoEn !== created) items.push({ id:`request-${item.id}-status`, kind:"status", category:"estados", text:`Solicitud ${item.folio || item.id} editada (Estado: ${item.estado})`, user:item.actualizadoPor || item.asesor || "Usuario", at:item.actualizadoEn }); });
+    return items.filter((item) => item.at).sort((a,b)=>new Date(b.at)-new Date(a.at)).slice(0,30);
+  }
+  function renderRecentActivity(filter="todos") { const list=$("#recentActivityList"); if (!list) return; const items=buildActivity().filter(item=>filter==="todos" || item.category===filter || (filter==="avaluos" && item.user===activeSessionUser)); list.innerHTML=items.length ? items.slice(0,12).map(item=>`<article class="activity-item"><span class="activity-icon activity-${item.kind}">${activityIcon(item.kind)}</span><div><strong>${escapeHtml(item.text)}</strong><small>${escapeHtml(item.user)} · ${escapeHtml(relativeTime(item.at))}</small></div><span class="activity-badge activity-badge-${item.kind}">${item.kind === "creation" ? "Creación" : item.kind === "status" ? "Estado" : item.kind === "request" ? "Solicitud" : "Edición"}</span></article>`).join("") : `<p class="activity-empty">No hay actividad para este filtro.</p>`; }
+  function searchGlobal(query="") { const palette=$("#globalSearchPalette"), results=$("#globalSearchResults"); if (!palette || !results) return; const q=String(query).trim().toLocaleLowerCase("es-MX"); palette.hidden=false; if (!q) { results.innerHTML='<p>Busca folios, clientes, ubicaciones o acciones como “crear avalúo”.</p>'; return; } const found=[]; const actions=[{terms:["crear","nuevo","avaluo","avalúo","expediente"],type:"Acción",title:"Crear nuevo avalúo",detail:"Abrir Gestión de Avalúos y comenzar un expediente",action:()=>{switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:section",{detail:"crear"})); window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-appraisal"));}},{terms:["registrar","registro","recepcion","recepción","avaluo"],type:"Acción",title:"Registrar avalúo",detail:"Abrir Recepción para registrar un avalúo",action:()=>{switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:section",{detail:"recepcion"}));}},{terms:["nueva","solicitud","solicitudes","servicio"],type:"Acción",title:"Nueva solicitud",detail:"Abrir el formulario de solicitudes de servicio",action:()=>{switchAppView("solicitudes"); window.setTimeout(()=>document.querySelector("#newInternalRequestButton")?.click(),0);}},{terms:["gestion","gestión","avaluos","avalúos"],type:"Sección",title:"Gestión de Avalúos",detail:"Consultar y editar expedientes técnicos",action:()=>{switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:section",{detail:"crear"}));}},{terms:["buscar","solicitud","solicitudes"],type:"Sección",title:"Buscar una solicitud",detail:"Consultar solicitudes registradas",action:()=>switchAppView("solicitudes")}]; actions.forEach(item=>{if(item.terms.some(term=>q.includes(term))) found.push(item);}); records.forEach(item=>{const text=[item.numeroAvaluo,item.solicitante,item.tipoBien,item.observacion].join(" "); if(text.toLocaleLowerCase("es-MX").includes(q)) found.push({type:"Avalúo", title:`Avalúo ${item.numeroAvaluo}`, detail:item.solicitante || item.tipoBien, action:()=>{switchAppView("avaluos"); openDialog(item.id);}});}); technicalAppraisals.forEach(item=>{const text=JSON.stringify(item); if(text.toLocaleLowerCase("es-MX").includes(q)) found.push({type:"Avalúo técnico",title:`Avalúo ${item.numeroAvaluo || item.numero || "s/n"}`,detail:item.solicitante || item.bienesAValuar || "Expediente técnico",action:()=>{switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-edit",{detail:item}));}});}); (window.__controlSolicitudes||[]).forEach(item=>{const text=JSON.stringify(item); if(text.toLocaleLowerCase("es-MX").includes(q)) found.push({type:"Solicitud",title:item.folio || "Solicitud",detail:item.solicitante?.nombre || item.tipoAvaluo || "Solicitud de servicio",action:()=>{switchAppView("solicitudes"); window.setTimeout(()=>window.SolicitudesControl?.openDetail(item.id),0);}});}); results.innerHTML=found.length ? found.slice(0,10).map((item,index)=>`<button class="search-result" type="button" data-search-result="${index}"><span>${escapeHtml(item.type)}</span><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.detail)}</small></button>`).join("") : '<p>No se encontraron coincidencias.</p>'; results.querySelectorAll("[data-search-result]").forEach(button => { button.addEventListener("mousedown", (event) => event.preventDefault()); button.addEventListener("click", () => { window.__setGlobalSearchActive?.(false); found[Number(button.dataset.searchResult)]?.action(); }); }); }
+  function renderAlerts(filter="all") {
+    const list=$("#alertsList"), count=$("#alertsCount"); if(!list) return;
+    const alerts = notifications.filter(item => filter !== "mine" || item.usuario_id);
+    const unread = notifications.filter(item => !item.leida).length;
+    if (count) { count.textContent = String(unread); count.hidden = unread < 1; }
+    list.innerHTML = alerts.length ? alerts.slice(0, 50).map(item => `<button class="alert-item${item.leida ? " is-read" : ""}" type="button" data-notification-id="${escapeHtml(item.id)}"><span class="activity-icon activity-${item.tipo === "nueva_solicitud" ? "request" : item.tipo === "actualizacion" ? "status" : "creation"}">${item.tipo === "actualizacion" ? "↻" : item.tipo === "nueva_solicitud" ? "▤" : "✓"}</span><div><strong>${escapeHtml(item.titulo)}</strong><small>${escapeHtml(item.mensaje)} · ${escapeHtml(relativeTime(item.created_at))}</small></div></button>`).join("") : '<p>No hay notificaciones.</p>';
+    list.querySelectorAll("[data-notification-id]").forEach(button => button.addEventListener("click", async () => {
+      const item = notifications.find(value => value.id === button.dataset.notificationId); if (!item) return;
+      try { await apiRequest(`/notifications/${encodeURIComponent(item.id)}/read`, { method: "PUT" }); item.leida = true; renderAlerts(filter); if (item.url_destino === "app://refresh") { localStorage.setItem("app_version", item.mensaje.match(/app_version:([^\)]+)/)?.[1] || ""); window.location.reload(true); } else if (item.url_destino) switchAppView(item.url_destino); } catch (error) { window.alert(error.message); }
+    }));
+  }
+  async function refreshNotifications() {
+    if (!activeSessionUser || !serverOnline) return;
+    try {
+      const clientVersion = localStorage.getItem("app_version") || "";
+      const versionResponse = await apiRequest("/version");
+      if (versionResponse?.version && !clientVersion) localStorage.setItem("app_version", versionResponse.version);
+      if (versionResponse?.version && clientVersion && clientVersion !== versionResponse.version) await apiRequest("/notifications/system-version", { method: "POST", body: JSON.stringify({ clientVersion }) });
+      notifications = await apiRequest("/notifications");
+      renderAlerts();
+    } catch { /* La interfaz conserva la última lectura local si el servidor está reiniciando. */ }
+  }
+  let versionPopupVersion = "";
+  function showVersionUpdatePopup(serverVersion) {
+    const dialog = $("#versionUpdateDialog");
+    if (!dialog || !serverVersion) return;
+    if (versionPopupVersion === serverVersion && dialog.open) return;
+    versionPopupVersion = serverVersion;
+    dialog.dataset.version = serverVersion;
+    if (!dialog.open) dialog.showModal?.();
+  }
+  async function checkAppVersion() {
+    try {
+      const response = await apiRequest("/version");
+      const serverVersion = String(response?.version || "").trim();
+      if (!serverVersion) return;
+      const clientVersion = localStorage.getItem("app_version") || "";
+      if (!clientVersion) { localStorage.setItem("app_version", serverVersion); return; }
+      if (clientVersion !== serverVersion && activeSessionUser) {
+        await apiRequest("/notifications/system-version", { method: "POST", body: JSON.stringify({ clientVersion }) });
+        notifications = await apiRequest("/notifications");
+        renderAlerts();
+        showVersionUpdatePopup(serverVersion);
+      }
+    } catch { /* El servidor puede estar reiniciándose; se reintentará en la siguiente revisión. */ }
+  }
+  function startVersionMonitor() {
+    if (versionMonitorId) return;
+    $("#versionUpdateReloadButton")?.addEventListener("click", () => {
+      const dialog = $("#versionUpdateDialog");
+      const version = dialog?.dataset.version || "";
+      if (version) localStorage.setItem("app_version", version);
+      dialog?.close();
+      window.location.reload(true);
+    });
+    $("#versionUpdateLaterButton")?.addEventListener("click", () => $("#versionUpdateDialog")?.close());
+    checkAppVersion();
+    versionMonitorId = window.setInterval(() => { if (!document.hidden) checkAppVersion(); }, 5 * 60 * 1000);
+  }
+  function renderGamesStats() {
+    const list = $("#gamesStatsList");
+    const summary = $("#gamesStatsSummary");
+    if (!list) return;
+    const user = String(activeSessionUser || "Usuario CP6");
+    let stats = {};
+    try { stats = JSON.parse(localStorage.getItem(`cp6_game_stats_${user}`) || "{}") || {}; } catch { stats = {}; }
+    const history = Array.isArray(stats.history) ? stats.history : [];
+    const bestByGame = ["Solitario", "Sudoku", "Buscaminas"].map((game) => ({ game, best: history.filter((item) => item.game === game).reduce((max, item) => Math.max(max, Number(item.score || item.points || 0)), 0) }));
+    bestByGame.forEach((item) => { const score = document.querySelector(`[data-game-score="${item.game}"]`); if (score) score.textContent = `${item.best} pts`; });
+    if (summary) summary.textContent = `${Number(stats.points || 0)} puntos acumulados · ${Number(stats.games || history.length || 0)} partidas completadas`;
+    list.innerHTML = `${bestByGame.map((item) => `<div class="games-best-item"><span>${escapeHtml(item.game)}</span><strong>${item.best} pts</strong></div>`).join("")}<div class="games-history-items">${history.slice(0, 5).map((item) => `<div class="games-history-item"><span>${escapeHtml(item.game)}</span><small>${Number(item.points || 0)} pts · ${new Date(item.completedAt).toLocaleDateString("es-MX")}</small></div>`).join("") || '<p class="games-stats-empty">Completa un juego para ver tus resultados.</p>'}</div>`;
+  }
+  function bindGames() {
+    const view = $("#juegosView");
+    const grid = view?.querySelector(".games-card-grid");
+    const stage = $("#gameStage");
+    const frame = $("#gameFrame");
+    const title = $("#gameStageTitle");
+    const close = $("#closeGameButton");
+    const heading = view?.querySelector(".games-page-heading");
+    const statsPanel = view?.querySelector(".games-stats-panel");
+    if (!view || !grid || !stage || !frame || !title || !close || view.dataset.gamesBound) return;
+    renderGamesStats();
+    view.dataset.gamesBound = "true";
+    const games = [
+      { card: ".game-card-solitaire", title: "Solitario", source: "games/cp6solitario.html" },
+      { card: ".game-card-sudoku", title: "Sudoku", source: "games/cp6sudoku.html" },
+      { card: ".game-card-mines", title: "Buscaminas", source: "games/cp6buscaminas.html" },
+    ];
+    const closeGame = () => { stage.hidden = true; grid.hidden = false; if (heading) heading.hidden = false; if (statsPanel) statsPanel.hidden = false; frame.src = "about:blank"; renderGamesStats(); };
+    games.forEach((game) => {
+      const card = view.querySelector(game.card);
+      const button = card?.querySelector(".btn-play");
+      if (!card || !button) return;
+      button.disabled = false;
+      button.textContent = "Jugar";
+      button.addEventListener("click", () => {
+        grid.hidden = true;
+        if (heading) heading.hidden = true;
+        if (statsPanel) statsPanel.hidden = true;
+        stage.hidden = false;
+        title.textContent = game.title;
+        frame.title = `${game.title} CP6`;
+        frame.src = game.source;
+        frame.focus();
+      });
+    });
+    close.addEventListener("click", closeGame);
+    window.addEventListener("control-avaluos:view", (event) => { if (event.detail !== "juegos") closeGame(); });
+  }
+  function bindHomeIntelligence() { document.body.classList.remove("global-search-active"); const searchInput=$("#globalSearchInput"), palette=$("#globalSearchPalette"), searchWrap=searchInput?.closest(".global-search-wrap"); let searchBackdrop=document.querySelector("#globalSearchBackdrop"); if (palette && searchWrap && palette.parentElement !== searchWrap) searchWrap.appendChild(palette); if (!searchBackdrop) { searchBackdrop=document.createElement("div"); searchBackdrop.id="globalSearchBackdrop"; searchBackdrop.hidden=true; (document.querySelector("#appShell") || document.body).appendChild(searchBackdrop); } const searchToggle=$("#globalSearchToggleButton"); const setSearchActive=(active)=>{ const alertsPanel=document.querySelector("#alertsPanel"); if (active && alertsPanel && !alertsPanel.hidden) { alertsPanel.hidden=true; document.querySelector("#alertsButton")?.setAttribute("aria-expanded","false"); } palette.hidden=!active; searchBackdrop.hidden=true; searchWrap?.toggleAttribute("hidden", !active); searchWrap?.classList.toggle("is-open", active); searchToggle?.setAttribute("aria-expanded", String(active)); document.body.classList.toggle("global-search-active", active); if (active) window.setTimeout(()=>searchInput?.focus(), 0); }; window.__setGlobalSearchActive=setSearchActive; searchToggle?.addEventListener("click",()=>setSearchActive(searchWrap?.hidden !== false)); searchInput?.addEventListener("input", event=>{ const value=event.target.value.trim(); if (value) { searchGlobal(value); setSearchActive(true); } else setSearchActive(false); }); searchInput?.addEventListener("focus", ()=>{ if (searchInput.value.trim()) setSearchActive(true); }); searchInput?.addEventListener("keydown", event=>{ if (event.key === "Escape") { searchInput.value=""; setSearchActive(false); searchInput.blur(); } }); $("#alertsButton")?.addEventListener("click",()=>{const panel=$("#alertsPanel"), button=$("#alertsButton"); const opening=panel.hidden; if (opening && typeof window.__setGlobalSearchActive === "function") window.__setGlobalSearchActive(false); panel.hidden=!opening; button.setAttribute("aria-expanded",String(!panel.hidden)); if(!panel.hidden) { renderAlerts(); refreshNotifications(); }}); $("#markAlertsReadButton")?.addEventListener("click",async()=>{ try { await apiRequest("/notifications/read-all", { method: "PUT" }); notifications = notifications.map(item => ({ ...item, leida: true })); renderAlerts(); } catch (error) { window.alert(error.message); }}); $$("[data-activity-filter]").forEach(button=>button.addEventListener("click",()=>{$$("[data-activity-filter]").forEach(item=>item.classList.toggle("is-active",item===button)); renderRecentActivity(button.dataset.activityFilter);})); $$("[data-alert-filter]").forEach(button=>button.addEventListener("click",()=>{$$("[data-alert-filter]").forEach(item=>item.classList.toggle("is-active",item===button)); renderAlerts(button.dataset.alertFilter);})); document.addEventListener("keydown",event=>{if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==="k"){event.preventDefault(); setSearchActive(true);}}); document.addEventListener("click", event=>{ const target=event.target; const searchPanel=document.querySelector("#globalSearchPalette, .search-dropdown, .search-popover"); const searchButton=document.querySelector("#globalSearchToggleButton, .search-icon-btn, [data-action=\"search\"]"); const searchContainer=document.querySelector(".global-search-wrap"); const alertsPanel=document.querySelector("#alertsPanel, .notifications-dropdown, .alerts-center"); const alertsButton=document.querySelector("#alertsButton, .notification-icon-btn, [data-action=\"notifications\"]"); if (searchPanel && !searchPanel.hidden && !searchPanel.contains(target) && !searchContainer?.contains(target) && !searchButton?.contains(target)) setSearchActive(false); if (alertsPanel && !alertsPanel.hidden && !alertsPanel.contains(target) && !alertsButton?.contains(target)) { alertsPanel.hidden=true; alertsButton?.setAttribute("aria-expanded","false"); } }); window.addEventListener("control-avaluos:technical-appraisals-updated",()=>{renderRecentActivity();renderAlerts();}); window.addEventListener("control-avaluos:request-updated",(event)=>{
+      const updated = event.detail;
+      if (updated?.id) {
+        const current = Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : [];
+        window.__controlSolicitudes = current.some((item) => item.id === updated.id) ? current.map((item) => item.id === updated.id ? updated : item) : [...current, updated];
+      }
+      renderRecentActivity();
+      renderAlerts();
+      renderProfileDashboard();
+      render();
+    }); }
+  function showAuthenticatedApp(user) {
+    if (adminAccessDialog?.open) adminAccessDialog.close();
+    activeSessionUser = user;
+    activeUser.textContent = user;
+    activeUserRole.textContent = roleLabel(roleFor(user));
+    applyProfileAvatar(user);
+    $("#welcomeUserName").textContent = user || "usuario";
+    const currentRole = roleFor(user);
+    $("#welcomeRoleCopy").textContent = currentRole === "admin" ? "Tienes acceso administrativo para gestionar los avalúos, el resumen y la configuración local." : currentRole === "auditor" ? "Tienes acceso total a Avalúos, Fe Pública, Resumen general, Chat y Notas/Tareas." : currentRole === "valuador" ? "Puedes crear y editar avalúos técnicos, además de usar el Chat y registrar Notas/Tareas; Recepción es solo de consulta." : currentRole === "editor" ? "Puedes registrar y editar avalúos, además de consultar el Control de saldos." : "Puedes consultar los avalúos, recibos y listados disponibles en este equipo.";
+    loginScreen.classList.add("is-hidden");
+    loginScreen.hidden = true;
+    appShell.classList.remove("is-hidden");
+    appShell.hidden = false;
+    appShell.classList.remove("is-entering");
+    applyRoleUi();
+    window.setTimeout(() => appShell.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+    switchAppView("inicio");
+    renderWelcomeTasks();
+    window.dispatchEvent(new CustomEvent("control-avaluos:authenticated", { detail: { user } }));
+    render();
+    refreshNotifications();
+    checkAppVersion();
+  }
+  function showLogin() {
+    if (adminAccessDialog?.open) adminAccessDialog.close();
+    activeSessionUser = "";
+    appShell.classList.add("is-hidden");
+    appShell.hidden = true;
+    appShell.classList.remove("is-entering");
+    loginScreen.classList.remove("is-hidden", "is-exiting");
+    loginScreen.hidden = false;
+    loginPassword.value = "";
+    loginMessage.textContent = "";
+    $("#openCredentialSetupButton").classList.toggle("is-hidden", Object.keys(loadCredentials()).length > 0);
+    loginUser.focus();
+  }
+  async function authenticate(event) {
+    event.preventDefault();
+    const user = loginUser.value;
+    const password = loginPassword.value;
+    const credentials = loadCredentials();
+    let authenticated = false;
+    const remoteUser = remoteUsers?.find((item) => item.name === user);
+    if (serverOnline && remoteUser?.hasPassword) {
+      try { await apiRequest("/auth/login", { method: "POST", body: JSON.stringify({ name: user, password }) }); authenticated = true; } catch {}
+    } else if (credentials[user] && password === credentials[user]) authenticated = true;
+    if (!authenticated) {
+      loginMessage.textContent = "Selecciona un usuario y captura su contraseña individual válida.";
+      loginPassword.focus();
+      return;
+    }
+    sessionStorage.setItem(SESSION_KEY, user);
+    showAuthenticatedApp(user);
+  }
+
+  const VIEW_DETAILS = {
+    inicio: { title: "Avalúos", kicker: "", description: "Consulta expedientes técnicos, administra solicitudes de servicio y gestiona el flujo de validación." },
+    solicitudes: { title: "Solicitudes", kicker: "CONTROL DE SOLICITUDES", description: "Administra solicitudes, asesores y estados del proceso." },
+    avaluos: { title: "Avalúos", kicker: "", description: "Consulta expedientes técnicos, administra solicitudes de servicio y gestiona el flujo de validación." },
+    "fe-publica": { title: "Fe Pública", kicker: "", description: "" },
+    resumen: { title: "Resumen general", kicker: "", description: "" },
+    usuarios: { title: "Usuarios", kicker: "ACCESO LOCAL", description: "Gestiona usuarios administrativos y usuarios externos registrados." },
+    configuracion: { title: "Configuración", kicker: "", description: "Exporta, importa y respalda la información del equipo." },
+    mensajeria: { title: "Mensajería", kicker: "COMUNICACIÓN INSTITUCIONAL", description: "Conecta con el equipo CP6 y los usuarios externos en conversaciones seguras." },
+    juegos: { title: "Juegos", kicker: "ESPACIO DE DESCANSO", description: "Elige una actividad para despejar la mente entre tus actividades de trabajo." },
+    perfil: { title: "Mi Perfil", kicker: "CUENTA", description: "Información de la cuenta activa." },
+  };
+  function setUsersSection(section = "menu") {
+    const menu = $("#usuariosMenuSection");
+    const adminPanel = $("#usuariosAdminPanel");
+    const externalPanel = $("#usuariosExternalPanel");
+    if (!menu || !adminPanel || !externalPanel) return;
+    const showAdmin = section === "administrativos";
+    const showExternal = section === "externos";
+    menu.hidden = showAdmin || showExternal;
+    adminPanel.hidden = !showAdmin;
+    externalPanel.hidden = !showExternal;
+    if (showAdmin) renderUserPermissions();
+    if (showExternal) window.dispatchEvent(new CustomEvent("control-avaluos:users-view"));
+  }
+
+  function switchAppView(view) {
+    if (!VIEW_DETAILS[view] || (view === "resumen" ? !canViewSummary() : view === "fe-publica" ? !canViewFePublica() : view === "solicitudes" ? !canViewRequests() : view !== "avaluos" && view !== "inicio" && view !== "mensajeria" && view !== "juegos" && view !== "perfil" && !isAdmin())) return;
+    // Toda navegación del Navbar inicia las subsecciones en modo lista.
+    // El formulario de Recepción y cualquier ficha técnica nunca se arrastran a otra vista.
+    window.dispatchEvent(new CustomEvent("control-avaluos:close-reception-editor"));
+    window.dispatchEvent(new CustomEvent("control-avaluos:close-technical-creation"));
+    activeAppView = view;
+    $("#pageTitle").closest(".workspace-header")?.classList.toggle("avaluos-header", view === "avaluos");
+    $$(".app-view").forEach((section) => { const active = section.id === `${view}View`; section.hidden = !active; section.classList.toggle("is-active", active); });
+    $$("[data-app-view]").forEach((button) => button.classList.toggle("is-active", button.dataset.appView === view));
+    const details = VIEW_DETAILS[view];
+    $("#pageTitle").textContent = details.title;
+    $("#pageKicker").textContent = details.kicker;
+    $("#pageDescription").textContent = details.description;
+    if (view === "avaluos") {
+      window.dispatchEvent(new CustomEvent("control-avaluos:section", { detail: "inicio" }));
+    } else {
+      ["#backAvaluosButton", "#newRecordButton", "#newTechnicalAppraisalButton"].forEach((selector) => $(selector).classList.add("is-hidden"));
+    }
+    if (view === "solicitudes") window.dispatchEvent(new CustomEvent("control-avaluos:section", { detail: "solicitudes" }));
+    window.dispatchEvent(new CustomEvent("control-avaluos:view", { detail: view }));
+    if (view === "usuarios") { setUsersSection("menu"); window.dispatchEvent(new CustomEvent("control-avaluos:users-view")); }
+    if (view === "resumen") initialiseReportDates();
+    if (view === "configuracion") { renderNotarySettings(); renderPendingReceptionSummary(); refreshOperationalSettings(); }
+  }
+
+  function getExpiryDate(fechaAvaluo) { if (!fechaAvaluo) return ""; const date = new Date(`${fechaAvaluo}T12:00:00`); date.setMonth(date.getMonth() + 6); return date.toISOString().slice(0, 10); }
+  const isExpiredWithoutDeliveryOrPayment = (record) => { const expiry = getExpiryDate(record.fechaAvaluo); return Boolean(!record.pagado && !record.seEntregoA && expiry && expiry < today()); };
+  const dateInRange = (value, start, end) => Boolean(value && (!start || value >= start) && (!end || value <= end));
+  function currentWeekRange() { const date = new Date(`${today()}T12:00:00`); const day = date.getDay(); date.setDate(date.getDate() + (day === 0 ? -6 : 1 - day)); const start = date.toISOString().slice(0, 10); date.setDate(date.getDate() + 6); return { start, end: date.toISOString().slice(0, 10) }; }
+  function prioritize(items) { return [...items].sort((left, right) => Number(left.pagado) - Number(right.pagado) || new Date(right.actualizadoEn).getTime() - new Date(left.actualizadoEn).getTime()); }
+  function getVisibleRecords() {
+    const query = searchInput.value.trim().toLocaleLowerCase("es-MX");
+    const numericQuery = normalizeNumber(query);
+    return prioritize(records.filter((record) => {
+      const matchesSearch = !query || (numericQuery && normalizeNumber(record.numeroAvaluo).includes(numericQuery)) || record.solicitante.toLocaleLowerCase("es-MX").includes(query);
+      return matchesSearch;
+    }));
+  }
+  function getRecordsForOperationalView(view, source) {
+    if (view === "pendientes-entrega") return source.filter((record) => !record.pagado && !record.seEntregoA && !isExpiredWithoutDeliveryOrPayment(record));
+    if (view === "entregados-sin-pago") return source.filter((record) => !record.pagado && Boolean(record.seEntregoA));
+    if (view === "pagados") return source.filter((record) => record.pagado);
+    if (view === "vencidos") return source.filter(isExpiredWithoutDeliveryOrPayment);
+    return source;
+  }
+
+  function renderListRow(record) {
+    const paid = Boolean(record.pagado);
+    const delivered = Boolean(record.seEntregoA);
+    const expired = isExpiredWithoutDeliveryOrPayment(record);
+    const statusClass = paid ? "paid" : expired ? "expired" : "pending";
+    const statusLabel = paid ? "Pagado" : expired ? "Vencido" : delivered ? "Entregado sin pago" : "Pendiente de entrega";
+    const editIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"></path><path d="m14 7 3 3"></path></svg>`;
+    const receiptIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"></path><path d="M9 8h6M9 12h6M9 16h3"></path></svg>`;
+    const deleteIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7l1-3h4l1 3"></path></svg>`;
+    const printIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v7H6zM17 12h.01"></path></svg>`;
+    const receiptButton = paid ? `<button class="record-action request-icon-button request-upload-pdf-button receipt icon-only" data-receipt="${record.id}" type="button" title="Recibo" aria-label="Abrir recibo">${receiptIcon}</button>` : "";
+    const editButton = canEditReception() ? `<button class="record-action request-icon-button request-info-button icon-only" data-edit="${record.id}" type="button" title="Editar" aria-label="Editar avalúo">${editIcon}</button>` : `<button class="record-action request-icon-button request-info-button icon-only" data-view="${record.id}" type="button" title="Ver" aria-label="Ver avalúo">${editIcon}</button>`;
+    const deleteButton = isAdmin() ? `<button class="record-action request-icon-button request-delete-button delete icon-only" data-delete="${record.id}" type="button" title="Eliminar" aria-label="Eliminar avalúo">${deleteIcon}</button>` : "";
+    const printButton = paid ? `<button class="record-action request-icon-button request-print-button icon-only" data-print="${record.id}" type="button" title="Imprimir" aria-label="Imprimir recibo">${printIcon}</button>` : "";
+    const linkedRequest = (window.__controlSolicitudes || []).find((request) => normalizeNumber(request.numeroAvaluo) === normalizeNumber(record.numeroAvaluo));
+    const requestFolio = linkedRequest?.folio || record.folioSolicitud || record.solicitudFolio || "—";
+    return `<tr><td><strong class="avaluo-list-number">${escapeHtml(record.numeroAvaluo)}</strong></td><td class="avaluo-list-request-folio">${escapeHtml(requestFolio)}</td><td class="avaluo-list-requester">${escapeHtml(record.solicitante)}</td><td class="avaluo-list-user">${escapeHtml(record.usuario)}</td><td>${formatCurrency(record.valorAvaluo)}</td><td><span class="avaluo-status ${statusClass}">${statusLabel}</span></td><td class="table-action-cell reception-actions">${editButton}${receiptButton}${deleteButton}${printButton}</td></tr>`;
+  }
+  function paginationMarkup(scope, page, totalItems) {
+    const pages = Math.max(1, Math.ceil(totalItems / AVALUOS_PAGE_SIZE));
+    if (pages <= 1) return "";
+    const current = Math.min(Math.max(1, page), pages);
+    const buttons = Array.from({ length: pages }, (_, index) => { const number = index + 1; return `<button type="button" class="table-page-button${number === current ? " is-active" : ""}" data-${scope}-page="${number}" aria-label="Página ${number}" aria-current="${number === current ? "page" : "false"}">${number}</button>`; }).join("");
+    return `<nav class="table-pagination" aria-label="Paginación de avalúos"><span>Mostrando ${Math.min((current - 1) * AVALUOS_PAGE_SIZE + 1, totalItems)}-${Math.min(current * AVALUOS_PAGE_SIZE, totalItems)} de ${totalItems}</span><div><button type="button" class="table-page-button" data-${scope}-page="${current - 1}" ${current === 1 ? "disabled" : ""} aria-label="Página anterior">‹</button>${buttons}<button type="button" class="table-page-button" data-${scope}-page="${current + 1}" ${current === pages ? "disabled" : ""} aria-label="Página siguiente">›</button></div></nav>`;
+  }
+  function renderList(items, emptyCopy) {
+    const pages = Math.max(1, Math.ceil(items.length / AVALUOS_PAGE_SIZE));
+    receptionPage = Math.min(Math.max(1, receptionPage), pages);
+    const pageItems = items.slice((receptionPage - 1) * AVALUOS_PAGE_SIZE, receptionPage * AVALUOS_PAGE_SIZE);
+    $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>No.</th><th>Solicitud</th><th>Solicitante</th><th>Usuario</th><th>Valor del avalúo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${pageItems.length ? pageItems.map(renderListRow).join("") : `<tr><td colspan="7" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>${paginationMarkup("reception", receptionPage, items.length)}`;
+  }
+  function bindRecordActions() {
+    $$('[data-edit]').forEach((button) => button.addEventListener("click", () => openDialog(button.dataset.edit)));
+  $$('[data-view]').forEach((button) => button.addEventListener("click", () => openDialog(button.dataset.view, true)));
+  $$('[data-delete]').forEach((button) => button.addEventListener("click", () => removeRecord(button.dataset.delete)));
+  $$('[data-receipt]').forEach((button) => button.addEventListener("click", () => openReceipt(records.find((record) => record.id === button.dataset.receipt))));
+  $$('[data-print]').forEach((button) => button.addEventListener("click", () => openReceipt(records.find((record) => record.id === button.dataset.print))));
+  }
+  function render() {
+    const visible = getVisibleRecords();
+    const operationalRecords = getRecordsForOperationalView(operationalView, visible);
+    const titles = { todos: "Registros Recientes", "pendientes-entrega": "Pendientes de entrega", "entregados-sin-pago": "Entregados sin registro de pago", pagados: "Pagados", vencidos: "Vencidos" };
+    const filteredCount = $("#filteredCount");
+    if (filteredCount) filteredCount.textContent = `${visible.length} ${visible.length === 1 ? "resultado" : "resultados"}`;
+    $("#statusListTitle").textContent = titles[operationalView];
+    $("#statusListCount").textContent = String(operationalRecords.length);
+    renderList(operationalRecords, "No hay avalúos para este estado, búsqueda o periodo.");
+    renderAuthorizedFolios();
+    bindRecordActions();
+    $$('[data-reception-page]').forEach((button) => button.addEventListener("click", () => { if (button.disabled) return; receptionPage = Number(button.dataset.receptionPage) || 1; render(); }));
+  }
+
+  function setPaymentVisibility() {
+    paymentDetails.classList.toggle("is-hidden", !paidInput.checked);
+    $("#previewReceiptButton").classList.toggle("is-hidden", !paidInput.checked);
+    amountInput.required = paidInput.checked;
+    methodInput.required = paidInput.checked;
+    paymentDeliveredToInput.required = paidInput.checked;
+    paymentDateInput.required = paidInput.checked;
+    if (!paidInput.checked) { amountInput.value = ""; methodInput.value = ""; paymentDeliveredToInput.value = ""; paymentDateInput.value = ""; }
+    else if (!paymentDateInput.value) paymentDateInput.value = today();
+  }
+  function openDialog(id = null, readOnly = false) {
+    if (!canEditReception() && !id) return;
+    window.dispatchEvent(new CustomEvent("control-avaluos:section", { detail: "recepcion" }));
+    editingId = id;
+    const record = id ? records.find((item) => item.id === id) : initialDraft;
+    if (!record) return;
+    const viewOnly = readOnly || !canEditReception();
+    form.reset();
+    Object.entries(initialDraft).forEach(([key, value]) => {
+      const field = form.elements.namedItem(key);
+      if (!field || field.type === "checkbox") return;
+      const savedValue = key === "valorAvaluo" ? (record[key] ? formatCurrency(record[key]) : "") : (record[key] ?? value);
+      if (field.tagName === "SELECT" && savedValue && !Array.from(field.options).some((option) => option.value === String(savedValue))) {
+        field.add(new Option(String(savedValue), String(savedValue)));
+      }
+      field.value = savedValue;
+    });
+    paidInput.checked = Boolean(record.pagado);
+    amountInput.value = record.pagado ? formatCurrency(record.montoPagado || 0) : "";
+    methodInput.value = record.pagado ? record.metodoPago || "" : "";
+    paymentDeliveredToInput.value = record.pagado ? record.pagoEntregadoA || "" : "";
+    paymentDateInput.value = record.pagado ? record.fechaPago || today() : "";
+    avaluoDateInput.value = record.fechaAvaluo || today();
+    form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = viewOnly; });
+    $("#saveRecordButton").classList.toggle("is-hidden", viewOnly);
+    $("#dialogTitle").textContent = viewOnly ? "Consulta de avalúo" : id ? "Editar avalúo" : "Registrar avalúo";
+    $("#formMessage").textContent = "";
+    setPaymentVisibility();
+    recordEditor.hidden = false;
+    $("#avaluosView").classList.add("is-registering");
+    if (!viewOnly) window.setTimeout(() => numberInput.focus(), 120);
+  }
+  function closeDialog() {
+    recordEditor.hidden = true;
+    $("#avaluosView").classList.remove("is-registering");
+    editingId = null;
+    form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = false; });
+    form.reset();
+    // Los combobox personalizados no se actualizan solos con form.reset().
+    form.querySelectorAll("select").forEach((select) => select.dispatchEvent(new Event("change", { bubbles: true })));
+    paidInput.checked = false;
+    paymentDetails.classList.add("is-hidden");
+    $("#formMessage").textContent = "";
+  }
+  async function removeRecord(id) { if (!isAdmin()) return; const record = records.find((item) => item.id === id); if (!record || !window.confirm(`¿Eliminar el avalúo ${record.numeroAvaluo}? Esta acción no se puede deshacer.`)) return; try { await deleteRemoteRecord(id); records = records.filter((item) => item.id !== id); saveRecords(); render(); } catch (error) { window.alert(error.message); } }
+  function formDraft() {
+    const data = new FormData(form);
+    return { numeroAvaluo: normalizeNumber(data.get("numeroAvaluo")), usuario: String(data.get("usuario") || "").trim(), asesorValuador: String(data.get("asesorValuador") || "").trim(), tipoBien: String(data.get("tipoBien") || "").trim(), tipoAvaluo: String(data.get("tipoAvaluo") || "").trim(), solicitante: String(data.get("solicitante") || "").trim(), valorAvaluo: parseMoney(data.get("valorAvaluo")), seEntregoA: String(data.get("seEntregoA") || "").trim(), pagoEntregadoA: paidInput.checked ? String(data.get("pagoEntregadoA") || "") : "", observacion: String(data.get("observacion") || "").trim(), fechaAvaluo: String(data.get("fechaAvaluo") || ""), pagado: paidInput.checked, montoPagado: paidInput.checked ? parseMoney(data.get("montoPagado")) : 0, metodoPago: paidInput.checked ? String(data.get("metodoPago") || "") : "", fechaPago: paidInput.checked ? String(data.get("fechaPago") || "") : "" };
+  }
+  let receptionLookupTimer = null;
+  numberInput?.addEventListener("input", () => {
+    window.clearTimeout(receptionLookupTimer);
+    const number = normalizeNumber(numberInput.value || "");
+    if (!/^\d{4}$/.test(number)) return;
+    receptionLookupTimer = window.setTimeout(async () => {
+      try {
+        const requests = await apiRequest("/service-requests");
+        const match = (Array.isArray(requests) ? requests : []).find((item) => normalizeNumber(item.numeroAvaluo) === number);
+        if (!match) return;
+        const setField = (name, value) => { const field = form.elements.namedItem(name); if (field && value) { if (field.tagName === "SELECT" && !Array.from(field.options).some((option) => option.value === String(value))) field.add(new Option(String(value), String(value))); field.value = value; } };
+        setField("tipoBien", match.tipoBien || match.tipoAvaluo);
+        setField("tipoAvaluo", match.tipoAvaluo || "");
+        setField("usuario", match.asesor || "");
+        const requester = match.solicitante?.nombre || match.nombreSolicitante || "";
+        setField("solicitante", requester);
+        $("#formMessage").textContent = `Datos de la solicitud ${match.folio || number} cargados.`;
+      } catch { /* La captura manual sigue disponible si el servidor no responde. */ }
+    }, 250);
+  });
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!canEditReception()) return;
+    const draft = formDraft();
+    const required = [draft.numeroAvaluo, draft.usuario, draft.tipoBien, draft.tipoAvaluo, draft.solicitante, draft.fechaAvaluo];
+    if (!/^\d{4}$/.test(draft.numeroAvaluo)) { $("#formMessage").textContent = "El número de avalúo debe tener exactamente cuatro dígitos."; return; }
+    if (!serverOnline) { $("#formMessage").textContent = "No fue posible comunicarse con el servidor de Recepción. Verifica la dirección, el puerto 3000 y /api/health antes de registrar."; return; }
+    if (!authorizedAppraisalNumbers.includes(draft.numeroAvaluo)) { $("#formMessage").textContent = `El avalúo ${draft.numeroAvaluo} no ha sido autorizado para su registro por Administración o Auditoría. Autorízalo primero desde Avalúos > Validación.`; return; }
+    if (records.some((record) => record.id !== editingId && normalizeNumber(record.numeroAvaluo) === draft.numeroAvaluo)) { $("#formMessage").textContent = `El avalúo ${draft.numeroAvaluo} ya se agregó.`; return; }
+    if (required.some((value) => !value)) { $("#formMessage").textContent = "Completa los campos obligatorios: número de avalúo, fecha, tipo de bien, tipo de avalúo, usuario y solicitante."; return; }
+    if (draft.pagado && (!draft.montoPagado || !draft.metodoPago || !draft.pagoEntregadoA || !draft.fechaPago)) { $("#formMessage").textContent = "Completa los datos de pago, incluido a quién se entregó el pago."; return; }
+    const now = new Date().toISOString();
+    const candidate = editingId ? { ...records.find((record) => record.id === editingId), ...draft, id: editingId, actualizadoEn: now } : { ...draft, id: `${Date.now()}-${Math.random().toString(16).slice(2)}`, creadoEn: now, actualizadoEn: now };
+    try {
+      $("#saveRecordButton").disabled = true;
+      const saved = await saveRemoteRecord(candidate, Boolean(editingId));
+      records = editingId ? records.map((record) => record.id === editingId ? saved : record) : [saved, ...records];
+      saveRecords();
+      closeDialog();
+      render();
+    } catch (error) {
+      $("#formMessage").textContent = error.message;
+    } finally {
+      $("#saveRecordButton").disabled = false;
+    }
+  });
+
+  function wordsUnderThousand(value) { const units = ["", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"], teens = ["diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve"], tens = ["", "", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"], hundreds = ["", "ciento", "doscientos", "trescientos", "cuatrocientos", "quinientos", "seiscientos", "setecientos", "ochocientos", "novecientos"]; if (value === 0) return ""; if (value === 100) return "cien"; const head = hundreds[Math.floor(value / 100)], rest = value % 100; if (rest < 10) return [head, units[rest]].filter(Boolean).join(" "); if (rest < 20) return [head, teens[rest - 10]].filter(Boolean).join(" "); if (rest < 30) return [head, rest === 20 ? "veinte" : `veinti${units[rest - 20]}`].filter(Boolean).join(" "); const ten = tens[Math.floor(rest / 10)], unit = units[rest % 10]; return [head, unit ? `${ten} y ${unit}` : ten].filter(Boolean).join(" "); }
+  function wholeWords(value) { if (value === 0) return "cero"; if (value < 1000) return wordsUnderThousand(value); if (value < 1000000) { const thousands = Math.floor(value / 1000), rest = value % 1000; return [thousands === 1 ? "mil" : `${wordsUnderThousand(thousands)} mil`, wordsUnderThousand(rest)].filter(Boolean).join(" "); } const millions = Math.floor(value / 1000000), rest = value % 1000000; return [millions === 1 ? "un millón" : `${wholeWords(millions)} millones`, rest ? wholeWords(rest) : ""].filter(Boolean).join(" "); }
+  function amountInWords(amount) { const normalized = Math.max(0, Number(amount) || 0), whole = Math.floor(normalized), cents = Math.round((normalized - whole) * 100).toString().padStart(2, "0"), raw = wholeWords(whole), words = raw.endsWith("uno") ? `${raw.slice(0, -3)}un` : raw; return `${words.charAt(0).toUpperCase()}${words.slice(1)} pesos ${cents}/100 M.N.`; }
+  function receiptPrefix(record) { return String(record.area || record.tipoRegistro || record.tipoAvaluo || "").toLocaleLowerCase("es-MX").includes("fe pública") || String(record.area || record.tipoRegistro || "").toLocaleLowerCase("es-MX").includes("fe-publica") ? "CP6FE" : "CP6AV"; }
+  async function nextReceiptFolio(prefix) {
+    if (serverOnline) {
+      const response = await apiRequest("/receipts/next", { method: "POST", body: JSON.stringify({ prefix }) });
+      return response.folio;
+    }
+    let stored = {};
+    try { const parsed = JSON.parse(localStorage.getItem(RECEIPT_SEQUENCE_KEY) || "{}"); stored = parsed && typeof parsed === "object" ? parsed : { AV: Number(parsed) || 9999 }; } catch { stored = {}; }
+    const key = prefix === "CP6FE" ? "FE" : "AV";
+    const current = Number(stored[key]) || 9999;
+    const next = Math.max(current + 1, 10000);
+    stored[key] = next;
+    localStorage.setItem(RECEIPT_SEQUENCE_KEY, JSON.stringify(stored));
+    return `${prefix}${String(next).padStart(5, "0")}`;
+  }
+  async function getReceiptFolio(record) {
+    if (record.folioRecibo) return record.folioRecibo;
+    if (!record.id) return serverOnline ? "CP6AV10000" : nextReceiptFolio(receiptPrefix(record));
+    const folioRecibo = await nextReceiptFolio(receiptPrefix(record));
+    const updated = { ...record, folioRecibo };
+    records = records.map((item) => item.id === record.id ? updated : item);
+    if (serverOnline) { try { await saveRemoteRecord(updated, true); } catch {} }
+    saveRecords();
+    return folioRecibo;
+  }
+  function receiptHtml(record) { return `<!doctype html><html lang="es-MX"><head><meta charset="UTF-8"><title>Recibo ${escapeHtml(record.folioRecibo || record.numeroAvaluo)}</title><style>@page{margin:0;size:letter}html,body{height:100%;margin:0}body{background:#fff;color:#1f303a;display:flex;font-family:Georgia,"Times New Roman",serif;align-items:flex-start;justify-content:center}.receipt{background:#fff;box-sizing:border-box;margin:.45in auto 0;min-height:10.1in;padding:.72in .78in;width:7.05in}.top{border-bottom:3px solid #bb8a32;padding-bottom:14px;text-align:center}.brand{color:#123e5a;font-family:Arial,sans-serif;font-size:22px;font-weight:800;letter-spacing:.05em;margin:0;text-transform:uppercase}.address{color:#5c6c75;font-family:Arial,sans-serif;font-size:12px;line-height:1.45;margin:7px 0 0}.receipt-title{color:#123e5a;font-family:Arial,sans-serif;font-size:19px;font-weight:800;letter-spacing:.14em;margin:24px 0 6px;text-align:center;text-transform:uppercase}.meta{color:#5b6971;font-family:Arial,sans-serif;font-size:12px;text-align:center}.folio{color:#123e5a;font-family:Arial,sans-serif;font-size:13px;font-weight:800;letter-spacing:.08em;margin:10px 0 0;text-align:center}.rule{border-top:1px solid #d9e1e5;margin:20px 0}.body-copy{font-size:16px;line-height:1.6}.amount{background:#eff7f3;border-left:5px solid #167a5c;color:#114f3b;font-family:Arial,sans-serif;font-size:25px;font-weight:800;line-height:1.35;margin:18px 0;padding:14px 16px}.amount-words{color:#345565;font-family:Arial,sans-serif;font-size:13px;font-style:italic;line-height:1.4}.summary{background:#f7fafb;border:1px solid #dbe5e9;font-family:Arial,sans-serif;margin-top:20px;padding:12px 14px}.summary p{font-size:13px;margin:5px 0}.signature{font-family:Arial,sans-serif;font-size:13px;margin-top:72px;text-align:center}.signature-line{border-top:1px solid #667982;margin:0 auto 8px;width:260px}@media print{body{background:#fff;min-height:100vh}.receipt{margin:0;min-height:11in;padding:.72in .78in;width:8.5in}}</style></head><body><section class="receipt"><header class="top"><p class="brand">Correduría Pública No.6</p><p class="address">Av. Morelos 854 Oriente, Col. Centro<br>Torreón, Coahuila.</p></header><h1 class="receipt-title">Recibo de pago</h1><p class="folio">Folio: ${escapeHtml(record.folioRecibo || "CP6AV10000")}</p><p class="meta">Fecha de pago: ${formatDate(record.fechaPago)}</p><div class="rule"></div><p class="body-copy">Recibí de <strong>${escapeHtml(record.seEntregoA || "________________")}</strong> la cantidad de:</p><div class="amount">${formatCurrency(record.montoPagado)}<br><span class="amount-words">(${escapeHtml(amountInWords(record.montoPagado))})</span></div><p class="body-copy">Por concepto del avalúo número <strong>${escapeHtml(record.numeroAvaluo)}</strong>, correspondiente a un avalúo de tipo <strong>${escapeHtml(record.tipoAvaluo)}</strong>.</p><section class="summary"><p><strong>Método de pago:</strong> ${escapeHtml(record.metodoPago || "No especificado")}</p></section><div class="signature"><div class="signature-line"></div>Firma de recibido</div></section><script>window.onload=()=>window.print()<\/script></body></html>`; }
+  async function openReceipt(record) { if (!record || !record.seEntregoA || !record.montoPagado || !record.numeroAvaluo || !record.tipoAvaluo) { $("#formMessage").textContent = "Completa quién recibe, cantidad, número y tipo de avalúo para generar el recibo."; return; } const receiptWindow = window.open("", "_blank", "width=980,height=900"); if (!receiptWindow) { alert("El navegador bloqueó la ventana del recibo. Permite ventanas emergentes e inténtalo de nuevo."); return; } try { const receiptRecord = { ...record, folioRecibo: await getReceiptFolio(record) }; receiptWindow.document.write(receiptHtml(receiptRecord)); receiptWindow.document.close(); } catch (error) { receiptWindow.close(); $("#formMessage").textContent = error.message; } }
+
+  function reportData(start, end) {
+    const active = records.filter((record) => dateInRange(record.fechaAvaluo, start, end) && !isExpiredWithoutDeliveryOrPayment(record));
+    const paid = active.filter((record) => record.pagado);
+    const pending = active.filter((record) => !record.pagado && !record.seEntregoA);
+    const delivered = active.filter((record) => !record.pagado && Boolean(record.seEntregoA));
+    return { paid, pending, delivered, totalPaid: paid.reduce((total, record) => total + Number(record.montoPagado || 0), 0) };
+  }
+  function inlineReportHtml(start, end) {
+    const { paid, pending, delivered, totalPaid } = reportData(start, end);
+    const pendingRows = pending.map((record) => `<tr><td>${escapeHtml(record.numeroAvaluo)}</td><td>${escapeHtml(record.usuario)}</td><td>${escapeHtml(record.solicitante)}</td><td>${escapeHtml(record.tipoBien)}</td><td>${escapeHtml(record.tipoAvaluo)}</td></tr>`).join("") || `<tr><td colspan="5" class="empty">No hay pendientes de entrega en este periodo.</td></tr>`;
+    const paidRows = paid.map((record) => `<tr><td>${escapeHtml(record.numeroAvaluo)}</td><td>${escapeHtml(record.solicitante)}</td><td>${formatDate(record.fechaPago)}</td><td>${escapeHtml(record.metodoPago || "Sin especificar")}</td><td>${formatCurrency(record.montoPagado)}</td></tr>`).join("") || `<tr><td colspan="5" class="empty">No hay pagos registrados en este periodo.</td></tr>`;
+    const deliverySummary = paid.reduce((result, record) => { const recipient = record.pagoEntregadoA || "Sin especificar"; const current = result.get(recipient) || { count: 0, cashAmount: 0, transferAmount: 0, total: 0 }; const amount = Number(record.montoPagado || 0); current.count += 1; if (record.metodoPago === "Efectivo") current.cashAmount += amount; if (record.metodoPago === "Transferencia") current.transferAmount += amount; current.total += amount; result.set(recipient, current); return result; }, new Map());
+    const totalCash = paid.filter((record) => record.metodoPago === "Efectivo").reduce((total, record) => total + Number(record.montoPagado || 0), 0);
+    const totalTransfer = paid.filter((record) => record.metodoPago === "Transferencia").reduce((total, record) => total + Number(record.montoPagado || 0), 0);
+    const deliveryRows = [...deliverySummary.entries()].map(([recipient, summary]) => `<tr><td>${escapeHtml(recipient)}</td><td>${summary.count}</td><td>${formatCurrency(summary.cashAmount)}</td><td>${formatCurrency(summary.transferAmount)}</td><td>${formatCurrency(summary.total)}</td></tr>`).join("") || `<tr><td colspan="5" class="empty">No hay pagos entregados en este periodo.</td></tr>`;
+    return `<article class="print-report"><header class="report-header"><p class="eyebrow">CORREDURÍA PÚBLICA 6 · PLAZA COAHUILA</p><h2>Resumen general de avalúos</h2><p>Av. Morelos 854 Oriente, Col. Centro · Torreón, Coahuila</p></header><div class="report-period"><strong>Periodo del reporte:</strong> ${formatDate(start)} al ${formatDate(end)}</div><section class="report-metrics"><article><span>Pagados</span><strong>${paid.length}</strong></article><article><span>Pendientes de entrega</span><strong>${pending.length}</strong></article><article><span>Entregados sin pago</span><strong>${delivered.length}</strong></article><article class="report-amount"><span>Importe pagado</span><strong>${formatCurrency(totalPaid)}</strong></article></section><section class="report-table-section"><h3>Pendientes de entrega</h3><div class="report-table-wrap"><table><thead><tr><th>Avalúo</th><th>Usuario</th><th>Solicitante</th><th>Tipo de bien</th><th>Tipo de avalúo</th></tr></thead><tbody>${pendingRows}</tbody></table></div></section><section class="report-table-section"><h3>Avalúos pagados</h3><div class="report-table-wrap"><table><thead><tr><th>Avalúo</th><th>Solicitante</th><th>Fecha de pago</th><th>Método</th><th>Importe</th></tr></thead><tbody>${paidRows}</tbody><tfoot><tr><td colspan="4">Total pagado</td><td>${formatCurrency(totalPaid)}</td></tr></tfoot></table></div></section><section class="report-table-section"><h3>Se entregó pago</h3><div class="report-table-wrap"><table><thead><tr><th>Entregado a</th><th>Pagos</th><th>Efectivo</th><th>Depósito / transferencia</th><th>Importe total</th></tr></thead><tbody>${deliveryRows}</tbody><tfoot><tr><td colspan="2">Total entregado</td><td>${formatCurrency(totalCash)}</td><td>${formatCurrency(totalTransfer)}</td><td>${formatCurrency(totalPaid)}</td></tr></tfoot></table></div></section></article>`;
+  }
+  function initialiseReportDates() { const week = currentWeekRange(); if (!$("#inlineReportStartDate").value) $("#inlineReportStartDate").value = week.start; if (!$("#inlineReportEndDate").value) $("#inlineReportEndDate").value = week.end; }
+  function prepareInlineReport() {
+    if (!canViewSummary()) return;
+    const start = $("#inlineReportStartDate").value;
+    const end = $("#inlineReportEndDate").value;
+    const message = $("#inlineReportMessage");
+    if (!start || !end || start > end) { message.textContent = "Selecciona un periodo válido: la fecha inicial debe ser anterior o igual a la final."; return; }
+    message.textContent = "";
+    $("#reportPreview").innerHTML = inlineReportHtml(start, end);
+    $("#printInlineReportButton").disabled = false;
+  }
+  function printInlineReport() { if (!canViewSummary() || !$("#reportPreview .print-report")) return; window.print(); }
+
+  const csvCell = (value) => `"${String(value ?? "").replace(/"/g, '""')}"`;
+  function exportRecords() {
+    if (!isAdmin()) return;
+    const start = $("#exportStartDate").value;
+    const end = $("#exportEndDate").value;
+    const message = $("#exportMessage");
+    if (!start || !end || start > end) { message.textContent = "Selecciona un periodo válido antes de descargar el archivo."; return; }
+    const selectedRecords = prioritize(records.filter((record) => dateInRange(record.fechaAvaluo, start, end)));
+    const rows = [["Número de avalúo", "Fecha del avalúo", "Usuario", "Tipo de bien", "Tipo de avalúo", "Solicitante", "Se entregó a", "Pagado", "Cantidad pagada", "Método de pago", "Fecha de pago", "Vence", "Observación", "Fecha de creación", "Última actualización"], ...selectedRecords.map((record) => [record.numeroAvaluo, formatDate(record.fechaAvaluo), record.usuario, record.tipoBien, record.tipoAvaluo, record.solicitante, record.seEntregoA, record.pagado ? "Sí" : "No", record.pagado ? record.montoPagado : "", record.metodoPago, formatDate(record.fechaPago), formatDate(getExpiryDate(record.fechaAvaluo)), record.observacion, formatDate(record.creadoEn), formatDate(record.actualizadoEn)])];
+    downloadBlob(new Blob([`\uFEFF${rows.map((row) => row.map(csvCell).join(",")).join("\r\n")}`], { type: "text/csv;charset=utf-8;" }), `control-avaluos-${start}-a-${end}.csv`);
+    message.classList.remove("is-error");
+    message.textContent = `${selectedRecords.length} ${selectedRecords.length === 1 ? "registro exportado" : "registros exportados"} del periodo seleccionado.`;
+  }
+  function downloadBlob(blob, filename) { const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = filename; document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(link.href); }
+  async function exportBackup() {
+    if (!isAdmin()) return;
+    try {
+      const backup = serverOnline ? await apiRequest("/export") : { app: "Control de Avalúos", version: BACKUP_VERSION, exportedAt: new Date().toISOString(), records };
+      downloadBlob(new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" }), `respaldo-control-avaluos-${today()}.json`);
+    } catch (error) { $("#importMessage").textContent = error.message; }
+  }
+  async function importBackup() {
+    if (!isAdmin()) return;
+    const file = $("#importFileInput").files?.[0];
+    const mode = $("#importMode").value;
+    const message = $("#importMessage");
+    if (!file) { message.textContent = "Selecciona un archivo de respaldo JSON para importar."; return; }
+    try {
+      const source = JSON.parse(await file.text());
+      const incoming = Array.isArray(source) ? source : source?.records;
+      const incomingAppraisals = Array.isArray(source?.appraisals) ? source.appraisals.filter((item) => item && item.tipo === "automotriz" && Array.isArray(item.vehiculos)) : [];
+      if (!Array.isArray(incoming)) throw new Error("Estructura no válida");
+      const valid = incoming.filter((item) => item && typeof item === "object" && /^\d{4}$/.test(normalizeNumber(item.numeroAvaluo))).map(normalizeRecord);
+      if (!valid.length && incoming.length) throw new Error("Sin registros compatibles");
+      if (mode === "replace" && !window.confirm("Se reemplazarán todos los avalúos actuales por los del respaldo. ¿Deseas continuar?")) return;
+      if (serverOnline) {
+        await apiRequest("/import", { method: "POST", body: JSON.stringify({ mode, records: valid, appraisals: incomingAppraisals }) });
+        const remoteState = await apiRequest("/state");
+        records = remoteState.records.map(normalizeRecord);
+        technicalAppraisals = Array.isArray(remoteState.appraisals) ? remoteState.appraisals : [];
+      } else if (mode === "replace") {
+        records = valid;
+        technicalAppraisals = incomingAppraisals;
+      } else {
+        const existingByNumber = new Map(records.map((record) => [record.numeroAvaluo, record]));
+        valid.forEach((record) => { const existing = existingByNumber.get(record.numeroAvaluo); if (existing) Object.assign(existing, { ...record, id: existing.id }); else records.push({ ...record, id: record.id || `${Date.now()}-${Math.random().toString(16).slice(2)}` }); });
+        const existingAppraisals = new Map(technicalAppraisals.map((appraisal) => [appraisal.id, appraisal]));
+        incomingAppraisals.forEach((appraisal) => existingAppraisals.set(appraisal.id, appraisal));
+        technicalAppraisals = [...existingAppraisals.values()];
+      }
+      saveRecords();
+      saveTechnicalAppraisals();
+      window.dispatchEvent(new CustomEvent("control-avaluos:technical-appraisals-updated"));
+      $("#importFileInput").value = "";
+      message.classList.remove("is-error");
+      message.textContent = `${valid.length} ${valid.length === 1 ? "registro fue importado" : "registros fueron importados"} correctamente${serverOnline ? " en la base central" : ""}.`;
+      render();
+    } catch { message.textContent = "No se pudo importar el archivo. Selecciona un respaldo JSON generado desde esta aplicación."; }
+  }
+
+  async function updateUserRole(user, nextRole) {
+    if (!isAdmin() || !allUsers().includes(user) || DEFAULT_ROLE_BY_USER[user] === "admin" || !VALID_ROLES.includes(nextRole)) return;
+    const message = $("#roleMessage");
+    try {
+      const remoteUser = remoteUsers?.find((item) => item.name === user);
+      if (serverOnline && remoteUser) {
+        const saved = await apiRequest(`/users/${encodeURIComponent(remoteUser.id)}`, { method: "PUT", body: JSON.stringify({ role: nextRole }) });
+        remoteUsers = remoteUsers.map((item) => item.id === saved.id ? { ...item, ...saved } : item);
+      } else {
+        const roles = loadRoles();
+        roles[user] = nextRole;
+        saveRoles(roles);
+      }
+      message.classList.add("is-success");
+      message.textContent = `${user} ahora tiene el rol ${roleLabel(nextRole)}.`;
+      renderUserPermissions();
+      applyRoleUi();
+    } catch (error) { message.textContent = error.message; message.classList.add("is-error"); }
+  }
+  async function updateUserEmail(user, nextEmail) {
+    if (!isAdmin() || !allUsers().includes(user)) return;
+    const email = String(nextEmail || "").trim().toLowerCase();
+    const message = $("#roleMessage");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { message.textContent = "Captura un correo electrónico válido."; message.classList.add("is-error"); return; }
+    try {
+      const remoteUser = remoteUsers?.find((item) => item.name === user);
+      if (serverOnline && remoteUser) {
+        const saved = await apiRequest(`/users/${encodeURIComponent(remoteUser.id)}`, { method: "PUT", body: JSON.stringify({ email }) });
+        remoteUsers = remoteUsers.map((item) => item.id === saved.id ? { ...item, ...saved } : item);
+      }
+      message.classList.remove("is-error");
+      message.classList.add("is-success");
+      message.textContent = `Correo de ${user} actualizado.`;
+      renderUserPermissions();
+    } catch (error) { message.textContent = error.message; message.classList.add("is-error"); }
+  }
+  function renderUserPermissions() {
+    const credentials = loadCredentials();
+    $("#userPermissionsList").innerHTML = allUsers().map((user) => {
+      const role = roleFor(user);
+      const remoteUser = remoteUsers?.find((item) => item.name === user);
+      const email = remoteUser?.email || "";
+      const detail = role === "admin" ? "Control total, contraseñas, resumen y configuración" : role === "auditor" ? "Acceso total a Avalúos, Fe Pública, resumen, Chat y Notas/Tareas" : role === "valuador" ? "Puede crear y editar avalúos técnicos; Recepción solo en consulta" : role === "editor" ? "Puede crear y editar avalúos" : "Solo consulta, recibos y listados";
+      const roleControl = DEFAULT_ROLE_BY_USER[user] === "admin" ? `<span class="role-badge admin">Administrador</span>` : `<label class="role-select-label">Rol<select class="role-select" data-role-user="${escapeHtml(user)}" aria-label="Cambiar rol de ${escapeHtml(user)}"><option value="editor" ${role === "editor" ? "selected" : ""}>Editor(a)</option><option value="viewer" ${role === "viewer" ? "selected" : ""}>Solo lectura</option><option value="valuador" ${role === "valuador" ? "selected" : ""}>Valuador</option><option value="auditor" ${role === "auditor" ? "selected" : ""}>Auditor</option></select></label>`;
+      const emailEditor = `<label class="user-email-editor">Correo electrónico<input type="email" value="${escapeHtml(email)}" data-email-user="${escapeHtml(user)}" placeholder="correo@ejemplo.com" required /><button type="button" class="text-action-button btn-copu-primary" data-save-email-user="${escapeHtml(user)}">Guardar correo</button></label>`;
+      return `<article class="user-permission-row"><div class="user-initial">${escapeHtml(user.split(" ").map((part) => part[0]).slice(0, 2).join(""))}</div><div><strong>${escapeHtml(user)}</strong><span>${detail}</span>${emailEditor}</div><div class="user-permission-status">${roleControl}<small>${credentials[user] ? "Contraseña configurada" : "Sin contraseña"}</small></div></article>`;
+    }).join("");
+    $$(".role-select").forEach((select) => select.addEventListener("change", () => updateUserRole(select.dataset.roleUser, select.value)));
+    $$('[data-save-email-user]').forEach((button) => button.addEventListener("click", () => { const input = document.querySelector(`[data-email-user="${CSS.escape(button.dataset.saveEmailUser)}"]`); updateUserEmail(button.dataset.saveEmailUser, input?.value); }));
+  }
+
+  async function registerUser(event) {
+    event.preventDefault();
+    if (!isAdmin()) return;
+    const user = normalizeUserName($("#newUserName").value);
+    const role = VALID_ROLES.includes($("#newUserRole").value) ? $("#newUserRole").value : "viewer";
+    const email = String($("#newUserEmail").value || "").trim().toLowerCase();
+    const message = $("#addUserMessage");
+    if (user.length < 3) { message.textContent = "Escribe el nombre completo del nuevo usuario."; return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { message.textContent = "Captura un correo electrónico válido."; return; }
+    if (!/[\p{L}]/u.test(user)) { message.textContent = "El nombre debe incluir al menos una letra."; return; }
+    if (allUsers().some((candidate) => candidate.localeCompare(user, "es", { sensitivity: "base" }) === 0)) { message.textContent = "Ese usuario ya está registrado."; return; }
+    const nextRole = role === "editor" ? "editor" : "viewer";
+    try {
+      if (serverOnline) {
+        const created = await apiRequest("/users", { method: "POST", body: JSON.stringify({ name: user, role: nextRole, email }) });
+        remoteUsers = [...(remoteUsers || []), created];
+      } else {
+        const addedUsers = loadAddedUsers();
+        addedUsers.push(user);
+        saveAddedUsers(addedUsers);
+        const roles = loadRoles();
+        roles[user] = nextRole;
+        saveRoles(roles);
+      }
+    } catch (error) { message.textContent = error.message; message.classList.add("is-error"); return; }
+    $("#newUserName").value = "";
+    $("#newUserEmail").value = "";
+    message.classList.add("is-success");
+    message.textContent = `${user} fue registrado como ${roleLabel(nextRole)}. Configura su contraseña antes de iniciar sesión.`;
+    syncUserOptions();
+    renderUserPermissions();
+  }
+
+  function renderNotarySettings() {
+    const target = $("#notariesSettingsList");
+    if (!target) return;
+    target.innerHTML = notarias.length ? notarias.map((item) => `<article class="settings-data-row"><div><strong>Notaría ${escapeHtml(item.numero)} · ${escapeHtml(item.municipio)}</strong><span>${escapeHtml(item.nombre)}${item.direccion ? ` · ${escapeHtml(item.direccion)}` : ""}${item.telefono ? ` · ${escapeHtml(item.telefono)}` : ""}</span></div><div class="settings-row-actions"><button type="button" class="text-action-button btn-copu-primary" data-edit-notary="${escapeHtml(item.id)}">Editar</button><button type="button" class="text-action-button btn-copu-primary is-danger" data-delete-notary="${escapeHtml(item.id)}">Eliminar</button></div></article>`).join("") : '<p class="settings-empty">No hay notarías cargadas.</p>';
+    target.querySelectorAll("[data-edit-notary]").forEach((button) => button.addEventListener("click", () => { const item = notarias.find((candidate) => candidate.id === button.dataset.editNotary); if (!item) return; $("#notaryEditId").value = item.id; $("#notaryMunicipalityInput").value = item.municipio; $("#notaryNumberInput").value = item.numero; $("#notaryNameInput").value = item.nombre; $("#notaryAddressInput").value = item.direccion || ""; $("#notaryPhoneInput").value = item.telefono || ""; }));
+    target.querySelectorAll("[data-delete-notary]").forEach((button) => button.addEventListener("click", async () => { if (!window.confirm("¿Eliminar esta notaría?")) return; try { await apiRequest(`/notarias/${encodeURIComponent(button.dataset.deleteNotary)}`, { method: "DELETE" }); notarias = notarias.filter((item) => item.id !== button.dataset.deleteNotary); renderNotarySettings(); window.dispatchEvent(new CustomEvent("control-avaluos:notarias-updated", { detail: notarias })); } catch (error) { $("#notaryMessage").textContent = error.message; } }));
+  }
+  function renderAuthorizedFolios() {
+    const targets = [$("#authorizedFoliosList"), $("#authorizedFoliosListAvaluos")].filter(Boolean);
+    const validationCard = $(".validation-choice");
+    const validationPanel = $("#avaluosAuthorizedFoliosPanel");
+    const permitted = canAuthorizeFolios();
+    validationCard?.classList.toggle("is-hidden", !permitted);
+    if (validationPanel) validationPanel.classList.toggle("is-hidden", !permitted || !validationPanel.dataset.open);
+    const markup = authorizedAppraisalNumbers.length ? authorizedAppraisalNumbers.map((number) => {
+      const normalized = normalizeNumber(number);
+      const registered = records.some((record) => normalizeNumber(record.numeroAvaluo) === normalized);
+      return `<article class="settings-data-row"><div><strong>#${escapeHtml(number)}</strong><span class="folio-validation-status ${registered ? "is-registered" : "is-pending"}">${registered ? "Registrado en Recepción" : "Autorizado · pendiente de Recepción"}</span></div><button type="button" class="text-action-button btn-copu-primary is-danger" data-delete-authorized-folio="${escapeHtml(number)}">Retirar</button></article>`;
+    }).join("") : '<p class="settings-empty">Aún no hay folios autorizados.</p>';
+    targets.forEach((target) => { target.innerHTML = markup; target.querySelectorAll("[data-delete-authorized-folio]").forEach((button) => button.addEventListener("click", async () => { try { await apiRequest(`/authorized-folios/${encodeURIComponent(button.dataset.deleteAuthorizedFolio)}`, { method: "DELETE" }); authorizedAppraisalNumbers = authorizedAppraisalNumbers.filter((value) => value !== button.dataset.deleteAuthorizedFolio); renderAuthorizedFolios(); } catch (error) { const message = $("#authorizedFolioMessage") || $("#authorizedFolioMessageAvaluos"); if (message) message.textContent = error.message; } })); });
+  }
+  async function renderValidationRegistry() {
+    const target = $("#validationRegistryList");
+    if (!target || !serverOnline || !canAuthorizeFolios()) return;
+    try {
+      const rows = await apiRequest("/authorized-folios/registry");
+      const filter = $("#validationRegistryFilter")?.value || "todos";
+      const visible = (Array.isArray(rows) ? rows : []).filter((item) => filter === "todos" || (filter === "registrado" ? item.registrado : !item.registrado));
+      target.innerHTML = visible.length ? visible.map((item) => {
+        const date = item.fechaRegistro ? new Date(item.fechaRegistro).toLocaleDateString("es-MX", { day: "2-digit", month: "2-digit", year: "numeric" }) : "—";
+        return `<article class="settings-data-row validation-registry-row"><div><strong>#${escapeHtml(item.numeroAvaluo)}</strong><span>Fecha de registro: ${escapeHtml(date)}</span><span class="folio-validation-status ${item.registrado ? "is-registered" : "is-pending"}">${escapeHtml(item.estado)}</span></div><button type="button" class="text-action-button btn-copu-primary is-danger" data-delete-validation-folio="${escapeHtml(item.numeroAvaluo)}" aria-label="Eliminar folio ${escapeHtml(item.numeroAvaluo)}">Eliminar</button></article>`;
+      }).join("") : '<p class="settings-empty">No hay avalúos para este filtro.</p>';
+      target.querySelectorAll("[data-delete-validation-folio]").forEach((button) => button.addEventListener("click", async () => {
+        try { await apiRequest(`/authorized-folios/${encodeURIComponent(button.dataset.deleteValidationFolio)}`, { method: "DELETE" }); authorizedAppraisalNumbers = authorizedAppraisalNumbers.filter((value) => normalizeNumber(value) !== normalizeNumber(button.dataset.deleteValidationFolio)); renderAuthorizedFolios(); renderValidationRegistry(); } catch (error) { window.alert(error.message); }
+      }));
+    } catch (error) { target.innerHTML = `<p class="settings-empty">${escapeHtml(error.message)}</p>`; }
+  }
+  async function renderPendingReceptionSummary() {
+    const target = $("#pendingReceptionSummary");
+    if (!target || !serverOnline) return;
+    try { const data = await apiRequest("/summary/pending-reception"); const pending = Array.isArray(data.pending) ? data.pending : []; target.innerHTML = pending.length ? pending.map((item) => `<article class="settings-data-row"><div><strong>#${escapeHtml(item.numeroAvaluo || "Sin folio")}</strong><span>${escapeHtml(item.tipoAvaluo || item.tipo || "Avalúo técnico")} · ${escapeHtml(item.solicitante || "Sin solicitante")}</span></div></article>`).join("") : '<p class="settings-empty">No hay avalúos pendientes de registrar en Recepción.</p>'; } catch (error) { target.innerHTML = `<p class="settings-empty">${escapeHtml(error.message)}</p>`; }
+  }
+  async function refreshOperationalSettings() {
+    if (!serverOnline) return;
+    try { notarias = await apiRequest("/notarias"); authorizedAppraisalNumbers = await apiRequest("/authorized-folios"); window.__controlNotarias = notarias; window.__controlAuthorizedFolios = authorizedAppraisalNumbers; renderNotarySettings(); renderAuthorizedFolios(); renderPendingReceptionSummary(); window.dispatchEvent(new CustomEvent("control-avaluos:notarias-updated", { detail: notarias })); } catch (error) { const message = $("#notaryMessage"); if (message) message.textContent = error.message; }
+  }
+  function closeCustomSelects(except) {
+    $$(".custom-select.is-open").forEach((wrapper) => { if (wrapper !== except) wrapper.classList.remove("is-open"); });
+  }
+  function enhanceSelect(select) {
+    if (!select || select.dataset.customEnhanced === "true") return;
+    select.dataset.customEnhanced = "true";
+    const wrapper = document.createElement("div");
+    wrapper.className = "custom-select";
+    select.parentNode.insertBefore(wrapper, select);
+    wrapper.appendChild(select);
+    select.classList.add("custom-select-native");
+    const trigger = document.createElement("button");
+    trigger.type = "button";
+    trigger.className = "custom-select-trigger";
+    trigger.setAttribute("aria-haspopup", "listbox");
+    const menu = document.createElement("div");
+    menu.className = "custom-select-menu";
+    menu.setAttribute("role", "listbox");
+    function syncOptions() {
+      const selected = select.options[select.selectedIndex];
+      trigger.textContent = selected?.textContent || "Selecciona una opción";
+      trigger.setAttribute("aria-expanded", String(wrapper.classList.contains("is-open")));
+      menu.innerHTML = [...select.options].map((option, index) => `<button type="button" class="custom-select-option${option.selected ? " is-selected" : ""}" role="option" aria-selected="${option.selected}" data-option-index="${index}">${escapeHtml(option.textContent || "")}</button>`).join("");
+      menu.querySelectorAll("[data-option-index]").forEach((optionButton) => optionButton.addEventListener("click", () => {
+        select.selectedIndex = Number(optionButton.dataset.optionIndex);
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+        wrapper.classList.remove("is-open");
+        syncOptions();
+      }));
+    }
+    trigger.addEventListener("click", () => { const open = !wrapper.classList.contains("is-open"); closeCustomSelects(wrapper); wrapper.classList.toggle("is-open", open); syncOptions(); });
+    select.addEventListener("change", syncOptions);
+    const optionObserver = new MutationObserver(syncOptions);
+    optionObserver.observe(select, { childList: true, subtree: true, attributes: true, attributeFilter: ["selected"] });
+    wrapper.append(trigger, menu);
+    syncOptions();
+  }
+  function enhanceAllSelects() { $("body").querySelectorAll("select:not([data-custom-enhanced='true'])").forEach(enhanceSelect); }
+  document.addEventListener("pointerdown", (event) => { if (!event.target.closest(".custom-select")) closeCustomSelects(); });
+  const selectObserver = new MutationObserver(enhanceAllSelects);
+  selectObserver.observe(document.body, { childList: true, subtree: true });
+  enhanceAllSelects();
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      const activeForm = document.querySelector("#publicRequestForm:not([hidden])") || document.querySelector("form:focus-within");
+      const message = document.querySelector("#publicRequestMessage") || document.querySelector("#formMessage");
+      if (activeForm && message) {
+        message.textContent = "Hay una actualización disponible. Tus datos siguen en esta pantalla; termina o guarda el formulario antes de recargar.";
+        message.className = "form-message is-success";
+        message.hidden = false;
+      }
+    });
+  }
+  loginForm.addEventListener("submit", authenticate);
+  loginUser.addEventListener("change", syncCredentialSetupVisibility);
+  $("#openInternalAccessButton").addEventListener("click", () => { loginMessage.textContent = ""; loginPassword.value = ""; syncCredentialSetupVisibility(); adminAccessDialog.showModal(); window.setTimeout(() => loginUser.focus(), 40); });
+  $("#closeAdminAccessButton").addEventListener("click", () => adminAccessDialog.close());
+  $("#cancelAdminAccessButton").addEventListener("click", () => adminAccessDialog.close());
+  $("#taskForm")?.addEventListener("submit", createTask);
+  $("#homeButton").addEventListener("click", () => { switchAppView("inicio"); renderHomeActions(); });
+  $$('[data-home-action]').forEach((card) => card.addEventListener('click', () => openHomeAction(card.dataset.homeAction)));
+  $("#chatForm").addEventListener("submit", createChatMessage);
+  $("#chatToggleButton").addEventListener("click", () => { const widget = $("#chatWidget"); const panel = $("#chatPanel"); const button = $("#chatToggleButton"); const isOpening = widget.hidden || panel.hidden; widget.hidden = false; panel.hidden = !isOpening; button.setAttribute("aria-expanded", String(isOpening)); button.textContent = isOpening ? "Cerrar" : "Abrir Chat"; if (isOpening) { renderChat(); $("#chatMessageInput").focus(); } });
+  $("#closeChatButton").addEventListener("click", () => { $("#chatPanel").hidden = true; $("#chatWidget").hidden = true; $("#chatToggleButton").setAttribute("aria-expanded", "false"); $("#chatToggleButton").textContent = "Chat"; });
+  $("#openCredentialSetupButton").addEventListener("click", openCredentialSetup);
+  $("#adminProfileButton")?.addEventListener("click", openCredentialSetup);
+  manageUsersButton.addEventListener("click", () => switchAppView("usuarios"));
+  credentialForm.addEventListener("submit", saveCredential);
+  $("#closeCredentialDialogButton").addEventListener("click", closeCredentialSetup);
+  $("#cancelCredentialDialogButton").addEventListener("click", closeCredentialSetup);
+  $("#inlineCredentialForm").addEventListener("submit", saveInlineCredential);
+  $("#addUserForm").addEventListener("submit", registerUser);
+  const profileButton = $("#profileButton");
+  const profileMenu = $("#profileMenu");
+  const closeProfileMenu = () => { if (profileMenu) profileMenu.hidden = true; profileButton?.setAttribute("aria-expanded", "false"); };
+  function profileRequestMatches(item, selectedUser) {
+    const normalizedSelected = String(selectedUser || "").trim().toLowerCase();
+    if (normalizedSelected === "__all") return true;
+    const candidates = [item.asesor, item.usuario, item.creadoPor, item.creadoPorNombre, item.asignadoA, item.responsable, item.solicitante?.nombre, item.solicitante?.correo].map((value) => String(value || "").trim().toLowerCase()).filter(Boolean);
+    const selected = Array.isArray(remoteUsers) ? remoteUsers.find((user) => String(user.name || "").toLowerCase() === normalizedSelected) : null;
+    return candidates.includes(normalizedSelected) || Boolean(selected?.email && candidates.includes(String(selected.email).toLowerCase()));
+  }
+  function syncProfileMetricsFilter(user) {
+    const wrap = $("#profileMetricsFilterWrap");
+    const select = $("#profileMetricsFilter");
+    const isAdmin = roleFor(user) === "admin";
+    if (!wrap || !select) return;
+    wrap.hidden = !isAdmin;
+    if (!isAdmin) return;
+    const selected = select.value || "__all";
+    const users = Array.isArray(remoteUsers) ? remoteUsers : [];
+    select.innerHTML = `<option value="__all">Todos los usuarios</option>${users.map((item) => `<option value="${escapeHtml(item.name)}">${escapeHtml(item.name)}</option>`).join("")}`;
+    select.value = users.some((item) => item.name === selected) || selected === "__all" ? selected : "__all";
+  }
+  function renderProfileDashboard() {
+    const user = String(activeSessionUser || "");
+    syncProfileMetricsFilter(user);
+    const selected = roleFor(user) === "admin" ? ($( "#profileMetricsFilter")?.value || "__all") : user;
+    const allRequests = Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : [];
+    const list = roleFor(user) === "admin" && selected === "__all" ? allRequests : allRequests.filter((item) => profileRequestMatches(item, selected));
+    const total = list.length;
+    const completed = list.filter((item) => String(item.estado || "").toLowerCase() === "concluida").length;
+    const pending = list.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
+    const metricUsers = selected === "__all" ? [...new Set([...(Array.isArray(remoteUsers) ? remoteUsers.map((item) => item.name) : []), user].filter(Boolean))] : [selected];
+    const gamePoints = metricUsers.reduce((sum, metricUser) => { try { return sum + Number(JSON.parse(localStorage.getItem(`cp6_game_stats_${metricUser}`) || "{}").points || 0); } catch { return sum; } }, 0);
+    const points = total * 250 + completed * 250 + gamePoints;
+    $("#profileTotalRequests") && ($("#profileTotalRequests").textContent = String(total));
+    $("#profilePendingRequests") && ($("#profilePendingRequests").textContent = String(pending));
+    $("#profileCompletedRequests") && ($("#profileCompletedRequests").textContent = String(completed));
+    $("#profilePoints") && ($("#profilePoints").textContent = String(points));
+    $("#profileGamePoints") && ($("#profileGamePoints").textContent = String(gamePoints));
+    const setRingProgress = (id, value, color) => { const ring = $(id); if (!ring) return; ring.style.setProperty("--progress", `${Math.round(value * 100)}%`); ring.style.setProperty("--ring-color", color); };
+    setRingProgress("#profileTotalRing", total ? 1 : 0, "#2563eb");
+    setRingProgress("#profilePendingRing", total ? pending / total : 0, "#f59e0b");
+    setRingProgress("#profileCompletedRing", total ? completed / total : 0, "#16a34a");
+    const chart = $("#profileRequestsChart");
+    if (chart) {
+      const max = Math.max(pending, completed, 1);
+      chart.innerHTML = [{ label: "Pendientes", value: pending, className: "pending" }, { label: "Concluidas", value: completed, className: "completed" }].map((item) => `<div class="profile-chart-column"><span class="profile-chart-value">${item.value}</span><div class="profile-chart-bar ${item.className}" style="height:${Math.max(8, Math.round((item.value / max) * 120))}px"></div><span class="profile-chart-label">${item.label}</span></div>`).join("");
+    }
+    const donut = $("#profileRequestsDonut");
+    if (donut) { donut.style.setProperty("--pending-angle", `${total ? Math.round((pending / total) * 360) : 0}deg`); donut.style.background = total ? "" : "#e2e8f0"; donut.setAttribute("aria-label", `Distribución: ${pending} pendientes y ${completed} concluidas`); }
+    $("#profileDonutTotal") && ($("#profileDonutTotal").textContent = String(total));
+  }
+  const openAdminProfile = () => {
+    closeProfileMenu();
+    const user = String(activeSessionUser || "");
+    const remote = Array.isArray(remoteUsers) ? remoteUsers.find((item) => item.name === user) : null;
+    $("#profilePageName") && ($("#profilePageName").textContent = user || "—");
+    $("#profilePageEmail") && ($("#profilePageEmail").textContent = remote?.email || "No registrado");
+    $("#profilePagePhone") && ($("#profilePagePhone").textContent = remote?.phone || "No registrado");
+    $("#profilePageRole") && ($("#profilePageRole").textContent = roleLabel(roleFor(user)));
+    $("#profilePageBrokerage") && ($("#profilePageBrokerage").textContent = remote?.brokerage || "Correduría Pública 6 - Torreón");
+    switchAppView("perfil");
+  };
+  profileButton?.addEventListener("click", (event) => { event.stopPropagation(); openAdminProfile(); });
+  $("#profileMetricsFilter")?.addEventListener("change", renderProfileDashboard);
+  $("#logoutHeaderButton")?.addEventListener("click", () => { sessionStorage.removeItem(SESSION_KEY); showLogin(); });
+  profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); sessionStorage.removeItem(SESSION_KEY); showLogin(); } }));
+  document.addEventListener("click", (event) => { if (profileMenu && !event.target.closest(".profile-menu-wrap")) closeProfileMenu(); });
+  $("#profilePageBackButton")?.addEventListener("click", () => switchAppView("inicio"));
+  $("#newRecordButton").addEventListener("click", () => openDialog());
+  $("#newTechnicalAppraisalButton").addEventListener("click", () => window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-creation")));
+  $("#backAvaluosButton").addEventListener("click", () => {
+    const creationPanel = $("#technicalCreationPanel");
+    const mobiliarioEditor = $("#mobiliarioEditor");
+    const automotrizEditor = $("#automotrizEditor");
+    const editingTechnical = !creationPanel.hidden || !mobiliarioEditor.hidden || !automotrizEditor.hidden;
+    if (editingTechnical) window.dispatchEvent(new CustomEvent("control-avaluos:close-technical-creation"));
+    else window.dispatchEvent(new CustomEvent("control-avaluos:section", { detail: "inicio" }));
+  });
+  window.addEventListener("control-avaluos:subsection-change", (event) => {
+    const section = event.detail;
+    // Cambiar entre Recepción, Gestión o Validación siempre abandona el formulario.
+    if (section !== "recepcion") window.dispatchEvent(new CustomEvent("control-avaluos:close-reception-editor"));
+    if (section !== "crear") window.dispatchEvent(new CustomEvent("control-avaluos:close-technical-creation"));
+    const details = {
+      inicio: { title: "Gestión de Avalúos", description: "Consulta y administra los expedientes técnicos de la Correduría Pública No. 6." },
+      recepcion: { title: "Recepción", description: "Registra y controla los avalúos recibidos, sus pagos y entregas." },
+      crear: { title: "Tipo de avalúo", description: "Selecciona el tipo de avalúo y continúa con las pestañas de avance." },
+      validacion: { title: "Validación", description: "Autoriza folios y verifica cuáles siguen pendientes de Recepción." },
+    }[section] || { title: "Avalúos", description: "" };
+    const inAvaluos = activeAppView === "avaluos";
+    $("#pageTitle").textContent = details.title;
+    $("#pageDescription").textContent = details.description;
+    const workspaceHeader = $("#pageTitle").closest(".workspace-header");
+    workspaceHeader?.classList.toggle("technical-creation-header", inAvaluos && section === "crear");
+    workspaceHeader?.classList.toggle("avaluos-header", inAvaluos && section === "inicio");
+    const backButton = $("#backAvaluosButton");
+    const registerButton = $("#newRecordButton");
+    const createButton = $("#newTechnicalAppraisalButton");
+    backButton?.classList.toggle("is-hidden", !inAvaluos || section === "inicio");
+    registerButton?.classList.toggle("is-hidden", !inAvaluos || section !== "recepcion" || !canEditReception());
+    createButton?.classList.toggle("is-hidden", !inAvaluos || section !== "crear" || !canEdit());
+    if (section === "recepcion") createButton?.classList.add("is-hidden");
+  });
+  window.addEventListener("control-avaluos:technical-creation-state", (event) => {
+    if (activeAppView !== "avaluos") return;
+    $("#newTechnicalAppraisalButton").classList.toggle("is-hidden", Boolean(event.detail) || !canEdit());
+  });
+  window.addEventListener("control-avaluos:close-reception-editor", closeDialog);
+  $("#closeDialogButton").addEventListener("click", closeDialog);
+  $("#cancelDialogButton").addEventListener("click", closeDialog);
+  $("#previewReceiptButton").addEventListener("click", () => openReceipt(formDraft()));
+  paidInput.addEventListener("change", setPaymentVisibility);
+  numberInput.addEventListener("input", () => { numberInput.value = normalizeNumber(numberInput.value); });
+  searchInput.addEventListener("input", () => { receptionPage = 1; if (searchInput.value.trim()) { operationalView = "todos"; $$("[data-view]").forEach((item) => item.classList.toggle("is-active", item.dataset.view === "todos")); } render(); });
+  $$("[data-view]").forEach((button) => button.addEventListener("click", () => { operationalView = button.dataset.view; $$("[data-view]").forEach((item) => item.classList.toggle("is-active", item === button)); render(); }));
+  $$("[data-app-view]").forEach((button) => button.addEventListener("click", (event) => { event.preventDefault(); switchAppView(button.dataset.appView); }));
+  $("#generateInlineReportButton").addEventListener("click", prepareInlineReport);
+  $$('[data-users-section]').forEach((button) => button.addEventListener("click", () => setUsersSection(button.dataset.usersSection)));
+  $$('[data-users-back]').forEach((button) => button.addEventListener("click", () => setUsersSection("menu")));
+  $("#printInlineReportButton").addEventListener("click", printInlineReport);
+  $("#exportCsvSettingsButton").addEventListener("click", exportRecords);
+  $("#exportBackupButton").addEventListener("click", exportBackup);
+  $("#importDataButton").addEventListener("click", importBackup);
+  $("#exportButton").addEventListener("click", () => switchAppView("configuracion"));
+  $("#reportButton").addEventListener("click", () => switchAppView("resumen"));
+  $("#statusViewSelect")?.addEventListener("change", (event) => { operationalView = event.target.value; receptionPage = 1; render(); });
+  $("#notaryForm")?.addEventListener("submit", async (event) => { event.preventDefault(); if (!isAdmin()) return; const id = $("#notaryEditId").value.trim(); const payload = { municipio: $("#notaryMunicipalityInput").value.trim(), numero: $("#notaryNumberInput").value, nombre: $("#notaryNameInput").value.trim(), direccion: $("#notaryAddressInput").value.trim(), telefono: $("#notaryPhoneInput").value.trim() }; const message = $("#notaryMessage"); try { const saved = await apiRequest(id ? `/notarias/${encodeURIComponent(id)}` : "/notarias", { method: id ? "PUT" : "POST", body: JSON.stringify(payload) }); notarias = Array.isArray(saved) ? saved : (id ? notarias.map((item) => item.id === id ? saved : item) : [...notarias, saved]); $("#notaryForm").reset(); $("#notaryEditId").value = ""; message.textContent = "Notaría guardada correctamente."; message.className = "form-message is-success"; renderNotarySettings(); window.dispatchEvent(new CustomEvent("control-avaluos:notarias-updated", { detail: notarias })); } catch (error) { message.textContent = error.message; message.className = "form-message is-error"; } });
+  $("#toggleNotariesRecordsButton")?.addEventListener("click", () => { const target = $("#notariesSettingsList"); const button = $("#toggleNotariesRecordsButton"); if (!target || !button) return; const willShow = target.hidden; target.hidden = !willShow; button.setAttribute("aria-expanded", String(willShow)); button.textContent = willShow ? "Ocultar registros" : "Ver registros"; if (willShow) renderNotarySettings(); });
+  $("#cancelNotaryEditButton")?.addEventListener("click", () => { $("#notaryForm").reset(); $("#notaryEditId").value = ""; });
+  async function saveAuthorizedFolioFrom(inputSelector, messageSelector) { if (!canAuthorizeFolios()) return; const value = normalizeNumber($(inputSelector)?.value || ""); const message = $(messageSelector); if (!/^\d{4}$/.test(value)) { if (message) message.textContent = "Escribe un número de avalúo de cuatro dígitos."; return; }     try { const response = await apiRequest("/authorized-folios", { method: "POST", body: JSON.stringify({ numeroAvaluo: value }) }); authorizedAppraisalNumbers = Array.isArray(response.values) ? response.values : [...new Set([...authorizedAppraisalNumbers, value])].sort(); $(inputSelector).value = ""; if (message) { message.textContent = `El avalúo ${value} quedó autorizado para Recepción.`; message.className = "form-message is-success"; } renderAuthorizedFolios(); await renderPendingReceptionSummary(); } catch (error) { if (message) { message.textContent = error.message; message.className = "form-message is-error"; } } }
+  $("#authorizedFolioForm")?.addEventListener("submit", async (event) => { event.preventDefault(); await saveAuthorizedFolioFrom("#authorizedFolioInput", "#authorizedFolioMessage"); });
+  $("#authorizedFolioFormAvaluos")?.addEventListener("submit", async (event) => { event.preventDefault(); await saveAuthorizedFolioFrom("#authorizedFolioInputAvaluos", "#authorizedFolioMessageAvaluos"); });
+  $("#searchAuthorizedFolioButton")?.addEventListener("click", () => { const value = normalizeNumber($("#authorizedFolioSearchInputAvaluos")?.value || ""); const message = $("#authorizedFolioMessageAvaluos"); if (!/^\d{4}$/.test(value)) { if (message) message.textContent = "Escribe un número de avalúo de cuatro dígitos para buscar."; return; } const authorized = authorizedAppraisalNumbers.some((item) => normalizeNumber(item) === value); const technical = technicalAppraisals.some((item) => normalizeNumber(item.numeroAvaluo || item.numero) === value); const received = records.some((item) => normalizeNumber(item.numeroAvaluo) === value); if (message) { message.textContent = authorized || technical || received ? `El avalúo ${value} fue localizado${received ? " y ya está en Recepción" : technical ? " en expedientes técnicos" : " como folio autorizado"}.` : `No se encontró el avalúo ${value}.`; message.className = `form-message ${authorized || technical || received ? "is-success" : "is-error"}`; } });
+  $("#refreshPendingSummaryButton")?.addEventListener("click", renderPendingReceptionSummary);
+  $("#validationRegistryFilter")?.addEventListener("change", renderValidationRegistry);
+
+  bindHomeIntelligence();
+  bindGames();
+  startVersionMonitor();
+  syncUserOptions();
+  bindMoneyInputs();
+  renderNotarySettings();
+  renderAuthorizedFolios();
+  renderValidationRegistry();
+  loadRemoteState();
+  syncCredentialSetupVisibility();
+  const storedSession = sessionStorage.getItem(SESSION_KEY);
+  if (storedSession && allUsers().includes(storedSession)) { loginUser.value = storedSession; showAuthenticatedApp(storedSession); } else { showLogin(); }
+
+  window.ControlAvaluosDesktop = {
+    canEdit,
+    getActiveUser: () => activeSessionUser,
+    getTechnicalObjectives: loadTechnicalObjectives,
+    saveTechnicalObjectives,
+    saveTechnicalAppraisal,
+    deleteTechnicalAppraisal,
+    getNextTechnicalFolio,
+    getTechnicalAppraisals: () => [...technicalAppraisals],
+    apiRequest,
+    getApiBaseUrl: () => API_BASE_URL,
+    allUsers,
+    canViewRequests,
+    renderAuthorizedFolios,
+    renderPendingReceptionSummary,
+    renderValidationRegistry,
+    refreshRecords: render,
+  };
+})();
+
+/* Herramientas flotantes: cierre externo de alertas y calculadora movible. */
+(() => {
+  const $ = (selector) => document.querySelector(selector);
+  const panel = $("#calculatorPanel");
+  const toggle = $("#calculatorToggleButton");
+  const close = $("#calculatorCloseButton");
+  const display = $("#calculatorDisplay");
+  if (!panel || !toggle || !display) return;
+  let expression = "";
+  let dragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+  const show = (visible) => { panel.hidden = !visible; panel.style.display = visible ? "" : "none"; toggle.setAttribute("aria-expanded", String(visible)); };
+  toggle.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); show(panel.hidden); });
+  close?.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); show(false); panel.hidden = true; panel.style.display = "none"; });
+  const calculate = () => {
+    const candidate = expression.trim();
+    if (!candidate || !/^[0-9+*/().% -]+$/.test(candidate)) return false;
+    try {
+      const result = Function(`"use strict"; return (${candidate})`)();
+      if (!Number.isFinite(result)) return false;
+      expression = String(result);
+      display.value = expression;
+      return true;
+    } catch {
+      display.value = "Error";
+      expression = "";
+      return false;
+    }
+  };
+  panel.querySelectorAll("[data-calc-key]").forEach((button) => button.addEventListener("click", () => {
+    const key = button.dataset.calcKey;
+    if (key === "C") { expression = ""; display.value = "0"; return; }
+    if (key === "backspace") { expression = expression.slice(0, -1); display.value = expression || "0"; return; }
+    if (key === "=") { calculate(); return; }
+    expression += key;
+    display.value = expression;
+  }));
+  const dragHandle = panel.querySelector("[data-calculator-drag]");
+  dragHandle?.addEventListener("pointerdown", (event) => { dragging = true; const rect = panel.getBoundingClientRect(); offsetX = event.clientX - rect.left; offsetY = event.clientY - rect.top; dragHandle.setPointerCapture?.(event.pointerId); panel.classList.add("is-dragging"); });
+  dragHandle?.addEventListener("pointermove", (event) => { if (!dragging) return; panel.style.setProperty("left", `${Math.max(8, event.clientX - offsetX)}px`, "important"); panel.style.setProperty("top", `${Math.max(68, event.clientY - offsetY)}px`, "important"); panel.style.setProperty("right", "auto", "important"); });
+  dragHandle?.addEventListener("pointerup", () => { dragging = false; panel.classList.remove("is-dragging"); });
+  document.addEventListener("keydown", (event) => {
+    if (panel.hidden) return;
+    if (event.key === "Enter") {
+      event.preventDefault();
+      event.stopPropagation();
+      calculate();
+      return;
+    }
+    if (event.key === "Backspace") {
+      if (panel.contains(document.activeElement)) {
+        event.preventDefault();
+        expression = expression.slice(0, -1);
+        display.value = expression || "0";
+      }
+      return;
+    }
+    if (/^[0-9+*/().%-]$/.test(event.key) && panel.contains(document.activeElement)) {
+      event.preventDefault();
+      expression += event.key;
+      display.value = expression;
+    }
+  }, true);
+})();
