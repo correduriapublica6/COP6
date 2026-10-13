@@ -11536,3 +11536,65 @@ html body #appShell.control-shell .app-workspace {
 #appShell.control-shell .request-table-compact .request-status-select { display:none !important; }
 #appShell.control-shell .game-stage { margin-top:0 !important; border-top-left-radius:0 !important; border-top-right-radius:0 !important; }
 #appShell.control-shell .game-stage-toolbar { min-height:48px !important; padding-top:6px !important; padding-bottom:6px !important; }
+
+/* Corrección definitiva: tarjeta de detalle sin duplicación visible y controles seguros */
+#requestDetailDialog.client-luxury-detail .request-detail-blue-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 14px !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-inline-actions {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 8px 0 4px !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-inline-actions .request-detail-button {
+  white-space: nowrap !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-head-actions {
+  display: none !important;
+}
+#requestDetailDialog.client-luxury-detail .request-pane-heading {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+#requestDetailDialog.client-luxury-detail .request-pane-heading > div {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+#requestDetailDialog.client-luxury-detail .client-edit-info-form[hidden],
+#requestDetailDialog.client-luxury-detail [hidden] {
+  display: none !important;
+}
+#requestDetailDialog.client-luxury-detail .client-edit-info-form:not([hidden]) {
+  display: grid !important;
+}
+
+/* Recepción, Gestión y Solicitudes: encabezados y filas con la misma altura */
+#appShell.control-shell #statusRecordList .operational-table-compact th,
+#appShell.control-shell #statusRecordList .operational-table-compact td,
+#appShell.control-shell #technicalAppraisalList .technical-table th,
+#appShell.control-shell #technicalAppraisalList .technical-table td,
+#appShell.control-shell #serviceRequestsTable .request-table-compact th,
+#appShell.control-shell #serviceRequestsTable .request-table-compact td {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  height: 38px !important;
+  line-height: 1.2 !important;
+  vertical-align: middle !important;
+}
+#appShell.control-shell #statusRecordList .operational-table-compact thead th,
+#appShell.control-shell #technicalAppraisalList .technical-table thead th,
+#appShell.control-shell #serviceRequestsTable .request-table-compact thead th {
+  height: 38px !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+@media (max-width: 760px) {
+  #requestDetailDialog.client-luxury-detail .request-detail-inline-actions { flex-wrap: wrap !important; }
+}
