@@ -681,6 +681,15 @@
       renderAlerts();
     } catch { /* La interfaz conserva la última lectura local si el servidor está reiniciando. */ }
   }
+  let versionPopupVersion = "";
+  function showVersionUpdatePopup(serverVersion) {
+    const dialog = $("#versionUpdateDialog");
+    if (!dialog || !serverVersion) return;
+    if (versionPopupVersion === serverVersion && dialog.open) return;
+    versionPopupVersion = serverVersion;
+    dialog.dataset.version = serverVersion;
+    if (!dialog.open) dialog.showModal?.();
+  }
   async function checkAppVersion() {
     try {
       const response = await apiRequest("/version");
@@ -692,11 +701,20 @@
         await apiRequest("/notifications/system-version", { method: "POST", body: JSON.stringify({ clientVersion }) });
         notifications = await apiRequest("/notifications");
         renderAlerts();
+        showVersionUpdatePopup(serverVersion);
       }
     } catch { /* El servidor puede estar reiniciándose; se reintentará en la siguiente revisión. */ }
   }
   function startVersionMonitor() {
     if (versionMonitorId) return;
+    $("#versionUpdateReloadButton")?.addEventListener("click", () => {
+      const dialog = $("#versionUpdateDialog");
+      const version = dialog?.dataset.version || "";
+      if (version) localStorage.setItem("app_version", version);
+      dialog?.close();
+      window.location.reload(true);
+    });
+    $("#versionUpdateLaterButton")?.addEventListener("click", () => $("#versionUpdateDialog")?.close());
     checkAppVersion();
     versionMonitorId = window.setInterval(() => { if (!document.hidden) checkAppVersion(); }, 5 * 60 * 1000);
   }

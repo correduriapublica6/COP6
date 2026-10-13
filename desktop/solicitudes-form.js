@@ -653,7 +653,11 @@
     if (!table) return;
     try {
       const applicants = await api("/applicants");
-      table.innerHTML = applicants.length ? `<table class="request-table"><thead><tr><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Registro</th><th>Acciones</th></tr></thead><tbody>${applicants.map((item) => `<tr><td>${escapeHtml(item.name)}</td><td>${escapeHtml(item.email)}</td><td>${escapeHtml(item.phone || "")}</td><td>${escapeHtml(item.createdAt?.slice(0, 10) || "")}</td><td class="request-action-cell"><button type="button" class="request-detail-button" data-edit-applicant="${escapeHtml(item.id)}">Editar</button><button type="button" class="request-detail-button is-danger" data-delete-applicant="${escapeHtml(item.id)}">Eliminar</button></td></tr>`).join("")}</tbody></table>` : `<p class="request-empty">No hay solicitantes registrados.</p>`;
+      const query = String($("#registeredApplicantsSearchInput")?.value || "").trim().toLocaleLowerCase("es-MX");
+      const visible = applicants.filter((item) => !query || [item.name, item.email, item.phone, item.createdAt].join(" ").toLocaleLowerCase("es-MX").includes(query));
+      const editIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"></path><path d="m14 7 3 3"></path></svg>`;
+      const deleteIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7l1-3h4l1 3"></path></svg>`;
+      table.innerHTML = visible.length ? `<table class="request-table request-table-compact users-external-table"><thead><tr><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Registro</th><th>Acciones</th></tr></thead><tbody>${visible.map((item) => `<tr><td><strong>${escapeHtml(item.name)}</strong></td><td>${escapeHtml(item.email)}</td><td>${escapeHtml(item.phone || "—")}</td><td>${escapeHtml(item.createdAt?.slice(0, 10) || "—")}</td><td class="request-action-cell"><button type="button" class="request-icon-button request-info-button" data-edit-applicant="${escapeHtml(item.id)}" title="Editar usuario" aria-label="Editar usuario">${editIcon}</button><button type="button" class="request-icon-button request-delete-button" data-delete-applicant="${escapeHtml(item.id)}" title="Eliminar usuario" aria-label="Eliminar usuario">${deleteIcon}</button></td></tr>`).join("")}</tbody></table>` : `<p class="request-empty">${query ? "No se encontraron usuarios externos." : "No hay solicitantes registrados."}</p>`;
       table.querySelectorAll("[data-edit-applicant]").forEach((button) => button.addEventListener("click", () => editApplicant(applicants.find((item) => item.id === button.dataset.editApplicant))));
       table.querySelectorAll("[data-delete-applicant]").forEach((button) => button.addEventListener("click", () => deleteApplicant(button.dataset.deleteApplicant)));
     } catch { table.innerHTML = `<p class="request-empty">No se pudo cargar la lista de solicitantes.</p>`; }
@@ -752,6 +756,7 @@
     $("#cancelApplicantProfileButton")?.addEventListener("click", () => closeDialog($("#applicantProfileDialog")));
     $("#applicantHomeLogoutButton")?.addEventListener("click", () => { applicantSession = null; sessionStorage.removeItem("control-avaluos.applicant"); showPublicEntry(); });
     $("#requestSearchInput")?.addEventListener("input", () => { requestsPage = 1; renderRequests(); });
+    $("#registeredApplicantsSearchInput")?.addEventListener("input", renderRegisteredApplicants);
     $("#requestStatusFilter")?.addEventListener("change", () => { requestsPage = 1; renderRequests(); });
     window.addEventListener("control-avaluos:authenticated", () => { renderWelcomeRequests(); renderRequests(); });
     window.addEventListener("control-avaluos:users-view", renderRegisteredApplicants);
