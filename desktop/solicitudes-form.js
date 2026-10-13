@@ -57,7 +57,7 @@
     const list = $("#publicRequestAttachmentsList");
     if (!list) return;
     list.innerHTML = archivosSeleccionados.length ? `<ul>${archivosSeleccionados.map((file, index) => `<li><span title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</span><small>${Math.max(1, Math.round(file.size / 1024))} KB</small><button type="button" data-remove-request-file="${index}" aria-label="Quitar ${escapeHtml(file.name)}">Quitar</button></li>`).join("")}</ul>` : "";
-    list.querySelectorAll("[data-remove-request-file]").forEach((button) => button.addEventListener("click", () => {
+    list.querySelectorAll("[data-remove-request-file]").forEach((button) => button?.addEventListener("click", () => {
       archivosSeleccionados.splice(Number(button.dataset.removeRequestFile), 1);
       renderSelectedFiles();
     }));
@@ -111,7 +111,7 @@
       const text = normalizeSearch(query.value);
       const list = (Array.isArray(window.__controlNotarias) ? window.__controlNotarias : []).filter((item) => (!municipalityValue || normalizeSearch(item.municipio) === municipalityValue) && (!text || normalizeSearch(`${item.numero} ${item.nombre}`).includes(text))).slice(0, 30);
       results.innerHTML = list.length ? list.map((item) => { const value = `${item.numero} · ${item.municipio} · ${item.nombre}`; return `<button type="button" class="notary-search-result${hidden.value === value ? " is-selected" : ""}" data-notary-value="${escapeHtml(value)}"><strong>${escapeHtml(item.numero)} · ${escapeHtml(item.nombre)}</strong><span>${escapeHtml(item.municipio)}${item.direccion ? ` · ${escapeHtml(item.direccion)}` : ""}</span></button>`; }).join("") : `<p class="notary-search-empty">Selecciona un municipio y escribe el número o nombre de la notaría.</p>`;
-      results.querySelectorAll("[data-notary-value]").forEach((button) => button.addEventListener("click", () => { hidden.value = button.dataset.notaryValue || ""; const item = (Array.isArray(window.__controlNotarias) ? window.__controlNotarias : []).find((candidate) => `${candidate.numero} · ${candidate.municipio} · ${candidate.nombre}` === hidden.value); if (item) { municipality.value = item.municipio; query.value = `${item.numero} · ${item.nombre}`; } results.querySelectorAll(".notary-search-result").forEach((candidate) => candidate.classList.toggle("is-selected", candidate === button)); }));
+      results.querySelectorAll("[data-notary-value]").forEach((button) => button?.addEventListener("click", () => { hidden.value = button.dataset.notaryValue || ""; const item = (Array.isArray(window.__controlNotarias) ? window.__controlNotarias : []).find((candidate) => `${candidate.numero} · ${candidate.municipio} · ${candidate.nombre}` === hidden.value); if (item) { municipality.value = item.municipio; query.value = `${item.numero} · ${item.nombre}`; } results.querySelectorAll(".notary-search-result").forEach((candidate) => candidate.classList.toggle("is-selected", candidate === button)); }));
     };
     municipality.onchange = render; query.oninput = render; render();
   }
@@ -129,12 +129,12 @@
     if (!container) return;
     if (type === "Inmuebles") {
       container.innerHTML = `<div class="request-subgrid"><label>Modalidad *<select name="modalidadInmueble" id="requestInmuebleMode"><option value="">Selecciona</option><option>Referido</option><option>Comercial</option><option>Otro</option></select></label><div id="requestInmuebleModeFields"></div><label>Subtipo de bien *<select name="subtipoBien"><option value="">Selecciona</option><option>Terreno</option><option>Construcción</option></select></label><label>Valor de la operación<input name="valorOperacion" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></label><label>Número de enajenantes<input name="numeroEnajenantes" type="number" min="0" step="1" /></label><label>Propietario<input name="propietario" /></label></div>`;
-      $("#requestInmuebleMode").addEventListener("change", renderInmuebleModeFields);
+      $("#requestInmuebleMode")?.addEventListener("change", renderInmuebleModeFields);
     } else if (["Automotriz", "Maquinaria y equipo", "Mobiliario y Bienes Diversos"].includes(type)) {
       container.innerHTML = `<div class="request-subgrid"><label>Calle<input name="calle" /></label><label>Número<input name="numero" /></label><label>Colonia<input name="colonia" /></label><label>Ciudad<input name="ciudad" /></label><label>Propietario<input name="propietario" /></label></div>`;
     } else if (type === "Intangibles") {
       container.innerHTML = `<div class="request-subgrid"><label>Tipo de intangible *<select name="tipoIntangible" id="requestIntangibleType"><option value="">Selecciona</option><option>Empresa en marcha</option><option>Marca</option><option>Patente</option><option>Títulos accionarios</option><option>Partes sociales</option><option>Otro</option></select></label><div id="requestIntangibleOther"></div></div>`;
-      $("#requestIntangibleType").addEventListener("change", () => { $("#requestIntangibleOther").innerHTML = $("#requestIntangibleType").value === "Otro" ? `<label>Describe el intangible<input name="otroIntangible" required /></label>` : ""; });
+      $("#requestIntangibleType")?.addEventListener("change", () => { $("#requestIntangibleOther").innerHTML = $("#requestIntangibleType").value === "Otro" ? `<label>Describe el intangible<input name="otroIntangible" required /></label>` : ""; });
     } else container.innerHTML = "";
   }
 
@@ -251,7 +251,7 @@
     const unread = applicantNotifications.filter((item) => !item.leida).length;
     if (count) { count.textContent = String(unread); count.hidden = unread < 1; }
     list.innerHTML = applicantNotifications.length ? applicantNotifications.slice(0, 50).map((item) => `<button type="button" class="applicant-notification-item${item.leida ? " is-read" : ""}" data-applicant-notification-id="${escapeHtml(item.id)}"><span class="applicant-notification-icon">${item.tipo === "cambio_estatus" ? "↻" : item.tipo === "actualizacion" ? "↻" : "✓"}</span><span><strong>${escapeHtml(item.titulo)}</strong><small>${escapeHtml(item.mensaje)}<br />${escapeHtml(requestDate(item.created_at))}</small></span></button>`).join("") : "<p>No hay notificaciones.</p>";
-    list.querySelectorAll("[data-applicant-notification-id]").forEach((button) => button.addEventListener("click", async () => {
+    list.querySelectorAll("[data-applicant-notification-id]").forEach((button) => button?.addEventListener("click", async () => {
       const item = applicantNotifications.find((candidate) => candidate.id === button.dataset.applicantNotificationId);
       if (!item) return;
       try {
@@ -362,7 +362,7 @@
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "application/pdf,.pdf";
-    input.addEventListener("change", async () => {
+    input?.addEventListener("change", async () => {
       const file = input.files?.[0];
       if (!file) return;
       const formData = new FormData();
@@ -384,7 +384,7 @@
     input.type = "file";
     input.accept = "image/*,.pdf,.doc,.docx";
     input.multiple = true;
-    input.addEventListener("change", async () => {
+    input?.addEventListener("change", async () => {
       const selected = Array.from(input.files || []);
       if (!selected.length) return;
       const formData = new FormData();
@@ -460,7 +460,7 @@
       const query = [nameInput.value, emailInput.value, phoneInput.value].join(" ").trim().toLocaleLowerCase("es-MX");
       const matches = !query ? applicants.slice(0, 8) : applicants.filter((user) => [user.name, user.email, user.phone].join(" ").toLocaleLowerCase("es-MX").includes(query)).slice(0, 8);
       results.innerHTML = matches.length ? matches.map((user) => `<button type="button" class="request-external-result" data-external-result="${escapeHtml(user.id)}"><strong>${escapeHtml(user.name)}</strong><small>${escapeHtml(user.email || "")} · ${escapeHtml(user.phone || "Sin teléfono")}</small></button>`).join("") : `<small class="request-external-empty">No se encontraron usuarios externos.</small>`;
-      results.querySelectorAll("[data-external-result]").forEach((button) => button.addEventListener("click", () => {
+      results.querySelectorAll("[data-external-result]").forEach((button) => button?.addEventListener("click", () => {
         selected = applicants.find((user) => user.id === button.dataset.externalResult) || null;
         if (selected) { nameInput.value = selected.name || ""; emailInput.value = selected.email || ""; phoneInput.value = selected.phone || ""; }
         results.innerHTML = selected ? `<small class="request-external-selected">Seleccionado: ${escapeHtml(selected.name)}</small>` : "";
@@ -469,9 +469,9 @@
     try {
       applicants = await api("/applicants");
       if (selected) { nameInput.value = selected.name; emailInput.value = selected.email; phoneInput.value = selected.phone; }
-      [nameInput, emailInput, phoneInput].forEach((input) => input.addEventListener("input", () => { selected = null; renderMatches(); }));
+      [nameInput, emailInput, phoneInput].forEach((input) => input?.addEventListener("input", () => { selected = null; renderMatches(); }));
       renderMatches();
-      save.addEventListener("click", async () => {
+      save?.addEventListener("click", async () => {
         if (!selected) selected = applicants.find((user) => String(user.name || "").toLocaleLowerCase("es-MX") === nameInput.value.trim().toLocaleLowerCase("es-MX") || String(user.email || "").toLowerCase() === emailInput.value.trim().toLowerCase() || String(user.phone || "").trim() === phoneInput.value.trim()) || null;
         if (!selected) { window.alert("Busca y selecciona un usuario externo antes de asignar."); return; }
         save.disabled = true;
@@ -522,12 +522,12 @@
     const externalName = item.asignadoExternoNombre || "";
     detail.innerHTML = `<div class="request-detail-compact-head request-detail-blue-head"><div><strong class="request-detail-user-name">${readValue(currentApplicant.nombre || creatorName)}</strong><span class="request-detail-request-number">No. de solicitud: <b>${readValue(item.folio || "Pendiente")}</b></span><div class="request-detail-inline-actions"><button type="button" class="request-detail-button btn-dorado" data-open-appraisal-popup>Asignar avalúo</button><button type="button" class="request-detail-button btn-crema" data-open-external-popup>${externalName ? "Cambiar usuario externo" : "Asignar usuario externo"}</button></div><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small><div class="request-creator-summary"><span>Registró la solicitud</span><strong>${readValue(creatorName)}</strong>${creatorRole ? `<small>${escapeHtml(creatorRole)}</small>` : ""}</div></div><div class="request-detail-head-actions"></div></div><div class="request-detail-compact-grid request-detail-blue-grid"><section class="request-detail-pane"><div class="request-pane-heading"><div><strong>Expediente digital</strong><small>${files.length} documento(s)</small></div><button type="button" class="client-outline-button btn-crema" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div><ul class="request-files-grid">${filesMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${uploadFinal}</div><div class="final-pdf-actions">${finalActions}</div></section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong><button type="button" class="request-detail-button btn-crema" data-edit-request-info>Editar información</button></div><div class="client-read-info-grid" data-read-request-info>${readFields}</div><form class="client-edit-info-form" data-request-info-form hidden>${editFields}<div class="client-edit-info-actions"><p data-edit-message hidden></p><button type="button" class="request-detail-button btn-crema" data-cancel-request-info>Cancelar</button><button type="submit" class="request-detail-button btn-dorado" data-save-request-info>Guardar cambios</button></div></form></section></div><div class="request-submodal" data-appraisal-popup hidden><div class="request-submodal-card"><h3>Asignar avalúo</h3><p>Escribe el número de avalúo de 4 dígitos.</p><input data-popup-appraisal-number inputmode="numeric" maxlength="4" value="${escapeHtml(appraisalNumber)}" placeholder="0000" /><div><button type="button" class="btn-crema" data-close-submodal>Cancelar</button><button type="button" class="btn-dorado" data-accept-appraisal>Aceptar</button></div></div></div><div class="request-submodal" data-external-popup hidden><div class="request-submodal-card"><h3>Asignar usuario externo</h3><input data-popup-external-search placeholder="Buscar por nombre, correo o teléfono" /><div class="request-popup-results" data-popup-external-results></div><div><button type="button" class="btn-crema" data-close-submodal>Cancelar</button><button type="button" class="btn-dorado" data-accept-external disabled>Aceptar</button></div></div></div>`;
     openDialog(dialog);
-    detail.querySelectorAll("[data-view-file]").forEach((button) => button.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
+    detail.querySelectorAll("[data-view-file]").forEach((button) => button?.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
     detail.querySelector("[data-view-final-pdf]")?.addEventListener("click", (event) => openResourceViewer(event.currentTarget.dataset.viewFinalPdf, "Avalúo final.pdf", "application/pdf"));
     detail.querySelector("[data-attach-missing]")?.addEventListener("click", () => annexDocuments(item));
     detail.querySelector("[data-upload-final-pdf]")?.addEventListener("click", () => uploadFinalPdf(item));
     const closeSubmodals = () => detail.querySelectorAll("[data-appraisal-popup],[data-external-popup]").forEach((modal) => { modal.hidden = true; });
-    detail.querySelectorAll("[data-close-submodal]").forEach((button) => button.addEventListener("click", closeSubmodals));
+    detail.querySelectorAll("[data-close-submodal]").forEach((button) => button?.addEventListener("click", closeSubmodals));
     const appraisalPopup = detail.querySelector("[data-appraisal-popup]");
     detail.querySelector("[data-open-appraisal-popup]")?.addEventListener("click", () => { closeSubmodals(); appraisalPopup.hidden = false; appraisalPopup.querySelector("input")?.focus(); });
     detail.querySelector("[data-accept-appraisal]")?.addEventListener("click", async () => {
@@ -538,14 +538,14 @@
     const externalPopup = detail.querySelector("[data-external-popup]"); const search = detail.querySelector("[data-popup-external-search]"); const resultBox = detail.querySelector("[data-popup-external-results]"); const acceptExternal = detail.querySelector("[data-accept-external]");
     let externalUsers = []; let selectedExternal = null;
     detail.querySelector("[data-open-external-popup]")?.addEventListener("click", async () => { closeSubmodals(); externalPopup.hidden = false; search.focus(); try { externalUsers = await api("/applicants"); } catch (error) { resultBox.innerHTML = `<small>${escapeHtml(error.message || "No se pudieron cargar los usuarios.")}</small>`; } });
-    search?.addEventListener("input", () => { selectedExternal = null; acceptExternal.disabled = true; const query = search.value.trim().toLocaleLowerCase("es-MX"); if (!query) { resultBox.innerHTML = ""; return; } const matches = externalUsers.filter((user) => [user.name, user.email, user.phone].join(" ").toLocaleLowerCase("es-MX").includes(query)).slice(0, 8); resultBox.innerHTML = matches.length ? matches.map((user) => `<button type="button" class="request-popup-result" data-external-id="${escapeHtml(user.id)}"><strong>${escapeHtml(user.name)}</strong><small>${escapeHtml(user.email || "")} · ${escapeHtml(user.phone || "Sin teléfono")}</small></button>`).join("") : `<small>No se encontraron usuarios.</small>`; resultBox.querySelectorAll("[data-external-id]").forEach((button) => button.addEventListener("click", () => { selectedExternal = externalUsers.find((user) => user.id === button.dataset.externalId); search.value = selectedExternal?.name || ""; acceptExternal.disabled = !selectedExternal; resultBox.innerHTML = selectedExternal ? `<small>Seleccionado: ${escapeHtml(selectedExternal.name)}</small>` : ""; })); });
+    search?.addEventListener("input", () => { selectedExternal = null; acceptExternal.disabled = true; const query = search.value.trim().toLocaleLowerCase("es-MX"); if (!query) { resultBox.innerHTML = ""; return; } const matches = externalUsers.filter((user) => [user.name, user.email, user.phone].join(" ").toLocaleLowerCase("es-MX").includes(query)).slice(0, 8); resultBox.innerHTML = matches.length ? matches.map((user) => `<button type="button" class="request-popup-result" data-external-id="${escapeHtml(user.id)}"><strong>${escapeHtml(user.name)}</strong><small>${escapeHtml(user.email || "")} · ${escapeHtml(user.phone || "Sin teléfono")}</small></button>`).join("") : `<small>No se encontraron usuarios.</small>`; resultBox.querySelectorAll("[data-external-id]").forEach((button) => button?.addEventListener("click", () => { selectedExternal = externalUsers.find((user) => user.id === button.dataset.externalId); search.value = selectedExternal?.name || ""; acceptExternal.disabled = !selectedExternal; resultBox.innerHTML = selectedExternal ? `<small>Seleccionado: ${escapeHtml(selectedExternal.name)}</small>` : ""; })); });
     acceptExternal?.addEventListener("click", async () => { if (!selectedExternal) return; try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ asignadoExternoId: selectedExternal.id, asignadoExternoEmail: selectedExternal.email || "", asignadoExternoNombre: selectedExternal.name || "" }) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); } catch (error) { window.alert(error.message || "No se pudo asignar el usuario externo."); } });
     const editButton = detail.querySelector("[data-edit-request-info]"); const readPanel = detail.querySelector("[data-read-request-info]"); const editForm = detail.querySelector("[data-request-info-form]");
     editButton?.addEventListener("click", () => { if (!readPanel || !editForm) return; readPanel.hidden = true; editButton.hidden = true; editForm.hidden = false; editForm.querySelector("input, textarea, select")?.focus(); });
     detail.querySelector("[data-cancel-request-info]")?.addEventListener("click", () => { if (!editForm || !readPanel || !editButton) return; editForm.hidden = true; readPanel.hidden = false; editButton.hidden = false; });
     editForm?.addEventListener("submit", async (event) => { event.preventDefault(); const values = Object.fromEntries(new FormData(editForm).entries()); const nextSpecific = { ...specific }; Object.entries(values).forEach(([key, value]) => { if (key.startsWith("specific:")) nextSpecific[key.slice(9)] = value; }); const body = { solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo }, propietario: values.propietario, valorOperacion: values.valorOperacion, tipoBien: values.tipoBien, tipoAvaluo: values.tipoAvaluo, asesor: values.asesor, notaria: values.notaria, modalidad: values.modalidad, observaciones: values.observaciones, datosEspecificos: { ...nextSpecific, ...Object.fromEntries(Object.entries(values).filter(([key]) => !key.startsWith("specific:") && !["nombre", "telefono", "correo"].includes(key))) } }; try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify(body) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); } catch (error) { const message = editForm.querySelector("[data-edit-message]"); message.textContent = error.message || "No se pudieron guardar los cambios."; message.hidden = false; } });
   }
-  function bindRequestDetailButtons(container, list) { container.querySelectorAll("[data-request-detail]").forEach((button) => button.addEventListener("click", () => { const item = list.find((candidate) => candidate.id === button.dataset.requestDetail); if (item) renderRequestDetail(item); })); }
+  function bindRequestDetailButtons(container, list) { container.querySelectorAll("[data-request-detail]").forEach((button) => button?.addEventListener("click", () => { const item = list.find((candidate) => candidate.id === button.dataset.requestDetail); if (item) renderRequestDetail(item); })); }
 
   async function submitPublicRequest(event) {
     event.preventDefault();
@@ -601,7 +601,7 @@
     const own = await api(`/mis-solicitudes?email=${encodeURIComponent(applicantSession.email)}&usuario_id=${encodeURIComponent(applicantSession.id || "")}`);
     table.innerHTML = applicantOwnRequestsTable(own);
     bindRequestDetailButtons(table, own);
-    table.querySelectorAll("[data-edit-own-request]").forEach((button) => button.addEventListener("click", () => { const item = own.find((candidate) => candidate.id === button.dataset.editOwnRequest); if (item) editOwnRequest(item); }));
+    table.querySelectorAll("[data-edit-own-request]").forEach((button) => button?.addEventListener("click", () => { const item = own.find((candidate) => candidate.id === button.dataset.editOwnRequest); if (item) editOwnRequest(item); }));
     openDialog(applicantRequestsDialog);
   }
   function editOwnRequest(item) {
@@ -689,8 +689,8 @@
       const editIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"></path><path d="m14 7 3 3"></path></svg>`;
       const deleteIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7l1-3h4l1 3"></path></svg>`;
       table.innerHTML = visible.length ? `<table class="request-table request-table-compact users-external-table"><thead><tr><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Registro</th><th>Acciones</th></tr></thead><tbody>${visible.map((item) => `<tr><td><strong>${escapeHtml(item.name)}</strong></td><td>${escapeHtml(item.email)}</td><td>${escapeHtml(item.phone || "—")}</td><td>${escapeHtml(item.createdAt?.slice(0, 10) || "—")}</td><td class="request-action-cell"><button type="button" class="request-icon-button request-info-button" data-edit-applicant="${escapeHtml(item.id)}" title="Editar usuario" aria-label="Editar usuario">${editIcon}</button><button type="button" class="request-icon-button request-delete-button" data-delete-applicant="${escapeHtml(item.id)}" title="Eliminar usuario" aria-label="Eliminar usuario">${deleteIcon}</button></td></tr>`).join("")}</tbody></table>` : `<p class="request-empty">${query ? "No se encontraron usuarios externos." : "No hay solicitantes registrados."}</p>`;
-      table.querySelectorAll("[data-edit-applicant]").forEach((button) => button.addEventListener("click", () => editApplicant(applicants.find((item) => item.id === button.dataset.editApplicant))));
-      table.querySelectorAll("[data-delete-applicant]").forEach((button) => button.addEventListener("click", () => deleteApplicant(button.dataset.deleteApplicant)));
+      table.querySelectorAll("[data-edit-applicant]").forEach((button) => button?.addEventListener("click", () => editApplicant(applicants.find((item) => item.id === button.dataset.editApplicant))));
+      table.querySelectorAll("[data-delete-applicant]").forEach((button) => button?.addEventListener("click", () => deleteApplicant(button.dataset.deleteApplicant)));
     } catch { table.innerHTML = `<p class="request-empty">No se pudo cargar la lista de solicitantes.</p>`; }
   }
   async function editApplicant(item) {
@@ -731,8 +731,8 @@
     const pageItems = visible.slice((requestsPage - 1) * REQUESTS_PAGE_SIZE, requestsPage * REQUESTS_PAGE_SIZE);
     table.innerHTML = `${requestRows(pageItems, ["admin", "auditor", "valuador"].includes(role), true, role === "admin")}${requestsPagination(requestsPage, visible.length)}`;
     bindRequestDetailButtons(table, pageItems);
-    table.querySelectorAll("[data-requests-page]").forEach((button) => button.addEventListener("click", () => { if (button.disabled) return; requestsPage = Number(button.dataset.requestsPage) || 1; renderRequests(); }));
-    table.querySelectorAll("[data-delete-request]").forEach((button) => button.addEventListener("click", () => deleteRequest(button.dataset.deleteRequest))); table.querySelectorAll("[data-upload-final-row]").forEach((button) => button.addEventListener("click", () => { const item = requests.find((request) => request.id === button.dataset.uploadFinalRow); if (item) uploadFinalPdf(item); }));
+    table.querySelectorAll("[data-requests-page]").forEach((button) => button?.addEventListener("click", () => { if (button.disabled) return; requestsPage = Number(button.dataset.requestsPage) || 1; renderRequests(); }));
+    table.querySelectorAll("[data-delete-request]").forEach((button) => button?.addEventListener("click", () => deleteRequest(button.dataset.deleteRequest))); table.querySelectorAll("[data-upload-final-row]").forEach((button) => button?.addEventListener("click", () => { const item = requests.find((request) => request.id === button.dataset.uploadFinalRow); if (item) uploadFinalPdf(item); }));
   }
 
   async function renderWelcomeRequests() {

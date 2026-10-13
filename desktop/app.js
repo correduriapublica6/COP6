@@ -103,7 +103,7 @@
     const gallery = $("#profileAvatarGallery");
     if (!gallery) return;
     gallery.innerHTML = PROFILE_AVATARS.map((avatar, index) => `<button type="button" class="profile-avatar-option${avatar === selected ? " is-selected" : ""}" data-profile-avatar="${index}" aria-label="Seleccionar avatar ${index + 1}"><img src="${avatar}" alt="Avatar profesional ${index + 1}"></button>`).join("");
-    gallery.querySelectorAll("[data-profile-avatar]").forEach((button) => button.addEventListener("click", () => {
+    gallery.querySelectorAll("[data-profile-avatar]").forEach((button) => button?.addEventListener("click", () => {
       const avatar = PROFILE_AVATARS[Number(button.dataset.profileAvatar)];
       gallery.querySelectorAll(".profile-avatar-option").forEach((item) => item.classList.toggle("is-selected", item === button));
       gallery.dataset.selectedAvatar = avatar;
@@ -405,7 +405,7 @@
       oscillator.connect(gain).connect(context.destination);
       oscillator.start();
       oscillator.stop(context.currentTime + 0.24);
-      oscillator.addEventListener("ended", () => context.close(), { once: true });
+      oscillator?.addEventListener("ended", () => context.close(), { once: true });
     } catch {}
   }
 
@@ -575,8 +575,8 @@
     assignedList.innerHTML = renderItems(assignedTasks);
     createdList.innerHTML = splitCreated(createdTasks);
     [assignedList, createdList].forEach((list) => {
-      list.querySelectorAll("[data-complete-task]:not(:disabled)").forEach((checkbox) => checkbox.addEventListener("change", () => toggleTask(checkbox.dataset.completeTask, checkbox.checked)));
-      list.querySelectorAll("[data-remove-task]").forEach((button) => button.addEventListener("click", () => removeTask(button.dataset.removeTask)));
+      list.querySelectorAll("[data-complete-task]:not(:disabled)").forEach((checkbox) => checkbox?.addEventListener("change", () => toggleTask(checkbox.dataset.completeTask, checkbox.checked)));
+      list.querySelectorAll("[data-remove-task]").forEach((button) => button?.addEventListener("click", () => removeTask(button.dataset.removeTask)));
     });
   }
   function renderHomeActions() {
@@ -658,14 +658,14 @@
     return items.filter((item) => item.at).sort((a,b)=>new Date(b.at)-new Date(a.at)).slice(0,30);
   }
   function renderRecentActivity(filter="todos") { const list=$("#recentActivityList"); if (!list) return; const items=buildActivity().filter(item=>filter==="todos" || item.category===filter || (filter==="avaluos" && item.user===activeSessionUser)); list.innerHTML=items.length ? items.slice(0,12).map(item=>`<article class="activity-item"><span class="activity-icon activity-${item.kind}">${activityIcon(item.kind)}</span><div><strong>${escapeHtml(item.text)}</strong><small>${escapeHtml(item.user)} · ${escapeHtml(relativeTime(item.at))}</small></div><span class="activity-badge activity-badge-${item.kind}">${item.kind === "creation" ? "Creación" : item.kind === "status" ? "Estado" : item.kind === "request" ? "Solicitud" : "Edición"}</span></article>`).join("") : `<p class="activity-empty">No hay actividad para este filtro.</p>`; }
-  function searchGlobal(query="") { const palette=$("#globalSearchPalette"), results=$("#globalSearchResults"); if (!palette || !results) return; const q=String(query).trim().toLocaleLowerCase("es-MX"); palette.hidden=false; if (!q) { results.innerHTML='<p>Busca folios, clientes, ubicaciones o acciones como “crear avalúo”.</p>'; return; } const found=[]; const actions=[{terms:["crear","nuevo","avaluo","avalúo","expediente"],type:"Acción",title:"Crear nuevo avalúo",detail:"Abrir Gestión de Avalúos y comenzar un expediente",action:()=>{switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:section",{detail:"crear"})); window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-appraisal"));}},{terms:["registrar","registro","recepcion","recepción","avaluo"],type:"Acción",title:"Registrar avalúo",detail:"Abrir Recepción para registrar un avalúo",action:()=>{switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:section",{detail:"recepcion"}));}},{terms:["nueva","solicitud","solicitudes","servicio"],type:"Acción",title:"Nueva solicitud",detail:"Abrir el formulario de solicitudes de servicio",action:()=>{switchAppView("solicitudes"); window.setTimeout(()=>document.querySelector("#newInternalRequestButton")?.click(),0);}},{terms:["gestion","gestión","avaluos","avalúos"],type:"Sección",title:"Gestión de Avalúos",detail:"Consultar y editar expedientes técnicos",action:()=>{switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:section",{detail:"crear"}));}},{terms:["buscar","solicitud","solicitudes"],type:"Sección",title:"Buscar una solicitud",detail:"Consultar solicitudes registradas",action:()=>switchAppView("solicitudes")}]; actions.forEach(item=>{if(item.terms.some(term=>q.includes(term))) found.push(item);}); records.forEach(item=>{const text=[item.numeroAvaluo,item.solicitante,item.tipoBien,item.observacion].join(" "); if(text.toLocaleLowerCase("es-MX").includes(q)) found.push({type:"Avalúo", title:`Avalúo ${item.numeroAvaluo}`, detail:item.solicitante || item.tipoBien, action:()=>{switchAppView("avaluos"); openDialog(item.id);}});}); technicalAppraisals.forEach(item=>{const text=JSON.stringify(item); if(text.toLocaleLowerCase("es-MX").includes(q)) found.push({type:"Avalúo técnico",title:`Avalúo ${item.numeroAvaluo || item.numero || "s/n"}`,detail:item.solicitante || item.bienesAValuar || "Expediente técnico",action:()=>{switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-edit",{detail:item}));}});}); (window.__controlSolicitudes||[]).forEach(item=>{const text=JSON.stringify(item); if(text.toLocaleLowerCase("es-MX").includes(q)) found.push({type:"Solicitud",title:item.folio || "Solicitud",detail:item.solicitante?.nombre || item.tipoAvaluo || "Solicitud de servicio",action:()=>{switchAppView("solicitudes"); window.setTimeout(()=>window.SolicitudesControl?.openDetail(item.id),0);}});}); results.innerHTML=found.length ? found.slice(0,10).map((item,index)=>`<button class="search-result" type="button" data-search-result="${index}"><span>${escapeHtml(item.type)}</span><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.detail)}</small></button>`).join("") : '<p>No se encontraron coincidencias.</p>'; results.querySelectorAll("[data-search-result]").forEach(button => { button.addEventListener("mousedown", (event) => event.preventDefault()); button.addEventListener("click", () => { window.__setGlobalSearchActive?.(false); found[Number(button.dataset.searchResult)]?.action(); }); }); }
+  function searchGlobal(query="") { const palette=$("#globalSearchPalette"), results=$("#globalSearchResults"); if (!palette || !results) return; const q=String(query).trim().toLocaleLowerCase("es-MX"); palette.hidden=false; if (!q) { results.innerHTML='<p>Busca folios, clientes, ubicaciones o acciones como “crear avalúo”.</p>'; return; } const found=[]; const actions=[{terms:["crear","nuevo","avaluo","avalúo","expediente"],type:"Acción",title:"Crear nuevo avalúo",detail:"Abrir Gestión de Avalúos y comenzar un expediente",action:()=>{switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:section",{detail:"crear"})); window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-appraisal"));}},{terms:["registrar","registro","recepcion","recepción","avaluo"],type:"Acción",title:"Registrar avalúo",detail:"Abrir Recepción para registrar un avalúo",action:()=>{switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:section",{detail:"recepcion"}));}},{terms:["nueva","solicitud","solicitudes","servicio"],type:"Acción",title:"Nueva solicitud",detail:"Abrir el formulario de solicitudes de servicio",action:()=>{switchAppView("solicitudes"); window.setTimeout(()=>document.querySelector("#newInternalRequestButton")?.click(),0);}},{terms:["gestion","gestión","avaluos","avalúos"],type:"Sección",title:"Gestión de Avalúos",detail:"Consultar y editar expedientes técnicos",action:()=>{switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:section",{detail:"crear"}));}},{terms:["buscar","solicitud","solicitudes"],type:"Sección",title:"Buscar una solicitud",detail:"Consultar solicitudes registradas",action:()=>switchAppView("solicitudes")}]; actions.forEach(item=>{if(item.terms.some(term=>q.includes(term))) found.push(item);}); records.forEach(item=>{const text=[item.numeroAvaluo,item.solicitante,item.tipoBien,item.observacion].join(" "); if(text.toLocaleLowerCase("es-MX").includes(q)) found.push({type:"Avalúo", title:`Avalúo ${item.numeroAvaluo}`, detail:item.solicitante || item.tipoBien, action:()=>{switchAppView("avaluos"); openDialog(item.id);}});}); technicalAppraisals.forEach(item=>{const text=JSON.stringify(item); if(text.toLocaleLowerCase("es-MX").includes(q)) found.push({type:"Avalúo técnico",title:`Avalúo ${item.numeroAvaluo || item.numero || "s/n"}`,detail:item.solicitante || item.bienesAValuar || "Expediente técnico",action:()=>{switchAppView("avaluos"); window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-edit",{detail:item}));}});}); (window.__controlSolicitudes||[]).forEach(item=>{const text=JSON.stringify(item); if(text.toLocaleLowerCase("es-MX").includes(q)) found.push({type:"Solicitud",title:item.folio || "Solicitud",detail:item.solicitante?.nombre || item.tipoAvaluo || "Solicitud de servicio",action:()=>{switchAppView("solicitudes"); window.setTimeout(()=>window.SolicitudesControl?.openDetail(item.id),0);}});}); results.innerHTML=found.length ? found.slice(0,10).map((item,index)=>`<button class="search-result" type="button" data-search-result="${index}"><span>${escapeHtml(item.type)}</span><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.detail)}</small></button>`).join("") : '<p>No se encontraron coincidencias.</p>'; results.querySelectorAll("[data-search-result]").forEach(button => { button?.addEventListener("mousedown", (event) => event.preventDefault()); button?.addEventListener("click", () => { window.__setGlobalSearchActive?.(false); found[Number(button.dataset.searchResult)]?.action(); }); }); }
   function renderAlerts(filter="all") {
     const list=$("#alertsList"), count=$("#alertsCount"); if(!list) return;
     const alerts = notifications.filter(item => filter !== "mine" || item.usuario_id);
     const unread = notifications.filter(item => !item.leida).length;
     if (count) { count.textContent = String(unread); count.hidden = unread < 1; }
     list.innerHTML = alerts.length ? alerts.slice(0, 50).map(item => `<button class="alert-item${item.leida ? " is-read" : ""}" type="button" data-notification-id="${escapeHtml(item.id)}"><span class="activity-icon activity-${item.tipo === "nueva_solicitud" ? "request" : item.tipo === "actualizacion" ? "status" : "creation"}">${item.tipo === "actualizacion" ? "↻" : item.tipo === "nueva_solicitud" ? "▤" : "✓"}</span><div><strong>${escapeHtml(item.titulo)}</strong><small>${escapeHtml(item.mensaje)} · ${escapeHtml(relativeTime(item.created_at))}</small></div></button>`).join("") : '<p>No hay notificaciones.</p>';
-    list.querySelectorAll("[data-notification-id]").forEach(button => button.addEventListener("click", async () => {
+    list.querySelectorAll("[data-notification-id]").forEach(button => button?.addEventListener("click", async () => {
       const item = notifications.find(value => value.id === button.dataset.notificationId); if (!item) return;
       try { await apiRequest(`/notifications/${encodeURIComponent(item.id)}/read`, { method: "PUT" }); item.leida = true; renderAlerts(filter); if (item.url_destino === "app://refresh") { localStorage.setItem("app_version", item.mensaje.match(/app_version:([^\)]+)/)?.[1] || ""); window.location.reload(true); } else if (item.url_destino) switchAppView(item.url_destino); } catch (error) { window.alert(error.message); }
     }));
@@ -755,7 +755,7 @@
       if (!card || !button) return;
       button.disabled = false;
       button.textContent = "Jugar";
-      button.addEventListener("click", () => {
+      button?.addEventListener("click", () => {
         grid.hidden = true;
         if (heading) heading.hidden = true;
         if (statsPanel) statsPanel.hidden = true;
@@ -766,7 +766,7 @@
         frame.focus();
       });
     });
-    close.addEventListener("click", closeGame);
+    close?.addEventListener("click", closeGame);
     window.addEventListener("control-avaluos:view", (event) => { if (event.detail !== "juegos") closeGame(); });
   }
   function bindHomeIntelligence() { document.body.classList.remove("global-search-active"); const searchInput=$("#globalSearchInput"), palette=$("#globalSearchPalette"), searchWrap=searchInput?.closest(".global-search-wrap"); let searchBackdrop=document.querySelector("#globalSearchBackdrop"); if (palette && searchWrap && palette.parentElement !== searchWrap) searchWrap.appendChild(palette); if (!searchBackdrop) { searchBackdrop=document.createElement("div"); searchBackdrop.id="globalSearchBackdrop"; searchBackdrop.hidden=true; (document.querySelector("#appShell") || document.body).appendChild(searchBackdrop); } const searchToggle=$("#globalSearchToggleButton"); const setSearchActive=(active)=>{ const alertsPanel=document.querySelector("#alertsPanel"); if (active && alertsPanel && !alertsPanel.hidden) { alertsPanel.hidden=true; document.querySelector("#alertsButton")?.setAttribute("aria-expanded","false"); } palette.hidden=!active; searchBackdrop.hidden=true; searchWrap?.toggleAttribute("hidden", !active); searchWrap?.classList.toggle("is-open", active); searchToggle?.setAttribute("aria-expanded", String(active)); document.body.classList.toggle("global-search-active", active); if (active) window.setTimeout(()=>searchInput?.focus(), 0); }; window.__setGlobalSearchActive=setSearchActive; searchToggle?.addEventListener("click",()=>setSearchActive(searchWrap?.hidden !== false)); searchInput?.addEventListener("input", event=>{ const value=event.target.value.trim(); if (value) { searchGlobal(value); setSearchActive(true); } else setSearchActive(false); }); searchInput?.addEventListener("focus", ()=>{ if (searchInput.value.trim()) setSearchActive(true); }); searchInput?.addEventListener("keydown", event=>{ if (event.key === "Escape") { searchInput.value=""; setSearchActive(false); searchInput.blur(); } }); $("#alertsButton")?.addEventListener("click",()=>{const panel=$("#alertsPanel"), button=$("#alertsButton"); const opening=panel.hidden; if (opening && typeof window.__setGlobalSearchActive === "function") window.__setGlobalSearchActive(false); panel.hidden=!opening; button.setAttribute("aria-expanded",String(!panel.hidden)); if(!panel.hidden) { renderAlerts(); refreshNotifications(); }}); $("#markAlertsReadButton")?.addEventListener("click",async()=>{ try { await apiRequest("/notifications/read-all", { method: "PUT" }); notifications = notifications.map(item => ({ ...item, leida: true })); renderAlerts(); } catch (error) { window.alert(error.message); }}); $$("[data-activity-filter]").forEach(button=>button.addEventListener("click",()=>{$$("[data-activity-filter]").forEach(item=>item.classList.toggle("is-active",item===button)); renderRecentActivity(button.dataset.activityFilter);})); $$("[data-alert-filter]").forEach(button=>button.addEventListener("click",()=>{$$("[data-alert-filter]").forEach(item=>item.classList.toggle("is-active",item===button)); renderAlerts(button.dataset.alertFilter);})); document.addEventListener("keydown",event=>{if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==="k"){event.preventDefault(); setSearchActive(true);}}); document.addEventListener("click", event=>{ const target=event.target; const searchPanel=document.querySelector("#globalSearchPalette, .search-dropdown, .search-popover"); const searchButton=document.querySelector("#globalSearchToggleButton, .search-icon-btn, [data-action=\"search\"]"); const searchContainer=document.querySelector(".global-search-wrap"); const alertsPanel=document.querySelector("#alertsPanel, .notifications-dropdown, .alerts-center"); const alertsButton=document.querySelector("#alertsButton, .notification-icon-btn, [data-action=\"notifications\"]"); if (searchPanel && !searchPanel.hidden && !searchPanel.contains(target) && !searchContainer?.contains(target) && !searchButton?.contains(target)) setSearchActive(false); if (alertsPanel && !alertsPanel.hidden && !alertsPanel.contains(target) && !alertsButton?.contains(target)) { alertsPanel.hidden=true; alertsButton?.setAttribute("aria-expanded","false"); } }); window.addEventListener("control-avaluos:technical-appraisals-updated",()=>{renderRecentActivity();renderAlerts();}); window.addEventListener("control-avaluos:request-updated",(event)=>{
@@ -940,11 +940,11 @@
     $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>No.</th><th>Solicitud</th><th>Solicitante</th><th>Usuario</th><th>Valor del avalúo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${pageItems.length ? pageItems.map(renderListRow).join("") : `<tr><td colspan="7" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>${paginationMarkup("reception", receptionPage, items.length)}`;
   }
   function bindRecordActions() {
-    $$('[data-edit]').forEach((button) => button.addEventListener("click", () => openDialog(button.dataset.edit)));
-  $$('[data-view]').forEach((button) => button.addEventListener("click", () => openDialog(button.dataset.view, true)));
-  $$('[data-delete]').forEach((button) => button.addEventListener("click", () => removeRecord(button.dataset.delete)));
-  $$('[data-receipt]').forEach((button) => button.addEventListener("click", () => openReceipt(records.find((record) => record.id === button.dataset.receipt))));
-  $$('[data-print]').forEach((button) => button.addEventListener("click", () => openReceipt(records.find((record) => record.id === button.dataset.print))));
+    $$('[data-edit]').forEach((button) => button?.addEventListener("click", () => openDialog(button.dataset.edit)));
+  $$('[data-view]').forEach((button) => button?.addEventListener("click", () => openDialog(button.dataset.view, true)));
+  $$('[data-delete]').forEach((button) => button?.addEventListener("click", () => removeRecord(button.dataset.delete)));
+  $$('[data-receipt]').forEach((button) => button?.addEventListener("click", () => openReceipt(records.find((record) => record.id === button.dataset.receipt))));
+  $$('[data-print]').forEach((button) => button?.addEventListener("click", () => openReceipt(records.find((record) => record.id === button.dataset.print))));
   }
   function render() {
     const visible = getVisibleRecords();
@@ -957,7 +957,7 @@
     renderList(operationalRecords, "No hay avalúos para este estado, búsqueda o periodo.");
     renderAuthorizedFolios();
     bindRecordActions();
-    $$('[data-reception-page]').forEach((button) => button.addEventListener("click", () => { if (button.disabled) return; receptionPage = Number(button.dataset.receptionPage) || 1; render(); }));
+    $$('[data-reception-page]').forEach((button) => button?.addEventListener("click", () => { if (button.disabled) return; receptionPage = Number(button.dataset.receptionPage) || 1; render(); }));
   }
 
   function setPaymentVisibility() {
@@ -1039,7 +1039,7 @@
       } catch { /* La captura manual sigue disponible si el servidor no responde. */ }
     }, 250);
   });
-  form.addEventListener("submit", async (event) => {
+  form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!canEditReception()) return;
     const draft = formDraft();
@@ -1234,8 +1234,8 @@
       const emailEditor = `<label class="user-email-editor">Correo electrónico<input type="email" value="${escapeHtml(email)}" data-email-user="${escapeHtml(user)}" placeholder="correo@ejemplo.com" required /><button type="button" class="text-action-button btn-copu-primary" data-save-email-user="${escapeHtml(user)}">Guardar correo</button></label>`;
       return `<article class="user-permission-row"><div class="user-initial">${escapeHtml(user.split(" ").map((part) => part[0]).slice(0, 2).join(""))}</div><div><strong>${escapeHtml(user)}</strong><span>${detail}</span>${emailEditor}</div><div class="user-permission-status">${roleControl}<small>${credentials[user] ? "Contraseña configurada" : "Sin contraseña"}</small></div></article>`;
     }).join("");
-    $$(".role-select").forEach((select) => select.addEventListener("change", () => updateUserRole(select.dataset.roleUser, select.value)));
-    $$('[data-save-email-user]').forEach((button) => button.addEventListener("click", () => { const input = document.querySelector(`[data-email-user="${CSS.escape(button.dataset.saveEmailUser)}"]`); updateUserEmail(button.dataset.saveEmailUser, input?.value); }));
+    $$(".role-select").forEach((select) => select?.addEventListener("change", () => updateUserRole(select.dataset.roleUser, select.value)));
+    $$('[data-save-email-user]').forEach((button) => button?.addEventListener("click", () => { const input = document.querySelector(`[data-email-user="${CSS.escape(button.dataset.saveEmailUser)}"]`); updateUserEmail(button.dataset.saveEmailUser, input?.value); }));
   }
 
   async function registerUser(event) {
@@ -1275,8 +1275,8 @@
     const target = $("#notariesSettingsList");
     if (!target) return;
     target.innerHTML = notarias.length ? notarias.map((item) => `<article class="settings-data-row"><div><strong>Notaría ${escapeHtml(item.numero)} · ${escapeHtml(item.municipio)}</strong><span>${escapeHtml(item.nombre)}${item.direccion ? ` · ${escapeHtml(item.direccion)}` : ""}${item.telefono ? ` · ${escapeHtml(item.telefono)}` : ""}</span></div><div class="settings-row-actions"><button type="button" class="text-action-button btn-copu-primary" data-edit-notary="${escapeHtml(item.id)}">Editar</button><button type="button" class="text-action-button btn-copu-primary is-danger" data-delete-notary="${escapeHtml(item.id)}">Eliminar</button></div></article>`).join("") : '<p class="settings-empty">No hay notarías cargadas.</p>';
-    target.querySelectorAll("[data-edit-notary]").forEach((button) => button.addEventListener("click", () => { const item = notarias.find((candidate) => candidate.id === button.dataset.editNotary); if (!item) return; $("#notaryEditId").value = item.id; $("#notaryMunicipalityInput").value = item.municipio; $("#notaryNumberInput").value = item.numero; $("#notaryNameInput").value = item.nombre; $("#notaryAddressInput").value = item.direccion || ""; $("#notaryPhoneInput").value = item.telefono || ""; }));
-    target.querySelectorAll("[data-delete-notary]").forEach((button) => button.addEventListener("click", async () => { if (!window.confirm("¿Eliminar esta notaría?")) return; try { await apiRequest(`/notarias/${encodeURIComponent(button.dataset.deleteNotary)}`, { method: "DELETE" }); notarias = notarias.filter((item) => item.id !== button.dataset.deleteNotary); renderNotarySettings(); window.dispatchEvent(new CustomEvent("control-avaluos:notarias-updated", { detail: notarias })); } catch (error) { $("#notaryMessage").textContent = error.message; } }));
+    target.querySelectorAll("[data-edit-notary]").forEach((button) => button?.addEventListener("click", () => { const item = notarias.find((candidate) => candidate.id === button.dataset.editNotary); if (!item) return; $("#notaryEditId").value = item.id; $("#notaryMunicipalityInput").value = item.municipio; $("#notaryNumberInput").value = item.numero; $("#notaryNameInput").value = item.nombre; $("#notaryAddressInput").value = item.direccion || ""; $("#notaryPhoneInput").value = item.telefono || ""; }));
+    target.querySelectorAll("[data-delete-notary]").forEach((button) => button?.addEventListener("click", async () => { if (!window.confirm("¿Eliminar esta notaría?")) return; try { await apiRequest(`/notarias/${encodeURIComponent(button.dataset.deleteNotary)}`, { method: "DELETE" }); notarias = notarias.filter((item) => item.id !== button.dataset.deleteNotary); renderNotarySettings(); window.dispatchEvent(new CustomEvent("control-avaluos:notarias-updated", { detail: notarias })); } catch (error) { $("#notaryMessage").textContent = error.message; } }));
   }
   function renderAuthorizedFolios() {
     const targets = [$("#authorizedFoliosList"), $("#authorizedFoliosListAvaluos")].filter(Boolean);
@@ -1290,7 +1290,7 @@
       const registered = records.some((record) => normalizeNumber(record.numeroAvaluo) === normalized);
       return `<article class="settings-data-row"><div><strong>#${escapeHtml(number)}</strong><span class="folio-validation-status ${registered ? "is-registered" : "is-pending"}">${registered ? "Registrado en Recepción" : "Autorizado · pendiente de Recepción"}</span></div><button type="button" class="text-action-button btn-copu-primary is-danger" data-delete-authorized-folio="${escapeHtml(number)}">Retirar</button></article>`;
     }).join("") : '<p class="settings-empty">Aún no hay folios autorizados.</p>';
-    targets.forEach((target) => { target.innerHTML = markup; target.querySelectorAll("[data-delete-authorized-folio]").forEach((button) => button.addEventListener("click", async () => { try { await apiRequest(`/authorized-folios/${encodeURIComponent(button.dataset.deleteAuthorizedFolio)}`, { method: "DELETE" }); authorizedAppraisalNumbers = authorizedAppraisalNumbers.filter((value) => value !== button.dataset.deleteAuthorizedFolio); renderAuthorizedFolios(); } catch (error) { const message = $("#authorizedFolioMessage") || $("#authorizedFolioMessageAvaluos"); if (message) message.textContent = error.message; } })); });
+    targets.forEach((target) => { target.innerHTML = markup; target.querySelectorAll("[data-delete-authorized-folio]").forEach((button) => button?.addEventListener("click", async () => { try { await apiRequest(`/authorized-folios/${encodeURIComponent(button.dataset.deleteAuthorizedFolio)}`, { method: "DELETE" }); authorizedAppraisalNumbers = authorizedAppraisalNumbers.filter((value) => value !== button.dataset.deleteAuthorizedFolio); renderAuthorizedFolios(); } catch (error) { const message = $("#authorizedFolioMessage") || $("#authorizedFolioMessageAvaluos"); if (message) message.textContent = error.message; } })); });
   }
   async function renderValidationRegistry() {
     const target = $("#validationRegistryList");
@@ -1303,7 +1303,7 @@
         const date = item.fechaRegistro ? new Date(item.fechaRegistro).toLocaleDateString("es-MX", { day: "2-digit", month: "2-digit", year: "numeric" }) : "—";
         return `<article class="settings-data-row validation-registry-row"><div><strong>#${escapeHtml(item.numeroAvaluo)}</strong><span>Fecha de registro: ${escapeHtml(date)}</span><span class="folio-validation-status ${item.registrado ? "is-registered" : "is-pending"}">${escapeHtml(item.estado)}</span></div><button type="button" class="text-action-button btn-copu-primary is-danger" data-delete-validation-folio="${escapeHtml(item.numeroAvaluo)}" aria-label="Eliminar folio ${escapeHtml(item.numeroAvaluo)}">Eliminar</button></article>`;
       }).join("") : '<p class="settings-empty">No hay avalúos para este filtro.</p>';
-      target.querySelectorAll("[data-delete-validation-folio]").forEach((button) => button.addEventListener("click", async () => {
+      target.querySelectorAll("[data-delete-validation-folio]").forEach((button) => button?.addEventListener("click", async () => {
         try { await apiRequest(`/authorized-folios/${encodeURIComponent(button.dataset.deleteValidationFolio)}`, { method: "DELETE" }); authorizedAppraisalNumbers = authorizedAppraisalNumbers.filter((value) => normalizeNumber(value) !== normalizeNumber(button.dataset.deleteValidationFolio)); renderAuthorizedFolios(); renderValidationRegistry(); } catch (error) { window.alert(error.message); }
       }));
     } catch (error) { target.innerHTML = `<p class="settings-empty">${escapeHtml(error.message)}</p>`; }
@@ -1340,15 +1340,15 @@
       trigger.textContent = selected?.textContent || "Selecciona una opción";
       trigger.setAttribute("aria-expanded", String(wrapper.classList.contains("is-open")));
       menu.innerHTML = [...select.options].map((option, index) => `<button type="button" class="custom-select-option${option.selected ? " is-selected" : ""}" role="option" aria-selected="${option.selected}" data-option-index="${index}">${escapeHtml(option.textContent || "")}</button>`).join("");
-      menu.querySelectorAll("[data-option-index]").forEach((optionButton) => optionButton.addEventListener("click", () => {
+      menu.querySelectorAll("[data-option-index]").forEach((optionButton) => optionButton?.addEventListener("click", () => {
         select.selectedIndex = Number(optionButton.dataset.optionIndex);
         select.dispatchEvent(new Event("change", { bubbles: true }));
         wrapper.classList.remove("is-open");
         syncOptions();
       }));
     }
-    trigger.addEventListener("click", () => { const open = !wrapper.classList.contains("is-open"); closeCustomSelects(wrapper); wrapper.classList.toggle("is-open", open); syncOptions(); });
-    select.addEventListener("change", syncOptions);
+    trigger?.addEventListener("click", () => { const open = !wrapper.classList.contains("is-open"); closeCustomSelects(wrapper); wrapper.classList.toggle("is-open", open); syncOptions(); });
+    select?.addEventListener("change", syncOptions);
     const optionObserver = new MutationObserver(syncOptions);
     optionObserver.observe(select, { childList: true, subtree: true, attributes: true, attributeFilter: ["selected"] });
     wrapper.append(trigger, menu);
@@ -1360,7 +1360,7 @@
   selectObserver.observe(document.body, { childList: true, subtree: true });
   enhanceAllSelects();
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
+    navigator.serviceWorker?.addEventListener("controllerchange", () => {
       const activeForm = document.querySelector("#publicRequestForm:not([hidden])") || document.querySelector("form:focus-within");
       const message = document.querySelector("#publicRequestMessage") || document.querySelector("#formMessage");
       if (activeForm && message) {
@@ -1370,25 +1370,25 @@
       }
     });
   }
-  loginForm.addEventListener("submit", authenticate);
-  loginUser.addEventListener("change", syncCredentialSetupVisibility);
-  $("#openInternalAccessButton").addEventListener("click", () => { loginMessage.textContent = ""; loginPassword.value = ""; syncCredentialSetupVisibility(); adminAccessDialog.showModal(); window.setTimeout(() => loginUser.focus(), 40); });
-  $("#closeAdminAccessButton").addEventListener("click", () => adminAccessDialog.close());
-  $("#cancelAdminAccessButton").addEventListener("click", () => adminAccessDialog.close());
+  loginForm?.addEventListener("submit", authenticate);
+  loginUser?.addEventListener("change", syncCredentialSetupVisibility);
+  $("#openInternalAccessButton")?.addEventListener("click", () => { loginMessage.textContent = ""; loginPassword.value = ""; syncCredentialSetupVisibility(); adminAccessDialog.showModal(); window.setTimeout(() => loginUser.focus(), 40); });
+  $("#closeAdminAccessButton")?.addEventListener("click", () => adminAccessDialog.close());
+  $("#cancelAdminAccessButton")?.addEventListener("click", () => adminAccessDialog.close());
   $("#taskForm")?.addEventListener("submit", createTask);
-  $("#homeButton").addEventListener("click", () => { switchAppView("inicio"); renderHomeActions(); });
-  $$('[data-home-action]').forEach((card) => card.addEventListener('click', () => openHomeAction(card.dataset.homeAction)));
-  $("#chatForm").addEventListener("submit", createChatMessage);
-  $("#chatToggleButton").addEventListener("click", () => { const widget = $("#chatWidget"); const panel = $("#chatPanel"); const button = $("#chatToggleButton"); const isOpening = widget.hidden || panel.hidden; widget.hidden = false; panel.hidden = !isOpening; button.setAttribute("aria-expanded", String(isOpening)); button.textContent = isOpening ? "Cerrar" : "Abrir Chat"; if (isOpening) { renderChat(); $("#chatMessageInput").focus(); } });
-  $("#closeChatButton").addEventListener("click", () => { $("#chatPanel").hidden = true; $("#chatWidget").hidden = true; $("#chatToggleButton").setAttribute("aria-expanded", "false"); $("#chatToggleButton").textContent = "Chat"; });
-  $("#openCredentialSetupButton").addEventListener("click", openCredentialSetup);
+  $("#homeButton")?.addEventListener("click", () => { switchAppView("inicio"); renderHomeActions(); });
+  $$('[data-home-action]').forEach((card) => card?.addEventListener('click', () => openHomeAction(card.dataset.homeAction)));
+  $("#chatForm")?.addEventListener("submit", createChatMessage);
+  $("#chatToggleButton")?.addEventListener("click", () => { const widget = $("#chatWidget"); const panel = $("#chatPanel"); const button = $("#chatToggleButton"); const isOpening = widget.hidden || panel.hidden; widget.hidden = false; panel.hidden = !isOpening; button.setAttribute("aria-expanded", String(isOpening)); button.textContent = isOpening ? "Cerrar" : "Abrir Chat"; if (isOpening) { renderChat(); $("#chatMessageInput").focus(); } });
+  $("#closeChatButton")?.addEventListener("click", () => { $("#chatPanel").hidden = true; $("#chatWidget").hidden = true; $("#chatToggleButton").setAttribute("aria-expanded", "false"); $("#chatToggleButton").textContent = "Chat"; });
+  $("#openCredentialSetupButton")?.addEventListener("click", openCredentialSetup);
   $("#adminProfileButton")?.addEventListener("click", openCredentialSetup);
-  manageUsersButton.addEventListener("click", () => switchAppView("usuarios"));
-  credentialForm.addEventListener("submit", saveCredential);
-  $("#closeCredentialDialogButton").addEventListener("click", closeCredentialSetup);
-  $("#cancelCredentialDialogButton").addEventListener("click", closeCredentialSetup);
-  $("#inlineCredentialForm").addEventListener("submit", saveInlineCredential);
-  $("#addUserForm").addEventListener("submit", registerUser);
+  manageUsersButton?.addEventListener("click", () => switchAppView("usuarios"));
+  credentialForm?.addEventListener("submit", saveCredential);
+  $("#closeCredentialDialogButton")?.addEventListener("click", closeCredentialSetup);
+  $("#cancelCredentialDialogButton")?.addEventListener("click", closeCredentialSetup);
+  $("#inlineCredentialForm")?.addEventListener("submit", saveInlineCredential);
+  $("#addUserForm")?.addEventListener("submit", registerUser);
   const profileButton = $("#profileButton");
   const profileMenu = $("#profileMenu");
   const closeProfileMenu = () => { if (profileMenu) profileMenu.hidden = true; profileButton?.setAttribute("aria-expanded", "false"); };
@@ -1455,12 +1455,12 @@
   profileButton?.addEventListener("click", (event) => { event.stopPropagation(); openAdminProfile(); });
   $("#profileMetricsFilter")?.addEventListener("change", renderProfileDashboard);
   $("#logoutHeaderButton")?.addEventListener("click", () => { sessionStorage.removeItem(SESSION_KEY); showLogin(); });
-  profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); sessionStorage.removeItem(SESSION_KEY); showLogin(); } }));
+  profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button?.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); sessionStorage.removeItem(SESSION_KEY); showLogin(); } }));
   document.addEventListener("click", (event) => { if (profileMenu && !event.target.closest(".profile-menu-wrap")) closeProfileMenu(); });
   $("#profilePageBackButton")?.addEventListener("click", () => switchAppView("inicio"));
-  $("#newRecordButton").addEventListener("click", () => openDialog());
-  $("#newTechnicalAppraisalButton").addEventListener("click", () => window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-creation")));
-  $("#backAvaluosButton").addEventListener("click", () => {
+  $("#newRecordButton")?.addEventListener("click", () => openDialog());
+  $("#newTechnicalAppraisalButton")?.addEventListener("click", () => window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-creation")));
+  $("#backAvaluosButton")?.addEventListener("click", () => {
     const creationPanel = $("#technicalCreationPanel");
     const mobiliarioEditor = $("#mobiliarioEditor");
     const automotrizEditor = $("#automotrizEditor");
@@ -1498,23 +1498,23 @@
     $("#newTechnicalAppraisalButton").classList.toggle("is-hidden", Boolean(event.detail) || !canEdit());
   });
   window.addEventListener("control-avaluos:close-reception-editor", closeDialog);
-  $("#closeDialogButton").addEventListener("click", closeDialog);
-  $("#cancelDialogButton").addEventListener("click", closeDialog);
-  $("#previewReceiptButton").addEventListener("click", () => openReceipt(formDraft()));
-  paidInput.addEventListener("change", setPaymentVisibility);
-  numberInput.addEventListener("input", () => { numberInput.value = normalizeNumber(numberInput.value); });
-  searchInput.addEventListener("input", () => { receptionPage = 1; if (searchInput.value.trim()) { operationalView = "todos"; $$("[data-view]").forEach((item) => item.classList.toggle("is-active", item.dataset.view === "todos")); } render(); });
-  $$("[data-view]").forEach((button) => button.addEventListener("click", () => { operationalView = button.dataset.view; $$("[data-view]").forEach((item) => item.classList.toggle("is-active", item === button)); render(); }));
-  $$("[data-app-view]").forEach((button) => button.addEventListener("click", (event) => { event.preventDefault(); switchAppView(button.dataset.appView); }));
-  $("#generateInlineReportButton").addEventListener("click", prepareInlineReport);
-  $$('[data-users-section]').forEach((button) => button.addEventListener("click", () => setUsersSection(button.dataset.usersSection)));
-  $$('[data-users-back]').forEach((button) => button.addEventListener("click", () => setUsersSection("menu")));
-  $("#printInlineReportButton").addEventListener("click", printInlineReport);
-  $("#exportCsvSettingsButton").addEventListener("click", exportRecords);
-  $("#exportBackupButton").addEventListener("click", exportBackup);
-  $("#importDataButton").addEventListener("click", importBackup);
-  $("#exportButton").addEventListener("click", () => switchAppView("configuracion"));
-  $("#reportButton").addEventListener("click", () => switchAppView("resumen"));
+  $("#closeDialogButton")?.addEventListener("click", closeDialog);
+  $("#cancelDialogButton")?.addEventListener("click", closeDialog);
+  $("#previewReceiptButton")?.addEventListener("click", () => openReceipt(formDraft()));
+  paidInput?.addEventListener("change", setPaymentVisibility);
+  numberInput?.addEventListener("input", () => { numberInput.value = normalizeNumber(numberInput.value); });
+  searchInput?.addEventListener("input", () => { receptionPage = 1; if (searchInput.value.trim()) { operationalView = "todos"; $$("[data-view]").forEach((item) => item.classList.toggle("is-active", item.dataset.view === "todos")); } render(); });
+  $$("[data-view]").forEach((button) => button?.addEventListener("click", () => { operationalView = button.dataset.view; $$("[data-view]").forEach((item) => item.classList.toggle("is-active", item === button)); render(); }));
+  $$("[data-app-view]").forEach((button) => button?.addEventListener("click", (event) => { event.preventDefault(); switchAppView(button.dataset.appView); }));
+  $("#generateInlineReportButton")?.addEventListener("click", prepareInlineReport);
+  $$('[data-users-section]').forEach((button) => button?.addEventListener("click", () => setUsersSection(button.dataset.usersSection)));
+  $$('[data-users-back]').forEach((button) => button?.addEventListener("click", () => setUsersSection("menu")));
+  $("#printInlineReportButton")?.addEventListener("click", printInlineReport);
+  $("#exportCsvSettingsButton")?.addEventListener("click", exportRecords);
+  $("#exportBackupButton")?.addEventListener("click", exportBackup);
+  $("#importDataButton")?.addEventListener("click", importBackup);
+  $("#exportButton")?.addEventListener("click", () => switchAppView("configuracion"));
+  $("#reportButton")?.addEventListener("click", () => switchAppView("resumen"));
   $("#statusViewSelect")?.addEventListener("change", (event) => { operationalView = event.target.value; receptionPage = 1; render(); });
   $("#notaryForm")?.addEventListener("submit", async (event) => { event.preventDefault(); if (!isAdmin()) return; const id = $("#notaryEditId").value.trim(); const payload = { municipio: $("#notaryMunicipalityInput").value.trim(), numero: $("#notaryNumberInput").value, nombre: $("#notaryNameInput").value.trim(), direccion: $("#notaryAddressInput").value.trim(), telefono: $("#notaryPhoneInput").value.trim() }; const message = $("#notaryMessage"); try { const saved = await apiRequest(id ? `/notarias/${encodeURIComponent(id)}` : "/notarias", { method: id ? "PUT" : "POST", body: JSON.stringify(payload) }); notarias = Array.isArray(saved) ? saved : (id ? notarias.map((item) => item.id === id ? saved : item) : [...notarias, saved]); $("#notaryForm").reset(); $("#notaryEditId").value = ""; message.textContent = "Notaría guardada correctamente."; message.className = "form-message is-success"; renderNotarySettings(); window.dispatchEvent(new CustomEvent("control-avaluos:notarias-updated", { detail: notarias })); } catch (error) { message.textContent = error.message; message.className = "form-message is-error"; } });
   $("#toggleNotariesRecordsButton")?.addEventListener("click", () => { const target = $("#notariesSettingsList"); const button = $("#toggleNotariesRecordsButton"); if (!target || !button) return; const willShow = target.hidden; target.hidden = !willShow; button.setAttribute("aria-expanded", String(willShow)); button.textContent = willShow ? "Ocultar registros" : "Ver registros"; if (willShow) renderNotarySettings(); });
@@ -1572,7 +1572,7 @@
   let offsetX = 0;
   let offsetY = 0;
   const show = (visible) => { panel.hidden = !visible; panel.style.display = visible ? "" : "none"; toggle.setAttribute("aria-expanded", String(visible)); };
-  toggle.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); show(panel.hidden); });
+  toggle?.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); show(panel.hidden); });
   close?.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); show(false); panel.hidden = true; panel.style.display = "none"; });
   const calculate = () => {
     const candidate = expression.trim();
@@ -1589,7 +1589,7 @@
       return false;
     }
   };
-  panel.querySelectorAll("[data-calc-key]").forEach((button) => button.addEventListener("click", () => {
+  panel.querySelectorAll("[data-calc-key]").forEach((button) => button?.addEventListener("click", () => {
     const key = button.dataset.calcKey;
     if (key === "C") { expression = ""; display.value = "0"; return; }
     if (key === "backspace") { expression = expression.slice(0, -1); display.value = expression || "0"; return; }

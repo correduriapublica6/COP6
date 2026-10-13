@@ -11598,3 +11598,34 @@ html body #appShell.control-shell .app-workspace {
 @media (max-width: 760px) {
   #requestDetailDialog.client-luxury-detail .request-detail-inline-actions { flex-wrap: wrap !important; }
 }
+
+/* Homologación final de Gestión de Avalúos con Recepción */
+#appShell.control-shell #technicalAppraisalList .operational-table,
+#appShell.control-shell #technicalAppraisalList .operational-table-compact,
+#appShell.control-shell #technicalAppraisalList table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+#appShell.control-shell #technicalListPanel .status-list-heading,
+#appShell.control-shell #technicalListPanel .status-list-heading h2,
+#appShell.control-shell #statusRecordList + .table-pagination,
+#appShell.control-shell #technicalAppraisalList .operational-table thead th,
+#appShell.control-shell #technicalAppraisalList .operational-table tbody td {
+  box-sizing: border-box !important;
+}
+#appShell.control-shell #technicalAppraisalList .operational-table thead th,
+#appShell.control-shell #technicalAppraisalList .operational-table tbody td {
+  height: 38px !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  line-height: 1.2 !important;
+  vertical-align: middle !important;
+}
+#appShell.control-shell #technicalListPanel .status-list-heading {
+  min-height: 38px !important;
+  height: 38px !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+}
