@@ -718,6 +718,39 @@
     checkAppVersion();
     versionMonitorId = window.setInterval(() => { if (!document.hidden) checkAppVersion(); }, 5 * 60 * 1000);
   }
+  function bindGames() {
+    const view = $("#juegosView");
+    const grid = view?.querySelector(".games-card-grid");
+    const stage = $("#gameStage");
+    const frame = $("#gameFrame");
+    const title = $("#gameStageTitle");
+    const close = $("#closeGameButton");
+    if (!view || !grid || !stage || !frame || !title || !close || view.dataset.gamesBound) return;
+    view.dataset.gamesBound = "true";
+    const games = [
+      { card: ".game-card-solitaire", title: "Solitario", source: "games/cp6solitario.html" },
+      { card: ".game-card-sudoku", title: "Sudoku", source: "games/cp6sudoku.html" },
+      { card: ".game-card-mines", title: "Buscaminas", source: "games/cp6buscaminas.html" },
+    ];
+    const closeGame = () => { stage.hidden = true; grid.hidden = false; frame.src = "about:blank"; };
+    games.forEach((game) => {
+      const card = view.querySelector(game.card);
+      const button = card?.querySelector(".btn-play");
+      if (!card || !button) return;
+      button.disabled = false;
+      button.textContent = "Jugar";
+      button.addEventListener("click", () => {
+        grid.hidden = true;
+        stage.hidden = false;
+        title.textContent = game.title;
+        frame.title = `${game.title} CP6`;
+        frame.src = game.source;
+        frame.focus();
+      });
+    });
+    close.addEventListener("click", closeGame);
+    window.addEventListener("control-avaluos:view", (event) => { if (event.detail !== "juegos") closeGame(); });
+  }
   function bindHomeIntelligence() { document.body.classList.remove("global-search-active"); const searchInput=$("#globalSearchInput"), palette=$("#globalSearchPalette"), searchWrap=searchInput?.closest(".global-search-wrap"); let searchBackdrop=document.querySelector("#globalSearchBackdrop"); if (palette && searchWrap && palette.parentElement !== searchWrap) searchWrap.appendChild(palette); if (!searchBackdrop) { searchBackdrop=document.createElement("div"); searchBackdrop.id="globalSearchBackdrop"; searchBackdrop.hidden=true; (document.querySelector("#appShell") || document.body).appendChild(searchBackdrop); } const searchToggle=$("#globalSearchToggleButton"); const setSearchActive=(active)=>{ const alertsPanel=document.querySelector("#alertsPanel"); if (active && alertsPanel && !alertsPanel.hidden) { alertsPanel.hidden=true; document.querySelector("#alertsButton")?.setAttribute("aria-expanded","false"); } palette.hidden=!active; searchBackdrop.hidden=true; searchWrap?.toggleAttribute("hidden", !active); searchWrap?.classList.toggle("is-open", active); searchToggle?.setAttribute("aria-expanded", String(active)); document.body.classList.toggle("global-search-active", active); if (active) window.setTimeout(()=>searchInput?.focus(), 0); }; window.__setGlobalSearchActive=setSearchActive; searchToggle?.addEventListener("click",()=>setSearchActive(searchWrap?.hidden !== false)); searchInput?.addEventListener("input", event=>{ const value=event.target.value.trim(); if (value) { searchGlobal(value); setSearchActive(true); } else setSearchActive(false); }); searchInput?.addEventListener("focus", ()=>{ if (searchInput.value.trim()) setSearchActive(true); }); searchInput?.addEventListener("keydown", event=>{ if (event.key === "Escape") { searchInput.value=""; setSearchActive(false); searchInput.blur(); } }); $("#alertsButton")?.addEventListener("click",()=>{const panel=$("#alertsPanel"), button=$("#alertsButton"); const opening=panel.hidden; if (opening && typeof window.__setGlobalSearchActive === "function") window.__setGlobalSearchActive(false); panel.hidden=!opening; button.setAttribute("aria-expanded",String(!panel.hidden)); if(!panel.hidden) { renderAlerts(); refreshNotifications(); }}); $("#markAlertsReadButton")?.addEventListener("click",async()=>{ try { await apiRequest("/notifications/read-all", { method: "PUT" }); notifications = notifications.map(item => ({ ...item, leida: true })); renderAlerts(); } catch (error) { window.alert(error.message); }}); $$("[data-activity-filter]").forEach(button=>button.addEventListener("click",()=>{$$("[data-activity-filter]").forEach(item=>item.classList.toggle("is-active",item===button)); renderRecentActivity(button.dataset.activityFilter);})); $$("[data-alert-filter]").forEach(button=>button.addEventListener("click",()=>{$$("[data-alert-filter]").forEach(item=>item.classList.toggle("is-active",item===button)); renderAlerts(button.dataset.alertFilter);})); document.addEventListener("keydown",event=>{if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==="k"){event.preventDefault(); setSearchActive(true);}}); document.addEventListener("click", event=>{ const target=event.target; const searchPanel=document.querySelector("#globalSearchPalette, .search-dropdown, .search-popover"); const searchButton=document.querySelector("#globalSearchToggleButton, .search-icon-btn, [data-action=\"search\"]"); const searchContainer=document.querySelector(".global-search-wrap"); const alertsPanel=document.querySelector("#alertsPanel, .notifications-dropdown, .alerts-center"); const alertsButton=document.querySelector("#alertsButton, .notification-icon-btn, [data-action=\"notifications\"]"); if (searchPanel && !searchPanel.hidden && !searchPanel.contains(target) && !searchContainer?.contains(target) && !searchButton?.contains(target)) setSearchActive(false); if (alertsPanel && !alertsPanel.hidden && !alertsPanel.contains(target) && !alertsButton?.contains(target)) { alertsPanel.hidden=true; alertsButton?.setAttribute("aria-expanded","false"); } }); window.addEventListener("control-avaluos:technical-appraisals-updated",()=>{renderRecentActivity();renderAlerts();}); window.addEventListener("control-avaluos:request-updated",(event)=>{
       const updated = event.detail;
       if (updated?.id) {
@@ -1473,6 +1506,7 @@
   $("#validationRegistryFilter")?.addEventListener("change", renderValidationRegistry);
 
   bindHomeIntelligence();
+  bindGames();
   startVersionMonitor();
   syncUserOptions();
   bindMoneyInputs();
