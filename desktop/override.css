@@ -11473,3 +11473,54 @@ html body #appShell.control-shell .app-workspace {
 #appShell.control-shell .request-external-result strong { font-size:.73rem !important; font-weight:500 !important; }
 #appShell.control-shell .request-external-result small, #appShell.control-shell .request-external-empty, #appShell.control-shell .request-external-selected { color:#64748b !important; font-size:.68rem !important; }
 @media (max-width:800px) { #appShell.control-shell .request-external-search-grid { grid-template-columns:1fr !important; } #appShell.control-shell .request-external-assignment { min-width:220px !important; } }
+
+/* Rediseño final CP6: detalle de solicitud en azul/grafito */
+#requestDetailDialog.client-luxury-detail { background:#f8fafc !important; border:1px solid #cbd5e1 !important; border-radius:18px !important; color:#0f172a !important; }
+#requestDetailDialog.client-luxury-detail > form { background:#f8fafc !important; padding:24px !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-compact-head { border-bottom:1px solid #e2e8f0 !important; padding-bottom:18px !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-blue-head { align-items:flex-start !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-user-name { color:#0f172a !important; display:block !important; font-family:Inter,"Segoe UI",sans-serif !important; font-size:1.35rem !important; font-weight:650 !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-request-number { color:#2563eb !important; display:block !important; font-size:.88rem !important; margin-top:4px !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-request-number b { font-weight:700 !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-compact-head small { color:#64748b !important; }
+#requestDetailDialog.client-luxury-detail .request-creator-summary { margin-top:8px !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-head-actions { display:flex !important; flex-wrap:wrap !important; gap:8px !important; align-items:flex-start !important; justify-content:flex-end !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-head-actions .request-detail-button,
+#requestDetailDialog.client-luxury-detail .request-detail-head-actions .client-outline-button { white-space:nowrap !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-blue-grid { grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr) !important; margin-top:18px !important; }
+#requestDetailDialog.client-luxury-detail .request-detail-pane { background:#fff !important; border:1px solid #e2e8f0 !important; border-radius:14px !important; box-shadow:0 8px 22px rgba(15,23,42,.06) !important; }
+#requestDetailDialog.client-luxury-detail .request-pane-heading strong { color:#0f172a !important; font-family:Inter,"Segoe UI",sans-serif !important; }
+#requestDetailDialog.client-luxury-detail .request-pane-heading { border-color:#e2e8f0 !important; }
+#requestDetailDialog.client-luxury-detail .request-file-card:hover { border-color:#93c5fd !important; box-shadow:0 9px 20px rgba(37,99,235,.12) !important; }
+#requestDetailDialog.client-luxury-detail .request-file-icon { background:#eff6ff !important; color:#2563eb !important; }
+#requestDetailDialog.client-luxury-detail .request-final-heading { border-color:#e2e8f0 !important; }
+#requestDetailDialog.client-luxury-detail .final-pdf-actions { background:#eff6ff !important; border:1px solid #bfdbfe !important; }
+#requestDetailDialog.client-luxury-detail .client-download-button { border-radius:8px !important; }
+#requestDetailDialog.client-luxury-detail .client-read-info-grid { gap:12px 16px !important; }
+#requestDetailDialog.client-luxury-detail .client-read-info-field { border-color:#f1f5f9 !important; }
+#requestDetailDialog.client-luxury-detail .client-read-info-field span { color:#64748b !important; }
+#requestDetailDialog.client-luxury-detail .client-read-info-field strong { color:#0f172a !important; font-weight:500 !important; }
+#requestDetailDialog.client-luxury-detail .request-submodal { align-items:center !important; background:rgba(15,23,42,.42) !important; display:flex !important; inset:0 !important; justify-content:center !important; position:absolute !important; z-index:20 !important; }
+#requestDetailDialog.client-luxury-detail .request-submodal[hidden] { display:none !important; }
+#requestDetailDialog.client-luxury-detail .request-submodal-card { background:#fff !important; border:1px solid #dbeafe !important; border-radius:14px !important; box-shadow:0 20px 50px rgba(15,23,42,.22) !important; color:#0f172a !important; max-width:420px !important; padding:22px !important; width:calc(100% - 32px) !important; }
+#requestDetailDialog.client-luxury-detail .request-submodal-card h3 { color:#0f172a !important; font-size:1.05rem !important; margin:0 0 5px !important; }
+#requestDetailDialog.client-luxury-detail .request-submodal-card p { color:#64748b !important; font-size:.8rem !important; margin:0 0 12px !important; }
+#requestDetailDialog.client-luxury-detail .request-submodal-card > input { background:#fff !important; border:1px solid #cbd5e1 !important; border-radius:8px !important; box-sizing:border-box !important; color:#0f172a !important; padding:10px 12px !important; width:100% !important; }
+#requestDetailDialog.client-luxury-detail .request-submodal-card > input:focus { border-color:#2563eb !important; box-shadow:0 0 0 3px rgba(37,99,235,.13) !important; outline:none !important; }
+#requestDetailDialog.client-luxury-detail .request-submodal-card > div:last-child { display:flex !important; gap:8px !important; justify-content:flex-end !important; margin-top:16px !important; }
+#requestDetailDialog.client-luxury-detail .request-popup-results { display:flex !important; flex-direction:column !important; gap:5px !important; margin-top:10px !important; max-height:180px !important; overflow:auto !important; }
+#requestDetailDialog.client-luxury-detail .request-popup-result { align-items:flex-start !important; background:#fff !important; border:1px solid #e2e8f0 !important; border-radius:8px !important; color:#0f172a !important; display:flex !important; flex-direction:column !important; padding:8px 10px !important; text-align:left !important; width:100% !important; }
+#requestDetailDialog.client-luxury-detail .request-popup-result:hover { background:#eff6ff !important; border-color:#93c5fd !important; }
+#requestDetailDialog.client-luxury-detail .request-popup-result strong { font-size:.78rem !important; font-weight:600 !important; }
+#requestDetailDialog.client-luxury-detail .request-popup-result small, #requestDetailDialog.client-luxury-detail .request-popup-results > small { color:#64748b !important; font-size:.7rem !important; }
+#requestDetailDialog.client-luxury-detail .client-edit-info-form { display:grid !important; gap:10px 12px !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+#requestDetailDialog.client-luxury-detail .client-edit-info-form[hidden] { display:none !important; }
+#requestDetailDialog.client-luxury-detail .client-edit-info-form label { color:#475569 !important; display:grid !important; font-size:.68rem !important; font-weight:650 !important; gap:4px !important; text-transform:uppercase !important; }
+#requestDetailDialog.client-luxury-detail .client-edit-info-form input,
+#requestDetailDialog.client-luxury-detail .client-edit-info-form textarea { background:#fff !important; border:1px solid #cbd5e1 !important; border-radius:7px !important; box-sizing:border-box !important; color:#0f172a !important; font:400 .78rem Inter,"Segoe UI",sans-serif !important; padding:8px !important; resize:vertical !important; width:100% !important; }
+#requestDetailDialog.client-luxury-detail .client-edit-info-form input:focus,
+#requestDetailDialog.client-luxury-detail .client-edit-info-form textarea:focus { border-color:#2563eb !important; box-shadow:0 0 0 3px rgba(37,99,235,.12) !important; outline:none !important; }
+#requestDetailDialog.client-luxury-detail .client-edit-info-actions { grid-column:1 / -1 !important; }
+#requestDetailDialog.client-luxury-detail .client-edit-info-actions p { color:#b91c1c !important; }
+#requestDetailDialog.client-luxury-detail .client-timeline { display:none !important; }
+@media (max-width:760px) { #requestDetailDialog.client-luxury-detail .request-detail-blue-grid { grid-template-columns:1fr !important; } #requestDetailDialog.client-luxury-detail .request-detail-head-actions { justify-content:flex-start !important; } #requestDetailDialog.client-luxury-detail .client-edit-info-form { grid-template-columns:1fr !important; } }
