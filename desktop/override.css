@@ -11350,3 +11350,13 @@ html body #appShell.control-shell .app-workspace {
 @media (max-width: 900px) {
   #appShell.control-shell .game-card .title { font-size: 20px !important; }
 }
+
+/* Juegos: reemplazo del acento guinda por azul CP6 */
+#appShell.control-shell .game-card:hover { border-color: rgba(37,99,235,.32) !important; box-shadow: 0 15px 30px rgba(37,99,235,.12) !important; }
+#appShell.control-shell .game-card .icon-wrapper,
+#appShell.control-shell .game-card .sudoku-icon,
+#appShell.control-shell .game-card .mines-icon { background: rgba(37,99,235,.08) !important; border-color: rgba(37,99,235,.20) !important; color: #2563eb !important; }
+#appShell.control-shell .game-card .category { color: #2563eb !important; }
+#appShell.control-shell .game-card .btn-play { background: linear-gradient(135deg,#2563eb 0%,#1e3a8a 100%) !important; box-shadow: 0 4px 10px rgba(37,99,235,.20) !important; }
+#appShell.control-shell .game-card .btn-play:hover { background: linear-gradient(135deg,#3b82f6 0%,#2563eb 100%) !important; box-shadow: 0 6px 15px rgba(37,99,235,.35) !important; }
+#appShell.control-shell .game-card-solitaire .icon-wrapper span:nth-child(2) { color: #2563eb !important; }
