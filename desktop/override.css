@@ -11524,3 +11524,15 @@ html body #appShell.control-shell .app-workspace {
 #requestDetailDialog.client-luxury-detail .client-edit-info-actions p { color:#b91c1c !important; }
 #requestDetailDialog.client-luxury-detail .client-timeline { display:none !important; }
 @media (max-width:760px) { #requestDetailDialog.client-luxury-detail .request-detail-blue-grid { grid-template-columns:1fr !important; } #requestDetailDialog.client-luxury-detail .request-detail-head-actions { justify-content:flex-start !important; } #requestDetailDialog.client-luxury-detail .client-edit-info-form { grid-template-columns:1fr !important; } }
+
+
+/* Ajustes solicitados: tablas compactas y estados no editables */
+#appShell.control-shell .operational-table-compact th,
+#appShell.control-shell .operational-table-compact td,
+#appShell.control-shell .request-table-compact th,
+#appShell.control-shell .request-table-compact td { padding-top: 6px !important; padding-bottom: 6px !important; line-height: 1.2 !important; }
+#appShell.control-shell .request-status.request-status-tramite { background:#fff7ed !important; border-color:#fed7aa !important; color:#c2410c !important; }
+#appShell.control-shell .request-status.request-status-concluida { background:#ecfdf5 !important; border-color:#bbf7d0 !important; color:#15803d !important; }
+#appShell.control-shell .request-table-compact .request-status-select { display:none !important; }
+#appShell.control-shell .game-stage { margin-top:0 !important; border-top-left-radius:0 !important; border-top-right-radius:0 !important; }
+#appShell.control-shell .game-stage-toolbar { min-height:48px !important; padding-top:6px !important; padding-bottom:6px !important; }
