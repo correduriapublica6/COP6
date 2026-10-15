@@ -11629,3 +11629,15 @@ html body #appShell.control-shell .app-workspace {
   display: flex !important;
   align-items: center !important;
 }
+
+/* Ajuste solicitado: mismas alturas y densidad vertical que Recepción; sin cambios horizontales */
+#appShell.control-shell #crearAvaluoSection #technicalAppraisalList table th,
+#appShell.control-shell #crearAvaluoSection #technicalAppraisalList table td,
+#appShell.control-shell #solicitudesView .request-table-compact th,
+#appShell.control-shell #solicitudesView .request-table-compact td {
+  height: 38px !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  line-height: 1.2 !important;
+  vertical-align: middle !important;
+}
