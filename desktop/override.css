@@ -12288,3 +12288,52 @@ body:has(#loginScreen.applicant-dashboard-active) {
   #loginScreen.applicant-dashboard-active .client-request-table td { font-size: .66rem !important; padding: 7px 4px !important; }
   #loginScreen.applicant-dashboard-active .applicant-table-pagination > span { font-size: .62rem !important; }
 }
+
+/* Portal externo — métricas como texto plano dentro del perfil. */
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics .client-dashboard-stats {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics .client-dashboard-stats article,
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics .client-dashboard-stats article:hover {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  min-height: 0 !important;
+  padding: 3px 0 !important;
+  transform: none !important;
+}
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics .metric-stat-row {
+  align-items: baseline !important;
+  display: flex !important;
+  gap: 8px !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics .metric-icon { display: none !important; }
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics .client-dashboard-stats article > .metric-stat-row > div {
+  align-items: baseline !important;
+  display: flex !important;
+  flex: 1 1 auto !important;
+  justify-content: space-between !important;
+  min-width: 0 !important;
+}
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics .client-dashboard-stats article > .metric-stat-row > div > span {
+  color: #64748b !important;
+  font-size: .72rem !important;
+  font-weight: 500 !important;
+  letter-spacing: .01em !important;
+  line-height: 1.3 !important;
+  text-transform: none !important;
+}
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics .client-dashboard-stats article > .metric-stat-row strong {
+  color: #0f172a !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  margin: 0 0 0 10px !important;
+}
