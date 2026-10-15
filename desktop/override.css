@@ -11832,3 +11832,109 @@ html body #appShell.control-shell .app-workspace {
   #loginScreen.applicant-dashboard-active .client-request-filter { flex-basis: auto !important; }
   #loginScreen.applicant-dashboard-active .client-history-caption { display: none !important; }
 }
+
+/* ============================================================================
+   PORTAL EXTERNO — AJUSTE FINAL FULL WIDTH Y TABLA SIN CORTES
+   ============================================================================ */
+#loginScreen.applicant-dashboard-active {
+  display: block !important;
+  width: 100vw !important;
+  min-width: 100% !important;
+  overflow-x: hidden !important;
+}
+#loginScreen.applicant-dashboard-active .login-visual,
+#loginScreen.applicant-dashboard-active #loginVisualBrand,
+#loginScreen.applicant-dashboard-active #applicantVisualPanel {
+  display: none !important;
+}
+#loginScreen.applicant-dashboard-active .public-entry-panel,
+#loginScreen.applicant-dashboard-active .public-entry-content,
+#loginScreen.applicant-dashboard-active #applicantHomePanel {
+  box-sizing: border-box !important;
+  display: block !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active .public-entry-panel { min-height: 100vh !important; padding: 0 !important; }
+#loginScreen.applicant-dashboard-active .client-dashboard-header { width: 100% !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-shell {
+  box-sizing: border-box !important;
+  grid-template-columns: 250px minmax(0, 1fr) !important;
+  margin: 0 !important;
+  max-width: none !important;
+  padding: 28px 32px 36px !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active .client-inbox-main,
+#loginScreen.applicant-dashboard-active .client-history-section,
+#loginScreen.applicant-dashboard-active .client-request-table-wrap,
+#loginScreen.applicant-dashboard-active .client-request-table { min-width: 0 !important; width: 100% !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-heading h2,
+#loginScreen.applicant-dashboard-active .client-inbox-heading h2 strong { color: #1e293b !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-heading h2 strong { font-weight: 600 !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-cta,
+#loginScreen.applicant-dashboard-active .client-primary-button,
+#loginScreen.applicant-dashboard-active .btn-gold-cream,
+#loginScreen.applicant-dashboard-active .btn-crema,
+#loginScreen.applicant-dashboard-active .btn-dorado {
+  background: #0f172a !important;
+  background-image: none !important;
+  border-color: #0f172a !important;
+  color: #ffffff !important;
+}
+#loginScreen.applicant-dashboard-active .client-inbox-cta:hover,
+#loginScreen.applicant-dashboard-active .client-primary-button:hover { background: #1e293b !important; border-color: #1e293b !important; }
+#loginScreen.applicant-dashboard-active .client-dashboard-stats {
+  align-items: stretch !important;
+  grid-template-columns: repeat(3, minmax(180px, 1fr)) !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active .client-dashboard-stats article {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+  padding: 18px 20px !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active .metric-stat-row { min-width: 0 !important; width: 100% !important; }
+#loginScreen.applicant-dashboard-active .metric-stat-row > div { min-width: 0 !important; flex: 1 1 auto !important; }
+#loginScreen.applicant-dashboard-active .client-dashboard-stats article > .metric-stat-row > div > span {
+  overflow: visible !important;
+  white-space: normal !important;
+  word-break: normal !important;
+}
+#loginScreen.applicant-dashboard-active .client-dashboard-stats article > .metric-stat-row strong { white-space: nowrap !important; }
+#loginScreen.applicant-dashboard-active .client-history-section { box-sizing: border-box !important; }
+#loginScreen.applicant-dashboard-active .client-request-table {
+  border-collapse: collapse !important;
+  table-layout: auto !important;
+}
+#loginScreen.applicant-dashboard-active .client-request-table th,
+#loginScreen.applicant-dashboard-active .client-request-table td {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  word-break: normal !important;
+}
+#loginScreen.applicant-dashboard-active .client-request-table th:nth-child(1),
+#loginScreen.applicant-dashboard-active .client-request-table td:nth-child(1) { min-width: 105px !important; }
+#loginScreen.applicant-dashboard-active .client-request-table th:nth-child(2),
+#loginScreen.applicant-dashboard-active .client-request-table td:nth-child(2) { min-width: 135px !important; }
+#loginScreen.applicant-dashboard-active .client-request-table th:nth-child(3),
+#loginScreen.applicant-dashboard-active .client-request-table td:nth-child(3) { min-width: 125px !important; }
+#loginScreen.applicant-dashboard-active .client-request-table th:nth-child(4),
+#loginScreen.applicant-dashboard-active .client-request-table td:nth-child(4) { min-width: 150px !important; }
+#loginScreen.applicant-dashboard-active .client-request-table th:nth-child(5),
+#loginScreen.applicant-dashboard-active .client-request-table td:nth-child(5) { min-width: 105px !important; }
+#loginScreen.applicant-dashboard-active .client-request-table th:nth-child(6),
+#loginScreen.applicant-dashboard-active .client-request-table td:nth-child(6) { min-width: 84px !important; }
+#loginScreen.applicant-dashboard-active .client-request-table th:nth-child(7),
+#loginScreen.applicant-dashboard-active .client-request-table td:nth-child(7) { min-width: 60px !important; }
+#loginScreen.applicant-dashboard-active .client-table-view-button,
+#loginScreen.applicant-dashboard-active .client-pdf-link { white-space: nowrap !important; }
+@media (max-width: 900px) {
+  #loginScreen.applicant-dashboard-active .client-inbox-shell { grid-template-columns: 220px minmax(0, 1fr) !important; padding-inline: 18px !important; }
+  #loginScreen.applicant-dashboard-active .client-dashboard-stats { grid-template-columns: 1fr !important; }
+}
