@@ -11641,3 +11641,16 @@ html body #appShell.control-shell .app-workspace {
   line-height: 1.2 !important;
   vertical-align: middle !important;
 }
+
+/* Corrección efectiva: filas de Gestión y Solicitudes al tamaño compacto de Recepción.
+   Solo se modifica el eje vertical; los 18px laterales y los anchos permanecen intactos. */
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table thead th,
+#appShell.control-shell #crearAvaluoSection #technicalListPanel table tbody td,
+#appShell.control-shell #solicitudesView .request-table-wrap table thead th,
+#appShell.control-shell #solicitudesView .request-table-wrap table tbody td {
+  height: auto !important;
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+  line-height: 1.2 !important;
+  vertical-align: middle !important;
+}
