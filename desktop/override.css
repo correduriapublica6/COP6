@@ -12356,3 +12356,19 @@ body:has(#loginScreen.applicant-dashboard-active) {
 #loginScreen.applicant-dashboard-active .client-sidebar-profile h1 { color: #0f172a !important; font-weight: 500 !important; }
 #loginScreen.applicant-dashboard-active .client-sidebar-contact { display: grid !important; gap: 4px !important; margin-top: 8px !important; }
 #loginScreen.applicant-dashboard-active .client-sidebar-contact p { color: #475569 !important; font-size: .78rem !important; font-weight: 400 !important; line-height: 1.35 !important; margin: 0 !important; overflow-wrap: anywhere !important; }
+
+/* Juegos integrados: eliminar el espacio reservado del encabezado cuando el escenario está abierto. */
+#appShell.control-shell > .app-workspace > #juegosView:has(#gameStage:not([hidden])) {
+  margin-top: -88px !important;
+  padding-top: 0 !important;
+}
+#appShell.control-shell > .app-workspace > #juegosView:has(#gameStage:not([hidden])) .game-stage {
+  margin-top: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+@media (max-width: 760px) {
+  #appShell.control-shell > .app-workspace > #juegosView:has(#gameStage:not([hidden])) {
+    margin-top: -122px !important;
+  }
+}
