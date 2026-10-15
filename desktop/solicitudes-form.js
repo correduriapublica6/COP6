@@ -286,7 +286,7 @@
   }
   function filterApplicantRequests() {
     const query=String($("#applicantRequestSearchInput")?.value || "").trim().toLowerCase(); const status=$("#applicantRequestStatusFilter")?.value || "";
-    const visible=applicantRequestsCache.filter((item) => { const owner=applicantRequestOwner(item).toLowerCase(); const folio=String(item.folio || "").toLowerCase(); return (!query || folio.includes(query) || owner.includes(query)) && (!status || applicantRequestStatusGroup(item.estado) === status); });
+    const visible=applicantRequestsCache.filter((item) => { const owner=applicantRequestOwner(item).toLowerCase(); const folio=String(item.folio || "").toLowerCase(); const asset=applicantRequestAssetType(item).toLowerCase(); const appraisal=applicantRequestAppraisalType(item).toLowerCase(); return (!query || folio.includes(query) || owner.includes(query) || asset.includes(query) || appraisal.includes(query)) && (!status || applicantRequestStatusGroup(item.estado) === status); });
     const table=$("#applicantHomeRequestsTable"); if (!table) return; table.innerHTML=applicantOwnRequestsTable(visible); bindRequestDetailButtons(table, visible); table.querySelector("#clientEmptyNewRequest")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
   }
 
@@ -774,6 +774,13 @@
     $("#applicantHomeNewRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
     $("#applicantRequestSearchInput")?.addEventListener("input", filterApplicantRequests);
     $("#applicantRequestStatusFilter")?.addEventListener("change", filterApplicantRequests);
+    document.querySelectorAll("[data-client-quick-filter]").forEach((button) => button?.addEventListener("click", () => {
+      const value = button.dataset.clientQuickFilter || "";
+      const select = $("#applicantRequestStatusFilter");
+      if (select) select.value = value;
+      document.querySelectorAll("[data-client-quick-filter]").forEach((item) => item.classList.toggle("is-active", item === button));
+      filterApplicantRequests();
+    }));
     $("#applicantVisualNewRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
     window.addEventListener("pagehide", saveRequestDraft);
     $("#applicantVisualProfileButton")?.addEventListener("click", openApplicantProfile);

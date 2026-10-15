@@ -11654,3 +11654,181 @@ html body #appShell.control-shell .app-workspace {
   line-height: 1.2 !important;
   vertical-align: middle !important;
 }
+
+/* ============================================================================
+   PORTAL EXTERNO — BANDEJA DE ENTRADA CP6
+   Identidad fría del Login: navy, azul y grises. Sin dorado ni amarillo.
+   ============================================================================ */
+#loginScreen.applicant-dashboard-active {
+  background: #eef2f7 !important;
+  background-image: none !important;
+  color: #0f172a !important;
+  min-height: 100vh !important;
+}
+#loginScreen.applicant-dashboard-active .public-entry-panel,
+#loginScreen.applicant-dashboard-active .public-entry-content,
+#loginScreen.applicant-dashboard-active #applicantHomePanel {
+  width: 100% !important;
+  max-width: none !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+#loginScreen.applicant-dashboard-active #applicantHomePanel {
+  min-height: 100vh !important;
+  padding: 0 !important;
+}
+#loginScreen.applicant-dashboard-active .client-dashboard-header {
+  align-items: center !important;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(148,163,184,.24) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 8px 22px rgba(15,23,42,.14) !important;
+  color: #fff !important;
+  display: flex !important;
+  height: 68px !important;
+  justify-content: space-between !important;
+  margin: 0 !important;
+  padding: 0 32px !important;
+  position: relative !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active .client-brand strong {
+  color: #fff !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+  letter-spacing: .06em !important;
+}
+#loginScreen.applicant-dashboard-active .client-brand span {
+  color: #94a3b8 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .62rem !important;
+  letter-spacing: .18em !important;
+}
+#loginScreen.applicant-dashboard-active .client-header-actions { gap: 12px !important; }
+#loginScreen.applicant-dashboard-active .client-header-user { border-left: 1px solid rgba(148,163,184,.24) !important; padding-left: 16px !important; }
+#loginScreen.applicant-dashboard-active .client-header-user small { color: #94a3b8 !important; display: block !important; font: 400 .72rem/1.2 Inter, sans-serif !important; }
+#loginScreen.applicant-dashboard-active .client-header-user strong { color: #f8fafc !important; display: block !important; font: 500 .85rem/1.3 Inter, sans-serif !important; max-width: 220px !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
+#loginScreen.applicant-dashboard-active .client-logout-button,
+#loginScreen.applicant-dashboard-active .applicant-messaging-button,
+#loginScreen.applicant-dashboard-active .applicant-notifications-button {
+  background: transparent !important;
+  border: 1px solid rgba(148,163,184,.3) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  color: #e2e8f0 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: .76rem !important;
+  font-weight: 500 !important;
+  min-height: 34px !important;
+  padding: 7px 10px !important;
+}
+#loginScreen.applicant-dashboard-active .client-logout-button:hover,
+#loginScreen.applicant-dashboard-active .applicant-messaging-button:hover,
+#loginScreen.applicant-dashboard-active .applicant-notifications-button:hover { background: rgba(255,255,255,.1) !important; border-color: #93c5fd !important; color: #fff !important; }
+#loginScreen.applicant-dashboard-active .applicant-messaging-button,
+#loginScreen.applicant-dashboard-active .applicant-notifications-button { display: inline-grid !important; min-width: 34px !important; padding: 7px !important; place-items: center !important; }
+#loginScreen.applicant-dashboard-active .applicant-messaging-button svg,
+#loginScreen.applicant-dashboard-active .applicant-notifications-button svg { fill: none !important; height: 18px !important; stroke: currentColor !important; stroke-linecap: round !important; stroke-linejoin: round !important; stroke-width: 1.7 !important; width: 18px !important; }
+#loginScreen.applicant-dashboard-active .applicant-notifications-button b { background: #ef4444 !important; border: 2px solid #0f172a !important; right: -5px !important; top: -5px !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-shell {
+  align-items: stretch !important;
+  display: grid !important;
+  gap: 24px !important;
+  grid-template-columns: minmax(235px, 270px) minmax(0, 1fr) !important;
+  margin: 0 auto !important;
+  max-width: 1480px !important;
+  min-height: calc(100vh - 68px) !important;
+  padding: 28px 32px 36px !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active .client-inbox-sidebar {
+  align-self: start !important;
+  background: #fff !important;
+  border: 1px solid #dbe4ef !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 24px rgba(15,23,42,.06) !important;
+  min-height: 430px !important;
+  padding: 22px 16px !important;
+}
+#loginScreen.applicant-dashboard-active .client-sidebar-profile { border-bottom: 1px solid #e2e8f0 !important; padding: 4px 8px 22px !important; }
+#loginScreen.applicant-dashboard-active .client-sidebar-avatar { align-items: center !important; background: #eff6ff !important; border-radius: 12px !important; color: #2563eb !important; display: flex !important; height: 54px !important; justify-content: center !important; margin-bottom: 17px !important; width: 54px !important; }
+#loginScreen.applicant-dashboard-active .client-sidebar-avatar svg { fill: none !important; height: 27px !important; stroke: currentColor !important; stroke-linecap: round !important; stroke-linejoin: round !important; stroke-width: 1.7 !important; width: 27px !important; }
+#loginScreen.applicant-dashboard-active .client-sidebar-kicker { color: #64748b !important; display: block !important; font: 600 .66rem/1.2 Inter, sans-serif !important; letter-spacing: .12em !important; text-transform: uppercase !important; }
+#loginScreen.applicant-dashboard-active .client-sidebar-profile h1 { color: #0f172a !important; font: 600 1.08rem/1.3 Inter, sans-serif !important; margin: 8px 0 5px !important; }
+#loginScreen.applicant-dashboard-active .client-sidebar-profile p { color: #64748b !important; font: 400 .78rem/1.5 Inter, sans-serif !important; margin: 0 !important; overflow-wrap: anywhere !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-nav { display: grid !important; gap: 5px !important; margin: 20px 0 !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-nav button { align-items: center !important; background: transparent !important; border: 0 !important; border-radius: 8px !important; color: #475569 !important; display: flex !important; font: 500 .82rem/1.2 Inter, sans-serif !important; gap: 10px !important; padding: 11px 10px !important; text-align: left !important; width: 100% !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-nav button span { color: #64748b !important; font-size: 1rem !important; width: 18px !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-nav button:hover,
+#loginScreen.applicant-dashboard-active .client-inbox-nav button.is-active { background: #eff6ff !important; color: #1d4ed8 !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-nav button.is-active span { color: #2563eb !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-cta { align-items: center !important; background: #2563eb !important; border: 1px solid #2563eb !important; border-radius: 8px !important; box-shadow: 0 6px 14px rgba(37,99,235,.18) !important; color: #fff !important; display: flex !important; font: 500 .82rem/1.2 Inter, sans-serif !important; gap: 7px !important; justify-content: center !important; min-height: 42px !important; padding: 10px 12px !important; width: 100% !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-cta:hover { background: #1d4ed8 !important; border-color: #1d4ed8 !important; transform: translateY(-1px) !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-main { min-width: 0 !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-heading { margin: 3px 0 20px !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-heading h2 { color: #0f172a !important; font: 600 clamp(1.45rem, 2vw, 1.9rem)/1.2 Inter, sans-serif !important; letter-spacing: -.03em !important; margin: 7px 0 7px !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-heading h2 strong { color: #2563eb !important; font-weight: 600 !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-heading p { color: #64748b !important; font: 400 .9rem/1.5 Inter, sans-serif !important; margin: 0 !important; }
+#loginScreen.applicant-dashboard-active .client-dashboard-stats { display: grid !important; gap: 14px !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; margin: 0 0 22px !important; }
+#loginScreen.applicant-dashboard-active .client-dashboard-stats article { background: #fff !important; border: 1px solid #dbe4ef !important; border-radius: 12px !important; box-shadow: 0 5px 16px rgba(15,23,42,.045) !important; min-height: 100px !important; padding: 16px !important; }
+#loginScreen.applicant-dashboard-active .metric-stat-row { align-items: center !important; display: flex !important; gap: 12px !important; }
+#loginScreen.applicant-dashboard-active .metric-icon { align-items: center !important; background: #eff6ff !important; border-radius: 10px !important; color: #2563eb !important; display: inline-flex !important; flex: 0 0 40px !important; height: 40px !important; justify-content: center !important; padding: 10px !important; }
+#loginScreen.applicant-dashboard-active .metric-icon svg { fill: none !important; height: 20px !important; stroke: currentColor !important; stroke-linecap: round !important; stroke-linejoin: round !important; stroke-width: 1.8 !important; width: 20px !important; }
+#loginScreen.applicant-dashboard-active .client-dashboard-stats article > .metric-stat-row > div > span { color: #64748b !important; display: block !important; font: 500 .68rem/1.25 Inter, sans-serif !important; letter-spacing: .04em !important; text-transform: uppercase !important; }
+#loginScreen.applicant-dashboard-active .client-dashboard-stats article > .metric-stat-row strong { color: #0f172a !important; display: block !important; font: 600 1.7rem/1 Inter, sans-serif !important; margin-top: 6px !important; }
+#loginScreen.applicant-dashboard-active .client-history-section { background: #fff !important; border: 1px solid #dbe4ef !important; border-radius: 14px !important; box-shadow: 0 8px 24px rgba(15,23,42,.055) !important; margin: 0 !important; padding: 20px !important; }
+#loginScreen.applicant-dashboard-active .client-history-heading { align-items: center !important; display: flex !important; justify-content: space-between !important; margin-bottom: 16px !important; }
+#loginScreen.applicant-dashboard-active .client-history-heading h3 { color: #0f172a !important; font: 600 1.05rem/1.2 Inter, sans-serif !important; margin: 6px 0 0 !important; }
+#loginScreen.applicant-dashboard-active .client-history-caption { color: #94a3b8 !important; font: 400 .74rem/1.2 Inter, sans-serif !important; }
+#loginScreen.applicant-dashboard-active .client-request-toolbar { align-items: center !important; display: flex !important; gap: 10px !important; margin: 0 0 14px !important; }
+#loginScreen.applicant-dashboard-active .client-request-search { align-items: center !important; background: #f8fafc !important; border: 1px solid #dbe4ef !important; border-radius: 8px !important; color: #64748b !important; display: flex !important; flex: 1 !important; gap: 8px !important; min-height: 40px !important; padding: 0 12px !important; }
+#loginScreen.applicant-dashboard-active .client-request-search input { background: transparent !important; border: 0 !important; box-shadow: none !important; color: #0f172a !important; flex: 1 !important; font: 400 .82rem/1.2 Inter, sans-serif !important; min-width: 0 !important; outline: 0 !important; padding: 0 !important; }
+#loginScreen.applicant-dashboard-active .client-request-filter { flex: 0 0 172px !important; }
+#loginScreen.applicant-dashboard-active .client-request-filter select { background: #fff !important; border: 1px solid #dbe4ef !important; border-radius: 8px !important; color: #334155 !important; font: 500 .78rem/1.2 Inter, sans-serif !important; min-height: 40px !important; padding: 0 10px !important; width: 100% !important; }
+#loginScreen.applicant-dashboard-active .client-request-table-wrap { border: 1px solid #e2e8f0 !important; border-radius: 10px !important; box-shadow: none !important; overflow-x: auto !important; }
+#loginScreen.applicant-dashboard-active .client-request-table { border-collapse: collapse !important; min-width: 680px !important; width: 100% !important; }
+#loginScreen.applicant-dashboard-active .client-request-table thead th { background: #f8fafc !important; border-bottom: 1px solid #e2e8f0 !important; color: #64748b !important; font: 600 .67rem/1.2 Inter, sans-serif !important; letter-spacing: .07em !important; padding: 11px 12px !important; text-align: left !important; text-transform: uppercase !important; white-space: nowrap !important; }
+#loginScreen.applicant-dashboard-active .client-request-table tbody td { background: #fff !important; border-bottom: 1px solid #eef2f7 !important; color: #334155 !important; font: 400 .78rem/1.25 Inter, sans-serif !important; padding: 12px !important; white-space: nowrap !important; }
+#loginScreen.applicant-dashboard-active .client-request-table tbody tr:hover td { background: #f8fbff !important; }
+#loginScreen.applicant-dashboard-active .client-request-table tbody tr:last-child td { border-bottom: 0 !important; }
+#loginScreen.applicant-dashboard-active .client-request-table td:first-child strong { color: #1d4ed8 !important; font-weight: 600 !important; }
+#loginScreen.applicant-dashboard-active .client-status-badge { border: 1px solid transparent !important; border-radius: 999px !important; display: inline-flex !important; font: 500 .7rem/1.2 Inter, sans-serif !important; padding: 5px 8px !important; }
+#loginScreen.applicant-dashboard-active .client-status-badge.client-status-concluida { background: #dcfce7 !important; border-color: #bbf7d0 !important; color: #166534 !important; }
+#loginScreen.applicant-dashboard-active .client-status-badge:not(.client-status-concluida) { background: #eff6ff !important; border-color: #bfdbfe !important; color: #1d4ed8 !important; }
+#loginScreen.applicant-dashboard-active .client-table-view-button,
+#loginScreen.applicant-dashboard-active .client-pdf-link { align-items: center !important; background: #fff !important; border: 1px solid #cbd5e1 !important; border-radius: 7px !important; color: #334155 !important; display: inline-flex !important; font: 500 .72rem/1 Inter, sans-serif !important; height: 29px !important; justify-content: center !important; padding: 0 9px !important; text-decoration: none !important; }
+#loginScreen.applicant-dashboard-active .client-table-view-button:hover,
+#loginScreen.applicant-dashboard-active .client-pdf-link:hover { background: #eff6ff !important; border-color: #93c5fd !important; color: #1d4ed8 !important; }
+#loginScreen.applicant-dashboard-active .client-pdf-cell { text-align: center !important; }
+#loginScreen.applicant-dashboard-active .client-pdf-disabled { color: #94a3b8 !important; font: 400 .7rem/1.2 Inter, sans-serif !important; }
+#loginScreen.applicant-dashboard-active .client-empty-state { background: #f8fafc !important; border: 1px dashed #cbd5e1 !important; border-radius: 10px !important; color: #64748b !important; padding: 36px 20px !important; text-align: center !important; }
+#loginScreen.applicant-dashboard-active .client-empty-state h4 { color: #0f172a !important; font: 600 1rem/1.2 Inter, sans-serif !important; }
+/* El portal no hereda ningún acento cálido de reglas históricas. */
+#loginScreen.applicant-dashboard-active .client-primary-button,
+#loginScreen.applicant-dashboard-active .btn-gold-cream,
+#loginScreen.applicant-dashboard-active .btn-crema,
+#loginScreen.applicant-dashboard-active .btn-dorado { background: #2563eb !important; background-image: none !important; border-color: #2563eb !important; color: #fff !important; }
+#loginScreen.applicant-dashboard-active .applicant-notifications-heading button { color: #2563eb !important; }
+#loginScreen.applicant-dashboard-active .applicant-notification-icon { background: #eff6ff !important; color: #2563eb !important; }
+#loginScreen.applicant-dashboard-active .client-request-table tbody tr.is-notification-highlight td { background: #eff6ff !important; box-shadow: inset 0 2px 0 #60a5fa, inset 0 -2px 0 #60a5fa !important; }
+@media (max-width: 768px) {
+  #loginScreen.applicant-dashboard-active .client-dashboard-header { align-items: flex-start !important; height: auto !important; min-height: 68px !important; padding: 16px !important; }
+  #loginScreen.applicant-dashboard-active .client-header-actions { flex-wrap: wrap !important; justify-content: flex-end !important; }
+  #loginScreen.applicant-dashboard-active .client-header-user { display: none !important; }
+  #loginScreen.applicant-dashboard-active .client-inbox-shell { display: flex !important; flex-direction: column !important; gap: 16px !important; padding: 16px !important; }
+  #loginScreen.applicant-dashboard-active .client-inbox-sidebar { min-height: auto !important; padding: 16px !important; }
+  #loginScreen.applicant-dashboard-active .client-sidebar-profile { align-items: center !important; display: grid !important; grid-template-columns: 54px minmax(0,1fr) !important; column-gap: 12px !important; }
+  #loginScreen.applicant-dashboard-active .client-sidebar-profile .client-sidebar-avatar { grid-row: span 3 !important; margin: 0 !important; }
+  #loginScreen.applicant-dashboard-active .client-sidebar-profile .client-sidebar-kicker { align-self: end !important; }
+  #loginScreen.applicant-dashboard-active .client-sidebar-profile h1 { margin: 3px 0 !important; }
+  #loginScreen.applicant-dashboard-active .client-sidebar-profile p { align-self: start !important; }
+  #loginScreen.applicant-dashboard-active .client-inbox-nav { grid-template-columns: repeat(3, minmax(0,1fr)) !important; margin: 14px 0 !important; }
+  #loginScreen.applicant-dashboard-active .client-inbox-nav button { flex-direction: column !important; font-size: .7rem !important; gap: 4px !important; justify-content: center !important; padding: 9px 4px !important; text-align: center !important; }
+  #loginScreen.applicant-dashboard-active .client-dashboard-stats { grid-template-columns: 1fr !important; }
+  #loginScreen.applicant-dashboard-active .client-history-section { padding: 14px !important; }
+  #loginScreen.applicant-dashboard-active .client-request-toolbar { align-items: stretch !important; flex-direction: column !important; }
+  #loginScreen.applicant-dashboard-active .client-request-filter { flex-basis: auto !important; }
+  #loginScreen.applicant-dashboard-active .client-history-caption { display: none !important; }
+}
