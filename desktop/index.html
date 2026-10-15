@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261015-1322" />
+    <link rel="stylesheet" href="override.css?v=20261015-1323" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -51,12 +51,9 @@
     <aside class="client-inbox-sidebar" aria-label="Perfil y filtros de solicitudes">
       <div class="client-sidebar-profile">
         <div class="client-sidebar-avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-        <h1 id="applicantWelcomeNameMirror">solicitante</h1>
-        <p id="applicantWelcomeContact">—</p>
+        <h1 id="applicantWelcomeNameMirror">—</h1>
+        <div class="client-sidebar-contact"><p id="applicantProfileEmail">—</p><p id="applicantProfilePhone">—</p></div>
         <button id="applicantHomeProfileButton" class="client-sidebar-profile-button" type="button">Editar perfil</button>
-      </div>
-      <div class="client-sidebar-metrics" aria-label="Resumen de solicitudes">
-        <div class="client-dashboard-stats" aria-label="Resumen de solicitudes"><article class="metric-total"><div class="metric-stat-row"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3h8l3 3v15H7z"></path><path d="M15 3v4h4M10 12h5M10 16h5"></path></svg></span><div><span>Total:</span><strong id="applicantTotalRequests">0</strong></div></div></article><article class="metric-active"><div class="metric-stat-row"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><path d="M12 8v5l3 2"></path></svg></span><div><span>En Proceso:</span><strong id="applicantActiveRequests">0</strong></div></div></article><article class="metric-completed"><div class="metric-stat-row"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.5 2.5L16 9"></path></svg></span><div><span>Concluidas:</span><strong id="applicantCompletedRequests">0</strong></div></div></article></div>
       </div>
       <nav class="client-inbox-nav" aria-label="Filtros rápidos">
         <button type="button" class="is-active" data-client-quick-filter=""><span>▣</span>Todas las solicitudes</button>

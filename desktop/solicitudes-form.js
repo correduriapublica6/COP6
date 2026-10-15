@@ -340,10 +340,14 @@
     $("#loginVisualBrand")?.setAttribute("hidden", "true");
     $("#applicantVisualPanel")?.setAttribute("hidden", "true");
     $("#openInternalAccessButton")?.setAttribute("hidden", "true");
-    $("#applicantWelcomeName").textContent = applicantSession.name || "solicitante";
-    $("#applicantWelcomeNameMessage") && ($("#applicantWelcomeNameMessage").textContent = applicantSession.name || "solicitante");
-    $("#applicantWelcomeNameMirror").textContent = applicantSession.name || "solicitante";
-    $("#applicantWelcomeContact").textContent = [applicantSession.phone, applicantSession.email].filter(Boolean).join(" · ");
+    const applicantName = String(applicantSession.name || applicantSession.nombre || "—").trim() || "—";
+    const applicantEmail = String(applicantSession.email || applicantSession.correo || "—").trim() || "—";
+    const applicantPhone = String(applicantSession.phone || applicantSession.telefono || "—").trim() || "—";
+    $("#applicantWelcomeName") && ($("#applicantWelcomeName").textContent = applicantName);
+    $("#applicantWelcomeNameMessage") && ($("#applicantWelcomeNameMessage").textContent = applicantName);
+    $("#applicantWelcomeNameMirror") && ($("#applicantWelcomeNameMirror").textContent = applicantName);
+    $("#applicantProfileEmail") && ($("#applicantProfileEmail").textContent = applicantEmail);
+    $("#applicantProfilePhone") && ($("#applicantProfilePhone").textContent = applicantPhone);
     $("#publicRequestForm")?.elements.correo && ($("#publicRequestForm").elements.correo.readOnly = true);
     renderApplicantHomeRequests();
     refreshApplicantNotifications();
@@ -671,9 +675,11 @@
       const updated = await api(`/applicants/${encodeURIComponent(applicantSession.id)}/profile`, { method: "PUT", body: JSON.stringify({ name: values.nombre, phone: values.telefono, password: values.password || "" }) });
       applicantSession = updated;
       sessionStorage.setItem("control-avaluos.applicant", JSON.stringify(updated));
-      $("#applicantWelcomeName").textContent = updated.name;
-      $("#applicantWelcomeNameMessage") && ($("#applicantWelcomeNameMessage").textContent = updated.name);
-      $("#applicantWelcomeContact").textContent = [updated.phone, updated.email].filter(Boolean).join(" · ");
+      $("#applicantWelcomeName") && ($("#applicantWelcomeName").textContent = updated.name || "—");
+      $("#applicantWelcomeNameMessage") && ($("#applicantWelcomeNameMessage").textContent = updated.name || "—");
+      $("#applicantWelcomeNameMirror") && ($("#applicantWelcomeNameMirror").textContent = updated.name || "—");
+      $("#applicantProfileEmail") && ($("#applicantProfileEmail").textContent = updated.email || "—");
+      $("#applicantProfilePhone") && ($("#applicantProfilePhone").textContent = updated.phone || "—");
       setMessage(message, "Perfil actualizado correctamente.", "success");
       window.setTimeout(() => closeDialog($("#applicantProfileDialog")), 700);
     } catch (error) { setMessage(message, error.message || "No se pudo actualizar el perfil."); }

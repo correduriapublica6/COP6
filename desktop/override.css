@@ -12349,3 +12349,10 @@ body:has(#loginScreen.applicant-dashboard-active) {
 #loginScreen.applicant-dashboard-active .client-sidebar-metrics .client-dashboard-stats article > .metric-stat-row strong { font-size: .95rem !important; font-weight: 500 !important; }
 #loginScreen.applicant-dashboard-active .client-inbox-heading,
 #loginScreen.applicant-dashboard-active .client-header-user { display: none !important; }
+
+
+/* Portal externo — perfil con nombre, correo y teléfono separados; métricas retiradas. */
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics { display: none !important; }
+#loginScreen.applicant-dashboard-active .client-sidebar-profile h1 { color: #0f172a !important; font-weight: 500 !important; }
+#loginScreen.applicant-dashboard-active .client-sidebar-contact { display: grid !important; gap: 4px !important; margin-top: 8px !important; }
+#loginScreen.applicant-dashboard-active .client-sidebar-contact p { color: #475569 !important; font-size: .78rem !important; font-weight: 400 !important; line-height: 1.35 !important; margin: 0 !important; overflow-wrap: anywhere !important; }
