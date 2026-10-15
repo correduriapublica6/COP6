@@ -12093,3 +12093,43 @@ html body #appShell.control-shell .app-workspace {
   #loginScreen.applicant-dashboard-active .client-dashboard-stats { grid-template-columns: 1fr !important; }
   #loginScreen.applicant-dashboard-active .client-history-section { padding: 16px !important; }
 }
+
+/* Portal externo: anulación absoluta de la división visual del Login. */
+html:has(#loginScreen.applicant-dashboard-active),
+body:has(#loginScreen.applicant-dashboard-active) {
+  background: #f1f5f9 !important;
+  min-width: 100% !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active,
+#loginScreen.applicant-dashboard-active.login-screen {
+  background: #f1f5f9 !important;
+  display: block !important;
+  grid-template-columns: none !important;
+  min-height: 100vh !important;
+  width: 100vw !important;
+}
+#loginScreen.applicant-dashboard-active > .public-entry-panel,
+#loginScreen.applicant-dashboard-active .public-entry-panel {
+  background: #f1f5f9 !important;
+  display: block !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  max-width: none !important;
+  min-height: 100vh !important;
+  padding: 0 !important;
+  width: 100vw !important;
+}
+#loginScreen.applicant-dashboard-active .public-entry-content {
+  display: block !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active .client-inbox-shell {
+  box-sizing: border-box !important;
+  grid-template-columns: 280px minmax(0, 1fr) !important;
+  margin: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active .login-visual { display: none !important; }
