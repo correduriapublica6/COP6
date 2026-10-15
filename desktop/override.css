@@ -12337,3 +12337,15 @@ body:has(#loginScreen.applicant-dashboard-active) {
   line-height: 1 !important;
   margin: 0 0 0 10px !important;
 }
+
+
+/* Portal externo — métricas en texto limpio y sin saludo superior. */
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics .metric-icon { display: none !important; }
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics .client-dashboard-stats article,
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics .client-dashboard-stats article:hover {
+  background: transparent !important; border: none !important; box-shadow: none !important; padding: 3px 0 !important; transform: none !important;
+}
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics .client-dashboard-stats article > .metric-stat-row > div > span { font-size: .76rem !important; font-weight: 400 !important; text-transform: none !important; }
+#loginScreen.applicant-dashboard-active .client-sidebar-metrics .client-dashboard-stats article > .metric-stat-row strong { font-size: .95rem !important; font-weight: 500 !important; }
+#loginScreen.applicant-dashboard-active .client-inbox-heading,
+#loginScreen.applicant-dashboard-active .client-header-user { display: none !important; }

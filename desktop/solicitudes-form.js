@@ -260,7 +260,7 @@
         await api(`/notifications/${encodeURIComponent(item.id)}/read`, { method: "PUT" });
         item.leida = true;
         renderApplicantNotifications();
-        if (item.url_destino === "app://refresh") { const version = item.mensaje.match(/app_version:([^\)]+)/)?.[1] || ""; if (version) localStorage.setItem(APPLICANT_APP_VERSION_KEY, version); window.location.reload(true); return; }
+        if (item.url_destino === "app://refresh") { const version = item.mensaje.match(/app_version:([^\)]+)/)?.[1] || ""; if (version) localStorage.setItem(APPLICANT_APP_VERSION_KEY, version); const url = new URL(window.location.href); url.searchParams.set("v", version || String(Date.now())); window.location.replace(url.toString()); return; }
         if (item.tipo === "cambio_estatus" && item.url_destino?.startsWith("solicitud:")) {
           applicantHighlightRequestId = item.url_destino.slice("solicitud:".length);
           $("#applicantNotificationsPanel").hidden = true;
@@ -271,13 +271,34 @@
       } catch (error) { window.alert(error.message || "No fue posible marcar la notificación."); }
     }));
   }
+  function showApplicantVersionUpdatePopup(serverVersion) {
+    const dialog = $("#versionUpdateDialog");
+    const reloadButton = $("#versionUpdateReloadButton");
+    if (!dialog || !serverVersion) return;
+    dialog.dataset.version = serverVersion;
+    if (reloadButton && reloadButton.dataset.applicantVersionBound !== "true") {
+      reloadButton.dataset.applicantVersionBound = "true";
+      reloadButton.addEventListener("click", () => {
+        const version = dialog.dataset.version || serverVersion;
+        localStorage.setItem(APPLICANT_APP_VERSION_KEY, version);
+        const url = new URL(window.location.href);
+        url.searchParams.set("v", version);
+        window.location.replace(url.toString());
+      });
+    }
+    if (!dialog.open) dialog.showModal?.();
+  }
   async function refreshApplicantNotifications() {
     if (!applicantSession) return;
     try {
       const clientVersion = localStorage.getItem(APPLICANT_APP_VERSION_KEY) || "";
       const serverVersion = await api("/version");
-      if (serverVersion?.version && !clientVersion) localStorage.setItem(APPLICANT_APP_VERSION_KEY, serverVersion.version);
-      if (serverVersion?.version && clientVersion && clientVersion !== serverVersion.version) await api("/notifications/system-version", { method: "POST", body: JSON.stringify({ clientVersion }) });
+      const currentVersion = String(serverVersion?.version || "").trim();
+      if (currentVersion && !clientVersion) localStorage.setItem(APPLICANT_APP_VERSION_KEY, currentVersion);
+      if (currentVersion && clientVersion && clientVersion !== currentVersion) {
+        await api("/notifications/system-version", { method: "POST", body: JSON.stringify({ clientVersion }) });
+        showApplicantVersionUpdatePopup(currentVersion);
+      }
       applicantNotifications = await api("/notifications");
       renderApplicantNotifications();
     } catch { /* Se conserva el contador anterior durante una caída momentánea. */ }

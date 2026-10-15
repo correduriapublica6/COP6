@@ -712,7 +712,9 @@
       const version = dialog?.dataset.version || "";
       if (version) localStorage.setItem("app_version", version);
       dialog?.close();
-      window.location.reload(true);
+      const url = new URL(window.location.href);
+      url.searchParams.set("v", version || String(Date.now()));
+      window.location.replace(url.toString());
     });
     $("#versionUpdateLaterButton")?.addEventListener("click", () => $("#versionUpdateDialog")?.close());
     checkAppVersion();
