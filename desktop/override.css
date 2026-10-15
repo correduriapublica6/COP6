@@ -12133,3 +12133,49 @@ body:has(#loginScreen.applicant-dashboard-active) {
   width: 100% !important;
 }
 #loginScreen.applicant-dashboard-active .login-visual { display: none !important; }
+
+/* Portal externo — perfil lateral, sin chat y controles alineados. */
+#loginScreen.applicant-dashboard-active #applicantMessagingButton,
+#loginScreen.applicant-dashboard-active #applicantMessagingView,
+#loginScreen.applicant-dashboard-active .applicant-messaging-button { display: none !important; }
+#loginScreen.applicant-dashboard-active .client-sidebar-avatar {
+  height: 76px !important;
+  margin-bottom: 20px !important;
+  width: 76px !important;
+}
+#loginScreen.applicant-dashboard-active .client-sidebar-avatar svg {
+  height: 38px !important;
+  width: 38px !important;
+}
+#loginScreen.applicant-dashboard-active .client-sidebar-profile-button {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  color: #334155 !important;
+  display: block !important;
+  font: 500 .78rem/1.2 Inter, "Segoe UI", sans-serif !important;
+  margin-top: 16px !important;
+  padding: 9px 12px !important;
+  transition: background .2s ease, border-color .2s ease, color .2s ease !important;
+  width: 100% !important;
+}
+#loginScreen.applicant-dashboard-active .client-sidebar-profile-button:hover {
+  background: #eff6ff !important;
+  border-color: #93c5fd !important;
+  color: #1d4ed8 !important;
+}
+#loginScreen.applicant-dashboard-active .client-inbox-cta {
+  margin-top: 30px !important;
+}
+#loginScreen.applicant-dashboard-active .client-dashboard-stats {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  position: relative !important;
+  transform: translateX(-2px) !important;
+  width: calc(100% + 2px) !important;
+}
+@media (max-width: 760px) {
+  #loginScreen.applicant-dashboard-active .client-sidebar-profile-button { margin-top: 14px !important; }
+  #loginScreen.applicant-dashboard-active .client-inbox-cta { margin-top: 22px !important; }
+  #loginScreen.applicant-dashboard-active .client-dashboard-stats { transform: none !important; width: 100% !important; }
+}
