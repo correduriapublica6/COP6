@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261015-1205" />
+    <link rel="stylesheet" href="override.css?v=20261015-1233" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -56,6 +56,9 @@
         <p id="applicantWelcomeContact">—</p>
         <button id="applicantHomeProfileButton" class="client-sidebar-profile-button" type="button">Editar perfil</button>
       </div>
+      <div class="client-sidebar-metrics" aria-label="Resumen de solicitudes">
+        <div class="client-dashboard-stats" aria-label="Resumen de solicitudes"><article class="metric-total"><div class="metric-stat-row"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3h8l3 3v15H7z"></path><path d="M15 3v4h4M10 12h5M10 16h5"></path></svg></span><div><span>Total de solicitudes</span><strong id="applicantTotalRequests">0</strong></div></div></article><article class="metric-active"><div class="metric-stat-row"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><path d="M12 8v5l3 2"></path></svg></span><div><span>En proceso</span><strong id="applicantActiveRequests">0</strong></div></div></article><article class="metric-completed"><div class="metric-stat-row"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.5 2.5L16 9"></path></svg></span><div><span>Concluidas</span><strong id="applicantCompletedRequests">0</strong></div></div></article></div>
+      </div>
       <nav class="client-inbox-nav" aria-label="Filtros rápidos">
         <button type="button" class="is-active" data-client-quick-filter=""><span>▣</span>Todas las solicitudes</button>
         <button type="button" data-client-quick-filter="proceso"><span>◷</span>En proceso</button>
@@ -67,7 +70,7 @@
       <section class="client-inbox-heading" aria-labelledby="applicantWelcomeTitle">
         <div><span class="client-sidebar-kicker">CENTRO DE TRÁMITES</span><h2 id="applicantWelcomeTitle">¡Hola, <strong id="applicantWelcomeNameMessage">solicitante</strong>!</h2><p>Consulta el estado de tus avalúos y gestiona tus solicitudes desde un solo lugar.</p></div>
       </section>
-      <section class="client-dashboard-stats" aria-label="Resumen de solicitudes"><article class="metric-total"><div class="metric-stat-row"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3h8l3 3v15H7z"></path><path d="M15 3v4h4M10 12h5M10 16h5"></path></svg></span><div><span>Total de solicitudes</span><strong id="applicantTotalRequests">0</strong></div></div></article><article class="metric-active"><div class="metric-stat-row"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><path d="M12 8v5l3 2"></path></svg></span><div><span>En proceso</span><strong id="applicantActiveRequests">0</strong></div></div></article><article class="metric-completed"><div class="metric-stat-row"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.5 2.5L16 9"></path></svg></span><div><span>Concluidas</span><strong id="applicantCompletedRequests">0</strong></div></div></article></section>
+
       <section id="applicantMessagingView" class="applicant-messaging-view" hidden><button id="applicantMessagingBackButton" class="applicant-messaging-back" type="button">← Volver a mis solicitudes</button><div id="applicantMessagingApp" class="messaging-app-container"></div></section>
       <section class="client-history-section"><div class="client-history-heading"><div><span class="client-sidebar-kicker">BANDEJA DE ENTRADA</span><h3>Mis solicitudes</h3></div><span class="client-history-caption">Actualizado en tiempo real</span></div><div class="client-request-toolbar" role="search"><label class="client-request-search"><span class="sr-only">Buscar solicitudes</span><span aria-hidden="true">⌕</span><input id="applicantRequestSearchInput" type="search" placeholder="Buscar por folio, tipo de bien o propietario..." autocomplete="off" /></label><label class="client-request-filter"><span class="sr-only">Filtrar por estatus</span><select id="applicantRequestStatusFilter"><option value="">Todos los estatus</option><option value="proceso">En proceso</option><option value="concluida">Concluidas</option><option value="recibida">Recibidas</option></select></label></div><div id="applicantHomeRequestsTable" class="client-request-grid"></div></section>
     </main>

@@ -16,6 +16,8 @@
   let applicantRefreshTimer = null;
   let applicantNotificationTimer = null;
   let applicantRequestsCache = [];
+  let applicantRequestsPage = 1;
+  const APPLICANT_REQUESTS_PAGE_SIZE = 5;
   let applicantNotifications = [];
   let applicantHighlightRequestId = "";
   const APPLICANT_APP_VERSION_KEY = "app_version";
@@ -284,10 +286,23 @@
     if (!list.length) return `<div class="client-empty-state"><div class="client-empty-icon">＋</div><h4>Aún no tienes solicitudes</h4><p>Inicia tu primer trámite y consulta aquí todo su avance.</p><button type="button" class="client-primary-button btn-copu-primary btn-gold-cream" id="clientEmptyNewRequest">Solicitar un servicio</button></div>`;
     return `<div class="client-request-table-wrap"><table class="client-request-table"><thead><tr><th>Folio</th><th>Tipo de bien</th><th>Tipo de avalúo</th><th>Propietario</th><th>Estatus</th><th>Detalles</th><th>PDF</th></tr></thead><tbody>${list.map((item) => { const group=applicantRequestStatusGroup(item.estado); const pdf=applicantPdfUrl(item); const pdfAction=pdf ? `<a class="client-pdf-link" href="${escapeHtml(pdf)}" target="_blank" rel="noopener" download>⇩</a>` : `<span class="client-pdf-disabled" title="Avalúo en proceso">En proceso</span>`; return `<tr data-applicant-request-row="${escapeHtml(item.id)}" class="${applicantHighlightRequestId === item.id ? "is-notification-highlight" : ""}"><td><strong>${escapeHtml(item.folio || "Pendiente")}</strong></td><td>${escapeHtml(applicantRequestAssetType(item))}</td><td>${escapeHtml(applicantRequestAppraisalType(item))}</td><td>${escapeHtml(applicantRequestOwner(item))}</td><td><span class="client-status-badge client-status-${requestStatusClass(item.estado)}">${escapeHtml(item.estado || "Recibida")}</span></td><td><button type="button" class="client-table-view-button" data-request-detail="${escapeHtml(item.id)}">Detalles</button></td><td class="client-pdf-cell">${pdfAction}</td></tr>`; }).join("")}</tbody></table></div>`;
   }
-  function filterApplicantRequests() {
+  function applicantRequestsPagination(page, total) {
+    const pages = Math.max(1, Math.ceil(total / APPLICANT_REQUESTS_PAGE_SIZE));
+    const current = Math.min(Math.max(1, page), pages);
+    const first = total ? (current - 1) * APPLICANT_REQUESTS_PAGE_SIZE + 1 : 0;
+    const last = Math.min(current * APPLICANT_REQUESTS_PAGE_SIZE, total);
+    const buttons = Array.from({ length: pages }, (_, index) => { const number = index + 1; return `<button type="button" class="table-page-button${number === current ? " is-active" : ""}" data-applicant-page="${number}" aria-current="${number === current ? "page" : "false"}">${number}</button>`; }).join("");
+    return `<nav class="table-pagination applicant-table-pagination" aria-label="Paginación de mis solicitudes"><span>Mostrando ${first}-${last} de ${total}</span><div><button type="button" class="table-page-button" data-applicant-page="${current - 1}" ${current === 1 ? "disabled" : ""} aria-label="Página anterior">‹</button>${buttons}<button type="button" class="table-page-button" data-applicant-page="${current + 1}" ${current === pages ? "disabled" : ""} aria-label="Página siguiente">›</button></div></nav>`;
+  }
+  function filterApplicantRequests(resetPage = false) {
+    if (resetPage) applicantRequestsPage = 1;
     const query=String($("#applicantRequestSearchInput")?.value || "").trim().toLowerCase(); const status=$("#applicantRequestStatusFilter")?.value || "";
     const visible=applicantRequestsCache.filter((item) => { const owner=applicantRequestOwner(item).toLowerCase(); const folio=String(item.folio || "").toLowerCase(); const asset=applicantRequestAssetType(item).toLowerCase(); const appraisal=applicantRequestAppraisalType(item).toLowerCase(); return (!query || folio.includes(query) || owner.includes(query) || asset.includes(query) || appraisal.includes(query)) && (!status || applicantRequestStatusGroup(item.estado) === status); });
-    const table=$("#applicantHomeRequestsTable"); if (!table) return; table.innerHTML=applicantOwnRequestsTable(visible); bindRequestDetailButtons(table, visible); table.querySelector("#clientEmptyNewRequest")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
+    const pages = Math.max(1, Math.ceil(visible.length / APPLICANT_REQUESTS_PAGE_SIZE));
+    applicantRequestsPage = Math.min(Math.max(1, applicantRequestsPage), pages);
+    const pageItems = visible.slice((applicantRequestsPage - 1) * APPLICANT_REQUESTS_PAGE_SIZE, applicantRequestsPage * APPLICANT_REQUESTS_PAGE_SIZE);
+    const table=$("#applicantHomeRequestsTable"); if (!table) return; table.innerHTML=applicantOwnRequestsTable(pageItems) + applicantRequestsPagination(applicantRequestsPage, visible.length); bindRequestDetailButtons(table, pageItems); table.querySelector("#clientEmptyNewRequest")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
+    table.querySelectorAll("[data-applicant-page]").forEach((button) => button?.addEventListener("click", () => { if (button.disabled) return; applicantRequestsPage = Number(button.dataset.applicantPage) || 1; filterApplicantRequests(); }));
   }
 
   function showApplicantHome() {
@@ -333,6 +348,7 @@
     try {
       const own = await api(`/mis-solicitudes?email=${encodeURIComponent(applicantSession.email)}&usuario_id=${encodeURIComponent(applicantSession.id || "")}`);
       applicantRequestsCache = own;
+      applicantRequestsPage = Math.min(applicantRequestsPage, Math.max(1, Math.ceil(own.length / APPLICANT_REQUESTS_PAGE_SIZE)));
       table.dataset.loaded = "true";
       if ($("#applicantTotalRequests")) $("#applicantTotalRequests").textContent = own.length;
       if ($("#applicantActiveRequests")) $("#applicantActiveRequests").textContent = own.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
@@ -772,14 +788,14 @@
     $("#backRequestsToAvaluosButton")?.addEventListener("click", () => $("[data-app-view=avaluos]")?.click());
     $("#applicantProfileForm")?.addEventListener("submit", saveApplicantProfile);
     $("#applicantHomeNewRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
-    $("#applicantRequestSearchInput")?.addEventListener("input", filterApplicantRequests);
-    $("#applicantRequestStatusFilter")?.addEventListener("change", filterApplicantRequests);
+    $("#applicantRequestSearchInput")?.addEventListener("input", () => filterApplicantRequests(true));
+    $("#applicantRequestStatusFilter")?.addEventListener("change", () => filterApplicantRequests(true));
     document.querySelectorAll("[data-client-quick-filter]").forEach((button) => button?.addEventListener("click", () => {
       const value = button.dataset.clientQuickFilter || "";
       const select = $("#applicantRequestStatusFilter");
       if (select) select.value = value;
       document.querySelectorAll("[data-client-quick-filter]").forEach((item) => item.classList.toggle("is-active", item === button));
-      filterApplicantRequests();
+      filterApplicantRequests(true);
     }));
     $("#applicantVisualNewRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
     window.addEventListener("pagehide", saveRequestDraft);
