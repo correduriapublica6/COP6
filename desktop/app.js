@@ -897,7 +897,7 @@
   const isExpiredWithoutDeliveryOrPayment = (record) => { const expiry = getExpiryDate(record.fechaAvaluo); return Boolean(!record.pagado && !record.seEntregoA && expiry && expiry < today()); };
   const dateInRange = (value, start, end) => Boolean(value && (!start || value >= start) && (!end || value <= end));
   function currentWeekRange() { const date = new Date(`${today()}T12:00:00`); const day = date.getDay(); date.setDate(date.getDate() + (day === 0 ? -6 : 1 - day)); const start = date.toISOString().slice(0, 10); date.setDate(date.getDate() + 6); return { start, end: date.toISOString().slice(0, 10) }; }
-  function prioritize(items) { return [...items].sort((left, right) => Number(left.pagado) - Number(right.pagado) || new Date(right.actualizadoEn).getTime() - new Date(left.actualizadoEn).getTime()); }
+  function prioritize(items) { return [...items].sort((left, right) => { const leftDate = new Date(left.creadoEn || left.createdAt || left.fechaAvaluo || 0).getTime() || 0; const rightDate = new Date(right.creadoEn || right.createdAt || right.fechaAvaluo || 0).getTime() || 0; return leftDate - rightDate; }); }
   function getVisibleRecords() {
     const query = searchInput.value.trim().toLocaleLowerCase("es-MX");
     const numericQuery = normalizeNumber(query);
@@ -919,7 +919,7 @@
     const delivered = Boolean(record.seEntregoA);
     const expired = isExpiredWithoutDeliveryOrPayment(record);
     const statusClass = paid ? "paid" : expired ? "expired" : "pending";
-    const statusLabel = paid ? "Pagado" : expired ? "Vencido" : delivered ? "Entregado sin pago" : "Pendiente de entrega";
+    const statusLabel = paid && !delivered ? "Pagado, no entregado" : paid ? "Pagado" : expired ? "Vencido" : delivered ? "Entregado sin pago" : "Pendiente de entrega";
     const editIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"></path><path d="m14 7 3 3"></path></svg>`;
     const receiptIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"></path><path d="M9 8h6M9 12h6M9 16h3"></path></svg>`;
     const deleteIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7l1-3h4l1 3"></path></svg>`;
