@@ -375,7 +375,7 @@
   const roleLabel = (role) => ({ admin: "Administrador", editor: "Editor(a)", viewer: "Solo lectura", valuador: "Valuador", auditor: "Auditor" }[role] || "Solo lectura");
   const isAdmin = () => roleFor(activeSessionUser) === "admin";
   const canEdit = () => ["admin", "editor", "valuador", "auditor"].includes(roleFor(activeSessionUser));
-  const canEditReception = () => ["admin", "editor", "auditor"].includes(roleFor(activeSessionUser));
+  const canEditReception = () => ["admin", "editor", "valuador", "auditor"].includes(roleFor(activeSessionUser));
   const canCreateTask = () => ["admin", "editor", "valuador", "auditor"].includes(roleFor(activeSessionUser));
   const canViewSummary = () => ["admin", "editor", "auditor"].includes(roleFor(activeSessionUser));
   const canAuthorizeFolios = () => ["admin", "auditor"].includes(roleFor(activeSessionUser));
@@ -792,7 +792,7 @@
     applyProfileAvatar(user);
     $("#welcomeUserName").textContent = user || "usuario";
     const currentRole = roleFor(user);
-    $("#welcomeRoleCopy").textContent = currentRole === "admin" ? "Tienes acceso administrativo para gestionar los avalúos, el resumen y la configuración local." : currentRole === "auditor" ? "Tienes acceso total a Avalúos, Fe Pública, Resumen general, Chat y Notas/Tareas." : currentRole === "valuador" ? "Puedes crear y editar avalúos técnicos, además de usar el Chat y registrar Notas/Tareas; Recepción es solo de consulta." : currentRole === "editor" ? "Puedes registrar y editar avalúos, además de consultar el Control de saldos." : "Puedes consultar los avalúos, recibos y listados disponibles en este equipo.";
+    $("#welcomeRoleCopy").textContent = currentRole === "admin" ? "Tienes acceso administrativo para gestionar los avalúos, el resumen y la configuración local." : currentRole === "auditor" ? "Tienes acceso total a Avalúos, Fe Pública, resumen, Chat, Notas/Tareas y registro en Recepción." : currentRole === "valuador" ? "Puedes crear y editar avalúos técnicos, registrar avalúos en Recepción y usar el Chat y las Notas/Tareas." : currentRole === "editor" ? "Puedes registrar y editar avalúos, además de consultar el Control de saldos." : "Puedes consultar los avalúos, recibos y listados disponibles en este equipo.";
     loginScreen.classList.add("is-hidden");
     loginScreen.hidden = true;
     appShell.classList.remove("is-hidden");
