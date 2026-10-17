@@ -12443,3 +12443,41 @@ body:has(#loginScreen.applicant-dashboard-active) {
   font-weight: 600 !important;
 }
 #appShell.control-shell .game-stage-back:hover { background: #1d4ed8 !important; }
+
+/* Animania: vista proxy a pantalla completa, sin márgenes laterales ni scroll horizontal. */
+#appShell.control-shell .animania-embedded-panel {
+  position: fixed !important;
+  inset: 64px 0 0 0 !important;
+  z-index: 50 !important;
+  width: 100vw !important;
+  height: calc(100vh - 64px) !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell .animania-panel-toolbar {
+  height: 52px !important;
+  min-height: 52px !important;
+  box-sizing: border-box !important;
+  padding: 8px 20px !important;
+  background: #fff !important;
+}
+#appShell.control-shell .animania-panel-toolbar > div:first-child { display: none !important; }
+#appShell.control-shell #animaniaFrame {
+  display: block !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: calc(100vh - 116px) !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+}
+body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
+@media (max-width: 700px) {
+  #appShell.control-shell .animania-embedded-panel { inset: 56px 0 0 0 !important; height: calc(100vh - 56px) !important; }
+  #appShell.control-shell .animania-panel-toolbar { height: 48px !important; min-height: 48px !important; padding: 6px 12px !important; }
+  #appShell.control-shell #animaniaFrame { height: calc(100vh - 104px) !important; }
+}

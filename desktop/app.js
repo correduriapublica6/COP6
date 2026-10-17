@@ -1539,7 +1539,9 @@
   $$('[data-animania-open]').forEach((button) => button?.addEventListener("click", () => {
     if (!animaniaPanel || !animaniaFrame) return;
     animaniaPanel.hidden = false;
-    animaniaFrame.src = "/api/animania/principal";
+    // En GitHub Pages las rutas relativas apuntan a GitHub y producen 404.
+    // Animania debe pasar por el mismo backend público que usa el resto de la app.
+    animaniaFrame.src = `${API_BASE_URL}/animania`;
     document.querySelector(".avaluos-choice-grid")?.classList.add("is-hidden");
     document.querySelector("#avaluosAuthorizedFoliosPanel")?.classList.add("is-hidden");
     animaniaPanel.scrollIntoView({ behavior: "smooth", block: "start" });
