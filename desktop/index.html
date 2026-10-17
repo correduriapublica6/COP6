@@ -141,6 +141,10 @@
 
         <section id="inicioView" class="app-view welcome-view" aria-labelledby="welcomeTitle" hidden>
           <div class="welcome-card"><div class="welcome-card-main"><h2 id="welcomeTitle">Bienvenido, <span id="welcomeUserName">usuario</span></h2><p id="welcomeRoleCopy" class="welcome-copy">Tu espacio está listo para continuar con el control local.</p></div></div>
+          <section id="mobileInstallCard" class="mobile-install-card" aria-label="Instalar versión móvil">
+            <div class="mobile-install-copy"><span class="section-kicker">VERSIÓN MÓVIL</span><h3>Instala CP6 en tu celular</h3><p>Escanea el código QR con la cámara de tu teléfono para abrir la versión móvil e instalarla como aplicación.</p><button id="mobileInstallButton" class="primary-button btn-copu-primary mobile-install-button" type="button" hidden>Instalar aplicación</button></div>
+            <div class="mobile-qr-wrap"><img src="./assets/mobile-install-qr.png" alt="Código QR para instalar la versión móvil de Control de Avalúos CP6" width="132" height="132" loading="lazy" /></div>
+          </section>
         </section>
 
         <section id="chatWidget" class="chat-widget" hidden><div class="chat-panel" id="chatPanel"><div class="chat-heading"><div aria-hidden="true"></div><button id="closeChatButton" class="icon-button" type="button" aria-label="Cerrar chat">×</button></div><div id="chatMessages" class="chat-messages" aria-live="polite"><p class="chat-empty">Aún no hay mensajes.</p></div><form id="chatForm" class="chat-form"><input id="chatMessageInput" type="text" maxlength="500" placeholder="Escribe un mensaje para todos" required /><button id="chatSendButton" class="subtle-action-button btn-copu-primary" type="submit">Enviar</button></form></div><button id="chatToggleButton" class="chat-toggle-button" type="button" aria-expanded="false">Chat</button></section>
@@ -335,6 +339,7 @@
     <script>
       if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
     </script>
+    <script src="mobile-pwa.js?v=20261017-1240"></script>
     <script src="automotriz-form.js?v=20261006-1705"></script>
     <script src="mobiliario-form.js?v=20261006-1705"></script>
     <script src="solicitudes-form.js?v=20261012-1308"></script>

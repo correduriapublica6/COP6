@@ -12503,3 +12503,29 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #appShell.control-shell #avaluosView:has(#animaniaEmbeddedPanel:not([hidden])) .avaluos-section-heading,
 #appShell.control-shell #avaluosView:has(#animaniaEmbeddedPanel:not([hidden])) .avaluos-choice-grid { display: none !important; }
 #appShell.control-shell #avaluosView:has(#animaniaEmbeddedPanel:not([hidden])) .animania-embedded-panel { margin-top: 0 !important; }
+
+
+/* Home de escritorio: acceso visible a la PWA móvil */
+#appShell.control-shell .mobile-install-card {
+  align-items: center !important;
+  background: #ffffff !important;
+  border: 1px solid #dbe4ef !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 24px rgb(15 23 42 / .06) !important;
+  display: flex !important;
+  gap: 24px !important;
+  justify-content: space-between !important;
+  margin: 20px 0 0 !important;
+  max-width: 760px !important;
+  padding: 20px 24px !important;
+}
+#appShell.control-shell .mobile-install-copy { min-width: 0 !important; }
+#appShell.control-shell .mobile-install-copy h3 { color: #0f172a !important; font-family: Inter, "Segoe UI", sans-serif !important; font-size: 1.05rem !important; margin: 4px 0 5px !important; }
+#appShell.control-shell .mobile-install-copy p { color: #64748b !important; font-size: .86rem !important; line-height: 1.5 !important; margin: 0 !important; max-width: 560px !important; }
+#appShell.control-shell .mobile-qr-wrap { align-items: center !important; background: #fff !important; border: 1px solid #e2e8f0 !important; border-radius: 12px !important; display: flex !important; flex: 0 0 144px !important; height: 144px !important; justify-content: center !important; padding: 5px !important; }
+#appShell.control-shell .mobile-qr-wrap img { display: block !important; height: 132px !important; max-width: 132px !important; width: 132px !important; }
+#appShell.control-shell .mobile-install-button { margin-top: 12px !important; }
+@media (max-width: 640px) {
+  #appShell.control-shell .mobile-install-card { align-items: flex-start !important; flex-direction: column !important; }
+  #appShell.control-shell .mobile-qr-wrap { align-self: center !important; }
+}
