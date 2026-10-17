@@ -1539,7 +1539,7 @@
   $$('[data-animania-open]').forEach((button) => button?.addEventListener("click", () => {
     if (!animaniaPanel || !animaniaFrame) return;
     animaniaPanel.hidden = false;
-    animaniaFrame.src = "http://animaniastudios.dyndns-server.com:8011/principal";
+    animaniaFrame.src = "/api/animania/principal";
     document.querySelector(".avaluos-choice-grid")?.classList.add("is-hidden");
     document.querySelector("#avaluosAuthorizedFoliosPanel")?.classList.add("is-hidden");
     animaniaPanel.scrollIntoView({ behavior: "smooth", block: "start" });
