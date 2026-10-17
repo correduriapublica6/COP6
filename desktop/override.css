@@ -12372,3 +12372,22 @@ body:has(#loginScreen.applicant-dashboard-active) {
     margin-top: -122px !important;
   }
 }
+
+
+/* Juegos nuevos y Animania Studios — integración CP6 */
+#appShell.control-shell .animania-choice { opacity: .72; cursor: not-allowed; }
+#appShell.control-shell .animania-choice .avaluos-choice-icon { color: #64748b; background: #f1f5f9; }
+#appShell.control-shell .game-card-avaluando .icon-wrapper,
+#appShell.control-shell .game-card-runlogo .icon-wrapper {
+  color: #2563eb; background: #eff6ff; border-color: rgba(37,99,235,.22);
+  font-size: 28px; font-weight: 500;
+}
+#appShell.control-shell .game-card-avaluando .title,
+#appShell.control-shell .game-card-runlogo .title { font-weight: 500; }
+#appShell.control-shell .game-card-avaluando .category,
+#appShell.control-shell .game-card-runlogo .category { color: #2563eb; font-weight: 500; }
+#appShell.control-shell .game-card-avaluando .btn-play,
+#appShell.control-shell .game-card-runlogo .btn-play {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 10px rgba(37,99,235,.20);
+}

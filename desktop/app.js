@@ -728,7 +728,7 @@
     let stats = {};
     try { stats = JSON.parse(localStorage.getItem(`cp6_game_stats_${user}`) || "{}") || {}; } catch { stats = {}; }
     const history = Array.isArray(stats.history) ? stats.history : [];
-    const bestByGame = ["Solitario", "Sudoku", "Buscaminas"].map((game) => ({ game, best: history.filter((item) => item.game === game).reduce((max, item) => Math.max(max, Number(item.score || item.points || 0)), 0) }));
+    const bestByGame = ["Solitario", "Sudoku", "Buscaminas", "Avaluando", "Run Logo"].map((game) => ({ game, best: history.filter((item) => item.game === game).reduce((max, item) => Math.max(max, Number(item.score || item.points || 0)), 0) }));
     bestByGame.forEach((item) => { const score = document.querySelector(`[data-game-score="${item.game}"]`); if (score) score.textContent = `${item.best} pts`; });
     if (summary) summary.textContent = `${Number(stats.points || 0)} puntos acumulados · ${Number(stats.games || history.length || 0)} partidas completadas`;
     list.innerHTML = `${bestByGame.map((item) => `<div class="games-best-item"><span>${escapeHtml(item.game)}</span><strong>${item.best} pts</strong></div>`).join("")}<div class="games-history-items">${history.slice(0, 5).map((item) => `<div class="games-history-item"><span>${escapeHtml(item.game)}</span><small>${Number(item.points || 0)} pts · ${new Date(item.completedAt).toLocaleDateString("es-MX")}</small></div>`).join("") || '<p class="games-stats-empty">Completa un juego para ver tus resultados.</p>'}</div>`;
@@ -749,6 +749,8 @@
       { card: ".game-card-solitaire", title: "Solitario", source: "games/cp6solitario.html" },
       { card: ".game-card-sudoku", title: "Sudoku", source: "games/cp6sudoku.html" },
       { card: ".game-card-mines", title: "Buscaminas", source: "games/cp6buscaminas.html" },
+      { card: ".game-card-avaluando", title: "Avaluando", source: "games/avaluando.html" },
+      { card: ".game-card-runlogo", title: "Run Logo", source: "games/runlogo.html" },
     ];
     const closeGame = () => { stage.hidden = true; grid.hidden = false; if (heading) heading.hidden = false; if (statsPanel) statsPanel.hidden = false; frame.src = "about:blank"; renderGamesStats(); };
     games.forEach((game) => {
