@@ -12481,3 +12481,25 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   #appShell.control-shell .animania-panel-toolbar { height: 48px !important; min-height: 48px !important; padding: 6px 12px !important; }
   #appShell.control-shell #animaniaFrame { height: calc(100vh - 104px) !important; }
 }
+
+/* Ajustes finales CP6: iconos manuscritos del navbar y acceso animado */
+#appShell.control-shell .cp6-nav-link { gap: 7px !important; }
+#appShell.control-shell .cp6-hand-icon { display: inline-flex !important; width: 17px !important; height: 17px !important; flex: 0 0 17px !important; align-items: center !important; justify-content: center !important; color: #ffffff !important; opacity: .92 !important; }
+#appShell.control-shell .cp6-hand-icon svg { width: 17px !important; height: 17px !important; fill: none !important; stroke: currentColor !important; stroke-width: 1.35 !important; stroke-linecap: round !important; stroke-linejoin: round !important; }
+#appShell.control-shell .cp6-nav-link:hover .cp6-hand-icon,
+#appShell.control-shell .cp6-nav-link.active .cp6-hand-icon,
+#appShell.control-shell .cp6-nav-link.is-active .cp6-hand-icon { color: #ffffff !important; opacity: 1 !important; }
+
+/* Tipografía de las tarjetas de Avalúos alineada con el acceso del Login. */
+#appShell.control-shell #avaluosView .avaluos-choice-copy strong { font-family: Georgia, "Times New Roman", serif !important; font-size: clamp(1.45rem, 2vw, 1.85rem) !important; font-weight: 500 !important; letter-spacing: -.02em !important; line-height: 1.1 !important; }
+#appShell.control-shell #avaluosView .avaluos-choice-copy small { font-family: Inter, "Segoe UI", sans-serif !important; font-size: .9rem !important; }
+
+/* El acceso aparece con un desplazamiento y desvanecido suave al abrir la portada. */
+.public-entry-content { animation: cp6LoginAccessReveal .62s cubic-bezier(.22,.61,.36,1) both !important; }
+@keyframes cp6LoginAccessReveal { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .public-entry-content { animation: none !important; } }
+
+/* Animania es una vista independiente: se ocultan el título y las tarjetas de Avalúos. */
+#appShell.control-shell #avaluosView:has(#animaniaEmbeddedPanel:not([hidden])) .avaluos-section-heading,
+#appShell.control-shell #avaluosView:has(#animaniaEmbeddedPanel:not([hidden])) .avaluos-choice-grid { display: none !important; }
+#appShell.control-shell #avaluosView:has(#animaniaEmbeddedPanel:not([hidden])) .animania-embedded-panel { margin-top: 0 !important; }
