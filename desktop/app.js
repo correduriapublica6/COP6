@@ -799,6 +799,8 @@
     appShell.hidden = false;
     appShell.classList.remove("is-entering");
     applyRoleUi();
+    // El selector de métricas debe estar disponible desde el primer inicio de sesión.
+    window.setTimeout(() => { syncProfileMetricsFilter?.(user); renderProfileDashboard?.(); }, 0);
     window.setTimeout(() => appShell.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
     switchAppView("inicio");
     renderWelcomeTasks();
@@ -1530,6 +1532,27 @@
   $("#refreshPendingSummaryButton")?.addEventListener("click", renderPendingReceptionSummary);
   $("#validationRegistryFilter")?.addEventListener("change", renderValidationRegistry);
 
+  // Animania Studios se abre dentro del flujo normal de Avalúos, no como popup.
+  const animaniaPanel = $("#animaniaEmbeddedPanel");
+  const animaniaFrame = $("#animaniaFrame");
+  const closeAnimania = $("#closeAnimaniaButton");
+  $$('[data-animania-open]').forEach((button) => button?.addEventListener("click", () => {
+    if (!animaniaPanel || !animaniaFrame) return;
+    animaniaPanel.hidden = false;
+    animaniaFrame.src = "http://animaniastudios.dyndns-server.com:8011/principal";
+    document.querySelector(".avaluos-choice-grid")?.classList.add("is-hidden");
+    document.querySelector("#avaluosAuthorizedFoliosPanel")?.classList.add("is-hidden");
+    animaniaPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }));
+  closeAnimania?.addEventListener("click", () => {
+    if (animaniaFrame) animaniaFrame.src = "about:blank";
+    if (animaniaPanel) animaniaPanel.hidden = true;
+    document.querySelector(".avaluos-choice-grid")?.classList.remove("is-hidden");
+  });
+  window.addEventListener("control-avaluos:subsection-change", () => {
+    if (animaniaPanel && !animaniaPanel.hidden) { animaniaPanel.hidden = true; if (animaniaFrame) animaniaFrame.src = "about:blank"; }
+    document.querySelector(".avaluos-choice-grid")?.classList.remove("is-hidden");
+  });
   bindHomeIntelligence();
   bindGames();
   startVersionMonitor();
