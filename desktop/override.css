@@ -12529,3 +12529,56 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   #appShell.control-shell .mobile-install-card { align-items: flex-start !important; flex-direction: column !important; }
   #appShell.control-shell .mobile-qr-wrap { align-self: center !important; }
 }
+
+
+/* Refinamiento PWA móvil: QR más visible y navegación de aplicación */
+#appShell.control-shell .mobile-qr-wrap { flex-basis: 190px !important; height: 190px !important; padding: 6px !important; }
+#appShell.control-shell .mobile-qr-wrap img { height: 176px !important; max-width: 176px !important; width: 176px !important; }
+
+@media (max-width: 640px) {
+  body.mobile-mode { background: #eef3f8 !important; }
+  body.mobile-mode .cp6-navbar-modern {
+    box-shadow: 0 2px 12px rgb(15 23 42 / .18) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100 !important;
+  }
+  body.mobile-mode #appShell.control-shell .app-workspace {
+    padding: 14px 12px 82px !important;
+  }
+  body.mobile-mode #appShell.control-shell .cp6-nav-center {
+    align-items: stretch !important;
+    background: #0f172a !important;
+    bottom: 0 !important;
+    box-shadow: 0 -4px 18px rgb(15 23 42 / .2) !important;
+    display: flex !important;
+    gap: 0 !important;
+    justify-content: space-around !important;
+    left: 0 !important;
+    overflow-x: auto !important;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom)) !important;
+    position: fixed !important;
+    right: 0 !important;
+    z-index: 110 !important;
+  }
+  body.mobile-mode #appShell.control-shell .cp6-nav-link {
+    align-items: center !important;
+    display: flex !important;
+    flex: 0 0 auto !important;
+    flex-direction: column !important;
+    font-size: .62rem !important;
+    gap: 2px !important;
+    justify-content: center !important;
+    min-width: 62px !important;
+    padding: 5px 7px !important;
+  }
+  body.mobile-mode #appShell.control-shell .cp6-nav-link .cp6-hand-icon { height: 18px !important; width: 18px !important; }
+  body.mobile-mode #appShell.control-shell .workspace-header h1 { font-size: 1.3rem !important; }
+  body.mobile-mode #appShell.control-shell .workspace-description { font-size: .78rem !important; }
+  body.mobile-mode #appShell.control-shell .app-view { animation: cp6MobileViewIn .18s ease-out both !important; }
+  body.mobile-mode #appShell.control-shell .request-table-wrap,
+  body.mobile-mode #appShell.control-shell .operational-table-wrap,
+  body.mobile-mode #appShell.control-shell .technical-list-panel { border-radius: 12px !important; }
+}
+@keyframes cp6MobileViewIn { from { opacity: .7; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { body.mobile-mode #appShell.control-shell .app-view { animation: none !important; } }
