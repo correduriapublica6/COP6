@@ -12777,3 +12777,48 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #appShell.control-shell #avaluosView:has(#cotizacionesEmbeddedPanel:not([hidden])) .avaluos-choice-grid { display:none !important; }
 #appShell.control-shell #avaluosView:has(#cotizacionesEmbeddedPanel:not([hidden])) .cotizaciones-embedded-panel { margin-top:0 !important; }
 @media (max-width:700px) { #appShell.control-shell .cotizaciones-panel-toolbar { height:52px !important; padding:6px 12px !important; } #appShell.control-shell #cotizacionesFrame { height:calc(100vh - 116px) !important; min-height:620px !important; } }
+
+/* Homologación CP6 basada en Cotizaciones: campos, buscadores y folios */
+#appShell.control-shell input:not([type="checkbox"]):not([type="radio"]),
+#appShell.control-shell select,
+#appShell.control-shell textarea {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif !important;
+  font-size: .86rem !important;
+  color: #0f172a !important;
+  background: #fff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  min-height: 42px !important;
+  padding: 10px 13px !important;
+  box-shadow: 0 1px 2px rgba(15,23,42,.03) !important;
+}
+#appShell.control-shell input:focus,
+#appShell.control-shell select:focus,
+#appShell.control-shell textarea:focus {
+  border-color: #2563eb !important;
+  outline: 3px solid rgba(37,99,235,.12) !important;
+}
+#appShell.control-shell .filters-bar input,
+#appShell.control-shell .search-bar-container input,
+#appShell.control-shell input[placeholder*="Buscar"] {
+  min-height: 44px !important;
+  padding-left: 40px !important;
+  border-radius: 10px !important;
+  font-size: .84rem !important;
+}
+#appShell.control-shell .filters-bar,
+#appShell.control-shell .search-bar-container { gap: 12px !important; }
+#appShell.control-shell .request-appraisal-number-heading,
+#appShell.control-shell .request-appraisal-number-cell { width: 110px !important; max-width: 110px !important; white-space: nowrap !important; }
+#appShell.control-shell .request-folio-cell strong { color: #f97316 !important; font-weight: 600 !important; }
+#appShell.control-shell .requester-cell,
+#appShell.control-shell .requester-cell strong { font-weight: 400 !important; }
+#appShell.control-shell .request-table th,
+#appShell.control-shell .operational-table th { height: 42px !important; padding-top: 10px !important; padding-bottom: 10px !important; }
+#appShell.control-shell .request-table td,
+#appShell.control-shell .operational-table td { height: 38px !important; padding-top: 8px !important; padding-bottom: 8px !important; }
+#appShell.control-shell .cotizaciones-panel-toolbar > div:empty { flex: 1 !important; }
+
+/* Fotografías múltiples por bien */
+#appShell.control-shell .mobiliario-item-photo-preview { display:flex !important; flex-wrap:wrap !important; gap:8px !important; }
+#appShell.control-shell .mobiliario-item-photo-preview img { width:72px !important; height:54px !important; object-fit:cover !important; border-radius:8px !important; border:1px solid #cbd5e1 !important; }

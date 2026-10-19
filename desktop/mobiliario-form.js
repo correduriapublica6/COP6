@@ -39,7 +39,8 @@
   let wizardReady = false;
   let saved = new Set();
   let editingItemId = null;
-  let itemPhotoDataUrl = '';
+  let itemPhotoDataUrls = [];
+  // Compatibilidad: los avalúos antiguos conservan `fotografia` como una sola URL.
   let activeTechnicalType = 'mobiliario';
 
   const esc = (value) => String(value ?? '').replace(/[&<>'"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[c]));
@@ -111,12 +112,12 @@
   }
 
   function renderItemPhotoPreview() {
-    itemPhotoPreview.innerHTML = itemPhotoDataUrl ? `<img src="${esc(itemPhotoDataUrl)}" alt="Fotografía del bien" />` : '';
+    itemPhotoPreview.innerHTML = itemPhotoDataUrls.map((url) => `<img src="${esc(url)}" alt="Fotografía del bien" />`).join('');
   }
 
   function clearItemEditor() {
     editingItemId = null;
-    itemPhotoDataUrl = '';
+    itemPhotoDataUrls = [];
     if (itemPhoto) itemPhoto.value = '';
     renderItemPhotoPreview();
     itemQuantity.value = '1';
@@ -137,7 +138,7 @@
 
   function addItem(item = {}) {
     const id = item.id || `bien-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-    itemRecords.push({ id, cantidad: Math.min(999, Math.max(1, number(item.cantidad) || 1)), descripcion: item.descripcion || '', marca: item.marca || '', serie: item.serie || '', condiciones: item.condiciones || '', fotografia: item.fotografia || item.foto || '' });
+    itemRecords.push({ id, cantidad: Math.min(999, Math.max(1, number(item.cantidad) || 1)), descripcion: item.descripcion || '', marca: item.marca || '', serie: item.serie || '', condiciones: item.condiciones || '', fotografia: item.fotografia || item.foto || '', fotografias: Array.isArray(item.fotografias) ? item.fotografias : (item.fotografia || item.foto ? [item.fotografia || item.foto] : []) });
     valueInputs.set(id, { unidad: item.unidad || 'Pieza', valorUnitario: item.valorUnitario ?? '', factorDepreciacion: item.factorDepreciacion ?? '1', obsolescenciaFuncional: item.obsolescenciaFuncional ?? item.obsolescencia?.funcional ?? '1', obsolescenciaEconomica: item.obsolescenciaEconomica ?? item.obsolescencia?.economica ?? '1' });
     renderItems();
     renderValues();
@@ -147,7 +148,7 @@
     const quantity = Math.min(999, Math.max(1, number(itemQuantity.value) || 1));
     const description = itemDescription.value.trim();
     if (!description) { itemMessage.textContent = 'Escribe la descripción del bien.'; itemDescription.focus(); return; }
-    const record = { cantidad: quantity, descripcion: description, marca: itemBrand.value.trim(), serie: itemSeries.value.trim(), condiciones: itemCondition.value.trim(), fotografia: itemPhotoDataUrl };
+    const record = { cantidad: quantity, descripcion: description, marca: itemBrand.value.trim(), serie: itemSeries.value.trim(), condiciones: itemCondition.value.trim(), fotografia: itemPhotoDataUrls[0] || '', fotografias: [...itemPhotoDataUrls] };
     if (editingItemId) {
       const index = itemRecords.findIndex((item) => item.id === editingItemId);
       if (index >= 0) itemRecords[index] = { ...itemRecords[index], ...record };
@@ -165,7 +166,7 @@
     itemBrand.value = item.marca || '';
     itemSeries.value = item.serie || '';
     itemCondition.value = item.condiciones || '';
-    itemPhotoDataUrl = item.fotografia || '';
+    itemPhotoDataUrls = Array.isArray(item.fotografias) && item.fotografias.length ? [...item.fotografias] : (item.fotografia ? [item.fotografia] : []);
     renderItemPhotoPreview();
     addItemButton.textContent = 'Guardar cambios';
     cancelItemEditButton.classList.remove('is-hidden');
@@ -233,9 +234,13 @@
     if (!utils) return appraisal;
     if (appraisal.localizacionFoto?.startsWith?.('data:')) appraisal.localizacionFoto = (await utils.uploadDataUrl(appraisal.localizacionFoto, `localizacion-${appraisal.numeroAvaluo}.jpg`))?.url || '';
     appraisal.bienes = await Promise.all((appraisal.bienes || []).map(async (item, index) => {
-      if (!item.fotografia?.startsWith?.('data:')) return item;
-      const stored = await utils.uploadDataUrl(item.fotografia, `bien-${index + 1}.jpg`);
-      return { ...item, fotografia: stored?.url || '' };
+      const source = Array.isArray(item.fotografias) && item.fotografias.length ? item.fotografias : (item.fotografia ? [item.fotografia] : []);
+      const fotografias = await Promise.all(source.map(async (photo, photoIndex) => {
+        if (!photo?.startsWith?.('data:')) return photo;
+        const stored = await utils.uploadDataUrl(photo, `bien-${index + 1}-${photoIndex + 1}.jpg`);
+        return stored?.url || '';
+      }));
+      return { ...item, fotografias, fotografia: fotografias[0] || '' };
     }));
     appraisal.valoresMobiliario = appraisal.bienes;
     return appraisal;
@@ -293,7 +298,7 @@
     const photo = appraisal.localizacionFoto ? `<div class="location-photo"><img src="${esc(appraisal.localizacionFoto)}" alt="Fotografía de ubicación de los bienes" /></div>` : '<div class="pdf-empty">Sin fotografía de ubicación registrada.</div>';
     const considerations = (appraisal.consideraciones || []).map((item) => `<li>${esc(item)}</li>`).join('') || '<li>No se registraron consideraciones previas.</li>';
     const conclusionConsiderations = (appraisal.consideracionesConclusion || []).map((item) => `<li>${esc(item)}</li>`).join('') || '<li>No se registraron consideraciones previas a la conclusión.</li>';
-    const itemPhotos = (appraisal.bienes || []).map((item) => item.fotografia || item.foto ? `<figure class="item-photo"><img src="${esc(item.fotografia || item.foto)}" alt="${esc(item.descripcion)}" /><figcaption>${esc(item.descripcion)}</figcaption></figure>` : `<figure class="item-photo is-empty"><span>Sin fotografía</span><figcaption>${esc(item.descripcion)}</figcaption></figure>`).join('');
+    const itemPhotos = (appraisal.bienes || []).flatMap((item) => { const photos = Array.isArray(item.fotografias) && item.fotografias.length ? item.fotografias : (item.fotografia || item.foto ? [item.fotografia || item.foto] : []); return photos.length ? photos.map((photo) => `<figure class="item-photo"><img src="${esc(photo)}" alt="${esc(item.descripcion)}" /><figcaption>${esc(item.descripcion)}</figcaption></figure>`) : [`<figure class="item-photo is-empty"><span>Sin fotografía</span><figcaption>${esc(item.descripcion)}</figcaption></figure>`]; }).join('');
     const field = (label, value) => `<div class="pdf-field"><strong>${esc(label)}</strong><span>${esc(value || 'No especificado')}</span></div>`;
     const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"/><title>Avalúo ${esc(appraisal.numeroAvaluo)}</title><style>
       @page{size:letter;margin:11mm 15mm}*{box-sizing:border-box}body{background:#fff;color:#233835;font-family:Georgia,'Times New Roman',serif;font-size:10.6pt;line-height:1.34;margin:0}.report-header{align-items:flex-start;border-bottom:1px solid #b49355;border-top:3px solid #26443f;display:flex;gap:16px;justify-content:space-between;margin-bottom:7px;padding:6px 0 7px}.report-header>div{flex:1;order:1}.report-logo{height:47px;object-fit:contain;order:2;width:66px}.report-header h1{color:#183b38;font-size:20pt;font-weight:500;line-height:1.04;margin:0}.report-header p{color:#6c6250;font-size:10pt;margin:2px 0 0}.report-folio{color:#354744;font-size:10.5pt;margin:4px 0 18px}.pdf-page{page-break-before:always}.pdf-page:first-of-type{page-break-before:auto}.section-title{border-bottom:1px solid #bfaa7f;border-top:3px solid #26443f;display:flex;gap:7px;align-items:baseline;margin:0 0 10px;padding:9px 0 6px}.section-title span{color:#735b2f;font-size:11.5pt;font-weight:700}.section-title h2{color:#173b38;font-size:13.5pt;font-weight:700;margin:0;text-transform:uppercase}.pdf-field{border-bottom:1px solid #e9e3d8;display:block;margin:0;padding:4px 0}.pdf-field strong{color:#354744;font-size:10.7pt;font-weight:700;margin-right:6px}.pdf-field span{font-size:10.7pt}.legal-note{border-left:3px solid #c2aa76;margin:7px 0;padding:4px 0 4px 10px}.legal-note strong{display:inline;font-size:9.2pt;margin-right:5px}.antecedents-bottom{display:grid;gap:18px;grid-template-columns:1.45fr .85fr;margin-top:14px;align-items:start}.location-title{border-bottom:1px solid #bfaa7f;font-size:9.4pt;font-weight:700;margin:0 0 6px;padding-bottom:4px}.location-photo{background:#fbfaf6;border:1px solid #e0d8c9;height:180px;margin:0;overflow:hidden}.location-photo img{display:block;height:100%;object-fit:cover;width:100%}.pdf-empty{background:#fbfaf6;border-left:2px solid #c2aa76;font-size:9.2pt;padding:8px}.signature-cover{font-size:10.5pt;text-align:center;padding-top:40px}.signature-role{font-weight:700;margin:0}.signature-space{height:70px}.signature-office{border-top:1px solid #b49355;margin:10px 0 0;padding-top:7px}.data-table{border-collapse:collapse;width:100%;font-size:9.3pt}.data-table th,.data-table td{border:1px solid #cfc2a7;padding:5px;vertical-align:top}.data-table th{background:#e8e2d4;color:#263d3a;font-weight:700}.characteristics-lead{margin:0 0 10px}.item-photo-grid{display:grid;gap:9px;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:12px}.item-photo{aspect-ratio:16/10;border:1px solid #cfc2a7;margin:0;overflow:hidden;position:relative}.item-photo img{display:block;height:100%;object-fit:cover;width:100%}.item-photo.is-empty{align-items:center;background:#fbfaf6;color:#7c817a;display:flex;justify-content:center}.item-photo figcaption{background:rgba(255,255,255,.9);bottom:0;font-size:8.5pt;left:0;padding:3px 5px;position:absolute;right:0}.notes{margin:8px 0 0 20px}.notes li{margin:4px 0}.values-legal-notice,.conclusion-legal{font-size:9.6pt;font-weight:700;line-height:1.35;margin-top:14px}.amount-in-words{font-weight:700;margin:8px 0}.total{font-size:13pt;font-weight:700;margin:10px 0}.conclusion-page{page-break-before:always}.conclusion-page .section-title{margin-top:0}.signature-block{text-align:center;margin:48px auto 0;max-width:320px}.signature-block .space{height:58px}.conclusion-legal{border-top:1px solid #bfaa7f;margin-top:62px;padding-top:9px}.small{font-size:9pt}.legal-foundation{font-size:11pt;line-height:1.35;margin:10px 0 14px}.legal-foundation h3{font-size:12pt;margin:0 0 8px}.legal-foundation p{margin:0 0 7px}
@@ -312,7 +317,7 @@
   }
 
   locationPhoto.addEventListener('change', () => { const file = locationPhoto.files?.[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { locationDataUrl = String(reader.result); setLocationPreview(); }; reader.readAsDataURL(file); });
-  itemPhoto?.addEventListener('change', () => { const file = itemPhoto.files?.[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { itemPhotoDataUrl = String(reader.result); renderItemPhotoPreview(); }; reader.readAsDataURL(file); });
+  itemPhoto?.addEventListener('change', () => { const files = [...(itemPhoto.files || [])]; if (!files.length) return; itemPhotoDataUrls = []; files.forEach((file) => { const reader = new FileReader(); reader.onload = () => { itemPhotoDataUrls.push(String(reader.result)); renderItemPhotoPreview(); }; reader.readAsDataURL(file); }); });
   addItemButton.addEventListener('click', saveItemFromEditor);
   cancelItemEditButton.addEventListener('click', clearItemEditor);
   itemQuantity.addEventListener('input', () => { if (itemQuantity.value.length > 3) itemQuantity.value = itemQuantity.value.slice(0, 3); });
