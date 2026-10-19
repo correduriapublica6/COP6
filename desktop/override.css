@@ -12822,3 +12822,170 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 /* Fotografías múltiples por bien */
 #appShell.control-shell .mobiliario-item-photo-preview { display:flex !important; flex-wrap:wrap !important; gap:8px !important; }
 #appShell.control-shell .mobiliario-item-photo-preview img { width:72px !important; height:54px !important; object-fit:cover !important; border-radius:8px !important; border:1px solid #cbd5e1 !important; }
+
+/* =========================================================
+   CP6 UI/UX — buscadores pill, tablas y formularios modernos
+   ========================================================= */
+#appShell.control-shell,
+#appShell.control-shell input,
+#appShell.control-shell select,
+#appShell.control-shell textarea,
+#appShell.control-shell button,
+#appShell.control-shell table {
+  font-family: Inter, "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif !important;
+}
+
+/* Buscadores: cápsula blanca con lupa interna */
+#appShell.control-shell input[type="search"],
+#appShell.control-shell input[id*="Search"],
+#appShell.control-shell input[id*="search"],
+#appShell.control-shell input[placeholder*="Buscar"],
+#appShell.control-shell input[placeholder*="buscar"],
+#appShell.control-shell .filters-bar input,
+#appShell.control-shell .search-bar-container input,
+#appShell.control-shell .technical-search-panel input {
+  height: 44px !important;
+  min-height: 44px !important;
+  width: 100% !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 9999px !important;
+  background-color: #ffffff !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'%3E%3C/circle%3E%3Cpath d='m20 20-4-4'%3E%3C/path%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: 14px center !important;
+  background-size: 17px 17px !important;
+  padding: 0 16px 0 42px !important;
+  color: #334155 !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .03) !important;
+  transition: border-color .18s ease, box-shadow .18s ease !important;
+}
+#appShell.control-shell input[type="search"]:focus,
+#appShell.control-shell input[id*="Search"]:focus,
+#appShell.control-shell input[id*="search"]:focus,
+#appShell.control-shell input[placeholder*="Buscar"]:focus,
+#appShell.control-shell input[placeholder*="buscar"]:focus {
+  border-color: #2563eb !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .12) !important;
+}
+#appShell.control-shell input[type="search"]::placeholder,
+#appShell.control-shell input[id*="Search"]::placeholder,
+#appShell.control-shell input[id*="search"]::placeholder,
+#appShell.control-shell input[placeholder*="Buscar"]::placeholder,
+#appShell.control-shell input[placeholder*="buscar"]::placeholder {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+}
+
+/* Formularios: controles suaves, redondeados y con foco azul */
+#appShell.control-shell form input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+#appShell.control-shell form select,
+#appShell.control-shell form textarea,
+#appShell.control-shell .form-container input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+#appShell.control-shell .form-container select,
+#appShell.control-shell .form-container textarea {
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 11px !important;
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  min-height: 42px !important;
+  padding: 10px 13px 10px 40px !important;
+  outline: none !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .025) !important;
+  transition: border-color .18s ease, box-shadow .18s ease !important;
+}
+#appShell.control-shell form textarea,
+#appShell.control-shell .form-container textarea { min-height: 82px !important; padding-top: 12px !important; }
+#appShell.control-shell form input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+#appShell.control-shell form select:focus,
+#appShell.control-shell form textarea:focus,
+#appShell.control-shell .form-container input:focus,
+#appShell.control-shell .form-container select:focus,
+#appShell.control-shell .form-container textarea:focus {
+  border-color: #2563eb !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .14) !important;
+}
+#appShell.control-shell form input::placeholder,
+#appShell.control-shell form textarea::placeholder,
+#appShell.control-shell .form-container input::placeholder,
+#appShell.control-shell .form-container textarea::placeholder {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+  font-size: 13px !important;
+}
+
+/* Iconografía de campos: iconos lineales dentro del control */
+#appShell.control-shell form input,
+#appShell.control-shell form select,
+#appShell.control-shell form textarea { background-repeat: no-repeat !important; background-size: 17px 17px !important; background-position: 12px 12px !important; }
+#appShell.control-shell form input[type="date"],
+#appShell.control-shell form input[id*="fecha"],
+#appShell.control-shell form input[name*="fecha"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364758b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='17' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E") !important;
+}
+#appShell.control-shell form input[id*="folio"],
+#appShell.control-shell form input[id*="Folio"],
+#appShell.control-shell form input[id*="numero"],
+#appShell.control-shell form input[id*="Numero"],
+#appShell.control-shell form input[name*="folio"],
+#appShell.control-shell form input[name*="numero"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364758b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 4h12v16H6z'/%3E%3Cpath d='M9 8h6M9 12h6M9 16h3'/%3E%3C/svg%3E") !important;
+}
+#appShell.control-shell form input[id*="solicitante"],
+#appShell.control-shell form input[id*="Solicitante"],
+#appShell.control-shell form input[name*="solicitante"],
+#appShell.control-shell form input[id*="usuario"],
+#appShell.control-shell form input[id*="Usuario"],
+#appShell.control-shell form input[name*="usuario"],
+#appShell.control-shell form input[id*="asesor"],
+#appShell.control-shell form input[name*="asesor"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364758b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='3.5'/%3E%3Cpath d='M5 21c.7-4 3-6 7-6s6.3 2 7 6'/%3E%3C/svg%3E") !important;
+}
+#appShell.control-shell form input[id*="ubicacion"],
+#appShell.control-shell form input[id*="Ubicacion"],
+#appShell.control-shell form input[id*="direccion"],
+#appShell.control-shell form input[id*="Direccion"],
+#appShell.control-shell form input[name*="ubicacion"],
+#appShell.control-shell form input[name*="direccion"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364758b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z'/%3E%3Ccircle cx='12' cy='10' r='2.5'/%3E%3C/svg%3E") !important;
+}
+#appShell.control-shell form input[id*="valor"],
+#appShell.control-shell form input[id*="Valor"],
+#appShell.control-shell form input[name*="valor"],
+#appShell.control-shell form input[id*="precio"],
+#appShell.control-shell form input[name*="precio"],
+#appShell.control-shell form input[id*="monto"],
+#appShell.control-shell form input[name*="monto"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364758b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8.5'/%3E%3Cpath d='M15 8.5c-.7-.7-1.7-1-3-1-1.8 0-3 .8-3 2s1.2 2 3 2 3 .8 3 2-1.2 2-3 2c-1.3 0-2.4-.3-3.2-1M12 6v12'/%3E%3C/svg%3E") !important;
+}
+
+/* Datos tabulares: lectura clara, iconos separados y acciones definidas */
+#appShell.control-shell .cp6-cell-with-icon { display: inline-flex !important; align-items: center !important; gap: 9px !important; min-width: 0 !important; }
+#appShell.control-shell .cp6-cell-icon { display: inline-flex !important; align-items: center !important; justify-content: center !important; flex: 0 0 19px !important; width: 19px !important; height: 19px !important; color: #2563eb !important; opacity: .9 !important; }
+#appShell.control-shell .cp6-cell-icon svg { width: 18px !important; height: 18px !important; stroke: currentColor !important; stroke-width: 1.8 !important; }
+#appShell.control-shell .cp6-cell-icon-money { color: #16a34a !important; }
+#appShell.control-shell .request-folio-cell strong,
+#appShell.control-shell .requester-cell strong { font-weight: 600 !important; }
+#appShell.control-shell .request-table td,
+#appShell.control-shell .operational-table td { font-size: 13px !important; color: #334155 !important; }
+#appShell.control-shell .request-table td:first-child,
+#appShell.control-shell .operational-table td:first-child { color: #0f172a !important; }
+#appShell.control-shell .request-action-cell,
+#appShell.control-shell .technical-row-actions,
+#appShell.control-shell .reception-actions { display: flex !important; align-items: center !important; gap: 7px !important; }
+#appShell.control-shell .request-icon-button,
+#appShell.control-shell .action-icon-button,
+#appShell.control-shell .technical-row-actions button { display: inline-flex !important; align-items: center !important; justify-content: center !important; width: 32px !important; height: 32px !important; border-radius: 9px !important; color: #2563eb !important; border: 1px solid #dbeafe !important; background: #eff6ff !important; }
+#appShell.control-shell .request-delete-button,
+#appShell.control-shell .is-danger { color: #dc2626 !important; border-color: #fee2e2 !important; background: #fff1f2 !important; }
+#appShell.control-shell .request-icon-button svg,
+#appShell.control-shell .action-icon-button svg,
+#appShell.control-shell .technical-row-actions button svg { width: 17px !important; height: 17px !important; stroke-width: 2 !important; }
