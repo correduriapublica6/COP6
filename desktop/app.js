@@ -1534,6 +1534,24 @@
   $("#refreshPendingSummaryButton")?.addEventListener("click", renderPendingReceptionSummary);
   $("#validationRegistryFilter")?.addEventListener("change", renderValidationRegistry);
 
+  // Cotizaciones se abre dentro del flujo normal de Avalúos, no como popup.
+  const cotizacionesPanel = $("#cotizacionesEmbeddedPanel");
+  const cotizacionesFrame = $("#cotizacionesFrame");
+  const closeCotizaciones = $("#closeCotizacionesButton");
+  $$('[data-cotizaciones-open]').forEach((button) => button?.addEventListener("click", () => {
+    if (!cotizacionesPanel || !cotizacionesFrame) return;
+    cotizacionesPanel.hidden = false;
+    cotizacionesFrame.src = "cotizacion.html";
+    document.querySelector(".avaluos-choice-grid")?.classList.add("is-hidden");
+    document.querySelector("#animaniaEmbeddedPanel")?.setAttribute("hidden", "");
+    document.querySelector("#avaluosAuthorizedFoliosPanel")?.classList.add("is-hidden");
+    cotizacionesPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }));
+  closeCotizaciones?.addEventListener("click", () => {
+    if (cotizacionesFrame) cotizacionesFrame.src = "about:blank";
+    if (cotizacionesPanel) cotizacionesPanel.hidden = true;
+    document.querySelector(".avaluos-choice-grid")?.classList.remove("is-hidden");
+  });
   // Animania Studios se abre dentro del flujo normal de Avalúos, no como popup.
   const animaniaPanel = $("#animaniaEmbeddedPanel");
   const animaniaFrame = $("#animaniaFrame");
@@ -1554,6 +1572,7 @@
     document.querySelector(".avaluos-choice-grid")?.classList.remove("is-hidden");
   });
   window.addEventListener("control-avaluos:subsection-change", () => {
+    if (cotizacionesPanel && !cotizacionesPanel.hidden) { cotizacionesPanel.hidden = true; if (cotizacionesFrame) cotizacionesFrame.src = "about:blank"; }
     if (animaniaPanel && !animaniaPanel.hidden) { animaniaPanel.hidden = true; if (animaniaFrame) animaniaFrame.src = "about:blank"; }
     document.querySelector(".avaluos-choice-grid")?.classList.remove("is-hidden");
   });
