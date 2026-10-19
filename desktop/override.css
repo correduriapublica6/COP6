@@ -13255,3 +13255,89 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   #appShell.control-shell #recordEditor .record-secondary-fields,
   #appShell.control-shell #recordEditor .payment-details { grid-template-columns: 1fr !important; }
 }
+
+/* Registro de avalúo: formulario homologado con Nueva Cotización. */
+#appShell.control-shell #recordEditor .form-full-page-container {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, .06) !important;
+  padding: 24px !important;
+}
+#appShell.control-shell #recordEditor .record-form-columns {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr) !important;
+  gap: 28px !important;
+  align-items: start !important;
+}
+#appShell.control-shell #recordEditor .record-form-column {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px 16px !important;
+  min-width: 0 !important;
+}
+#appShell.control-shell #recordEditor .record-form-left label,
+#appShell.control-shell #recordEditor .record-form-right label {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  color: #475569 !important;
+  font: 600 12px/1.2 Inter, "Segoe UI", sans-serif !important;
+  letter-spacing: 0 !important;
+}
+#appShell.control-shell #recordEditor .record-form-left label:nth-child(7),
+#appShell.control-shell #recordEditor .record-form-left .full-width,
+#appShell.control-shell #recordEditor .record-form-right label:first-child,
+#appShell.control-shell #recordEditor .record-form-right .checkbox-label,
+#appShell.control-shell #recordEditor .record-form-right .payment-details {
+  grid-column: 1 / -1 !important;
+}
+#appShell.control-shell #recordEditor input:not([type="checkbox"]),
+#appShell.control-shell #recordEditor select,
+#appShell.control-shell #recordEditor textarea {
+  width: 100% !important;
+  min-height: 40px !important;
+  height: 40px !important;
+  padding: 10px 12px !important;
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  color: #0f172a !important;
+  font: 400 13px/1.2 Inter, "Segoe UI", sans-serif !important;
+}
+#appShell.control-shell #recordEditor textarea { height: auto !important; min-height: 82px !important; resize: vertical !important; }
+#appShell.control-shell #recordEditor input:not([type="checkbox"]):focus,
+#appShell.control-shell #recordEditor select:focus,
+#appShell.control-shell #recordEditor textarea:focus {
+  outline: none !important;
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, .12) !important;
+}
+#appShell.control-shell #recordEditor .payment-details {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px 16px !important;
+  padding-top: 4px !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+#appShell.control-shell #recordEditor .payment-details.is-hidden { display: none !important; }
+#appShell.control-shell #recordEditor .checkbox-label {
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: #334155 !important;
+  font-weight: 500 !important;
+}
+#appShell.control-shell #recordEditor .checkbox-label input[type="checkbox"] { width: 16px !important; height: 16px !important; accent-color: #2563eb !important; }
+#appShell.control-shell #recordEditor .dialog-heading { margin-bottom: 20px !important; }
+#appShell.control-shell #recordEditor .dialog-heading .eyebrow { color: #64748b !important; font: 600 11px/1.2 Inter, "Segoe UI", sans-serif !important; }
+#appShell.control-shell #recordEditor .dialog-heading h2 { color: #0f172a !important; font: 600 22px/1.25 Inter, "Segoe UI", sans-serif !important; }
+#appShell.control-shell #recepcionAvaluosSection .search-panel[hidden] { display: none !important; }
+@media (max-width: 850px) {
+  #appShell.control-shell #recordEditor .record-form-columns { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 560px) {
+  #appShell.control-shell #recordEditor .record-form-column,
+  #appShell.control-shell #recordEditor .payment-details { grid-template-columns: 1fr !important; }
+}

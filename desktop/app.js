@@ -1007,11 +1007,13 @@
     $("#formMessage").textContent = "";
     setPaymentVisibility();
     recordEditor.hidden = false;
+    $("#recepcionAvaluosSection .search-panel")?.setAttribute("hidden", "");
     $("#avaluosView").classList.add("is-registering");
     if (!viewOnly) window.setTimeout(() => numberInput.focus(), 120);
   }
   function closeDialog() {
     recordEditor.hidden = true;
+    $("#recepcionAvaluosSection .search-panel")?.removeAttribute("hidden");
     $("#avaluosView").classList.remove("is-registering");
     editingId = null;
     form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = false; });
