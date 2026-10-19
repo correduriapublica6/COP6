@@ -12704,3 +12704,64 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   #appShell.control-shell .operational-table th::before,
   #appShell.control-shell .request-table th::before { margin-right: 3px !important; font-size: .72rem !important; }
 }
+
+/* ================================================================
+   CP6 — Corrección de iconografía: encabezados y labels limpios
+   ================================================================ */
+#appShell.control-shell .operational-table th::before,
+#appShell.control-shell .request-table th::before,
+#appShell.control-shell .settings-data-list th::before,
+#appShell.control-shell form label::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* Iconos consistentes dentro de los valores de las filas. */
+#appShell.control-shell .cp6-cell-with-icon {
+  align-items: center !important;
+  display: inline-flex !important;
+  gap: 7px !important;
+  min-width: 0 !important;
+}
+#appShell.control-shell .cp6-cell-icon {
+  align-items: center !important;
+  color: #94a3b8 !important;
+  display: inline-flex !important;
+  flex: 0 0 16px !important;
+  height: 16px !important;
+  justify-content: center !important;
+  opacity: .9 !important;
+  width: 16px !important;
+}
+#appShell.control-shell .cp6-cell-icon svg {
+  display: block !important;
+  height: 16px !important;
+  stroke: currentColor !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  stroke-width: 1.65 !important;
+  width: 16px !important;
+}
+#appShell.control-shell .cp6-cell-icon-money {
+  color: #86a98f !important;
+  font-size: .82rem !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+}
+
+/* La lupa permanece dentro del campo, separada del borde y del texto. */
+#appShell.control-shell input[type="search"],
+#appShell.control-shell input[id*="Search"],
+#appShell.control-shell input[id*="search"],
+#appShell.control-shell input[placeholder*="Buscar"],
+#appShell.control-shell input[placeholder*="buscar"] {
+  background-position: 13px 50% !important;
+  background-size: 16px 16px !important;
+  padding-left: 40px !important;
+  text-indent: 0 !important;
+}
+
+/* Sin adornos automáticos en labels: el texto queda limpio y legible. */
+#appShell.control-shell form label {
+  align-items: initial !important;
+}
