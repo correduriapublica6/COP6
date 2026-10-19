@@ -13159,3 +13159,99 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   background-image: none !important;
   box-shadow: none !important;
 }
+
+/* Recepción: formulario homologado al estilo visual de Cotizaciones. */
+#appShell.control-shell #recordEditor,
+#appShell.control-shell #recordEditor .form-full-page-container {
+  background: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, .05) !important;
+}
+#appShell.control-shell #recordEditor .dialog-heading > div { display: none !important; }
+#appShell.control-shell #recordEditor .dialog-heading { justify-content: flex-end !important; min-height: 28px !important; padding: 0 !important; }
+#appShell.control-shell #recordEditor .record-form-grid { gap: 18px 20px !important; }
+#appShell.control-shell #recordEditor .record-primary-fields {
+  display: grid !important;
+  grid-template-columns: minmax(190px, 1.35fr) minmax(150px, 1fr) minmax(0, .85fr) minmax(0, .85fr) !important;
+  gap: 14px !important;
+  width: 100% !important;
+}
+#appShell.control-shell #recordEditor .record-secondary-fields {
+  display: grid !important;
+  grid-template-columns: minmax(0, .8fr) minmax(220px, 1.35fr) minmax(190px, 1fr) !important;
+  gap: 14px !important;
+  width: 100% !important;
+}
+#appShell.control-shell #recordEditor .record-form-grid > label:not(.checkbox-label),
+#appShell.control-shell #recordEditor .record-primary-fields label,
+#appShell.control-shell #recordEditor .record-secondary-fields label,
+#appShell.control-shell #recordEditor .payment-details label {
+  gap: 6px !important;
+  color: #475569 !important;
+  font: 600 11px/1.2 Inter, "Segoe UI", sans-serif !important;
+  letter-spacing: .02em !important;
+}
+#appShell.control-shell #recordEditor input:not([type="checkbox"]),
+#appShell.control-shell #recordEditor select,
+#appShell.control-shell #recordEditor textarea {
+  min-height: 40px !important;
+  height: 40px !important;
+  padding: 10px 12px !important;
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  color: #0f172a !important;
+  font: 400 13px/1.2 Inter, "Segoe UI", sans-serif !important;
+}
+#appShell.control-shell #recordEditor textarea { height: auto !important; min-height: 76px !important; resize: vertical !important; }
+#appShell.control-shell #recordEditor input:not([type="checkbox"]):focus,
+#appShell.control-shell #recordEditor select:focus,
+#appShell.control-shell #recordEditor textarea:focus {
+  outline: none !important;
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, .12) !important;
+}
+#appShell.control-shell #recordEditor .payment-details {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr) !important;
+  gap: 14px !important;
+}
+#appShell.control-shell #recordEditor .payment-details.is-hidden { display: none !important; }
+#appShell.control-shell #recordEditor .dialog-actions { margin-top: 6px !important; }
+
+/* Recepción: columna de solicitud y valor compactas, sin alterar el ancho general. */
+#appShell.control-shell #recepcionAvaluosSection .operational-table th:nth-child(2),
+#appShell.control-shell #recepcionAvaluosSection .operational-table td:nth-child(2) {
+  width: 92px !important;
+  min-width: 92px !important;
+  max-width: 92px !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .operational-table th:nth-child(5),
+#appShell.control-shell #recepcionAvaluosSection .operational-table td:nth-child(5) {
+  width: 150px !important;
+  min-width: 150px !important;
+  max-width: 150px !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .operational-table .money-cell,
+#appShell.control-shell #recepcionAvaluosSection .operational-table .money-cell .cp6-cell-with-icon {
+  white-space: nowrap !important;
+  color: #15803d !important;
+  font-weight: 600 !important;
+}
+#appShell.control-shell #recepcionAvaluosSection .operational-table .money-cell svg,
+#appShell.control-shell #recepcionAvaluosSection .operational-table .money-cell .cp6-cell-icon { color: #16a34a !important; }
+
+@media (max-width: 850px) {
+  #appShell.control-shell #recordEditor .record-primary-fields,
+  #appShell.control-shell #recordEditor .record-secondary-fields,
+  #appShell.control-shell #recordEditor .payment-details { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 560px) {
+  #appShell.control-shell #recordEditor .record-primary-fields,
+  #appShell.control-shell #recordEditor .record-secondary-fields,
+  #appShell.control-shell #recordEditor .payment-details { grid-template-columns: 1fr !important; }
+}

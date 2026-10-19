@@ -945,7 +945,7 @@
     const pages = Math.max(1, Math.ceil(items.length / AVALUOS_PAGE_SIZE));
     receptionPage = Math.min(Math.max(1, receptionPage), pages);
     const pageItems = items.slice((receptionPage - 1) * AVALUOS_PAGE_SIZE, receptionPage * AVALUOS_PAGE_SIZE);
-    $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>No.</th><th>Solicitud</th><th>Solicitante</th><th>Usuario</th><th>Valor del avalúo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${pageItems.length ? pageItems.map(renderListRow).join("") : `<tr><td colspan="7" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>${paginationMarkup("reception", receptionPage, items.length)}`;
+    $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>No.</th><th>Solicitud</th><th>Solicitante</th><th>Usuario</th><th>Valor</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${pageItems.length ? pageItems.map(renderListRow).join("") : `<tr><td colspan="7" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>${paginationMarkup("reception", receptionPage, items.length)}`;
   }
   function bindRecordActions() {
     $$('[data-edit]').forEach((button) => button?.addEventListener("click", () => openDialog(button.dataset.edit)));
