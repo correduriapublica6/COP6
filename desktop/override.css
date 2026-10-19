@@ -12601,3 +12601,106 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   border-radius: 8px !important; padding: 8px 12px !important; cursor: pointer !important;
 }
 #appShell.control-shell .btn-danger-soft:hover { background: #ffe4e6 !important; }
+
+/* ================================================================
+   CP6 — Iconos ligeros para tablas, formularios y búsquedas
+   ================================================================ */
+#appShell.control-shell {
+  --cp6-icon-muted: #64748b;
+  --cp6-folio-orange: #ea580c;
+  --cp6-money-green: #15803d;
+}
+
+#appShell.control-shell .operational-table th::before,
+#appShell.control-shell .request-table th::before,
+#appShell.control-shell .settings-data-list th::before {
+  display: inline-block !important;
+  margin-right: 6px !important;
+  color: #94a3b8 !important;
+  font-family: "Segoe UI Symbol", system-ui, sans-serif !important;
+  font-size: .82rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  vertical-align: -1px !important;
+}
+#appShell.control-shell .operational-table th:nth-child(1)::before,
+#appShell.control-shell .request-table th:nth-child(1)::before { content: "▣"; }
+#appShell.control-shell .operational-table th:nth-child(2)::before,
+#appShell.control-shell .request-table th:nth-child(2)::before { content: "⌁"; }
+#appShell.control-shell .operational-table th:nth-child(3)::before,
+#appShell.control-shell .request-table th:nth-child(3)::before { content: "♙"; }
+#appShell.control-shell .operational-table th:nth-child(4)::before,
+#appShell.control-shell .request-table th:nth-child(4)::before { content: "♙"; }
+#appShell.control-shell .operational-table th:nth-child(5)::before,
+#appShell.control-shell .request-table th:nth-child(5)::before { content: "$"; }
+#appShell.control-shell .operational-table th:nth-child(6)::before,
+#appShell.control-shell .request-table th:nth-child(6)::before { content: "◷"; }
+#appShell.control-shell .operational-table th:last-child::before,
+#appShell.control-shell .request-table th:last-child::before { content: "⚙"; }
+
+#appShell.control-shell .request-folio-cell,
+#appShell.control-shell .request-folio-cell strong,
+#appShell.control-shell .avaluo-list-request-folio {
+  color: var(--cp6-folio-orange) !important;
+  font-weight: 600 !important;
+}
+#appShell.control-shell .money-cell,
+#appShell.control-shell .price-cell,
+#appShell.control-shell .currency-cell,
+#appShell.control-shell td[data-field="valorAvaluo"] {
+  color: var(--cp6-money-green) !important;
+  font-weight: 600 !important;
+}
+#appShell.control-shell .operational-table .requester-cell,
+#appShell.control-shell .operational-table .user-cell {
+  font-weight: 400 !important;
+}
+
+#appShell.control-shell form label:has(input[name="solicitante"])::before,
+#appShell.control-shell form label:has(input[name="nombre"])::before,
+#appShell.control-shell form label:has(input[name="propietario"])::before { content: "♙"; }
+#appShell.control-shell form label:has(input[name="usuario"])::before,
+#appShell.control-shell form label:has(select[name="usuario"])::before,
+#appShell.control-shell form label:has(select[name="asesor"])::before { content: "♙"; }
+#appShell.control-shell form label:has(input[name="numeroAvaluo"])::before,
+#appShell.control-shell form label:has(input[name="folio"])::before { content: "▣"; }
+#appShell.control-shell form label:has(input[name="valorAvaluo"])::before,
+#appShell.control-shell form label:has(input[name="valorOperacion"])::before,
+#appShell.control-shell form label:has(input[name="montoPagado"])::before { content: "$"; }
+#appShell.control-shell form label:has(input[type="date"])::before { content: "◷"; }
+#appShell.control-shell form label:has(select[name="tipoBien"])::before,
+#appShell.control-shell form label:has(select[name="tipoAvaluo"])::before { content: "◇"; }
+#appShell.control-shell form label:has(input[name="telefono"])::before { content: "☎"; }
+#appShell.control-shell form label:has(input[name="correo"])::before { content: "✉"; }
+#appShell.control-shell form label:has(textarea)::before { content: "≡"; }
+#appShell.control-shell form label:has(input[type="file"])::before { content: "⌑"; }
+#appShell.control-shell form label:has(input[type="checkbox"])::before { content: "✓"; }
+#appShell.control-shell form label:has(input)::before,
+#appShell.control-shell form label:has(select)::before,
+#appShell.control-shell form label:has(textarea)::before {
+  display: inline-block !important;
+  width: 1.1em !important;
+  margin-right: 5px !important;
+  color: var(--cp6-icon-muted) !important;
+  font-family: "Segoe UI Symbol", system-ui, sans-serif !important;
+  font-size: .9em !important;
+  font-weight: 400 !important;
+  vertical-align: 0 !important;
+}
+
+#appShell.control-shell input[type="search"],
+#appShell.control-shell input[id*="Search"],
+#appShell.control-shell input[id*="search"],
+#appShell.control-shell input[placeholder*="Buscar"],
+#appShell.control-shell input[placeholder*="buscar"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364758b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-4-4'/%3E%3C/svg%3E") !important;
+  background-position: 12px center !important;
+  background-repeat: no-repeat !important;
+  background-size: 15px 15px !important;
+  padding-left: 36px !important;
+}
+
+@media (max-width: 640px) {
+  #appShell.control-shell .operational-table th::before,
+  #appShell.control-shell .request-table th::before { margin-right: 3px !important; font-size: .72rem !important; }
+}
