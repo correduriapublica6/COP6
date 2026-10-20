@@ -524,94 +524,79 @@
     const detail = $("#requestDetailContent");
     const dialog = $("#requestDetailDialog");
     if (!detail || !dialog || !item) return;
+
     dialog.classList.add("cp6-request-detail-dialog");
     const files = Array.isArray(item.archivos) ? item.archivos : [];
     const specific = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
-    const currentApplicant = item.solicitante || {};
+    const currentApplicant = item.solicitante && typeof item.solicitante === "object" ? item.solicitante : {};
     const activeRole = $("#appShell")?.dataset.role || "";
     const canManage = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
-    const canUploadFinal = canManage;
-    const readValue = (value) => escapeHtml(value === undefined || value === null || value === "" ? "No especificado" : String(value));
+    const readValue = (value, fallback = "N/D") => escapeHtml(value === undefined || value === null || value === "" ? fallback : String(value));
     const creatorName = item.creadoPorNombre || item.creadoPor || currentApplicant.nombre || "Usuario externo";
     const creatorRole = item.creadorRol ? ({ admin: "Administrador", auditor: "Auditor", valuador: "Valuador", editor: "Editor", viewer: "Solo lectura" }[item.creadorRol] || item.creadorRol) : "";
+    const externalName = item.asignadoExternoNombre || "";
+    const appraisalNumber = String(item.numeroAvaluo || "").replace(/\D/g, "").slice(0, 4);
+    const finalPdf = apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "");
+    const visitContact = item.contactoVisita && typeof item.contactoVisita === "object" ? item.contactoVisita : {};
+
     const filesMarkup = files.length ? files.map((file, index) => {
       const name = escapeHtml(file.name || `Archivo ${index + 1}`);
       const source = apiResourceUrl(file.url || safeFileData(file));
-      if (!source) return `<li class="cp6-file-card cp6-file-unavailable"><span>${name}</span></li>`;
+      if (!source) return `<div class="cp6-file-card cp6-file-unavailable"><span>${name}</span></div>`;
       const image = String(file.type || "").startsWith("image/");
-      const preview = image ? `<img src="${escapeHtml(source)}" alt="${name}" />` : `<div class="cp6-file-icon" aria-hidden="true">${/\.pdf$/i.test(file.name || "") ? "PDF" : "DOC"}</div>`;
-      return `<li class="cp6-file-card cp6-file-document"><button type="button" class="cp6-file-preview" data-view-file="${index}" aria-label="Ver ${name}">${preview}</button><span title="${name}">${name}</span><div class="cp6-file-actions"><button type="button" class="cp6-detail-button" data-view-file="${index}">Ver</button></div></li>`;
-    }).join("") : `<li class="cp6-file-empty">No hay documentos cargados.</li>`;
-    const finalPdf = apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "");
-      const finalActions = finalPdf ? `<button type="button" class="cp6-action-button cp6-final-view cp6-primary-button" data-view-final-pdf="${escapeHtml(finalPdf)}">Ver avalúo final</button>${canUploadFinal ? `<button type="button" class="cp6-action-button cp6-danger-button" data-delete-final-pdf="${escapeHtml(item.id)}">Eliminar avalúo final</button>` : ""}` : `<span class="cp6-pending">Aún no se ha cargado el avalúo final.</span>`;
-    const uploadFinal = canUploadFinal ? `<button type="button" class="cp6-action-button cp6-secondary-button" data-upload-final-pdf="${escapeHtml(item.id)}">Subir avalúo final</button>` : "";
-    const knownFields = [
-      ["nombre", "Nombre", currentApplicant.nombre || item.nombre || ""], ["telefono", "Teléfono", currentApplicant.telefono || item.telefono || ""], ["correo", "Correo", currentApplicant.correo || item.requesterEmail || item.email || ""],
-      ["propietario", "Propietario", item.propietario || specific.propietario || ""], ["valorOperacion", "Valor de operación", item.valorOperacion || specific.valorOperacion || ""], ["tipoBien", "Tipo de bien", item.tipoBien || specific.tipoBien || ""], ["tipoAvaluo", "Tipo de avalúo", item.tipoAvaluo || specific.tipoAvaluo || ""], ["asesor", "Asesor", item.asesor || specific.asesor || ""], ["notaria", "Notaría", item.notaria || specific.notaria || ""], ["modalidad", "Modalidad", item.modalidad || specific.modalidad || ""], ["observaciones", "Observaciones", item.observaciones || specific.observaciones || ""]
-    ];
-    const used = new Set(knownFields.map(([key]) => key));
-    Object.entries(item).forEach(([key, value]) => { if (!used.has(key) && !["archivos", "datosEspecificos", "solicitante"].includes(key) && ["string", "number", "boolean"].includes(typeof value)) { knownFields.push([key, key.replace(/([A-Z])/g, " $1"), value]); used.add(key); } });
-    Object.entries(item.contactoVisita && typeof item.contactoVisita === "object" ? item.contactoVisita : {}).forEach(([key, value]) => { knownFields.push([`contacto:${key}`, `Contacto visita · ${key.replace(/([A-Z])/g, " $1")}`, value]); });
-    Object.entries(specific).forEach(([key, value]) => { if (!used.has(key) && ["string", "number", "boolean"].includes(typeof value)) knownFields.push([`specific:${key}`, key.replace(/([A-Z])/g, " $1"), value]); });
-    const readFields = knownFields.map(([, label, value]) => `<div class="cp6-read-info-field"><span>${escapeHtml(label)}</span><strong>${readValue(value)}</strong></div>`).join("");
-    const editFields = knownFields.map(([key, label, value]) => {
-      const name = key.startsWith("specific:") ? key.slice(9) : key;
-      const isLong = key === "observaciones" || name.length > 24;
-      return `<label>${escapeHtml(label)}${isLong ? `<textarea name="${escapeHtml(key)}" rows="2">${readValue(value).replace(/&quot;/g, '"')}</textarea>` : `<input name="${escapeHtml(key)}" value="${escapeHtml(value)}" />`}</label>`;
-    }).join("");
-    const appraisalNumber = String(item.numeroAvaluo || "").replace(/\D/g, "").slice(0, 4);
-    const externalName = item.asignadoExternoNombre || "";
-    detail.innerHTML = `<div class="bg-white w-full rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden relative my-2" data-request-card>
-        <div class="h-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700"></div>
-        <div class="px-6 py-4 border-b border-slate-100 flex flex-col justify-between gap-3 bg-slate-50/50 relative pr-14">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div class="flex flex-wrap items-center gap-2.5 overflow-hidden min-w-0">
-                    <h2 class="text-xl font-black text-slate-900 tracking-tight truncate">${readValue(currentApplicant.nombre || creatorName)}</h2>
-                    <span class="bg-blue-100 text-blue-700 text-[11px] font-bold px-2.5 py-1 rounded-full border border-blue-200 flex-shrink-0">No. de solicitud: ${readValue(item.folio || "Pendiente")}</span>
-                </div>
-                <div class="text-xs text-slate-500 font-medium flex items-center gap-1 bg-white px-2.5 py-1 rounded-full border border-slate-200/80 shadow-xs flex-shrink-0"><i class="fa-solid fa-calendar-day text-blue-600"></i> Registrada el ${escapeHtml(requestDate(item.creadoEn))}</div>
-            </div>
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1.5 border-t border-slate-200/60">
-                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 font-medium min-w-0">
-                    <span class="truncate"><i class="fa-solid fa-user-gear text-slate-400 mr-1"></i> Registró: ${readValue(creatorName)}${creatorRole ? ` · ${escapeHtml(creatorRole)}` : ""}</span>
-                    <span>•</span>
-                    <span class="text-emerald-600 font-semibold"><i class="fa-solid fa-user-check mr-1"></i> Valuador asignado: ${readValue(item.asesor || specific.asesor || "Sin asignar")}</span>
-                </div>
-                <div class="flex flex-wrap items-center gap-2">
-                    <div class="flex items-center bg-emerald-50/80 border border-emerald-200 rounded-xl px-2.5 py-1 gap-2">
-                        <div class="flex items-center gap-1.5 text-emerald-800 font-bold text-xs"><i class="fa-solid fa-file-circle-check text-emerald-600 text-[10px]"></i><span>${appraisalNumber ? `No. ${escapeHtml(appraisalNumber)}` : "Sin avalúo asignado"}</span></div>
-                        <div class="flex items-center gap-1 border-l border-emerald-300 pl-2"><button type="button" class="text-slate-500 hover:text-blue-600 transition text-xs px-1" data-open-appraisal-popup title="Editar número de avalúo"><i class="fa-solid fa-pen-to-square"></i></button></div>
-                    </div>
-                    <div class="flex items-center bg-blue-50/70 border border-blue-200/80 rounded-xl px-2.5 py-1 gap-2">
-                        <div class="flex items-center gap-1.5 text-blue-800 font-bold text-xs min-w-0"><i class="fa-solid fa-user-check text-blue-600 text-[10px]"></i><span class="truncate max-w-[190px]">${externalName ? readValue(item.asignadoExternoEmail || externalName) : "Sin usuario externo"}</span></div>
-                        <div class="flex items-center gap-1 border-l border-blue-200 pl-2"><button type="button" class="text-slate-500 hover:text-blue-600 transition text-xs px-1" data-open-external-popup title="Asignar usuario externo"><i class="fa-solid fa-pen-to-square"></i></button></div>
-                    </div>
-                </div>
-            </div>
-            <button type="button" data-close-request-detail class="absolute top-4 right-4 w-8 h-8 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-full flex items-center justify-center transition" aria-label="Cerrar detalle"><i class="fa-solid fa-xmark text-base"></i></button>
+      const preview = image
+        ? `<img src="${escapeHtml(source)}" alt="${name}" />`
+        : `<div class="cp6-file-icon" aria-hidden="true">${/\.pdf$/i.test(file.name || "") ? "PDF" : "DOC"}</div>`;
+      return `<div class="cp6-file-card cp6-file-document bg-white p-2.5 rounded-xl border border-slate-200 flex items-center justify-between hover:shadow-sm transition min-w-0">
+        <div class="flex items-center gap-2.5 overflow-hidden min-w-0"><button type="button" class="cp6-file-preview flex-shrink-0" data-view-file="${index}" aria-label="Ver ${name}">${preview}</button><span class="text-xs font-bold text-slate-800 truncate" title="${name}">${name}</span></div>
+        <button type="button" class="cp6-detail-button p-1.5 text-slate-400 hover:text-blue-600 rounded-lg flex-shrink-0" data-view-file="${index}" aria-label="Ver archivo"><i class="fa-solid fa-eye text-xs"></i></button>
+      </div>`;
+    }).join("") : `<div class="cp6-file-empty text-xs text-slate-500 p-3">No hay documentos cargados.</div>`;
+
+    const finalActions = finalPdf
+      ? `<button type="button" class="cp6-action-button cp6-primary-button bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-1.5" data-view-final-pdf="${escapeHtml(finalPdf)}"><i class="fa-solid fa-eye text-[10px]"></i> Ver avalúo final</button>${canManage ? `<button type="button" class="cp6-action-button cp6-danger-button bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold px-3 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-1.5" data-delete-final-pdf="${escapeHtml(item.id)}" title="Eliminar avalúo"><i class="fa-solid fa-trash-can text-[10px]"></i></button>` : ""}`
+      : `<span class="cp6-pending text-[11px] text-slate-500">Aún no se ha cargado el avalúo final.</span>`;
+    const uploadFinal = canManage ? `<button type="button" class="cp6-action-button cp6-secondary-button bg-white border border-slate-300 text-slate-700 font-bold px-3 py-2 rounded-xl text-xs transition flex items-center gap-1.5" data-upload-final-pdf="${escapeHtml(item.id)}">Subir avalúo final</button>` : "";
+
+    const valueOperation = item.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "";
+    const contactName = visitContact.nombre || visitContact.name || item.contactoVisitaNombre || specific.contactoVisitaNombre || specific.contacto_visita || "";
+    const visitPhone = visitContact.telefono || visitContact.phone || item.contactoVisitaTelefono || specific.contactoVisitaTelefono || specific.telefono_visita || "";
+    const typeBien = item.tipoBien || specific.tipoBien || specific.tipo_bien || "";
+    const typeAppraisal = item.tipoAvaluo || specific.tipoAvaluo || specific.tipo_avaluo || "";
+
+    detail.innerHTML = `<div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden relative my-2" data-request-card>
+      <div class="h-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700"></div>
+      <div class="px-6 py-4 border-b border-slate-100 flex flex-col justify-between gap-3 bg-slate-50/50 relative pr-14">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex flex-wrap items-center gap-2.5 overflow-hidden min-w-0"><h2 class="text-xl font-black text-slate-900 tracking-tight truncate">${readValue(currentApplicant.nombre || item.nombre || creatorName)}</h2><span class="bg-blue-100 text-blue-700 text-[11px] font-bold px-2.5 py-1 rounded-full border border-blue-200 flex-shrink-0">No. de solicitud: ${readValue(item.folio, "Pendiente")}</span></div>
+          <div class="text-xs text-slate-500 font-medium flex items-center gap-1 bg-white px-2.5 py-1 rounded-full border border-slate-200/80 shadow-xs flex-shrink-0"><i class="fa-solid fa-calendar-day text-blue-600"></i> Registrada el ${escapeHtml(requestDate(item.creadoEn))}</div>
         </div>
-        <div class="p-5 sm:p-6 space-y-4">
-            <div class="bg-slate-50/80 rounded-2xl p-4 sm:p-5 border border-slate-200/90 space-y-3.5 shadow-sm">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/70 pb-3">
-                    <div class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-blue-500/20"><i class="fa-solid fa-folder-open"></i></div><div><div class="flex items-center gap-2"><h3 class="text-sm font-black text-slate-900 tracking-tight">Expediente Digital</h3><span class="bg-blue-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">${files.length} archivos</span></div><p class="text-[11px] text-slate-500">Documentos técnicos, escrituras, predial, factura, fotografías, etc.</p></div></div>
-                    <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-1.5 flex-shrink-0" data-attach-missing="${escapeHtml(item.id)}"><i class="fa-solid fa-plus text-[10px]"></i> Anexar documentos</button>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-[210px] overflow-y-auto cp6-custom-scroll pr-1.5">${filesMarkup}</div>
-            </div>
-            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 flex flex-wrap items-center justify-between gap-3">
-                <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-base shadow-sm"><i class="fa-solid fa-file-arrow-up"></i></div><div><h4 class="text-xs font-bold text-slate-900">${finalPdf ? "Avalúo final cargado" : "Avalúo final pendiente"}</h4><p class="text-[11px] text-slate-500">${finalPdf ? "El documento final está disponible para consulta." : "Aún no se ha adjuntado el documento final de este trámite."}</p></div></div>
-                <div class="flex flex-wrap gap-2">${uploadFinal || ""}${finalActions}</div>
-            </div>
-            <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 space-y-3 shadow-sm">
-                <div class="border-b border-slate-100 pb-2.5 flex items-center justify-between"><div class="flex items-center gap-2"><i class="fa-solid fa-address-card text-blue-600"></i><h3 class="text-xs font-bold text-slate-900">Información registrada</h3></div><span class="text-[10px] font-semibold text-slate-400">Detalles del trámite</span></div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs" data-read-request-info>${readFields}</div>
-                <form class="cp6-edit-info-form" data-request-info-form hidden>${editFields}<div class="cp6-edit-info-actions"><p data-edit-message hidden></p><button type="button" class="cp6-detail-button cp6-secondary-button" data-cancel-request-info>Cancelar</button><button type="submit" class="cp6-detail-button cp6-primary-button" data-save-request-info>Guardar cambios</button></div></form>
-                <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-2 rounded-xl text-xs transition" data-edit-request-info>Editar información</button>
-            </div>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1.5 border-t border-slate-200/60">
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 font-medium"><span><i class="fa-solid fa-user-gear text-slate-400 mr-1"></i> Registró: ${readValue(creatorName)}${creatorRole ? ` · ${escapeHtml(creatorRole)}` : ""}</span><span>•</span><span class="text-emerald-600 font-semibold"><i class="fa-solid fa-user-check mr-1"></i> Valuador asignado: ${readValue(item.asesor || specific.asesor || "Sin asignar")}</span></div>
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="flex items-center bg-emerald-50/80 border border-emerald-200 rounded-xl px-2.5 py-1 gap-2"><div class="flex items-center gap-1.5 text-emerald-800 font-bold text-xs"><i class="fa-solid fa-file-circle-check text-emerald-600 text-[10px]"></i><span>${appraisalNumber ? `No. ${escapeHtml(appraisalNumber)}` : "Sin asignar"}</span></div><button type="button" class="text-slate-500 hover:text-blue-600 transition text-xs px-1" data-open-appraisal-popup title="Editar número de avalúo"><i class="fa-solid fa-pen-to-square"></i></button></div>
+            <div class="flex items-center bg-blue-50/70 border border-blue-200/80 rounded-xl px-2.5 py-1 gap-2"><div class="flex items-center gap-1.5 text-blue-800 font-bold text-xs min-w-0"><i class="fa-solid fa-user-check text-blue-600 text-[10px]"></i><span class="truncate max-w-[190px]">${externalName ? readValue(item.asignadoExternoEmail || externalName) : "Sin usuario externo"}</span></div><button type="button" class="text-slate-500 hover:text-blue-600 transition text-xs px-1" data-open-external-popup title="Asignar usuario externo"><i class="fa-solid fa-pen-to-square"></i></button></div>
+          </div>
         </div>
-        <div class="cp6-submodal" data-appraisal-popup hidden><div class="cp6-submodal-card"><h3>Asignar avalúo</h3><p>Escribe el número de avalúo de 4 dígitos.</p><input data-popup-appraisal-number inputmode="numeric" maxlength="4" value="${escapeHtml(appraisalNumber)}" placeholder="0000" /><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-appraisal>Aceptar</button></div></div></div>
-        <div class="cp6-submodal" data-external-popup hidden><div class="cp6-submodal-card"><h3>Asignar usuario externo</h3><input data-popup-external-search placeholder="Buscar por nombre, correo o teléfono" /><div class="cp6-popup-results" data-popup-external-results></div><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-external disabled>Aceptar</button></div></div></div>
-    </div>`
+        <button type="button" data-close-request-detail class="absolute top-4 right-4 w-8 h-8 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-full flex items-center justify-center transition" aria-label="Cerrar detalle"><i class="fa-solid fa-xmark text-base"></i></button>
+      </div>
+      <div class="p-5 sm:p-6 space-y-4">
+        <div class="bg-slate-50/80 rounded-2xl p-4 sm:p-5 border border-slate-200/90 space-y-3.5 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/70 pb-3"><div class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-blue-500/20"><i class="fa-solid fa-folder-open"></i></div><div><h3 class="text-sm font-black text-slate-900 tracking-tight">Expediente Digital</h3><p class="text-[11px] text-slate-500">Documentos técnicos, escrituras, predial, facturas, fotografías, etc.</p></div></div><button type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-1.5 flex-shrink-0" data-attach-missing="${escapeHtml(item.id)}"><i class="fa-solid fa-plus text-[10px]"></i> Anexar documentos</button></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-[210px] overflow-y-auto cp6-custom-scroll pr-1.5">${filesMarkup}</div>
+        </div>
+        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 flex flex-wrap items-center justify-between gap-3"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-base shadow-sm"><i class="fa-solid fa-file-circle-check"></i></div><div><h4 class="text-xs font-bold text-slate-900">${finalPdf ? "Avalúo final cargado" : "Avalúo final pendiente"}</h4><p class="text-[11px] text-slate-500">${finalPdf ? "El documento final está disponible para consulta." : "Aún no se ha cargado el avalúo final."}</p></div></div><div class="flex items-center gap-2">${uploadFinal}${finalActions}</div></div>
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 space-y-3 shadow-sm"><div class="border-b border-slate-100 pb-2.5 flex items-center justify-between"><div class="flex items-center gap-2"><i class="fa-solid fa-address-card text-blue-600"></i><h3 class="text-xs font-bold text-slate-900">Información registrada</h3></div><span class="text-[10px] font-semibold text-slate-400">Detalles del trámite</span></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-0.5">Valor de operación</span><p class="font-extrabold text-blue-700 text-xs">${readValue(valueOperation, "$0.00")}</p></div>
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-0.5">Contacto para visita</span><p class="font-bold text-slate-800 text-xs">${readValue(contactName)}</p></div>
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-0.5">Teléfono de visita</span><p class="font-semibold text-slate-800 text-xs"><i class="fa-solid fa-phone text-blue-600 mr-1 text-[10px]"></i> ${readValue(visitPhone)}</p></div>
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-0.5">Tipo de bien</span><p class="font-semibold text-slate-800 text-xs"><i class="fa-solid fa-building text-blue-600 mr-1 text-[10px]"></i> ${readValue(typeBien)}</p></div>
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-0.5">Tipo de avalúo</span><p class="font-semibold text-slate-800 text-xs"><i class="fa-solid fa-file-invoice-dollar text-blue-600 mr-1 text-[10px]"></i> ${readValue(typeAppraisal)}</p></div>
+        </div></div>
+      </div>
+      <div class="cp6-submodal" data-appraisal-popup hidden><div class="cp6-submodal-card"><h3>Asignar avalúo</h3><p>Escribe el número de avalúo de 4 dígitos.</p><input data-popup-appraisal-number inputmode="numeric" maxlength="4" value="${escapeHtml(appraisalNumber)}" placeholder="0000" /><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-appraisal>Aceptar</button></div></div></div>
+      <div class="cp6-submodal" data-external-popup hidden><div class="cp6-submodal-card"><h3>Asignar usuario externo</h3><input data-popup-external-search placeholder="Buscar por nombre, correo o teléfono" /><div class="cp6-popup-results" data-popup-external-results></div><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-external disabled>Aceptar</button></div></div></div>
+    </div>`;
     openDialog(dialog);
     detail.querySelector("[data-close-request-detail]")?.addEventListener("click", () => closeDialog(dialog));
     detail.querySelectorAll("[data-view-file]").forEach((button) => button?.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
