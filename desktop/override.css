@@ -13224,7 +13224,7 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #appShell.control-shell #recordEditor h3 {
   color: #0f172a !important;
   font-size: 1.125rem !important;
-  font-weight: 900 !important;
+  font-weight: 700 !important;
 }
 
 #appShell.control-shell #recordEditor .max-w-7xl > form input:not([type="checkbox"]),
@@ -13240,7 +13240,7 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   border-radius: .75rem !important;
   color: #0f172a !important;
   font-size: .75rem !important;
-  font-weight: 500 !important;
+  font-weight: 400 !important;
   box-shadow: none !important;
 }
 
