@@ -13542,3 +13542,27 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   flex-shrink: 0 !important;
   white-space: nowrap !important;
 }
+
+/* Expediente Digital: tarjetas compactas y uniformes aunque haya pocos documentos */
+#requestDetailDialog.cp6-request-detail-dialog [data-request-card] {
+  width: min(1120px, calc(100vw - 32px)) !important;
+  max-width: 1120px !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog [data-request-card] .cp6-custom-scroll {
+  align-content: start !important;
+  justify-content: start !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog [data-request-card] .cp6-file-card {
+  height: 64px !important;
+  min-height: 64px !important;
+  max-height: 64px !important;
+  align-self: start !important;
+  overflow: hidden !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog [data-request-card] .cp6-file-card .truncate {
+  min-width: 0 !important;
+  max-width: 190px !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog [data-request-card] .cp6-file-card .text-\[10px\] {
+  line-height: 1.2 !important;
+}

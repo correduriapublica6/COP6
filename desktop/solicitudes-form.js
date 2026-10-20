@@ -564,7 +564,7 @@
     const contactName = visitContact.nombre || visitContact.name || item.contactoVisitaNombre || specific.contactoVisitaNombre || specific.contacto_visita || "";
     const visitPhone = visitContact.telefono || visitContact.phone || item.contactoVisitaTelefono || specific.contactoVisitaTelefono || specific.telefono_visita || "";
     const typeBien = item.tipoBien || specific.tipoBien || specific.tipo_bien || "";
-    const typeAppraisal = item.tipoAvaluo || specific.tipoAvaluo || specific.tipo_avaluo || "";
+    const typeAppraisal = item.tipoAvaluo || item.tipo_avaluo || specific.tipoAvaluo || specific.tipo_avaluo || specific.tipo_de_avaluo || "";
 
     detail.innerHTML = `<div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden relative my-2" data-request-card>
       <div class="h-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700"></div>
@@ -575,7 +575,7 @@
         </div>
         <div class="flex flex-col sm:flex-row sm:flex-nowrap sm:items-center justify-between gap-2 pt-1.5 border-t border-slate-200/60">
           <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 font-medium min-w-0"><span><i class="fa-solid fa-user-gear text-slate-400 mr-1"></i> Registró: ${readValue(creatorName)}${creatorRole ? ` · ${escapeHtml(creatorRole)}` : ""}</span><span>•</span><span class="text-emerald-600 font-semibold"><i class="fa-solid fa-user-check mr-1"></i> Valuador asignado: ${readValue(item.asesor || specific.asesor || "Sin asignar")}</span></div>
-          <div class="flex flex-nowrap items-center gap-2 ml-auto flex-shrink-0 overflow-x-auto">
+          <div class="flex flex-nowrap items-center justify-end gap-2 ml-auto flex-shrink-0 overflow-x-auto">
             <div class="flex flex-nowrap items-center bg-emerald-50/80 border border-emerald-200 rounded-xl px-2.5 py-1 gap-2 flex-shrink-0 whitespace-nowrap"><div class="flex items-center gap-1.5 text-emerald-800 font-bold text-xs"><i class="fa-solid fa-file-circle-check text-emerald-600 text-[10px]"></i><span>${appraisalNumber ? `No. ${escapeHtml(appraisalNumber)}` : "Sin asignar"}</span></div><button type="button" class="text-slate-500 hover:text-blue-600 transition text-xs px-1" data-open-appraisal-popup title="Editar número de avalúo"><i class="fa-solid fa-pen-to-square"></i></button></div>
             <div class="flex flex-nowrap items-center bg-blue-50/70 border border-blue-200/80 rounded-xl px-2.5 py-1 gap-2 flex-shrink-0 whitespace-nowrap"><div class="flex items-center gap-1.5 text-blue-800 font-bold text-xs min-w-0"><i class="fa-solid fa-user-check text-blue-600 text-[10px]"></i><span class="truncate max-w-[190px]">${externalName ? readValue(item.asignadoExternoEmail || externalName) : "Sin usuario externo"}</span></div><button type="button" class="text-slate-500 hover:text-blue-600 transition text-xs px-1" data-open-external-popup title="Asignar usuario externo"><i class="fa-solid fa-pen-to-square"></i></button></div>
           </div>
