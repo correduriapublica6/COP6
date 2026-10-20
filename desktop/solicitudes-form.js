@@ -531,6 +531,7 @@
     const currentApplicant = item.solicitante && typeof item.solicitante === "object" ? item.solicitante : {};
     const activeRole = $("#appShell")?.dataset.role || "";
     const canManage = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
+    const isAdmin = !applicantSession && activeRole === "admin";
     const readValue = (value, fallback = "N/D") => escapeHtml(value === undefined || value === null || value === "" ? fallback : String(value));
     const creatorName = item.creadoPorNombre || item.creadoPor || currentApplicant.nombre || "Usuario externo";
     const creatorRole = item.creadorRol ? ({ admin: "Administrador", auditor: "Auditor", valuador: "Valuador", editor: "Editor", viewer: "Solo lectura" }[item.creadorRol] || item.creadorRol) : "";
@@ -549,7 +550,7 @@
         : `<div class="cp6-file-icon" aria-hidden="true">${/\.pdf$/i.test(file.name || "") ? "PDF" : "DOC"}</div>`;
       return `<div class="cp6-file-card cp6-file-document bg-white p-2.5 rounded-xl border border-slate-200 flex items-center justify-between hover:shadow-sm transition min-w-0">
         <div class="flex items-center gap-2.5 overflow-hidden min-w-0"><button type="button" class="cp6-file-preview flex-shrink-0" data-view-file="${index}" aria-label="Ver ${name}">${preview}</button><span class="text-xs font-bold text-slate-800 truncate" title="${name}">${name}</span></div>
-        <button type="button" class="cp6-detail-button p-1.5 text-slate-400 hover:text-blue-600 rounded-lg flex-shrink-0" data-view-file="${index}" aria-label="Ver archivo"><i class="fa-solid fa-eye text-xs"></i></button>
+        <div class="flex items-center gap-1"><button type="button" class="cp6-detail-button p-1.5 text-slate-400 hover:text-blue-600 rounded-lg flex-shrink-0" data-view-file="${index}" aria-label="Ver archivo"><i class="fa-solid fa-eye text-xs"></i></button>${isAdmin ? `<button type="button" class="cp6-file-delete p-1.5 text-slate-400 hover:text-red-600 rounded-lg flex-shrink-0" data-delete-file="${index}" title="Eliminar archivo (Solo Admin)"><i class="fa-solid fa-trash-can text-xs"></i></button>` : ""}</div>
       </div>`;
     }).join("") : `<div class="cp6-file-empty text-xs text-slate-500 p-3">No hay documentos cargados.</div>`;
 
@@ -600,6 +601,16 @@
     openDialog(dialog);
     detail.querySelector("[data-close-request-detail]")?.addEventListener("click", () => closeDialog(dialog));
     detail.querySelectorAll("[data-view-file]").forEach((button) => button?.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
+    detail.querySelectorAll("[data-delete-file]").forEach((button) => button?.addEventListener("click", async () => {
+      const index = Number(button.dataset.deleteFile);
+      if (!isAdmin || !Number.isInteger(index) || !files[index]) return;
+      if (!window.confirm("¿Eliminar este archivo del expediente?")) return;
+      try {
+        const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ archivos: files.filter((_, fileIndex) => fileIndex !== index) }) });
+        requests = requests.map((candidate) => candidate.id === item.id ? (updated?.solicitud || updated) : candidate);
+        renderRequestDetail(updated?.solicitud || updated);
+      } catch (error) { window.alert(error.message || "No se pudo eliminar el archivo."); }
+    }));
     detail.querySelector("[data-view-final-pdf]")?.addEventListener("click", (event) => openResourceViewer(event.currentTarget.dataset.viewFinalPdf, "Avalúo final.pdf", "application/pdf"));
     detail.querySelector("[data-attach-missing]")?.addEventListener("click", () => annexDocuments(item));
     detail.querySelector("[data-upload-final-pdf]")?.addEventListener("click", () => uploadFinalPdf(item));

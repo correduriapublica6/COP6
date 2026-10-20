@@ -13442,3 +13442,65 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   background: #fecaca !important;
   color: #991b1b !important;
 }
+
+/* Modales emergentes de asignación: tipografía y controles limpios */
+#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal,
+#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card,
+#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card h3,
+#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card p,
+#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card input,
+#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card button {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card h3 {
+  color: #0f172a !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 6px !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card p {
+  color: #64748b !important;
+  font-size: .75rem !important;
+  margin: 0 0 12px !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card input {
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 12px !important;
+  color: #1e293b !important;
+  font-size: .875rem !important;
+  font-weight: 700 !important;
+  outline: none !important;
+  padding: 8px 12px !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card input:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59,130,246,.2) !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card > div:last-child {
+  display: flex !important;
+  gap: 8px !important;
+  justify-content: flex-end !important;
+  margin-top: 14px !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card .cp6-secondary-button {
+  background: #f1f5f9 !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  color: #475569 !important;
+  font-size: .75rem !important;
+  font-weight: 700 !important;
+  padding: 8px 16px !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card .cp6-primary-button {
+  background: #2563eb !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 10px rgba(37,99,235,.16) !important;
+  color: #fff !important;
+  font-size: .75rem !important;
+  font-weight: 700 !important;
+  padding: 8px 16px !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog .cp6-file-delete:hover {
+  background: #fef2f2 !important;
+}
