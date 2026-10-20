@@ -13504,3 +13504,25 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #requestDetailDialog.cp6-request-detail-dialog .cp6-file-delete:hover {
   background: #fef2f2 !important;
 }
+
+/* Expediente Digital: espacio reservado para seis archivos e iconos sin previsualización */
+#requestDetailDialog.cp6-request-detail-dialog .cp6-custom-scroll {
+  min-height: 300px !important;
+  max-height: 360px !important;
+  overflow-y: auto !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog .cp6-file-icon {
+  width: 40px !important;
+  height: 40px !important;
+  flex: 0 0 40px !important;
+  font-size: 1.1rem !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog .cp6-file-icon i {
+  line-height: 1 !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog h2,
+#requestDetailDialog.cp6-request-detail-dialog h3,
+#requestDetailDialog.cp6-request-detail-dialog h4,
+#requestDetailDialog.cp6-request-detail-dialog [data-popup-external-search] {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+}

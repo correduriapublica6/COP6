@@ -544,12 +544,12 @@
       const name = escapeHtml(file.name || `Archivo ${index + 1}`);
       const source = apiResourceUrl(file.url || safeFileData(file));
       if (!source) return `<div class="cp6-file-card cp6-file-unavailable"><span>${name}</span></div>`;
-      const image = String(file.type || "").startsWith("image/");
-      const preview = image
-        ? `<img src="${escapeHtml(source)}" alt="${name}" />`
-        : `<div class="cp6-file-icon" aria-hidden="true">${/\.pdf$/i.test(file.name || "") ? "PDF" : "DOC"}</div>`;
+      const isPdf = /\.pdf$/i.test(file.name || "") || String(file.type || "").toLowerCase() === "application/pdf";
+      const isImage = /\.(jpg|jpeg|png|webp|gif)$/i.test(file.name || "") || String(file.type || "").startsWith("image/");
+      const iconClass = isPdf ? "fa-file-pdf text-red-600 bg-red-50" : (isImage ? "fa-file-image text-amber-600 bg-amber-50" : "fa-file-lines text-blue-600 bg-blue-50");
+      const preview = `<div class="cp6-file-icon w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg ${iconClass}" aria-hidden="true"><i class="fa-solid ${iconClass.split(" ")[0]}"></i></div>`;
       return `<div class="cp6-file-card cp6-file-document bg-white p-2.5 rounded-xl border border-slate-200 flex items-center justify-between hover:shadow-sm transition min-w-0">
-        <div class="flex items-center gap-2.5 overflow-hidden min-w-0"><button type="button" class="cp6-file-preview flex-shrink-0" data-view-file="${index}" aria-label="Ver ${name}">${preview}</button><span class="text-xs font-bold text-slate-800 truncate" title="${name}">${name}</span></div>
+        <div class="flex items-center gap-2.5 overflow-hidden min-w-0"><button type="button" class="cp6-file-preview flex-shrink-0" data-view-file="${index}" aria-label="Ver ${name}">${preview}</button><div class="truncate"><span class="text-xs font-bold text-slate-800 truncate block" title="${name}">${name}</span><span class="text-[10px] text-slate-400 block">${escapeHtml(file.size || "1.2 MB")}</span></div></div>
         <div class="flex items-center gap-1"><button type="button" class="cp6-detail-button p-1.5 text-slate-400 hover:text-blue-600 rounded-lg flex-shrink-0" data-view-file="${index}" aria-label="Ver archivo"><i class="fa-solid fa-eye text-xs"></i></button>${isAdmin ? `<button type="button" class="cp6-file-delete p-1.5 text-slate-400 hover:text-red-600 rounded-lg flex-shrink-0" data-delete-file="${index}" title="Eliminar archivo (Solo Admin)"><i class="fa-solid fa-trash-can text-xs"></i></button>` : ""}</div>
       </div>`;
     }).join("") : `<div class="cp6-file-empty text-xs text-slate-500 p-3">No hay documentos cargados.</div>`;
@@ -585,7 +585,7 @@
       <div class="p-5 sm:p-6 space-y-4">
         <div class="bg-slate-50/80 rounded-2xl p-4 sm:p-5 border border-slate-200/90 space-y-3.5 shadow-sm">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/70 pb-3"><div class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-blue-500/20"><i class="fa-solid fa-folder-open"></i></div><div><h3 class="text-sm font-black text-slate-900 tracking-tight">Expediente Digital</h3><p class="text-[11px] text-slate-500">Documentos técnicos, escrituras, predial, facturas, fotografías, etc.</p></div></div><button type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-1.5 flex-shrink-0" data-attach-missing="${escapeHtml(item.id)}"><i class="fa-solid fa-plus text-[10px]"></i> Anexar documentos</button></div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-[210px] overflow-y-auto cp6-custom-scroll pr-1.5">${filesMarkup}</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 min-h-[300px] max-h-[360px] overflow-y-auto cp6-custom-scroll pr-1.5">${filesMarkup}</div>
         </div>
         ${finalSection}
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 space-y-3 shadow-sm"><div class="border-b border-slate-100 pb-2.5 flex items-center justify-between"><div class="flex items-center gap-2"><i class="fa-solid fa-address-card text-blue-600"></i><h3 class="text-xs font-bold text-slate-900">Información registrada</h3></div><span class="text-[10px] font-semibold text-slate-400">Detalles del trámite</span></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
@@ -597,9 +597,9 @@
         </div></div>
       </div>
       <div class="cp6-submodal" data-appraisal-popup hidden><div class="cp6-submodal-card"><h3>Asignar avalúo</h3><p>Escribe el número de avalúo de 4 dígitos.</p><input data-popup-appraisal-number inputmode="numeric" maxlength="4" value="${escapeHtml(appraisalNumber)}" placeholder="0000" /><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-appraisal>Aceptar</button></div></div></div>
-      <div class="cp6-submodal" data-external-popup hidden><div class="cp6-submodal-card"><h3>Asignar usuario externo</h3><input data-popup-external-search placeholder="Buscar por nombre, correo o teléfono" /><div class="cp6-popup-results max-h-48 overflow-y-auto border border-slate-200 rounded-xl bg-white shadow-lg mt-1 divide-y divide-slate-100" data-popup-external-results></div><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-external disabled>Aceptar</button></div></div></div>
+      <div class="cp6-submodal" data-external-popup hidden><div class="cp6-submodal-card"><h3>Asignar usuario externo</h3><input data-popup-external-search style="font-family: Plus Jakarta Sans, system-ui, -apple-system, sans-serif !important;" placeholder="Buscar por nombre, correo o teléfono" /><div class="cp6-popup-results max-h-48 overflow-y-auto border border-slate-200 rounded-xl bg-white shadow-lg mt-1 divide-y divide-slate-100" data-popup-external-results></div><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-external disabled>Aceptar</button></div></div></div>
     </div>`;
-    detail.querySelectorAll("h2, h3, h4, button, input").forEach((element) => { element.style.fontFamily = "system-ui, -apple-system, sans-serif"; });
+    detail.querySelectorAll("h2, h3, h4, button, input").forEach((element) => { element.style.fontFamily = "Plus Jakarta Sans, system-ui, -apple-system, sans-serif"; });
     openDialog(dialog);
     detail.querySelector("[data-close-request-detail]")?.addEventListener("click", () => closeDialog(dialog));
     detail.querySelectorAll("[data-view-file]").forEach((button) => button?.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
