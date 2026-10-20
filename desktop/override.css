@@ -13343,7 +13343,7 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #requestDetailDialog.cp6-request-detail-dialog::backdrop {
   background: rgba(15, 23, 42, .58) !important;
 }
-#requestDetailDialog.cp6-request-detail-dialog > form {
+#requestDetailDialog.cp6-request-detail-dialog > .cp6-detail-content {
   background: transparent !important;
   max-height: calc(100vh - 24px) !important;
   overflow-y: auto !important;
@@ -13430,5 +13430,15 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form { font-family: 'Plus Jakarta Sans', sans-serif !important; }
 @media (max-width: 700px) {
   #requestDetailDialog.cp6-request-detail-dialog { max-width: calc(100vw - 12px) !important; width: calc(100vw - 12px) !important; }
-  #requestDetailDialog.cp6-request-detail-dialog > form { max-height: calc(100vh - 12px) !important; }
+  #requestDetailDialog.cp6-request-detail-dialog > .cp6-detail-content { max-height: calc(100vh - 12px) !important; }
+}
+
+#requestDetailDialog.cp6-request-detail-dialog .cp6-danger-button {
+  background: #fee2e2 !important;
+  border: 1px solid #fecaca !important;
+  color: #b91c1c !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog .cp6-danger-button:hover {
+  background: #fecaca !important;
+  color: #991b1b !important;
 }
