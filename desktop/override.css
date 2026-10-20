@@ -13578,3 +13578,22 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
     white-space: normal;
   }
 }
+
+/* Limpieza final del Registro de Avalúos */
+#appShell.control-shell .app-workspace.is-registration-mode > .workspace-header {
+  display: none !important;
+}
+
+#appShell.control-shell #recordEditor .max-w-7xl h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 1.125rem !important;
+  color: #0f172a !important;
+}
+
+#appShell.control-shell #recordEditor .max-w-7xl input:not([type="checkbox"]),
+#appShell.control-shell #recordEditor .max-w-7xl select,
+#appShell.control-shell #recordEditor .max-w-7xl textarea {
+  padding-left: 2.5rem !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}

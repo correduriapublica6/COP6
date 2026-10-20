@@ -1009,12 +1009,14 @@
     recordEditor.hidden = false;
     $("#recepcionAvaluosSection .search-panel")?.setAttribute("hidden", "");
     $("#avaluosView").classList.add("is-registering");
+    $(".app-workspace")?.classList.add("is-registration-mode");
     if (!viewOnly) window.setTimeout(() => numberInput.focus(), 120);
   }
   function closeDialog() {
     recordEditor.hidden = true;
     $("#recepcionAvaluosSection .search-panel")?.removeAttribute("hidden");
     $("#avaluosView").classList.remove("is-registering");
+    $(".app-workspace")?.classList.remove("is-registration-mode");
     editingId = null;
     form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = false; });
     form.reset();
