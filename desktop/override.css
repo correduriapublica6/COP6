@@ -13341,3 +13341,45 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   #appShell.control-shell #recordEditor .record-form-column,
   #appShell.control-shell #recordEditor .payment-details { grid-template-columns: 1fr !important; }
 }
+
+/* Recepción — formulario moderno inspirado en Cotizaciones */
+#appShell.control-shell #recordEditor .reception-modern-form {
+  background: #f8fafc !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  max-width: none !important;
+}
+#appShell.control-shell .reception-form-header { display:flex; justify-content:space-between; align-items:flex-end; gap:18px; padding: 4px 0 22px; border-bottom:1px solid #e2e8f0; }
+#appShell.control-shell .reception-form-kicker { display:block; color:#2563eb; font-size:11px; font-weight:700; letter-spacing:.16em; margin-bottom:6px; }
+#appShell.control-shell .reception-form-heading h2 { margin:0; color:#0f172a; font:600 1.5rem/1.2 Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing:-.03em; }
+#appShell.control-shell .reception-form-heading p, #appShell.control-shell .reception-required-note { margin:7px 0 0; color:#64748b; font-size:12px; font-weight:400; }
+#appShell.control-shell .reception-required-note b, #appShell.control-shell .reception-field b { color:#2563eb; }
+#appShell.control-shell .reception-form-columns { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(320px,.8fr); gap:24px; margin-top:24px; align-items:start; }
+#appShell.control-shell .reception-form-card { background:#fff; border:1px solid #e2e8f0; border-radius:16px; box-shadow:0 8px 24px rgba(15,23,42,.06); padding:24px; min-width:0; }
+#appShell.control-shell .reception-card-heading { display:flex; align-items:center; gap:12px; padding-bottom:17px; margin-bottom:20px; border-bottom:1px solid #f1f5f9; }
+#appShell.control-shell .reception-card-icon { width:38px; height:38px; border-radius:11px; display:grid; place-items:center; color:#2563eb; background:#eff6ff; border:1px solid #dbeafe; font-size:17px; font-weight:600; }
+#appShell.control-shell .reception-card-heading h3 { margin:0; color:#0f172a; font-size:15px; font-weight:600; }
+#appShell.control-shell .reception-card-heading p { margin:4px 0 0; color:#94a3b8; font-size:11px; }
+#appShell.control-shell .reception-fields-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:17px 18px; }
+#appShell.control-shell .reception-field { display:block; min-width:0; color:#475569; font-size:12px; font-weight:600; }
+#appShell.control-shell .reception-field-wide { grid-column:1/-1; }
+#appShell.control-shell .reception-input-wrap { position:relative; margin-top:7px; }
+#appShell.control-shell .reception-input-wrap > i { position:absolute; left:12px; top:50%; transform:translateY(-50%); z-index:1; color:#94a3b8; font-style:normal; font-size:13px; line-height:1; pointer-events:none; }
+#appShell.control-shell .reception-input-wrap input, #appShell.control-shell .reception-input-wrap select, #appShell.control-shell .reception-input-wrap textarea { width:100%; box-sizing:border-box; border:1px solid #cbd5e1 !important; border-radius:10px !important; background:#fff !important; color:#0f172a !important; font:400 12px/1.4 Inter, ui-sans-serif, system-ui, sans-serif !important; padding:11px 12px 11px 36px !important; box-shadow:none !important; outline:none !important; transition:border-color .18s ease, box-shadow .18s ease; }
+#appShell.control-shell .reception-input-wrap select { appearance:auto; padding-right:30px !important; }
+#appShell.control-shell .reception-input-wrap textarea { resize:vertical; min-height:76px; }
+#appShell.control-shell .reception-input-wrap input::placeholder, #appShell.control-shell .reception-input-wrap textarea::placeholder { color:#94a3b8; opacity:1; }
+#appShell.control-shell .reception-input-wrap input:focus, #appShell.control-shell .reception-input-wrap select:focus, #appShell.control-shell .reception-input-wrap textarea:focus { border-color:#2563eb !important; box-shadow:0 0 0 2px rgba(37,99,235,.12) !important; }
+#appShell.control-shell .reception-payment-fields { display:flex; flex-direction:column; gap:18px; }
+#appShell.control-shell .reception-check-row { display:flex; align-items:flex-start; gap:11px; padding:14px; border:1px solid #e2e8f0; border-radius:12px; background:#f8fafc; cursor:pointer; }
+#appShell.control-shell .reception-check-row input { width:16px; height:16px; margin:2px 0 0; accent-color:#2563eb; }
+#appShell.control-shell .reception-check-row b { display:block; color:#334155; font-size:12px; font-weight:600; }
+#appShell.control-shell .reception-check-row small { display:block; margin-top:4px; color:#94a3b8; font-size:11px; }
+#appShell.control-shell .reception-payment-details { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:17px 14px; padding:17px; background:#eff6ff; border:1px solid #dbeafe; border-radius:13px; }
+#appShell.control-shell .reception-form-message { margin:16px 0 0; }
+#appShell.control-shell .reception-form-actions { justify-content:flex-end; padding-top:20px; margin-top:20px; border-top:1px solid #e2e8f0; }
+#appShell.control-shell .reception-form-actions button { min-height:42px; border-radius:10px; }
+@media (max-width: 900px) { #appShell.control-shell .reception-form-columns { grid-template-columns:1fr; } }
+@media (max-width: 620px) { #appShell.control-shell .reception-form-header { align-items:flex-start; flex-direction:column; } #appShell.control-shell .reception-fields-grid, #appShell.control-shell .reception-payment-details { grid-template-columns:1fr; } #appShell.control-shell .reception-field-wide { grid-column:auto; } #appShell.control-shell .reception-form-card { padding:18px; } }

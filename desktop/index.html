@@ -184,33 +184,56 @@
             </section>
 
             <section id="recordEditor" class="inline-record-editor" aria-labelledby="dialogTitle" hidden>
-              <form id="recordForm" class="form-full-page-container">
-                <div class="dialog-heading"><div><p class="eyebrow">RECEPCIÓN</p><h2 id="dialogTitle">Registrar avalúo</h2></div></div>
-                <div class="record-form-columns">
-                  <section class="record-form-column record-form-left" aria-label="Datos del avalúo">
-                    <label>No. *<input id="numeroInput" name="numeroAvaluo" required inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="Ej. 3311" /></label>
-                    <label>Fecha *<input id="avaluoDateInput" name="fechaAvaluo" required type="date" /></label>
-                    <label>Tipo de bien *<select name="tipoBien" required><option value="">Selecciona el tipo de bien</option><option>Inmuebles</option><option>Vehículo Automotriz</option><option>Maquinaria y equipo</option><option>Mobiliario y Bienes Diversos</option><option>Intangibles</option></select></label>
-                    <label>Tipo de avalúo *<select name="tipoAvaluo" required><option value="">Selecciona el tipo de avalúo</option><option>Referido</option><option>Comercial</option><option>Otro</option></select></label>
-                    <label>Usuario *<select name="usuario" required><option value="">Selecciona un usuario</option><option>Juan Manuel Barrera Martínez</option><option>Gabriel Barrera Martínez</option><option>Cesar Delgado Armendáriz</option><option>Diana Barrera Rivera</option><option>Francisco Gabriel Hernández Estrada</option><option>Emmanuel Barrera Atilano</option><option>Caridad Rojas Vázquez</option></select></label>
-                    <label>Solicitante *<input name="solicitante" required placeholder="Nombre o empresa" /></label>
-                    <label>Valor del avalúo<input id="appraisalValueInput" name="valorAvaluo" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></label>
-                    <label class="full-width">Observación<textarea name="observacion" rows="3" placeholder="Notas relevantes del avalúo"></textarea></label>
+              <form id="recordForm" class="form-full-page-container reception-modern-form">
+                <header class="reception-form-header">
+                  <div class="reception-form-heading">
+                    <span class="reception-form-kicker">RECEPCIÓN</span>
+                    <h2 id="dialogTitle">Registrar avalúo</h2>
+                    <p>Captura los datos generales del avalúo y el estatus de pago.</p>
+                  </div>
+                  <span class="reception-required-note">Campos obligatorios <b>*</b></span>
+                </header>
+
+                <div class="reception-form-columns">
+                  <section class="reception-form-card reception-form-main" aria-label="Datos generales del avalúo">
+                    <div class="reception-card-heading">
+                      <span class="reception-card-icon" aria-hidden="true">⌁</span>
+                      <div><h3>Datos generales del avalúo</h3><p>Información técnica y datos del solicitante.</p></div>
+                    </div>
+                    <div class="reception-fields-grid">
+                      <label class="reception-field"><span>No. <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">#</i><input id="numeroInput" name="numeroAvaluo" required inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="Ej. 3311" /></div></label>
+                      <label class="reception-field"><span>Fecha <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">◷</i><input id="avaluoDateInput" name="fechaAvaluo" required type="date" /></div></label>
+                      <label class="reception-field"><span>Tipo de bien <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">▦</i><select name="tipoBien" required><option value="">Selecciona el tipo de bien</option><option>Inmuebles</option><option>Vehículo Automotriz</option><option>Maquinaria y equipo</option><option>Mobiliario y Bienes Diversos</option><option>Intangibles</option></select></div></label>
+                      <label class="reception-field"><span>Tipo de avalúo <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">▤</i><select name="tipoAvaluo" required><option value="">Selecciona el tipo de avalúo</option><option>Referido</option><option>Comercial</option><option>Otro</option></select></div></label>
+                      <label class="reception-field"><span>Usuario <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">◉</i><select name="usuario" required><option value="">Selecciona un usuario</option><option>Juan Manuel Barrera Martínez</option><option>Gabriel Barrera Martínez</option><option>Cesar Delgado Armendáriz</option><option>Diana Barrera Rivera</option><option>Francisco Gabriel Hernández Estrada</option><option>Emmanuel Barrera Atilano</option><option>Caridad Rojas Vázquez</option></select></div></label>
+                      <label class="reception-field"><span>Solicitante <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">⌁</i><input name="solicitante" required placeholder="Nombre o empresa" /></div></label>
+                      <label class="reception-field"><span>Valor del avalúo</span><div class="reception-input-wrap"><i aria-hidden="true">$</i><input id="appraisalValueInput" name="valorAvaluo" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></div></label>
+                      <label class="reception-field reception-field-wide"><span>Observación</span><div class="reception-input-wrap reception-textarea-wrap"><i aria-hidden="true">≡</i><textarea name="observacion" rows="3" placeholder="Notas relevantes del avalúo"></textarea></div></label>
+                    </div>
                   </section>
-                  <section class="record-form-column record-form-right" aria-label="Entrega y pago">
-                    <label>Quién recibe<input name="seEntregoA" placeholder="Nombre de quien recibe el avalúo" /></label>
-                    <label class="checkbox-label"><input id="paidInput" name="pagado" type="checkbox" /> Ya se pagó</label>
-                    <div id="paymentDetails" class="payment-details is-hidden">
-                      <label>Cantidad pagada *<input id="amountInput" name="montoPagado" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></label>
-                      <label>Método de pago *<select id="methodInput" name="metodoPago"><option value=""></option><option>Efectivo</option><option>Transferencia</option></select></label>
-                      <label>Pago entregado a *<select id="paymentDeliveredToInput" name="pagoEntregadoA"><option value=""></option><option>Juan Manuel Barrera Martínez</option><option>Diana Barrera Rivera</option><option>Cesar Delgado Armendáriz</option><option>Caridad Rojas Vázquez</option><option>Gabriel Barrera Martínez</option></select></label>
-                      <label>Fecha de pago *<input id="paymentDateInput" name="fechaPago" type="date" /></label>
+
+                  <section class="reception-form-card reception-payment-card" aria-label="Entrega y pago">
+                    <div class="reception-card-heading">
+                      <span class="reception-card-icon" aria-hidden="true">$</span>
+                      <div><h3>Estatus de pago</h3><p>Recepción de documento y liquidación.</p></div>
+                    </div>
+                    <div class="reception-payment-fields">
+                      <label class="reception-field"><span>Quién recibe</span><div class="reception-input-wrap"><i aria-hidden="true">◉</i><input name="seEntregoA" placeholder="Nombre de quien recibe el avalúo" /></div></label>
+                      <label class="reception-check-row"><input id="paidInput" name="pagado" type="checkbox" /><span><b>Ya se pagó este trámite</b><small>Activa esta opción para registrar la liquidación.</small></span></label>
+                      <div id="paymentDetails" class="payment-details reception-payment-details is-hidden">
+                        <label class="reception-field"><span>Cantidad pagada <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">$</i><input id="amountInput" name="montoPagado" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></div></label>
+                        <label class="reception-field"><span>Método de pago <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">▣</i><select id="methodInput" name="metodoPago"><option value=""></option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option><option>Cheque</option></select></div></label>
+                        <label class="reception-field"><span>Pago entregado a <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">◉</i><select id="paymentDeliveredToInput" name="pagoEntregadoA"><option value=""></option><option>Juan Manuel Barrera Martínez</option><option>Diana Barrera Rivera</option><option>Cesar Delgado Armendáriz</option><option>Caridad Rojas Vázquez</option><option>Gabriel Barrera Martínez</option></select></div></label>
+                        <label class="reception-field"><span>Fecha de pago <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">◷</i><input id="paymentDateInput" name="fechaPago" type="date" /></div></label>
+                      </div>
                     </div>
                   </section>
                 </div>
-                <p id="formMessage" class="form-message" role="alert"></p><div class="dialog-actions"><button id="previewReceiptButton" class="receipt-button form-receipt-button is-hidden" type="button">Generar recibo</button><button id="cancelDialogButton" class="secondary-button btn-copu-primary btn-gold-cream" type="button">Cancelar</button><button id="saveRecordButton" class="primary-button btn-copu-primary" type="submit">Guardar cambios</button></div>
+                <p id="formMessage" class="form-message reception-form-message" role="alert"></p>
+                <div class="dialog-actions reception-form-actions"><button id="previewReceiptButton" class="receipt-button form-receipt-button is-hidden" type="button">Generar recibo</button><button id="cancelDialogButton" class="secondary-button btn-copu-primary btn-gold-cream" type="button">Cancelar</button><button id="saveRecordButton" class="primary-button btn-copu-primary" type="submit">Guardar cambios</button></div>
               </form>
             </section>
+
 
             <section class="dashboard-tabs" aria-label="Estados de avalúos recibidos">
 
