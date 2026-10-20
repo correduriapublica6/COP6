@@ -13597,3 +13597,42 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   padding-left: 2.5rem !important;
   font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
+
+/* Ajustes finales del formulario de Registro de Avalúos */
+#appShell.control-shell #recordEditor .max-w-7xl h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 1.125rem !important;
+  font-weight: 900 !important;
+  color: #0f172a !important;
+}
+
+#appShell.control-shell #recordEditor .max-w-7xl label:not(.relative) {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: .75rem !important;
+  font-weight: 700 !important;
+  color: #334155 !important;
+  margin-bottom: .375rem !important;
+}
+
+#appShell.control-shell #recordEditor .max-w-7xl select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background-color: #ffffff !important;
+  border: 1px solid rgba(226, 232, 240, .9) !important;
+  border-radius: .75rem !important;
+  padding-left: 2.5rem !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+#appShell.control-shell #recordEditor .max-w-7xl textarea {
+  padding-left: 2.5rem !important;
+  padding-top: .625rem !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+#appShell.control-shell #recordEditor #paidInput {
+  flex: 0 0 auto;
+  width: 1rem !important;
+  height: 1rem !important;
+  padding: 0 !important;
+}
