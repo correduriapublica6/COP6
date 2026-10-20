@@ -13490,3 +13490,91 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
     width: 100%;
   }
 }
+
+/* Encabezado del Registro de Avalúos inspirado en la referencia */
+#appShell.control-shell #recordEditor .reception-form-heading-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+#appShell.control-shell #recordEditor .reception-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 11px;
+  background: #f1f5f9;
+  color: #334155;
+  font: 600 12px/1 "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease, color .18s ease;
+}
+
+#appShell.control-shell #recordEditor .reception-back-button:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+#appShell.control-shell #recordEditor .reception-form-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #0f172a !important;
+  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
+  font-size: 21px !important;
+  font-weight: 800 !important;
+  letter-spacing: -.035em;
+  line-height: 1.2 !important;
+}
+
+#appShell.control-shell #recordEditor .reception-form-heading h2 .fa-file-signature {
+  color: #2563eb;
+  font-size: 20px;
+}
+
+#appShell.control-shell #recordEditor .reception-form-heading p {
+  margin-top: 5px !important;
+  color: #64748b !important;
+  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
+  font-size: 12px !important;
+}
+
+#appShell.control-shell #recordEditor .reception-required-note {
+  color: #94a3b8 !important;
+  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  white-space: nowrap;
+}
+
+#appShell.control-shell #recordEditor .reception-required-note b,
+#appShell.control-shell #recordEditor .reception-field b {
+  color: #ef4444 !important;
+}
+
+#appShell.control-shell #recordEditor .reception-card-heading h3 {
+  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
+  font-weight: 800 !important;
+  letter-spacing: -.025em;
+}
+
+@media (max-width: 620px) {
+  #appShell.control-shell #recordEditor .reception-form-heading-wrap {
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100%;
+  }
+  #appShell.control-shell #recordEditor .reception-form-heading {
+    width: 100%;
+  }
+  #appShell.control-shell #recordEditor .reception-required-note {
+    align-self: flex-start;
+    white-space: normal;
+  }
+}

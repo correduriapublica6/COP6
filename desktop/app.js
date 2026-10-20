@@ -1002,7 +1002,8 @@
     avaluoDateInput.value = record.fechaAvaluo || today();
     form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = viewOnly; });
     form.querySelectorAll("[data-record-save-action]").forEach((button) => button.classList.toggle("is-hidden", viewOnly));
-    $("#dialogTitle").textContent = viewOnly ? "Consulta de avalúo" : id ? "Editar avalúo" : "Registrar avalúo";
+    const dialogTitle = $("#dialogTitle");
+    if (dialogTitle) dialogTitle.innerHTML = `<i class="fa-solid fa-file-signature" aria-hidden="true"></i><span>${viewOnly ? "Consulta de avalúo" : id ? "Editar avalúo" : "Registro de Avalúos"}</span>`;
     $("#formMessage").textContent = "";
     setPaymentVisibility();
     recordEditor.hidden = false;
@@ -1509,6 +1510,7 @@
   window.addEventListener("control-avaluos:close-reception-editor", closeDialog);
   $("#closeDialogButton")?.addEventListener("click", closeDialog);
   $("#cancelDialogButton")?.addEventListener("click", closeDialog);
+  $("#recordFormBackButton")?.addEventListener("click", closeDialog);
   $("#previewReceiptButton")?.addEventListener("click", () => openReceipt(formDraft()));
   paidInput?.addEventListener("change", setPaymentVisibility);
   numberInput?.addEventListener("input", () => { numberInput.value = normalizeNumber(numberInput.value); });

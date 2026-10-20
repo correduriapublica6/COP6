@@ -23,7 +23,8 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261020-0248" />
+    <link rel="stylesheet" href="override.css?v=20261020-0258" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -186,12 +187,14 @@
             <section id="recordEditor" class="inline-record-editor" aria-labelledby="dialogTitle" hidden>
               <form id="recordForm" class="form-full-page-container reception-modern-form">
                 <header class="reception-form-header">
-                  <div class="reception-form-heading">
-                    <span class="reception-form-kicker">RECEPCIÓN</span>
-                    <h2 id="dialogTitle">Registrar avalúo</h2>
-                    <p>Captura los datos generales del avalúo y el estatus de pago.</p>
+                  <div class="reception-form-heading-wrap">
+                    <button id="recordFormBackButton" class="reception-back-button" type="button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>Volver</span></button>
+                    <div class="reception-form-heading">
+                      <h2 id="dialogTitle"><i class="fa-solid fa-file-signature" aria-hidden="true"></i><span>Registro de Avalúos</span></h2>
+                      <p>Captura de expediente y recepción de pagos</p>
+                    </div>
                   </div>
-                  <span class="reception-required-note">Campos obligatorios <b>*</b></span>
+                  <span class="reception-required-note">Campos obligatorios marcados con (<b>*</b>)</span>
                 </header>
 
                 <div class="reception-form-columns">
