@@ -13566,3 +13566,25 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #requestDetailDialog.cp6-request-detail-dialog [data-request-card] .cp6-file-card .text-\[10px\] {
   line-height: 1.2 !important;
 }
+
+/* Popup de detalle: el ancho se amplía sin rebasar el viewport */
+#requestDetailDialog.cp6-request-detail-dialog {
+  box-sizing: border-box !important;
+  width: min(1120px, calc(100vw - 24px)) !important;
+  max-width: min(1120px, calc(100vw - 24px)) !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog > .cp6-detail-content,
+#requestDetailDialog.cp6-request-detail-dialog [data-request-card] {
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog > .cp6-detail-content {
+  overflow-x: hidden !important;
+}
+@media (max-width: 700px) {
+  #requestDetailDialog.cp6-request-detail-dialog {
+    width: calc(100vw - 12px) !important;
+    max-width: calc(100vw - 12px) !important;
+  }
+}
