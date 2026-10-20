@@ -970,7 +970,6 @@
 
   function setPaymentVisibility() {
     paymentDetails.classList.toggle("is-hidden", !paidInput.checked);
-    $("#previewReceiptButton").classList.toggle("is-hidden", !paidInput.checked);
     amountInput.required = paidInput.checked;
     methodInput.required = paidInput.checked;
     paymentDeliveredToInput.required = paidInput.checked;
@@ -1002,7 +1001,7 @@
     paymentDateInput.value = record.pagado ? record.fechaPago || today() : "";
     avaluoDateInput.value = record.fechaAvaluo || today();
     form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = viewOnly; });
-    $("#saveRecordButton").classList.toggle("is-hidden", viewOnly);
+    form.querySelectorAll("[data-record-save-action]").forEach((button) => button.classList.toggle("is-hidden", viewOnly));
     $("#dialogTitle").textContent = viewOnly ? "Consulta de avalúo" : id ? "Editar avalúo" : "Registrar avalúo";
     $("#formMessage").textContent = "";
     setPaymentVisibility();

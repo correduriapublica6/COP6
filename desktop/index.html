@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261019-1644" />
+    <link rel="stylesheet" href="override.css?v=20261020-0248" />
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -196,6 +196,7 @@
 
                 <div class="reception-form-columns">
                   <section class="reception-form-card reception-form-main" aria-label="Datos generales del avalúo">
+                    <div class="reception-card-gradient" aria-hidden="true"></div>
                     <div class="reception-card-heading">
                       <span class="reception-card-icon" aria-hidden="true">⌁</span>
                       <div><h3>Datos generales del avalúo</h3><p>Información técnica y datos del solicitante.</p></div>
@@ -210,9 +211,13 @@
                       <label class="reception-field"><span>Valor del avalúo</span><div class="reception-input-wrap"><i aria-hidden="true">$</i><input id="appraisalValueInput" name="valorAvaluo" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></div></label>
                       <label class="reception-field reception-field-wide"><span>Observación</span><div class="reception-input-wrap reception-textarea-wrap"><i aria-hidden="true">≡</i><textarea name="observacion" rows="3" placeholder="Notas relevantes del avalúo"></textarea></div></label>
                     </div>
+                    <div class="reception-card-actions">
+                      <button id="saveRecordButton" data-record-save-action class="primary-button btn-copu-primary reception-save-button" type="submit">Guardar Registro de Avalúo</button>
+                    </div>
                   </section>
 
                   <section class="reception-form-card reception-payment-card" aria-label="Entrega y pago">
+                    <div class="reception-card-gradient" aria-hidden="true"></div>
                     <div class="reception-card-heading">
                       <span class="reception-card-icon" aria-hidden="true">$</span>
                       <div><h3>Estatus de pago</h3><p>Recepción de documento y liquidación.</p></div>
@@ -227,10 +232,13 @@
                         <label class="reception-field"><span>Fecha de pago <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">◷</i><input id="paymentDateInput" name="fechaPago" type="date" /></div></label>
                       </div>
                     </div>
+                    <div class="reception-card-actions reception-payment-actions">
+                      <button data-record-save-action class="primary-button btn-copu-primary reception-save-button" type="submit">Guardar pago</button>
+                      <button id="cancelDialogButton" class="secondary-button btn-copu-primary reception-cancel-button" type="button">Cancelar</button>
+                    </div>
                   </section>
                 </div>
                 <p id="formMessage" class="form-message reception-form-message" role="alert"></p>
-                <div class="dialog-actions reception-form-actions"><button id="previewReceiptButton" class="receipt-button form-receipt-button is-hidden" type="button">Generar recibo</button><button id="cancelDialogButton" class="secondary-button btn-copu-primary btn-gold-cream" type="button">Cancelar</button><button id="saveRecordButton" class="primary-button btn-copu-primary" type="submit">Guardar cambios</button></div>
               </form>
             </section>
 
