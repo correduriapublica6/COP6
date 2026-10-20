@@ -13196,6 +13196,8 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   max-width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
+  position: relative !important;
+  top: -18px !important;
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -13204,9 +13206,9 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 
 #appShell.control-shell #recordEditor > .max-w-7xl {
   width: 100% !important;
-  max-width: 80rem !important;
-  margin-top: .5rem !important;
-  padding-top: .5rem !important;
+  max-width: none !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
   font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
@@ -13247,6 +13249,9 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #appShell.control-shell #recordEditor .max-w-7xl > form select {
   appearance: none !important;
   -webkit-appearance: none !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
   border-color: rgba(226, 232, 240, .9) !important;
 }
 
