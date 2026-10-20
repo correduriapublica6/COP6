@@ -13160,67 +13160,6 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   box-shadow: none !important;
 }
 
-/* Recepción: formulario homologado al estilo visual de Cotizaciones. */
-#appShell.control-shell #recordEditor,
-#appShell.control-shell #recordEditor .form-full-page-container {
-  background: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-#appShell.control-shell #recordEditor .dialog-heading > div { display: none !important; }
-#appShell.control-shell #recordEditor .dialog-heading { justify-content: flex-end !important; min-height: 28px !important; padding: 0 !important; }
-#appShell.control-shell #recordEditor .record-form-grid { gap: 18px 20px !important; }
-#appShell.control-shell #recordEditor .record-primary-fields {
-  display: grid !important;
-  grid-template-columns: minmax(190px, 1.35fr) minmax(150px, 1fr) minmax(0, .85fr) minmax(0, .85fr) !important;
-  gap: 14px !important;
-  width: 100% !important;
-}
-#appShell.control-shell #recordEditor .record-secondary-fields {
-  display: grid !important;
-  grid-template-columns: minmax(0, .8fr) minmax(220px, 1.35fr) minmax(190px, 1fr) !important;
-  gap: 14px !important;
-  width: 100% !important;
-}
-#appShell.control-shell #recordEditor .record-form-grid > label:not(.checkbox-label),
-#appShell.control-shell #recordEditor .record-primary-fields label,
-#appShell.control-shell #recordEditor .record-secondary-fields label,
-#appShell.control-shell #recordEditor .payment-details label {
-  gap: 6px !important;
-  color: #475569 !important;
-  font: 600 11px/1.2 Inter, "Segoe UI", sans-serif !important;
-  letter-spacing: .02em !important;
-}
-#appShell.control-shell #recordEditor input:not([type="checkbox"]),
-#appShell.control-shell #recordEditor select,
-#appShell.control-shell #recordEditor textarea {
-  min-height: 40px !important;
-  height: 40px !important;
-  padding: 10px 12px !important;
-  background: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  border-radius: 10px !important;
-  box-shadow: none !important;
-  color: #0f172a !important;
-  font: 400 13px/1.2 Inter, "Segoe UI", sans-serif !important;
-}
-#appShell.control-shell #recordEditor textarea { height: auto !important; min-height: 76px !important; resize: vertical !important; }
-#appShell.control-shell #recordEditor input:not([type="checkbox"]):focus,
-#appShell.control-shell #recordEditor select:focus,
-#appShell.control-shell #recordEditor textarea:focus {
-  outline: none !important;
-  border-color: #2563eb !important;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, .12) !important;
-}
-#appShell.control-shell #recordEditor .payment-details {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 1fr) !important;
-  gap: 14px !important;
-}
-#appShell.control-shell #recordEditor .payment-details.is-hidden { display: none !important; }
-#appShell.control-shell #recordEditor .dialog-actions { margin-top: 6px !important; }
-
 /* Recepción: columna de solicitud y valor compactas, sin alterar el ancho general. */
 #appShell.control-shell #recepcionAvaluosSection .operational-table th:nth-child(2),
 #appShell.control-shell #recepcionAvaluosSection .operational-table td:nth-child(2) {
@@ -13245,394 +13184,116 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #appShell.control-shell #recepcionAvaluosSection .operational-table .money-cell svg,
 #appShell.control-shell #recepcionAvaluosSection .operational-table .money-cell .cp6-cell-icon { color: #16a34a !important; }
 
-@media (max-width: 850px) {
-  #appShell.control-shell #recordEditor .record-primary-fields,
-  #appShell.control-shell #recordEditor .record-secondary-fields,
-  #appShell.control-shell #recordEditor .payment-details { grid-template-columns: 1fr 1fr !important; }
-}
-@media (max-width: 560px) {
-  #appShell.control-shell #recordEditor .record-primary-fields,
-  #appShell.control-shell #recordEditor .record-secondary-fields,
-  #appShell.control-shell #recordEditor .payment-details { grid-template-columns: 1fr !important; }
-}
 
-/* Registro de avalúo: formulario homologado con Nueva Cotización. */
-#appShell.control-shell #recordEditor .form-full-page-container {
-  background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 16px !important;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, .06) !important;
-  padding: 24px !important;
-}
-#appShell.control-shell #recordEditor .record-form-columns {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr) !important;
-  gap: 28px !important;
-  align-items: start !important;
-}
-#appShell.control-shell #recordEditor .record-form-column {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 14px 16px !important;
-  min-width: 0 !important;
-}
-#appShell.control-shell #recordEditor .record-form-left label,
-#appShell.control-shell #recordEditor .record-form-right label {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 6px !important;
-  color: #475569 !important;
-  font: 600 12px/1.2 Inter, "Segoe UI", sans-serif !important;
-  letter-spacing: 0 !important;
-}
-#appShell.control-shell #recordEditor .record-form-left label:nth-child(7),
-#appShell.control-shell #recordEditor .record-form-left .full-width,
-#appShell.control-shell #recordEditor .record-form-right label:first-child,
-#appShell.control-shell #recordEditor .record-form-right .checkbox-label,
-#appShell.control-shell #recordEditor .record-form-right .payment-details {
-  grid-column: 1 / -1 !important;
-}
-#appShell.control-shell #recordEditor input:not([type="checkbox"]),
-#appShell.control-shell #recordEditor select,
-#appShell.control-shell #recordEditor textarea {
-  width: 100% !important;
-  min-height: 40px !important;
-  height: 40px !important;
-  padding: 10px 12px !important;
-  background: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  border-radius: 8px !important;
-  box-shadow: none !important;
-  color: #0f172a !important;
-  font: 400 13px/1.2 Inter, "Segoe UI", sans-serif !important;
-}
-#appShell.control-shell #recordEditor textarea { height: auto !important; min-height: 82px !important; resize: vertical !important; }
-#appShell.control-shell #recordEditor input:not([type="checkbox"]):focus,
-#appShell.control-shell #recordEditor select:focus,
-#appShell.control-shell #recordEditor textarea:focus {
-  outline: none !important;
-  border-color: #2563eb !important;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, .12) !important;
-}
-#appShell.control-shell #recordEditor .payment-details {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 14px 16px !important;
-  padding-top: 4px !important;
-  border-top: 1px solid #e2e8f0 !important;
-}
-#appShell.control-shell #recordEditor .payment-details.is-hidden { display: none !important; }
-#appShell.control-shell #recordEditor .checkbox-label {
-  flex-direction: row !important;
-  align-items: center !important;
-  gap: 8px !important;
-  color: #334155 !important;
-  font-weight: 500 !important;
-}
-#appShell.control-shell #recordEditor .checkbox-label input[type="checkbox"] { width: 16px !important; height: 16px !important; accent-color: #2563eb !important; }
-#appShell.control-shell #recordEditor .dialog-heading { margin-bottom: 20px !important; }
-#appShell.control-shell #recordEditor .dialog-heading .eyebrow { color: #64748b !important; font: 600 11px/1.2 Inter, "Segoe UI", sans-serif !important; }
-#appShell.control-shell #recordEditor .dialog-heading h2 { color: #0f172a !important; font: 600 22px/1.25 Inter, "Segoe UI", sans-serif !important; }
-#appShell.control-shell #recepcionAvaluosSection .search-panel[hidden] { display: none !important; }
-@media (max-width: 850px) {
-  #appShell.control-shell #recordEditor .record-form-columns { grid-template-columns: 1fr !important; }
-}
-@media (max-width: 560px) {
-  #appShell.control-shell #recordEditor .record-form-column,
-  #appShell.control-shell #recordEditor .payment-details { grid-template-columns: 1fr !important; }
-}
 
-/* Recepción — formulario moderno inspirado en Cotizaciones */
-#appShell.control-shell #recordEditor .reception-modern-form {
-  background: #f8fafc !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  max-width: none !important;
-}
-#appShell.control-shell .reception-form-header { display:flex; justify-content:space-between; align-items:flex-end; gap:18px; padding: 4px 0 22px; border-bottom:1px solid #e2e8f0; }
-#appShell.control-shell .reception-form-kicker { display:block; color:#2563eb; font-size:11px; font-weight:700; letter-spacing:.16em; margin-bottom:6px; }
-#appShell.control-shell .reception-form-heading h2 { margin:0; color:#0f172a; font:600 1.5rem/1.2 Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing:-.03em; }
-#appShell.control-shell .reception-form-heading p, #appShell.control-shell .reception-required-note { margin:7px 0 0; color:#64748b; font-size:12px; font-weight:400; }
-#appShell.control-shell .reception-required-note b, #appShell.control-shell .reception-field b { color:#2563eb; }
-#appShell.control-shell .reception-form-columns { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(320px,.8fr); gap:24px; margin-top:24px; align-items:start; }
-#appShell.control-shell .reception-form-card { background:#fff; border:1px solid #e2e8f0; border-radius:16px; box-shadow:0 8px 24px rgba(15,23,42,.06); padding:24px; min-width:0; }
-#appShell.control-shell .reception-card-heading { display:flex; align-items:center; gap:12px; padding-bottom:17px; margin-bottom:20px; border-bottom:1px solid #f1f5f9; }
-#appShell.control-shell .reception-card-icon { width:38px; height:38px; border-radius:11px; display:grid; place-items:center; color:#2563eb; background:#eff6ff; border:1px solid #dbeafe; font-size:17px; font-weight:600; }
-#appShell.control-shell .reception-card-heading h3 { margin:0; color:#0f172a; font-size:15px; font-weight:600; }
-#appShell.control-shell .reception-card-heading p { margin:4px 0 0; color:#94a3b8; font-size:11px; }
-#appShell.control-shell .reception-fields-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:17px 18px; }
-#appShell.control-shell .reception-field { display:block; min-width:0; color:#475569; font-size:12px; font-weight:600; }
-#appShell.control-shell .reception-field-wide { grid-column:1/-1; }
-#appShell.control-shell .reception-input-wrap { position:relative; margin-top:7px; }
-#appShell.control-shell .reception-input-wrap > i { position:absolute; left:12px; top:50%; transform:translateY(-50%); z-index:1; color:#94a3b8; font-style:normal; font-size:13px; line-height:1; pointer-events:none; }
-#appShell.control-shell .reception-input-wrap input, #appShell.control-shell .reception-input-wrap select, #appShell.control-shell .reception-input-wrap textarea { width:100%; box-sizing:border-box; border:1px solid #cbd5e1 !important; border-radius:10px !important; background:#fff !important; color:#0f172a !important; font:400 12px/1.4 Inter, ui-sans-serif, system-ui, sans-serif !important; padding:11px 12px 11px 36px !important; box-shadow:none !important; outline:none !important; transition:border-color .18s ease, box-shadow .18s ease; }
-#appShell.control-shell .reception-input-wrap select { appearance:auto; padding-right:30px !important; }
-#appShell.control-shell .reception-input-wrap textarea { resize:vertical; min-height:76px; }
-#appShell.control-shell .reception-input-wrap input::placeholder, #appShell.control-shell .reception-input-wrap textarea::placeholder { color:#94a3b8; opacity:1; }
-#appShell.control-shell .reception-input-wrap input:focus, #appShell.control-shell .reception-input-wrap select:focus, #appShell.control-shell .reception-input-wrap textarea:focus { border-color:#2563eb !important; box-shadow:0 0 0 2px rgba(37,99,235,.12) !important; }
-#appShell.control-shell .reception-payment-fields { display:flex; flex-direction:column; gap:18px; }
-#appShell.control-shell .reception-check-row { display:flex; align-items:flex-start; gap:11px; padding:14px; border:1px solid #e2e8f0; border-radius:12px; background:#f8fafc; cursor:pointer; }
-#appShell.control-shell .reception-check-row input { width:16px; height:16px; margin:2px 0 0; accent-color:#2563eb; }
-#appShell.control-shell .reception-check-row b { display:block; color:#334155; font-size:12px; font-weight:600; }
-#appShell.control-shell .reception-check-row small { display:block; margin-top:4px; color:#94a3b8; font-size:11px; }
-#appShell.control-shell .reception-payment-details { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:17px 14px; padding:17px; background:#eff6ff; border:1px solid #dbeafe; border-radius:13px; }
-#appShell.control-shell .reception-form-message { margin:16px 0 0; }
-#appShell.control-shell .reception-form-actions { justify-content:flex-end; padding-top:20px; margin-top:20px; border-top:1px solid #e2e8f0; }
-#appShell.control-shell .reception-form-actions button { min-height:42px; border-radius:10px; }
-@media (max-width: 900px) { #appShell.control-shell .reception-form-columns { grid-template-columns:1fr; } }
-@media (max-width: 620px) { #appShell.control-shell .reception-form-header { align-items:flex-start; flex-direction:column; } #appShell.control-shell .reception-fields-grid, #appShell.control-shell .reception-payment-details { grid-template-columns:1fr; } #appShell.control-shell .reception-field-wide { grid-column:auto; } #appShell.control-shell .reception-form-card { padding:18px; } }
-
-/* Registro de Avalúo: refinamiento final del formulario moderno */
-#appShell.control-shell #recordEditor,
-#appShell.control-shell #recordEditor form,
-#appShell.control-shell #recordEditor input,
-#appShell.control-shell #recordEditor select,
-#appShell.control-shell #recordEditor textarea,
-#appShell.control-shell #recordEditor button {
-  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
-}
-
-#appShell.control-shell #recordEditor .reception-form-card {
-  position: relative;
-  overflow: hidden;
-  padding: 0 24px 24px !important;
-}
-
-#appShell.control-shell #recordEditor .reception-card-gradient {
-  height: 12px;
-  margin: 0 -24px 22px;
-  background: linear-gradient(90deg, #2563eb 0%, #4f46e5 52%, #1d4ed8 100%);
-}
-
-#appShell.control-shell #recordEditor .reception-card-heading,
-#appShell.control-shell #recordEditor .reception-fields-grid,
-#appShell.control-shell #recordEditor .reception-payment-fields {
-  position: relative;
-  z-index: 1;
-}
-
-#appShell.control-shell #recordEditor .reception-input-wrap input,
-#appShell.control-shell #recordEditor .reception-input-wrap select,
-#appShell.control-shell #recordEditor .reception-input-wrap textarea {
-  padding-left: 36px !important;
-  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
-  font-variant-numeric: normal !important;
-}
-
-#appShell.control-shell #recordEditor .reception-input-wrap select {
-  padding-left: 36px !important;
-  padding-right: 34px !important;
-}
-
-#appShell.control-shell #recordEditor .reception-card-actions {
-  display: flex;
-  justify-content: flex-start;
-  gap: 10px;
-  margin-top: 22px;
-  padding-top: 18px;
-  border-top: 1px solid #e2e8f0;
-}
-
-#appShell.control-shell #recordEditor .reception-payment-actions {
-  justify-content: flex-end;
-}
-
-#appShell.control-shell #recordEditor .reception-save-button,
-#appShell.control-shell #recordEditor .reception-cancel-button {
-  min-height: 42px;
-  border-radius: 10px !important;
-  padding: 10px 18px !important;
-  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-}
-
-#appShell.control-shell #recordEditor .reception-save-button {
-  background: #2563eb !important;
-  color: #fff !important;
-  border: 1px solid #2563eb !important;
-}
-
-#appShell.control-shell #recordEditor .reception-cancel-button {
-  background: #fff !important;
-  color: #475569 !important;
-  border: 1px solid #cbd5e1 !important;
-}
-
-#appShell.control-shell #recordEditor .reception-save-button.is-hidden,
-#appShell.control-shell #recordEditor .reception-cancel-button.is-hidden {
-  display: none !important;
-}
-
-#appShell.control-shell #recordEditor .reception-check-row input[type="checkbox"] {
-  width: 16px !important;
-  min-width: 16px !important;
-  padding: 0 !important;
-}
-
-@media (max-width: 620px) {
-  #appShell.control-shell #recordEditor .reception-form-card {
-    padding: 0 18px 18px !important;
-  }
-  #appShell.control-shell #recordEditor .reception-card-gradient {
-    margin-left: -18px;
-    margin-right: -18px;
-  }
-  #appShell.control-shell #recordEditor .reception-card-actions,
-  #appShell.control-shell #recordEditor .reception-payment-actions {
-    justify-content: stretch;
-    flex-direction: column;
-  }
-  #appShell.control-shell #recordEditor .reception-save-button,
-  #appShell.control-shell #recordEditor .reception-cancel-button {
-    width: 100%;
-  }
-}
-
-/* Encabezado del Registro de Avalúos inspirado en la referencia */
-#appShell.control-shell #recordEditor .reception-form-heading-wrap {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  min-width: 0;
-}
-
-#appShell.control-shell #recordEditor .reception-back-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 40px;
-  padding: 10px 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 11px;
-  background: #f1f5f9;
-  color: #334155;
-  font: 600 12px/1 "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: background .18s ease, border-color .18s ease, color .18s ease;
-}
-
-#appShell.control-shell #recordEditor .reception-back-button:hover {
-  background: #e2e8f0;
-  border-color: #cbd5e1;
-  color: #0f172a;
-}
-
-#appShell.control-shell #recordEditor .reception-form-heading h2 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #0f172a !important;
-  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
-  font-size: 21px !important;
-  font-weight: 800 !important;
-  letter-spacing: -.035em;
-  line-height: 1.2 !important;
-}
-
-#appShell.control-shell #recordEditor .reception-form-heading h2 .fa-file-signature {
-  color: #2563eb;
-  font-size: 20px;
-}
-
-#appShell.control-shell #recordEditor .reception-form-heading p {
-  margin-top: 5px !important;
-  color: #64748b !important;
-  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
-  font-size: 12px !important;
-}
-
-#appShell.control-shell #recordEditor .reception-required-note {
-  color: #94a3b8 !important;
-  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
-  font-size: 11px !important;
-  font-weight: 500 !important;
-  white-space: nowrap;
-}
-
-#appShell.control-shell #recordEditor .reception-required-note b,
-#appShell.control-shell #recordEditor .reception-field b {
-  color: #ef4444 !important;
-}
-
-#appShell.control-shell #recordEditor .reception-card-heading h3 {
-  font-family: "Plus Jakarta Sans", Inter, ui-sans-serif, system-ui, sans-serif !important;
-  font-weight: 800 !important;
-  letter-spacing: -.025em;
-}
-
-@media (max-width: 620px) {
-  #appShell.control-shell #recordEditor .reception-form-heading-wrap {
-    align-items: flex-start;
-    flex-direction: column;
-    width: 100%;
-  }
-  #appShell.control-shell #recordEditor .reception-form-heading {
-    width: 100%;
-  }
-  #appShell.control-shell #recordEditor .reception-required-note {
-    align-self: flex-start;
-    white-space: normal;
-  }
-}
-
-/* Limpieza final del Registro de Avalúos */
+/* Registro de Avalúo — bloque CSS único y limpio */
 #appShell.control-shell .app-workspace.is-registration-mode > .workspace-header {
   display: none !important;
 }
 
-#appShell.control-shell #recordEditor .max-w-7xl h3 {
+#appShell.control-shell #recordEditor {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
   font-family: 'Plus Jakarta Sans', sans-serif !important;
-  font-weight: 800 !important;
-  font-size: 1.125rem !important;
+}
+
+#appShell.control-shell #recordEditor > .max-w-7xl {
+  width: 100% !important;
+  max-width: 80rem !important;
+  margin-top: .5rem !important;
+  padding-top: .5rem !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+#appShell.control-shell #recordEditor h1,
+#appShell.control-shell #recordEditor h3,
+#appShell.control-shell #recordEditor p,
+#appShell.control-shell #recordEditor label,
+#appShell.control-shell #recordEditor button,
+#appShell.control-shell #recordEditor input,
+#appShell.control-shell #recordEditor select,
+#appShell.control-shell #recordEditor textarea {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+#appShell.control-shell #recordEditor h3 {
   color: #0f172a !important;
-}
-
-#appShell.control-shell #recordEditor .max-w-7xl input:not([type="checkbox"]),
-#appShell.control-shell #recordEditor .max-w-7xl select,
-#appShell.control-shell #recordEditor .max-w-7xl textarea {
-  padding-left: 2.5rem !important;
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
-}
-
-/* Ajustes finales del formulario de Registro de Avalúos */
-#appShell.control-shell #recordEditor .max-w-7xl h3 {
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
   font-size: 1.125rem !important;
   font-weight: 900 !important;
+}
+
+#appShell.control-shell #recordEditor .max-w-7xl > form input:not([type="checkbox"]),
+#appShell.control-shell #recordEditor .max-w-7xl > form select,
+#appShell.control-shell #recordEditor .max-w-7xl > form textarea {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-height: 42px !important;
+  height: 42px !important;
+  padding: 10px 12px 10px 40px !important;
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: .75rem !important;
   color: #0f172a !important;
-}
-
-#appShell.control-shell #recordEditor .max-w-7xl label:not(.relative) {
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
   font-size: .75rem !important;
-  font-weight: 700 !important;
-  color: #334155 !important;
-  margin-bottom: .375rem !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
 }
 
-#appShell.control-shell #recordEditor .max-w-7xl select {
+#appShell.control-shell #recordEditor .max-w-7xl > form select {
   appearance: none !important;
   -webkit-appearance: none !important;
-  background-color: #ffffff !important;
-  border: 1px solid rgba(226, 232, 240, .9) !important;
-  border-radius: .75rem !important;
-  padding-left: 2.5rem !important;
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  border-color: rgba(226, 232, 240, .9) !important;
 }
 
-#appShell.control-shell #recordEditor .max-w-7xl textarea {
-  padding-left: 2.5rem !important;
-  padding-top: .625rem !important;
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
+#appShell.control-shell #recordEditor .max-w-7xl > form textarea {
+  height: auto !important;
+  min-height: 76px !important;
+  padding-top: 10px !important;
+  resize: vertical !important;
+}
+
+#appShell.control-shell #recordEditor .max-w-7xl > form input:not([type="checkbox"]):focus,
+#appShell.control-shell #recordEditor .max-w-7xl > form select:focus,
+#appShell.control-shell #recordEditor .max-w-7xl > form textarea:focus {
+  outline: none !important;
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, .12) !important;
+}
+
+#appShell.control-shell #recordEditor .max-w-7xl > form label.block {
+  display: block !important;
+  margin-bottom: .375rem !important;
+  color: #334155 !important;
+  font-size: .75rem !important;
+  font-weight: 700 !important;
 }
 
 #appShell.control-shell #recordEditor #paidInput {
-  flex: 0 0 auto;
   width: 1rem !important;
+  min-width: 1rem !important;
   height: 1rem !important;
+  min-height: 1rem !important;
   padding: 0 !important;
+  flex: 0 0 auto !important;
+  accent-color: #2563eb !important;
+}
+
+#appShell.control-shell #recordEditor #paymentDetails.is-hidden {
+  display: none !important;
+}
+
+#appShell.control-shell #recordEditor #paymentDetails:not(.is-hidden) {
+  display: grid !important;
+}
+
+@media (max-width: 640px) {
+  #appShell.control-shell #recordEditor > .max-w-7xl {
+    padding-left: .75rem !important;
+    padding-right: .75rem !important;
+  }
 }
