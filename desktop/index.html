@@ -23,8 +23,11 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261020-2306" />
+    <link rel="stylesheet" href="override.css?v=20261020-0023" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body data-server-status="checking">
@@ -185,23 +188,14 @@
               <div class="search-row"><div class="reception-search-input-wrap"><input id="searchInput" type="search" placeholder="Buscar por folio, solicitante o tipo" autocomplete="off" /></div><select id="statusViewSelect" aria-label="Filtrar avalúos recibidos"><option value="todos">Todos los estados</option><option value="pendientes-entrega">Pendientes de entrega</option><option value="entregados-sin-pago">Entregados sin pago</option><option value="pagados">Pagados</option><option value="vencidos">Vencidos</option></select></div>
             </section>
 
-            <section id="recordEditor" class="inline-record-editor" aria-labelledby="dialogTitle" hidden>
-<div class="max-w-7xl mx-auto mt-0 pt-0 space-y-3" style="font-family: 'Plus Jakarta Sans', sans-serif !important;">
+            <section id="recordEditor" class="inline-record-editor" aria-label="Registro de Avalúos" hidden>
+<div class="max-w-7xl mx-auto mt-2 pt-2 space-y-3" style="font-family: 'Plus Jakarta Sans', sans-serif !important;">
 
   <!-- HEADER PRINCIPAL -->
-  <header class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
-    <div class="flex items-center gap-3 w-full sm:w-auto">
+  <header class="flex items-center justify-start">
       <button id="recordFormBackButton" type="button" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2.5 rounded-xl text-xs transition flex items-center gap-2">
         <i class="fa-solid fa-arrow-left"></i> Volver
       </button>
-      <div>
-        <h1 id="dialogTitle" class="font-sans font-bold text-slate-900 text-xl flex items-center gap-2.5" style="font-family: 'Plus Jakarta Sans', sans-serif !important;">
-          <i class="fa-solid fa-file-signature text-blue-600"></i><span>Registro de Avalúos</span>
-        </h1>
-        <p class="text-xs text-slate-500 mt-0.5">Captura de expediente y recepción de pagos</p>
-      </div>
-    </div>
-    <span class="text-xs text-slate-400 font-medium">Campos obligatorios marcados con (<span class="text-red-500">*</span>)</span>
   </header>
 
   <!-- CONTENEDOR EN DOS COLUMNAS -->

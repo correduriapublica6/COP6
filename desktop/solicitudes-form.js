@@ -561,8 +561,59 @@
     }).join("");
     const appraisalNumber = String(item.numeroAvaluo || "").replace(/\D/g, "").slice(0, 4);
     const externalName = item.asignadoExternoNombre || "";
-    detail.innerHTML = `<div class="request-detail-compact-head request-detail-blue-head"><div><strong class="request-detail-user-name">${readValue(currentApplicant.nombre || creatorName)}</strong><span class="request-detail-request-number">No. de solicitud: <b>${readValue(item.folio || "Pendiente")}</b></span><div class="request-detail-inline-actions"><button type="button" class="request-detail-button btn-dorado" data-open-appraisal-popup>Asignar avalúo</button><button type="button" class="request-detail-button btn-crema" data-open-external-popup>${externalName ? "Cambiar usuario externo" : "Asignar usuario externo"}</button></div><small>Registrada el ${escapeHtml(requestDate(item.creadoEn))}</small><div class="request-creator-summary"><span>Registró la solicitud</span><strong>${readValue(creatorName)}</strong>${creatorRole ? `<small>${escapeHtml(creatorRole)}</small>` : ""}</div></div><div class="request-detail-head-actions"></div></div><div class="request-detail-compact-grid request-detail-blue-grid"><section class="request-detail-pane"><div class="request-pane-heading"><div><strong>Expediente digital</strong><small>${files.length} documento(s)</small></div><button type="button" class="client-outline-button btn-crema" data-attach-missing="${escapeHtml(item.id)}">+ Anexar documentos</button></div><ul class="request-files-grid">${filesMarkup}</ul><div class="request-pane-heading request-final-heading"><strong>Avalúo final</strong>${uploadFinal}</div><div class="final-pdf-actions">${finalActions}</div></section><section class="request-detail-pane request-info-pane"><div class="request-pane-heading"><strong>Información registrada</strong><button type="button" class="request-detail-button btn-crema" data-edit-request-info>Editar información</button></div><div class="client-read-info-grid" data-read-request-info>${readFields}</div><form class="client-edit-info-form" data-request-info-form hidden>${editFields}<div class="client-edit-info-actions"><p data-edit-message hidden></p><button type="button" class="request-detail-button btn-crema" data-cancel-request-info>Cancelar</button><button type="submit" class="request-detail-button btn-dorado" data-save-request-info>Guardar cambios</button></div></form></section></div><div class="request-submodal" data-appraisal-popup hidden><div class="request-submodal-card"><h3>Asignar avalúo</h3><p>Escribe el número de avalúo de 4 dígitos.</p><input data-popup-appraisal-number inputmode="numeric" maxlength="4" value="${escapeHtml(appraisalNumber)}" placeholder="0000" /><div><button type="button" class="btn-crema" data-close-submodal>Cancelar</button><button type="button" class="btn-dorado" data-accept-appraisal>Aceptar</button></div></div></div><div class="request-submodal" data-external-popup hidden><div class="request-submodal-card"><h3>Asignar usuario externo</h3><input data-popup-external-search placeholder="Buscar por nombre, correo o teléfono" /><div class="request-popup-results" data-popup-external-results></div><div><button type="button" class="btn-crema" data-close-submodal>Cancelar</button><button type="button" class="btn-dorado" data-accept-external disabled>Aceptar</button></div></div></div>`;
+    detail.innerHTML = `<div class="bg-white w-full rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden relative my-2" data-request-card>
+        <div class="h-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700"></div>
+        <div class="px-6 py-4 border-b border-slate-100 flex flex-col justify-between gap-3 bg-slate-50/50 relative pr-14">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex flex-wrap items-center gap-2.5 overflow-hidden min-w-0">
+                    <h2 class="text-xl font-black text-slate-900 tracking-tight truncate">${readValue(currentApplicant.nombre || creatorName)}</h2>
+                    <span class="bg-blue-100 text-blue-700 text-[11px] font-bold px-2.5 py-1 rounded-full border border-blue-200 flex-shrink-0">No. de solicitud: ${readValue(item.folio || "Pendiente")}</span>
+                </div>
+                <div class="text-xs text-slate-500 font-medium flex items-center gap-1 bg-white px-2.5 py-1 rounded-full border border-slate-200/80 shadow-xs flex-shrink-0"><i class="fa-solid fa-calendar-day text-blue-600"></i> Registrada el ${escapeHtml(requestDate(item.creadoEn))}</div>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1.5 border-t border-slate-200/60">
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 font-medium min-w-0">
+                    <span class="truncate"><i class="fa-solid fa-user-gear text-slate-400 mr-1"></i> Registró: ${readValue(creatorName)}${creatorRole ? ` · ${escapeHtml(creatorRole)}` : ""}</span>
+                    <span>•</span>
+                    <span class="text-emerald-600 font-semibold"><i class="fa-solid fa-user-check mr-1"></i> Valuador asignado: ${readValue(item.asesor || specific.asesor || "Sin asignar")}</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <div class="flex items-center bg-emerald-50/80 border border-emerald-200 rounded-xl px-2.5 py-1 gap-2">
+                        <div class="flex items-center gap-1.5 text-emerald-800 font-bold text-xs"><i class="fa-solid fa-file-circle-check text-emerald-600 text-[10px]"></i><span>${appraisalNumber ? `No. ${escapeHtml(appraisalNumber)}` : "Sin avalúo asignado"}</span></div>
+                        <div class="flex items-center gap-1 border-l border-emerald-300 pl-2"><button type="button" class="text-slate-500 hover:text-blue-600 transition text-xs px-1" data-open-appraisal-popup title="Editar número de avalúo"><i class="fa-solid fa-pen-to-square"></i></button></div>
+                    </div>
+                    <div class="flex items-center bg-blue-50/70 border border-blue-200/80 rounded-xl px-2.5 py-1 gap-2">
+                        <div class="flex items-center gap-1.5 text-blue-800 font-bold text-xs min-w-0"><i class="fa-solid fa-user-check text-blue-600 text-[10px]"></i><span class="truncate max-w-[190px]">${externalName ? readValue(item.asignadoExternoEmail || externalName) : "Sin usuario externo"}</span></div>
+                        <div class="flex items-center gap-1 border-l border-blue-200 pl-2"><button type="button" class="text-slate-500 hover:text-blue-600 transition text-xs px-1" data-open-external-popup title="Asignar usuario externo"><i class="fa-solid fa-pen-to-square"></i></button></div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" data-close-request-detail class="absolute top-4 right-4 w-8 h-8 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-full flex items-center justify-center transition" aria-label="Cerrar detalle"><i class="fa-solid fa-xmark text-base"></i></button>
+        </div>
+        <div class="p-5 sm:p-6 space-y-4">
+            <div class="bg-slate-50/80 rounded-2xl p-4 sm:p-5 border border-slate-200/90 space-y-3.5 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/70 pb-3">
+                    <div class="flex items-center gap-2.5"><div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-blue-500/20"><i class="fa-solid fa-folder-open"></i></div><div><div class="flex items-center gap-2"><h3 class="text-sm font-black text-slate-900 tracking-tight">Expediente Digital</h3><span class="bg-blue-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">${files.length} archivos</span></div><p class="text-[11px] text-slate-500">Documentos técnicos, escrituras, predial, factura, fotografías, etc.</p></div></div>
+                    <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-1.5 flex-shrink-0" data-attach-missing="${escapeHtml(item.id)}"><i class="fa-solid fa-plus text-[10px]"></i> Anexar documentos</button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-[210px] overflow-y-auto custom-scroll pr-1.5">${filesMarkup}</div>
+            </div>
+            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-base shadow-sm"><i class="fa-solid fa-file-arrow-up"></i></div><div><h4 class="text-xs font-bold text-slate-900">${finalPdf ? "Avalúo final cargado" : "Avalúo final pendiente"}</h4><p class="text-[11px] text-slate-500">${finalPdf ? "El documento final está disponible para consulta." : "Aún no se ha adjuntado el documento final de este trámite."}</p></div></div>
+                <div class="flex flex-wrap gap-2">${uploadFinal || ""}${finalActions}</div>
+            </div>
+            <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 space-y-3 shadow-sm">
+                <div class="border-b border-slate-100 pb-2.5 flex items-center justify-between"><div class="flex items-center gap-2"><i class="fa-solid fa-address-card text-blue-600"></i><h3 class="text-xs font-bold text-slate-900">Información registrada</h3></div><span class="text-[10px] font-semibold text-slate-400">Detalles del trámite</span></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs" data-read-request-info>${readFields}</div>
+                <form class="client-edit-info-form" data-request-info-form hidden>${editFields}<div class="client-edit-info-actions"><p data-edit-message hidden></p><button type="button" class="request-detail-button btn-crema" data-cancel-request-info>Cancelar</button><button type="submit" class="request-detail-button btn-dorado" data-save-request-info>Guardar cambios</button></div></form>
+                <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-2 rounded-xl text-xs transition" data-edit-request-info>Editar información</button>
+            </div>
+        </div>
+        <div class="request-submodal" data-appraisal-popup hidden><div class="request-submodal-card"><h3>Asignar avalúo</h3><p>Escribe el número de avalúo de 4 dígitos.</p><input data-popup-appraisal-number inputmode="numeric" maxlength="4" value="${escapeHtml(appraisalNumber)}" placeholder="0000" /><div><button type="button" class="btn-crema" data-close-submodal>Cancelar</button><button type="button" class="btn-dorado" data-accept-appraisal>Aceptar</button></div></div></div>
+        <div class="request-submodal" data-external-popup hidden><div class="request-submodal-card"><h3>Asignar usuario externo</h3><input data-popup-external-search placeholder="Buscar por nombre, correo o teléfono" /><div class="request-popup-results" data-popup-external-results></div><div><button type="button" class="btn-crema" data-close-submodal>Cancelar</button><button type="button" class="btn-dorado" data-accept-external disabled>Aceptar</button></div></div></div>
+    </div>`
     openDialog(dialog);
+    detail.querySelector("[data-close-request-detail]")?.addEventListener("click", () => closeDialog(dialog));
     detail.querySelectorAll("[data-view-file]").forEach((button) => button?.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
     detail.querySelector("[data-view-final-pdf]")?.addEventListener("click", (event) => openResourceViewer(event.currentTarget.dataset.viewFinalPdf, "Avalúo final.pdf", "application/pdf"));
     detail.querySelector("[data-attach-missing]")?.addEventListener("click", () => annexDocuments(item));

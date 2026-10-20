@@ -13196,8 +13196,6 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   max-width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
-  position: relative !important;
-  top: -18px !important;
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
@@ -13206,9 +13204,9 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 
 #appShell.control-shell #recordEditor > .max-w-7xl {
   width: 100% !important;
-  max-width: none !important;
-  margin-top: 0 !important;
-  padding-top: 0 !important;
+  max-width: 80rem !important;
+  margin-top: .5rem !important;
+  padding-top: .5rem !important;
   font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
@@ -13301,4 +13299,30 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
     padding-left: .75rem !important;
     padding-right: .75rem !important;
   }
+}
+
+
+/* Tarjeta oficial de Solicitudes — plantilla Tailwind integrada */
+#requestDetailDialog.client-luxury-detail .request-detail-content,
+#requestDetailDialog.client-luxury-detail .request-detail-content [data-request-card] {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-content > [data-request-card] {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-content [data-request-card] input,
+#requestDetailDialog.client-luxury-detail .request-detail-content [data-request-card] textarea,
+#requestDetailDialog.client-luxury-detail .request-detail-content [data-request-card] button {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-content [data-request-card] .request-file-card {
+  min-width: 0 !important;
+}
+#requestDetailDialog.client-luxury-detail .request-detail-content [data-request-card] .request-file-card > span {
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
