@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="dashboard.css" />
     <link rel="stylesheet" href="override.css?v=20261020-0258" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body data-server-status="checking">
     <section id="loginScreen" class="login-screen" aria-labelledby="publicEntryTitle">
@@ -185,64 +186,76 @@
             </section>
 
             <section id="recordEditor" class="inline-record-editor" aria-labelledby="dialogTitle" hidden>
-              <form id="recordForm" class="form-full-page-container reception-modern-form">
-                <header class="reception-form-header">
-                  <div class="reception-form-heading-wrap">
-                    <button id="recordFormBackButton" class="reception-back-button" type="button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>Volver</span></button>
-                    <div class="reception-form-heading">
-                      <h2 id="dialogTitle"><i class="fa-solid fa-file-signature" aria-hidden="true"></i><span>Registro de Avalúos</span></h2>
-                      <p>Captura de expediente y recepción de pagos</p>
-                    </div>
-                  </div>
-                  <span class="reception-required-note">Campos obligatorios marcados con (<b>*</b>)</span>
-                </header>
+<div class="max-w-7xl mx-auto space-y-6">
 
-                <div class="reception-form-columns">
-                  <section class="reception-form-card reception-form-main" aria-label="Datos generales del avalúo">
-                    <div class="reception-card-gradient" aria-hidden="true"></div>
-                    <div class="reception-card-heading">
-                      <span class="reception-card-icon" aria-hidden="true">⌁</span>
-                      <div><h3>Datos generales del avalúo</h3><p>Información técnica y datos del solicitante.</p></div>
-                    </div>
-                    <div class="reception-fields-grid">
-                      <label class="reception-field"><span>No. <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">#</i><input id="numeroInput" name="numeroAvaluo" required inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="Ej. 3311" /></div></label>
-                      <label class="reception-field"><span>Fecha <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">◷</i><input id="avaluoDateInput" name="fechaAvaluo" required type="date" /></div></label>
-                      <label class="reception-field"><span>Tipo de bien <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">▦</i><select name="tipoBien" required><option value="">Selecciona el tipo de bien</option><option>Inmuebles</option><option>Vehículo Automotriz</option><option>Maquinaria y equipo</option><option>Mobiliario y Bienes Diversos</option><option>Intangibles</option></select></div></label>
-                      <label class="reception-field"><span>Tipo de avalúo <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">▤</i><select name="tipoAvaluo" required><option value="">Selecciona el tipo de avalúo</option><option>Referido</option><option>Comercial</option><option>Otro</option></select></div></label>
-                      <label class="reception-field"><span>Usuario <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">◉</i><select name="usuario" required><option value="">Selecciona un usuario</option><option>Juan Manuel Barrera Martínez</option><option>Gabriel Barrera Martínez</option><option>Cesar Delgado Armendáriz</option><option>Diana Barrera Rivera</option><option>Francisco Gabriel Hernández Estrada</option><option>Emmanuel Barrera Atilano</option><option>Caridad Rojas Vázquez</option></select></div></label>
-                      <label class="reception-field"><span>Solicitante <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">⌁</i><input name="solicitante" required placeholder="Nombre o empresa" /></div></label>
-                      <label class="reception-field"><span>Valor del avalúo</span><div class="reception-input-wrap"><i aria-hidden="true">$</i><input id="appraisalValueInput" name="valorAvaluo" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></div></label>
-                      <label class="reception-field reception-field-wide"><span>Observación</span><div class="reception-input-wrap reception-textarea-wrap"><i aria-hidden="true">≡</i><textarea name="observacion" rows="3" placeholder="Notas relevantes del avalúo"></textarea></div></label>
-                    </div>
-                    <div class="reception-card-actions">
-                      <button id="saveRecordButton" data-record-save-action class="primary-button btn-copu-primary reception-save-button" type="submit">Guardar Registro de Avalúo</button>
-                    </div>
-                  </section>
+  <!-- HEADER PRINCIPAL -->
+  <header class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div class="flex items-center gap-3 w-full sm:w-auto">
+      <button id="recordFormBackButton" type="button" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2.5 rounded-xl text-xs transition flex items-center gap-2">
+        <i class="fa-solid fa-arrow-left"></i> Volver
+      </button>
+      <div>
+        <h1 id="dialogTitle" class="text-xl font-black text-slate-900 flex items-center gap-2.5">
+          <i class="fa-solid fa-file-signature text-blue-600"></i><span>Registro de Avalúos</span>
+        </h1>
+        <p class="text-xs text-slate-500 mt-0.5">Captura de expediente y recepción de pagos</p>
+      </div>
+    </div>
+    <span class="text-xs text-slate-400 font-medium">Campos obligatorios marcados con (<span class="text-red-500">*</span>)</span>
+  </header>
 
-                  <section class="reception-form-card reception-payment-card" aria-label="Entrega y pago">
-                    <div class="reception-card-gradient" aria-hidden="true"></div>
-                    <div class="reception-card-heading">
-                      <span class="reception-card-icon" aria-hidden="true">$</span>
-                      <div><h3>Estatus de pago</h3><p>Recepción de documento y liquidación.</p></div>
-                    </div>
-                    <div class="reception-payment-fields">
-                      <label class="reception-field"><span>Quién recibe</span><div class="reception-input-wrap"><i aria-hidden="true">◉</i><input name="seEntregoA" placeholder="Nombre de quien recibe el avalúo" /></div></label>
-                      <label class="reception-check-row"><input id="paidInput" name="pagado" type="checkbox" /><span><b>Ya se pagó este trámite</b><small>Activa esta opción para registrar la liquidación.</small></span></label>
-                      <div id="paymentDetails" class="payment-details reception-payment-details is-hidden">
-                        <label class="reception-field"><span>Cantidad pagada <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">$</i><input id="amountInput" name="montoPagado" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></div></label>
-                        <label class="reception-field"><span>Método de pago <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">▣</i><select id="methodInput" name="metodoPago"><option value=""></option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option><option>Cheque</option></select></div></label>
-                        <label class="reception-field"><span>Pago entregado a <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">◉</i><select id="paymentDeliveredToInput" name="pagoEntregadoA"><option value=""></option><option>Juan Manuel Barrera Martínez</option><option>Diana Barrera Rivera</option><option>Cesar Delgado Armendáriz</option><option>Caridad Rojas Vázquez</option><option>Gabriel Barrera Martínez</option></select></div></label>
-                        <label class="reception-field"><span>Fecha de pago <b>*</b></span><div class="reception-input-wrap"><i aria-hidden="true">◷</i><input id="paymentDateInput" name="fechaPago" type="date" /></div></label>
-                      </div>
-                    </div>
-                    <div class="reception-card-actions reception-payment-actions">
-                      <button data-record-save-action class="primary-button btn-copu-primary reception-save-button" type="submit">Guardar pago</button>
-                      <button id="cancelDialogButton" class="secondary-button btn-copu-primary reception-cancel-button" type="button">Cancelar</button>
-                    </div>
-                  </section>
-                </div>
-                <p id="formMessage" class="form-message reception-form-message" role="alert"></p>
-              </form>
+  <!-- CONTENEDOR EN DOS COLUMNAS -->
+  <form id="recordForm" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <!-- COLUMNA 1: DATOS GENERALES DEL AVALÚO -->
+    <div class="lg:col-span-7 bg-white rounded-3xl card-shadow border border-slate-200/90 overflow-hidden">
+      <div class="h-3 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700"></div>
+      <div class="p-6 sm:p-7 space-y-5">
+        <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg border border-blue-200/50"><i class="fa-solid fa-sliders"></i></div>
+            <div><h3 class="text-lg font-black text-slate-900 tracking-tight leading-none">Datos Generales del Avalúo</h3><p class="text-xs text-slate-400 mt-1">Información técnica y datos del solicitante.</p></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">No. <span class="text-red-500">*</span></label><div class="relative"><i class="fa-solid fa-hashtag absolute left-3 top-2.5 text-slate-400 text-xs"></i><input type="text" id="numeroInput" name="numeroAvaluo" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="Ej. 3311" required class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition"></div></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Fecha <span class="text-red-500">*</span></label><div class="relative"><i class="fa-solid fa-calendar-days absolute left-3 top-2.5 text-slate-400 text-xs"></i><input type="date" id="avaluoDateInput" name="fechaAvaluo" required class="w-full pl-8 pr-2 py-2 border border-slate-300 rounded-lg text-xs font-medium text-slate-800 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition"></div></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Tipo de bien <span class="text-red-500">*</span></label><div class="relative"><i class="fa-solid fa-building-user absolute left-3 top-2.5 text-slate-400 text-xs"></i><select name="tipoBien" required class="w-full pl-8 pr-8 py-2 border border-slate-300 rounded-lg text-xs font-medium text-slate-800 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition appearance-none bg-white"><option value="">Selecciona el tipo de bien</option><option>Inmuebles</option><option>Vehículo Automotriz</option><option>Maquinaria y equipo</option><option>Mobiliario y Bienes Diversos</option><option>Intangibles</option></select><i class="fa-solid fa-chevron-down absolute right-3 top-3 text-slate-400 text-[10px] pointer-events-none"></i></div></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Tipo de avalúo <span class="text-red-500">*</span></label><div class="relative"><i class="fa-solid fa-file-contract absolute left-3 top-2.5 text-slate-400 text-xs"></i><select name="tipoAvaluo" required class="w-full pl-8 pr-8 py-2 border border-slate-300 rounded-lg text-xs font-medium text-slate-800 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition appearance-none bg-white"><option value="">Selecciona el tipo de avalúo</option><option>Referido</option><option>Comercial</option><option>Otro</option></select><i class="fa-solid fa-chevron-down absolute right-3 top-3 text-slate-400 text-[10px] pointer-events-none"></i></div></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Usuario <span class="text-red-500">*</span></label><div class="relative"><i class="fa-solid fa-user-gear absolute left-3 top-2.5 text-slate-400 text-xs"></i><select name="usuario" required class="w-full pl-8 pr-8 py-2 border border-slate-300 rounded-lg text-xs font-medium text-slate-800 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition appearance-none bg-white"><option value="">Selecciona un usuario</option><option>Juan Manuel Barrera Martínez</option><option>Gabriel Barrera Martínez</option><option>Cesar Delgado Armendáriz</option><option>Diana Barrera Rivera</option><option>Francisco Gabriel Hernández Estrada</option><option>Emmanuel Barrera Atilano</option><option>Caridad Rojas Vázquez</option></select><i class="fa-solid fa-chevron-down absolute right-3 top-3 text-slate-400 text-[10px] pointer-events-none"></i></div></div>
+          <div><label class="block text-xs font-semibold text-slate-600 mb-1">Solicitante <span class="text-red-500">*</span></label><div class="relative"><i class="fa-solid fa-building absolute left-3 top-2.5 text-slate-400 text-xs"></i><input type="text" name="solicitante" placeholder="Nombre o empresa" required class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-800 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition"></div></div>
+        </div>
+
+        <div class="border-t border-slate-100 pt-3"><label class="block text-xs font-semibold text-slate-700 mb-1">Valor del avalúo</label><div class="relative"><i class="fa-solid fa-sack-dollar absolute left-3 top-2.5 text-slate-400 text-xs"></i><input type="text" id="appraisalValueInput" name="valorAvaluo" inputmode="decimal" data-money-input placeholder="0.00" class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition"></div></div>
+        <div class="border-t border-slate-100 pt-3"><label class="block text-xs font-semibold text-slate-700 mb-1">Observación</label><div class="relative"><i class="fa-solid fa-note-sticky absolute left-3 top-2.5 text-slate-400 text-xs"></i><textarea name="observacion" rows="2" placeholder="Notas relevantes del avalúo..." class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-800 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition resize-none"></textarea></div></div>
+        <div class="pt-3 border-t border-slate-100"><button id="saveRecordButton" data-record-save-action type="submit" class="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-3 rounded-xl shadow-sm text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-floppy-disk"></i> Guardar Registro de Avalúo</button></div>
+      </div>
+    </div>
+
+    <!-- COLUMNA 2: QUIÉN RECIBE Y ESTATUS DE PAGO -->
+    <div class="lg:col-span-5 bg-white rounded-3xl card-shadow border border-slate-200/90 overflow-hidden sticky top-6">
+      <div class="h-3 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700"></div>
+      <div class="p-6 sm:p-7 space-y-5">
+        <div class="flex justify-between items-center border-b border-slate-100 pb-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg border border-blue-200/50"><i class="fa-solid fa-wallet"></i></div><div><h3 class="text-lg font-black text-slate-900 tracking-tight leading-none">Estatus de pago</h3><p class="text-xs text-slate-400 mt-1">Recepción de documento y liquidación.</p></div></div></div>
+        <div><label class="block text-xs font-semibold text-slate-600 mb-1">Quién recibe</label><div class="relative"><i class="fa-solid fa-user-check absolute left-3 top-2.5 text-slate-400 text-xs"></i><input type="text" name="seEntregoA" placeholder="Nombre de quien recibe el avalúo" class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg text-xs text-slate-800 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition"></div></div>
+        <div class="pt-1"><label class="relative flex items-center gap-3 p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-slate-50 cursor-pointer transition"><input type="checkbox" id="paidInput" name="pagado" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-600"><div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i><span class="text-xs font-bold text-slate-800">Ya se pagó este trámite</span></div></label></div>
+        <div id="paymentDetails" class="is-hidden space-y-4 p-4 bg-blue-50/30 rounded-2xl border border-blue-100 transition-all">
+          <div><label class="block text-xs font-semibold text-slate-700 mb-1">Cantidad pagada <span class="text-red-500">*</span></label><div class="relative"><i class="fa-solid fa-money-bill-wave absolute left-3 top-2.5 text-slate-400 text-xs"></i><input type="text" id="amountInput" name="montoPagado" inputmode="decimal" data-money-input placeholder="$0.00" class="w-full pl-8 pr-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-900 focus:ring-2 focus:ring-blue-600 outline-none transition"></div></div>
+          <div><label class="block text-xs font-semibold text-slate-700 mb-1">Fecha de pago <span class="text-red-500">*</span></label><div class="relative"><i class="fa-solid fa-calendar-check absolute left-3 top-2.5 text-slate-400 text-xs"></i><input type="date" id="paymentDateInput" name="fechaPago" class="w-full pl-8 pr-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-blue-600 outline-none transition"></div></div>
+          <div><label class="block text-xs font-semibold text-slate-700 mb-1">Método de pago <span class="text-red-500">*</span></label><div class="relative"><i class="fa-solid fa-credit-card absolute left-3 top-2.5 text-slate-400 text-xs"></i><select id="methodInput" name="metodoPago" class="w-full pl-8 pr-8 py-2 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-800 focus:ring-2 focus:ring-blue-600 outline-none transition appearance-none"><option value="">Selecciona una opción</option><option>Efectivo</option><option>Transferencia</option><option>Tarjeta</option><option>Cheque</option></select><i class="fa-solid fa-chevron-down absolute right-3 top-3 text-slate-400 text-[10px] pointer-events-none"></i></div></div>
+          <div><label class="block text-xs font-semibold text-slate-700 mb-1">Pago entregado a <span class="text-red-500">*</span></label><div class="relative"><i class="fa-solid fa-user-tag absolute left-3 top-2.5 text-slate-400 text-xs"></i><select id="paymentDeliveredToInput" name="pagoEntregadoA" class="w-full pl-8 pr-8 py-2 bg-white border border-slate-300 rounded-lg text-xs font-medium text-slate-800 focus:ring-2 focus:ring-blue-600 outline-none transition appearance-none"><option value="">Selecciona una opción</option><option>Juan Manuel Barrera Martínez</option><option>Diana Barrera Rivera</option><option>Cesar Delgado Armendáriz</option><option>Caridad Rojas Vázquez</option><option>Gabriel Barrera Martínez</option></select><i class="fa-solid fa-chevron-down absolute right-3 top-3 text-slate-400 text-[10px] pointer-events-none"></i></div></div>
+        </div>
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5"><button id="cancelDialogButton" type="button" class="flex-1 bg-white hover:bg-slate-100 text-slate-600 font-bold py-3 rounded-xl border border-slate-300 text-xs transition">Cancelar</button><button data-record-save-action type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-3 rounded-xl shadow-sm text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-floppy-disk"></i> Guardar pago</button></div>
+      </div>
+    </div>
+  </form>
+</div>
             </section>
 
 
