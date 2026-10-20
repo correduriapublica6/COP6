@@ -13526,3 +13526,19 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #requestDetailDialog.cp6-request-detail-dialog [data-popup-external-search] {
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
 }
+
+/* Detalle de solicitud: ancho estable y badges de asignación siempre juntos a la derecha */
+#requestDetailDialog.cp6-request-detail-dialog [data-request-card] {
+  width: min(1024px, calc(100vw - 32px)) !important;
+  max-width: 1024px !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog [data-request-card] .cp6-custom-scroll {
+  width: 100% !important;
+  min-height: 300px !important;
+  max-height: 360px !important;
+}
+#requestDetailDialog.cp6-request-detail-dialog [data-open-appraisal-popup],
+#requestDetailDialog.cp6-request-detail-dialog [data-open-external-popup] {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
