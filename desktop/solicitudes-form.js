@@ -70,9 +70,10 @@
     const previous = $("#btn-prev");
     const next = $("#btn-next");
     const submit = $("#publicRequestSubmit");
-    if (previous) { previous.classList.toggle("opacity-0", requestStep === 1); previous.classList.toggle("pointer-events-none", requestStep === 1); }
+    if (previous) { previous.hidden = requestStep === 1; previous.classList.toggle("opacity-0", requestStep === 1); previous.classList.toggle("pointer-events-none", requestStep === 1); }
     if (next) next.hidden = requestStep === 5;
     if (submit) submit.classList.toggle("hidden", requestStep !== 5);
+    updateSummary?.();
     refreshRequestIcons();
   }
   const requestCategoryStyles = {
@@ -102,7 +103,13 @@
       else button.classList.add("border-slate-200", "bg-white", "text-slate-800");
     });
     renderDynamicFields();
+    document.querySelectorAll("#publicRequestForm [data-request-category]").forEach((button) => {
+      const active = button.dataset.requestCategory === requestCategoryValues[selected];
+      button.querySelector("[data-lucide]")?.classList.toggle("text-white", active);
+      button.querySelector("[data-lucide]")?.classList.toggle("text-slate-500", !active);
+    });
     fillNotaries();
+    updateSummary?.();
   }
   function requestStepValid(step) {
     const form = $("#publicRequestForm");
@@ -128,6 +135,7 @@
     const input = $("#publicRequestAttachments");
     if (input) input.value = "";
     renderSelectedFiles();
+    updateSummary?.();
   }
   async function readFiles(files) {
     const selectedFiles = Array.from(files || []);
@@ -181,18 +189,15 @@
   }
 
   function renderDynamicFields() {
-    const type = $("#publicRequestType")?.value;
-    const container = $("#publicRequestDynamicFields");
-    if (!container) return;
-    if (type === "Inmuebles") {
-      container.innerHTML = `<div class="request-subgrid"><label>Modalidad *<select name="modalidadInmueble" id="requestInmuebleMode"><option value="">Selecciona</option><option>Referido</option><option>Comercial</option><option>Otro</option></select></label><div id="requestInmuebleModeFields"></div><label>Subtipo de bien *<select name="subtipoBien"><option value="">Selecciona</option><option>Terreno</option><option>Construcción</option></select></label><label>Valor de la operación<input name="valorOperacion" type="text" inputmode="decimal" data-money-input placeholder="$0.00" /></label><label>Número de enajenantes<input name="numeroEnajenantes" type="number" min="0" step="1" /></label><label>Propietario<input name="propietario" /></label></div>`;
-      $("#requestInmuebleMode")?.addEventListener("change", renderInmuebleModeFields);
-    } else if (["Automotriz", "Maquinaria y equipo", "Mobiliario y Bienes Diversos"].includes(type)) {
-      container.innerHTML = `<div class="request-subgrid"><label>Calle<input name="calle" /></label><label>Número<input name="numero" /></label><label>Colonia<input name="colonia" /></label><label>Ciudad<input name="ciudad" /></label><label>Propietario<input name="propietario" /></label></div>`;
-    } else if (type === "Intangibles") {
-      container.innerHTML = `<div class="request-subgrid"><label>Tipo de intangible *<select name="tipoIntangible" id="requestIntangibleType"><option value="">Selecciona</option><option>Empresa en marcha</option><option>Marca</option><option>Patente</option><option>Títulos accionarios</option><option>Partes sociales</option><option>Otro</option></select></label><div id="requestIntangibleOther"></div></div>`;
-      $("#requestIntangibleType")?.addEventListener("change", () => { $("#requestIntangibleOther").innerHTML = $("#requestIntangibleType").value === "Otro" ? `<label>Describe el intangible<input name="otroIntangible" required /></label>` : ""; });
-    } else container.innerHTML = "";
+    const type = String($("#publicRequestType")?.value || "");
+    const keyByType = { "Inmuebles": "inmuebles", "Vehículo Automotriz": "vehiculos", "Automotriz": "vehiculos", "Maquinaria y equipo": "maquinaria", "Mobiliario y Bienes Diversos": "mobiliario", "Intangibles": "intangibles" };
+    const selected = keyByType[type] || "";
+    document.querySelectorAll("#publicRequestForm .cat-specific-block").forEach((block) => {
+      const active = block.id === `cat-fields-${selected}`;
+      block.classList.toggle("hidden", !active);
+      block.querySelectorAll("input, select, textarea").forEach((field) => { field.required = active; });
+    });
+    $("#valor-operacion-container")?.classList.toggle("hidden", selected !== "inmuebles");
   }
 
   function renderInmuebleModeFields() {
@@ -203,6 +208,21 @@
     if (mode === "Referido") { fillNotaries().then(() => renderNotarySearch()); }
   }
 
+  function ensureRequestFieldNames() {
+    const names = { solicitante_nombre: "nombre", solicitante_telefono: "telefono", solicitante_correo: "correo", valuador_asignado: "asesor", tipo_avaluo: "tipoAvaluo", inmueble_subtipo: "subtipoBien", inmueble_enajenantes: "numeroEnajenantes", inmueble_propietario: "propietario", vehiculo_marca: "marcaVehiculo", vehiculo_modelo: "modeloVehiculo", vehiculo_km: "kilometraje", maquinaria_tipo: "tipoMaquinaria", maquinaria_serie: "serieMaquinaria", mobiliario_tipo: "tipoMobiliario", mobiliario_estado: "estadoMobiliario", intangible_tipo: "tipoIntangible", intangible_registro: "registroIntangible", descripcion_bien: "descripcion", valor_operacion: "valorOperacion", contacto_visita: "contactoVisitaNombre", telefono_visita: "contactoVisitaTelefono", direccion_visita: "direccionVisita", observaciones_solicitud: "observaciones" };
+    const form = $("#publicRequestForm");
+    Object.entries(names).forEach(([id, name]) => { const field = form?.querySelector(`#${id}`); if (field && !field.name) field.name = name; });
+  }
+  function textValue(id, fallback = "-") { return String($("#" + id)?.value || "").trim() || fallback; }
+  function updateSummary() {
+    ensureRequestFieldNames();
+    const values = { solicitante: textValue("solicitante_nombre"), telefono: textValue("solicitante_telefono"), correo: textValue("solicitante_correo"), valuador: textValue("valuador_asignado"), tipo: textValue("publicRequestType"), tipoAvaluo: textValue("tipo_avaluo"), subtipo: textValue("inmueble_subtipo"), propietario: textValue("inmueble_propietario"), contacto: textValue("contacto_visita"), telefonoVisita: textValue("telefono_visita"), direccion: textValue("direccion_visita"), descripcion: textValue("descripcion_bien"), observaciones: textValue("observaciones_solicitud"), archivos: String(archivosSeleccionados.length) };
+    const set = (id, value) => { const node = $("#" + id); if (node) node.textContent = value; };
+    set("sum-solicitante", values.solicitante); set("sum-telefono", values.telefono); set("sum-correo", values.correo); set("sum-valuador", values.valuador); set("sum-categoria", values.tipo); set("sum-tipo-avaluo", values.tipoAvaluo); set("sum-contacto-visita", values.contacto); set("sum-telefono-visita", values.telefonoVisita); set("sum-direccion", values.direccion); set("sum-descripcion", values.descripcion); set("sum-archivos", `${values.archivos} archivo(s)`); set("sum-observaciones", values.observaciones);
+    const inmueble = values.tipo === "Inmuebles"; $("#sum-inmueble-enajenantes-row")?.classList.toggle("hidden", !inmueble); $("#sum-inmueble-propietario-row")?.classList.toggle("hidden", !inmueble); set("sum-inmueble-enajenantes", textValue("inmueble_enajenantes")); set("sum-inmueble-propietario", values.propietario); set("sum-valor-num", textValue("valor_operacion", "$0.00") + " MXN");
+  }
+  window.updateSummary = updateSummary;
+  window.formatTitleCase = (input) => { if (input?.value) input.value = input.value.replace(/\s+/g, " ").replace(/(^|\s)\S/g, (letter) => letter.toUpperCase()); updateSummary(); };
   function openDialog(dialog) { if (dialog?.showModal) dialog.showModal(); }
   function closeDialog(dialog) { if (dialog?.open) dialog.close(); }
   function formObject(form) { return Object.fromEntries(new FormData(form).entries()); }
@@ -250,10 +270,15 @@
   function resetRequestForm() {
     const form = getRequestForm();
     if (!form) return;
+    ensureRequestFieldNames();
     form.reset();
     archivosSeleccionados = [];
     archivosExistentesEnEdicion = [];
     renderSelectedFiles();
+    document.querySelectorAll("#publicRequestForm .cat-specific-block").forEach((block) => { block.classList.add("hidden"); block.querySelectorAll("input, select, textarea").forEach((field) => { field.required = false; }); });
+    $("#valor-operacion-container")?.classList.add("hidden");
+    document.querySelectorAll("#publicRequestForm [data-request-category]").forEach((button) => { button.className = "category-btn border-2 border-slate-200 bg-white rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition"; button.querySelector("[data-lucide]")?.classList.remove("text-white"); button.querySelector("[data-lucide]")?.classList.add("text-slate-500"); });
+    updateSummary();
     $("#publicRequestDynamicFields").innerHTML = "";
     editingRequestId = "";
     if (applicantSession) {
@@ -938,8 +963,9 @@
     $("#publicRequestAttachments")?.addEventListener("change", (event) => addSelectedFiles(event.target.files));
     window.addEventListener("control-avaluos:notarias-updated", () => { if (selectedNotaryValue() || $("#requestNotaryMunicipality")) renderNotarySearch(selectedNotaryValue()); });
     $("#publicRequestForm")?.addEventListener("submit", submitPublicRequest);
-    $("#publicRequestForm")?.addEventListener("input", scheduleRequestDraftSave);
-    $("#publicRequestForm")?.addEventListener("change", scheduleRequestDraftSave);
+    $("#publicRequestForm")?.addEventListener("input", () => { updateSummary(); scheduleRequestDraftSave(); });
+    $("#publicRequestForm")?.addEventListener("change", () => { updateSummary(); scheduleRequestDraftSave(); });
+    requestDialog?.addEventListener("cancel", (event) => event.preventDefault());
     $("#applicantRegisterForm")?.addEventListener("submit", registerApplicant);
     $("#applicantLoginForm")?.addEventListener("submit", loginApplicant);
     $("#closeApplicantRequestsButton")?.addEventListener("click", () => closeDialog(applicantRequestsDialog));

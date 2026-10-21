@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261021-1132" />
+    <link rel="stylesheet" href="override.css?v=20261021-1156" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -98,14 +98,7 @@
           <p class="text-xs text-slate-400 font-medium">Capture la información para registrar una nueva solicitud</p>
         </div>
       </div>
-
-      <!-- Folio Dinámico Anti-Colisión -->
-      <div class="bg-slate-800/90 border border-slate-700/60 rounded-2xl px-4 py-2 flex items-center gap-3">
-        <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Folio:</span>
-        <span id="display-folio" class="text-sm font-sans font-bold text-white tracking-wide">#VAL-2026-0000</span>
-      </div>
-
-      <button id="closePublicRequestButton" type="button" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center" aria-label="Cerrar">×</button>
+<button id="closePublicRequestButton" type="button" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center" aria-label="Cerrar">×</button>
     </div>
 
     <!-- BARRA DE PASOS / PASO A PASO (1 - 5) -->
@@ -220,27 +213,27 @@
             <label class="block text-xs font-semibold text-slate-700">Categoría principal</label>
             <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
 
-              <button type="button" id="cat-inmuebles" onclick="selectCategory('inmuebles')" data-request-category="Inmuebles" class="category-btn border-2 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition border-blue-500 bg-blue-50 text-blue-700">
+              <button type="button" id="cat-inmuebles" onclick="selectCategory('inmuebles')" data-request-category="Inmuebles" class="category-btn border-2 border-slate-200 bg-white rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition">
                 <i data-lucide="building-2" class="w-10 h-10 text-blue-600"></i>
                 <span class="text-xs font-semibold text-slate-900">Inmuebles</span>
               </button>
 
-              <button type="button" id="cat-vehiculos" onclick="selectCategory('vehiculos')" data-request-category="Vehículo Automotriz" class="category-btn border-2 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition border-emerald-500 bg-emerald-50 text-emerald-700">
+              <button type="button" id="cat-vehiculos" onclick="selectCategory('vehiculos')" data-request-category="Vehículo Automotriz" class="category-btn border-2 border-slate-200 bg-white rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition">
                 <i data-lucide="car" class="w-10 h-10 text-emerald-600"></i>
                 <span class="text-xs font-semibold text-slate-900">Vehículos</span>
               </button>
 
-              <button type="button" id="cat-maquinaria" onclick="selectCategory('maquinaria')" data-request-category="Maquinaria y equipo" class="category-btn border-2 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition border-amber-500 bg-amber-50 text-amber-700">
+              <button type="button" id="cat-maquinaria" onclick="selectCategory('maquinaria')" data-request-category="Maquinaria y equipo" class="category-btn border-2 border-slate-200 bg-white rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition">
                 <i data-lucide="cog" class="w-10 h-10 text-amber-600"></i>
                 <span class="text-xs font-semibold text-slate-900">Maquinaria</span>
               </button>
 
-              <button type="button" id="cat-mobiliario" onclick="selectCategory('mobiliario')" data-request-category="Mobiliario y Bienes Diversos" class="category-btn border-2 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition border-violet-500 bg-violet-50 text-violet-700">
+              <button type="button" id="cat-mobiliario" onclick="selectCategory('mobiliario')" data-request-category="Mobiliario y Bienes Diversos" class="category-btn border-2 border-slate-200 bg-white rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition">
                 <i data-lucide="armchair" class="w-10 h-10 text-violet-600"></i>
                 <span class="text-xs font-semibold text-slate-900">Mobiliario</span>
               </button>
 
-              <button type="button" id="cat-intangibles" onclick="selectCategory('intangibles')" data-request-category="Intangibles" class="category-btn border-2 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition border-rose-500 bg-rose-50 text-rose-700">
+              <button type="button" id="cat-intangibles" onclick="selectCategory('intangibles')" data-request-category="Intangibles" class="category-btn border-2 border-slate-200 bg-white rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition">
                 <i data-lucide="badge-percent" class="w-10 h-10 text-rose-600"></i>
                 <span class="text-xs font-semibold text-slate-900">Intangibles</span>
               </button>
@@ -276,18 +269,11 @@
           <!-- BLOQUES ESPECÍFICOS SEGÚN CATEGORÍA SELECCIONADA -->
 
           <!-- 1. CAMPOS ESPECÍFICOS INMUEBLES -->
-          <div id="cat-fields-inmuebles" class="cat-specific-block space-y-4 border-t border-slate-200 pt-3">
+          <div id="cat-fields-inmuebles" class="cat-specific-block space-y-4 border-t border-slate-200 pt-3 hidden">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div class="space-y-1.5">
-                <label class="block text-xs font-semibold text-slate-700">Subtipo de Inmueble</label>
-                <select id="inmueble_subtipo" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition pl-11">
-                  <option value="Casa Habitación">Casa Habitación</option>
-                  <option value="Departamento">Departamento</option>
-                  <option value="Terreno / Lote">Terreno / Lote</option>
-                  <option value="Local Comercial">Local Comercial</option>
-                  <option value="Nave Industrial">Nave Industrial</option>
-                  <option value="Oficina">Oficina</option>
-                </select>
+                <label class="block text-xs font-semibold text-slate-700">Subtipo de inmueble</label>
+                <select id="inmueble_subtipo" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition pl-11"><option value="">Selecciona el tipo de bien</option><option value="Terreno">Terreno</option><option value="Construcción">Construcción</option><option value="Casa Habitación">Casa habitación</option><option value="Departamento">Departamento</option><option value="Local Comercial">Local comercial</option><option value="Nave Industrial">Nave industrial</option><option value="Oficina">Oficina</option></select>
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Número de enajenantes</label>
@@ -373,7 +359,7 @@
           <!-- Descripción libre del bien o múltiples bienes -->
           <div class="space-y-1.5">
             <label class="block text-xs font-semibold text-slate-700">Descripción detallada del o los bienes</label>
-            <textarea id="descripcion_bien" rows="3" placeholder="Escriba aquí los detalles principales. Si se trata de múltiples bienes, agréguelos en este espacio..." class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl p-4 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none py-3 pl-11"></textarea>
+            <textarea id="descripcion_bien" rows="1" placeholder="Escriba aquí los detalles principales. Si se trata de múltiples bienes, agréguelos en este espacio..." class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl p-4 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none py-3 pl-11"></textarea>
           </div>
 
           <!-- Valor de Operación (Solo se muestra en Inmuebles) -->
@@ -432,14 +418,14 @@
           </div>
 
           <!-- Creador de Dropzone -->
-          <div class="border-2 border-dashed border-slate-300 hover:border-brand-500 bg-slate-50/50 hover:bg-brand-50/30 rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer transition text-center group">
-            <input type="file" id="publicRequestAttachments" multiple class="hidden" />
+          <label for="publicRequestAttachments" class="border-2 border-dashed border-slate-300 hover:border-brand-500 bg-slate-50/50 hover:bg-brand-50/30 rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer transition text-center group">
+            <input type="file" id="publicRequestAttachments" name="archivos" multiple class="hidden" />
             <div class="p-3 bg-white rounded-full shadow-sm border border-slate-200 group-hover:scale-110 transition mb-2">
               <i data-lucide="upload-cloud" class="w-6 h-6 text-brand-600"></i>
             </div>
             <p class="text-xs font-bold text-slate-800">Haga clic o arrastre archivos aquí</p>
             <p class="text-[11px] text-slate-400 mt-0.5">Soporta PDF, imágenes (JPG, PNG), Word, Excel y ZIP (Máx. 10MB por archivo)</p>
-          </div>
+          </label>
 
           <!-- Lista de Archivos Cargados en Grid de 3 Columnas -->
           <div class="space-y-2">
@@ -548,6 +534,8 @@
 
           </div>
 
+          <div class="rounded-xl border border-slate-200 bg-white p-3 text-sm"><span class="text-slate-400 block font-medium">Observaciones capturadas:</span><span id="sum-observaciones" class="font-medium text-slate-700 whitespace-pre-line">-</span></div>
+
           <!-- Campo de Observaciones al final del resumen -->
           <div class="space-y-1.5 pt-2">
             <label class="block text-xs font-semibold text-slate-700">Observaciones o notas adicionales</label>
@@ -562,10 +550,8 @@
       <p id="publicRequestMessage" class="form-message mx-6 mb-2" role="alert"></p>
       <div class="bg-slate-50 border-t border-slate-200 px-6 py-4 flex items-center justify-between gap-2 flex-shrink-0">
 
-        <button type="button" id="cancelPublicRequestButton" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs">Cancelar</button>
-
         <!-- Botón Anterior (Oculto/deshabilitado en el Paso 1) -->
-        <button type="button" id="btn-prev" class="hidden px-5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs flex items-center gap-2 transition opacity-0 pointer-events-none">
+        <button type="button" id="btn-prev" class="hidden px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-2 transition">
           <i data-lucide="chevron-left" class="w-4 h-4"></i>
           Anterior
         </button>

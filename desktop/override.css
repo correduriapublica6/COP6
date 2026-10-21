@@ -13690,3 +13690,28 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #publicRequestDialog.public-request-dialog select { appearance: none !important; }
 #publicRequestDialog.public-request-dialog .font-mono,
 #publicRequestDialog.public-request-dialog [class*="font-mono"] { font-family: Inter, ui-sans-serif, system-ui, sans-serif !important; }
+
+/* Ajustes finales Nueva solicitud v3 */
+#publicRequestDialog.public-request-dialog { width: min(96vw, 1180px) !important; max-width: 1180px !important; margin: auto !important; }
+#publicRequestDialog.public-request-dialog > div { width: 100% !important; max-width: 1120px !important; height: 96vh !important; max-height: 96vh !important; margin: auto !important; }
+#publicRequestDialog.public-request-dialog .bg-slate-900 h1 { color: #fff !important; font-family: Inter, ui-sans-serif, system-ui, sans-serif !important; }
+#publicRequestDialog.public-request-dialog .bg-slate-900 { position: relative; }
+#publicRequestDialog.public-request-dialog #btn-next,
+#publicRequestDialog.public-request-dialog #btn-prev { background: #2563eb !important; color: #fff !important; border-color: #2563eb !important; }
+#publicRequestDialog.public-request-dialog #btn-next:hover,
+#publicRequestDialog.public-request-dialog #btn-prev:hover { background: #1d4ed8 !important; }
+#publicRequestDialog.public-request-dialog #descripcion_bien { height: 42px !important; min-height: 42px !important; line-height: 1.35 !important; overflow-y: hidden !important; }
+#publicRequestDialog.public-request-dialog [data-request-category] { color: #0f172a !important; }
+#publicRequestDialog.public-request-dialog [data-request-category] > [data-lucide] { color: #64748b !important; }
+#publicRequestDialog.public-request-dialog [data-request-category].border-blue-500 > [data-lucide] { color: #2563eb !important; }
+#publicRequestDialog.public-request-dialog [data-request-category].border-emerald-500 > [data-lucide] { color: #059669 !important; }
+#publicRequestDialog.public-request-dialog [data-request-category].border-amber-500 > [data-lucide] { color: #d97706 !important; }
+#publicRequestDialog.public-request-dialog [data-request-category].border-violet-500 > [data-lucide] { color: #7c3aed !important; }
+#publicRequestDialog.public-request-dialog [data-request-category].border-rose-500 > [data-lucide] { color: #e11d48 !important; }
+@media (max-width: 700px) { #publicRequestDialog.public-request-dialog { width: 100vw !important; } #publicRequestDialog.public-request-dialog > div { height: 100vh !important; max-height: 100vh !important; border-radius: 0 !important; } }
+
+/* Atrás azul visible sólo desde el paso 2; en el paso 1 permanece oculto. */
+#publicRequestDialog.public-request-dialog #btn-prev:not([hidden]) { display: flex !important; }
+#publicRequestDialog.public-request-dialog #btn-prev[hidden] { display: none !important; }
+#publicRequestDialog.public-request-dialog #publicRequestAttachments { display: none !important; }
+#publicRequestDialog.public-request-dialog #publicRequestAttachmentsList { min-height: 74px; }
