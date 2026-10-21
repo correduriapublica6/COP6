@@ -13834,10 +13834,20 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 
 /* Aviso de privacidad: queda al final del primer paso, justo antes de las acciones */
 #publicRequestDialog.public-request-dialog #step-content-1 {
-  min-height: calc(94vh - 235px) !important;
+  min-height: calc(94vh - 275px) !important;
   display: flex !important;
   flex-direction: column !important;
 }
 #publicRequestDialog.public-request-dialog #step-content-1 .request-privacy-box {
   margin-top: auto !important;
+}
+
+/* Ocultamiento robusto: los pasos inactivos no ocupan espacio ni aparecen al desplazar */
+#publicRequestDialog.public-request-dialog .step-content[hidden],
+#publicRequestDialog.public-request-dialog .step-content.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
 }

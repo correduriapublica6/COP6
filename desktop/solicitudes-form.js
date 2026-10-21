@@ -68,7 +68,11 @@
   }
   function showRequestStep(step) {
     requestStep = Math.max(1, Math.min(5, Number(step) || 1));
-    document.querySelectorAll("#publicRequestForm .step-content").forEach((panel, index) => { panel.classList.toggle("hidden", index + 1 !== requestStep); });
+    document.querySelectorAll("#publicRequestForm .step-content").forEach((panel, index) => {
+      const hidden = index + 1 !== requestStep;
+      panel.classList.toggle("hidden", hidden);
+      panel.hidden = hidden;
+    });
     document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => {
       const number = index + 1;
       tab.classList.toggle("is-active", number === requestStep);
@@ -1020,8 +1024,8 @@
     window.addEventListener("control-avaluos:notarias-updated", () => { if (selectedNotaryValue() || $("#requestNotaryMunicipality")) renderNotarySearch(selectedNotaryValue()); });
     $("#publicRequestForm")?.addEventListener("submit", submitPublicRequest);
     $("#valor_operacion")?.addEventListener("input", () => { updateOperationMoneyPreview(); updateSummary(); scheduleRequestDraftSave(); });
-    $("#publicRequestForm")?.addEventListener("input", () => { updateSummary(); scheduleRequestDraftSave(); });
-    $("#publicRequestForm")?.addEventListener("change", () => { updateSummary(); scheduleRequestDraftSave(); });
+    $("#publicRequestForm")?.addEventListener("input", () => { syncPrivacyConsentState(); updateSummary(); scheduleRequestDraftSave(); });
+    $("#publicRequestForm")?.addEventListener("change", () => { syncPrivacyConsentState(); updateSummary(); scheduleRequestDraftSave(); });
     requestDialog?.addEventListener("cancel", (event) => event.preventDefault());
     $("#applicantRegisterForm")?.addEventListener("submit", registerApplicant);
     $("#applicantLoginForm")?.addEventListener("submit", loginApplicant);
