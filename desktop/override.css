@@ -13851,3 +13851,15 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   min-height: 0 !important;
   overflow: hidden !important;
 }
+
+/* Corrección definitiva: el primer paso no conserva espacio cuando se cambia al paso 2 */
+#publicRequestDialog.public-request-dialog #step-content-1[hidden],
+#publicRequestDialog.public-request-dialog #step-content-1.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
