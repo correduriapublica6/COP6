@@ -57,6 +57,15 @@
 
   let requestStep = 1;
   function refreshRequestIcons() { window.lucide?.createIcons?.(); }
+  function syncPrivacyConsentState() {
+    const consent = $("#requestPrivacyConsent");
+    const next = $("#btn-next");
+    if (!next) return;
+    const blocked = requestStep === 1 && !Boolean(consent?.checked);
+    next.disabled = blocked;
+    next.setAttribute("aria-disabled", String(blocked));
+    next.classList.toggle("is-consent-disabled", blocked);
+  }
   function showRequestStep(step) {
     requestStep = Math.max(1, Math.min(5, Number(step) || 1));
     document.querySelectorAll("#publicRequestForm .step-content").forEach((panel, index) => { panel.classList.toggle("hidden", index + 1 !== requestStep); });
@@ -77,6 +86,7 @@
     if (previous) { previous.hidden = requestStep === 1; previous.classList.toggle("opacity-0", requestStep === 1); previous.classList.toggle("pointer-events-none", requestStep === 1); }
     if (next) next.hidden = requestStep === 5;
     if (submit) submit.classList.toggle("hidden", requestStep !== 5);
+    syncPrivacyConsentState();
     updateSummary?.();
     refreshRequestIcons();
   }
@@ -118,7 +128,7 @@
   }
   function requestStepValid(step) {
     const form = $("#publicRequestForm");
-    if (step === 1) return requireFields(form, ["nombre", "telefono"]);
+    if (step === 1) return requireFields(form, ["nombre", "telefono"]) && Boolean($("#requestPrivacyConsent")?.checked);
     if (step === 2) return requireFields(form, ["tipoBien", "tipoAvaluo"]);
     return true;
   }
@@ -981,7 +991,8 @@
     $("#publicRequestType")?.addEventListener("change", () => { renderDynamicFields(); fillNotaries(); });
     document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => tab?.addEventListener("click", () => showRequestStep(index + 1)));
     $("#btn-prev")?.addEventListener("click", () => showRequestStep(requestStep - 1));
-    $("#btn-next")?.addEventListener("click", () => showRequestStep(requestStep + 1));
+    $("#btn-next")?.addEventListener("click", () => { if (!requestStepValid(requestStep)) return; showRequestStep(requestStep + 1); });
+    $("#requestPrivacyConsent")?.addEventListener("change", syncPrivacyConsentState);
     $("#publicRequestForm")?.addEventListener("click", (event) => {
       const category = event.target.closest?.("[data-request-category]");
       if (!category) return;

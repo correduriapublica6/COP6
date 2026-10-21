@@ -13779,3 +13779,55 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #publicRequestDialog.public-request-dialog .step-tab.is-active .step-tab-label { color: #2563eb !important; font-weight: 700 !important; }
 #publicRequestDialog.public-request-dialog .step-tab.is-completed { background: #ecfdf5 !important; border-color: #a7f3d0 !important; }
 #publicRequestDialog.public-request-dialog .step-tab.is-completed .step-tab-label { color: #059669 !important; font-weight: 600 !important; }
+
+/* Nueva solicitud: aviso de privacidad y consentimiento obligatorio */
+#publicRequestDialog.public-request-dialog .request-privacy-box {
+  margin-top: 4px !important;
+  padding: 14px 16px !important;
+  border: 1px solid #dbeafe !important;
+  border-radius: 14px !important;
+  background: #f8fbff !important;
+}
+#publicRequestDialog.public-request-dialog .request-privacy-box h3 {
+  margin: 0 0 6px !important;
+  color: #1e3a8a !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+#publicRequestDialog.public-request-dialog .request-privacy-box p {
+  margin: 0 !important;
+  color: #475569 !important;
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+  font-weight: 400 !important;
+}
+#publicRequestDialog.public-request-dialog .request-consent-label {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 9px !important;
+  margin: 12px 0 0 !important;
+  color: #1e293b !important;
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+#publicRequestDialog.public-request-dialog .request-consent-label input[type="checkbox"] {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  margin: 1px 0 0 !important;
+  padding: 0 !important;
+  accent-color: #2563eb !important;
+  box-shadow: none !important;
+}
+#publicRequestDialog.public-request-dialog #btn-next.is-consent-disabled {
+  opacity: .48 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+}
+#publicRequestDialog.public-request-dialog .step-tab,
+#publicRequestDialog.public-request-dialog [data-step-connector] {
+  display: none !important;
+}

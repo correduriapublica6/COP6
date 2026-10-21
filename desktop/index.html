@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261021-1305" />
+    <link rel="stylesheet" href="override.css?v=20261021-1315" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -194,6 +194,15 @@
               </div>
             </div>
           </div>
+
+          <section class="request-privacy-box" aria-labelledby="requestPrivacyTitle">
+            <h3 id="requestPrivacyTitle">Aviso de privacidad</h3>
+            <p>Los datos personales solicitados en este formulario serán tratados con estricta confidencialidad y utilizados únicamente con la finalidad de gestionar, procesar y asignar un técnico para su Solicitud de Avalúo. No se realizarán transferencias de sus datos a terceros ni se utilizarán para fines publicitarios.</p>
+            <label class="request-consent-label" for="requestPrivacyConsent">
+              <input id="requestPrivacyConsent" name="consentimientoPrivacidad" value="aceptado" type="checkbox" />
+              <span>Consiento que mis datos personales sean tratados conforme a las finalidades especificadas en este formulario.</span>
+            </label>
+          </section>
         </div>
 
         <!-- ================= PASO 2: TIPO DE BIEN ================= -->
@@ -541,7 +550,7 @@
         </button>
 
         <!-- Botón Siguiente / Enviar -->
-        <button type="button" id="btn-next" class="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-brand-500/20 transition">
+        <button type="button" id="btn-next" disabled aria-disabled="true" class="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-brand-500/20 transition">
           Siguiente
           <i data-lucide="chevron-right" class="w-4 h-4"></i>
         </button>
