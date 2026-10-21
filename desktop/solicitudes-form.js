@@ -57,40 +57,24 @@
 
   let requestStep = 1;
   function refreshRequestIcons() { window.lucide?.createIcons?.(); }
-  function requestStepCompleted(step) {
-    const value = (id) => String($(id)?.value || "").trim();
-    if (step === 1) return Boolean(value("solicitante_nombre") && value("solicitante_telefono") && value("publicRequestAdvisor") && value("publicRequestAppraisalType"));
-    if (step === 2) return Boolean(value("publicRequestType") && (value("inmueble_subtipo") || value("vehiculo_marca") || value("maquinaria_tipo") || value("mobiliario_tipo") || value("intangible_tipo")) && value("descripcion_bien"));
-    if (step === 3) return Boolean(value("contacto_visita") && value("telefono_visita") && value("direccion_visita"));
-    if (step === 4) return archivosSeleccionados.length > 0;
-    return false;
-  }
-  function updateRequestStepper() {
-    document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => {
-      const step = index + 1;
-      const icon = tab.querySelector("[id^=step-icon-]");
-      const active = step === requestStep;
-      const completed = !active && requestStepCompleted(step);
-      icon?.classList.toggle("bg-brand-600", active);
-      icon?.classList.toggle("text-white", active);
-      icon?.classList.toggle("bg-emerald-500", completed);
-      icon?.classList.toggle("bg-slate-200", !active && !completed);
-      icon?.classList.toggle("text-slate-600", !active && !completed);
-      icon?.classList.toggle("ring-4", active);
-      tab.classList.toggle("is-completed", completed);
-      tab.classList.toggle("is-active", active);
-    });
-    document.querySelectorAll("[data-step-connector]").forEach((connector) => {
-      const step = Number(connector.dataset.stepConnector);
-      connector.classList.toggle("bg-emerald-500", requestStepCompleted(step));
-      connector.classList.toggle("bg-brand-600", !requestStepCompleted(step) && step < requestStep);
-      connector.classList.toggle("bg-slate-200", !requestStepCompleted(step) && step >= requestStep);
-    });
-  }
   function showRequestStep(step) {
     requestStep = Math.max(1, Math.min(5, Number(step) || 1));
     document.querySelectorAll("#publicRequestForm .step-content").forEach((panel, index) => { panel.classList.toggle("hidden", index + 1 !== requestStep); });
-    updateRequestStepper();
+    document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => {
+      const active = index + 1 === requestStep;
+      const completed = index + 1 < requestStep;
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("bg-brand-600", active);
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("text-white", active);
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("bg-slate-200", !active);
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("text-slate-600", !active && !completed);
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("bg-brand-600", completed);
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("text-white", completed);
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("ring-4", active);
+    });
+    document.querySelectorAll("[data-step-connector]").forEach((connector) => {
+      connector.classList.toggle("bg-brand-600", Number(connector.dataset.stepConnector) < requestStep);
+      connector.classList.toggle("bg-slate-200", Number(connector.dataset.stepConnector) >= requestStep);
+    });
     const previous = $("#btn-prev");
     const next = $("#btn-next");
     const submit = $("#publicRequestSubmit");
@@ -137,8 +121,8 @@
   }
   function requestStepValid(step) {
     const form = $("#publicRequestForm");
-    if (step === 1) return requireFields(form, ["nombre", "telefono", "asesor", "tipoAvaluo"]);
-    if (step === 2) return requireFields(form, ["tipoBien"]);
+    if (step === 1) return requireFields(form, ["nombre", "telefono"]);
+    if (step === 2) return requireFields(form, ["tipoBien", "tipoAvaluo"]);
     return true;
   }
   function fileIconName(file) {
@@ -995,8 +979,8 @@
     $("#publicRequestAttachments")?.addEventListener("change", (event) => addSelectedFiles(event.target.files));
     window.addEventListener("control-avaluos:notarias-updated", () => { if (selectedNotaryValue() || $("#requestNotaryMunicipality")) renderNotarySearch(selectedNotaryValue()); });
     $("#publicRequestForm")?.addEventListener("submit", submitPublicRequest);
-    $("#publicRequestForm")?.addEventListener("input", () => { updateSummary(); updateRequestStepper(); scheduleRequestDraftSave(); });
-    $("#publicRequestForm")?.addEventListener("change", () => { updateSummary(); updateRequestStepper(); scheduleRequestDraftSave(); });
+    $("#publicRequestForm")?.addEventListener("input", () => { updateSummary(); scheduleRequestDraftSave(); });
+    $("#publicRequestForm")?.addEventListener("change", () => { updateSummary(); scheduleRequestDraftSave(); });
     requestDialog?.addEventListener("cancel", (event) => event.preventDefault());
     $("#applicantRegisterForm")?.addEventListener("submit", registerApplicant);
     $("#applicantLoginForm")?.addEventListener("submit", loginApplicant);

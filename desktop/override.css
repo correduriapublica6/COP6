@@ -13737,21 +13737,3 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #publicRequestDialog.public-request-dialog label[for="publicRequestAttachments"] { min-height: 210px !important; display: flex !important; align-items: center !important; justify-content: center !important; }
 #publicRequestDialog.public-request-dialog label[for="publicRequestAttachments"] > div:first-of-type { width: 68px !important; height: 68px !important; display: flex !important; align-items: center !important; justify-content: center !important; border-radius: 18px !important; }
 #publicRequestDialog.public-request-dialog label[for="publicRequestAttachments"] > div:first-of-type svg { width: 34px !important; height: 34px !important; }
-
-/* Nueva solicitud v5: tipografía regular, navegación y estados del stepper */
-#publicRequestDialog.public-request-dialog input:not([type="file"]),
-#publicRequestDialog.public-request-dialog select,
-#publicRequestDialog.public-request-dialog textarea,
-#publicRequestDialog.public-request-dialog #publicRequestAttachments + div p,
-#publicRequestDialog.public-request-dialog #publicRequestAttachments + div p strong,
-#publicRequestDialog.public-request-dialog #publicRequestAttachments + div p + p { font-weight: 400 !important; }
-#publicRequestDialog.public-request-dialog #publicRequestDialog,
-#publicRequestDialog.public-request-dialog .step-tab span,
-#publicRequestDialog.public-request-dialog #step-content-5 span { font-weight: 400 !important; }
-#publicRequestDialog.public-request-dialog #step-content-5 [class*="font-"] { font-weight: 400 !important; }
-#publicRequestDialog.public-request-dialog #observaciones_solicitud { height: 42px !important; min-height: 42px !important; padding-top: .7rem !important; padding-bottom: .7rem !important; overflow-y: hidden !important; }
-#publicRequestDialog.public-request-dialog .step-tab.is-completed [id^="step-icon-"] { background: #10b981 !important; color: #fff !important; }
-#publicRequestDialog.public-request-dialog .step-tab.is-active [id^="step-icon-"] { background: #2563eb !important; color: #fff !important; box-shadow: 0 0 0 4px #dbeafe !important; }
-#publicRequestDialog.public-request-dialog [data-step-connector].bg-emerald-500 { background-color: #10b981 !important; }
-#publicRequestDialog.public-request-dialog [data-step-connector].bg-brand-600 { background-color: #2563eb !important; }
-#publicRequestDialog.public-request-dialog #request-appraisal-field { font-weight: 400 !important; }

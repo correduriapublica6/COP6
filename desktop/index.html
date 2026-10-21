@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261021-1220" />
+    <link rel="stylesheet" href="override.css?v=20261021-1210" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -199,19 +199,6 @@
               </div>
             </div>
           </div>
-
-          <div id="request-appraisal-field" class="space-y-1.5 mt-4"><!-- Tipo de Avalúo -->
-            <div class="space-y-1.5">
-              <label class="block text-xs font-semibold text-slate-700">Tipo de avalúo</label>
-              <select id="publicRequestAppraisalType" name="tipoAvaluo" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition pl-11">
-                <option value="">Selecciona el tipo de avalúo</option>
-                <option value="Referido">Referido</option>
-                <option value="Comercial">Comercial</option>
-                <option value="Otro">Otro</option>
-              </select>
-            </div>
-
-            </div>
         </div>
 
         <!-- ================= PASO 2: TIPO DE BIEN ================= -->
@@ -259,6 +246,24 @@
           <!-- CAMPOS COMUNES Y DINÁMICOS POR CATEGORÍA -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
 
+            <!-- Tipo de Avalúo (Común) -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-semibold text-slate-700">Tipo de avalúo</label>
+              <select id="publicRequestAppraisalType" name="tipoAvaluo" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition pl-11">
+                <option value="">Selecciona el tipo de avalúo</option>
+                <option value="Referido">Referido</option>
+                <option value="Comercial">Comercial</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+
+            <!-- Campo Propósito (se oculta automáticamente en Inmuebles) -->
+            <div id="field-proposito-container" class="space-y-1.5 hidden">
+              <label class="block text-xs font-semibold text-slate-700">Propósito del avalúo</label>
+              <input type="text" id="proposito_avaluo" placeholder="Ej. Garantía crediticia, fusión, venta" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition pl-11" />
+            </div>
+
+          </div>
 
           <!-- BLOQUES ESPECÍFICOS SEGÚN CATEGORÍA SELECCIONADA -->
 
@@ -444,70 +449,75 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-xs">
 
               <div>
-                <span class="text-slate-400 block font-normal">Solicitante:</span>
-                <span id="sum-solicitante" class="font-normal text-slate-900 text-sm">-</span>
+                <span class="text-slate-400 block font-medium">Solicitante:</span>
+                <span id="sum-solicitante" class="font-bold text-slate-900 text-sm">-</span>
               </div>
 
               <div>
-                <span class="text-slate-400 block font-normal">Teléfono:</span>
-                <span id="sum-telefono" class="font-normal text-slate-800">-</span>
+                <span class="text-slate-400 block font-medium">Teléfono:</span>
+                <span id="sum-telefono" class="font-semibold text-slate-800">-</span>
               </div>
 
               <div>
-                <span class="text-slate-400 block font-normal">Correo electrónico:</span>
-                <span id="sum-correo" class="font-normal text-slate-800">-</span>
+                <span class="text-slate-400 block font-medium">Correo electrónico:</span>
+                <span id="sum-correo" class="font-semibold text-slate-800">-</span>
               </div>
 
               <div>
-                <span class="text-slate-400 block font-normal">Valuador asignado:</span>
-                <span id="sum-valuador" class="font-normal text-slate-800">-</span>
+                <span class="text-slate-400 block font-medium">Valuador asignado:</span>
+                <span id="sum-valuador" class="font-semibold text-slate-800">-</span>
               </div>
 
               <div>
-                <span class="text-slate-400 block font-normal">Categoría principal:</span>
-                <span id="sum-categoria" class="font-normal text-brand-600 uppercase tracking-wide">-</span>
+                <span class="text-slate-400 block font-medium">Categoría principal:</span>
+                <span id="sum-categoria" class="font-bold text-brand-600 uppercase tracking-wide">-</span>
               </div>
 
               <div>
-                <span class="text-slate-400 block font-normal">Tipo de avalúo:</span>
-                <span id="sum-tipo-avaluo" class="font-normal text-slate-800">-</span>
+                <span class="text-slate-400 block font-medium">Tipo de avalúo:</span>
+                <span id="sum-tipo-avaluo" class="font-semibold text-slate-800">-</span>
               </div>
 
               <!-- Fila condicional de Propósito -->
               <div id="sum-proposito-row" class="hidden">
-                <span class="text-slate-400 block font-normal">Propósito del avalúo:</span>
-                <span id="sum-proposito" class="font-normal text-slate-800">-</span>
+                <span class="text-slate-400 block font-medium">Propósito del avalúo:</span>
+                <span id="sum-proposito" class="font-semibold text-slate-800">-</span>
               </div>
 
               <!-- Filas condicionales exclusivas para Inmuebles en el Resumen -->
               <div id="sum-inmueble-enajenantes-row" class="hidden">
-                <span class="text-slate-400 block font-normal">Número de enajenantes:</span>
-                <span id="sum-inmueble-enajenantes" class="font-normal text-slate-800">-</span>
+                <span class="text-slate-400 block font-medium">Número de enajenantes:</span>
+                <span id="sum-inmueble-enajenantes" class="font-semibold text-slate-800">-</span>
               </div>
 
               <div id="sum-inmueble-propietario-row" class="hidden">
-                <span class="text-slate-400 block font-normal">Propietario:</span>
-                <span id="sum-inmueble-propietario" class="font-normal text-slate-800">-</span>
+                <span class="text-slate-400 block font-medium">Propietario:</span>
+                <span id="sum-inmueble-propietario" class="font-semibold text-slate-800">-</span>
               </div>
 
               <div>
-                <span class="text-slate-400 block font-normal">Contacto para visita:</span>
-                <span id="sum-contacto-visita" class="font-normal text-slate-800">-</span>
+                <span class="text-slate-400 block font-medium">Contacto para visita:</span>
+                <span id="sum-contacto-visita" class="font-semibold text-slate-800">-</span>
               </div>
 
               <div>
-                <span class="text-slate-400 block font-normal">Teléfono de visita:</span>
-                <span id="sum-telefono-visita" class="font-normal text-slate-800">-</span>
+                <span class="text-slate-400 block font-medium">Teléfono de visita:</span>
+                <span id="sum-telefono-visita" class="font-semibold text-slate-800">-</span>
               </div>
 
               <div class="col-span-full">
-                <span class="text-slate-400 block font-normal">Ubicación / Dirección:</span>
-                <span id="sum-direccion" class="font-normal text-slate-800 block leading-relaxed">-</span>
+                <span class="text-slate-400 block font-medium">Ubicación / Dirección:</span>
+                <span id="sum-direccion" class="font-semibold text-slate-800 block leading-relaxed">-</span>
               </div>
 
               <div class="col-span-full">
-                <span class="text-slate-400 block font-normal">Descripción del bien:</span>
-                <span id="sum-descripcion" class="font-normal text-slate-700 block whitespace-pre-line bg-white p-3 rounded-xl border border-slate-200 mt-1">-</span>
+                <span class="text-slate-400 block font-medium">Descripción del bien:</span>
+                <span id="sum-descripcion" class="font-medium text-slate-700 block whitespace-pre-line bg-white p-3 rounded-xl border border-slate-200 mt-1">-</span>
+              </div>
+
+              <div>
+                <span class="text-slate-400 block font-medium">Archivos adjuntos:</span>
+                <span id="sum-archivos" class="font-semibold text-slate-800">0 archivo(s)</span>
               </div>
 
             </div>
@@ -525,7 +535,7 @@
 <!-- Campo de Observaciones al final del resumen -->
           <div class="space-y-1.5 pt-2">
             <label class="block text-xs font-semibold text-slate-700">Observaciones o notas adicionales</label>
-            <textarea id="observaciones_solicitud" name="observaciones" rows="1" placeholder="Agregue cualquier indicación especial, comentarios para el valuador o detalles adicionales..." class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl p-3.5 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none py-3 pl-11"></textarea>
+            <textarea id="observaciones_solicitud" name="observaciones" rows="2" placeholder="Agregue cualquier indicación especial, comentarios para el valuador o detalles adicionales..." class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl p-3.5 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none py-3 pl-11"></textarea>
           </div>
 
         </div>
