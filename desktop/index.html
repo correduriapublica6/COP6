@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261021-1245" />
+    <link rel="stylesheet" href="override.css?v=20261021-1248" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -85,7 +85,7 @@
 
     <dialog id="credentialDialog" class="record-dialog credential-dialog"><form id="credentialForm" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">ACCESO LOCAL</p><h2>Cambiar contraseña</h2></div><button id="closeCredentialDialogButton" class="icon-button" type="button" aria-label="Cerrar">×</button></div><p class="credential-copy">Cambia únicamente tu propia contraseña. El Administrador también puede administrar las contraseñas de otros usuarios desde Usuarios. El cambio se guarda en el servidor de Recepción y en este navegador.</p><div class="form-grid"><label id="credentialUserLabel">Usuario<select id="credentialUser" required><option value="">Selecciona un usuario</option><option>Juan Manuel Barrera Martínez</option><option>Gabriel Barrera Martínez</option><option>Cesar Delgado Armendáriz</option><option>Diana Barrera Rivera</option><option>Francisco Gabriel Hernández Estrada</option><option>Emmanuel Barrera Atilano</option><option>Caridad Rojas Vázquez</option></select></label><label id="credentialCurrentPasswordLabel" class="is-hidden">Contraseña actual<input id="credentialCurrentPassword" type="password" autocomplete="current-password" /></label><label>Nueva contraseña<input id="credentialPassword" type="password" minlength="6" required autocomplete="new-password" /></label><label class="full-width">Confirmar contraseña<input id="credentialPasswordConfirm" type="password" minlength="6" required autocomplete="new-password" /></label></div><p id="credentialMessage" class="form-message" role="alert"></p><div class="dialog-actions"><button id="cancelCredentialDialogButton" class="secondary-button btn-gold-cream" type="button">Cancelar</button><button class="primary-button btn-copu-primary" type="submit">Guardar contraseña</button></div></form></dialog>
 
-    <section id="publicRequestDialog" class="public-request-inline" hidden aria-label="Nueva solicitud de avalúo">  <div class="bg-white rounded-3xl shadow-2xl border border-slate-200/80 w-full max-w-4xl h-[94vh] max-h-[95vh] flex flex-col overflow-hidden">
+    <dialog id="publicRequestDialog" class="record-dialog public-request-dialog">  <div class="bg-white rounded-3xl shadow-2xl border border-slate-200/80 w-full max-w-4xl h-[94vh] max-h-[95vh] flex flex-col overflow-hidden">
 
     <!-- ENCABEZADO SUPERIOR -->
     <div class="bg-slate-900 text-white px-6 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 flex-shrink-0">
@@ -555,7 +555,7 @@
 
     </form>
   </div>
-</section>
+</dialog>
     <dialog id="applicantLoginDialog" class="record-dialog applicant-login-dialog"><form id="applicantLoginForm" novalidate><div class="dialog-heading"><div><p class="eyebrow">ACCESO DE SOLICITANTE</p><h2>Consultar mis solicitudes</h2></div><button id="closeApplicantLoginButton" class="icon-button" type="button" aria-label="Cerrar">×</button></div><div class="form-grid"><label>Usuario (correo electrónico) *<input name="email" type="email" autocomplete="username" required /></label><label>Contraseña *<input name="password" type="password" autocomplete="current-password" required /></label></div><p id="applicantLoginMessage" class="form-message" role="alert"></p><div class="dialog-actions"><button id="cancelApplicantLoginButton" class="secondary-button" type="button">Cancelar</button><button class="primary-button" type="submit">Entrar</button></div></form></dialog>
     <dialog id="applicantRequestsDialog" class="record-dialog applicant-requests-dialog"><form method="dialog"><div class="dialog-heading"><div><p class="eyebrow">MI SEGUIMIENTO</p><h2>Mis solicitudes</h2></div><button id="closeApplicantRequestsButton" class="icon-button" type="button" aria-label="Cerrar">×</button></div><div id="applicantRequestsTable" class="request-table-wrap"></div><div class="dialog-actions"><button id="newApplicantRequestButton" class="primary-button" type="button">+ Nueva solicitud</button><button id="cancelApplicantRequestsButton" class="secondary-button" type="button">Cerrar</button></div></form></dialog>
     <dialog id="requestDetailDialog" class="cp6-request-detail-dialog"><div id="requestDetailContent" class="cp6-detail-content"></div></dialog>
