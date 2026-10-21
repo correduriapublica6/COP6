@@ -13616,3 +13616,77 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   #publicRequestDialog.public-request-dialog { width: calc(100vw - 12px) !important; border-radius: 16px !important; }
   #publicRequestDialog.public-request-dialog > div { height: calc(100vh - 12px) !important; max-height: calc(100vh - 12px) !important; }
 }
+
+/* Ajustes de la plantilla Nueva solicitud v20261021 */
+#publicRequestDialog.public-request-dialog > div { height: 94vh !important; max-height: 95vh !important; }
+#publicRequestDialog.public-request-dialog #btn-prev { display: none !important; }
+#publicRequestDialog.public-request-dialog input:not([type="file"]),
+#publicRequestDialog.public-request-dialog select,
+#publicRequestDialog.public-request-dialog textarea { padding-top: .75rem !important; padding-bottom: .75rem !important; padding-left: 2.75rem !important; }
+#publicRequestDialog.public-request-dialog [data-request-category] { border-width: 2px; }
+#publicRequestDialog.public-request-dialog [data-request-category] i { transition: color .18s ease; }
+
+/* Corrección estricta de Nueva solicitud: Inter, campos blancos y categorías */
+#publicRequestDialog.public-request-dialog,
+#publicRequestDialog.public-request-dialog form,
+#publicRequestDialog.public-request-dialog input,
+#publicRequestDialog.public-request-dialog select,
+#publicRequestDialog.public-request-dialog textarea,
+#publicRequestDialog.public-request-dialog button,
+#publicRequestDialog.public-request-dialog h1,
+#publicRequestDialog.public-request-dialog h2,
+#publicRequestDialog.public-request-dialog h3,
+#publicRequestDialog.public-request-dialog label,
+#publicRequestDialog.public-request-dialog span,
+#publicRequestDialog.public-request-dialog p {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif !important;
+}
+#publicRequestDialog.public-request-dialog input:not([type="hidden"]):not([type="file"]),
+#publicRequestDialog.public-request-dialog select,
+#publicRequestDialog.public-request-dialog textarea {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: .75rem !important;
+  padding: .75rem 1rem !important;
+  color: #0f172a !important;
+  font-size: .875rem !important;
+  font-weight: 500 !important;
+  box-shadow: 0 1px 2px rgba(15,23,42,.08) !important;
+}
+#publicRequestDialog.public-request-dialog input:not([type="hidden"]):not([type="file"]):focus,
+#publicRequestDialog.public-request-dialog select:focus,
+#publicRequestDialog.public-request-dialog textarea:focus {
+  border-color: #2563eb !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(37,99,235,.18), 0 1px 2px rgba(15,23,42,.08) !important;
+}
+#publicRequestDialog.public-request-dialog select { appearance: none !important; }
+#publicRequestDialog.public-request-dialog .font-mono,
+#publicRequestDialog.public-request-dialog [class*="font-mono"] { font-family: Inter, ui-sans-serif, system-ui, sans-serif !important; }
+#publicRequestDialog.public-request-dialog [data-request-category] { cursor: pointer; }
+
+/* Corrección estricta de Nueva solicitud: Inter, campos blancos y categorías */
+#publicRequestDialog.public-request-dialog,
+#publicRequestDialog.public-request-dialog form,
+#publicRequestDialog.public-request-dialog input,
+#publicRequestDialog.public-request-dialog select,
+#publicRequestDialog.public-request-dialog textarea,
+#publicRequestDialog.public-request-dialog button,
+#publicRequestDialog.public-request-dialog h1,
+#publicRequestDialog.public-request-dialog h2,
+#publicRequestDialog.public-request-dialog h3,
+#publicRequestDialog.public-request-dialog label,
+#publicRequestDialog.public-request-dialog span,
+#publicRequestDialog.public-request-dialog p { font-family: Inter, ui-sans-serif, system-ui, sans-serif !important; }
+#publicRequestDialog.public-request-dialog input:not([type="hidden"]):not([type="file"]),
+#publicRequestDialog.public-request-dialog select,
+#publicRequestDialog.public-request-dialog textarea { background-color: #fff !important; border: 1px solid #cbd5e1 !important; border-radius: .75rem !important; padding: .75rem 1rem !important; color: #0f172a !important; font-size: .875rem !important; font-weight: 500 !important; box-shadow: 0 1px 2px rgba(15,23,42,.08) !important; }
+#publicRequestDialog.public-request-dialog .relative > input:not([type="hidden"]):not([type="file"]),
+#publicRequestDialog.public-request-dialog .relative > select,
+#publicRequestDialog.public-request-dialog .relative > textarea { padding-left: 2.75rem !important; }
+#publicRequestDialog.public-request-dialog input:not([type="hidden"]):not([type="file"]):focus,
+#publicRequestDialog.public-request-dialog select:focus,
+#publicRequestDialog.public-request-dialog textarea:focus { border-color: #2563eb !important; outline: none !important; box-shadow: 0 0 0 2px rgba(37,99,235,.18), 0 1px 2px rgba(15,23,42,.08) !important; }
+#publicRequestDialog.public-request-dialog select { appearance: none !important; }
+#publicRequestDialog.public-request-dialog .font-mono,
+#publicRequestDialog.public-request-dialog [class*="font-mono"] { font-family: Inter, ui-sans-serif, system-ui, sans-serif !important; }

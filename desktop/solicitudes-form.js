@@ -75,6 +75,35 @@
     if (submit) submit.classList.toggle("hidden", requestStep !== 5);
     refreshRequestIcons();
   }
+  const requestCategoryStyles = {
+    inmuebles: ["border-blue-500", "bg-blue-50", "text-blue-700"],
+    vehiculos: ["border-emerald-500", "bg-emerald-50", "text-emerald-700"],
+    maquinaria: ["border-amber-500", "bg-amber-50", "text-amber-700"],
+    mobiliario: ["border-violet-500", "bg-violet-50", "text-violet-700"],
+    intangibles: ["border-rose-500", "bg-rose-50", "text-rose-700"]
+  };
+  const requestCategoryValues = {
+    inmuebles: "Inmuebles",
+    vehiculos: "Vehículo Automotriz",
+    maquinaria: "Maquinaria y equipo",
+    mobiliario: "Mobiliario y Bienes Diversos",
+    intangibles: "Intangibles"
+  };
+  function selectCategory(category) {
+    const key = String(category || "").toLowerCase();
+    const selected = requestCategoryValues[key] ? key : Object.keys(requestCategoryValues).find((candidate) => requestCategoryValues[candidate] === category);
+    if (!selected) return;
+    const typeField = $("#publicRequestType");
+    if (typeField) typeField.value = requestCategoryValues[selected];
+    const allColors = Object.values(requestCategoryStyles).flat();
+    document.querySelectorAll("#publicRequestForm [data-request-category]").forEach((button) => {
+      button.classList.remove(...allColors, "border-slate-200", "bg-white", "text-slate-800");
+      if (button.dataset.requestCategory === requestCategoryValues[selected]) button.classList.add(...requestCategoryStyles[selected]);
+      else button.classList.add("border-slate-200", "bg-white", "text-slate-800");
+    });
+    renderDynamicFields();
+    fillNotaries();
+  }
   function requestStepValid(step) {
     const form = $("#publicRequestForm");
     if (step === 1) return requireFields(form, ["nombre", "telefono"]);
@@ -886,10 +915,22 @@
     $("#publicRequestForm")?.addEventListener("click", (event) => {
       const category = event.target.closest?.("[data-request-category]");
       if (!category) return;
-      const select = $("#publicRequestType");
-      if (!select) return;
-      select.value = category.dataset.requestCategory || "";
-      document.querySelectorAll("[data-request-category]").forEach((candidate) => candidate.classList.toggle("border-brand-500", candidate === category));
+      if (category.getAttribute("onclick")) return;
+      selectCategory(category.dataset.requestCategory || "");
+      return;
+      const categoryClasses = {
+        "Inmuebles": ["border-blue-500", "bg-blue-50", "text-blue-700"],
+        "Vehículo Automotriz": ["border-emerald-500", "bg-emerald-50", "text-emerald-700"],
+        "Maquinaria y equipo": ["border-amber-500", "bg-amber-50", "text-amber-700"],
+        "Mobiliario y Bienes Diversos": ["border-violet-500", "bg-violet-50", "text-violet-700"],
+        "Intangibles": ["border-rose-500", "bg-rose-50", "text-rose-700"]
+      };
+      const allCategoryClasses = Object.values(categoryClasses).flat();
+      document.querySelectorAll("[data-request-category]").forEach((candidate) => {
+        candidate.classList.remove(...allCategoryClasses);
+        if (candidate === category) candidate.classList.add(...(categoryClasses[category.dataset.requestCategory] || categoryClasses.Inmuebles));
+        else candidate.classList.add("border-slate-200", "bg-white", "text-slate-800");
+      });
       renderDynamicFields();
       fillNotaries();
     });
@@ -911,6 +952,7 @@
     ["closeApplicantRegisterButton", "cancelApplicantRegisterButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(applicantRegisterDialog)));
     ["closeApplicantLoginButton", "cancelApplicantLoginButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(applicantLoginDialog)));
     $("#newInternalRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
+    window.selectCategory = selectCategory;
     showRequestStep(1);
     refreshRequestIcons();
     $("#openRequestsViewButton")?.addEventListener("click", () => $("[data-app-view=solicitudes]")?.click());

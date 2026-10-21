@@ -23,11 +23,12 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261021-1045" />
+    <link rel="stylesheet" href="override.css?v=20261021-1132" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
   </head>
@@ -84,7 +85,7 @@
 
     <dialog id="credentialDialog" class="record-dialog credential-dialog"><form id="credentialForm" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">ACCESO LOCAL</p><h2>Cambiar contraseña</h2></div><button id="closeCredentialDialogButton" class="icon-button" type="button" aria-label="Cerrar">×</button></div><p class="credential-copy">Cambia únicamente tu propia contraseña. El Administrador también puede administrar las contraseñas de otros usuarios desde Usuarios. El cambio se guarda en el servidor de Recepción y en este navegador.</p><div class="form-grid"><label id="credentialUserLabel">Usuario<select id="credentialUser" required><option value="">Selecciona un usuario</option><option>Juan Manuel Barrera Martínez</option><option>Gabriel Barrera Martínez</option><option>Cesar Delgado Armendáriz</option><option>Diana Barrera Rivera</option><option>Francisco Gabriel Hernández Estrada</option><option>Emmanuel Barrera Atilano</option><option>Caridad Rojas Vázquez</option></select></label><label id="credentialCurrentPasswordLabel" class="is-hidden">Contraseña actual<input id="credentialCurrentPassword" type="password" autocomplete="current-password" /></label><label>Nueva contraseña<input id="credentialPassword" type="password" minlength="6" required autocomplete="new-password" /></label><label class="full-width">Confirmar contraseña<input id="credentialPasswordConfirm" type="password" minlength="6" required autocomplete="new-password" /></label></div><p id="credentialMessage" class="form-message" role="alert"></p><div class="dialog-actions"><button id="cancelCredentialDialogButton" class="secondary-button btn-gold-cream" type="button">Cancelar</button><button class="primary-button btn-copu-primary" type="submit">Guardar contraseña</button></div></form></dialog>
 
-    <dialog id="publicRequestDialog" class="record-dialog public-request-dialog">  <div class="bg-white rounded-3xl shadow-2xl border border-slate-200/80 w-full max-w-4xl h-[880px] max-h-[95vh] flex flex-col overflow-hidden">
+    <dialog id="publicRequestDialog" class="record-dialog public-request-dialog">  <div class="bg-white rounded-3xl shadow-2xl border border-slate-200/80 w-full max-w-4xl h-[94vh] max-h-[95vh] flex flex-col overflow-hidden">
 
     <!-- ENCABEZADO SUPERIOR -->
     <div class="bg-slate-900 text-white px-6 py-5 flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 flex-shrink-0">
@@ -101,7 +102,7 @@
       <!-- Folio Dinámico Anti-Colisión -->
       <div class="bg-slate-800/90 border border-slate-700/60 rounded-2xl px-4 py-2 flex items-center gap-3">
         <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Folio:</span>
-        <span id="display-folio" class="text-sm font-mono font-bold text-white tracking-wide">#VAL-2026-0000</span>
+        <span id="display-folio" class="text-sm font-sans font-bold text-white tracking-wide">#VAL-2026-0000</span>
       </div>
 
       <button id="closePublicRequestButton" type="button" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center" aria-label="Cerrar">×</button>
@@ -166,7 +167,7 @@
               <label class="block text-xs font-semibold text-slate-700">Nombre completo</label>
               <div class="relative">
                 <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-                <input type="text" id="solicitante_nombre" name="nombre" placeholder="Ej. Juan Pérez López" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-10 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="text" id="solicitante_nombre" name="nombre" placeholder="Ej. Juan Pérez López" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
               </div>
             </div>
 
@@ -175,7 +176,7 @@
               <label class="block text-xs font-semibold text-slate-700">Teléfono</label>
               <div class="relative">
                 <i data-lucide="phone" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-                <input type="tel" id="solicitante_telefono" name="telefono" placeholder="Ej. 871 123 4567" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-10 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="tel" id="solicitante_telefono" name="telefono" placeholder="Ej. 871 123 4567" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
               </div>
             </div>
 
@@ -184,7 +185,7 @@
               <label class="block text-xs font-semibold text-slate-700">Correo electrónico</label>
               <div class="relative">
                 <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-                <input type="email" id="solicitante_correo" name="correo" placeholder="ejemplo@correo.com" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-10 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="email" id="solicitante_correo" name="correo" placeholder="ejemplo@correo.com" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
               </div>
             </div>
 
@@ -193,7 +194,7 @@
               <label class="block text-xs font-semibold text-slate-700">Valuador asignado</label>
               <div class="relative">
                 <i data-lucide="user-check" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 z-10 pointer-events-none"></i>
-                <select id="publicRequestAdvisor" name="asesor" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-10 pr-4 py-3 text-sm text-slate-900 font-medium outline-none transition appearance-none cursor-pointer">
+                <select id="publicRequestAdvisor" name="asesor" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-900 font-medium outline-none transition appearance-none cursor-pointer">
                   <option value="">Seleccione un valuador...</option>
                   <option value="Ing. Roberto Gómez">Ing. Roberto Gómez</option>
                   <option value="Arq. Maria Elena Torres">Arq. Maria Elena Torres</option>
@@ -219,33 +220,33 @@
             <label class="block text-xs font-semibold text-slate-700">Categoría principal</label>
             <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
 
-              <button type="button" id="cat-inmuebles" data-request-category="Inmuebles" class="category-btn border-2 border-brand-500 bg-brand-50/50 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition">
-                <i data-lucide="building-2" class="w-10 h-10 text-brand-600"></i>
+              <button type="button" id="cat-inmuebles" onclick="selectCategory('inmuebles')" data-request-category="Inmuebles" class="category-btn border-2 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition border-blue-500 bg-blue-50 text-blue-700">
+                <i data-lucide="building-2" class="w-10 h-10 text-blue-600"></i>
                 <span class="text-xs font-semibold text-slate-900">Inmuebles</span>
               </button>
 
-              <button type="button" id="cat-vehiculos" data-request-category="Vehículo Automotriz" class="category-btn border-2 border-slate-200 bg-white hover:border-slate-300 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition">
-                <i data-lucide="car" class="w-10 h-10 text-slate-500"></i>
+              <button type="button" id="cat-vehiculos" onclick="selectCategory('vehiculos')" data-request-category="Vehículo Automotriz" class="category-btn border-2 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition border-emerald-500 bg-emerald-50 text-emerald-700">
+                <i data-lucide="car" class="w-10 h-10 text-emerald-600"></i>
                 <span class="text-xs font-semibold text-slate-900">Vehículos</span>
               </button>
 
-              <button type="button" id="cat-maquinaria" data-request-category="Maquinaria y equipo" class="category-btn border-2 border-slate-200 bg-white hover:border-slate-300 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition">
-                <i data-lucide="cog" class="w-10 h-10 text-slate-500"></i>
+              <button type="button" id="cat-maquinaria" onclick="selectCategory('maquinaria')" data-request-category="Maquinaria y equipo" class="category-btn border-2 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition border-amber-500 bg-amber-50 text-amber-700">
+                <i data-lucide="cog" class="w-10 h-10 text-amber-600"></i>
                 <span class="text-xs font-semibold text-slate-900">Maquinaria</span>
               </button>
 
-              <button type="button" id="cat-mobiliario" data-request-category="Mobiliario y Bienes Diversos" class="category-btn border-2 border-slate-200 bg-white hover:border-slate-300 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition">
-                <i data-lucide="armchair" class="w-10 h-10 text-slate-500"></i>
+              <button type="button" id="cat-mobiliario" onclick="selectCategory('mobiliario')" data-request-category="Mobiliario y Bienes Diversos" class="category-btn border-2 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition border-violet-500 bg-violet-50 text-violet-700">
+                <i data-lucide="armchair" class="w-10 h-10 text-violet-600"></i>
                 <span class="text-xs font-semibold text-slate-900">Mobiliario</span>
               </button>
 
-              <button type="button" id="cat-intangibles" data-request-category="Intangibles" class="category-btn border-2 border-slate-200 bg-white hover:border-slate-300 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition">
-                <i data-lucide="badge-percent" class="w-10 h-10 text-slate-500"></i>
+              <button type="button" id="cat-intangibles" onclick="selectCategory('intangibles')" data-request-category="Intangibles" class="category-btn border-2 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition border-rose-500 bg-rose-50 text-rose-700">
+                <i data-lucide="badge-percent" class="w-10 h-10 text-rose-600"></i>
                 <span class="text-xs font-semibold text-slate-900">Intangibles</span>
               </button>
 
             </div>
-            <select id="publicRequestType" name="tipoBien" class="hidden" aria-hidden="true" tabindex="-1"><option value="">Selecciona el tipo de bien</option><option>Inmuebles</option><option>Vehículo Automotriz</option><option>Maquinaria y equipo</option><option>Mobiliario y Bienes Diversos</option><option>Intangibles</option></select>
+            <input type="hidden" id="publicRequestType" name="tipoBien" value="" />
             <div id="publicRequestDynamicFields" class="hidden" aria-hidden="true"></div>
           </div>
 
@@ -255,7 +256,7 @@
             <!-- Tipo de Avalúo (Común) -->
             <div class="space-y-1.5">
               <label class="block text-xs font-semibold text-slate-700">Tipo de avalúo</label>
-              <select id="publicRequestAppraisalType" name="tipoAvaluo" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition">
+              <select id="publicRequestAppraisalType" name="tipoAvaluo" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition pl-11">
                 <option value="Comercial">Comercial</option>
                 <option value="Catastral">Catastral</option>
                 <option value="Fiscal">Fiscal</option>
@@ -267,7 +268,7 @@
             <!-- Campo Propósito (se oculta automáticamente en Inmuebles) -->
             <div id="field-proposito-container" class="space-y-1.5 hidden">
               <label class="block text-xs font-semibold text-slate-700">Propósito del avalúo</label>
-              <input type="text" id="proposito_avaluo" placeholder="Ej. Garantía crediticia, fusión, venta" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+              <input type="text" id="proposito_avaluo" placeholder="Ej. Garantía crediticia, fusión, venta" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition pl-11" />
             </div>
 
           </div>
@@ -279,7 +280,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Subtipo de Inmueble</label>
-                <select id="inmueble_subtipo" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition">
+                <select id="inmueble_subtipo" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition pl-11">
                   <option value="Casa Habitación">Casa Habitación</option>
                   <option value="Departamento">Departamento</option>
                   <option value="Terreno / Lote">Terreno / Lote</option>
@@ -290,11 +291,11 @@
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Número de enajenantes</label>
-                <input type="number" id="inmueble_enajenantes" placeholder="Ej. 1" min="1" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="number" id="inmueble_enajenantes" placeholder="Ej. 1" min="1" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition pl-11" />
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Propietario</label>
-                <input type="text" id="inmueble_propietario" placeholder="Ej. María González Pérez" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="text" id="inmueble_propietario" placeholder="Ej. María González Pérez" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition pl-11" />
               </div>
             </div>
           </div>
@@ -304,15 +305,15 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Marca / Submarca</label>
-                <input type="text" id="vehiculo_marca" placeholder="Ej. Ford F-150 / Nissan Versa" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="text" id="vehiculo_marca" placeholder="Ej. Ford F-150 / Nissan Versa" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition pl-11" />
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Modelo (Año)</label>
-                <input type="number" id="vehiculo_modelo" placeholder="Ej. 2022" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="number" id="vehiculo_modelo" placeholder="Ej. 2022" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition pl-11" />
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Kilometraje aprox.</label>
-                <input type="text" id="vehiculo_km" placeholder="Ej. 45,000 km" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="text" id="vehiculo_km" placeholder="Ej. 45,000 km" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition pl-11" />
               </div>
             </div>
           </div>
@@ -322,11 +323,11 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Tipo de Maquinaria / Equipo</label>
-                <input type="text" id="maquinaria_tipo" placeholder="Ej. Torno CNC, Montacargas, Excavadora" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="text" id="maquinaria_tipo" placeholder="Ej. Torno CNC, Montacargas, Excavadora" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition pl-11" />
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Marca / Número de Serie (si aplica)</label>
-                <input type="text" id="maquinaria_serie" placeholder="Ej. Caterpillar / SN-987452" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="text" id="maquinaria_serie" placeholder="Ej. Caterpillar / SN-987452" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition pl-11" />
               </div>
             </div>
           </div>
@@ -336,11 +337,11 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Tipo de Mobiliario / Equipo de Oficina</label>
-                <input type="text" id="mobiliario_tipo" placeholder="Ej. Lote de escritorios, sillas ejecutivas" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="text" id="mobiliario_tipo" placeholder="Ej. Lote de escritorios, sillas ejecutivas" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition pl-11" />
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Estado de Conservación</label>
-                <select id="mobiliario_estado" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition">
+                <select id="mobiliario_estado" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition pl-11">
                   <option value="Excelente">Excelente</option>
                   <option value="Bueno">Bueno</option>
                   <option value="Regular">Regular</option>
@@ -355,7 +356,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Tipo de Activo Intangible</label>
-                <select id="intangible_tipo" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition">
+                <select id="intangible_tipo" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition pl-11">
                   <option value="Marca Registrada / Nombre Comercial">Marca Registrada / Nombre Comercial</option>
                   <option value="Patente / Propiedad Intelectual">Patente / Propiedad Intelectual</option>
                   <option value="Software / Licencia">Software / Licencia</option>
@@ -364,7 +365,7 @@
               </div>
               <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-slate-700">Registro / Folio de Marca o Patente</label>
-                <input type="text" id="intangible_registro" placeholder="Ej. IMPI Reg. #298374" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="text" id="intangible_registro" placeholder="Ej. IMPI Reg. #298374" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition pl-11" />
               </div>
             </div>
           </div>
@@ -372,7 +373,7 @@
           <!-- Descripción libre del bien o múltiples bienes -->
           <div class="space-y-1.5">
             <label class="block text-xs font-semibold text-slate-700">Descripción detallada del o los bienes</label>
-            <textarea id="descripcion_bien" rows="3" placeholder="Escriba aquí los detalles principales. Si se trata de múltiples bienes, agréguelos en este espacio..." class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl p-4 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none"></textarea>
+            <textarea id="descripcion_bien" rows="3" placeholder="Escriba aquí los detalles principales. Si se trata de múltiples bienes, agréguelos en este espacio..." class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl p-4 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none py-3 pl-11"></textarea>
           </div>
 
           <!-- Valor de Operación (Solo se muestra en Inmuebles) -->
@@ -380,7 +381,7 @@
             <label class="block text-xs font-semibold text-slate-700">Valor de operación / estimado (MXN)</label>
             <div class="relative">
               <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-400 text-sm">$</span>
-              <input type="number" id="valor_operacion" name="valorOperacion" step="0.01" placeholder="0.00" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-8 pr-4 py-3 text-sm text-slate-900 font-semibold placeholder:text-slate-400 outline-none transition" />
+              <input type="number" id="valor_operacion" name="valorOperacion" step="0.01" placeholder="0.00" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-900 font-semibold placeholder:text-slate-400 outline-none transition" />
             </div>
             <p id="valor_letras_preview" class="text-xs text-brand-600 font-medium italic min-h-[1rem]"></p>
           </div>
@@ -400,7 +401,7 @@
               <label class="block text-xs font-semibold text-slate-700">Contacto para visita</label>
               <div class="relative">
                 <i data-lucide="user-check" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-                <input type="text" id="contacto_visita" name="contactoVisitaNombre" placeholder="Ej. Carlos Mendoza" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-10 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="text" id="contacto_visita" name="contactoVisitaNombre" placeholder="Ej. Carlos Mendoza" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
               </div>
             </div>
 
@@ -408,7 +409,7 @@
               <label class="block text-xs font-semibold text-slate-700">Teléfono de visita</label>
               <div class="relative">
                 <i data-lucide="phone-call" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-                <input type="tel" id="telefono_visita" name="contactoVisitaTelefono" placeholder="Ej. 871 987 6543" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-10 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
+                <input type="tel" id="telefono_visita" name="contactoVisitaTelefono" placeholder="Ej. 871 987 6543" class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" />
               </div>
             </div>
 
@@ -418,7 +419,7 @@
             <label class="block text-xs font-semibold text-slate-700">Ubicación / Dirección completa</label>
             <div class="relative">
               <i data-lucide="map-pin" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5"></i>
-              <textarea id="direccion_visita" name="direccionVisita" rows="3" placeholder="Calle, número, colonia, código postal, municipio y estado..." class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-10 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none"></textarea>
+              <textarea id="direccion_visita" name="direccionVisita" rows="3" placeholder="Calle, número, colonia, código postal, municipio y estado..." class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none"></textarea>
             </div>
           </div>
         </div>
@@ -550,7 +551,7 @@
           <!-- Campo de Observaciones al final del resumen -->
           <div class="space-y-1.5 pt-2">
             <label class="block text-xs font-semibold text-slate-700">Observaciones o notas adicionales</label>
-            <textarea id="observaciones_solicitud" name="observaciones" rows="2" placeholder="Agregue cualquier indicación especial, comentarios para el valuador o detalles adicionales..." class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl p-3.5 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none"></textarea>
+            <textarea id="observaciones_solicitud" name="observaciones" rows="2" placeholder="Agregue cualquier indicación especial, comentarios para el valuador o detalles adicionales..." class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl p-3.5 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none py-3 pl-11"></textarea>
           </div>
 
         </div>
@@ -564,7 +565,7 @@
         <button type="button" id="cancelPublicRequestButton" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs">Cancelar</button>
 
         <!-- Botón Anterior (Oculto/deshabilitado en el Paso 1) -->
-        <button type="button" id="btn-prev" class="px-5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs flex items-center gap-2 transition opacity-0 pointer-events-none">
+        <button type="button" id="btn-prev" class="hidden px-5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs flex items-center gap-2 transition opacity-0 pointer-events-none">
           <i data-lucide="chevron-left" class="w-4 h-4"></i>
           Anterior
         </button>
