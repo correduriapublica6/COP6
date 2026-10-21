@@ -73,6 +73,8 @@
       panel.classList.toggle("hidden", hidden);
       panel.hidden = hidden;
     });
+    const requestScrollRegion = document.querySelector("#publicRequestForm > .flex-1.overflow-y-auto");
+    if (requestScrollRegion) requestScrollRegion.scrollTop = 0;
     document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => {
       const number = index + 1;
       tab.classList.toggle("is-active", number === requestStep);
