@@ -13762,3 +13762,11 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #publicRequestDialog.public-request-dialog #sum-valor-num,
 #publicRequestDialog.public-request-dialog #sum-valor-letras { color: #059669 !important; font-weight: 400 !important; }
 #recordEditor > .max-w-7xl { margin-top: 0 !important; padding-top: 0 !important; }
+
+/* Nueva solicitud inline de prueba: reemplaza el popup sin cambiar IDs ni lógica */
+.public-request-inline { width: 100% !important; max-width: 1180px !important; margin: 0 auto 24px !important; padding: 0 !important; background: transparent !important; border: 0 !important; }
+.public-request-inline[hidden] { display: none !important; }
+.public-request-inline > div { width: 100% !important; max-width: none !important; height: auto !important; max-height: none !important; min-height: calc(100vh - 96px) !important; border-radius: 20px !important; box-shadow: 0 12px 35px rgba(15,23,42,.12) !important; }
+.public-request-inline #observaciones_solicitud { height: 42px !important; min-height: 42px !important; max-height: 42px !important; resize: none !important; overflow: hidden !important; }
+#publicRequestDialog.public-request-inline { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important; }
+#publicRequestDialog.public-request-inline .bg-slate-900 { position: sticky; top: 0; z-index: 2; }

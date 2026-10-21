@@ -266,8 +266,16 @@
   }
   window.updateSummary = updateSummary;
   window.formatTitleCase = (input) => { if (input?.value) input.value = input.value.replace(/\s+/g, " ").replace(/(^|\s)\S/g, (letter) => letter.toUpperCase()); updateSummary(); };
-  function openDialog(dialog) { if (dialog?.showModal) dialog.showModal(); }
-  function closeDialog(dialog) { if (dialog?.open) dialog.close(); }
+  function openDialog(dialog) {
+    if (!dialog) return;
+    if (dialog.id === "publicRequestDialog") { dialog.hidden = false; dialog.classList.add("is-inline-open"); dialog.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    if (dialog.showModal) dialog.showModal();
+  }
+  function closeDialog(dialog) {
+    if (!dialog) return;
+    if (dialog.id === "publicRequestDialog") { dialog.hidden = true; dialog.classList.remove("is-inline-open"); return; }
+    if (dialog.open) dialog.close();
+  }
   function formObject(form) { return Object.fromEntries(new FormData(form).entries()); }
   function setMessage(element, text, tone = "error") { if (!element) return; element.textContent = text; element.dataset.tone = tone; element.hidden = !text; }
   function setBusy(form, busy, label) { const button = form?.querySelector('button[type="submit"]'); if (!button) return; if (!button.dataset.defaultLabel) button.dataset.defaultLabel = button.textContent; button.disabled = busy; button.textContent = busy ? label : button.dataset.defaultLabel; }
