@@ -515,7 +515,9 @@
                 return;
             }
 
-            tbody.innerHTML = filtered.map(r => {
+            // La bandeja de registros muestra como máximo cinco cotizaciones.
+            const visibleRecords = filtered.slice(0, 5);
+            tbody.innerHTML = visibleRecords.map(r => {
                 const totalCon = (r.isrCon || 0) + (r.honorarios || 0);
                 const ahorro = (r.isrSin || 0) - totalCon;
 

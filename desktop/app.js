@@ -1548,6 +1548,8 @@
     cotizacionesPanel.hidden = false;
     cotizacionesFrame.src = "cotizacion.html";
     document.querySelector(".avaluos-choice-grid")?.classList.add("is-hidden");
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.querySelector("#appShell main")?.scrollTo?.({ top: 0, left: 0, behavior: "auto" });
     document.querySelector("#animaniaEmbeddedPanel")?.setAttribute("hidden", "");
     document.querySelector("#avaluosAuthorizedFoliosPanel")?.classList.add("is-hidden");
     cotizacionesPanel.scrollIntoView({ behavior: "smooth", block: "start" });

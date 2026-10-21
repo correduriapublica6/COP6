@@ -13771,3 +13771,11 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   resize: none !important;
   overflow: hidden !important;
 }
+
+/* Nueva solicitud: pestañas limpias, sin línea de progreso */
+#publicRequestDialog.public-request-dialog [data-step-connector] { display: none !important; }
+#publicRequestDialog.public-request-dialog .step-tab { flex: 1 1 0 !important; border: 1px solid transparent !important; background: transparent !important; }
+#publicRequestDialog.public-request-dialog .step-tab.is-active { background: #eff6ff !important; border-color: #bfdbfe !important; }
+#publicRequestDialog.public-request-dialog .step-tab.is-active .step-tab-label { color: #2563eb !important; font-weight: 700 !important; }
+#publicRequestDialog.public-request-dialog .step-tab.is-completed { background: #ecfdf5 !important; border-color: #a7f3d0 !important; }
+#publicRequestDialog.public-request-dialog .step-tab.is-completed .step-tab-label { color: #059669 !important; font-weight: 600 !important; }
