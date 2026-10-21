@@ -13747,3 +13747,18 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #publicRequestDialog.public-request-dialog [data-step-connector].bg-brand-600 { background: #2563eb !important; }
 #publicRequestDialog.public-request-dialog .step-tab:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
 @media (max-width: 720px) { #publicRequestDialog.public-request-dialog .step-tab { padding-inline: 4px; } #publicRequestDialog.public-request-dialog .step-tab-label { font-size: 10px !important; white-space: normal; text-align: center; } }
+
+/* Correcciones solicitadas: categorías legibles, resumen monetario y Recepción más arriba */
+#publicRequestDialog.public-request-dialog [data-request-category].border-blue-500,
+#publicRequestDialog.public-request-dialog [data-request-category].border-emerald-500,
+#publicRequestDialog.public-request-dialog [data-request-category].border-amber-500,
+#publicRequestDialog.public-request-dialog [data-request-category].border-violet-500,
+#publicRequestDialog.public-request-dialog [data-request-category].border-rose-500 { background: #ffffff !important; }
+#publicRequestDialog.public-request-dialog [data-request-category].border-blue-500 { color: #1d4ed8 !important; }
+#publicRequestDialog.public-request-dialog [data-request-category].border-emerald-500 { color: #047857 !important; }
+#publicRequestDialog.public-request-dialog [data-request-category].border-amber-500 { color: #b45309 !important; }
+#publicRequestDialog.public-request-dialog [data-request-category].border-violet-500 { color: #6d28d9 !important; }
+#publicRequestDialog.public-request-dialog [data-request-category].border-rose-500 { color: #be123c !important; }
+#publicRequestDialog.public-request-dialog #sum-valor-num,
+#publicRequestDialog.public-request-dialog #sum-valor-letras { color: #059669 !important; font-weight: 400 !important; }
+#recordEditor > .max-w-7xl { margin-top: 0 !important; padding-top: 0 !important; }

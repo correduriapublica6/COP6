@@ -225,13 +225,44 @@
     const form = $("#publicRequestForm");
     Object.entries(names).forEach(([id, name]) => { const field = form?.querySelector(`#${id}`); if (field && !field.name) field.name = name; });
   }
+  const unidadesTexto = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve", "veinte", "veintiuno", "veintidós", "veintitrés", "veinticuatro", "veinticinco", "veintiséis", "veintisiete", "veintiocho", "veintinueve"];
+  const decenasTexto = ["", "", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"];
+  function numeroEnLetrasMenorMil(number) {
+    const n = Math.floor(Number(number) || 0);
+    if (n < 30) return unidadesTexto[n];
+    if (n < 100) return decenasTexto[Math.floor(n / 10)] + (n % 10 ? ` y ${unidadesTexto[n % 10]}` : "");
+    if (n === 100) return "cien";
+    if (n < 200) return `ciento ${numeroEnLetrasMenorMil(n - 100)}`;
+    if (n < 300) return `doscientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    if (n < 400) return `trescientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    if (n < 500) return `cuatrocientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    if (n < 600) return `quinientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    if (n < 700) return `seiscientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    if (n < 800) return `setecientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    if (n < 900) return `ochocientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    return `novecientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+  }
+  function numeroEnLetras(number) {
+    const n = Math.floor(Number(number) || 0);
+    if (n < 1000) return numeroEnLetrasMenorMil(n);
+    if (n < 1000000) { const miles = Math.floor(n / 1000); return `${miles === 1 ? "mil" : `${numeroEnLetrasMenorMil(miles)} mil`} ${n % 1000 ? numeroEnLetrasMenorMil(n % 1000) : ""}`.trim(); }
+    const millones = Math.floor(n / 1000000); return `${millones === 1 ? "un millón" : `${numeroEnLetrasMenorMil(millones)} millones`} ${n % 1000000 ? numeroEnLetras(n % 1000000) : ""}`.trim();
+  }
+  function moneyNumber(value) { return Number(String(value || "").replace(/,/g, "").replace(/[^0-9.]/g, "")) || 0; }
+  function formattedMoney(value) { return moneyNumber(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function updateOperationMoneyPreview() {
+    const input = $("#valor_operacion");
+    if (!input) return;
+    const raw = String(input.value || "").replace(/,/g, "").replace(/[^0-9.]/g, "");
+    if (raw) input.value = raw.replace(/^(\d+)(\.\d{0,2})?.*$/, (_, integer, decimal = "") => `${Number(integer).toLocaleString("en-US")}${decimal}`);
+  }
   function textValue(id, fallback = "-") { return String($("#" + id)?.value || "").trim() || fallback; }
   function updateSummary() {
     ensureRequestFieldNames();
     const values = { solicitante: textValue("solicitante_nombre"), telefono: textValue("solicitante_telefono"), correo: textValue("solicitante_correo"), valuador: textValue("publicRequestAdvisor"), tipo: textValue("publicRequestType"), tipoAvaluo: textValue("publicRequestAppraisalType"), subtipo: textValue("inmueble_subtipo"), propietario: textValue("inmueble_propietario"), contacto: textValue("contacto_visita"), telefonoVisita: textValue("telefono_visita"), direccion: textValue("direccion_visita"), descripcion: textValue("descripcion_bien"), observaciones: textValue("observaciones_solicitud"), archivos: String(archivosSeleccionados.length) };
     const set = (id, value) => { const node = $("#" + id); if (node) node.textContent = value; };
     set("sum-solicitante", values.solicitante); set("sum-telefono", values.telefono); set("sum-correo", values.correo); set("sum-valuador", values.valuador); set("sum-categoria", values.tipo); set("sum-tipo-avaluo", values.tipoAvaluo); set("sum-contacto-visita", values.contacto); set("sum-telefono-visita", values.telefonoVisita); set("sum-direccion", values.direccion); set("sum-descripcion", values.descripcion); set("sum-archivos", `${values.archivos} archivo(s)`); set("sum-observaciones", values.observaciones);
-    const inmueble = values.tipo === "Inmuebles"; $("#sum-inmueble-enajenantes-row")?.classList.toggle("hidden", !inmueble); $("#sum-inmueble-propietario-row")?.classList.toggle("hidden", !inmueble); set("sum-inmueble-enajenantes", textValue("inmueble_enajenantes")); set("sum-inmueble-propietario", values.propietario); set("sum-valor-num", textValue("valor_operacion", "$0.00") + " MXN");
+    const inmueble = values.tipo === "Inmuebles"; $("#sum-inmueble-enajenantes-row")?.classList.toggle("hidden", !inmueble); $("#sum-inmueble-propietario-row")?.classList.toggle("hidden", !inmueble); set("sum-inmueble-enajenantes", textValue("inmueble_enajenantes")); set("sum-inmueble-propietario", values.propietario); const amount = moneyNumber(textValue("valor_operacion", "0")); set("sum-valor-num", `$${formattedMoney(amount)} MXN`); set("sum-valor-letras", amount ? `${numeroEnLetras(Math.floor(amount))} pesos mexicanos${Math.round((amount % 1) * 100) ? ` con ${String(Math.round((amount % 1) * 100)).padStart(2, "0")} centavos` : ""}` : "-");
   }
   window.updateSummary = updateSummary;
   window.formatTitleCase = (input) => { if (input?.value) input.value = input.value.replace(/\s+/g, " ").replace(/(^|\s)\S/g, (letter) => letter.toUpperCase()); updateSummary(); };
@@ -748,6 +779,7 @@
     setMessage(message, "");
     if (!requireFields(form, ["nombre", "telefono", "tipoBien"])) { setMessage(message, "Completa nombre, teléfono y tipo de avalúo."); return; }
     const values = formObject(form);
+    if (values.valorOperacion) values.valorOperacion = String(values.valorOperacion).replace(/,/g, "");
     // El formulario puede crear un segundo campo dinámico llamado tipoBien.
     // Siempre tomamos el selector principal para no dejar que el campo dinámico
     // vacío sobrescriba el tipo de bien seleccionado por el usuario.
@@ -976,6 +1008,7 @@
     $("#publicRequestAttachments")?.addEventListener("change", (event) => addSelectedFiles(event.target.files));
     window.addEventListener("control-avaluos:notarias-updated", () => { if (selectedNotaryValue() || $("#requestNotaryMunicipality")) renderNotarySearch(selectedNotaryValue()); });
     $("#publicRequestForm")?.addEventListener("submit", submitPublicRequest);
+    $("#valor_operacion")?.addEventListener("input", () => { updateOperationMoneyPreview(); updateSummary(); scheduleRequestDraftSave(); });
     $("#publicRequestForm")?.addEventListener("input", () => { updateSummary(); scheduleRequestDraftSave(); });
     $("#publicRequestForm")?.addEventListener("change", () => { updateSummary(); scheduleRequestDraftSave(); });
     requestDialog?.addEventListener("cancel", (event) => event.preventDefault());
