@@ -13715,3 +13715,25 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #publicRequestDialog.public-request-dialog #btn-prev[hidden] { display: none !important; }
 #publicRequestDialog.public-request-dialog #publicRequestAttachments { display: none !important; }
 #publicRequestDialog.public-request-dialog #publicRequestAttachmentsList { min-height: 74px; }
+
+/* Nueva solicitud v4: stepper, antecedentes y botones */
+#publicRequestDialog.public-request-dialog #btn-prev { display: none !important; }
+#publicRequestDialog.public-request-dialog #btn-prev:not([hidden]) { display: flex !important; }
+#publicRequestDialog.public-request-dialog #btn-next { margin-left: auto !important; }
+#publicRequestDialog.public-request-dialog [data-step-connector].bg-brand-600 { background-color: #2563eb !important; }
+#publicRequestDialog.public-request-dialog #publicRequestAttachments + * { min-height: 178px !important; }
+#publicRequestDialog.public-request-dialog #publicRequestAttachmentsList { min-height: 96px !important; max-height: 220px !important; }
+#publicRequestDialog.public-request-dialog #publicRequestAttachmentsList li { justify-content: flex-start !important; min-height: 58px !important; padding: 8px 10px !important; }
+#publicRequestDialog.public-request-dialog .request-file-icon { width: 38px; height: 38px; flex: 0 0 38px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; background: #eff6ff; color: #2563eb; }
+#publicRequestDialog.public-request-dialog .request-file-icon-file-text { background: #fef2f2; color: #dc2626; }
+#publicRequestDialog.public-request-dialog .request-file-icon-image { background: #ecfdf5; color: #059669; }
+#publicRequestDialog.public-request-dialog .request-file-icon-file-type-2 { background: #eff6ff; color: #2563eb; }
+#publicRequestDialog.public-request-dialog .request-file-icon-file-spreadsheet { background: #f0fdf4; color: #16a34a; }
+#publicRequestDialog.public-request-dialog .request-file-icon-archive { background: #fff7ed; color: #ea580c; }
+#publicRequestDialog.public-request-dialog .request-file-meta { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 2px; }
+#publicRequestDialog.public-request-dialog .request-file-meta strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+#publicRequestDialog.public-request-dialog .request-file-meta small { color: #94a3b8; font-size: 10px; }
+#publicRequestDialog.public-request-dialog #publicRequestAttachmentsList li > button { margin-left: auto; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; color: #dc2626; background: #fef2f2; border-radius: 8px; }
+#publicRequestDialog.public-request-dialog label[for="publicRequestAttachments"] { min-height: 210px !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+#publicRequestDialog.public-request-dialog label[for="publicRequestAttachments"] > div:first-of-type { width: 68px !important; height: 68px !important; display: flex !important; align-items: center !important; justify-content: center !important; border-radius: 18px !important; }
+#publicRequestDialog.public-request-dialog label[for="publicRequestAttachments"] > div:first-of-type svg { width: 34px !important; height: 34px !important; }

@@ -62,10 +62,18 @@
     document.querySelectorAll("#publicRequestForm .step-content").forEach((panel, index) => { panel.classList.toggle("hidden", index + 1 !== requestStep); });
     document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => {
       const active = index + 1 === requestStep;
+      const completed = index + 1 < requestStep;
       tab.querySelector("[id^=step-icon-]")?.classList.toggle("bg-brand-600", active);
       tab.querySelector("[id^=step-icon-]")?.classList.toggle("text-white", active);
       tab.querySelector("[id^=step-icon-]")?.classList.toggle("bg-slate-200", !active);
-      tab.querySelector("[id^=step-icon-]")?.classList.toggle("text-slate-600", !active);
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("text-slate-600", !active && !completed);
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("bg-brand-600", completed);
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("text-white", completed);
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("ring-4", active);
+    });
+    document.querySelectorAll("[data-step-connector]").forEach((connector) => {
+      connector.classList.toggle("bg-brand-600", Number(connector.dataset.stepConnector) < requestStep);
+      connector.classList.toggle("bg-slate-200", Number(connector.dataset.stepConnector) >= requestStep);
     });
     const previous = $("#btn-prev");
     const next = $("#btn-next");
@@ -114,17 +122,24 @@
   function requestStepValid(step) {
     const form = $("#publicRequestForm");
     if (step === 1) return requireFields(form, ["nombre", "telefono"]);
-    if (step === 2) return requireFields(form, ["tipoBien"]);
+    if (step === 2) return requireFields(form, ["tipoBien", "tipoAvaluo"]);
     return true;
+  }
+  function fileIconName(file) {
+    const name = String(file?.name || "").toLowerCase();
+    if (name.endsWith(".pdf")) return "file-text";
+    if (/\.(png|jpe?g|gif|webp|bmp)$/i.test(name)) return "image";
+    if (/\.(docx?|rtf)$/i.test(name)) return "file-type-2";
+    if (/\.(xlsx?|csv)$/i.test(name)) return "file-spreadsheet";
+    if (/\.(zip|rar|7z)$/i.test(name)) return "archive";
+    return "file";
   }
   function renderSelectedFiles() {
     const list = $("#publicRequestAttachmentsList");
     if (!list) return;
-    list.innerHTML = archivosSeleccionados.length ? `<ul>${archivosSeleccionados.map((file, index) => `<li><span title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</span><small>${Math.max(1, Math.round(file.size / 1024))} KB</small><button type="button" data-remove-request-file="${index}" aria-label="Quitar ${escapeHtml(file.name)}">Quitar</button></li>`).join("")}</ul>` : "";
-    list.querySelectorAll("[data-remove-request-file]").forEach((button) => button?.addEventListener("click", () => {
-      archivosSeleccionados.splice(Number(button.dataset.removeRequestFile), 1);
-      renderSelectedFiles();
-    }));
+    list.innerHTML = archivosSeleccionados.length ? `<ul>${archivosSeleccionados.map((file, index) => `<li><span class="request-file-icon request-file-icon-${fileIconName(file)}"><i data-lucide="${fileIconName(file)}" class="w-5 h-5"></i></span><span class="request-file-meta"><strong title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</strong><small>${Math.max(1, Math.round(file.size / 1024))} KB</small></span><button type="button" data-remove-request-file="${index}" aria-label="Quitar ${escapeHtml(file.name)}"><i data-lucide="x" class="w-4 h-4"></i></button></li>`).join("")}</ul>` : `<p class="text-xs text-slate-400 italic text-center py-4">No se han adjuntado archivos aún.</p>`;
+    list.querySelectorAll("[data-remove-request-file]").forEach((button) => button?.addEventListener("click", () => { archivosSeleccionados.splice(Number(button.dataset.removeRequestFile), 1); renderSelectedFiles(); }));
+    refreshRequestIcons();
   }
   function addSelectedFiles(fileList) {
     Array.from(fileList || []).forEach((file) => {
@@ -209,14 +224,14 @@
   }
 
   function ensureRequestFieldNames() {
-    const names = { solicitante_nombre: "nombre", solicitante_telefono: "telefono", solicitante_correo: "correo", valuador_asignado: "asesor", tipo_avaluo: "tipoAvaluo", inmueble_subtipo: "subtipoBien", inmueble_enajenantes: "numeroEnajenantes", inmueble_propietario: "propietario", vehiculo_marca: "marcaVehiculo", vehiculo_modelo: "modeloVehiculo", vehiculo_km: "kilometraje", maquinaria_tipo: "tipoMaquinaria", maquinaria_serie: "serieMaquinaria", mobiliario_tipo: "tipoMobiliario", mobiliario_estado: "estadoMobiliario", intangible_tipo: "tipoIntangible", intangible_registro: "registroIntangible", descripcion_bien: "descripcion", valor_operacion: "valorOperacion", contacto_visita: "contactoVisitaNombre", telefono_visita: "contactoVisitaTelefono", direccion_visita: "direccionVisita", observaciones_solicitud: "observaciones" };
+    const names = { solicitante_nombre: "nombre", solicitante_telefono: "telefono", solicitante_correo: "correo", publicRequestAdvisor: "asesor", publicRequestAppraisalType: "tipoAvaluo", inmueble_subtipo: "subtipoBien", inmueble_enajenantes: "numeroEnajenantes", inmueble_propietario: "propietario", vehiculo_marca: "marcaVehiculo", vehiculo_modelo: "modeloVehiculo", vehiculo_km: "kilometraje", maquinaria_tipo: "tipoMaquinaria", maquinaria_serie: "serieMaquinaria", mobiliario_tipo: "tipoMobiliario", mobiliario_estado: "estadoMobiliario", intangible_tipo: "tipoIntangible", intangible_registro: "registroIntangible", descripcion_bien: "descripcion", valor_operacion: "valorOperacion", contacto_visita: "contactoVisitaNombre", telefono_visita: "contactoVisitaTelefono", direccion_visita: "direccionVisita", observaciones_solicitud: "observaciones" };
     const form = $("#publicRequestForm");
     Object.entries(names).forEach(([id, name]) => { const field = form?.querySelector(`#${id}`); if (field && !field.name) field.name = name; });
   }
   function textValue(id, fallback = "-") { return String($("#" + id)?.value || "").trim() || fallback; }
   function updateSummary() {
     ensureRequestFieldNames();
-    const values = { solicitante: textValue("solicitante_nombre"), telefono: textValue("solicitante_telefono"), correo: textValue("solicitante_correo"), valuador: textValue("valuador_asignado"), tipo: textValue("publicRequestType"), tipoAvaluo: textValue("tipo_avaluo"), subtipo: textValue("inmueble_subtipo"), propietario: textValue("inmueble_propietario"), contacto: textValue("contacto_visita"), telefonoVisita: textValue("telefono_visita"), direccion: textValue("direccion_visita"), descripcion: textValue("descripcion_bien"), observaciones: textValue("observaciones_solicitud"), archivos: String(archivosSeleccionados.length) };
+    const values = { solicitante: textValue("solicitante_nombre"), telefono: textValue("solicitante_telefono"), correo: textValue("solicitante_correo"), valuador: textValue("publicRequestAdvisor"), tipo: textValue("publicRequestType"), tipoAvaluo: textValue("publicRequestAppraisalType"), subtipo: textValue("inmueble_subtipo"), propietario: textValue("inmueble_propietario"), contacto: textValue("contacto_visita"), telefonoVisita: textValue("telefono_visita"), direccion: textValue("direccion_visita"), descripcion: textValue("descripcion_bien"), observaciones: textValue("observaciones_solicitud"), archivos: String(archivosSeleccionados.length) };
     const set = (id, value) => { const node = $("#" + id); if (node) node.textContent = value; };
     set("sum-solicitante", values.solicitante); set("sum-telefono", values.telefono); set("sum-correo", values.correo); set("sum-valuador", values.valuador); set("sum-categoria", values.tipo); set("sum-tipo-avaluo", values.tipoAvaluo); set("sum-contacto-visita", values.contacto); set("sum-telefono-visita", values.telefonoVisita); set("sum-direccion", values.direccion); set("sum-descripcion", values.descripcion); set("sum-archivos", `${values.archivos} archivo(s)`); set("sum-observaciones", values.observaciones);
     const inmueble = values.tipo === "Inmuebles"; $("#sum-inmueble-enajenantes-row")?.classList.toggle("hidden", !inmueble); $("#sum-inmueble-propietario-row")?.classList.toggle("hidden", !inmueble); set("sum-inmueble-enajenantes", textValue("inmueble_enajenantes")); set("sum-inmueble-propietario", values.propietario); set("sum-valor-num", textValue("valor_operacion", "$0.00") + " MXN");
@@ -272,6 +287,7 @@
     if (!form) return;
     ensureRequestFieldNames();
     form.reset();
+    showRequestStep(1);
     archivosSeleccionados = [];
     archivosExistentesEnEdicion = [];
     renderSelectedFiles();
@@ -974,7 +990,7 @@
     $("#openPublicRequestButton")?.addEventListener("click", () => { applicantSession = null; resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
     $("#openApplicantRegisterButton")?.addEventListener("click", () => { setMessage($("#applicantRegisterMessage"), ""); openDialog(applicantRegisterDialog); });
     $("#openApplicantLoginButton")?.addEventListener("click", () => applicantSession ? showApplicantHome() : openDialog(applicantLoginDialog));
-    ["closePublicRequestButton", "cancelPublicRequestButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(requestDialog)));
+    ["closePublicRequestButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(requestDialog)));
     ["closeApplicantRegisterButton", "cancelApplicantRegisterButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(applicantRegisterDialog)));
     ["closeApplicantLoginButton", "cancelApplicantLoginButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(applicantLoginDialog)));
     $("#newInternalRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
