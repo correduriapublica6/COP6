@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261021-1210" />
+    <link rel="stylesheet" href="override.css?v=20261021-1215" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -107,36 +107,31 @@
 
         <!-- Paso 1 -->
         <button id="step-tab-1" type="button" class="step-tab flex items-center gap-2 group focus:outline-none">
-          <div id="step-icon-1" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all bg-brand-600 text-white shadow-sm ring-4 ring-brand-100">1</div>
-          <span id="step-label-1" class="text-xs font-bold text-slate-900 hidden sm:inline">Datos Personales</span>
+          <span id="step-label-1" class="step-tab-label">Datos Personales</span>
         </button>
         <div data-step-connector="1" class="h-0.5 flex-1 bg-slate-200 mx-2 transition-colors"></div>
 
         <!-- Paso 2 -->
         <button id="step-tab-2" type="button" class="step-tab flex items-center gap-2 group focus:outline-none">
-          <div id="step-icon-2" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all bg-slate-200 text-slate-600 group-hover:bg-slate-300">2</div>
-          <span id="step-label-2" class="text-xs font-medium text-slate-500 hidden sm:inline">Descripción del bien</span>
+          <span id="step-label-2" class="step-tab-label">Descripción del bien</span>
         </button>
         <div data-step-connector="2" class="h-0.5 flex-1 bg-slate-200 mx-2 transition-colors"></div>
 
         <!-- Paso 3 -->
         <button id="step-tab-3" type="button" class="step-tab flex items-center gap-2 group focus:outline-none">
-          <div id="step-icon-3" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all bg-slate-200 text-slate-600 group-hover:bg-slate-300">3</div>
-          <span id="step-label-3" class="text-xs font-medium text-slate-500 hidden sm:inline">Contacto para visita</span>
+          <span id="step-label-3" class="step-tab-label">Contacto para visita</span>
         </button>
         <div data-step-connector="3" class="h-0.5 flex-1 bg-slate-200 mx-2 transition-colors"></div>
 
         <!-- Paso 4 -->
         <button id="step-tab-4" type="button" class="step-tab flex items-center gap-2 group focus:outline-none">
-          <div id="step-icon-4" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all bg-slate-200 text-slate-600 group-hover:bg-slate-300">4</div>
-          <span id="step-label-4" class="text-xs font-medium text-slate-500 hidden sm:inline">Antecedentes</span>
+          <span id="step-label-4" class="step-tab-label">Antecedentes</span>
         </button>
-        <div class="h-0.5 flex-1 bg-slate-200 mx-2"></div>
+        <div data-step-connector="4" class="h-0.5 flex-1 bg-slate-200 mx-2 transition-colors"></div>
 
         <!-- Paso 5 -->
         <button id="step-tab-5" type="button" class="step-tab flex items-center gap-2 group focus:outline-none">
-          <div id="step-icon-5" class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all bg-slate-200 text-slate-600 group-hover:bg-slate-300">5</div>
-          <span id="step-label-5" class="text-xs font-medium text-slate-500 hidden sm:inline">Resumen</span>
+          <span id="step-label-5" class="step-tab-label">Resumen</span>
         </button>
 
       </div>

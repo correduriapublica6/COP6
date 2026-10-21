@@ -13737,3 +13737,13 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #publicRequestDialog.public-request-dialog label[for="publicRequestAttachments"] { min-height: 210px !important; display: flex !important; align-items: center !important; justify-content: center !important; }
 #publicRequestDialog.public-request-dialog label[for="publicRequestAttachments"] > div:first-of-type { width: 68px !important; height: 68px !important; display: flex !important; align-items: center !important; justify-content: center !important; border-radius: 18px !important; }
 #publicRequestDialog.public-request-dialog label[for="publicRequestAttachments"] > div:first-of-type svg { width: 34px !important; height: 34px !important; }
+
+/* Nueva solicitud v4.1: barra como pestañas limpias, sin numeración */
+#publicRequestDialog.public-request-dialog .step-tab { flex: 1 1 0; justify-content: center; min-width: 0; padding: 8px 10px; border-radius: 10px; transition: background-color .18s ease, color .18s ease; }
+#publicRequestDialog.public-request-dialog .step-tab-label { display: inline-block !important; color: #64748b !important; font-size: 12px !important; font-weight: 500 !important; white-space: nowrap; }
+#publicRequestDialog.public-request-dialog .step-tab.is-active { background: #eff6ff !important; }
+#publicRequestDialog.public-request-dialog .step-tab.is-active .step-tab-label { color: #2563eb !important; font-weight: 700 !important; }
+#publicRequestDialog.public-request-dialog .step-tab.is-completed .step-tab-label { color: #059669 !important; font-weight: 600 !important; }
+#publicRequestDialog.public-request-dialog [data-step-connector].bg-brand-600 { background: #2563eb !important; }
+#publicRequestDialog.public-request-dialog .step-tab:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
+@media (max-width: 720px) { #publicRequestDialog.public-request-dialog .step-tab { padding-inline: 4px; } #publicRequestDialog.public-request-dialog .step-tab-label { font-size: 10px !important; white-space: normal; text-align: center; } }

@@ -61,19 +61,15 @@
     requestStep = Math.max(1, Math.min(5, Number(step) || 1));
     document.querySelectorAll("#publicRequestForm .step-content").forEach((panel, index) => { panel.classList.toggle("hidden", index + 1 !== requestStep); });
     document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => {
-      const active = index + 1 === requestStep;
-      const completed = index + 1 < requestStep;
-      tab.querySelector("[id^=step-icon-]")?.classList.toggle("bg-brand-600", active);
-      tab.querySelector("[id^=step-icon-]")?.classList.toggle("text-white", active);
-      tab.querySelector("[id^=step-icon-]")?.classList.toggle("bg-slate-200", !active);
-      tab.querySelector("[id^=step-icon-]")?.classList.toggle("text-slate-600", !active && !completed);
-      tab.querySelector("[id^=step-icon-]")?.classList.toggle("bg-brand-600", completed);
-      tab.querySelector("[id^=step-icon-]")?.classList.toggle("text-white", completed);
-      tab.querySelector("[id^=step-icon-]")?.classList.toggle("ring-4", active);
+      const number = index + 1;
+      tab.classList.toggle("is-active", number === requestStep);
+      tab.classList.toggle("is-completed", number < requestStep);
+      tab.setAttribute("aria-current", number === requestStep ? "step" : "false");
     });
     document.querySelectorAll("[data-step-connector]").forEach((connector) => {
-      connector.classList.toggle("bg-brand-600", Number(connector.dataset.stepConnector) < requestStep);
-      connector.classList.toggle("bg-slate-200", Number(connector.dataset.stepConnector) >= requestStep);
+      const number = Number(connector.dataset.stepConnector);
+      connector.classList.toggle("bg-brand-600", number < requestStep);
+      connector.classList.toggle("bg-slate-200", number >= requestStep);
     });
     const previous = $("#btn-prev");
     const next = $("#btn-next");
@@ -84,6 +80,7 @@
     updateSummary?.();
     refreshRequestIcons();
   }
+
   const requestCategoryStyles = {
     inmuebles: ["border-blue-500", "bg-blue-50", "text-blue-700"],
     vehiculos: ["border-emerald-500", "bg-emerald-50", "text-emerald-700"],
@@ -952,7 +949,7 @@
     $("#publicRequestType")?.addEventListener("change", () => { renderDynamicFields(); fillNotaries(); });
     document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => tab?.addEventListener("click", () => showRequestStep(index + 1)));
     $("#btn-prev")?.addEventListener("click", () => showRequestStep(requestStep - 1));
-    $("#btn-next")?.addEventListener("click", () => { if (requestStepValid(requestStep)) showRequestStep(requestStep + 1); });
+    $("#btn-next")?.addEventListener("click", () => showRequestStep(requestStep + 1));
     $("#publicRequestForm")?.addEventListener("click", (event) => {
       const category = event.target.closest?.("[data-request-category]");
       if (!category) return;
