@@ -13831,3 +13831,13 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #publicRequestDialog.public-request-dialog [data-step-connector] {
   display: none !important;
 }
+
+/* Aviso de privacidad: queda al final del primer paso, justo antes de las acciones */
+#publicRequestDialog.public-request-dialog #step-content-1 {
+  min-height: calc(94vh - 235px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+#publicRequestDialog.public-request-dialog #step-content-1 .request-privacy-box {
+  margin-top: auto !important;
+}
