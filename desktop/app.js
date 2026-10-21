@@ -380,7 +380,7 @@
   const canViewSummary = () => ["admin", "editor", "auditor"].includes(roleFor(activeSessionUser));
   const canAuthorizeFolios = () => ["admin", "auditor"].includes(roleFor(activeSessionUser));
   const canViewFePublica = () => ["admin", "editor", "auditor"].includes(roleFor(activeSessionUser));
-  const canViewRequests = () => ["admin", "valuador", "auditor"].includes(roleFor(activeSessionUser));
+  const canViewRequests = () => ["admin", "editor", "valuador", "auditor"].includes(roleFor(activeSessionUser));
   const escapeHtml = (value) => String(value || "").replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#039;", '"': "&quot;" }[character]));
   const formatCurrency = (amount) => new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(Number(amount) || 0);
   const parseMoney = (value) => Number(String(value ?? "").replace(/[^0-9.-]/g, "")) || 0;

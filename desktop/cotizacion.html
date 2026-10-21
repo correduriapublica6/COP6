@@ -61,6 +61,9 @@
                 <button id="btnNavTable" onclick="showView('table')" class="flex-1 sm:flex-none bg-slate-900 hover:bg-slate-800 text-white font-semibold px-4 py-2.5 rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-xs">
                     <i class="fa-solid fa-list-check"></i> Registros
                 </button>
+                <button id="btnBackToAvaluos" onclick="returnToAvaluos()" class="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2.5 rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-xs" type="button">
+                    <i class="fa-solid fa-arrow-left"></i> Regresar
+                </button>
                 <button id="btnNavForm" onclick="prepareNewQuote()" class="flex-1 sm:flex-none bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2.5 rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-xs">
                     <i class="fa-solid fa-plus"></i> Nueva Cotización
                 </button>
@@ -316,6 +319,19 @@
     <script>
         let currentRecordId = null;
         const STORAGE_KEY = 'cotizaciones_avaluo_db';
+
+        function returnToAvaluos() {
+            try {
+                const parentDocument = window.parent.document;
+                const panel = parentDocument.getElementById('cotizacionesEmbeddedPanel');
+                const frame = parentDocument.getElementById('cotizacionesFrame');
+                const grid = parentDocument.querySelector('.avaluos-choice-grid');
+                if (panel) panel.hidden = true;
+                if (frame) frame.src = 'about:blank';
+                grid?.classList.remove('is-hidden');
+            } catch {}
+            if (window.parent === window) window.history.back();
+        }
 
         // Inicialización
         document.getElementById('inFecha').valueAsDate = new Date();
