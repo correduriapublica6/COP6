@@ -13588,3 +13588,31 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
     max-width: calc(100vw - 12px) !important;
   }
 }
+
+/* Nueva solicitud: componente único basado en la plantilla entregada */
+#publicRequestDialog.public-request-dialog {
+  width: min(960px, calc(100vw - 24px)) !important;
+  max-width: 960px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 24px !important;
+  background: transparent !important;
+  overflow: hidden !important;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+}
+#publicRequestDialog.public-request-dialog::backdrop { background: rgba(15, 23, 42, .68) !important; }
+#publicRequestDialog.public-request-dialog form,
+#publicRequestDialog.public-request-dialog input,
+#publicRequestDialog.public-request-dialog select,
+#publicRequestDialog.public-request-dialog textarea,
+#publicRequestDialog.public-request-dialog button { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
+#publicRequestDialog.public-request-dialog .step-content.hidden { display: none !important; }
+#publicRequestDialog.public-request-dialog [data-request-category] { cursor: pointer; }
+#publicRequestDialog.public-request-dialog #publicRequestAttachmentsList > ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+#publicRequestDialog.public-request-dialog #publicRequestAttachmentsList li { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; font-size: 12px; color: #334155; }
+#publicRequestDialog.public-request-dialog #publicRequestAttachmentsList li small { color: #94a3b8; white-space: nowrap; }
+#publicRequestDialog.public-request-dialog #publicRequestAttachmentsList li button { border: 0; background: transparent; color: #2563eb; font-size: 11px; cursor: pointer; }
+@media (max-width: 720px) {
+  #publicRequestDialog.public-request-dialog { width: calc(100vw - 12px) !important; border-radius: 16px !important; }
+  #publicRequestDialog.public-request-dialog > div { height: calc(100vh - 12px) !important; max-height: calc(100vh - 12px) !important; }
+}

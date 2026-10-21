@@ -55,6 +55,32 @@
     throw new Error(lastError?.message || "No fue posible comunicarse con el servidor. Verifica la conexión y la dirección de Recepción.");
   }
 
+  let requestStep = 1;
+  function refreshRequestIcons() { window.lucide?.createIcons?.(); }
+  function showRequestStep(step) {
+    requestStep = Math.max(1, Math.min(5, Number(step) || 1));
+    document.querySelectorAll("#publicRequestForm .step-content").forEach((panel, index) => { panel.classList.toggle("hidden", index + 1 !== requestStep); });
+    document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => {
+      const active = index + 1 === requestStep;
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("bg-brand-600", active);
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("text-white", active);
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("bg-slate-200", !active);
+      tab.querySelector("[id^=step-icon-]")?.classList.toggle("text-slate-600", !active);
+    });
+    const previous = $("#btn-prev");
+    const next = $("#btn-next");
+    const submit = $("#publicRequestSubmit");
+    if (previous) { previous.classList.toggle("opacity-0", requestStep === 1); previous.classList.toggle("pointer-events-none", requestStep === 1); }
+    if (next) next.hidden = requestStep === 5;
+    if (submit) submit.classList.toggle("hidden", requestStep !== 5);
+    refreshRequestIcons();
+  }
+  function requestStepValid(step) {
+    const form = $("#publicRequestForm");
+    if (step === 1) return requireFields(form, ["nombre", "telefono"]);
+    if (step === 2) return requireFields(form, ["tipoBien"]);
+    return true;
+  }
   function renderSelectedFiles() {
     const list = $("#publicRequestAttachmentsList");
     if (!list) return;
@@ -854,6 +880,20 @@
     if (window.__controlSolicitudesBound) return;
     window.__controlSolicitudesBound = true;
     $("#publicRequestType")?.addEventListener("change", () => { renderDynamicFields(); fillNotaries(); });
+    document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => tab?.addEventListener("click", () => showRequestStep(index + 1)));
+    $("#btn-prev")?.addEventListener("click", () => showRequestStep(requestStep - 1));
+    $("#btn-next")?.addEventListener("click", () => { if (requestStepValid(requestStep)) showRequestStep(requestStep + 1); });
+    $("#publicRequestForm")?.addEventListener("click", (event) => {
+      const category = event.target.closest?.("[data-request-category]");
+      if (!category) return;
+      const select = $("#publicRequestType");
+      if (!select) return;
+      select.value = category.dataset.requestCategory || "";
+      document.querySelectorAll("[data-request-category]").forEach((candidate) => candidate.classList.toggle("border-brand-500", candidate === category));
+      renderDynamicFields();
+      fillNotaries();
+    });
+
     $("#publicRequestAttachments")?.addEventListener("change", (event) => addSelectedFiles(event.target.files));
     window.addEventListener("control-avaluos:notarias-updated", () => { if (selectedNotaryValue() || $("#requestNotaryMunicipality")) renderNotarySearch(selectedNotaryValue()); });
     $("#publicRequestForm")?.addEventListener("submit", submitPublicRequest);
@@ -871,6 +911,8 @@
     ["closeApplicantRegisterButton", "cancelApplicantRegisterButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(applicantRegisterDialog)));
     ["closeApplicantLoginButton", "cancelApplicantLoginButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(applicantLoginDialog)));
     $("#newInternalRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
+    showRequestStep(1);
+    refreshRequestIcons();
     $("#openRequestsViewButton")?.addEventListener("click", () => $("[data-app-view=solicitudes]")?.click());
     $("#backRequestsToAvaluosButton")?.addEventListener("click", () => $("[data-app-view=avaluos]")?.click());
     $("#applicantProfileForm")?.addEventListener("submit", saveApplicantProfile);
