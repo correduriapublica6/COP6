@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261022-reception-layout-final" />
+    <link rel="stylesheet" href="override.css?v=20261022-reception-centered-final" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -665,7 +665,7 @@
 
           <section id="recepcionAvaluosSection" class="avaluos-subsection" aria-label="Recepción" hidden>
             <section class="search-panel request-style-filter-panel" aria-label="Búsqueda y filtros de avalúos recibidos">
-              <div class="search-row"><div class="reception-search-input-wrap"><input id="searchInput" type="search" placeholder="Buscar por folio, solicitante o tipo" autocomplete="off" /></div><select id="statusViewSelect" aria-label="Filtrar avalúos recibidos"><option value="todos">Todos los estados</option><option value="pendientes-entrega">Pendientes de entrega</option><option value="entregados-sin-pago">Entregados sin pago</option><option value="pagados">Pagados</option><option value="vencidos">Vencidos</option></select><div class="reception-filter-actions"><button id="backAvaluosButton" class="subtle-action-button btn-copu-primary btn-gold-cream is-hidden" type="button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Regresar</button><button id="newRecordButton" class="subtle-action-button btn-copu-primary is-hidden" type="button"><i class="fa-solid fa-plus" aria-hidden="true"></i> Nueva Recepción</button></div></div>
+              <div class="search-row"><div class="reception-filter-title"><span class="reception-filter-title-icon" aria-hidden="true"><i class="fa-solid fa-clipboard-check"></i></span><strong>Recepción</strong></div><div class="reception-search-input-wrap"><input id="searchInput" type="search" placeholder="Buscar por folio, solicitante o tipo" autocomplete="off" /></div><select id="statusViewSelect" aria-label="Filtrar avalúos recibidos"><option value="todos">Todos los estados</option><option value="pendientes-entrega">Pendientes de entrega</option><option value="entregados-sin-pago">Entregados sin pago</option><option value="pagados">Pagados</option><option value="vencidos">Vencidos</option></select><div class="reception-filter-actions"><button id="backAvaluosButton" class="subtle-action-button btn-copu-primary btn-gold-cream is-hidden" type="button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Regresar</button><button id="newRecordButton" class="subtle-action-button btn-copu-primary is-hidden" type="button"><i class="fa-solid fa-plus" aria-hidden="true"></i> Nueva Recepción</button></div></div>
             </section>
 
             <section id="recordEditor" class="inline-record-editor" aria-label="Registro de Avalúos" hidden>
