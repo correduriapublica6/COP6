@@ -918,7 +918,7 @@
     const paid = Boolean(record.pagado);
     const delivered = Boolean(record.seEntregoA);
     const expired = isExpiredWithoutDeliveryOrPayment(record);
-    const statusClass = paid ? "paid" : expired ? "expired" : "pending";
+    const statusClass = paid ? "status-paid" : expired ? "status-expired" : delivered ? "status-delivered" : "status-pending";
     const statusLabel = paid && !delivered ? "Pagado, no entregado" : paid ? "Pagado" : expired ? "Vencido" : delivered ? "Entregado sin pago" : "Pendiente de entrega";
     const editIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"></path><path d="m14 7 3 3"></path></svg>`;
     const receiptIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"></path><path d="M9 8h6M9 12h6M9 16h3"></path></svg>`;
@@ -945,7 +945,7 @@
     const pages = Math.max(1, Math.ceil(items.length / AVALUOS_PAGE_SIZE));
     receptionPage = Math.min(Math.max(1, receptionPage), pages);
     const pageItems = items.slice((receptionPage - 1) * AVALUOS_PAGE_SIZE, receptionPage * AVALUOS_PAGE_SIZE);
-    $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>No.</th><th>Solicitud</th><th>Solicitante</th><th>Usuario</th><th>Valor</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${pageItems.length ? pageItems.map(renderListRow).join("") : `<tr><td colspan="7" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>${paginationMarkup("reception", receptionPage, items.length)}`;
+    $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>No.</th><th>Solicitud</th><th>Solicitante</th><th>Valuador</th><th>Valor</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${pageItems.length ? pageItems.map(renderListRow).join("") : `<tr><td colspan="7" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>${paginationMarkup("reception", receptionPage, items.length)}`;
   }
   function bindRecordActions() {
     $$('[data-edit]').forEach((button) => button?.addEventListener("click", () => openDialog(button.dataset.edit)));
@@ -1501,11 +1501,9 @@
     const backButton = $("#backAvaluosButton");
     const registerButton = $("#newRecordButton");
     const createButton = $("#newTechnicalAppraisalButton");
-    const receptionRecordsButton = $("#receptionRecordsButton");
-    backButton?.classList.toggle("is-hidden", !inAvaluos || section === "inicio");
+        backButton?.classList.toggle("is-hidden", !inAvaluos || section === "inicio");
     registerButton?.classList.toggle("is-hidden", !inAvaluos || section !== "recepcion" || !canEditReception());
     createButton?.classList.toggle("is-hidden", !inAvaluos || section !== "crear" || !canEdit());
-    if (receptionRecordsButton) receptionRecordsButton.hidden = !(inAvaluos && section === "recepcion");
     if (backButton && inAvaluos && section === "recepcion") backButton.innerHTML = '<i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Regresar';
     if (registerButton && inAvaluos && section === "recepcion") registerButton.innerHTML = '<i class="fa-solid fa-plus" aria-hidden="true"></i> Nueva Recepción';
     if (section === "recepcion") createButton?.classList.add("is-hidden");
@@ -1518,7 +1516,6 @@
   $("#closeDialogButton")?.addEventListener("click", closeDialog);
   $("#cancelDialogButton")?.addEventListener("click", closeDialog);
   $("#recordFormBackButton")?.addEventListener("click", closeDialog);
-  $("#receptionRecordsButton")?.addEventListener("click", () => { closeDialog(); $("#statusRecordList")?.scrollIntoView({ behavior: "smooth", block: "start" }); });
   $("#previewReceiptButton")?.addEventListener("click", () => openReceipt(formDraft()));
   paidInput?.addEventListener("change", setPaymentVisibility);
   numberInput?.addEventListener("input", () => { numberInput.value = normalizeNumber(numberInput.value); });
