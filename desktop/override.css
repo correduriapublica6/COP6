@@ -14178,3 +14178,26 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #appShell.control-shell #avaluosAuthorizedFoliosPanel[data-open="true"] #validationRegistryList{display:block!important;visibility:visible!important;min-height:58px!important}
 @media(max-width:1100px){#appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel .search-row{grid-template-columns:minmax(160px,.8fr) minmax(220px,1fr) 125px auto!important}}
 @media(max-width:700px){#appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel .search-row{grid-template-columns:1fr!important}#appShell.control-shell #recepcionAvaluosSection #statusViewSelect{width:100%!important;min-width:0!important}}
+
+
+/* Validación y filtros: ajuste visual solicitado 2026-10-22 */
+#appShell.control-shell #recepcionAvaluosSection #statusViewSelect{height:38px!important;min-height:38px!important;line-height:1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;font-size:11px!important}
+#appShell.control-shell #recepcionAvaluosSection #searchInput{max-width:380px!important}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-authorize-form{display:flex!important;align-items:flex-end!important;justify-content:center!important;gap:12px!important;max-width:620px!important;margin:0 auto!important}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-authorize-form .validation-field{flex:0 1 310px!important;margin:0!important}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-actions{margin:0!important;display:flex!important;align-items:flex-end!important}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-actions button{height:40px!important;min-width:112px!important}
+#appShell.control-shell .validation-registry-section{padding:14px 18px!important;margin-top:14px!important}
+#appShell.control-shell .validation-registry-heading{align-items:center!important;justify-content:center!important;margin-bottom:12px!important;gap:10px!important}
+#appShell.control-shell .validation-registry-search-wrap{position:relative!important;display:flex!important;align-items:center!important;width:min(100%,380px)!important}
+#appShell.control-shell .validation-registry-search-wrap i{position:absolute!important;left:14px!important;color:#94a3b8!important;font-size:12px!important;pointer-events:none!important}
+#appShell.control-shell #validationRegistrySearch{width:100%!important;height:36px!important;padding:0 14px 0 36px!important;border:1px solid #e2e8f0!important;border-radius:999px!important;background:#fff!important;color:#334155!important;font:400 12px "Plus Jakarta Sans",Inter,system-ui,sans-serif!important;outline:none!important}
+#appShell.control-shell #validationRegistrySearch:focus{border-color:#2563eb!important;box-shadow:0 0 0 3px rgba(37,99,235,.12)!important}
+#appShell.control-shell .validation-registry-filter-label{font-size:11px!important}
+#appShell.control-shell #validationRegistryFilter{height:36px!important;padding-top:6px!important;padding-bottom:6px!important}
+#appShell.control-shell .validation-registry-table th{padding:8px 11px!important;font-size:9px!important}
+#appShell.control-shell .validation-registry-table td{padding:7px 11px!important;font-size:11px!important;line-height:1.15!important}
+#appShell.control-shell .validation-registry-table td:first-child strong{font-size:12px!important}
+#appShell.control-shell .validation-delete-button{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:28px!important;height:28px!important;padding:0!important;border:0!important;border-radius:8px!important;background:#fff1f2!important;color:#dc2626!important;cursor:pointer!important}
+#appShell.control-shell .validation-delete-button:hover{background:#fee2e2!important;color:#b91c1c!important}
+@media(max-width:700px){#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-authorize-form{align-items:stretch!important;flex-direction:column!important;max-width:100%!important}#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-authorize-form .validation-field{flex-basis:auto!important}#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-actions button{width:100%!important}#appShell.control-shell .validation-registry-heading{flex-direction:column!important;align-items:stretch!important}#appShell.control-shell .validation-registry-search-wrap{width:100%!important}}
