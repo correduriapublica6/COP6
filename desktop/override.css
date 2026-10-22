@@ -14094,3 +14094,46 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   #appShell.control-shell #recepcionAvaluosSection #statusRecordList{width:100%!important}
   #appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(7),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(7){min-width:105px!important}
 }
+
+/* Recepción: panel superior normal, ancho de la tabla y no fijo al hacer scroll */
+#appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel{
+  position:static!important; top:auto!important; inset:auto!important; z-index:auto!important;
+  width:calc(100% - 24px)!important; max-width:1520px!important; margin:0 auto 10px!important;
+  box-sizing:border-box!important; padding:9px 16px!important;
+}
+#appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel .search-row{
+  display:grid!important; grid-template-columns:minmax(210px,1fr) minmax(330px,520px) 165px minmax(300px,1fr)!important;
+  align-items:center!important; gap:10px!important; width:100%!important;
+}
+#appShell.control-shell #recepcionAvaluosSection .reception-filter-title{justify-self:start!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap{width:100%!important; max-width:none!important; flex:none!important}
+#appShell.control-shell #recepcionAvaluosSection #statusViewSelect{width:100%!important; min-width:0!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{justify-self:end!important; margin-left:0!important; gap:8px!important; white-space:nowrap!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList{width:calc(100% - 24px)!important; max-width:1520px!important; margin:0 auto!important}
+@media(max-width:1100px){
+  #appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel .search-row{grid-template-columns:minmax(180px,1fr) minmax(260px,1fr) 150px!important}
+  #appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{grid-column:1/-1; justify-self:end!important}
+  #appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap{width:100%!important}
+  #appShell.control-shell #recepcionAvaluosSection #statusViewSelect{width:100%!important}
+}
+@media(max-width:700px){
+  #appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel,#appShell.control-shell #recepcionAvaluosSection #statusRecordList{width:100%!important}
+  #appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel .search-row{display:flex!important; flex-wrap:wrap!important}
+  #appShell.control-shell #recepcionAvaluosSection .reception-filter-title,#appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap,#appShell.control-shell #recepcionAvaluosSection #statusViewSelect,#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{width:100%!important; flex:1 1 100%!important; justify-self:stretch!important}
+  #appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{justify-content:center!important}
+}
+
+/* Validación: tabla de números autorizados/validados */
+#appShell.control-shell .validation-registry-section{margin-top:20px!important; padding:18px!important; background:#fff!important; border:1px solid #e2e8f0!important; border-radius:16px!important; box-shadow:0 6px 18px rgba(15,23,42,.05)!important}
+#appShell.control-shell .validation-registry-heading{display:flex!important; align-items:flex-end!important; justify-content:space-between!important; gap:18px!important; margin-bottom:14px!important}
+#appShell.control-shell .validation-registry-heading h4{margin:0!important; color:#0f172a!important; font-family:"Plus Jakarta Sans",Inter,system-ui,sans-serif!important; font-size:16px!important; font-weight:800!important}
+#appShell.control-shell .validation-registry-heading p{margin:4px 0 0!important; color:#64748b!important; font-size:12px!important}
+#appShell.control-shell .validation-registry-filter-label{display:flex!important; align-items:center!important; gap:8px!important; color:#64748b!important; font-size:11px!important; font-weight:700!important; white-space:nowrap!important}
+#appShell.control-shell #validationRegistryFilter{min-width:150px!important; padding:9px 28px 9px 12px!important; border:1px solid #cbd5e1!important; border-radius:10px!important; background:#fff!important; color:#334155!important; font-size:12px!important}
+#appShell.control-shell .validation-registry-table-wrap{overflow-x:auto!important}
+#appShell.control-shell .validation-registry-table{width:100%!important; border-collapse:collapse!important; font-family:"Plus Jakarta Sans",Inter,system-ui,sans-serif!important}
+#appShell.control-shell .validation-registry-table th{padding:11px 12px!important; border-bottom:1px solid #e2e8f0!important; color:#64748b!important; font-size:10px!important; letter-spacing:.06em!important; text-transform:uppercase!important; text-align:left!important}
+#appShell.control-shell .validation-registry-table td{padding:13px 12px!important; border-bottom:1px solid #f1f5f9!important; color:#334155!important; font-size:12px!important}
+#appShell.control-shell .validation-registry-table tbody tr:hover td{background:#f8fafc!important}
+#appShell.control-shell .validation-registry-table td:first-child strong{color:#2563eb!important; font-size:14px!important}
+#appShell.control-shell .validation-registry-table td:last-child{text-align:right!important}

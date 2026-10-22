@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=20261022-reception-search-order-final" />
+    <link rel="stylesheet" href="override.css?v=20261022-reception-validation-layout" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -659,6 +659,7 @@
             <section id="avaluosAuthorizedFoliosPanel" class="inline-panel folio-authorizer-only is-hidden" aria-label="Validación de folios">
               <div class="inline-panel-heading"><div><h3>Validación</h3><p>Autoriza el folio antes de registrarlo en Recepción y consulta su estado.</p></div></div>
               <form id="authorizedFolioFormAvaluos" class="compact-settings-form validation-authorize-form"><label class="validation-field" for="authorizedFolioInputAvaluos"><span class="validation-field-label"><span class="validation-field-icon" aria-hidden="true">✓</span>Número de avalúo para validar</span><input id="authorizedFolioInputAvaluos" type="text" inputmode="numeric" maxlength="4" placeholder="Ej. 3010" autocomplete="off" required /></label><div class="validation-actions"><button class="primary-button btn-copu-primary" type="submit">Validar</button></div><p id="authorizedFolioMessageAvaluos" class="form-message" role="alert"></p></form>
+              <section id="validationRegistrySection" class="validation-registry-section" aria-label="Números validados"><div class="validation-registry-heading"><div><h4>Números validados</h4><p>Consulta los números autorizados, su fecha y si ya fueron registrados en Recepción.</p></div><label class="validation-registry-filter-label" for="validationRegistryFilter">Filtrar<select id="validationRegistryFilter"><option value="todos">Todos</option><option value="registrado">Registrados</option><option value="pendiente">Pendientes</option></select></label></div><div id="validationRegistryList" class="validation-registry-table-wrap"><p class="settings-empty">Cargando números validados…</p></div></section>
               <div id="authorizedFoliosListAvaluos" class="settings-data-list validation-hidden-list"></div><section class="validation-pending-section validation-hidden-list"><div class="inline-panel-heading"><div><h4>Avalúos autorizados pendientes de Recepción</h4><p>Folios autorizados o expedientes técnicos que todavía no aparecen registrados en Recepción.</p></div><button id="refreshPendingSummaryButton" class="secondary-button btn-copu-primary" type="button">Actualizar</button></div><div id="pendingReceptionSummary" class="settings-data-list"></div></section>
             </section>
           </section>

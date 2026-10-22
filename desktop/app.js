@@ -1313,10 +1313,10 @@
       const rows = await apiRequest("/authorized-folios/registry");
       const filter = $("#validationRegistryFilter")?.value || "todos";
       const visible = (Array.isArray(rows) ? rows : []).filter((item) => filter === "todos" || (filter === "registrado" ? item.registrado : !item.registrado));
-      target.innerHTML = visible.length ? visible.map((item) => {
+      target.innerHTML = visible.length ? `<table class="validation-registry-table"><thead><tr><th>No. de avalúo</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${visible.map((item) => {
         const date = item.fechaRegistro ? new Date(item.fechaRegistro).toLocaleDateString("es-MX", { day: "2-digit", month: "2-digit", year: "numeric" }) : "—";
-        return `<article class="settings-data-row validation-registry-row"><div><strong>#${escapeHtml(item.numeroAvaluo)}</strong><span>Fecha de registro: ${escapeHtml(date)}</span><span class="folio-validation-status ${item.registrado ? "is-registered" : "is-pending"}">${escapeHtml(item.estado)}</span></div><button type="button" class="text-action-button btn-copu-primary is-danger" data-delete-validation-folio="${escapeHtml(item.numeroAvaluo)}" aria-label="Eliminar folio ${escapeHtml(item.numeroAvaluo)}">Eliminar</button></article>`;
-      }).join("") : '<p class="settings-empty">No hay avalúos para este filtro.</p>';
+        return `<tr><td><strong>#${escapeHtml(item.numeroAvaluo)}</strong></td><td>${escapeHtml(date)}</td><td><span class="folio-validation-status ${item.registrado ? "is-registered" : "is-pending"}">${escapeHtml(item.estado)}</span></td><td><button type="button" class="text-action-button btn-copu-primary is-danger" data-delete-validation-folio="${escapeHtml(item.numeroAvaluo)}" aria-label="Eliminar folio ${escapeHtml(item.numeroAvaluo)}">Eliminar</button></td></tr>`;
+      }).join("")}</tbody></table>` : '<p class="settings-empty">No hay avalúos para este filtro.</p>';
       target.querySelectorAll("[data-delete-validation-folio]").forEach((button) => button?.addEventListener("click", async () => {
         try { await apiRequest(`/authorized-folios/${encodeURIComponent(button.dataset.deleteValidationFolio)}`, { method: "DELETE" }); authorizedAppraisalNumbers = authorizedAppraisalNumbers.filter((value) => normalizeNumber(value) !== normalizeNumber(button.dataset.deleteValidationFolio)); renderAuthorizedFolios(); renderValidationRegistry(); } catch (error) { window.alert(error.message); }
       }));
@@ -1509,6 +1509,7 @@
     if (backButton && inAvaluos && section === "recepcion") backButton.innerHTML = '<i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Regresar';
     if (registerButton && inAvaluos && section === "recepcion") registerButton.innerHTML = '<i class="fa-solid fa-plus" aria-hidden="true"></i> Nueva Recepción';
     if (section === "recepcion") createButton?.classList.add("is-hidden");
+    if (section === "validacion") renderValidationRegistry();
   });
   window.addEventListener("control-avaluos:technical-creation-state", (event) => {
     if (activeAppView !== "avaluos") return;
