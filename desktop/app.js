@@ -1509,7 +1509,13 @@
     if (backButton && inAvaluos && section === "recepcion") backButton.innerHTML = '<i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Regresar';
     if (registerButton && inAvaluos && section === "recepcion") registerButton.innerHTML = '<i class="fa-solid fa-plus" aria-hidden="true"></i> Nueva Recepción';
     if (section === "recepcion") createButton?.classList.add("is-hidden");
-    if (section === "validacion") { const validationPanel = $("#avaluosAuthorizedFoliosPanel"); if (validationPanel) validationPanel.dataset.open = "true"; renderAuthorizedFolios(); renderValidationRegistry(); }
+    if (section === "validacion") {
+      const validationPanel = $("#avaluosAuthorizedFoliosPanel");
+      if (validationPanel) { validationPanel.dataset.open = "true"; validationPanel.classList.remove("is-hidden"); validationPanel.hidden = false; validationPanel.style.setProperty("display", "block", "important"); }
+      renderAuthorizedFolios();
+      renderValidationRegistry();
+      window.setTimeout(() => { const panel = $("#avaluosAuthorizedFoliosPanel"); if (panel) { panel.classList.remove("is-hidden"); panel.hidden = false; panel.style.setProperty("display", "block", "important"); } }, 0);
+    }
   });
   window.addEventListener("control-avaluos:technical-creation-state", (event) => {
     if (activeAppView !== "avaluos") return;

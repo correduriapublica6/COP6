@@ -14167,3 +14167,14 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #appShell.control-shell [data-valuator-popup] select{width:100%!important;min-height:42px!important;border:1px solid #cbd5e1!important;border-radius:10px!important;padding:8px 10px!important;background:#fff!important;font:400 .86rem "Plus Jakarta Sans",system-ui,sans-serif!important}
 @media(max-width:980px){#appShell.control-shell #recepcionAvaluosSection .search-row{grid-template-columns:1fr 1fr!important}#appShell.control-shell #recepcionAvaluosSection .reception-filter-title{grid-column:1/-1!important}#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{justify-content:flex-end!important}}
 @media(max-width:640px){#appShell.control-shell #recepcionAvaluosSection .search-row{grid-template-columns:1fr!important}#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{justify-content:stretch!important}#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions button{flex:1!important}}
+
+
+/* Ajuste solicitado: filtro compacto y tabla de Validación visible */
+#appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel .search-row{grid-template-columns:minmax(180px,.8fr) minmax(240px,1.15fr) 132px auto!important;gap:8px!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap{max-width:100%!important}
+#appShell.control-shell #recepcionAvaluosSection #statusViewSelect{width:132px!important;min-width:132px!important;padding-left:10px!important;padding-right:22px!important;font-size:10px!important;white-space:nowrap!important}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel[data-open="true"]{display:block!important;visibility:visible!important;opacity:1!important;height:auto!important;max-height:none!important;overflow:visible!important}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel[data-open="true"] #validationRegistrySection{display:block!important;visibility:visible!important;height:auto!important;max-height:none!important;overflow:visible!important}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel[data-open="true"] #validationRegistryList{display:block!important;visibility:visible!important;min-height:58px!important}
+@media(max-width:1100px){#appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel .search-row{grid-template-columns:minmax(160px,.8fr) minmax(220px,1fr) 125px auto!important}}
+@media(max-width:700px){#appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel .search-row{grid-template-columns:1fr!important}#appShell.control-shell #recepcionAvaluosSection #statusViewSelect{width:100%!important;min-width:0!important}}
