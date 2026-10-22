@@ -14034,3 +14034,26 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   #appShell.control-shell #recepcionAvaluosSection .reception-filter-title,#appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap,#appShell.control-shell #recepcionAvaluosSection #statusViewSelect,#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{width:100%!important;flex:1 1 100%!important}
   #appShell.control-shell #recepcionAvaluosSection .reception-filter-actions button{flex:1 1 0!important}
 }
+
+
+/* Recepción: ancho final y eliminación del desplazamiento horizontal */
+#appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel .search-row{overflow:visible!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-filter-title{font-size:20px!important;gap:10px!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-filter-title-icon{width:42px!important;height:42px!important;border-radius:12px!important;font-size:20px!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap{width:520px!important;flex-basis:520px!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap input{font-size:14px!important;min-height:46px!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList{width:calc(100% - 32px)!important;max-width:1480px!important;overflow-x:hidden!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table-wrap{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table{width:100%!important;max-width:100%!important;table-layout:fixed!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th,
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(1),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(1){width:8%!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(2),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(2){width:14%!important;max-width:none!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(3),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(3){width:22%!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(4),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(4){width:22%!important;min-width:0!important;max-width:none!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(5),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(5){width:14%!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(6),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(6){width:13%!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(7),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(7){width:7%!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td.reception-actions{overflow:visible!important;text-overflow:clip!important;white-space:nowrap!important;padding-left:8px!important;padding-right:8px!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .reception-actions .record-action{width:32px!important;height:32px!important;min-width:32px!important;margin-left:3px!important}
+@media (max-width:900px){#appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap{width:auto!important;flex-basis:360px!important}}
