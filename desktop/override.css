@@ -14137,3 +14137,33 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #appShell.control-shell .validation-registry-table tbody tr:hover td{background:#f8fafc!important}
 #appShell.control-shell .validation-registry-table td:first-child strong{color:#2563eb!important; font-size:14px!important}
 #appShell.control-shell .validation-registry-table td:last-child{text-align:right!important}
+
+
+/* Ajuste final Recepción + Validación — 2026-10-22 */
+#appShell.control-shell #recepcionAvaluosSection > .search-panel.request-style-filter-panel{position:static!important;width:min(100%,1500px)!important;max-width:1500px!important;margin:0 auto 10px!important;padding:8px 14px!important;background:#fff!important;border:1px solid #e2e8f0!important;box-shadow:0 5px 16px rgba(15,23,42,.06)!important}
+#appShell.control-shell #recepcionAvaluosSection .search-row{display:grid!important;grid-template-columns:minmax(180px,.8fr) minmax(300px,1.55fr) minmax(150px,.7fr) auto!important;align-items:center!important;gap:10px!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-filter-title{justify-self:start!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-filter-title strong{font-size:1.12rem!important;text-shadow:0 1px 5px rgba(37,99,235,.18)}
+#appShell.control-shell #recepcionAvaluosSection .reception-filter-title-icon{width:38px!important;height:38px!important;font-size:1.05rem!important;box-shadow:0 4px 10px rgba(37,99,235,.16)!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap{width:100%!important}
+#appShell.control-shell #recepcionAvaluosSection #searchInput{width:100%!important;min-width:0!important}
+#appShell.control-shell #recepcionAvaluosSection #statusViewSelect{width:100%!important;min-width:0!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{justify-content:flex-end!important;gap:8px!important;white-space:nowrap!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions button{font-size:.88rem!important;padding:11px 16px!important;min-height:42px!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions #backAvaluosButton{color:#fff!important}
+#appShell.control-shell #recepcionAvaluosSection .operational-table-wrap{width:min(100%,1500px)!important;max-width:1500px!important;margin:0 auto!important;overflow-x:hidden!important}
+#appShell.control-shell #recepcionAvaluosSection .operational-table-compact thead th{background:#eff6ff!important;color:#64748b!important;border-top:3px solid #2563eb!important;padding-top:9px!important;padding-bottom:9px!important}
+#appShell.control-shell #recepcionAvaluosSection .operational-table-compact td{font-size:.9rem!important}
+#appShell.control-shell #recepcionAvaluosSection .operational-table-compact th:nth-child(2),#appShell.control-shell #recepcionAvaluosSection .operational-table-compact td:nth-child(2){width:175px!important;min-width:175px!important;max-width:175px!important}
+#appShell.control-shell #recepcionAvaluosSection .operational-table-compact th:nth-child(6),#appShell.control-shell #recepcionAvaluosSection .operational-table-compact td:nth-child(6){width:190px!important;min-width:190px!important}
+#appShell.control-shell #recepcionAvaluosSection .avaluo-list-user,#appShell.control-shell #recepcionAvaluosSection .avaluo-list-requester{font-size:.9rem!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-actions .record-action{width:34px!important;height:34px!important}
+#appShell.control-shell #validationRegistrySection,#appShell.control-shell .validation-registry-section,#appShell.control-shell #validationRegistryList,#appShell.control-shell #validationRegistryFilter{display:revert!important}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-hidden-list,#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-pending-section{display:none!important}
+#appShell.control-shell #validationRegistrySection{display:block!important;margin-top:18px!important}
+#appShell.control-shell .validation-registry-table-wrap{display:block!important;overflow-x:auto!important}
+#appShell.control-shell .validation-registry-table{width:100%!important;border-collapse:collapse!important;background:#fff!important}
+#appShell.control-shell .cp6-inline-edit-button{border:0!important;background:#eff6ff!important;color:#2563eb!important;border-radius:7px!important;padding:3px 6px!important;cursor:pointer!important}
+#appShell.control-shell [data-valuator-popup] select{width:100%!important;min-height:42px!important;border:1px solid #cbd5e1!important;border-radius:10px!important;padding:8px 10px!important;background:#fff!important;font:400 .86rem "Plus Jakarta Sans",system-ui,sans-serif!important}
+@media(max-width:980px){#appShell.control-shell #recepcionAvaluosSection .search-row{grid-template-columns:1fr 1fr!important}#appShell.control-shell #recepcionAvaluosSection .reception-filter-title{grid-column:1/-1!important}#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{justify-content:flex-end!important}}
+@media(max-width:640px){#appShell.control-shell #recepcionAvaluosSection .search-row{grid-template-columns:1fr!important}#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{justify-content:stretch!important}#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions button{flex:1!important}}

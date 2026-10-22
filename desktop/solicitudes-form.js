@@ -714,7 +714,7 @@
           <div class="text-xs text-slate-500 font-medium flex items-center gap-1 bg-white px-2.5 py-1 rounded-full border border-slate-200/80 shadow-xs flex-shrink-0"><i class="fa-solid fa-calendar-day text-blue-600"></i> Registrada el ${escapeHtml(requestDate(item.creadoEn))}</div>
         </div>
         <div class="flex flex-col sm:flex-row sm:flex-nowrap sm:items-center justify-between gap-2 pt-1.5 border-t border-slate-200/60">
-          <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 font-medium min-w-0"><span><i class="fa-solid fa-user-gear text-slate-400 mr-1"></i> Registró: ${readValue(creatorName)}${creatorRole ? ` · ${escapeHtml(creatorRole)}` : ""}</span><span>•</span><span class="text-emerald-600 font-semibold"><i class="fa-solid fa-user-check mr-1"></i> Valuador asignado: ${readValue(item.asesor || specific.asesor || "Sin asignar")}</span></div>
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 font-medium min-w-0"><span><i class="fa-solid fa-user-gear text-slate-400 mr-1"></i> Registró: ${readValue(creatorName)}${creatorRole ? ` · ${escapeHtml(creatorRole)}` : ""}</span><span>•</span><span class="text-emerald-600 font-semibold"><i class="fa-solid fa-user-check mr-1"></i> Valuador asignado: ${readValue(item.asesor || specific.asesor || "Sin asignar")}</span>${["admin", "auditor"].includes(String($("#appShell")?.dataset.role || "")) ? `<button type="button" class="cp6-inline-edit-button" data-open-valuator-popup title="Cambiar valuador"><i class="fa-solid fa-pen-to-square"></i></button>` : ""}</div>
           <div class="flex flex-nowrap items-center justify-end gap-2 ml-auto flex-shrink-0 overflow-x-auto">
             <div class="flex flex-nowrap items-center bg-emerald-50/80 border border-emerald-200 rounded-xl px-2.5 py-1 gap-2 flex-shrink-0 whitespace-nowrap"><div class="flex items-center gap-1.5 text-emerald-800 font-bold text-xs"><i class="fa-solid fa-file-circle-check text-emerald-600 text-[10px]"></i><span>${appraisalNumber ? `No. ${escapeHtml(appraisalNumber)}` : "Sin asignar"}</span></div><button type="button" class="text-slate-500 hover:text-blue-600 transition text-xs px-1" data-open-appraisal-popup title="Editar número de avalúo"><i class="fa-solid fa-pen-to-square"></i></button></div>
             <div class="flex flex-nowrap items-center bg-blue-50/70 border border-blue-200/80 rounded-xl px-2.5 py-1 gap-2 flex-shrink-0 whitespace-nowrap"><div class="flex items-center gap-1.5 text-blue-800 font-bold text-xs min-w-0"><i class="fa-solid fa-user-check text-blue-600 text-[10px]"></i><span class="truncate max-w-[190px]">${externalName ? readValue(item.asignadoExternoEmail || externalName) : "Sin usuario externo"}</span></div><button type="button" class="text-slate-500 hover:text-blue-600 transition text-xs px-1" data-open-external-popup title="Asignar usuario externo"><i class="fa-solid fa-pen-to-square"></i></button></div>
@@ -737,6 +737,7 @@
         </div></div>
       </div>
       <div class="cp6-submodal" data-appraisal-popup hidden><div class="cp6-submodal-card"><h3>Asignar avalúo</h3><p>Escribe el número de avalúo de 4 dígitos.</p><input data-popup-appraisal-number inputmode="numeric" maxlength="4" value="${escapeHtml(appraisalNumber)}" placeholder="0000" /><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-appraisal>Aceptar</button></div></div></div>
+      <div class="cp6-submodal" data-valuator-popup hidden><div class="cp6-submodal-card"><h3>Cambiar valuador</h3><p>Selecciona un usuario administrativo con rol de valuador.</p><select data-popup-valuator><option value="">Selecciona un valuador</option></select><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-valuator>Aceptar</button></div></div></div>
       <div class="cp6-submodal" data-external-popup hidden><div class="cp6-submodal-card"><h3>Asignar usuario externo</h3><input data-popup-external-search style="font-family: Plus Jakarta Sans, system-ui, -apple-system, sans-serif !important;" placeholder="Buscar por nombre, correo o teléfono" /><div class="cp6-popup-results max-h-48 overflow-y-auto border border-slate-200 rounded-xl bg-white shadow-lg mt-1 divide-y divide-slate-100" data-popup-external-results></div><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-external disabled>Aceptar</button></div></div></div>
     </div>`;
     detail.querySelectorAll("h2, h3, h4, button, input").forEach((element) => { element.style.fontFamily = "Plus Jakarta Sans, system-ui, -apple-system, sans-serif"; });
@@ -766,7 +767,7 @@
         renderRequestDetail(updated);
       } catch (error) { window.alert(error.message || "No se pudo eliminar el avalúo final."); }
     });
-    const closeSubmodals = () => detail.querySelectorAll("[data-appraisal-popup],[data-external-popup]").forEach((modal) => { modal.hidden = true; });
+    const closeSubmodals = () => detail.querySelectorAll("[data-appraisal-popup],[data-external-popup],[data-valuator-popup]").forEach((modal) => { modal.hidden = true; });
     detail.querySelectorAll("[data-close-submodal]").forEach((button) => button?.addEventListener("click", closeSubmodals));
     const appraisalPopup = detail.querySelector("[data-appraisal-popup]");
     detail.querySelector("[data-open-appraisal-popup]")?.addEventListener("click", () => { closeSubmodals(); appraisalPopup.hidden = false; appraisalPopup.querySelector("input")?.focus(); });
@@ -774,6 +775,16 @@
       const input = detail.querySelector("[data-popup-appraisal-number]"); const value = String(input?.value || "").replace(/\D/g, "").slice(0, 4);
       if (!/^\d{4}$/.test(value)) { window.alert("El número de avalúo debe tener exactamente 4 dígitos."); return; }
       try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ numeroAvaluo: value }) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); } catch (error) { window.alert(error.message || "No se pudo asignar el avalúo."); }
+    });
+    const valuatorPopup = detail.querySelector("[data-valuator-popup]");
+    const valuatorSelect = detail.querySelector("[data-popup-valuator]");
+    detail.querySelector("[data-open-valuator-popup]")?.addEventListener("click", async () => {
+      closeSubmodals(); valuatorPopup.hidden = false;
+      try { const users = await api("/users"); const valuators = (Array.isArray(users) ? users : []).filter((user) => user.role === "valuador"); valuatorSelect.innerHTML = `<option value="">Selecciona un valuador</option>` + valuators.map((user) => `<option value="${escapeHtml(user.name)}">${escapeHtml(user.name)}</option>`).join(""); valuatorSelect.value = item.asesor || ""; } catch (error) { valuatorSelect.innerHTML = `<option value="">${escapeHtml(error.message || "No se pudieron cargar los valuadores")}</option>`; }
+    });
+    detail.querySelector("[data-accept-valuator]")?.addEventListener("click", async () => {
+      const value = String(valuatorSelect?.value || "").trim(); if (!value) { window.alert("Selecciona un valuador."); return; }
+      try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ valuadorAsignado: value }) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); } catch (error) { window.alert(error.message || "No se pudo cambiar el valuador."); }
     });
     const externalPopup = detail.querySelector("[data-external-popup]"); const search = detail.querySelector("[data-popup-external-search]"); const resultBox = detail.querySelector("[data-popup-external-results]"); const acceptExternal = detail.querySelector("[data-accept-external]");
     let externalUsers = []; let selectedExternal = null;

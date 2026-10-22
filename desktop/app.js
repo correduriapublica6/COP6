@@ -903,7 +903,7 @@
     const numericQuery = normalizeNumber(query);
     return prioritize(records.filter((record) => {
       const linkedRequest = (window.__controlSolicitudes || []).find((request) => normalizeNumber(request.numeroAvaluo) === normalizeNumber(record.numeroAvaluo));
-      const searchableValues = [record.numeroAvaluo, record.solicitante, record.usuario, record.folioSolicitud, record.solicitudFolio, linkedRequest?.folio, linkedRequest?.numeroSolicitud, linkedRequest?.id];
+      const searchableValues = [record.numeroAvaluo, record.solicitante, record.usuario, record.asesorValuador, record.asesor, record.folioSolicitud, record.solicitudFolio, linkedRequest?.folio, linkedRequest?.numeroSolicitud, linkedRequest?.id];
       const matchesSearch = !query || searchableValues.some((value) => String(value ?? "").toLocaleLowerCase("es-MX").includes(query)) || (numericQuery && searchableValues.some((value) => normalizeNumber(value).includes(numericQuery)));
       return matchesSearch;
     }));
@@ -1509,7 +1509,7 @@
     if (backButton && inAvaluos && section === "recepcion") backButton.innerHTML = '<i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Regresar';
     if (registerButton && inAvaluos && section === "recepcion") registerButton.innerHTML = '<i class="fa-solid fa-plus" aria-hidden="true"></i> Nueva Recepción';
     if (section === "recepcion") createButton?.classList.add("is-hidden");
-    if (section === "validacion") renderValidationRegistry();
+    if (section === "validacion") { const validationPanel = $("#avaluosAuthorizedFoliosPanel"); if (validationPanel) validationPanel.dataset.open = "true"; renderAuthorizedFolios(); renderValidationRegistry(); }
   });
   window.addEventListener("control-avaluos:technical-creation-state", (event) => {
     if (activeAppView !== "avaluos") return;
