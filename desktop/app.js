@@ -1495,14 +1495,19 @@
     $("#pageTitle").textContent = details.title;
     $("#pageDescription").textContent = details.description;
     const workspaceHeader = $("#pageTitle").closest(".workspace-header");
+    workspaceHeader?.classList.toggle("reception-header", inAvaluos && section === "recepcion");
     workspaceHeader?.classList.toggle("technical-creation-header", inAvaluos && section === "crear");
     workspaceHeader?.classList.toggle("avaluos-header", inAvaluos && section === "inicio");
     const backButton = $("#backAvaluosButton");
     const registerButton = $("#newRecordButton");
     const createButton = $("#newTechnicalAppraisalButton");
+    const receptionRecordsButton = $("#receptionRecordsButton");
     backButton?.classList.toggle("is-hidden", !inAvaluos || section === "inicio");
     registerButton?.classList.toggle("is-hidden", !inAvaluos || section !== "recepcion" || !canEditReception());
     createButton?.classList.toggle("is-hidden", !inAvaluos || section !== "crear" || !canEdit());
+    if (receptionRecordsButton) receptionRecordsButton.hidden = !(inAvaluos && section === "recepcion");
+    if (backButton && inAvaluos && section === "recepcion") backButton.innerHTML = '<i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Regresar';
+    if (registerButton && inAvaluos && section === "recepcion") registerButton.innerHTML = '<i class="fa-solid fa-plus" aria-hidden="true"></i> Nueva Recepción';
     if (section === "recepcion") createButton?.classList.add("is-hidden");
   });
   window.addEventListener("control-avaluos:technical-creation-state", (event) => {
@@ -1513,6 +1518,7 @@
   $("#closeDialogButton")?.addEventListener("click", closeDialog);
   $("#cancelDialogButton")?.addEventListener("click", closeDialog);
   $("#recordFormBackButton")?.addEventListener("click", closeDialog);
+  $("#receptionRecordsButton")?.addEventListener("click", () => { closeDialog(); $("#statusRecordList")?.scrollIntoView({ behavior: "smooth", block: "start" }); });
   $("#previewReceiptButton")?.addEventListener("click", () => openReceipt(formDraft()));
   paidInput?.addEventListener("change", setPaymentVisibility);
   numberInput?.addEventListener("input", () => { numberInput.value = normalizeNumber(numberInput.value); });
