@@ -897,12 +897,14 @@
   const isExpiredWithoutDeliveryOrPayment = (record) => { const expiry = getExpiryDate(record.fechaAvaluo); return Boolean(!record.pagado && !record.seEntregoA && expiry && expiry < today()); };
   const dateInRange = (value, start, end) => Boolean(value && (!start || value >= start) && (!end || value <= end));
   function currentWeekRange() { const date = new Date(`${today()}T12:00:00`); const day = date.getDay(); date.setDate(date.getDate() + (day === 0 ? -6 : 1 - day)); const start = date.toISOString().slice(0, 10); date.setDate(date.getDate() + 6); return { start, end: date.toISOString().slice(0, 10) }; }
-  function prioritize(items) { return [...items].sort((left, right) => { const leftDate = new Date(left.creadoEn || left.createdAt || left.fechaAvaluo || 0).getTime() || 0; const rightDate = new Date(right.creadoEn || right.createdAt || right.fechaAvaluo || 0).getTime() || 0; return leftDate - rightDate; }); }
+  function prioritize(items) { return [...items].sort((left, right) => { const leftDate = new Date(left.creadoEn || left.createdAt || left.fechaAvaluo || 0).getTime() || 0; const rightDate = new Date(right.creadoEn || right.createdAt || right.fechaAvaluo || 0).getTime() || 0; return rightDate - leftDate; }); }
   function getVisibleRecords() {
     const query = searchInput.value.trim().toLocaleLowerCase("es-MX");
     const numericQuery = normalizeNumber(query);
     return prioritize(records.filter((record) => {
-      const matchesSearch = !query || (numericQuery && normalizeNumber(record.numeroAvaluo).includes(numericQuery)) || record.solicitante.toLocaleLowerCase("es-MX").includes(query);
+      const linkedRequest = (window.__controlSolicitudes || []).find((request) => normalizeNumber(request.numeroAvaluo) === normalizeNumber(record.numeroAvaluo));
+      const searchableValues = [record.numeroAvaluo, record.solicitante, record.usuario, record.folioSolicitud, record.solicitudFolio, linkedRequest?.folio, linkedRequest?.numeroSolicitud, linkedRequest?.id];
+      const matchesSearch = !query || searchableValues.some((value) => String(value ?? "").toLocaleLowerCase("es-MX").includes(query)) || (numericQuery && searchableValues.some((value) => normalizeNumber(value).includes(numericQuery)));
       return matchesSearch;
     }));
   }

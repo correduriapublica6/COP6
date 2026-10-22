@@ -14057,3 +14057,40 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td.reception-actions{overflow:visible!important;text-overflow:clip!important;white-space:nowrap!important;padding-left:8px!important;padding-right:8px!important}
 #appShell.control-shell #recepcionAvaluosSection #statusRecordList .reception-actions .record-action{width:32px!important;height:32px!important;min-width:32px!important;margin-left:3px!important}
 @media (max-width:900px){#appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap{width:auto!important;flex-basis:360px!important}}
+
+
+/* Recepción: barra en tres zonas y columnas sin empalmes */
+#appShell.control-shell #recepcionAvaluosSection{padding-top:4px!important}
+#appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel{margin-top:0!important;padding:10px 18px!important}
+#appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel .search-row{display:grid!important;grid-template-columns:minmax(180px,1fr) auto auto minmax(180px,1fr)!important;align-items:center!important;gap:9px!important;justify-content:initial!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-filter-title{justify-self:start!important;font-size:21px!important;text-shadow:0 3px 8px rgba(37,99,235,.22)!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-filter-title-icon{width:44px!important;height:44px!important;font-size:21px!important;box-shadow:0 5px 12px rgba(37,99,235,.24)!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap{width:480px!important;flex:none!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap input{min-height:43px!important;font-size:13px!important}
+#appShell.control-shell #recepcionAvaluosSection #statusViewSelect{width:158px!important;min-width:158px!important;min-height:43px!important;font-size:11px!important}
+#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{justify-self:end!important;margin-left:0!important;gap:8px!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList{width:calc(100% - 24px)!important;max-width:1520px!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(1),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(1){width:8%!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(2),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(2){width:14%!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(3),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(3){width:19%!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(4),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(4){width:19%!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(5),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(5){width:13%!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(6),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(6){width:17%!important;min-width:0!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(7),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(7){width:10%!important;min-width:120px!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .avaluo-status{font-size:12px!important;padding:7px 9px!important;white-space:normal!important;line-height:1.25!important;display:inline-block!important}
+#appShell.control-shell #recepcionAvaluosSection #statusRecordList .reception-actions .record-action{width:31px!important;height:31px!important;min-width:31px!important;margin-left:2px!important}
+@media (max-width:1100px){
+  #appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel .search-row{grid-template-columns:1fr 1fr!important;gap:8px 12px!important}
+  #appShell.control-shell #recepcionAvaluosSection .reception-filter-title{justify-self:start!important}
+  #appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{justify-self:end!important}
+  #appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap{width:100%!important}
+  #appShell.control-shell #recepcionAvaluosSection #statusViewSelect{width:100%!important}
+}
+@media (max-width:700px){
+  #appShell.control-shell #recepcionAvaluosSection>.request-style-filter-panel .search-row{display:flex!important;flex-wrap:wrap!important;justify-content:center!important}
+  #appShell.control-shell #recepcionAvaluosSection .reception-filter-title,#appShell.control-shell #recepcionAvaluosSection .reception-search-input-wrap,#appShell.control-shell #recepcionAvaluosSection #statusViewSelect,#appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{width:100%!important;flex:1 1 100%!important;justify-self:stretch!important}
+  #appShell.control-shell #recepcionAvaluosSection .reception-filter-title{justify-content:center!important}
+  #appShell.control-shell #recepcionAvaluosSection .reception-filter-actions{justify-content:center!important}
+  #appShell.control-shell #recepcionAvaluosSection #statusRecordList{width:100%!important}
+  #appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table th:nth-child(7),#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table td:nth-child(7){min-width:105px!important}
+}
