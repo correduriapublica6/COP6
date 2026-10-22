@@ -14201,3 +14201,12 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #appShell.control-shell .validation-delete-button{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:28px!important;height:28px!important;padding:0!important;border:0!important;border-radius:8px!important;background:#fff1f2!important;color:#dc2626!important;cursor:pointer!important}
 #appShell.control-shell .validation-delete-button:hover{background:#fee2e2!important;color:#b91c1c!important}
 @media(max-width:700px){#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-authorize-form{align-items:stretch!important;flex-direction:column!important;max-width:100%!important}#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-authorize-form .validation-field{flex-basis:auto!important}#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-actions button{width:100%!important}#appShell.control-shell .validation-registry-heading{flex-direction:column!important;align-items:stretch!important}#appShell.control-shell .validation-registry-search-wrap{width:100%!important}}
+
+
+/* Validación: buscador y filtro en columna, alineados al centro */
+#appShell.control-shell .validation-registry-heading{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:8px!important}
+#appShell.control-shell .validation-registry-search-wrap{width:min(100%,420px)!important;height:38px!important}
+#appShell.control-shell .validation-registry-search-wrap i{left:13px!important;top:50%!important;transform:translateY(-50%)!important;z-index:2!important}
+#appShell.control-shell #validationRegistrySearch{height:38px!important;box-sizing:border-box!important}
+#appShell.control-shell .validation-registry-filter-label{display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important}
+#appShell.control-shell #validationRegistryFilter{min-width:150px!important;height:34px!important}
