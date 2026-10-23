@@ -23,7 +23,7 @@
 
     <link rel="stylesheet" href="styles.css?v=20261006-1705" />
     <link rel="stylesheet" href="dashboard.css" />
-    <link rel="stylesheet" href="override.css?v=1.0.32" />
+    <link rel="stylesheet" href="override.css?v=1.0.33" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -422,12 +422,12 @@
 
           <!-- Creador de Dropzone -->
           <label for="publicRequestAttachments" class="border-2 border-dashed border-slate-300 hover:border-brand-500 bg-slate-50/50 hover:bg-brand-50/30 rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer transition text-center group">
-            <input type="file" id="publicRequestAttachments" name="archivos" multiple class="hidden" />
+            <input type="file" id="publicRequestAttachments" name="archivos" accept="image/*,.pdf,.doc,.docx,.zip" multiple class="hidden" />
             <div class="p-3 bg-white rounded-full shadow-sm border border-slate-200 group-hover:scale-110 transition mb-2">
               <i data-lucide="upload-cloud" class="w-6 h-6 text-brand-600"></i>
             </div>
             <p class="text-xs font-bold text-slate-800">Haga clic o arrastre archivos aquí</p>
-            <p class="text-[11px] text-slate-400 mt-0.5">Soporta PDF, imágenes (JPG, PNG), Word, Excel y ZIP (Máx. 10MB por archivo)</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Soporta PDF, imágenes (JPG, PNG), Word y ZIP (Máx. 100 MB por archivo)</p>
           </label>
 
           <!-- Lista de Archivos Cargados en Grid de 3 Columnas -->

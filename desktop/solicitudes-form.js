@@ -530,7 +530,7 @@
   function safeFileData(file) {
     const data = String(file?.data || "");
     const lower = data.toLowerCase();
-    const allowed = lower.startsWith("data:image/") || lower.startsWith("data:application/pdf") || lower.startsWith("data:application/msword") || lower.startsWith("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    const allowed = lower.startsWith("data:image/") || lower.startsWith("data:application/pdf") || lower.startsWith("data:application/msword") || lower.startsWith("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document") || lower.startsWith("data:application/zip") || lower.startsWith("data:application/x-zip-compressed");
     return allowed ? data : "";
   }
   function requestFileUrl(item, index, download = false) {
@@ -563,7 +563,7 @@
     if (!item?.id) return;
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = "image/*,.pdf,.doc,.docx";
+    input.accept = "image/*,.pdf,.doc,.docx,.zip";
     input.multiple = true;
     input?.addEventListener("change", async () => {
       const selected = Array.from(input.files || []);
