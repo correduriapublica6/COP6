@@ -14210,3 +14210,98 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #appShell.control-shell #validationRegistrySearch{height:38px!important;box-sizing:border-box!important}
 #appShell.control-shell .validation-registry-filter-label{display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important}
 #appShell.control-shell #validationRegistryFilter{min-width:150px!important;height:34px!important}
+
+/* Corrección Recepción: selectores de pago completos y checkbox en una sola línea */
+#appShell.control-shell #recordEditor #paymentDetails .relative:has(> select) {
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+#appShell.control-shell #recordEditor #paymentDetails select#methodInput,
+#appShell.control-shell #recordEditor #paymentDetails select#paymentDeliveredToInput {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  box-sizing: border-box !important;
+  padding-left: 2.5rem !important;
+  padding-right: 2.5rem !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #334155 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: .75rem !important;
+  font-weight: 400 !important;
+}
+#appShell.control-shell #recordEditor #paymentDetails select#methodInput option,
+#appShell.control-shell #recordEditor #paymentDetails select#paymentDeliveredToInput option {
+  white-space: nowrap !important;
+  color: #0f172a !important;
+  background: #ffffff !important;
+}
+#appShell.control-shell #recordEditor label[for="paidInput"],
+#appShell.control-shell #recordEditor #paidInput {
+  box-sizing: border-box !important;
+}
+#appShell.control-shell #recordEditor label:has(> #paidInput) {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: .75rem !important;
+  width: 100% !important;
+  min-height: 48px !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell #recordEditor label:has(> #paidInput) > span {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell #recordEditor label:has(> #paidInput) > span i {
+  flex: 0 0 auto !important;
+}
+
+/* Filtro de estados de Recepción: una línea legible y opciones completas */
+#appShell.control-shell #recepcionAvaluosSection #statusViewSelect {
+  width: 190px !important;
+  min-width: 190px !important;
+  max-width: 190px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding-left: .75rem !important;
+  padding-right: 2rem !important;
+  font-size: .75rem !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+#appShell.control-shell #recepcionAvaluosSection #statusViewSelect option {
+  white-space: nowrap !important;
+  min-width: 190px !important;
+  color: #0f172a !important;
+  background: #ffffff !important;
+}
+@media (max-width: 700px) {
+  #appShell.control-shell #recepcionAvaluosSection #statusViewSelect {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+}
+
+/* La cuadrícula reserva el ancho real del filtro para evitar recortes o empalmes */
+@media (min-width: 701px) {
+  #appShell.control-shell #recepcionAvaluosSection > .request-style-filter-panel .search-row {
+    grid-template-columns: minmax(180px, .8fr) minmax(220px, 1fr) 190px auto !important;
+  }
+}
