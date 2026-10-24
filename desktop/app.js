@@ -231,6 +231,7 @@
           saveChatMessages();
           window.dispatchEvent(new CustomEvent("control-avaluos:technical-appraisals-updated"));
           renderWelcomeTasks();
+          renderAdminHome();
           render();
         }
       } catch {
@@ -579,6 +580,37 @@
       list.querySelectorAll("[data-remove-task]").forEach((button) => button?.addEventListener("click", () => removeTask(button.dataset.removeTask)));
     });
   }
+  function renderAdminHome() {
+    const requests = Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : [];
+    const completed = requests.filter((item) => String(item.estado || "").toLowerCase() === "concluida").length;
+    const pending = requests.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
+    const totalAppraisals = records.length + technicalAppraisals.length;
+    const setText = (id, value) => { const element = document.getElementById(id); if (element) element.textContent = String(value); };
+    setText("homeTotalRequests", requests.length); setText("homePendingRequests", pending); setText("homeCompletedRequests", completed); setText("homeTotalAppraisals", totalAppraisals);
+    const badge = document.getElementById("homeServerBadge"); if (badge) { const online = document.body.dataset.serverStatus === "online"; badge.classList.toggle("is-offline", !online); badge.innerHTML = `<span></span>${online ? "Servidor conectado" : "Servidor sin conexión"}`; }
+    const chart = document.getElementById("homeRequestsChart");
+    if (chart) {
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const days = Array.from({ length: 7 }, (_, index) => { const date = new Date(today); date.setDate(today.getDate() - (6 - index)); return date; });
+      const values = days.map((date) => requests.filter((item) => { const stamp = new Date(item.creadoEn || item.fecha || 0); stamp.setHours(0, 0, 0, 0); return stamp.getTime() === date.getTime(); }).length);
+      const max = Math.max(...values, 1);
+      const points = values.map((value, index) => `${10 + index * 96},${164 - value / max * 144}`);
+      const line = `M ${points.join(" L ")}`;
+      const area = `${line} L 586,180 L 10,180 Z`;
+      chart.innerHTML = `<svg class="v2-area-svg" viewBox="0 0 596 180" preserveAspectRatio="none" role="img" aria-label="Solicitudes en los últimos siete días: ${values.join(', ')}"><defs><linearGradient id="v2HomeArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#246bfe" stop-opacity=".22"/><stop offset="100%" stop-color="#246bfe" stop-opacity=".015"/></linearGradient></defs><path d="${area}" fill="url(#v2HomeArea)"/><path class="v2-line-main" d="${line}"/>${points.map((point, index) => { const [cx,cy] = point.split(','); return `<circle cx="${cx}" cy="${cy}" r="4" fill="white" stroke="#246bfe" stroke-width="2"><title>${days[index].toLocaleDateString('es-MX')}: ${values[index]} solicitudes</title></circle>`; }).join('')}</svg><div class="v2-chart-labels">${days.map(day => `<span>${day.toLocaleDateString('es-MX', { weekday: 'short' }).replace('.', '')}</span>`).join('')}</div>`;
+    }
+    const activity = document.getElementById("homeActivityList");
+    if (activity) {
+      const items = [
+        ...requests.map((item) => ({ at: item.creadoEn || item.fecha, icon: "fa-envelope-open-text", tone: "blue", title: `Solicitud ${item.folio || item.id || "nueva"}`, detail: item.solicitante?.nombre || item.tipoBien || "Solicitud de servicio" })),
+        ...records.map((item) => ({ at: item.creadoEn || item.fechaAvaluo, icon: "fa-clipboard-check", tone: "green", title: `Avalúo ${item.numeroAvaluo || "sin número"}`, detail: item.solicitante || item.tipoBien || "Registro en Recepción" })),
+        ...technicalAppraisals.map((item) => ({ at: item.creadoEn || item.fechaAvaluo, icon: "fa-file-signature", tone: "violet", title: `Expediente ${item.numeroAvaluo || item.numero || "nuevo"}`, detail: item.solicitante || item.tipoBien || "Gestión de Avalúos" }))
+      ].filter((item) => item.at).sort((a, b) => new Date(b.at) - new Date(a.at)).slice(0, 5);
+      activity.innerHTML = items.length ? items.map((item) => `<article class="cp6-activity-item"><span class="cp6-activity-icon ${item.tone}"><i class="fa-solid ${item.icon}"></i></span><div><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.detail)}</small></div><time>${relativeTime(item.at)}</time></article>`).join("") : `<p class="cp6-empty-state">Aún no hay actividad registrada.</p>`;
+    }
+    renderHomeActions();
+  }
+
   function renderHomeActions() {
     const permissions = { recepcion: Boolean(activeSessionUser), gestion: canEdit(), solicitudes: canViewRequests(), crear: canEdit(), validacion: canAuthorizeFolios(), buscar: canViewRequests() };
     $$("[data-home-action]").forEach((card) => {
@@ -766,14 +798,14 @@
         stage.hidden = false;
         title.textContent = game.title;
         frame.title = `${game.title} CP6`;
-        frame.src = game.source;
+        frame.src = new URL(game.source, document.querySelector('script[src*="app.js"]')?.src || location.href).href;
         frame.focus();
       });
     });
     close?.addEventListener("click", closeGame);
     window.addEventListener("control-avaluos:view", (event) => { if (event.detail !== "juegos") closeGame(); });
   }
-  function bindHomeIntelligence() { document.body.classList.remove("global-search-active"); const searchInput=$("#globalSearchInput"), palette=$("#globalSearchPalette"), searchWrap=searchInput?.closest(".global-search-wrap"); let searchBackdrop=document.querySelector("#globalSearchBackdrop"); if (palette && searchWrap && palette.parentElement !== searchWrap) searchWrap.appendChild(palette); if (!searchBackdrop) { searchBackdrop=document.createElement("div"); searchBackdrop.id="globalSearchBackdrop"; searchBackdrop.hidden=true; (document.querySelector("#appShell") || document.body).appendChild(searchBackdrop); } const searchToggle=$("#globalSearchToggleButton"); const setSearchActive=(active)=>{ const alertsPanel=document.querySelector("#alertsPanel"); if (active && alertsPanel && !alertsPanel.hidden) { alertsPanel.hidden=true; document.querySelector("#alertsButton")?.setAttribute("aria-expanded","false"); } palette.hidden=!active; searchBackdrop.hidden=true; searchWrap?.toggleAttribute("hidden", !active); searchWrap?.classList.toggle("is-open", active); searchToggle?.setAttribute("aria-expanded", String(active)); document.body.classList.toggle("global-search-active", active); if (active) window.setTimeout(()=>searchInput?.focus(), 0); }; window.__setGlobalSearchActive=setSearchActive; searchToggle?.addEventListener("click",()=>setSearchActive(searchWrap?.hidden !== false)); searchInput?.addEventListener("input", event=>{ const value=event.target.value.trim(); if (value) { searchGlobal(value); setSearchActive(true); } else setSearchActive(false); }); searchInput?.addEventListener("focus", ()=>{ if (searchInput.value.trim()) setSearchActive(true); }); searchInput?.addEventListener("keydown", event=>{ if (event.key === "Escape") { searchInput.value=""; setSearchActive(false); searchInput.blur(); } }); $("#alertsButton")?.addEventListener("click",()=>{const panel=$("#alertsPanel"), button=$("#alertsButton"); const opening=panel.hidden; if (opening && typeof window.__setGlobalSearchActive === "function") window.__setGlobalSearchActive(false); panel.hidden=!opening; button.setAttribute("aria-expanded",String(!panel.hidden)); if(!panel.hidden) { renderAlerts(); refreshNotifications(); }}); $("#markAlertsReadButton")?.addEventListener("click",async()=>{ try { await apiRequest("/notifications/read-all", { method: "PUT" }); notifications = notifications.map(item => ({ ...item, leida: true })); renderAlerts(); } catch (error) { window.alert(error.message); }}); $$("[data-activity-filter]").forEach(button=>button.addEventListener("click",()=>{$$("[data-activity-filter]").forEach(item=>item.classList.toggle("is-active",item===button)); renderRecentActivity(button.dataset.activityFilter);})); $$("[data-alert-filter]").forEach(button=>button.addEventListener("click",()=>{$$("[data-alert-filter]").forEach(item=>item.classList.toggle("is-active",item===button)); renderAlerts(button.dataset.alertFilter);})); document.addEventListener("keydown",event=>{if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==="k"){event.preventDefault(); setSearchActive(true);}}); document.addEventListener("click", event=>{ const target=event.target; const searchPanel=document.querySelector("#globalSearchPalette, .search-dropdown, .search-popover"); const searchButton=document.querySelector("#globalSearchToggleButton, .search-icon-btn, [data-action=\"search\"]"); const searchContainer=document.querySelector(".global-search-wrap"); const alertsPanel=document.querySelector("#alertsPanel, .notifications-dropdown, .alerts-center"); const alertsButton=document.querySelector("#alertsButton, .notification-icon-btn, [data-action=\"notifications\"]"); if (searchPanel && !searchPanel.hidden && !searchPanel.contains(target) && !searchContainer?.contains(target) && !searchButton?.contains(target)) setSearchActive(false); if (alertsPanel && !alertsPanel.hidden && !alertsPanel.contains(target) && !alertsButton?.contains(target)) { alertsPanel.hidden=true; alertsButton?.setAttribute("aria-expanded","false"); } }); window.addEventListener("control-avaluos:technical-appraisals-updated",()=>{renderRecentActivity();renderAlerts();}); window.addEventListener("control-avaluos:request-updated",(event)=>{
+  function bindHomeIntelligence() { document.body.classList.remove("global-search-active"); const searchInput=$("#globalSearchInput"), palette=$("#globalSearchPalette"), searchWrap=searchInput?.closest(".global-search-wrap"); let searchBackdrop=document.querySelector("#globalSearchBackdrop"); if (palette && searchWrap && palette.parentElement !== searchWrap) searchWrap.appendChild(palette); if (!searchBackdrop) { searchBackdrop=document.createElement("div"); searchBackdrop.id="globalSearchBackdrop"; searchBackdrop.hidden=true; (document.querySelector("#appShell") || document.body).appendChild(searchBackdrop); } const searchToggle=$("#globalSearchToggleButton"); const setSearchActive=(active)=>{ const alertsPanel=document.querySelector("#alertsPanel"); if (active && alertsPanel && !alertsPanel.hidden) { alertsPanel.hidden=true; document.querySelector("#alertsButton")?.setAttribute("aria-expanded","false"); } palette.hidden=!active; searchBackdrop.hidden=true; searchWrap?.toggleAttribute("hidden", !active); searchWrap?.classList.toggle("is-open", active); searchToggle?.setAttribute("aria-expanded", String(active)); document.body.classList.toggle("global-search-active", active); if (active) window.setTimeout(()=>searchInput?.focus(), 0); }; window.__setGlobalSearchActive=setSearchActive; searchToggle?.addEventListener("click",()=>setSearchActive(searchWrap?.hidden !== false)); searchInput?.addEventListener("input", event=>{ const value=event.target.value.trim(); if (value) { searchGlobal(value); setSearchActive(true); } else setSearchActive(false); }); searchInput?.addEventListener("focus", ()=>{ if (searchInput.value.trim()) setSearchActive(true); }); searchInput?.addEventListener("keydown", event=>{ if (event.key === "Escape") { searchInput.value=""; setSearchActive(false); searchInput.blur(); } }); $("#alertsButton")?.addEventListener("click",()=>{const panel=$("#alertsPanel"), button=$("#alertsButton"); const opening=panel.hidden; if (opening && typeof window.__setGlobalSearchActive === "function") window.__setGlobalSearchActive(false); panel.hidden=!opening; button.setAttribute("aria-expanded",String(!panel.hidden)); if(!panel.hidden) { renderAlerts(); refreshNotifications(); }}); $("#markAlertsReadButton")?.addEventListener("click",async()=>{ try { await apiRequest("/notifications/read-all", { method: "PUT" }); notifications = notifications.map(item => ({ ...item, leida: true })); renderAlerts(); } catch (error) { window.alert(error.message); }}); $$("[data-activity-filter]").forEach(button=>button.addEventListener("click",()=>{$$("[data-activity-filter]").forEach(item=>item.classList.toggle("is-active",item===button)); renderRecentActivity(button.dataset.activityFilter);})); $$("[data-alert-filter]").forEach(button=>button.addEventListener("click",()=>{$$("[data-alert-filter]").forEach(item=>item.classList.toggle("is-active",item===button)); renderAlerts(button.dataset.alertFilter);})); document.addEventListener("keydown",event=>{if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==="k"){event.preventDefault(); setSearchActive(true);}}); document.addEventListener("click", event=>{ const target=event.target; const searchPanel=document.querySelector("#globalSearchPalette, .search-dropdown, .search-popover"); const searchButton=document.querySelector("#globalSearchToggleButton, .search-icon-btn, [data-action=\"search\"]"); const searchContainer=document.querySelector(".global-search-wrap"); const alertsPanel=document.querySelector("#alertsPanel, .notifications-dropdown, .alerts-center"); const alertsButton=document.querySelector("#alertsButton, .notification-icon-btn, [data-action=\"notifications\"]"); if (searchPanel && !searchPanel.hidden && !searchPanel.contains(target) && !searchContainer?.contains(target) && !searchButton?.contains(target)) setSearchActive(false); if (alertsPanel && !alertsPanel.hidden && !alertsPanel.contains(target) && !alertsButton?.contains(target)) { alertsPanel.hidden=true; alertsButton?.setAttribute("aria-expanded","false"); } }); window.addEventListener("control-avaluos:technical-appraisals-updated",()=>{renderRecentActivity();renderAlerts();renderAdminHome();}); window.addEventListener("control-avaluos:home-refresh", renderAdminHome); window.addEventListener("control-avaluos:request-updated",(event)=>{
       const updated = event.detail;
       if (updated?.id) {
         const current = Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : [];
@@ -782,6 +814,7 @@
       renderRecentActivity();
       renderAlerts();
       renderProfileDashboard();
+      renderAdminHome();
       render();
     }); }
   function showAuthenticatedApp(user) {
@@ -804,6 +837,7 @@
     window.setTimeout(() => appShell.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
     switchAppView("inicio");
     renderWelcomeTasks();
+    renderAdminHome();
     window.dispatchEvent(new CustomEvent("control-avaluos:authenticated", { detail: { user } }));
     render();
     refreshNotifications();
@@ -1567,7 +1601,7 @@
   $$('[data-cotizaciones-open]').forEach((button) => button?.addEventListener("click", () => {
     if (!cotizacionesPanel || !cotizacionesFrame) return;
     cotizacionesPanel.hidden = false;
-    cotizacionesFrame.src = "cotizacion.html";
+    cotizacionesFrame.src = new URL("cotizacion.html", document.querySelector('script[src*="app.js"]')?.src || location.href).href;
     document.querySelector(".avaluos-choice-grid")?.classList.add("is-hidden");
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     document.querySelector("#appShell main")?.scrollTo?.({ top: 0, left: 0, behavior: "auto" });

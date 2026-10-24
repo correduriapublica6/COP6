@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Manrope para títulos del diseño CP6 -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     <!-- html2canvas Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -43,13 +45,14 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="cp6-cotizaciones.css">
 </head>
-<body class="bg-slate-100/80 min-h-screen text-slate-800 p-3 sm:p-6 md:p-8">
+<body class="cp6-cotizaciones bg-slate-100/80 min-h-screen text-slate-800 p-3 sm:p-6 md:p-8">
 
-    <div class="max-w-7xl mx-auto space-y-6">
+    <div class="cp6-shell max-w-7xl mx-auto space-y-6">
         
         <!-- HEADER PRINCIPAL CON NAVEGACIÓN -->
-        <header class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+        <header class="cp6-topbar bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
                 <h1 class="text-2xl font-black text-slate-900 flex items-center gap-2.5">
                     <i class="fa-solid fa-calculator text-blue-600"></i> Cotizaciones
@@ -70,12 +73,29 @@
             </div>
         </header>
 
+        <!-- BANNER VISUAL CP6: solo contexto de la pantalla, sin datos operativos ficticios -->
+        <section class="cp6-hero" aria-label="Resumen de cotizaciones">
+            <div class="cp6-hero-copy">
+                <div class="cp6-eyebrow">Centro de cotizaciones</div>
+                <h2>Calcula, guarda y comparte tus cotizaciones con claridad.</h2>
+                <p>Administra los datos del cliente, desglose de ISR, honorarios y ahorro estimado desde una sola vista.</p>
+                <span class="cp6-hero-note"><i class="fa-solid fa-shield-halved"></i> Información guardada localmente en este dispositivo</span>
+            </div>
+            <div class="cp6-hero-art" aria-hidden="true">
+                <span style="height: 42%"></span><span style="height: 64%"></span><span style="height: 49%"></span><span style="height: 86%"></span><span style="height: 67%"></span>
+            </div>
+        </section>
+
         <!-- ========================================== -->
         <!-- VISTA 1: TABLA DE REGISTROS GUARDADOS      -->
         <!-- ========================================== -->
-        <section id="tableView" class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-6 space-y-4">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 pb-4">
-                <div class="w-full sm:w-72 relative">
+        <section id="tableView" class="cp6-table-panel bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-6 space-y-4">
+            <div class="cp6-table-head flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 pb-4">
+                <div class="cp6-section-heading">
+                    <h2>Cotizaciones guardadas</h2>
+                    <p>Consulta, edita o comparte tus registros recientes.</p>
+                </div>
+                <div class="cp6-search-wrap w-full sm:w-72 relative">
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
                     <input type="text" id="inSearch" oninput="renderTable()" placeholder="Buscar cliente, folio o ubicación..." class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-blue-600 outline-none">
                 </div>
@@ -104,12 +124,12 @@
         <!-- ========================================== -->
         <!-- VISTA 2: FORMULARIO Y VISTA PREVIA        -->
         <!-- ========================================== -->
-        <section id="formView" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <section id="formView" class="cp6-form-layout hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
             
             <!-- PANEL DE FORMULARIO -->
-            <div id="formPanel" class="lg:col-span-5 bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200/80 space-y-4">
+            <div id="formPanel" class="cp6-form-panel lg:col-span-5 bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200/80 space-y-4">
                 
-                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <div class="cp6-form-title flex justify-between items-center border-b border-slate-100 pb-3">
                     <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
                         <i class="fa-solid fa-sliders text-blue-600"></i> Datos de la Cotización
                     </h2>
@@ -206,10 +226,10 @@
             </div>
 
             <!-- PANEL VISTA PREVIA (RECIBO DERECHA) -->
-            <div id="previewContainer" class="lg:col-span-7 flex flex-col justify-start items-center space-y-4">
+            <div id="previewContainer" class="cp6-preview-panel lg:col-span-7 flex flex-col justify-start items-center space-y-4">
                 
                 <!-- Acciones de Exportación -->
-                <div id="actionsBar" class="w-full flex flex-wrap justify-end gap-2.5 no-print">
+                <div id="actionsBar" class="cp6-actions-bar w-full flex flex-wrap justify-end gap-2.5 no-print">
                     <button onclick="sendWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
                         <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
                     </button>
@@ -225,7 +245,7 @@
                 </div>
 
                 <!-- TARJETA DE VISTA PREVIA -->
-                <div class="w-full max-w-lg bg-white rounded-3xl card-shadow border border-slate-200/90 overflow-hidden" id="cotizacionCard">
+                <div class="cp6-quote-card w-full max-w-lg bg-white rounded-3xl card-shadow border border-slate-200/90 overflow-hidden" id="cotizacionCard">
                     <div class="h-3 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700"></div>
 
                     <div class="p-6 sm:p-7 space-y-5">

@@ -998,6 +998,7 @@
     if (!["admin", "auditor", "valuador"].includes(role)) { panel.hidden = true; return; }
     const user = window.ControlAvaluosDesktop?.getActiveUser?.() || "";
     await loadRequests(role, user);
+    window.dispatchEvent(new CustomEvent("control-avaluos:home-refresh"));
     const visible = requests;
     panel.hidden = false; table.innerHTML = requestRows(visible.slice(0, 8), false, true); bindRequestDetailButtons(table, visible.slice(0, 8));
   }

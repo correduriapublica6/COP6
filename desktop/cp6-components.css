@@ -1,0 +1,4686 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+/* CP6 component skin: intentionally unlayered so it can replace the legacy skin
+   when the existing styles are moved to @layer legacy. */
+body :where(#loginScreen, #appShell, dialog) {
+  --cp6-ink: #0b1628;
+  --cp6-ink-2: #253653;
+  --cp6-muted: #74839a;
+  --cp6-line: #e7edf5;
+  --cp6-surface: #ffffff;
+  --cp6-canvas: #f4f7fb;
+  --cp6-blue: #246bfe;
+  --cp6-blue-2: #5791ff;
+  --cp6-blue-soft: #edf4ff;
+  --cp6-cyan: #0ea5c9;
+  --cp6-green: #16a574;
+  --cp6-amber: #d99016;
+  --cp6-danger: #d14d5c;
+  --cp6-shadow: 0 16px 45px rgba(25, 52, 91, .07);
+  --cp6-shadow-sm: 0 7px 24px rgba(25, 52, 91, .055);
+  --cp6-ease: cubic-bezier(.23, 1, .32, 1);
+  color: var(--cp6-ink);
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+body :where(#loginScreen, #appShell) {
+  box-sizing: border-box;
+  background: var(--cp6-canvas);
+}
+
+body :where(#loginScreen *, #appShell *, dialog *) {
+  box-sizing: border-box;
+}
+
+body :where(h1, h2, h3, h4, h5, h6) {
+  font-family: "Manrope", system-ui, sans-serif;
+  color: var(--cp6-ink);
+}
+
+body :where(button, .primary-button, .secondary-button, .subtle-action-button, input[type="submit"], input[type="button"]) {
+  font-family: "Manrope", system-ui, sans-serif;
+  font-weight: 700;
+}
+
+body :where(input, select, textarea) {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+body :where(button, a, select, input[type="checkbox"], input[type="radio"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body :where(button:not(:disabled), a[href], select:not(:disabled), input[type="checkbox"]:not(:disabled), input[type="radio"]:not(:disabled)) {
+  cursor: pointer;
+}
+
+body :where(button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible) {
+  outline: 3px solid rgba(36, 107, 254, .28);
+  outline-offset: 2px;
+}
+
+body :where(button:disabled, input:disabled, select:disabled, textarea:disabled) {
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+body :where(#loginScreen [hidden], #appShell [hidden], dialog [hidden]) {
+  display: none !important;
+}
+
+body :where(#loginScreen .is-hidden, #appShell .is-hidden, dialog .is-hidden) {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   Shared controls and surfaces
+   -------------------------------------------------------------------------- */
+body :where(.primary-button, .subtle-action-button.btn-copu-primary, .client-primary-button, .cp6-primary-button, .cp6-action-button, [data-record-save-action]) {
+  align-items: center;
+  background: var(--cp6-blue);
+  border: 1px solid var(--cp6-blue);
+  border-radius: 12px;
+  box-shadow: 0 9px 19px rgba(36, 107, 254, .2);
+  color: #fff;
+  display: inline-flex;
+  gap: 8px;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 15px;
+  text-decoration: none;
+  transition: background-color .18s var(--cp6-ease), border-color .18s var(--cp6-ease), box-shadow .18s var(--cp6-ease), transform .18s var(--cp6-ease);
+}
+
+body :where(.primary-button:hover, .subtle-action-button.btn-copu-primary:hover, .client-primary-button:hover, .cp6-primary-button:hover, .cp6-action-button:hover, [data-record-save-action]:hover) {
+  background: #1557db;
+  border-color: #1557db;
+  box-shadow: 0 12px 24px rgba(36, 107, 254, .25);
+  transform: translateY(-2px);
+}
+
+body :where(.primary-button:active, .secondary-button:active, .subtle-action-button:active, .client-primary-button:active, .cp6-action-button:active, .cp6-detail-button:active, [data-record-save-action]:active) {
+  transform: scale(.97);
+}
+
+body :where(.secondary-button, .subtle-action-button:not(.btn-copu-primary), .cp6-secondary-button, .client-outline-button) {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 12px;
+  color: var(--cp6-ink-2);
+  display: inline-flex;
+  gap: 8px;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 15px;
+  text-decoration: none;
+  transition: background-color .18s var(--cp6-ease), border-color .18s var(--cp6-ease), color .18s var(--cp6-ease), transform .18s var(--cp6-ease);
+}
+
+body :where(.secondary-button:hover, .subtle-action-button:not(.btn-copu-primary):hover, .cp6-secondary-button:hover, .client-outline-button:hover) {
+  background: var(--cp6-blue-soft);
+  border-color: #bdd2ff;
+  color: var(--cp6-blue);
+}
+
+body :where(.btn-gold-cream) {
+  background: #fff;
+  border-color: var(--cp6-line);
+  color: var(--cp6-ink-2);
+}
+
+body :where(.btn-gold-cream:hover) {
+  background: var(--cp6-blue-soft);
+  border-color: #bdd2ff;
+  color: var(--cp6-blue);
+}
+
+body :where(.form-message, .login-message) {
+  border-radius: 10px;
+  color: #a63849;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 10px 0 0;
+  min-height: 0;
+}
+
+body :where(.form-message[data-tone="success"]) {
+  color: #13845e;
+}
+
+body :where(.form-message[hidden], .login-message[hidden]) {
+  display: none !important;
+}
+
+body :where(.section-kicker, .eyebrow) {
+  color: var(--cp6-blue);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.45px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   External entry and applicant portal
+   -------------------------------------------------------------------------- */
+body :where(#loginScreen.login-screen) {
+  align-items: stretch;
+  display: grid;
+  gap: 22px;
+  grid-template-columns: minmax(390px, .86fr) minmax(520px, 1.14fr);
+  min-height: 100vh;
+  padding: 24px;
+}
+
+body :where(#loginScreen .public-entry-panel) {
+  align-items: stretch;
+  background: var(--cp6-surface);
+  border: 1px solid var(--cp6-line);
+  border-radius: 28px;
+  box-shadow: var(--cp6-shadow);
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 48px);
+  min-width: 0;
+  overflow: hidden;
+  padding: clamp(30px, 5vw, 64px);
+}
+
+body :where(#loginScreen .public-entry-content) {
+  margin: auto;
+  max-width: 420px;
+  width: 100%;
+}
+
+body :where(#loginScreen .public-entry-content h1) {
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 800;
+  letter-spacing: -1.2px;
+  line-height: 1.08;
+  margin: 0;
+}
+
+body :where(#loginScreen .public-entry-copy) {
+  color: var(--cp6-muted);
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 12px 0 0;
+  max-width: 340px;
+}
+
+body :where(#loginScreen .public-entry-actions) {
+  display: grid;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+body :where(#loginScreen .public-entry-actions .primary-button, #loginScreen .public-entry-actions .secondary-button) {
+  min-height: 46px;
+  width: 100%;
+}
+
+body :where(#loginScreen .public-entry-internal) {
+  border-top: 1px solid var(--cp6-line);
+  margin-top: auto;
+  padding-top: 20px;
+  text-align: center;
+}
+
+body :where(#loginScreen .internal-access-button) {
+  background: transparent;
+  border: 0;
+  color: var(--cp6-muted);
+  font-size: 11px;
+  padding: 8px 12px;
+  text-decoration: underline;
+  text-decoration-color: #cbd7e8;
+  text-underline-offset: 3px;
+}
+
+body :where(#loginScreen .internal-access-button:hover) {
+  color: var(--cp6-blue);
+}
+
+body :where(#loginScreen .login-visual) {
+  background: linear-gradient(145deg, #071224, #123674 72%, #2167ed);
+  border-radius: 28px;
+  box-shadow: 0 22px 42px rgba(11, 38, 82, .17);
+  color: #fff;
+  min-height: calc(100vh - 48px);
+  overflow: hidden;
+  padding: clamp(28px, 5vw, 64px);
+  position: relative;
+}
+
+body :where(#loginScreen .login-visual::before, #loginScreen .login-visual::after) {
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+  position: absolute;
+}
+
+body :where(#loginScreen .login-visual::before) {
+  height: 430px;
+  right: -110px;
+  top: -190px;
+  width: 430px;
+}
+
+body :where(#loginScreen .login-visual::after) {
+  bottom: -270px;
+  height: 510px;
+  right: -25px;
+  width: 510px;
+}
+
+body :where(#loginScreen .login-visual-logo, #loginScreen .login-visual-copy, #loginScreen .login-visual-footer, #loginScreen .applicant-visual-panel) {
+  position: relative;
+  z-index: 1;
+}
+
+body :where(#loginScreen .login-visual-logo img) {
+  background: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 15px;
+  height: 58px;
+  object-fit: contain;
+  padding: 8px;
+  width: 58px;
+}
+
+body :where(#loginScreen .login-visual-copy) {
+  margin-top: clamp(90px, 13vh, 150px);
+  max-width: 420px;
+}
+
+body :where(#loginScreen .login-visual-copy h2) {
+  color: #fff;
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 800;
+  letter-spacing: -1.8px;
+  line-height: 1.08;
+  margin: 0;
+}
+
+body :where(#loginScreen .login-visual-copy span) {
+  color: #9cc1ff;
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 12px;
+}
+
+body :where(#loginScreen .login-visual-copy small) {
+  color: #c4d8f7;
+  display: block;
+  font-size: 11px;
+  line-height: 1.6;
+  margin-top: 24px;
+}
+
+body :where(#loginScreen .login-visual-footer) {
+  bottom: 28px;
+  color: #c8dafa;
+  font-size: 10px;
+  left: clamp(28px, 5vw, 64px);
+  position: absolute;
+}
+
+body :where(#loginScreen.applicant-dashboard-active) {
+  background: var(--cp6-canvas);
+  display: block;
+  padding: 0;
+}
+
+body :where(#loginScreen.applicant-dashboard-active .public-entry-panel) {
+  background: var(--cp6-canvas);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  display: block;
+  min-height: 100vh;
+  padding: 0;
+}
+
+body :where(#loginScreen.applicant-dashboard-active .public-entry-internal, #loginScreen.applicant-dashboard-active .login-visual) {
+  display: none;
+}
+
+body :where(#loginScreen.applicant-dashboard-active .public-entry-content) {
+  display: none;
+}
+
+body :where(#loginScreen .applicant-home-panel) {
+  background: var(--cp6-canvas);
+  min-height: 100vh;
+  padding: 0 34px 48px;
+  width: 100%;
+}
+
+body :where(#loginScreen .client-dashboard-header) {
+  align-items: center;
+  background: #fff;
+  border-bottom: 1px solid var(--cp6-line);
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  margin: 0 -34px 30px;
+  padding: 18px 34px;
+  position: relative;
+}
+
+body :where(#loginScreen .client-brand) {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+body :where(#loginScreen .client-brand::before) {
+  background: linear-gradient(135deg, #4288ff, #1f5ddd);
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(36, 107, 254, .25);
+  content: "CP6";
+  color: #fff;
+  display: grid;
+  font-family: "Manrope", sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  height: 37px;
+  letter-spacing: -.2px;
+  place-items: center;
+  width: 37px;
+}
+
+body :where(#loginScreen .client-brand strong) {
+  color: var(--cp6-ink);
+  display: block;
+  font-family: "Manrope", sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+body :where(#loginScreen .client-brand span) {
+  color: var(--cp6-muted);
+  display: block;
+  font-size: 9px;
+  letter-spacing: 1.2px;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+body :where(#loginScreen .client-header-actions) {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  position: relative;
+}
+
+body :where(#loginScreen .applicant-notifications-button) {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 12px;
+  color: var(--cp6-ink-2);
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  position: relative;
+  width: 40px;
+}
+
+body :where(#loginScreen .applicant-notifications-button svg) {
+  fill: none;
+  height: 19px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+  width: 19px;
+}
+
+body :where(#loginScreen .applicant-notifications-button b) {
+  background: var(--cp6-blue);
+  border: 2px solid #fff;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 8px;
+  min-width: 17px;
+  padding: 2px 4px;
+  position: absolute;
+  right: -4px;
+  top: -5px;
+}
+
+body :where(#loginScreen .client-logout-button) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 12px;
+  color: var(--cp6-ink-2);
+  min-height: 40px;
+  padding: 9px 13px;
+}
+
+body :where(#loginScreen .client-logout-button:hover) {
+  background: var(--cp6-blue-soft);
+  border-color: #bdd2ff;
+  color: var(--cp6-blue);
+}
+
+body :where(#loginScreen .applicant-notifications-panel) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 16px;
+  box-shadow: var(--cp6-shadow);
+  min-width: 280px;
+  padding: 13px;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 12px);
+  z-index: 5;
+}
+
+body :where(#loginScreen .applicant-notifications-heading) {
+  align-items: center;
+  border-bottom: 1px solid var(--cp6-line);
+  display: flex;
+  font-size: 11px;
+  justify-content: space-between;
+  padding: 2px 2px 10px;
+}
+
+body :where(#loginScreen .applicant-notifications-heading button) {
+  background: transparent;
+  border: 0;
+  color: var(--cp6-blue);
+  font-size: 10px;
+}
+
+body :where(#loginScreen .applicant-notifications-list) {
+  display: grid;
+  gap: 6px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-top: 8px;
+}
+
+body :where(#loginScreen .applicant-notification-item) {
+  align-items: flex-start;
+  background: #f8fbff;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--cp6-ink-2);
+  display: flex;
+  font-size: 10px;
+  gap: 9px;
+  padding: 9px;
+  text-align: left;
+  width: 100%;
+}
+
+body :where(#loginScreen .applicant-notification-item:hover) {
+  border-color: #d9e6ff;
+}
+
+body :where(#loginScreen .applicant-notification-item small) {
+  color: var(--cp6-muted);
+  display: block;
+  line-height: 1.45;
+  margin-top: 3px;
+}
+
+body :where(#loginScreen .applicant-notification-icon) {
+  align-items: center;
+  background: var(--cp6-blue-soft);
+  border-radius: 8px;
+  color: var(--cp6-blue);
+  display: inline-flex;
+  flex: 0 0 27px;
+  font-size: 14px;
+  height: 27px;
+  justify-content: center;
+}
+
+body :where(#loginScreen .client-inbox-shell) {
+  display: grid;
+  gap: 26px;
+  grid-template-columns: 230px minmax(0, 1fr);
+  margin: 0 auto;
+  max-width: 1420px;
+}
+
+body :where(#loginScreen .client-inbox-sidebar) {
+  align-self: start;
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 20px;
+  box-shadow: var(--cp6-shadow-sm);
+  padding: 18px;
+  position: sticky;
+  top: 24px;
+}
+
+body :where(#loginScreen .client-sidebar-profile) {
+  border-bottom: 1px solid var(--cp6-line);
+  padding-bottom: 18px;
+  text-align: center;
+}
+
+body :where(#loginScreen .client-sidebar-avatar) {
+  align-items: center;
+  background: linear-gradient(135deg, #dceaff, #83b4ff);
+  border-radius: 16px;
+  color: #164eb5;
+  display: inline-flex;
+  height: 53px;
+  justify-content: center;
+  margin-bottom: 10px;
+  width: 53px;
+}
+
+body :where(#loginScreen .client-sidebar-avatar svg) {
+  fill: none;
+  height: 25px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+  width: 25px;
+}
+
+body :where(#loginScreen .client-sidebar-profile h1) {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -.2px;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+body :where(#loginScreen .client-sidebar-contact) {
+  color: var(--cp6-muted);
+  font-size: 10px;
+  line-height: 1.55;
+  margin-top: 7px;
+  overflow-wrap: anywhere;
+}
+
+body :where(#loginScreen .client-sidebar-contact p) {
+  margin: 0;
+}
+
+body :where(#loginScreen .client-sidebar-profile-button) {
+  background: var(--cp6-blue-soft);
+  border: 1px solid #d9e6ff;
+  border-radius: 9px;
+  color: var(--cp6-blue);
+  font-size: 10px;
+  margin-top: 12px;
+  padding: 8px 10px;
+  width: 100%;
+}
+
+body :where(#loginScreen .client-inbox-nav) {
+  display: grid;
+  gap: 4px;
+  margin: 17px 0;
+}
+
+body :where(#loginScreen .client-inbox-nav button) {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  color: var(--cp6-muted);
+  display: flex;
+  font-size: 11px;
+  gap: 9px;
+  padding: 10px;
+  text-align: left;
+  width: 100%;
+}
+
+body :where(#loginScreen .client-inbox-nav button:hover, #loginScreen .client-inbox-nav button.is-active) {
+  background: var(--cp6-blue-soft);
+  color: var(--cp6-blue);
+}
+
+body :where(#loginScreen .client-inbox-nav button span) {
+  font-size: 15px;
+  line-height: 1;
+}
+
+body :where(#loginScreen .client-inbox-cta) {
+  justify-content: center;
+  width: 100%;
+}
+
+body :where(#loginScreen .client-inbox-main) {
+  min-width: 0;
+}
+
+body :where(#loginScreen .client-history-section) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 22px;
+  box-shadow: var(--cp6-shadow-sm);
+  min-width: 0;
+  padding: 22px;
+}
+
+body :where(#loginScreen .client-history-heading) {
+  align-items: flex-end;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+body :where(#loginScreen .client-sidebar-kicker) {
+  color: var(--cp6-blue);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+}
+
+body :where(#loginScreen .client-history-heading h3) {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -.7px;
+  margin: 6px 0 0;
+}
+
+body :where(#loginScreen .client-history-caption) {
+  color: var(--cp6-muted);
+  font-size: 10px;
+}
+
+body :where(#loginScreen .client-request-toolbar) {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  margin: 20px 0 16px;
+}
+
+body :where(#loginScreen .client-request-search, #loginScreen .client-request-filter) {
+  margin: 0;
+}
+
+body :where(#loginScreen .client-request-search) {
+  align-items: center;
+  background: #fbfcfe;
+  border: 1px solid var(--cp6-line);
+  border-radius: 11px;
+  color: #9aabc2;
+  display: flex;
+  flex: 1 1 420px;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+}
+
+body :where(#loginScreen .client-request-search input) {
+  background: transparent;
+  border: 0;
+  color: var(--cp6-ink);
+  font-size: 11px;
+  min-width: 0;
+  outline: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body :where(#loginScreen .client-request-filter) {
+  flex: 0 0 205px;
+}
+
+body :where(#loginScreen .client-request-filter select) {
+  width: 100%;
+}
+
+body :where(#loginScreen .client-request-grid, #loginScreen .client-request-table-wrap) {
+  min-width: 0;
+}
+
+body :where(#loginScreen .client-request-table-wrap) {
+  border: 1px solid var(--cp6-line);
+  border-radius: 15px;
+  overflow-x: auto;
+}
+
+body :where(#loginScreen .client-request-table) {
+  border-collapse: collapse;
+  min-width: 900px;
+  width: 100%;
+}
+
+body :where(#loginScreen .client-request-table th) {
+  background: #f8fbff;
+  border-bottom: 1px solid var(--cp6-line);
+  color: #8c9bb0;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .75px;
+  padding: 13px 14px;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+body :where(#loginScreen .client-request-table td) {
+  border-bottom: 1px solid #f0f3f7;
+  color: var(--cp6-ink-2);
+  font-size: 11px;
+  padding: 14px;
+  vertical-align: middle;
+}
+
+body :where(#loginScreen .client-request-table tbody tr:last-child td) {
+  border-bottom: 0;
+}
+
+body :where(#loginScreen .client-request-table tbody tr:hover td) {
+  background: #f8fbff;
+}
+
+body :where(#loginScreen .client-request-table td:first-child strong) {
+  color: var(--cp6-blue);
+  font-family: "Manrope", system-ui, sans-serif;
+  font-weight: 800;
+}
+
+body :where(#loginScreen .client-status-badge, .badge) {
+  align-items: center;
+  border-radius: 20px;
+  display: inline-flex;
+  font-size: 9px;
+  font-weight: 800;
+  gap: 5px;
+  padding: 6px 9px;
+  white-space: nowrap;
+}
+
+body :where(#loginScreen .client-status-badge)::before {
+  background: currentColor;
+  border-radius: 50%;
+  content: "";
+  height: 5px;
+  width: 5px;
+}
+
+body :where(#loginScreen .client-status-recibida, #loginScreen .client-status-en-revision, #loginScreen .client-status-asignada, #loginScreen .client-status-en-visita, #loginScreen .client-status-en-elaboracion, #loginScreen .badge.blue) {
+  background: var(--cp6-blue-soft);
+  color: var(--cp6-blue);
+}
+
+body :where(#loginScreen .client-status-concluida, #loginScreen .badge.green) {
+  background: #eafaf4;
+  color: var(--cp6-green);
+}
+
+body :where(#loginScreen .client-status-cancelada) {
+  background: #fff0f1;
+  color: var(--cp6-danger);
+}
+
+body :where(#loginScreen .client-table-view-button) {
+  background: var(--cp6-blue-soft);
+  border: 1px solid #d9e6ff;
+  border-radius: 8px;
+  color: var(--cp6-blue);
+  font-size: 10px;
+  padding: 7px 11px;
+  white-space: nowrap;
+}
+
+body :where(#loginScreen .client-table-view-button:hover) {
+  background: #dceaff;
+  border-color: #bdd2ff;
+}
+
+body :where(#loginScreen .client-pdf-cell) {
+  text-align: center;
+  width: 58px;
+}
+
+body :where(#loginScreen .client-pdf-link) {
+  align-items: center;
+  background: #eafaf4;
+  border: 1px solid #b8ebd5;
+  border-radius: 8px;
+  color: var(--cp6-green);
+  display: inline-flex;
+  font-size: 14px;
+  height: 30px;
+  justify-content: center;
+  text-decoration: none;
+  width: 34px;
+}
+
+body :where(#loginScreen .client-pdf-link:hover) {
+  background: #d6f6e8;
+  transform: translateY(-1px);
+}
+
+body :where(#loginScreen .client-pdf-disabled) {
+  color: var(--cp6-muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+body :where(#loginScreen .table-pagination) {
+  align-items: center;
+  color: var(--cp6-muted);
+  display: flex;
+  font-size: 10px;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+body :where(#loginScreen .table-pagination > div) {
+  display: flex;
+  gap: 4px;
+}
+
+body :where(#loginScreen .table-page-button) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 7px;
+  color: var(--cp6-ink-2);
+  font-size: 10px;
+  min-height: 29px;
+  min-width: 29px;
+  padding: 4px 7px;
+}
+
+body :where(#loginScreen .table-page-button.is-active) {
+  background: var(--cp6-blue);
+  border-color: var(--cp6-blue);
+  color: #fff;
+}
+
+body :where(#loginScreen .client-empty-state) {
+  border: 1px dashed #c7d8ed;
+  border-radius: 15px;
+  padding: 42px 18px;
+  text-align: center;
+}
+
+body :where(#loginScreen .client-empty-icon) {
+  color: var(--cp6-blue);
+  font-size: 28px;
+}
+
+body :where(#loginScreen .client-empty-state h4) {
+  font-size: 17px;
+  margin: 10px 0 5px;
+}
+
+body :where(#loginScreen .client-empty-state p) {
+  color: var(--cp6-muted);
+  font-size: 12px;
+  margin: 0 0 18px;
+}
+
+/* --------------------------------------------------------------------------
+   Dialog primitives, login, registration and public request wizard
+   -------------------------------------------------------------------------- */
+body :where(dialog.record-dialog, dialog.cp6-request-detail-dialog) {
+  border: 0;
+  border-radius: 24px;
+  box-shadow: 0 30px 90px rgba(7, 22, 48, .28);
+  color: var(--cp6-ink);
+  max-height: calc(100vh - 24px);
+  max-width: calc(100vw - 24px);
+  padding: 0;
+}
+
+body :where(dialog.record-dialog)::backdrop,
+body :where(dialog.cp6-request-detail-dialog)::backdrop {
+  background: rgba(7, 18, 37, .52);
+  backdrop-filter: blur(7px);
+}
+
+body :where(dialog.record-dialog > form) {
+  background: #fff;
+  border-radius: inherit;
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  padding: 26px;
+  width: min(580px, calc(100vw - 24px));
+}
+
+body :where(dialog .dialog-heading) {
+  align-items: flex-start;
+  border-bottom: 1px solid var(--cp6-line);
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 17px;
+}
+
+body :where(dialog .dialog-heading h2) {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -.6px;
+  margin: 5px 0 0;
+}
+
+body :where(dialog .dialog-heading .eyebrow) {
+  margin: 0;
+}
+
+body :where(dialog .icon-button, dialog .request-detail-close) {
+  align-items: center;
+  background: #f8fbff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 10px;
+  color: var(--cp6-muted);
+  display: inline-flex;
+  flex: 0 0 34px;
+  font-size: 20px;
+  height: 34px;
+  justify-content: center;
+  line-height: 1;
+  width: 34px;
+}
+
+body :where(dialog .icon-button:hover, dialog .request-detail-close:hover) {
+  background: var(--cp6-blue-soft);
+  color: var(--cp6-blue);
+}
+
+body :where(dialog .login-copy, dialog .credential-copy, dialog .report-dialog-copy) {
+  color: var(--cp6-muted);
+  font-size: 12px;
+  line-height: 1.65;
+  margin: 0 0 19px;
+}
+
+body :where(dialog .form-grid) {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body :where(dialog .form-grid .full-width) {
+  grid-column: 1 / -1;
+}
+
+body :where(dialog form > label, dialog .form-grid > label, dialog .inline-form-row > label) {
+  color: var(--cp6-ink-2);
+  display: grid;
+  font-size: 11px;
+  font-weight: 700;
+  gap: 7px;
+}
+
+body :where(dialog input:not([type="checkbox"]):not([type="radio"]), dialog select, dialog textarea, .modern-input-wrap input, .modern-input-wrap select, .modern-input-wrap textarea) {
+  background: #fbfcfe;
+  border: 1px solid #dce5f0;
+  border-radius: 11px;
+  color: var(--cp6-ink);
+  font-size: 11px;
+  min-height: 44px;
+  outline: 0;
+  padding: 11px 13px;
+  transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
+  width: 100%;
+}
+
+body :where(dialog textarea, .modern-input-wrap textarea) {
+  min-height: 78px;
+  resize: vertical;
+}
+
+body :where(dialog input:not([type="checkbox"]):not([type="radio"]):focus, dialog select:focus, dialog textarea:focus, .modern-input-wrap input:focus, .modern-input-wrap select:focus, .modern-input-wrap textarea:focus) {
+  background: #fff;
+  border-color: var(--cp6-blue);
+  box-shadow: 0 0 0 4px rgba(36, 107, 254, .1);
+}
+
+body :where(dialog input[readonly]) {
+  background: #f4f7fb;
+  color: var(--cp6-muted);
+}
+
+body :where(dialog .dialog-actions) {
+  align-items: center;
+  border-top: 1px solid var(--cp6-line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  justify-content: flex-end;
+  margin-top: 21px;
+  padding-top: 17px;
+}
+
+body :where(dialog .dialog-actions .primary-button, dialog .dialog-actions .secondary-button) {
+  min-width: 126px;
+}
+
+body :where(dialog .login-button) {
+  margin-top: 18px;
+  width: 100%;
+}
+
+body :where(dialog .credential-setup-button) {
+  background: transparent;
+  border: 0;
+  color: var(--cp6-blue);
+  font-size: 10px;
+  margin: 13px auto 0;
+  padding: 5px 8px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+body :where(dialog .login-hint) {
+  color: var(--cp6-muted);
+  font-size: 10px;
+  line-height: 1.55;
+  margin: 13px 0 0;
+  text-align: center;
+}
+
+body :where(#publicRequestDialog.public-request-dialog) {
+  background: transparent;
+  border: 0;
+  border-radius: 25px;
+  max-height: calc(100vh - 24px);
+  overflow: hidden;
+  padding: 0;
+  width: min(980px, calc(100vw - 24px));
+}
+
+body :where(#publicRequestDialog.public-request-dialog > div) {
+  background: #fff;
+  border: 1px solid rgba(231, 237, 245, .9);
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  height: min(850px, 92vh);
+  max-height: calc(100vh - 24px);
+  overflow: hidden;
+  width: 100%;
+}
+
+body :where(#publicRequestDialog .bg-slate-900) {
+  background: linear-gradient(110deg, #0b1628, #1d478a 70%, #246bfe);
+}
+
+body :where(#publicRequestDialog .bg-slate-900 h1) {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -.4px;
+}
+
+body :where(#publicRequestDialog .bg-slate-900 p) {
+  color: #bfd4f3;
+  font-size: 11px;
+}
+
+body :where(#publicRequestDialog #closePublicRequestButton) {
+  align-items: center;
+  background: rgba(255, 255, 255, .12);
+  border: 1px solid rgba(255, 255, 255, .17);
+  border-radius: 10px;
+  color: #fff;
+  display: inline-flex;
+  font-size: 20px;
+  height: 34px;
+  justify-content: center;
+  width: 34px;
+}
+
+body :where(#publicRequestDialog #closePublicRequestButton:hover) {
+  background: rgba(255, 255, 255, .22);
+}
+
+body :where(#publicRequestDialog > div > .bg-slate-50\/80) {
+  background: #fbfcfe;
+  border-bottom: 1px solid var(--cp6-line);
+  padding: 13px 25px;
+}
+
+body :where(#publicRequestDialog .step-tab) {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 11px;
+  color: var(--cp6-muted);
+  display: inline-flex;
+  font-size: 10px;
+  font-weight: 800;
+  gap: 7px;
+  justify-content: center;
+  min-height: 39px;
+  padding: 8px 10px;
+  text-align: center;
+  transition: background-color .18s var(--cp6-ease), border-color .18s var(--cp6-ease), color .18s var(--cp6-ease), transform .18s var(--cp6-ease);
+}
+
+body :where(#publicRequestDialog .step-tab::before) {
+  align-items: center;
+  background: #eef3fa;
+  border-radius: 50%;
+  color: var(--cp6-muted);
+  content: counter(cp6-step);
+  counter-increment: cp6-step;
+  display: inline-flex;
+  flex: 0 0 20px;
+  font-size: 9px;
+  height: 20px;
+  justify-content: center;
+  width: 20px;
+}
+
+body :where(#publicRequestDialog .step-tab:first-child) {
+  counter-reset: cp6-step;
+}
+
+body :where(#publicRequestDialog .step-tab.is-active) {
+  background: var(--cp6-blue-soft);
+  border-color: #bdd2ff;
+  color: var(--cp6-blue);
+}
+
+body :where(#publicRequestDialog .step-tab.is-active::before, #publicRequestDialog .step-tab.is-completed::before) {
+  background: var(--cp6-blue);
+  color: #fff;
+}
+
+body :where(#publicRequestDialog .step-tab.is-completed) {
+  border-color: #c9dafb;
+  color: #4c78c9;
+}
+
+body :where(#publicRequestDialog .step-tab-label) {
+  display: block;
+  line-height: 1.2;
+}
+
+body :where(#publicRequestDialog [data-step-connector]) {
+  background: #e5edf7;
+  height: 2px;
+  margin: 0 5px;
+  transition: background-color .18s ease;
+}
+
+body :where(#publicRequestDialog [data-step-connector].bg-brand-600) {
+  background: var(--cp6-blue);
+}
+
+body :where(#publicRequestDialog #publicRequestForm) {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+body :where(#publicRequestDialog #publicRequestForm > .flex-1.overflow-y-auto) {
+  background: #fff;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 26px 25px;
+}
+
+body :where(#publicRequestDialog .step-content) {
+  display: grid;
+  gap: 19px;
+}
+
+body :where(#publicRequestDialog .step-content.hidden, #publicRequestDialog .step-content[hidden]) {
+  display: none !important;
+}
+
+body :where(#publicRequestDialog .step-content > .border-b) {
+  border-bottom: 1px solid var(--cp6-line);
+  padding-bottom: 13px;
+}
+
+body :where(#publicRequestDialog .step-content > .border-b h2) {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -.3px;
+}
+
+body :where(#publicRequestDialog .step-content > .border-b p) {
+  color: var(--cp6-muted);
+  font-size: 11px;
+  line-height: 1.6;
+  margin-top: 5px;
+}
+
+body :where(#publicRequestDialog .step-content label:not(.request-consent-label)) {
+  color: var(--cp6-ink-2);
+  display: grid;
+  font-size: 10px;
+  font-weight: 700;
+  gap: 7px;
+}
+
+body :where(#publicRequestDialog .step-content input:not([type="checkbox"]), #publicRequestDialog .step-content select, #publicRequestDialog .step-content textarea) {
+  background: #fbfcfe;
+  border: 1px solid #dce5f0;
+  border-radius: 11px;
+  color: var(--cp6-ink);
+  font-size: 11px;
+  min-height: 44px;
+  outline: 0;
+  padding: 11px 13px 11px 39px;
+  transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
+  width: 100%;
+}
+
+body :where(#publicRequestDialog .step-content textarea) {
+  min-height: 76px;
+  resize: vertical;
+}
+
+body :where(#publicRequestDialog #descripcion_bien, #publicRequestDialog #observaciones_solicitud) {
+  height: 44px;
+  min-height: 44px;
+  resize: none;
+}
+
+body :where(#publicRequestDialog .step-content input:not([type="checkbox"]):focus, #publicRequestDialog .step-content select:focus, #publicRequestDialog .step-content textarea:focus) {
+  background: #fff;
+  border-color: var(--cp6-blue);
+  box-shadow: 0 0 0 4px rgba(36, 107, 254, .1);
+}
+
+body :where(#publicRequestDialog .step-content .relative) {
+  position: relative;
+}
+
+body :where(#publicRequestDialog .step-content .relative > [data-lucide], #publicRequestDialog .step-content .relative > .fa-solid) {
+  color: #9aabc2;
+  height: 15px;
+  left: 13px;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  z-index: 1;
+}
+
+body :where(#publicRequestDialog .step-content .relative > textarea ~ [data-lucide], #publicRequestDialog .step-content .relative > textarea ~ .fa-solid) {
+  top: 17px;
+  transform: none;
+}
+
+body :where(#publicRequestDialog .step-content select) {
+  appearance: none;
+  padding-right: 38px;
+}
+
+body :where(#publicRequestDialog .step-content .relative > select ~ [data-lucide="chevron-down"], #publicRequestDialog .step-content .relative > select ~ .fa-chevron-down) {
+  left: auto;
+  right: 13px;
+}
+
+body :where(#publicRequestDialog .request-privacy-box) {
+  background: #f2f8ff;
+  border: 1px solid #d9e9ff;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+body :where(#publicRequestDialog .request-privacy-box h3) {
+  color: var(--cp6-ink-2);
+  font-size: 12px;
+  font-weight: 800;
+  margin: 0;
+}
+
+body :where(#publicRequestDialog .request-privacy-box p) {
+  color: #66809f;
+  font-size: 10px;
+  line-height: 1.55;
+  margin: 6px 0 11px;
+}
+
+body :where(#publicRequestDialog .request-consent-label) {
+  align-items: flex-start;
+  color: var(--cp6-ink-2);
+  cursor: pointer;
+  display: flex;
+  font-size: 10px;
+  font-weight: 500;
+  gap: 9px;
+  line-height: 1.45;
+  width: auto;
+}
+
+body :where(#publicRequestDialog .request-consent-label input[type="checkbox"]) {
+  accent-color: var(--cp6-blue);
+  flex: 0 0 auto;
+  height: 16px;
+  margin: 1px 0 0;
+  width: 16px;
+}
+
+body :where(#publicRequestDialog .category-btn) {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 12px;
+  color: var(--cp6-muted);
+  display: flex;
+  gap: 7px;
+  justify-content: center;
+  min-height: 92px;
+  padding: 12px 8px;
+  transition: background-color .18s var(--cp6-ease), border-color .18s var(--cp6-ease), color .18s var(--cp6-ease), transform .18s var(--cp6-ease);
+}
+
+body :where(#publicRequestDialog .category-btn:hover) {
+  background: var(--cp6-blue-soft);
+  border-color: #bdd2ff;
+  color: var(--cp6-blue);
+  transform: translateY(-2px);
+}
+
+body :where(#publicRequestDialog .category-btn [data-lucide]) {
+  height: 25px;
+  margin: 0 auto;
+  width: 25px;
+}
+
+body :where(#publicRequestDialog .category-btn span) {
+  color: inherit;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+body :where(#publicRequestDialog .category-btn.border-blue-500, #publicRequestDialog .category-btn.bg-blue-50) {
+  background: var(--cp6-blue);
+  border-color: var(--cp6-blue);
+  color: #fff;
+}
+
+body :where(#publicRequestDialog .category-btn.border-emerald-500, #publicRequestDialog .category-btn.bg-emerald-50) {
+  background: #138a68;
+  border-color: #138a68;
+  color: #fff;
+}
+
+body :where(#publicRequestDialog .category-btn.border-amber-500, #publicRequestDialog .category-btn.bg-amber-50) {
+  background: #c27b12;
+  border-color: #c27b12;
+  color: #fff;
+}
+
+body :where(#publicRequestDialog .category-btn.border-violet-500, #publicRequestDialog .category-btn.bg-violet-50) {
+  background: #7058c6;
+  border-color: #7058c6;
+  color: #fff;
+}
+
+body :where(#publicRequestDialog .category-btn.border-rose-500, #publicRequestDialog .category-btn.bg-rose-50) {
+  background: #c54e72;
+  border-color: #c54e72;
+  color: #fff;
+}
+
+body :where(#publicRequestDialog .cat-specific-block) {
+  border-top: 1px solid var(--cp6-line);
+  padding-top: 15px;
+}
+
+body :where(#publicRequestDialog .cat-specific-block.hidden, #publicRequestDialog #field-proposito-container.hidden, #publicRequestDialog #valor-operacion-container.hidden) {
+  display: none !important;
+}
+
+body :where(#publicRequestDialog #valor_letras_preview) {
+  color: var(--cp6-blue);
+  font-size: 10px;
+  font-style: italic;
+  min-height: 15px;
+}
+
+body :where(#publicRequestDialog [for="publicRequestAttachments"]) {
+  align-items: center;
+  background: #f8fbff;
+  border: 1px dashed #b9cce8;
+  border-radius: 15px;
+  color: var(--cp6-muted);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 145px;
+  padding: 24px;
+  text-align: center;
+  transition: background-color .18s ease, border-color .18s ease, transform .18s ease;
+}
+
+body :where(#publicRequestDialog [for="publicRequestAttachments"]:hover) {
+  background: var(--cp6-blue-soft);
+  border-color: var(--cp6-blue);
+}
+
+body :where(#publicRequestDialog [for="publicRequestAttachments"] p:first-of-type) {
+  color: var(--cp6-ink-2);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+body :where(#publicRequestDialog [for="publicRequestAttachments"] p:last-of-type) {
+  color: var(--cp6-muted);
+  font-size: 9px;
+}
+
+body :where(#publicRequestDialog [for="publicRequestAttachments"] > div) {
+  align-items: center;
+  background: var(--cp6-blue-soft);
+  border: 1px solid #d9e6ff;
+  border-radius: 50%;
+  display: inline-flex;
+  height: 43px;
+  justify-content: center;
+  margin-bottom: 3px;
+  width: 43px;
+}
+
+body :where(#publicRequestDialog #publicRequestAttachmentsList) {
+  max-height: 180px;
+  overflow-y: auto;
+  padding: 0 1px;
+}
+
+body :where(#publicRequestDialog #publicRequestAttachmentsList > ul) {
+  display: grid;
+  gap: 7px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+body :where(#publicRequestDialog #publicRequestAttachmentsList li) {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 11px;
+  display: flex;
+  gap: 9px;
+  min-height: 51px;
+  padding: 8px 10px;
+}
+
+body :where(#publicRequestDialog #publicRequestAttachmentsList li .request-file-icon) {
+  align-items: center;
+  background: var(--cp6-blue-soft);
+  border-radius: 9px;
+  color: var(--cp6-blue);
+  display: inline-flex;
+  flex: 0 0 30px;
+  height: 30px;
+  justify-content: center;
+  width: 30px;
+}
+
+body :where(#publicRequestDialog #publicRequestAttachmentsList li .request-file-meta) {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+body :where(#publicRequestDialog #publicRequestAttachmentsList li .request-file-meta strong) {
+  color: var(--cp6-ink-2);
+  display: block;
+  font-size: 10px;
+  max-width: 210px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body :where(#publicRequestDialog #publicRequestAttachmentsList li .request-file-meta small) {
+  color: var(--cp6-muted);
+  font-size: 9px;
+}
+
+body :where(#publicRequestDialog #publicRequestAttachmentsList li button) {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--cp6-muted);
+  display: inline-flex;
+  height: 28px;
+  justify-content: center;
+  margin-left: auto;
+  width: 28px;
+}
+
+body :where(#publicRequestDialog #publicRequestAttachmentsList li button:hover) {
+  background: #fff0f1;
+  border-radius: 8px;
+  color: var(--cp6-danger);
+}
+
+body :where(#publicRequestDialog .bg-slate-50.border-t) {
+  background: #fbfcfe;
+  border-top: 1px solid var(--cp6-line);
+  padding: 15px 25px;
+}
+
+body :where(#publicRequestDialog #publicRequestMessage) {
+  margin: 10px 25px 0;
+}
+
+body :where(#publicRequestDialog #btn-prev, #publicRequestDialog #btn-next, #publicRequestDialog #publicRequestSubmit) {
+  border-radius: 11px;
+  min-height: 42px;
+  padding: 10px 16px;
+}
+
+body :where(#publicRequestDialog #btn-prev) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  color: var(--cp6-ink-2);
+}
+
+body :where(#publicRequestDialog #btn-prev:hover) {
+  background: var(--cp6-blue-soft);
+  border-color: #bdd2ff;
+  color: var(--cp6-blue);
+}
+
+body :where(#publicRequestDialog #btn-next) {
+  background: var(--cp6-blue);
+  border: 1px solid var(--cp6-blue);
+  box-shadow: 0 9px 19px rgba(36, 107, 254, .2);
+  color: #fff;
+  margin-left: auto;
+}
+
+body :where(#publicRequestDialog #publicRequestSubmit) {
+  background: var(--cp6-green);
+  border-color: var(--cp6-green);
+  box-shadow: 0 9px 19px rgba(22, 165, 116, .18);
+  color: #fff;
+  margin-left: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Administrative shell and home dashboard
+   -------------------------------------------------------------------------- */
+body :where(#appShell.control-shell) {
+  background: var(--cp6-canvas);
+  min-height: 100vh;
+}
+
+body :where(#appShell .cp6-navbar-modern) {
+  align-items: center;
+  background: var(--cp6-ink);
+  box-shadow: 0 8px 28px rgba(11, 22, 40, .14);
+  color: #fff;
+  display: flex;
+  gap: 22px;
+  min-height: 76px;
+  padding: 13px 30px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+body :where(#appShell .cp6-brand) {
+  align-items: center;
+  background: linear-gradient(135deg, #4288ff, #1f5ddd);
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(36, 107, 254, .25);
+  display: grid;
+  flex: 0 0 38px;
+  height: 38px;
+  place-items: center;
+  position: relative;
+  width: 38px;
+}
+
+body :where(#appShell .cp6-brand::after) {
+  color: #fff;
+  content: "CP6";
+  font-family: "Manrope", sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+body :where(#appShell .cp6-nav-center) {
+  align-items: center;
+  display: flex;
+  flex: 1 1 auto;
+  gap: 3px;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+body :where(#appShell .cp6-nav-link) {
+  align-items: center;
+  border-radius: 10px;
+  color: #9eaecc;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 10px;
+  gap: 7px;
+  min-height: 39px;
+  padding: 8px 10px;
+  text-decoration: none;
+  transition: background-color .18s var(--cp6-ease), color .18s var(--cp6-ease), transform .18s var(--cp6-ease);
+  white-space: nowrap;
+}
+
+body :where(#appShell .cp6-nav-link:hover, #appShell .cp6-nav-link.is-active, #appShell .cp6-nav-link[aria-current="page"]) {
+  background: rgba(65, 133, 255, .2);
+  color: #fff;
+}
+
+body :where(#appShell .cp6-nav-link:hover) {
+  transform: translateY(-1px);
+}
+
+body :where(#appShell .cp6-hand-icon) {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+}
+
+body :where(#appShell .cp6-hand-icon svg) {
+  fill: none;
+  height: 16px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+  width: 16px;
+}
+
+body :where(#appShell .cp6-nav-tools) {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+}
+
+body :where(#appShell .cp6-icon-btn) {
+  align-items: center;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .11);
+  border-radius: 10px;
+  color: #c9d6ea;
+  display: inline-flex;
+  height: 37px;
+  justify-content: center;
+  position: relative;
+  width: 37px;
+}
+
+body :where(#appShell .cp6-icon-btn:hover) {
+  background: rgba(255, 255, 255, .13);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+body :where(#appShell .profile-avatar-image) {
+  border-radius: 50%;
+  height: 22px;
+  object-fit: cover;
+  width: 22px;
+}
+
+body :where(#appShell .cp6-status-dot) {
+  background: #25d993;
+  border: 2px solid var(--cp6-ink);
+  border-radius: 50%;
+  bottom: 4px;
+  height: 8px;
+  position: absolute;
+  right: 4px;
+  width: 8px;
+}
+
+body :where(#appShell .profile-menu) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 13px;
+  box-shadow: var(--cp6-shadow);
+  min-width: 170px;
+  overflow: hidden;
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 9px);
+  z-index: 20;
+}
+
+body :where(#appShell .profile-menu button) {
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: var(--cp6-ink-2);
+  display: block;
+  font-size: 10px;
+  padding: 9px 10px;
+  text-align: left;
+  width: 100%;
+}
+
+body :where(#appShell .profile-menu button:hover) {
+  background: var(--cp6-blue-soft);
+  color: var(--cp6-blue);
+}
+
+body :where(#appShell .app-workspace) {
+  margin: 0 auto;
+  max-width: 1540px;
+  min-width: 0;
+  padding: 31px 34px 48px;
+}
+
+body :where(#appShell .workspace-header) {
+  align-items: end;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+body :where(#appShell .workspace-header h1) {
+  font-size: clamp(25px, 3vw, 35px);
+  font-weight: 800;
+  letter-spacing: -1.2px;
+  line-height: 1.1;
+  margin: 6px 0 0;
+}
+
+body :where(#appShell .workspace-description) {
+  color: var(--cp6-muted);
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 8px;
+}
+
+body :where(#appShell .workspace-actions) {
+  display: flex;
+  gap: 8px;
+}
+
+body :where(#appShell .app-view) {
+  min-width: 0;
+}
+
+body :where(#appShell .app-view[hidden]) {
+  display: none !important;
+}
+
+body :where(#appShell .cp6-home-hero) {
+  align-items: center;
+  background: linear-gradient(120deg, #0d1b31, #183663 68%, #256bfe);
+  border-radius: 24px;
+  box-shadow: 0 22px 42px rgba(11, 38, 82, .17);
+  color: #fff;
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  min-height: 178px;
+  overflow: hidden;
+  padding: 25px 27px;
+  position: relative;
+}
+
+body :where(#appShell .cp6-home-hero::before, #appShell .cp6-home-hero::after) {
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+  position: absolute;
+}
+
+body :where(#appShell .cp6-home-hero::before) {
+  height: 350px;
+  right: 120px;
+  top: -250px;
+  width: 350px;
+}
+
+body :where(#appShell .cp6-home-hero::after) {
+  bottom: -370px;
+  height: 450px;
+  right: -50px;
+  width: 450px;
+}
+
+body :where(#appShell .cp6-home-hero-copy, #appShell .cp6-home-hero-art) {
+  position: relative;
+  z-index: 1;
+}
+
+body :where(#appShell .cp6-home-hero-copy) {
+  max-width: 570px;
+}
+
+body :where(#appShell .cp6-home-eyebrow) {
+  color: #9cc1ff;
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+body :where(#appShell .cp6-live-dot) {
+  background: #25d993;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(37, 217, 147, .12);
+  display: inline-block;
+  height: 7px;
+  margin-right: 7px;
+  width: 7px;
+}
+
+body :where(#appShell .cp6-home-hero h2) {
+  color: #fff;
+  font-size: clamp(21px, 2.5vw, 30px);
+  font-weight: 800;
+  letter-spacing: -.8px;
+  line-height: 1.15;
+  margin: 9px 0 0;
+}
+
+body :where(#appShell .cp6-home-hero h2 span) {
+  color: #8ec0ff;
+}
+
+body :where(#appShell .cp6-home-hero .welcome-copy) {
+  color: #c4d8f7;
+  font-size: 12px;
+  line-height: 1.65;
+  margin-top: 10px;
+  max-width: 440px;
+}
+
+body :where(#appShell .cp6-home-user) {
+  align-items: center;
+  color: #c8dafa;
+  display: flex;
+  font-size: 10px;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+body :where(#appShell .cp6-home-user strong) {
+  color: #fff;
+}
+
+body :where(#appShell .cp6-avatar) {
+  align-items: center;
+  background: linear-gradient(135deg, #dceaff, #83b4ff);
+  border-radius: 10px;
+  color: #164eb5;
+  display: inline-flex;
+  height: 29px;
+  justify-content: center;
+  width: 29px;
+}
+
+body :where(#appShell .cp6-home-hero-art) {
+  min-height: 124px;
+  min-width: 215px;
+  position: relative;
+  width: 245px;
+}
+
+body :where(#appShell .cp6-hero-chart) {
+  align-items: end;
+  border-bottom: 1px solid rgba(255, 255, 255, .2);
+  bottom: 2px;
+  display: flex;
+  gap: 9px;
+  height: 105px;
+  padding: 12px 12px 0;
+  position: absolute;
+  right: 0;
+  width: 205px;
+}
+
+body :where(#appShell .cp6-hero-chart span) {
+  background: linear-gradient(#8ec0ff, rgba(142, 192, 255, .18));
+  border-radius: 6px 6px 0 0;
+  display: block;
+  flex: 1;
+  min-height: 20px;
+  transform-origin: bottom;
+}
+
+body :where(#appShell .cp6-floating-badge) {
+  background: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .17);
+  border-radius: 9px;
+  color: #fff;
+  font-size: 9px;
+  padding: 8px 10px;
+  position: absolute;
+  white-space: nowrap;
+}
+
+body :where(#appShell .cp6-badge-top) {
+  right: 42px;
+  top: 0;
+}
+
+body :where(#appShell .cp6-badge-bottom) {
+  bottom: 0;
+  right: 0;
+}
+
+body :where(#appShell .cp6-home-grid) {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: minmax(0, 1.42fr) minmax(290px, .8fr);
+  margin-top: 25px;
+}
+
+body :where(#appShell .cp6-home-main-column, #appShell .cp6-home-side-column) {
+  display: grid;
+  gap: 15px;
+  min-width: 0;
+}
+
+body :where(#appShell .cp6-section-heading, #appShell .cp6-card-heading) {
+  align-items: flex-end;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+body :where(#appShell .cp6-section-heading h3, #appShell .cp6-card-heading h3) {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -.25px;
+  margin: 5px 0 0;
+}
+
+body :where(#appShell .cp6-section-kicker) {
+  color: var(--cp6-blue);
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+}
+
+body :where(#appShell .cp6-card-caption, #appShell .cp6-section-heading > span:not(.cp6-section-kicker)) {
+  color: var(--cp6-muted);
+  font-size: 10px;
+}
+
+body :where(#appShell .cp6-kpi-grid) {
+  display: grid;
+  gap: 13px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+body :where(#appShell .cp6-kpi-card, #appShell .cp6-chart-card, #appShell .cp6-requests-card, #appShell .cp6-quick-card, #appShell .cp6-activity-card, #appShell .cp6-install-card, #appShell .inline-panel, #appShell .dashboard-tabs, #appShell .search-panel, #appShell .development-card) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 19px;
+  box-shadow: var(--cp6-shadow-sm);
+}
+
+body :where(#appShell .cp6-kpi-card) {
+  min-height: 126px;
+  overflow: hidden;
+  padding: 17px;
+  position: relative;
+  transition: border-color .2s var(--cp6-ease), box-shadow .2s var(--cp6-ease), transform .2s var(--cp6-ease);
+}
+
+body :where(#appShell .cp6-kpi-card:hover) {
+  border-color: #c9dafb;
+  box-shadow: var(--cp6-shadow);
+  transform: translateY(-3px);
+}
+
+body :where(#appShell .cp6-kpi-card::after) {
+  background: var(--cp6-blue-soft);
+  border-radius: 50%;
+  bottom: -30px;
+  content: "";
+  height: 80px;
+  position: absolute;
+  right: -28px;
+  width: 80px;
+}
+
+body :where(#appShell .cp6-kpi-icon) {
+  align-items: center;
+  background: var(--cp6-blue-soft);
+  border-radius: 10px;
+  color: var(--cp6-blue);
+  display: inline-flex;
+  height: 32px;
+  justify-content: center;
+  width: 32px;
+}
+
+body :where(#appShell .cp6-kpi-icon i) {
+  font-size: 14px;
+}
+
+body :where(#appShell .cp6-kpi-card > div:last-of-type > span) {
+  color: var(--cp6-muted);
+  display: block;
+  font-size: 10px;
+  margin-top: 12px;
+}
+
+body :where(#appShell .cp6-kpi-card strong) {
+  display: block;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -.7px;
+  margin-top: 5px;
+}
+
+body :where(#appShell .cp6-kpi-card small) {
+  color: var(--cp6-muted);
+  display: block;
+  font-size: 9px;
+  margin-top: 3px;
+}
+
+body :where(#appShell .cp6-kpi-amber .cp6-kpi-icon) { background: #fff7e8; color: var(--cp6-amber); }
+body :where(#appShell .cp6-kpi-green .cp6-kpi-icon) { background: #eafaf4; color: var(--cp6-green); }
+body :where(#appShell .cp6-kpi-violet .cp6-kpi-icon) { background: #f1efff; color: #7058c6; }
+
+body :where(#appShell .cp6-kpi-corner) {
+  color: #9db2d1;
+  font-size: 10px;
+  position: absolute;
+  right: 15px;
+  top: 17px;
+}
+
+body :where(#appShell .cp6-chart-card, #appShell .cp6-requests-card, #appShell .cp6-quick-card, #appShell .cp6-activity-card) {
+  padding: 19px 20px;
+}
+
+body :where(#appShell .cp6-bars-chart) {
+  align-items: end;
+  background: repeating-linear-gradient(to bottom, transparent 0, transparent 35px, #edf2f8 36px);
+  border-bottom: 1px solid #dae4f0;
+  display: flex;
+  gap: 12px;
+  height: 166px;
+  margin-top: 21px;
+  padding: 0 5%;
+}
+
+body :where(#appShell .cp6-bars-chart > span) {
+  background: linear-gradient(#5791ff, rgba(87, 145, 255, .18));
+  border-radius: 6px 6px 0 0;
+  display: block;
+  flex: 1;
+  min-height: 16px;
+  transform-origin: bottom;
+}
+
+body :where(#appShell .cp6-text-action) {
+  background: transparent;
+  border: 0;
+  color: var(--cp6-blue);
+  font-size: 10px;
+  padding: 6px;
+}
+
+body :where(#appShell .cp6-text-action:hover) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+body :where(#appShell .cp6-home-request-table, #appShell .request-table-wrap, #appShell .users-table-wrap, #appShell .validation-registry-table-wrap) {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+body :where(#appShell .cp6-home-request-table table, #appShell .request-table-wrap table, #appShell .users-table-wrap table, #appShell .validation-registry-table-wrap table) {
+  border-collapse: collapse;
+  min-width: 680px;
+  width: 100%;
+}
+
+body :where(#appShell .cp6-home-request-table th, #appShell .request-table-wrap th, #appShell .users-table-wrap th, #appShell .validation-registry-table-wrap th) {
+  background: #f8fbff;
+  border-bottom: 1px solid var(--cp6-line);
+  color: #8c9bb0;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .7px;
+  padding: 12px 14px;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+body :where(#appShell .cp6-home-request-table td, #appShell .request-table-wrap td, #appShell .users-table-wrap td, #appShell .validation-registry-table-wrap td) {
+  border-bottom: 1px solid #f0f3f7;
+  color: var(--cp6-ink-2);
+  font-size: 11px;
+  padding: 13px 14px;
+  vertical-align: middle;
+}
+
+body :where(#appShell .cp6-home-request-table tr:last-child td, #appShell .request-table-wrap tr:last-child td, #appShell .users-table-wrap tr:last-child td, #appShell .validation-registry-table-wrap tr:last-child td) {
+  border-bottom: 0;
+}
+
+body :where(#appShell .cp6-home-request-table tr:hover td, #appShell .request-table-wrap tbody tr:hover td, #appShell .users-table-wrap tbody tr:hover td) {
+  background: #f8fbff;
+}
+
+body :where(#appShell .cp6-quick-card h3, #appShell .cp6-activity-card h3) {
+  font-size: 14px;
+  font-weight: 800;
+  margin: 0;
+}
+
+body :where(#appShell .cp6-quick-grid) {
+  display: grid;
+  gap: 7px;
+  margin-top: 15px;
+}
+
+body :where(#appShell .cp6-quick-grid button) {
+  align-items: center;
+  background: #fbfcfe;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  color: var(--cp6-ink-2);
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  text-align: left;
+  width: 100%;
+}
+
+body :where(#appShell .cp6-quick-grid button:hover) {
+  background: var(--cp6-blue-soft);
+  border-color: #d9e6ff;
+}
+
+body :where(#appShell .cp6-quick-grid button > span:nth-child(2)) {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+body :where(#appShell .cp6-quick-grid strong) {
+  font-size: 10px;
+}
+
+body :where(#appShell .cp6-quick-grid small) {
+  color: var(--cp6-muted);
+  font-size: 9px;
+}
+
+body :where(#appShell .cp6-quick-grid button > i:last-child) {
+  color: #9db2d1;
+  font-size: 10px;
+  margin-left: auto;
+}
+
+body :where(#appShell .cp6-quick-icon) {
+  align-items: center;
+  border-radius: 10px;
+  display: inline-flex;
+  flex: 0 0 32px;
+  height: 32px;
+  justify-content: center;
+  width: 32px;
+}
+
+body :where(#appShell .cp6-quick-icon.blue) { background: var(--cp6-blue-soft); color: var(--cp6-blue); }
+body :where(#appShell .cp6-quick-icon.indigo) { background: #eef0ff; color: #5365d8; }
+body :where(#appShell .cp6-quick-icon.sky) { background: #e9faff; color: var(--cp6-cyan); }
+body :where(#appShell .cp6-quick-icon.violet) { background: #f1efff; color: #7058c6; }
+
+body :where(#appShell .cp6-activity-list) {
+  display: grid;
+  gap: 9px;
+  margin-top: 14px;
+}
+
+body :where(#appShell .cp6-empty-state, #appShell .settings-empty, #appShell .report-empty) {
+  color: var(--cp6-muted);
+  font-size: 11px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+body :where(#appShell .cp6-install-card) {
+  align-items: center;
+  background: linear-gradient(115deg, #fff, #eef5ff);
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  padding: 18px;
+}
+
+body :where(#appShell .cp6-install-card h3) {
+  font-size: 14px;
+  margin: 5px 0 0;
+}
+
+body :where(#appShell .cp6-install-card p) {
+  color: var(--cp6-muted);
+  font-size: 10px;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+body :where(#appShell .mobile-qr-wrap) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 13px;
+  flex: 0 0 auto;
+  padding: 6px;
+}
+
+body :where(#appShell .mobile-qr-wrap img) {
+  display: block;
+  height: 106px;
+  width: 106px;
+}
+
+/* --------------------------------------------------------------------------
+   Avalúos modules, requests and generic operational surfaces
+   -------------------------------------------------------------------------- */
+body :where(#appShell .avaluos-menu, #appShell .admin-view, #appShell .solicitudes-view, #appShell .development-view) {
+  min-width: 0;
+}
+
+body :where(#appShell .avaluos-section-heading, #appShell .admin-intro, #appShell .solicitudes-heading, #appShell .games-page-heading) {
+  margin-bottom: 19px;
+}
+
+body :where(#appShell .avaluos-section-heading h2, #appShell .admin-intro h2, #appShell .solicitudes-heading h2, #appShell .games-page-heading h2) {
+  font-size: clamp(23px, 3vw, 31px);
+  font-weight: 800;
+  letter-spacing: -.9px;
+  margin: 5px 0 0;
+}
+
+body :where(#appShell .avaluos-section-heading p, #appShell .admin-intro p, #appShell .solicitudes-heading p, #appShell .games-page-heading p) {
+  color: var(--cp6-muted);
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 7px;
+}
+
+body :where(#appShell .avaluos-section-heading h2 span) {
+  color: var(--cp6-blue);
+}
+
+body :where(#appShell .avaluos-choice-grid, #appShell .usuarios-choice-grid) {
+  display: grid;
+  gap: 13px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body :where(#appShell .avaluos-choice-card, #appShell .usuarios-choice-card) {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 17px;
+  box-shadow: var(--cp6-shadow-sm);
+  color: var(--cp6-ink-2);
+  display: flex;
+  gap: 13px;
+  min-height: 116px;
+  padding: 18px;
+  text-align: left;
+  transition: border-color .2s var(--cp6-ease), box-shadow .2s var(--cp6-ease), transform .2s var(--cp6-ease);
+  width: 100%;
+}
+
+body :where(#appShell .avaluos-choice-card:hover, #appShell .usuarios-choice-card:hover) {
+  border-color: #bdd2ff;
+  box-shadow: var(--cp6-shadow);
+  transform: translateY(-3px);
+}
+
+body :where(#appShell .avaluos-choice-icon, #appShell .usuarios-choice-icon) {
+  align-items: center;
+  background: var(--cp6-blue-soft);
+  border-radius: 13px;
+  color: var(--cp6-blue);
+  display: inline-flex;
+  flex: 0 0 43px;
+  height: 43px;
+  justify-content: center;
+  width: 43px;
+}
+
+body :where(#appShell .avaluos-choice-icon svg) {
+  height: 21px;
+  width: 21px;
+}
+
+body :where(#appShell .usuarios-choice-icon) {
+  font-size: 21px;
+}
+
+body :where(#appShell .avaluos-choice-copy, #appShell .usuarios-choice-copy) {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+body :where(#appShell .avaluos-choice-copy strong, #appShell .usuarios-choice-copy strong) {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+body :where(#appShell .avaluos-choice-copy small, #appShell .usuarios-choice-copy small) {
+  color: var(--cp6-muted);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+body :where(#appShell .avaluos-choice-arrow, #appShell .usuarios-choice-arrow) {
+  color: #9db2d1;
+  font-size: 17px;
+  margin-left: auto;
+}
+
+body :where(#appShell .search-panel, #appShell .request-filter-row) {
+  margin-bottom: 15px;
+  padding: 15px 18px;
+}
+
+body :where(#appShell .search-row, #appShell .request-filter-row, #appShell .solicitudes-heading, #appShell .solicitudes-heading-actions) {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+body :where(#appShell .reception-filter-title) {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 9px;
+}
+
+body :where(#appShell .reception-filter-title-icon) {
+  align-items: center;
+  background: var(--cp6-blue-soft);
+  border-radius: 10px;
+  color: var(--cp6-blue);
+  display: inline-flex;
+  height: 32px;
+  justify-content: center;
+  width: 32px;
+}
+
+body :where(#appShell .reception-filter-title strong) {
+  font-size: 13px;
+}
+
+body :where(#appShell .reception-search-input-wrap, #appShell .request-filter-row input, #appShell .request-filter-row select, #appShell .search-row input, #appShell .search-row select) {
+  min-width: 160px;
+}
+
+body :where(#appShell .reception-search-input-wrap) {
+  flex: 1 1 250px;
+}
+
+body :where(#appShell .request-filter-row input, #appShell .search-row input, #appShell .search-row select, #appShell .request-filter-row select) {
+  background: #fbfcfe;
+  border: 1px solid var(--cp6-line);
+  border-radius: 10px;
+  color: var(--cp6-ink);
+  font-size: 11px;
+  min-height: 42px;
+  outline: 0;
+  padding: 10px 12px;
+}
+
+body :where(#appShell .request-filter-row input:focus, #appShell .search-row input:focus, #appShell .search-row select:focus, #appShell .request-filter-row select:focus) {
+  border-color: var(--cp6-blue);
+  box-shadow: 0 0 0 4px rgba(36, 107, 254, .1);
+}
+
+body :where(#appShell .request-filter-row input) {
+  flex: 1 1 330px;
+}
+
+body :where(#appShell .request-filter-row select) {
+  flex: 0 1 210px;
+}
+
+body :where(#appShell .reception-filter-actions) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: auto;
+}
+
+body :where(#appShell .reception-filter-actions .is-hidden) {
+  display: none !important;
+}
+
+body :where(#appShell .record-list) {
+  display: grid;
+  gap: 10px;
+}
+
+body :where(#appShell .section-heading) {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 13px;
+}
+
+body :where(#appShell .section-heading h2) {
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0;
+}
+
+body :where(#appShell .section-count) {
+  align-items: center;
+  background: var(--cp6-blue-soft);
+  border-radius: 18px;
+  color: var(--cp6-blue);
+  display: inline-flex;
+  font-size: 10px;
+  font-weight: 800;
+  min-height: 25px;
+  padding: 4px 9px;
+}
+
+body :where(#appShell .development-card) {
+  margin: 0 auto;
+  max-width: 720px;
+  padding: 31px;
+  text-align: center;
+}
+
+body :where(#appShell .development-card h2) {
+  font-size: 24px;
+  margin: 8px 0;
+}
+
+body :where(#appShell .development-card p) {
+  color: var(--cp6-muted);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+/* --------------------------------------------------------------------------
+   Record editor and technical appraisal forms
+   -------------------------------------------------------------------------- */
+body :where(#appShell #recordEditor) {
+  background: transparent;
+  border: 0;
+  margin: 0;
+  max-width: none;
+  padding: 0;
+  width: 100%;
+}
+
+body :where(#appShell #recordEditor > .max-w-7xl) {
+  margin: 0;
+  max-width: 1280px;
+  padding: 0;
+  width: 100%;
+}
+
+body :where(#appShell #recordEditor #recordForm) {
+  align-items: start;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1.12fr) minmax(320px, .88fr);
+}
+
+body :where(#appShell #recordEditor #recordForm > div) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 22px;
+  box-shadow: var(--cp6-shadow-sm);
+  min-width: 0;
+  overflow: hidden;
+}
+
+body :where(#appShell #recordEditor #recordForm > div > .h-3) {
+  background: linear-gradient(90deg, #246bfe, #5365d8, #5791ff);
+  height: 4px;
+}
+
+body :where(#appShell #recordEditor #recordForm > div > .p-6, #appShell #recordEditor #recordForm > div > .sm\:p-7) {
+  padding: 25px;
+}
+
+body :where(#appShell #recordEditor h3) {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -.35px;
+  line-height: 1.15;
+  margin: 0;
+}
+
+body :where(#appShell #recordEditor .text-slate-400) {
+  color: var(--cp6-muted);
+}
+
+body :where(#appShell #recordEditor label) {
+  color: var(--cp6-ink-2);
+  display: grid;
+  font-size: 10px;
+  font-weight: 700;
+  gap: 7px;
+}
+
+body :where(#appShell #recordEditor input:not([type="checkbox"]), #appShell #recordEditor select, #appShell #recordEditor textarea, #appShell #automotrizEditor input, #appShell #automotrizEditor select, #appShell #automotrizEditor textarea, #appShell #mobiliarioEditor input, #appShell #mobiliarioEditor select, #appShell #mobiliarioEditor textarea) {
+  background: #fbfcfe;
+  border: 1px solid #dce5f0;
+  border-radius: 11px;
+  color: var(--cp6-ink);
+  font-size: 11px;
+  min-height: 44px;
+  outline: 0;
+  padding: 11px 13px 11px 39px;
+  width: 100%;
+}
+
+body :where(#appShell #recordEditor textarea, #appShell #automotrizEditor textarea, #appShell #mobiliarioEditor textarea) {
+  min-height: 80px;
+  resize: vertical;
+}
+
+body :where(#appShell #recordEditor input:not([type="checkbox"]):focus, #appShell #recordEditor select:focus, #appShell #recordEditor textarea:focus, #appShell #automotrizEditor input:focus, #appShell #automotrizEditor select:focus, #appShell #automotrizEditor textarea:focus, #appShell #mobiliarioEditor input:focus, #appShell #mobiliarioEditor select:focus, #appShell #mobiliarioEditor textarea:focus) {
+  background: #fff;
+  border-color: var(--cp6-blue);
+  box-shadow: 0 0 0 4px rgba(36, 107, 254, .1);
+}
+
+body :where(#appShell #recordEditor select, #appShell #automotrizEditor select, #appShell #mobiliarioEditor select) {
+  appearance: none;
+  padding-right: 38px;
+}
+
+body :where(#appShell #recordEditor .relative > .absolute) {
+  color: #9aabc2;
+  z-index: 1;
+}
+
+body :where(#appShell #recordEditor #paidInput) {
+  accent-color: var(--cp6-blue);
+  height: 16px;
+  min-height: 16px;
+  padding: 0;
+  width: 16px;
+}
+
+body :where(#appShell #recordEditor label[for="paidInput"]) {
+  align-items: center;
+  background: #f8fbff;
+  border: 1px solid #d9e6ff;
+  border-radius: 13px;
+  display: flex;
+  flex-direction: row;
+  gap: 9px;
+  min-height: 46px;
+  padding: 11px 13px;
+  width: auto;
+}
+
+body :where(#appShell #recordEditor label[for="paidInput"] span) {
+  align-items: center;
+  color: var(--cp6-ink-2);
+  display: flex;
+  font-size: 10px;
+  gap: 7px;
+}
+
+body :where(#appShell #recordEditor #paymentDetails) {
+  background: #f8fbff;
+  border: 1px solid #d9e6ff;
+  border-radius: 15px;
+  padding: 15px;
+}
+
+body :where(#appShell #recordEditor #paymentDetails.is-hidden) {
+  display: none !important;
+}
+
+body :where(#appShell #recordEditor #paymentDetails:not(.is-hidden)) {
+  display: grid;
+  gap: 13px;
+}
+
+body :where(#appShell .technical-appraisal-section .inline-panel, #appShell #technicalCreationPanel .inline-panel, #appShell .technical-form-section, #appShell .values-table-block, #appShell .selected-total-panel) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 17px;
+  box-shadow: var(--cp6-shadow-sm);
+}
+
+body :where(#appShell .technical-form-section) {
+  margin-top: 15px;
+  padding: 20px;
+}
+
+body :where(#appShell .technical-section-heading) {
+  align-items: flex-start;
+  display: flex;
+  gap: 11px;
+  margin-bottom: 17px;
+}
+
+body :where(#appShell .technical-section-heading > span) {
+  align-items: center;
+  background: var(--cp6-blue-soft);
+  border-radius: 10px;
+  color: var(--cp6-blue);
+  display: inline-flex;
+  flex: 0 0 30px;
+  font-size: 11px;
+  font-weight: 800;
+  height: 30px;
+  justify-content: center;
+  width: 30px;
+}
+
+body :where(#appShell .technical-section-heading h3) {
+  font-size: 15px;
+}
+
+body :where(#appShell .technical-section-heading p, #appShell .technical-type-hint, #appShell .technical-folio-help, #appShell .vehicle-add-action span) {
+  color: var(--cp6-muted);
+  font-size: 10px;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+body :where(#appShell .technical-grid, #appShell .mobiliario-capture-grid) {
+  display: grid;
+  gap: 13px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body :where(#appShell .technical-grid .full-width, #appShell .mobiliario-capture-grid .full-width) {
+  grid-column: 1 / -1;
+}
+
+body :where(#appShell .values-table-wrap) {
+  overflow-x: auto;
+}
+
+body :where(#appShell .values-table) {
+  border-collapse: collapse;
+  min-width: 720px;
+  width: 100%;
+}
+
+body :where(#appShell .values-table th) {
+  background: #f8fbff;
+  color: #8c9bb0;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .55px;
+  padding: 10px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+body :where(#appShell .values-table td) {
+  border-top: 1px solid #f0f3f7;
+  color: var(--cp6-ink-2);
+  font-size: 10px;
+  padding: 10px;
+}
+
+body :where(#appShell .values-table tfoot td, #appShell .values-table tfoot th) {
+  background: #f8fbff;
+  color: var(--cp6-ink);
+  font-weight: 800;
+}
+
+body :where(#appShell .values-table input, #appShell .values-table select) {
+  min-height: 36px;
+  padding: 8px 10px;
+}
+
+body :where(#appShell .selected-total-panel) {
+  align-items: center;
+  display: grid;
+  gap: 15px;
+  grid-template-columns: minmax(0, 1fr) minmax(190px, .5fr) minmax(170px, .45fr);
+  margin-top: 15px;
+  padding: 17px;
+}
+
+body :where(#appShell .selected-total-panel h4, #appShell .values-table-heading h4) {
+  font-size: 13px;
+  margin: 0;
+}
+
+body :where(#appShell .selected-total-panel p, #appShell .values-table-heading p) {
+  color: var(--cp6-muted);
+  font-size: 10px;
+  line-height: 1.45;
+  margin-top: 4px;
+}
+
+body :where(#appShell .selected-total-result) {
+  background: var(--cp6-blue-soft);
+  border: 1px solid #d9e6ff;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+body :where(#appShell .selected-total-result span, #appShell .selected-total-result small) {
+  color: var(--cp6-muted);
+  display: block;
+  font-size: 9px;
+}
+
+body :where(#appShell .selected-total-result strong) {
+  color: var(--cp6-blue);
+  display: block;
+  font-size: 18px;
+  margin: 5px 0;
+}
+
+/* --------------------------------------------------------------------------
+   Request detail dialog: dynamic cp6 render and uniform file cards
+   -------------------------------------------------------------------------- */
+body :where(#requestDetailDialog.cp6-request-detail-dialog) {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  max-height: calc(100vh - 24px);
+  max-width: min(1120px, calc(100vw - 24px));
+  overflow: visible;
+  width: min(1120px, calc(100vw - 24px));
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog)::backdrop {
+  background: rgba(7, 18, 37, .58);
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog > .cp6-detail-content) {
+  max-height: calc(100vh - 24px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog [data-request-card]) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 24px;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, .28);
+  margin: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog [data-request-card] > .h-2\.5) {
+  background: linear-gradient(90deg, #246bfe, #5365d8, #5791ff);
+  height: 5px;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog [data-request-card] h2) {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog [data-request-card] h3, #requestDetailDialog.cp6-request-detail-dialog [data-request-card] h4) {
+  font-weight: 800;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog [data-close-request-detail]) {
+  align-items: center;
+  background: #f8fbff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 10px;
+  color: var(--cp6-muted);
+  display: inline-flex;
+  height: 34px;
+  justify-content: center;
+  width: 34px;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog [data-close-request-detail]:hover) {
+  background: var(--cp6-blue-soft);
+  color: var(--cp6-blue);
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-custom-scroll) {
+  align-content: start;
+  max-height: 360px;
+  min-height: 300px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+  scrollbar-width: thin;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-file-card) {
+  align-self: start;
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 12px;
+  display: flex;
+  height: 64px;
+  justify-content: space-between;
+  min-height: 64px;
+  min-width: 0;
+  overflow: hidden;
+  padding: 9px;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-file-card:hover) {
+  border-color: #bdd2ff;
+  box-shadow: 0 9px 20px rgba(37, 99, 235, .1);
+  transform: translateY(-1px);
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-file-card .cp6-file-preview) {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  display: inline-flex;
+  flex: 0 0 40px;
+  height: 40px;
+  justify-content: center;
+  padding: 0;
+  width: 40px;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-file-icon) {
+  align-items: center;
+  background: var(--cp6-blue-soft);
+  border-radius: 9px;
+  color: var(--cp6-blue);
+  display: inline-flex;
+  flex: 0 0 40px;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-file-document > div:first-child) {
+  align-items: center;
+  display: flex;
+  gap: 9px;
+  min-width: 0;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-file-card .truncate) {
+  min-width: 0;
+  max-width: 175px;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-file-card .truncate > span:first-child, #requestDetailDialog.cp6-request-detail-dialog .cp6-file-card > span) {
+  color: var(--cp6-ink-2);
+  display: block;
+  font-size: 10px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-file-card .truncate > span:last-child) {
+  color: var(--cp6-muted);
+  display: block;
+  font-size: 9px;
+  margin-top: 3px;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-detail-button, #requestDetailDialog.cp6-request-detail-dialog .cp6-file-delete) {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: var(--cp6-muted);
+  display: inline-flex;
+  height: 26px;
+  justify-content: center;
+  padding: 4px;
+  width: 26px;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-detail-button:hover) {
+  background: var(--cp6-blue-soft);
+  color: var(--cp6-blue);
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-file-delete:hover) {
+  background: #fff0f1;
+  color: var(--cp6-danger);
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-file-empty, #requestDetailDialog.cp6-request-detail-dialog .cp6-file-unavailable) {
+  align-items: center;
+  background: #f8fbff;
+  border: 1px dashed #c7d8ed;
+  border-radius: 12px;
+  color: var(--cp6-muted);
+  display: flex;
+  font-size: 11px;
+  justify-content: center;
+  min-height: 64px;
+  padding: 14px;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal) {
+  align-items: center;
+  background: rgba(7, 18, 37, .45);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: absolute;
+  z-index: 20;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal[hidden]) {
+  display: none !important;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card) {
+  background: #fff;
+  border: 1px solid #d9e6ff;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, .22);
+  color: var(--cp6-ink);
+  max-width: 420px;
+  padding: 22px;
+  width: calc(100% - 32px);
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card h3) {
+  font-size: 16px;
+  margin: 0 0 6px;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card p) {
+  color: var(--cp6-muted);
+  font-size: 11px;
+  line-height: 1.55;
+  margin: 0 0 12px;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card input, #requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card select) {
+  background: #fbfcfe;
+  border: 1px solid #dce5f0;
+  border-radius: 10px;
+  color: var(--cp6-ink);
+  font-size: 11px;
+  min-height: 42px;
+  outline: 0;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card input:focus, #requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card select:focus) {
+  border-color: var(--cp6-blue);
+  box-shadow: 0 0 0 4px rgba(36, 107, 254, .1);
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card > div:last-child) {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-popup-results, #requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form) {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-popup-result) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 9px;
+  color: var(--cp6-ink-2);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 10px;
+  text-align: left;
+  width: 100%;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-popup-result:hover) {
+  background: var(--cp6-blue-soft);
+  border-color: #bdd2ff;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form:not([hidden])) {
+  display: grid;
+  gap: 11px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form[hidden]) {
+  display: none !important;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form label) {
+  color: var(--cp6-ink-2);
+  display: grid;
+  font-size: 10px;
+  font-weight: 700;
+  gap: 6px;
+}
+
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form input, #requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form textarea, #requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form select) {
+  background: #fbfcfe;
+  border: 1px solid #dce5f0;
+  border-radius: 10px;
+  color: var(--cp6-ink);
+  font-size: 11px;
+  min-height: 42px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Administrative profile, users and configuration cards
+   -------------------------------------------------------------------------- */
+body :where(#appShell .profile-root-light) {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(235px, .3fr) minmax(0, .7fr);
+}
+
+body :where(#appShell .profile-left-heading h1) {
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -.7px;
+  margin: 0;
+}
+
+body :where(#appShell .profile-left-heading p) {
+  color: var(--cp6-muted);
+  font-size: 11px;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+body :where(#appShell .profile-card-light) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 20px;
+  box-shadow: var(--cp6-shadow-sm);
+  margin-top: 17px;
+  padding: 20px;
+  text-align: center;
+}
+
+body :where(#appShell .profile-avatar-light) {
+  align-items: center;
+  background: linear-gradient(135deg, #dceaff, #83b4ff);
+  border-radius: 18px;
+  color: #164eb5;
+  display: inline-flex;
+  height: 66px;
+  justify-content: center;
+  width: 66px;
+}
+
+body :where(#appShell .profile-avatar-light svg) {
+  fill: none;
+  height: 30px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+  width: 30px;
+}
+
+body :where(#appShell .profile-card-light h2) {
+  font-size: 16px;
+  margin: 11px 0 0;
+  overflow-wrap: anywhere;
+}
+
+body :where(#appShell .profile-role-light) {
+  color: var(--cp6-blue);
+  font-size: 10px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+body :where(#appShell .profile-contact-list) {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+  text-align: left;
+}
+
+body :where(#appShell .profile-contact-item) {
+  align-items: center;
+  background: #f8fbff;
+  border: 1px solid #edf2f8;
+  border-radius: 10px;
+  display: flex;
+  gap: 9px;
+  padding: 9px;
+}
+
+body :where(#appShell .profile-contact-icon) {
+  align-items: center;
+  background: var(--cp6-blue-soft);
+  border-radius: 8px;
+  color: var(--cp6-blue);
+  display: inline-flex;
+  flex: 0 0 28px;
+  font-size: 10px;
+  font-weight: 800;
+  height: 28px;
+  justify-content: center;
+  width: 28px;
+}
+
+body :where(#appShell .profile-contact-item div) {
+  min-width: 0;
+}
+
+body :where(#appShell .profile-contact-label) {
+  color: var(--cp6-muted);
+  display: block;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .7px;
+}
+
+body :where(#appShell .profile-contact-value) {
+  color: var(--cp6-ink-2);
+  display: block;
+  font-size: 10px;
+  margin-top: 3px;
+  overflow-wrap: anywhere;
+}
+
+body :where(#appShell .profile-progress-light) {
+  border-top: 1px solid var(--cp6-line);
+  margin-top: 18px;
+  padding-top: 17px;
+  text-align: left;
+}
+
+body :where(#appShell .profile-progress-heading, #appShell .profile-score-line, #appShell .profile-games-score-light) {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+body :where(#appShell .profile-progress-heading span) {
+  color: var(--cp6-blue);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+body :where(#appShell .profile-progress-heading h3) {
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+body :where(#appShell .profile-progress-heading > b) {
+  background: var(--cp6-blue-soft);
+  border-radius: 15px;
+  color: var(--cp6-blue);
+  font-size: 9px;
+  padding: 5px 7px;
+}
+
+body :where(#appShell .profile-score-line, #appShell .profile-games-score-light) {
+  justify-content: flex-start;
+  margin-top: 15px;
+}
+
+body :where(#appShell .profile-score-ring) {
+  align-items: center;
+  background: conic-gradient(var(--cp6-blue) 0 72%, #eaf0f8 72% 100%);
+  border-radius: 50%;
+  display: flex;
+  flex: 0 0 60px;
+  height: 60px;
+  justify-content: center;
+  position: relative;
+  width: 60px;
+}
+
+body :where(#appShell .profile-score-ring::after) {
+  background: #fff;
+  border-radius: 50%;
+  content: "";
+  height: 46px;
+  position: absolute;
+  width: 46px;
+}
+
+body :where(#appShell .profile-score-ring > *) {
+  position: relative;
+  z-index: 1;
+}
+
+body :where(#appShell .profile-score-ring strong) {
+  display: block;
+  font-size: 15px;
+  text-align: center;
+}
+
+body :where(#appShell .profile-score-ring span) {
+  color: var(--cp6-muted);
+  display: block;
+  font-size: 7px;
+  text-align: center;
+}
+
+body :where(#appShell .profile-score-line > div:last-child strong, #appShell .profile-games-score-light > div:last-child strong) {
+  display: block;
+  font-size: 10px;
+}
+
+body :where(#appShell .profile-score-line > div:last-child p, #appShell .profile-games-score-light > div:last-child p) {
+  color: var(--cp6-muted);
+  font-size: 9px;
+  line-height: 1.45;
+  margin-top: 4px;
+}
+
+body :where(#appShell .profile-badges-light) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 15px;
+}
+
+body :where(#appShell .profile-badges-light span) {
+  background: #f8fbff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 20px;
+  color: var(--cp6-muted);
+  font-size: 8px;
+  padding: 5px 7px;
+}
+
+body :where(#appShell .profile-main-light) {
+  min-width: 0;
+}
+
+body :where(#appShell .profile-heading-light) {
+  min-height: 30px;
+}
+
+body :where(#appShell .profile-filter-light) {
+  align-items: center;
+  color: var(--cp6-muted);
+  display: inline-flex;
+  font-size: 10px;
+  gap: 8px;
+}
+
+body :where(#appShell .profile-filter-light select) {
+  min-height: 38px;
+}
+
+body :where(#appShell .profile-kpis-light) {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body :where(#appShell .profile-metric-light) {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 16px;
+  box-shadow: var(--cp6-shadow-sm);
+  display: flex;
+  gap: 11px;
+  min-width: 0;
+  padding: 15px;
+}
+
+body :where(#appShell .profile-metric-ring) {
+  align-items: center;
+  background: conic-gradient(var(--cp6-blue) var(--progress, 0%), #eaf0f8 0);
+  border-radius: 50%;
+  display: flex;
+  flex: 0 0 55px;
+  height: 55px;
+  justify-content: center;
+  position: relative;
+  width: 55px;
+}
+
+body :where(#appShell .profile-metric-ring::after) {
+  background: #fff;
+  border-radius: 50%;
+  content: "";
+  height: 42px;
+  position: absolute;
+  width: 42px;
+}
+
+body :where(#appShell .profile-metric-ring > div) {
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+body :where(#appShell .profile-metric-ring strong) {
+  display: block;
+  font-size: 15px;
+}
+
+body :where(#appShell .profile-metric-ring span) {
+  color: var(--cp6-muted);
+  font-size: 7px;
+}
+
+body :where(#appShell .ring-pending) { background: conic-gradient(var(--cp6-amber) var(--progress, 0%), #fff3dc 0); }
+body :where(#appShell .ring-completed) { background: conic-gradient(var(--cp6-green) var(--progress, 0%), #eafaf4 0); }
+
+body :where(#appShell .profile-metric-light b) {
+  display: block;
+  font-size: 10px;
+}
+
+body :where(#appShell .profile-metric-light small) {
+  color: var(--cp6-muted);
+  display: block;
+  font-size: 9px;
+  line-height: 1.4;
+  margin-top: 4px;
+}
+
+body :where(#appShell .profile-visual-light) {
+  background: #fff;
+  border: 1px solid var(--cp6-line);
+  border-radius: 20px;
+  box-shadow: var(--cp6-shadow-sm);
+  margin-top: 15px;
+  padding: 20px;
+}
+
+body :where(#appShell .profile-visual-heading) {
+  align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+}
+
+body :where(#appShell .profile-visual-heading > div:first-child > span) {
+  color: var(--cp6-blue);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+body :where(#appShell .profile-visual-heading h2) {
+  font-size: 17px;
+  margin-top: 5px;
+}
+
+body :where(#appShell .profile-legend-light) {
+  align-items: center;
+  color: var(--cp6-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 9px;
+  gap: 10px;
+}
+
+body :where(#appShell .profile-legend-light span) {
+  align-items: center;
+  display: inline-flex;
+  gap: 5px;
+}
+
+body :where(#appShell .profile-legend-light i) {
+  border-radius: 50%;
+  display: inline-block;
+  height: 7px;
+  width: 7px;
+}
+
+body :where(#appShell .profile-legend-light .legend-pending) { background: var(--cp6-amber); }
+body :where(#appShell .profile-legend-light .legend-completed) { background: var(--cp6-green); }
+
+body :where(#appShell .profile-visual-grid) {
+  align-items: center;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  margin-top: 24px;
+  min-height: 220px;
+}
+
+body :where(#appShell .profile-donut-panel-light) {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+body :where(#appShell .profile-donut-light) {
+  --pending-angle: 0deg;
+  align-items: center;
+  background: conic-gradient(var(--cp6-amber) 0 var(--pending-angle), var(--cp6-green) var(--pending-angle) 360deg);
+  border-radius: 50%;
+  display: flex;
+  height: 174px;
+  justify-content: center;
+  position: relative;
+  width: 174px;
+}
+
+body :where(#appShell .profile-donut-light::after) {
+  background: #fff;
+  border-radius: 50%;
+  content: "";
+  height: 124px;
+  position: absolute;
+  width: 124px;
+}
+
+body :where(#appShell .profile-donut-light > div) {
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+body :where(#appShell .profile-donut-light strong) {
+  display: block;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+body :where(#appShell .profile-donut-light span) {
+  color: var(--cp6-muted);
+  display: block;
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+body :where(#appShell .profile-donut-label-light) {
+  color: var(--cp6-muted);
+  font-size: 10px;
+}
+
+/* Users and configuration are card-first modules in the v2 shell. */
+body.cp6-redesign :where(#usuariosView, #configuracionView, #resumenView, #perfilView) {
+  color: var(--ink, #0b1628);
+  min-width: 0;
+}
+
+body.cp6-redesign :where(#usuariosView .admin-intro, #configuracionView .admin-intro, #resumenView .admin-intro, #perfilView .profile-left-heading) {
+  display: block;
+  margin-bottom: 20px;
+}
+
+body.cp6-redesign :where(#usuariosView .admin-intro h2, #configuracionView .admin-intro h2, #resumenView .admin-intro h2, #perfilView .profile-left-heading h1) {
+  color: var(--ink, #0b1628);
+  font-family: "Manrope", system-ui, sans-serif;
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin: 5px 0 0;
+}
+
+body.cp6-redesign :where(#usuariosView .admin-intro p, #configuracionView .admin-intro p, #resumenView .admin-intro p, #perfilView .profile-left-heading p) {
+  color: var(--muted, #74839a);
+  font-size: 12px;
+  line-height: 1.65;
+  margin-top: 8px;
+}
+
+body.cp6-redesign #usuariosView .usuarios-menu {
+  background: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+body.cp6-redesign #usuariosView .usuarios-choice-grid {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 17px;
+}
+
+body.cp6-redesign #usuariosView .usuarios-choice-card {
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid var(--line, #e7edf5);
+  border-radius: 19px;
+  box-shadow: var(--shadow-sm, 0 7px 24px rgba(25, 52, 91, .055));
+  color: var(--ink-2, #253653);
+  display: grid;
+  gap: 12px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  min-height: 126px;
+  padding: 20px;
+  text-align: left;
+  transition: border-color .18s var(--ease, cubic-bezier(.23, 1, .32, 1)), box-shadow .18s var(--ease, cubic-bezier(.23, 1, .32, 1)), transform .18s var(--ease, cubic-bezier(.23, 1, .32, 1));
+  width: 100%;
+}
+
+body.cp6-redesign #usuariosView .usuarios-choice-card:hover {
+  border-color: #bdd2ff;
+  box-shadow: var(--shadow, 0 16px 45px rgba(25, 52, 91, .07));
+  transform: translateY(-3px);
+}
+
+body.cp6-redesign #usuariosView .usuarios-choice-icon {
+  align-items: center;
+  background: var(--blue-soft, #edf4ff);
+  border-radius: 13px;
+  color: var(--blue, #246bfe);
+  display: inline-flex;
+  font-size: 20px;
+  height: 43px;
+  justify-content: center;
+  width: 43px;
+}
+
+body.cp6-redesign #usuariosView .usuarios-choice-copy {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+body.cp6-redesign #usuariosView .usuarios-choice-copy strong {
+  color: var(--ink, #0b1628);
+  font-family: "Manrope", system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+body.cp6-redesign #usuariosView .usuarios-choice-copy small {
+  color: var(--muted, #74839a);
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+body.cp6-redesign #usuariosView .usuarios-choice-arrow {
+  color: var(--blue, #246bfe);
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+body.cp6-redesign :where(.users-subview, #usuariosAdminPanel, #usuariosExternalPanel) {
+  min-width: 0;
+}
+
+body.cp6-redesign :where(.users-subview:not([hidden]), #usuariosAdminPanel:not([hidden]), #usuariosExternalPanel:not([hidden])) > .back-to-users {
+  background: transparent;
+  border: 0;
+  color: var(--blue, #246bfe);
+  font-size: 11px;
+  margin: 0 0 12px;
+  padding: 6px 0;
+}
+
+body.cp6-redesign :where(.users-subview:not([hidden]), #usuariosAdminPanel:not([hidden]), #usuariosExternalPanel:not([hidden])) > .back-to-users:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+body.cp6-redesign :where(.setting-card, .user-access-panel, .new-user-panel, .registered-applicants-panel, .users-subview .inline-panel) {
+  background: #fff;
+  border: 1px solid var(--line, #e7edf5);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm, 0 7px 24px rgba(25, 52, 91, .055));
+  min-width: 0;
+  padding: 20px;
+}
+
+body.cp6-redesign :where(.setting-card > h3, .user-access-panel h3, .new-user-panel h3, .registered-applicants-panel h3, .users-subview .inline-panel h3) {
+  color: var(--ink, #0b1628);
+  font-family: "Manrope", system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  margin: 8px 0 0;
+}
+
+body.cp6-redesign :where(.setting-card > p, .user-access-panel > p, .new-user-panel p, .registered-applicants-panel p, .users-subview .inline-panel p) {
+  color: var(--muted, #74839a);
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 7px 0 0;
+}
+
+body.cp6-redesign :where(.setting-icon) {
+  align-items: center;
+  background: var(--blue-soft, #edf4ff);
+  border-radius: 11px;
+  color: var(--blue, #246bfe);
+  display: inline-flex;
+  font-family: "Manrope", system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+
+body.cp6-redesign :where(.settings-grid) {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+body.cp6-redesign :where(.settings-grid > .setting-card) {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+body.cp6-redesign :where(.settings-grid > .setting-card > form, .compact-settings-form, .add-user-form, .inline-credential-form, .export-date-controls, .import-controls) {
+  display: grid;
+  gap: 12px;
+  margin-top: 17px;
+}
+
+body.cp6-redesign :where(.settings-grid label, .add-user-form label, .inline-credential-form label, .compact-settings-form label, .export-date-controls label, .import-controls label, .users-table-toolbar label) {
+  color: var(--ink-2, #253653);
+  display: grid;
+  font-size: 10px;
+  font-weight: 700;
+  gap: 6px;
+}
+
+body.cp6-redesign :where(.settings-grid input:not([type="checkbox"]), .settings-grid select, .settings-grid textarea, .add-user-form input, .add-user-form select, .inline-credential-form input, .inline-credential-form select, .compact-settings-form input, .compact-settings-form select, .export-date-controls input, .import-controls input, .import-controls select, .users-table-toolbar input) {
+  background: #fbfcfe;
+  border: 1px solid var(--line, #e7edf5);
+  border-radius: 10px;
+  color: var(--ink, #0b1628);
+  font-size: 11px;
+  min-height: 42px;
+  outline: 0;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+body.cp6-redesign :where(.settings-grid input:not([type="checkbox"]):focus, .settings-grid select:focus, .settings-grid textarea:focus, .add-user-form input:focus, .add-user-form select:focus, .inline-credential-form input:focus, .inline-credential-form select:focus, .compact-settings-form input:focus, .compact-settings-form select:focus, .export-date-controls input:focus, .import-controls input:focus, .import-controls select:focus, .users-table-toolbar input:focus) {
+  background: #fff;
+  border-color: var(--blue, #246bfe);
+  box-shadow: 0 0 0 4px rgba(36, 107, 254, .1);
+}
+
+body.cp6-redesign :where(.settings-grid .dialog-actions, .add-user-form .dialog-actions, .inline-credential-form .dialog-actions) {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 3px;
+}
+
+body.cp6-redesign :where(.settings-data-list, .user-permissions-list, .notaries-records-list) {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+  min-width: 0;
+}
+
+body.cp6-redesign :where(.settings-data-row, .user-permission-row) {
+  align-items: center;
+  background: #f8fbff;
+  border: 1px solid #edf2f8;
+  border-radius: 11px;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  min-width: 0;
+  padding: 11px 12px;
+}
+
+body.cp6-redesign :where(.settings-data-row strong, .user-permission-row strong) {
+  color: var(--ink-2, #253653);
+  display: block;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+body.cp6-redesign :where(.settings-data-row span, .user-permission-row span) {
+  color: var(--muted, #74839a);
+  display: block;
+  font-size: 9px;
+  line-height: 1.45;
+  margin-top: 3px;
+}
+
+body.cp6-redesign :where(.settings-row-actions, .user-permission-actions) {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+body.cp6-redesign :where(.text-action-button) {
+  background: transparent;
+  border: 0;
+  color: var(--blue, #246bfe);
+  font-size: 10px;
+  padding: 6px;
+}
+
+body.cp6-redesign :where(.text-action-button.is-danger) { color: #c03d50; }
+body.cp6-redesign :where(.text-action-button:hover) { text-decoration: underline; text-underline-offset: 3px; }
+
+body.cp6-redesign :where(.users-table-toolbar) {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin: 17px 0 12px;
+}
+
+body.cp6-redesign :where(.users-table-toolbar input) {
+  max-width: 340px;
+}
+
+/* Games cards preserve each game's action and iframe behavior. */
+body.cp6-redesign #juegosView .games-page-heading {
+  margin-bottom: 19px;
+}
+
+body.cp6-redesign #juegosView .games-card-grid {
+  display: grid;
+  gap: 13px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.cp6-redesign #juegosView .game-card {
+  background: #fff;
+  border: 1px solid var(--line, #e7edf5);
+  border-radius: 17px;
+  box-shadow: var(--shadow-sm, 0 7px 24px rgba(25, 52, 91, .055));
+  display: flex;
+  flex-direction: column;
+  min-height: 205px;
+  padding: 18px;
+  position: relative;
+  transition: border-color .2s var(--ease, cubic-bezier(.23, 1, .32, 1)), box-shadow .2s var(--ease, cubic-bezier(.23, 1, .32, 1)), transform .2s var(--ease, cubic-bezier(.23, 1, .32, 1));
+}
+
+body.cp6-redesign #juegosView .game-card:hover {
+  border-color: #bdd2ff;
+  box-shadow: var(--shadow, 0 16px 45px rgba(25, 52, 91, .07));
+  transform: translateY(-3px);
+}
+
+body.cp6-redesign #juegosView .game-card-icon {
+  align-items: center;
+  background: var(--blue-soft, #edf4ff);
+  border-radius: 13px;
+  color: var(--blue, #246bfe);
+  display: inline-flex;
+  font-family: "Manrope", system-ui, sans-serif;
+  font-size: 25px;
+  height: 44px;
+  justify-content: center;
+  margin-bottom: 14px;
+  width: 44px;
+}
+
+body.cp6-redesign #juegosView .game-card-copy {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+body.cp6-redesign #juegosView .game-card-kicker {
+  color: var(--blue, #246bfe);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+body.cp6-redesign #juegosView .game-card-score {
+  color: var(--muted, #74839a);
+  font-size: 9px;
+  position: absolute;
+  right: 17px;
+  top: 19px;
+}
+
+body.cp6-redesign #juegosView .game-card h3.title {
+  color: var(--ink, #0b1628);
+  font-family: "Manrope", system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  margin: 0;
+}
+
+body.cp6-redesign #juegosView .game-card p.description {
+  color: var(--muted, #74839a);
+  font-size: 10px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+body.cp6-redesign #juegosView .game-card-action {
+  align-items: center;
+  background: var(--blue-soft, #edf4ff);
+  border: 1px solid #d9e6ff;
+  border-radius: 9px;
+  color: var(--blue, #246bfe);
+  display: inline-flex;
+  font-size: 10px;
+  justify-content: center;
+  margin-top: auto;
+  min-height: 34px;
+  padding: 8px 12px;
+  width: 100%;
+}
+
+body.cp6-redesign #juegosView .game-card-action:hover {
+  background: var(--blue, #246bfe);
+  border-color: var(--blue, #246bfe);
+  color: #fff;
+}
+
+body.cp6-redesign #juegosView .game-stage {
+  background: #fff;
+  border: 1px solid var(--line, #e7edf5);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm, 0 7px 24px rgba(25, 52, 91, .055));
+  margin-top: 17px;
+  overflow: hidden;
+}
+
+body.cp6-redesign #juegosView .game-stage-toolbar {
+  align-items: center;
+  border-bottom: 1px solid var(--line, #e7edf5);
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 12px 16px;
+}
+
+body.cp6-redesign #juegosView .game-stage-back {
+  background: transparent;
+  border: 0;
+  color: var(--blue, #246bfe);
+  font-size: 11px;
+  padding: 6px 0;
+}
+
+body.cp6-redesign #juegosView #gameStageTitle {
+  color: var(--ink, #0b1628);
+  font-size: 12px;
+}
+
+body.cp6-redesign #juegosView #gameFrame {
+  border: 0;
+  display: block;
+  height: min(720px, calc(100vh - 170px));
+  min-height: 480px;
+  width: 100%;
+}
+
+/* Dialog variants and profile editors. */
+body.cp6-redesign :where(dialog.record-dialog, dialog.cp6-request-detail-dialog) {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+body.cp6-redesign :where(#applicantLoginDialog, #applicantRegisterDialog, #applicantProfileDialog, #credentialDialog, #adminAccessDialog, #reportDialog) {
+  width: min(600px, calc(100vw - 24px));
+}
+
+body.cp6-redesign :where(#applicantLoginDialog form, #applicantRegisterDialog form, #applicantProfileDialog form, #credentialDialog form, #adminAccessDialog form, #reportDialog form) {
+  width: 100%;
+}
+
+body.cp6-redesign #applicantRegisterDialog .form-grid,
+body.cp6-redesign #applicantProfileDialog .form-grid,
+body.cp6-redesign #credentialDialog .form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.cp6-redesign #applicantRequestsDialog {
+  width: min(980px, calc(100vw - 24px));
+}
+
+body.cp6-redesign #applicantRequestsDialog form {
+  width: 100%;
+}
+
+body.cp6-redesign #fileViewerDialog {
+  width: min(980px, calc(100vw - 24px));
+}
+
+body.cp6-redesign #fileViewerDialog form {
+  min-height: min(720px, calc(100vh - 24px));
+  width: 100%;
+}
+
+body.cp6-redesign :where(.file-viewer-content, .file-viewer-content img, .file-viewer-content iframe) {
+  max-height: calc(100vh - 150px);
+  max-width: 100%;
+}
+
+body.cp6-redesign :where(.version-update-dialog) {
+  width: min(420px, calc(100vw - 24px));
+}
+
+body.cp6-redesign :where(.version-update-content) {
+  background: #fff;
+  border-radius: 24px;
+  padding: 27px;
+  text-align: center;
+}
+
+body.cp6-redesign :where(.version-update-icon) {
+  align-items: center;
+  background: var(--blue-soft, #edf4ff);
+  border-radius: 50%;
+  color: var(--blue, #246bfe);
+  display: inline-flex;
+  font-size: 22px;
+  height: 48px;
+  justify-content: center;
+  width: 48px;
+}
+
+body.cp6-redesign :where(.version-update-content h2) {
+  font-size: 20px;
+  margin: 14px 0 7px;
+}
+
+body.cp6-redesign :where(.version-update-content p) {
+  color: var(--muted, #74839a);
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+body.cp6-redesign :where(.version-update-actions) {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Hidden is authoritative: runtime class toggles cannot reveal inactive panels. */
+body.cp6-redesign :where([hidden], .hidden, .is-hidden) {
+  display: none !important;
+}
+
+body.cp6-redesign #publicRequestDialog :where(.step-content.hidden, .step-content[hidden]) {
+  display: none !important;
+}
+
+body.cp6-redesign #paymentDetails.is-hidden,
+body.cp6-redesign #recordEditor.is-hidden,
+body.cp6-redesign #technicalCreationPanel.is-hidden {
+  display: none !important;
+}
+
+body.cp6-redesign :where(input[type="checkbox"], input[type="radio"]) {
+  accent-color: var(--blue, #246bfe);
+}
+
+body.cp6-redesign #recordEditor :where(label[for="paidInput"], #paidInput) {
+  flex: 0 0 auto;
+}
+
+body.cp6-redesign #recordEditor label[for="paidInput"] {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 9px;
+  width: auto;
+}
+
+body.cp6-redesign #recordEditor #paidInput {
+  height: 16px;
+  min-height: 16px;
+  min-width: 16px;
+  padding: 0;
+  width: 16px;
+}
+
+body.cp6-redesign #recordEditor label[for="paidInput"] span {
+  display: inline-flex;
+  width: auto;
+}
+
+body.cp6-redesign :where(.request-consent-label, .consent) {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  gap: 9px;
+  width: auto;
+}
+
+/* Generic labels retain the icon-wrapper convention without touching icon fonts. */
+body.cp6-redesign :where(.modern-input-wrap, .relative) {
+  position: relative;
+}
+
+body.cp6-redesign :where(.modern-input-wrap > svg, .modern-input-wrap > i, .relative > .absolute) {
+  pointer-events: none;
+}
+
+@media (max-width: 1200px) {
+  body.cp6-redesign :where(#appShell .cp6-kpi-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-home-grid, #appShell .v2-home-bottom) {
+    grid-template-columns: 1fr;
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-home-side-column) {
+    margin-top: 0;
+  }
+
+  body.cp6-redesign #juegosView .games-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1000px) {
+  body.cp6-redesign :where(#appShell .cp6-nav-center) {
+    gap: 2px;
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-nav-link) {
+    padding-inline: 8px;
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-nav-link > span:last-child) {
+    display: none;
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-nav-link) {
+    justify-content: center;
+  }
+
+  body.cp6-redesign #usuariosView .usuarios-choice-grid,
+  body.cp6-redesign .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  body.cp6-redesign :where(#loginScreen) {
+    display: block;
+    min-height: 100vh;
+  }
+
+  body.cp6-redesign :where(#loginScreen .login-visual) {
+    min-height: 330px;
+    padding: 30px;
+  }
+
+  body.cp6-redesign :where(#loginScreen .login-visual-copy) {
+    margin: 42px 0 0;
+    padding: 0;
+  }
+
+  body.cp6-redesign :where(#loginScreen .login-visual-copy h2) {
+    font-size: 32px;
+  }
+
+  body.cp6-redesign :where(#loginScreen .login-visual-footer) {
+    display: none;
+  }
+
+  body.cp6-redesign :where(#loginScreen .public-entry-panel) {
+    min-height: 430px;
+    padding: 35px 25px;
+  }
+
+  body.cp6-redesign :where(#loginScreen .client-inbox-shell) {
+    grid-template-columns: 1fr;
+  }
+
+  body.cp6-redesign :where(#loginScreen .client-inbox-sidebar) {
+    position: static;
+  }
+
+  body.cp6-redesign :where(#loginScreen .client-inbox-nav) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: grid;
+  }
+
+  body.cp6-redesign :where(#loginScreen .client-inbox-nav button) {
+    justify-content: center;
+    text-align: center;
+  }
+
+  body.cp6-redesign :where(#loginScreen .client-request-toolbar) {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  body.cp6-redesign :where(#loginScreen .client-request-filter) {
+    flex-basis: auto;
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-home-hero) {
+    align-items: flex-start;
+    min-height: 245px;
+    padding: 24px;
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-home-hero-art) {
+    bottom: 14px;
+    opacity: .35;
+    position: absolute;
+    right: 15px;
+    transform: scale(.72);
+    transform-origin: bottom right;
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-home-hero-copy) {
+    max-width: 100%;
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-kpi-grid) {
+    gap: 9px;
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-kpi-card) {
+    padding: 14px;
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-section-heading, #appShell .cp6-card-heading) {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  body.cp6-redesign :where(#appShell .avaluos-choice-grid) {
+    grid-template-columns: 1fr;
+  }
+
+  body.cp6-redesign #recordEditor #recordForm {
+    grid-template-columns: 1fr;
+  }
+
+  body.cp6-redesign #recordEditor #recordForm > div.sticky {
+    position: static;
+  }
+
+  body.cp6-redesign :where(#appShell .profile-root-light) {
+    grid-template-columns: 1fr;
+  }
+
+  body.cp6-redesign :where(#appShell .profile-left-column) {
+    min-width: 0;
+  }
+
+  body.cp6-redesign :where(#appShell .profile-kpis-light) {
+    grid-template-columns: 1fr;
+  }
+
+  body.cp6-redesign #juegosView .games-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.cp6-redesign #publicRequestDialog {
+    border-radius: 16px;
+    max-height: calc(100vh - 12px);
+    width: calc(100vw - 12px);
+  }
+
+  body.cp6-redesign #publicRequestDialog > div {
+    border-radius: 16px;
+    height: calc(100vh - 12px);
+    max-height: calc(100vh - 12px);
+  }
+
+  body.cp6-redesign #publicRequestDialog > div > .bg-slate-50\/80 {
+    overflow-x: auto;
+  }
+
+  body.cp6-redesign #publicRequestDialog .step-tab {
+    flex: 0 0 auto;
+    min-width: 120px;
+  }
+
+  body.cp6-redesign #publicRequestDialog .step-tab-label {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  body.cp6-redesign :where(dialog.record-dialog > form) {
+    padding: 20px;
+    width: calc(100vw - 12px);
+  }
+
+  body.cp6-redesign :where(dialog .form-grid, #applicantRegisterDialog .form-grid, #applicantProfileDialog .form-grid, #credentialDialog .form-grid) {
+    grid-template-columns: 1fr;
+  }
+
+  body.cp6-redesign :where(dialog .form-grid .full-width) {
+    grid-column: auto;
+  }
+
+  body.cp6-redesign :where(.settings-grid, #usuariosView .usuarios-choice-grid) {
+    grid-template-columns: 1fr;
+  }
+
+  body.cp6-redesign :where(.users-table-toolbar) {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  body.cp6-redesign :where(.users-table-toolbar input) {
+    max-width: none;
+  }
+
+  body.cp6-redesign :where(.selected-total-panel) {
+    grid-template-columns: 1fr;
+  }
+
+  body.cp6-redesign :where(.technical-grid, .mobiliario-capture-grid) {
+    grid-template-columns: 1fr;
+  }
+
+  body.cp6-redesign :where(.technical-grid .full-width, .mobiliario-capture-grid .full-width) {
+    grid-column: auto;
+  }
+
+  body.cp6-redesign :where(#requestDetailDialog.cp6-request-detail-dialog) {
+    max-height: calc(100vh - 12px);
+    max-width: calc(100vw - 12px);
+    width: calc(100vw - 12px);
+  }
+
+  body.cp6-redesign :where(#requestDetailDialog.cp6-request-detail-dialog > .cp6-detail-content) {
+    max-height: calc(100vh - 12px);
+  }
+
+  body.cp6-redesign :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form:not([hidden])) {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  body.cp6-redesign :where(#appShell) {
+    display: block;
+  }
+
+  body.cp6-redesign :where(#appShell .v2-sidebar) {
+    align-items: center;
+    border-radius: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    height: auto;
+    max-height: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 12px;
+    position: static;
+    width: 100%;
+  }
+
+  body.cp6-redesign :where(#appShell .v2-sidebar .v2-brand, #appShell .v2-sidebar .v2-user, #appShell .v2-sidebar .v2-operation-nav, #appShell .v2-sidebar .cp6-legacy-session) {
+    display: none;
+  }
+
+  body.cp6-redesign :where(#appShell .v2-main-nav) {
+    min-width: 490px;
+    width: 100%;
+  }
+
+  body.cp6-redesign :where(#appShell .v2-main-nav .cp6-nav-center) {
+    display: flex;
+    gap: 4px;
+    min-width: 490px;
+  }
+
+  body.cp6-redesign :where(#appShell .v2-main-nav .cp6-nav-link) {
+    flex: 1 0 auto;
+    justify-content: center;
+    min-width: 76px;
+    padding: 9px 8px;
+  }
+
+  body.cp6-redesign :where(#appShell .v2-main-nav .cp6-nav-link > span:last-child) {
+    display: inline;
+  }
+
+  body.cp6-redesign :where(#appShell .v2-topbar) {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-nav-tools) {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-home-hero-art) {
+    display: none;
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-kpi-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.cp6-redesign :where(#appShell .cp6-chart-card, #appShell .cp6-requests-card, #appShell .cp6-quick-card, #appShell .cp6-activity-card) {
+    padding: 16px;
+  }
+
+  body.cp6-redesign :where(#loginScreen .client-dashboard-header) {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-left: -18px;
+    margin-right: -18px;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  body.cp6-redesign :where(#loginScreen .client-header-actions) {
+    width: 100%;
+  }
+
+  body.cp6-redesign :where(#loginScreen .client-logout-button) {
+    flex: 1;
+  }
+
+  body.cp6-redesign :where(#loginScreen .applicant-home-panel) {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  body.cp6-redesign :where(#loginScreen .client-history-section) {
+    padding: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.cp6-redesign :where(*, *::before, *::after) {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Select enhancement generated by app.js: the native select stays functional
+   and visually hidden while this wrapper provides the CP6 presentation.
+   -------------------------------------------------------------------------- */
+body.cp6-redesign :where(.custom-select) {
+  display: block;
+  min-width: 0;
+  position: relative;
+  width: 100%;
+}
+
+body.cp6-redesign :where(.custom-select-native) {
+  height: 1px;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
+  z-index: -1;
+}
+
+body.cp6-redesign :where(.custom-select-trigger) {
+  align-items: center;
+  background: #fbfcfe;
+  border: 1px solid var(--line, #e7edf5);
+  border-radius: 11px;
+  color: var(--ink-2, #253653);
+  display: flex;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  justify-content: space-between;
+  letter-spacing: 0;
+  line-height: 1.25;
+  min-height: 44px;
+  overflow: hidden;
+  padding: 10px 36px 10px 13px;
+  position: relative;
+  text-align: left;
+  text-overflow: ellipsis;
+  transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease;
+  white-space: nowrap;
+  width: 100%;
+}
+
+body.cp6-redesign :where(.custom-select-trigger)::after {
+  border-bottom: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  color: #8ea0b8;
+  content: "";
+  height: 7px;
+  pointer-events: none;
+  position: absolute;
+  right: 14px;
+  top: 16px;
+  transform: rotate(45deg);
+  transition: transform .18s ease, color .18s ease;
+  width: 7px;
+}
+
+body.cp6-redesign :where(.custom-select-trigger:hover) {
+  background: #fff;
+  border-color: #bdd2ff;
+}
+
+body.cp6-redesign :where(.custom-select-trigger:focus-visible) {
+  outline: 3px solid rgba(36, 107, 254, .25);
+  outline-offset: 2px;
+}
+
+body.cp6-redesign :where(.custom-select.is-open .custom-select-trigger) {
+  background: #fff;
+  border-color: var(--blue, #246bfe);
+  box-shadow: 0 0 0 4px rgba(36, 107, 254, .1);
+}
+
+body.cp6-redesign :where(.custom-select.is-open .custom-select-trigger)::after {
+  color: var(--blue, #246bfe);
+  top: 19px;
+  transform: rotate(225deg);
+}
+
+body.cp6-redesign :where(.custom-select-menu) {
+  background: #fff;
+  border: 1px solid var(--line, #e7edf5);
+  border-radius: 12px;
+  box-shadow: 0 18px 38px rgba(25, 52, 91, .14);
+  display: none;
+  left: 0;
+  max-height: 250px;
+  min-width: 100%;
+  overflow-y: auto;
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 7px);
+  z-index: 160;
+}
+
+body.cp6-redesign :where(.custom-select.is-open .custom-select-menu) {
+  display: grid;
+  gap: 2px;
+}
+
+body.cp6-redesign :where(.custom-select-option) {
+  background: #fff;
+  border: 0;
+  border-radius: 8px;
+  color: var(--ink-2, #253653);
+  display: block;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.35;
+  min-height: 35px;
+  padding: 9px 10px;
+  text-align: left;
+  width: 100%;
+}
+
+body.cp6-redesign :where(.custom-select-option:hover, .custom-select-option:focus-visible) {
+  background: var(--blue-soft, #edf4ff);
+  color: var(--blue, #246bfe);
+  outline: 0;
+}
+
+body.cp6-redesign :where(.custom-select-option.is-selected) {
+  background: var(--blue-soft, #edf4ff);
+  color: var(--blue, #246bfe);
+  font-weight: 700;
+}
+
+body.cp6-redesign :where(.custom-select-option.is-selected)::after {
+  content: "✓";
+  float: right;
+  font-weight: 800;
+}
+
+body.cp6-redesign :where(.custom-select[aria-disabled="true"], .custom-select-native:disabled + .custom-select-trigger) {
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+/* Generated wrappers inherit the body copy face; icon glyphs remain untouched. */
+body.cp6-redesign :where(#appShell, #loginScreen, dialog) :where(div, span, p, label, small, strong, b, th, td, button, input, select, textarea) {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+body.cp6-redesign :where(#appShell, #loginScreen, dialog) :where(h1, h2, h3, h4, h5, h6) {
+  font-family: "Manrope", system-ui, sans-serif;
+}
+
+body.cp6-redesign :where(#appShell, #loginScreen, dialog) :where(i.fa-solid, i.fa-regular, i.fa-brands, .fa-solid, .fa-regular, .fa-brands) {
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", sans-serif;
+}
+
+/* The CP6 wizard uses only the active step; the legacy/progress variant is
+   suppressed when present, without changing step navigation logic. */
+body.cp6-redesign #publicRequestDialog :where(.request-progress-hidden, .request-progress, [data-request-progress]) {
+  display: none !important;
+}
+
+body.cp6-redesign #publicRequestDialog :where(.step-content:not(.is-active):not([data-active="true"]):not(:has(+ .step-content.is-active))) {
+  /* JS remains authoritative through .hidden/[hidden]; this keeps unmarked
+     inactive legacy content from painting if a stale class is left behind. */
+}
+
+body.cp6-redesign #publicRequestDialog :where(.step-content.hidden, .step-content[hidden], .step-content[aria-hidden="true"]) {
+  display: none !important;
+}
+
+body.cp6-redesign #publicRequestDialog :where(.step-content.is-active, .step-content[data-active="true"]):not([hidden]):not(.hidden) {
+  display: grid;
+}
+
+body.cp6-redesign #publicRequestDialog :where(.step-tab) {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+body.cp6-redesign #publicRequestDialog :where(.step-tab.is-active, .step-tab[aria-current="step"], .step-tab.active) {
+  background: var(--blue-soft, #edf4ff);
+  border-color: #bdd2ff;
+  color: var(--blue, #246bfe);
+}
+
+body.cp6-redesign #publicRequestDialog :where(.step-tab.is-completed) {
+  border-color: #c9dafb;
+  color: #4c78c9;
+}
+
+body.cp6-redesign #publicRequestDialog :where(#btn-next:not(:disabled), #publicRequestSubmit:not(:disabled)) {
+  background: var(--blue, #246bfe);
+  border: 1px solid var(--blue, #246bfe);
+  color: #fff;
+  display: inline-flex;
+  font-family: "Manrope", system-ui, sans-serif;
+  font-weight: 800;
+  opacity: 1;
+}
+
+body.cp6-redesign #publicRequestDialog :where(#btn-next:disabled, #publicRequestSubmit:disabled) {
+  background: #dce7f7;
+  border-color: #dce7f7;
+  color: #7990af;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+body.cp6-redesign #publicRequestDialog :where(#btn-prev) {
+  font-family: "Manrope", system-ui, sans-serif;
+}
+
+/* App-level hidden remains authoritative even where old utility rules exist.
+   aria-hidden is deliberately excluded: the UI uses it on visible icons. */
+body.cp6-redesign :where([hidden], .hidden, .is-hidden) {
+  display: none !important;
+}
+
+@media (max-width: 760px) {
+  body.cp6-redesign :where(.custom-select-menu) {
+    max-height: 220px;
+  }
+
+  body.cp6-redesign :where(.custom-select-option) {
+    min-height: 40px;
+    padding-block: 11px;
+  }
+}
+
+/* Final integration hooks: exact active markup, not legacy selector guesses. */
+body.cp6-redesign #publicRequestDialog .v2-request-header{background:linear-gradient(110deg,#0b1628,#1f4d98 75%,#246bfe);color:white;padding:21px 25px;border:0;position:relative;min-height:83px}
+body.cp6-redesign #publicRequestDialog .v2-request-header :is(h1,h2){display:block;color:white;font:800 23px/1.2 Manrope,system-ui,sans-serif;letter-spacing:-.6px;margin:0}
+body.cp6-redesign #publicRequestDialog .v2-request-header p{color:#c1d4f1;font-size:11px;margin:6px 0 0;letter-spacing:0;font-weight:400}
+body.cp6-redesign #publicRequestDialog .v2-request-header [data-lucide]{color:#a4c4ff;display:inline-block;width:23px;height:23px;stroke:currentColor}
+body.cp6-redesign #publicRequestDialog .v2-request-steps{display:none!important}
+body.cp6-redesign #publicRequestDialog .v2-request-footer{display:flex;align-items:center;justify-content:space-between;background:#f8fbff;border-top:1px solid #e7edf5;padding:16px 24px;min-height:76px;margin:0;gap:12px;flex-shrink:0}
+body.cp6-redesign #publicRequestDialog #btn-next,body.cp6-redesign #publicRequestDialog #publicRequestSubmit{margin-left:auto;min-width:126px;min-height:42px;font-size:12px;border-radius:12px}
+body.cp6-redesign #publicRequestDialog #btn-prev{margin-right:auto;background:#edf4ff;color:#246bfe;border:1px solid #d7e5ff;font-size:12px;border-radius:12px;min-height:42px;min-width:110px;padding:10px 15px}
+body.cp6-redesign #publicRequestDialog #step-content-1:not([hidden]):not(.hidden){display:flex;flex-direction:column;min-height:0;height:auto;gap:20px;flex:1}
+body.cp6-redesign #publicRequestDialog #step-content-1>.grid{row-gap:18px;padding-top:0;margin-top:0;border:0}
+body.cp6-redesign #publicRequestDialog .request-privacy-box{height:auto;min-height:0;padding:16px;margin-top:auto;margin-bottom:0;border-radius:14px;line-height:1.6;flex:0 0 auto}
+body.cp6-redesign #publicRequestDialog .request-privacy-box :is(p,span){font-weight:400;font-size:11px;line-height:1.7;letter-spacing:0}
+body.cp6-redesign #publicRequestDialog :is(input,textarea)::placeholder{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:400;letter-spacing:0;color:#93a3b8}
+body.cp6-redesign #publicRequestDialog #observaciones_solicitud{height:44px;min-height:44px;max-height:44px;padding-top:11px;padding-bottom:11px;resize:none}
+body.cp6-redesign #recordEditor .relative>.custom-select>.custom-select-trigger,body.cp6-redesign #publicRequestDialog .relative>.custom-select>.custom-select-trigger{padding-left:40px;padding-right:30px;font-size:12px;font-weight:400}
+body.cp6-redesign #recordEditor label:has(#paidInput){display:flex;flex-direction:row;align-items:center;gap:10px;padding:13px 15px;height:auto;min-height:47px;background:#f7faff;border:1px solid #e7edf5;border-radius:14px;white-space:normal}
+body.cp6-redesign #recordEditor label:has(#paidInput)::before,body.cp6-redesign #recordEditor label:has(#paidInput)::after{display:none;content:none}
+body.cp6-redesign #recordEditor label:has(#paidInput)>span{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:500;flex:1;width:auto}
+body.cp6-redesign #recordEditor #paidInput{position:static;display:block;width:16px;height:16px;min-width:16px;min-height:16px;flex:0 0 16px;margin:0;padding:0;transform:none;opacity:1;appearance:auto}
+body.cp6-redesign .login-visual-copy p{font-weight:400;font-size:13px;letter-spacing:0;line-height:1.8}
+body.cp6-redesign .login-visual{border-radius:0;min-width:0}
+body.cp6-redesign :is(.cp6-hand-icon, .v2-avatar){display:inline-flex;align-items:center;justify-content:center}
+body.cp6-redesign .cp6-nav-tools .cp6-icon-btn svg{display:block;width:18px;height:18px;stroke:currentColor;color:#253653;fill:none}
+body.cp6-redesign .v2-sidebar .cp6-hand-icon svg{display:block;width:17px;height:17px;stroke:currentColor;color:inherit;fill:none}
+body.cp6-redesign .v2-sidebar .cp6-hand-icon{width:18px;height:18px;flex:0 0 18px}
+@media(max-width:740px){body.cp6-redesign #publicRequestDialog .v2-request-header :is(h1,h2){font-size:20px}body.cp6-redesign #publicRequestDialog #step-content-1>.grid{row-gap:16px}body.cp6-redesign #publicRequestDialog .request-privacy-box{margin-top:7px}body.cp6-redesign #publicRequestDialog .v2-request-footer{padding:13px 16px}body.cp6-redesign #publicRequestDialog .v2-request-header{padding:20px}}

@@ -1,0 +1,909 @@
+:root {
+  --cp6-ink: #0b1628;
+  --cp6-ink-2: #253653;
+  --cp6-muted: #74839a;
+  --cp6-line: #e7edf5;
+  --cp6-surface: #ffffff;
+  --cp6-canvas: #f4f7fb;
+  --cp6-blue: #246bfe;
+  --cp6-blue-dark: #1557db;
+  --cp6-blue-soft: #edf4ff;
+  --cp6-green: #16a574;
+  --cp6-green-soft: #eafaf4;
+  --cp6-red: #dc5362;
+  --cp6-shadow: 0 16px 45px rgba(25, 52, 91, 0.07);
+  --cp6-shadow-sm: 0 7px 24px rgba(25, 52, 91, 0.055);
+  --cp6-ease: cubic-bezier(.23, 1, .32, 1);
+}
+
+.cp6-cotizaciones,
+.cp6-cotizaciones * {
+  box-sizing: border-box;
+}
+
+.cp6-cotizaciones {
+  margin: 0;
+  min-height: 100vh;
+  padding: clamp(15px, 2.8vw, 34px) clamp(14px, 3vw, 36px) 42px !important;
+  background: var(--cp6-canvas) !important;
+  color: var(--cp6-ink) !important;
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.cp6-cotizaciones button,
+.cp6-cotizaciones input,
+.cp6-cotizaciones textarea,
+.cp6-cotizaciones select {
+  font: inherit;
+}
+
+.cp6-cotizaciones button {
+  cursor: pointer;
+}
+
+.cp6-shell {
+  width: min(1240px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+}
+
+/* Tailwind's space-y utility is present in the original markup; the CP6 grid owns spacing. */
+.cp6-shell > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0 !important;
+}
+
+.cp6-cotizaciones h1,
+.cp6-cotizaciones h2,
+.cp6-cotizaciones h3,
+.cp6-cotizaciones h4,
+.cp6-cotizaciones strong,
+.cp6-cotizaciones th {
+  font-family: "Manrope", "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+/* Compact command-centre style header */
+.cp6-topbar {
+  min-height: 72px;
+  padding: 14px 18px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1px solid var(--cp6-line) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--cp6-shadow-sm) !important;
+}
+
+.cp6-topbar > div:first-child {
+  min-width: 0;
+}
+
+.cp6-topbar h1 {
+  margin: 0;
+  color: var(--cp6-ink) !important;
+  font-size: clamp(22px, 2.6vw, 30px) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.9px;
+  font-weight: 800 !important;
+}
+
+.cp6-topbar h1 i {
+  width: 34px;
+  height: 34px;
+  display: inline-grid;
+  place-items: center;
+  margin-right: 5px;
+  border-radius: 11px;
+  color: #fff !important;
+  background: linear-gradient(135deg, #4288ff, #1f5ddd);
+  box-shadow: 0 8px 18px rgba(36, 107, 254, .24);
+  font-size: 16px;
+  vertical-align: -4px;
+}
+
+.cp6-topbar p {
+  margin: 7px 0 0;
+  color: var(--cp6-muted) !important;
+  font-size: 11px !important;
+  line-height: 1.4;
+}
+
+.cp6-topbar > div:last-child {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cp6-topbar button,
+.cp6-action-button {
+  border: 1px solid transparent !important;
+  border-radius: 11px !important;
+  padding: 10px 13px !important;
+  min-height: 38px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  line-height: 1;
+  transition: transform .18s var(--cp6-ease), background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.cp6-topbar button:hover,
+.cp6-action-button:hover {
+  transform: translateY(-2px);
+}
+
+.cp6-topbar button:active,
+.cp6-action-button:active,
+.cp6-cotizaciones .cp6-table-actions button:active {
+  transform: scale(.97);
+}
+
+#btnNavTable {
+  color: var(--cp6-ink-2) !important;
+  background: #fff !important;
+  border-color: var(--cp6-line) !important;
+  box-shadow: var(--cp6-shadow-sm);
+}
+
+#btnNavTable:hover {
+  color: var(--cp6-blue) !important;
+  border-color: #bfd2ff !important;
+  background: var(--cp6-blue-soft) !important;
+}
+
+#btnBackToAvaluos,
+#btnNavForm {
+  color: #fff !important;
+  background: var(--cp6-blue) !important;
+  border-color: var(--cp6-blue) !important;
+  box-shadow: 0 9px 19px rgba(36, 107, 254, .2);
+}
+
+#btnBackToAvaluos:hover,
+#btnNavForm:hover {
+  background: var(--cp6-blue-dark) !important;
+}
+
+/* Reference-style contextual banner; it contains no fabricated operational figures. */
+.cp6-hero {
+  position: relative;
+  min-height: 156px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 26px;
+  padding: 24px 28px;
+  color: #fff;
+  border-radius: 22px;
+  background: linear-gradient(115deg, #0b1628 0%, #183663 67%, #246bfe 100%);
+  box-shadow: 0 22px 42px rgba(11, 38, 82, .16);
+}
+
+.cp6-hero::before,
+.cp6-hero::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, .11);
+  border-radius: 50%;
+}
+
+.cp6-hero::before {
+  width: 310px;
+  height: 310px;
+  top: -235px;
+  right: 180px;
+}
+
+.cp6-hero::after {
+  width: 390px;
+  height: 390px;
+  right: -75px;
+  bottom: -325px;
+}
+
+.cp6-hero-copy,
+.cp6-hero-art {
+  position: relative;
+  z-index: 1;
+}
+
+.cp6-hero-copy {
+  max-width: 680px;
+}
+
+.cp6-eyebrow {
+  margin-bottom: 8px;
+  color: #9cc1ff;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.45px;
+  text-transform: uppercase;
+}
+
+.cp6-hero h2 {
+  margin: 0;
+  color: #fff !important;
+  font-size: clamp(20px, 2.5vw, 29px);
+  line-height: 1.14;
+  letter-spacing: -.75px;
+  font-weight: 800;
+}
+
+.cp6-hero p {
+  max-width: 590px;
+  margin: 9px 0 0;
+  color: #c4d8f7;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.cp6-hero-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  padding: 7px 10px;
+  color: #e4efff;
+  background: rgba(255, 255, 255, .09);
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 9px;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.cp6-hero-note i {
+  color: #8ec0ff;
+}
+
+.cp6-hero-art {
+  width: 196px;
+  height: 100px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-end;
+  gap: 9px;
+  padding: 10px 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .2);
+}
+
+.cp6-hero-art span {
+  flex: 1;
+  min-height: 22px;
+  border-radius: 5px 5px 0 0;
+  background: linear-gradient(#8ec0ff, rgba(142, 192, 255, .15));
+  transform-origin: bottom;
+  animation: cp6-rise .7s var(--cp6-ease) both;
+}
+
+.cp6-hero-art span:nth-child(2) { animation-delay: .08s; }
+.cp6-hero-art span:nth-child(3) { animation-delay: .16s; }
+.cp6-hero-art span:nth-child(4) { animation-delay: .24s; }
+.cp6-hero-art span:nth-child(5) { animation-delay: .32s; }
+
+@keyframes cp6-rise {
+  from { opacity: .3; transform: scaleY(0); }
+  to { opacity: 1; transform: scaleY(1); }
+}
+
+/* Cards and records table */
+.cp6-panel,
+#formPanel,
+#cotizacionCard {
+  background: var(--cp6-surface) !important;
+  border: 1px solid var(--cp6-line) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--cp6-shadow-sm) !important;
+}
+
+#tableView.cp6-table-panel {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.cp6-table-head {
+  min-height: 78px;
+  padding: 17px 21px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid var(--cp6-line) !important;
+}
+
+.cp6-section-heading h2 {
+  margin: 0;
+  color: var(--cp6-ink) !important;
+  font-size: 16px;
+  line-height: 1.2;
+  letter-spacing: -.25px;
+  font-weight: 800;
+}
+
+.cp6-section-heading p {
+  margin: 5px 0 0;
+  color: var(--cp6-muted) !important;
+  font-size: 10px;
+}
+
+.cp6-search-wrap {
+  position: relative;
+  width: min(310px, 100%);
+  flex: 0 1 310px;
+}
+
+.cp6-search-wrap > i {
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  z-index: 1;
+  color: #9aabc2;
+  font-size: 11px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+#inSearch {
+  width: 100%;
+  min-height: 38px;
+  padding: 10px 13px 10px 35px !important;
+  color: var(--cp6-ink) !important;
+  background: #fbfcfe !important;
+  border: 1px solid #dce5f0 !important;
+  border-radius: 11px !important;
+  outline: 0;
+  font-size: 10px !important;
+  transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+}
+
+#inSearch:focus {
+  background: #fff !important;
+  border-color: var(--cp6-blue) !important;
+  box-shadow: 0 0 0 4px rgba(36, 107, 254, .1) !important;
+}
+
+.cp6-table-panel .overflow-x-auto {
+  overflow-x: auto;
+}
+
+.cp6-table-panel table {
+  min-width: 760px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cp6-table-panel thead tr {
+  background: #f8fbff !important;
+}
+
+.cp6-table-panel thead th {
+  padding: 12px 21px !important;
+  color: #7e91ac !important;
+  background: #f8fbff !important;
+  border-bottom: 1px solid var(--cp6-line) !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.cp6-table-panel tbody {
+  color: var(--cp6-ink-2) !important;
+}
+
+.cp6-table-panel tbody tr {
+  border-top: 1px solid #f0f3f7 !important;
+  transition: background .18s ease;
+}
+
+.cp6-table-panel tbody tr:first-child {
+  border-top: 0 !important;
+}
+
+.cp6-table-panel tbody tr:hover {
+  background: #f8fbff !important;
+}
+
+.cp6-table-panel tbody td {
+  padding: 13px 21px !important;
+  color: var(--cp6-ink-2) !important;
+  border: 0 !important;
+  font-size: 10px !important;
+  vertical-align: middle;
+}
+
+.cp6-table-panel tbody td:first-child span:first-child {
+  color: var(--cp6-blue) !important;
+  font-family: "Manrope", sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.cp6-table-panel tbody td:nth-child(2) span:first-child {
+  color: var(--cp6-ink) !important;
+  font-family: "Manrope", sans-serif;
+  font-weight: 800;
+}
+
+.cp6-table-panel tbody td:nth-child(4) {
+  color: var(--cp6-green) !important;
+  font-family: "Manrope", sans-serif;
+  font-weight: 800;
+}
+
+.cp6-table-panel tbody td:nth-child(5) span {
+  color: var(--cp6-muted) !important;
+  font-size: 9px !important;
+}
+
+.cp6-table-panel tbody td:nth-child(6) {
+  white-space: nowrap;
+}
+
+.cp6-table-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+.cp6-table-actions button {
+  width: 29px;
+  height: 29px;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  background: transparent !important;
+  font-size: 10px !important;
+  transition: color .18s ease, background .18s ease, transform .18s var(--cp6-ease);
+}
+
+.cp6-table-actions button:hover {
+  color: var(--cp6-blue) !important;
+  background: var(--cp6-blue-soft) !important;
+}
+
+.cp6-table-actions button:last-child:hover {
+  color: #c43e4d !important;
+  background: #fff0f1 !important;
+}
+
+/* Form and live quote preview */
+#formView.cp6-form-layout {
+  display: grid;
+  grid-template-columns: minmax(290px, .88fr) minmax(0, 1.12fr);
+  gap: 20px !important;
+  align-items: start;
+}
+
+#formView.cp6-form-layout.hidden {
+  display: none !important;
+}
+
+#formPanel.cp6-form-panel,
+#previewContainer.cp6-preview-panel {
+  min-width: 0;
+}
+
+#formPanel.cp6-form-panel {
+  grid-column: auto !important;
+  padding: 21px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 15px !important;
+}
+
+#previewContainer.cp6-preview-panel {
+  grid-column: auto !important;
+  align-items: stretch !important;
+  gap: 12px !important;
+}
+
+.cp6-form-title {
+  min-height: 37px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--cp6-line);
+}
+
+.cp6-form-title h2 {
+  margin: 0;
+  color: var(--cp6-ink) !important;
+  font-size: 14px !important;
+  letter-spacing: -.2px;
+  font-weight: 800 !important;
+}
+
+.cp6-form-title h2 i {
+  color: var(--cp6-blue) !important;
+  margin-right: 5px;
+}
+
+#badgeEditMode {
+  color: var(--cp6-blue) !important;
+  background: var(--cp6-blue-soft) !important;
+  border: 1px solid #cfe0ff;
+  padding: 5px 8px !important;
+  font-size: 9px !important;
+}
+
+#formPanel label {
+  display: block;
+  margin-bottom: 6px !important;
+  color: var(--cp6-ink-2) !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+}
+
+#formPanel .border-t {
+  border-color: var(--cp6-line) !important;
+}
+
+#formPanel .relative {
+  position: relative;
+}
+
+#formPanel .relative > i {
+  top: 50% !important;
+  left: 13px !important;
+  color: #9aabc2 !important;
+  font-size: 10px !important;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+#formPanel textarea + i {
+  top: 16px !important;
+  transform: none;
+}
+
+#formPanel input,
+#formPanel textarea {
+  width: 100%;
+  min-height: 39px;
+  padding: 10px 12px 10px 35px !important;
+  color: var(--cp6-ink) !important;
+  background: #fbfcfe !important;
+  border: 1px solid #dce5f0 !important;
+  border-radius: 11px !important;
+  outline: 0;
+  font-size: 10px !important;
+  transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+}
+
+#formPanel textarea {
+  min-height: 72px;
+  resize: vertical;
+}
+
+#formPanel input:focus,
+#formPanel textarea:focus {
+  background: #fff !important;
+  border-color: var(--cp6-blue) !important;
+  box-shadow: 0 0 0 4px rgba(36, 107, 254, .1) !important;
+}
+
+#formPanel #inValorOperacion,
+#formPanel #inIsrSin,
+#formPanel #inIsrCon,
+#formPanel #inHonorarios {
+  font-family: "Manrope", sans-serif;
+  font-weight: 800 !important;
+}
+
+#formPanel #inIsrSin { color: #c43e4d !important; }
+#formPanel #inIsrCon { color: #148d63 !important; }
+
+#formPanel > button[onclick="saveRecord()"] {
+  width: 100%;
+  margin-top: 2px;
+  min-height: 43px;
+  color: #fff !important;
+  background: var(--cp6-green) !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 9px 19px rgba(22, 165, 116, .17);
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  transition: transform .18s var(--cp6-ease), background .18s ease;
+}
+
+#formPanel > button[onclick="saveRecord()"]:hover {
+  background: #108a60 !important;
+  transform: translateY(-2px);
+}
+
+#actionsBar.cp6-actions-bar {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 7px !important;
+}
+
+#actionsBar button {
+  min-height: 35px;
+  padding: 9px 11px !important;
+  border: 1px solid transparent !important;
+  border-radius: 10px !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  transition: transform .18s var(--cp6-ease), background .18s ease, box-shadow .18s ease;
+}
+
+#actionsBar button:hover {
+  transform: translateY(-2px);
+}
+
+#actionsBar button:nth-child(1) {
+  background: var(--cp6-green) !important;
+  box-shadow: 0 7px 15px rgba(22, 165, 116, .14);
+}
+
+#actionsBar button:nth-child(2),
+#actionsBar button:nth-child(3) {
+  background: var(--cp6-blue) !important;
+  box-shadow: 0 7px 15px rgba(36, 107, 254, .14);
+}
+
+#actionsBar button:nth-child(4) {
+  background: var(--cp6-ink) !important;
+}
+
+#cotizacionCard.cp6-quote-card {
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 22px !important;
+  box-shadow: var(--cp6-shadow) !important;
+}
+
+#cotizacionCard > .h-3 {
+  height: 7px !important;
+  background: linear-gradient(90deg, #1f5ddd 0%, #5791ff 55%, #246bfe 100%) !important;
+}
+
+#cotizacionCard > .p-6 {
+  padding: 24px 25px !important;
+}
+
+#cotizacionCard h3 {
+  color: var(--cp6-ink) !important;
+  font-size: 20px !important;
+  letter-spacing: -.65px;
+}
+
+#cotizacionCard .w-10 {
+  width: 38px !important;
+  height: 38px !important;
+  color: var(--cp6-blue) !important;
+  background: var(--cp6-blue-soft) !important;
+  border: 1px solid #d3e2ff !important;
+  border-radius: 12px !important;
+}
+
+#cotizacionCard #outFolio {
+  color: var(--cp6-blue) !important;
+  font-size: 9px !important;
+}
+
+#cotizacionCard #outFecha {
+  color: var(--cp6-ink-2) !important;
+  font-family: "Manrope", sans-serif;
+  font-size: 10px !important;
+}
+
+#cotizacionCard .border-b,
+#cotizacionCard .border-t {
+  border-color: var(--cp6-line) !important;
+}
+
+#cotizacionCard .bg-slate-50\/80 {
+  background: #f8fbff !important;
+  border-color: #e8eff8 !important;
+  border-radius: 15px !important;
+}
+
+#cotizacionCard .bg-slate-50,
+#cotizacionCard .bg-emerald-50\/60 {
+  border: 1px solid #edf2f8;
+  border-radius: 11px !important;
+}
+
+#cotizacionCard .bg-emerald-50\/60 {
+  background: var(--cp6-green-soft) !important;
+  border-color: #d7f1e5;
+}
+
+#cotizacionCard .bg-slate-900 {
+  background: var(--cp6-ink) !important;
+  border-radius: 15px !important;
+}
+
+#cotizacionCard .bg-slate-900 #outTotalCon {
+  color: #8ec0ff !important;
+  font-family: "Manrope", sans-serif;
+}
+
+#cotizacionCard .bg-gradient-to-r {
+  background: linear-gradient(115deg, #138a62, #16a574 60%, #0ea5c9) !important;
+  border-radius: 15px !important;
+}
+
+#cotizacionCard #outAhorro {
+  font-family: "Manrope", sans-serif;
+  letter-spacing: -.6px;
+}
+
+#cotizacionCard p {
+  color: #8192a8 !important;
+  font-size: 9px !important;
+}
+
+#cotizacionCard p i {
+  color: var(--cp6-blue) !important;
+}
+
+/* Keep the existing print/export behavior intact, while making the printed card clean. */
+@media print {
+  .cp6-cotizaciones {
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  .cp6-cotizaciones .cp6-topbar,
+  .cp6-cotizaciones .cp6-hero,
+  #tableView,
+  #formPanel,
+  #actionsBar,
+  .no-print {
+    display: none !important;
+  }
+
+  #formView {
+    display: block !important;
+  }
+
+  #previewContainer {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  #cotizacionCard {
+    width: 100% !important;
+    max-width: 100% !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+}
+
+@media (max-width: 960px) {
+  #formView.cp6-form-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #cotizacionCard.cp6-quote-card {
+    max-width: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .cp6-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cp6-topbar > div:last-child {
+    width: 100%;
+  }
+
+  .cp6-topbar button {
+    flex: 1 1 0;
+  }
+
+  .cp6-hero {
+    min-height: 190px;
+    align-items: flex-start;
+    padding: 22px;
+  }
+
+  .cp6-hero-art {
+    position: absolute;
+    right: 20px;
+    bottom: 18px;
+    opacity: .58;
+    transform: scale(.72);
+    transform-origin: bottom right;
+  }
+
+  .cp6-table-head {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 17px !important;
+  }
+
+  .cp6-search-wrap {
+    width: 100%;
+    flex-basis: auto;
+  }
+
+  .cp6-table-panel thead th,
+  .cp6-table-panel tbody td {
+    padding-right: 15px !important;
+    padding-left: 15px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .cp6-cotizaciones {
+    padding: 12px 10px 26px !important;
+  }
+
+  .cp6-topbar {
+    padding: 14px !important;
+  }
+
+  .cp6-topbar h1 {
+    font-size: 22px !important;
+  }
+
+  .cp6-topbar > div:last-child {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #btnNavForm {
+    grid-column: 1 / -1;
+  }
+
+  .cp6-hero {
+    padding: 19px;
+  }
+
+  .cp6-hero h2 {
+    max-width: 260px;
+    font-size: 20px;
+  }
+
+  .cp6-hero p {
+    max-width: 280px;
+  }
+
+  #formPanel.cp6-form-panel {
+    padding: 17px !important;
+  }
+
+  #cotizacionCard > .p-6 {
+    padding: 20px 17px !important;
+  }
+
+  #actionsBar.cp6-actions-bar {
+    justify-content: stretch;
+  }
+
+  #actionsBar button {
+    flex: 1 1 calc(50% - 7px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cp6-cotizaciones *,
+  .cp6-cotizaciones *::before,
+  .cp6-cotizaciones *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
