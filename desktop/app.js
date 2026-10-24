@@ -265,6 +265,8 @@
       if (activeSessionUser) { applyRoleUi(); renderAuthorizedFolios(); }
       render();
       renderProfileDashboard();
+      // El registro depende de los datos remotos; se vuelve a pintar después de /state.
+      renderValidationRegistry();
     } catch {
       setServerStatus("offline");
       render();
@@ -1646,10 +1648,12 @@
   renderNotarySettings();
   renderAuthorizedFolios();
   renderValidationRegistry();
-  loadRemoteState();
+  // Restaurar la sesión antes de pedir /state permite que la primera petición ya lleve
+  // el usuario correcto; loadRemoteState vuelve a aplicar rol, perfil y métricas al terminar.
   syncCredentialSetupVisibility();
   const storedSession = sessionStorage.getItem(SESSION_KEY);
-  if (storedSession && allUsers().includes(storedSession)) { loginUser.value = storedSession; showAuthenticatedApp(storedSession); } else { showLogin(); }
+  if (storedSession) { loginUser.value = storedSession; showAuthenticatedApp(storedSession); } else { showLogin(); }
+  loadRemoteState();
 
   window.ControlAvaluosDesktop = {
     canEdit,

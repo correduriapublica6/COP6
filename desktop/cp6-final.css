@@ -1,0 +1,409 @@
+/* CP6 · Capa final de integración visual
+   Se carga después de las hojas del rediseño para neutralizar estilos heredados
+   sin modificar IDs, datos ni contratos de JavaScript. */
+:root {
+  --cp6-final-blue: #2563eb;
+  --cp6-final-navy: #0f172a;
+  --cp6-final-ink: #172033;
+  --cp6-final-muted: #64748b;
+  --cp6-final-line: #e5eaf2;
+  --cp6-final-canvas: #f6f8fb;
+}
+
+body.cp6-redesign {
+  background: var(--cp6-final-canvas);
+  color: var(--cp6-final-ink);
+  font-family: "Plus Jakarta Sans", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* El shell administrativo conserva el ancho completo y una única superficie de trabajo. */
+body.cp6-redesign #appShell.control-shell {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  background: var(--cp6-final-canvas);
+}
+body.cp6-redesign #appShell.control-shell > .app-workspace {
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+  overflow: visible;
+}
+
+/* Recepción y Gestión reciben la misma cabecera visual que Solicitudes. */
+body.cp6-redesign #recepcionAvaluosSection,
+body.cp6-redesign #crearAvaluoSection,
+body.cp6-redesign #solicitudesView {
+  width: 100%;
+  max-width: 1520px;
+  margin-inline: auto;
+}
+body.cp6-redesign .cp6-module-banner {
+  align-items: center;
+  background: linear-gradient(115deg, #0f172a 0%, #172554 58%, #2563eb 100%);
+  border: 0;
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, .14);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 16px;
+  min-height: 122px;
+  overflow: hidden;
+  padding: 24px 28px;
+  position: relative;
+}
+body.cp6-redesign .cp6-module-banner::after {
+  border: 1px solid rgba(191, 219, 254, .2);
+  border-radius: 50%;
+  content: "";
+  height: 220px;
+  position: absolute;
+  right: -68px;
+  top: -112px;
+  width: 220px;
+}
+body.cp6-redesign .cp6-module-banner > div,
+body.cp6-redesign .cp6-module-banner > i { position: relative; z-index: 1; }
+body.cp6-redesign .cp6-module-banner span {
+  color: #93c5fd;
+  display: block;
+  font-size: .66rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+body.cp6-redesign .cp6-module-banner h2 {
+  color: #fff;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: clamp(1.55rem, 2.6vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -.045em;
+  line-height: 1.1;
+  margin: 7px 0 0;
+}
+body.cp6-redesign .cp6-module-banner p {
+  color: #cbd5e1;
+  font-size: .76rem;
+  line-height: 1.5;
+  margin: 7px 0 0;
+}
+body.cp6-redesign .cp6-module-banner > i {
+  color: #bfdbfe;
+  font-size: 2.25rem;
+  margin-right: 12px;
+  opacity: .88;
+}
+
+/* Barras de controles: mismo contenedor, misma altura, sin posición fija. */
+body.cp6-redesign #recepcionAvaluosSection > .request-style-filter-panel,
+body.cp6-redesign #crearAvaluoSection > .technical-search-panel,
+body.cp6-redesign #solicitudesView > .request-filter-row {
+  background: #fff;
+  border: 1px solid var(--cp6-final-line);
+  border-radius: 18px;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, .055);
+  margin: 0 0 14px;
+  padding: 13px 16px;
+  position: static;
+  width: 100%;
+}
+body.cp6-redesign #recepcionAvaluosSection > .request-style-filter-panel .search-row {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(150px, .7fr) minmax(280px, 1.4fr) minmax(190px, .75fr) auto;
+  width: 100%;
+}
+body.cp6-redesign #crearAvaluoSection > .technical-search-panel .search-row {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(185px, .75fr) minmax(280px, 1.25fr) minmax(210px, .8fr) auto;
+  width: 100%;
+}
+body.cp6-redesign #solicitudesView > .request-filter-row {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(300px, 1fr) 220px;
+}
+body.cp6-redesign .reception-filter-title,
+body.cp6-redesign .v2-module-label {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+  white-space: nowrap;
+}
+body.cp6-redesign .reception-filter-title strong,
+body.cp6-redesign .v2-module-label strong {
+  color: var(--cp6-final-navy);
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: 1.02rem;
+  font-weight: 800;
+  letter-spacing: -.025em;
+  text-shadow: none;
+}
+body.cp6-redesign .reception-filter-title-icon,
+body.cp6-redesign .v2-module-label > span {
+  align-items: center;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  color: var(--cp6-final-blue);
+  display: inline-flex;
+  flex: 0 0 36px;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+body.cp6-redesign .reception-search-input-wrap {
+  max-width: none;
+  min-width: 0;
+  width: 100%;
+}
+body.cp6-redesign :is(#searchInput, #technicalSearchInput, #requestSearchInput, #validationRegistrySearch) {
+  background: #fff;
+  border: 1px solid #dbe3ee;
+  border-radius: 999px;
+  box-shadow: none;
+  color: var(--cp6-final-ink);
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .76rem;
+  font-weight: 400;
+  height: 40px;
+  line-height: 1.2;
+  min-height: 40px;
+  padding: 0 16px 0 40px;
+  width: 100%;
+}
+body.cp6-redesign #technicalSearchInput,
+body.cp6-redesign #requestSearchInput { padding-left: 16px; }
+body.cp6-redesign :is(#searchInput, #technicalSearchInput, #requestSearchInput, #validationRegistrySearch):focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, .1);
+  outline: 0;
+}
+body.cp6-redesign .reception-search-input-wrap::before {
+  color: #94a3b8;
+  content: "\f002";
+  font-family: "Font Awesome 6 Free";
+  font-size: 12px;
+  font-weight: 900;
+  left: 14px;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+body.cp6-redesign :is(#statusViewSelect, #technicalStatusFilter, #requestStatusFilter, #validationRegistryFilter) {
+  background: #fff;
+  border: 1px solid #dbe3ee;
+  border-radius: 12px;
+  color: #334155;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .72rem;
+  font-weight: 500;
+  height: 40px;
+  min-height: 40px;
+  min-width: 0;
+  max-width: none;
+  padding-inline: 12px 30px;
+  white-space: nowrap;
+  width: 100%;
+}
+body.cp6-redesign .reception-filter-actions {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin: 0;
+  white-space: nowrap;
+}
+body.cp6-redesign .reception-filter-actions button,
+body.cp6-redesign .technical-search-panel .search-row > button,
+body.cp6-redesign .solicitudes-heading-actions button {
+  border-radius: 12px;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .75rem;
+  font-weight: 700;
+  min-height: 40px;
+  padding: 0 15px;
+  white-space: nowrap;
+}
+body.cp6-redesign #backAvaluosButton { background: var(--cp6-final-navy); color: #fff; }
+body.cp6-redesign #newRecordButton,
+body.cp6-redesign #newTechnicalAppraisalButton,
+body.cp6-redesign #newInternalRequestButton { background: var(--cp6-final-blue); color: #fff; }
+body.cp6-redesign #backAvaluosButton i { color: #fff; }
+
+/* Tablas: franja azul fina, encabezado celeste bajo y filas compactas. */
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) {
+  background: #fff;
+  border: 1px solid var(--cp6-final-line);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, .055);
+  margin: 0;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-top: 4px;
+  position: relative;
+  width: 100%;
+}
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList)::before {
+  background: linear-gradient(90deg, #2563eb, #60a5fa);
+  content: "";
+  display: block;
+  height: 4px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+}
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) table {
+  background: #fff;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 860px;
+  table-layout: auto;
+  width: 100%;
+}
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) thead th {
+  background: #f8fbff;
+  border-bottom: 1px solid #e8eef6;
+  color: #64748b;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  line-height: 1.2;
+  padding: 11px 15px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) tbody td {
+  background: #fff;
+  border-bottom: 1px solid #eef2f7;
+  color: #334155;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .76rem;
+  font-weight: 400;
+  line-height: 1.3;
+  padding: 10px 15px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) tbody tr:last-child td { border-bottom: 0; }
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) tbody tr:hover td { background: #f8fbff; }
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) .table-action-cell,
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) .record-actions { white-space: nowrap; }
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) :is(.table-action-cell button, .record-action, .table-action-button) {
+  align-items: center;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 9px;
+  color: #2563eb;
+  display: inline-flex;
+  height: 32px;
+  justify-content: center;
+  margin-left: 5px;
+  padding: 0;
+  width: 32px;
+}
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) :is(.table-action-cell button:hover, .record-action:hover, .table-action-button:hover) { background: #dbeafe; }
+
+/* Validación: el panel se pinta al cargar /api/state y queda separado de los filtros. */
+body.cp6-redesign #avaluosAuthorizedFoliosPanel {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  display: block;
+  margin-inline: auto;
+  padding: 0;
+  width: 100%;
+}
+body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-authorize-form {
+  align-items: end;
+  background: #fff;
+  border: 1px solid var(--cp6-final-line);
+  border-radius: 18px;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, .055);
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 0 auto 14px;
+  max-width: 700px;
+  padding: 15px 18px;
+}
+body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-field { max-width: 360px; width: 100%; }
+body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-actions button { min-height: 40px; }
+body.cp6-redesign #validationRegistrySection { background: transparent; border: 0; box-shadow: none; padding: 0; }
+body.cp6-redesign .validation-registry-heading {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 10px;
+}
+body.cp6-redesign .validation-registry-search-wrap { max-width: 350px; position: relative; width: 100%; }
+body.cp6-redesign .validation-registry-search-wrap > i { color: #94a3b8; left: 14px; position: absolute; top: 50%; transform: translateY(-50%); z-index: 1; }
+body.cp6-redesign .validation-registry-filter-label { display: none; }
+body.cp6-redesign #validationRegistryList { margin-top: 0; }
+body.cp6-redesign .validation-registry-table { min-width: 720px !important; }
+body.cp6-redesign .validation-registry-table td,
+body.cp6-redesign .validation-registry-table th { padding-block: 9px; }
+body.cp6-redesign .validation-delete-button { align-items: center; background: #fff1f2; border: 1px solid #ffe4e6; border-radius: 8px; color: #e11d48; display: inline-flex; height: 30px; justify-content: center; width: 30px; }
+body.cp6-redesign .validation-delete-button:hover { background: #ffe4e6; }
+
+/* Perfil: datos legibles, avatar sin círculo de fondo y filtro amplio. */
+body.cp6-redesign #perfilView .profile-left-heading { display: none; }
+body.cp6-redesign #perfilView .profile-avatar-light {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--cp6-final-blue);
+}
+body.cp6-redesign #perfilView .profile-card-light h2,
+body.cp6-redesign #perfilView .profile-contact-value { color: #0f172a !important; font-weight: 400 !important; }
+body.cp6-redesign #perfilView .profile-main-light { min-width: 0; }
+body.cp6-redesign #perfilView .profile-filter-light { color: var(--cp6-final-blue); font-size: .85rem; font-weight: 700; }
+body.cp6-redesign #perfilView #profileMetricsFilter { min-width: 300px; width: min(440px, 100%); }
+body.cp6-redesign #perfilView .profile-root-light { min-width: 0; }
+
+/* Folios de las solicitudes recientes en una sola línea. */
+body.cp6-redesign #welcomeRequestsTable :is(.request-folio, .request-folio-number, td:first-child) { min-width: 122px; white-space: nowrap; }
+body.cp6-redesign #welcomeRequestsTable table { min-width: 680px; }
+
+@media (min-width: 901px) {
+  body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable) { overflow-x: visible; }
+  body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable) table { min-width: 0; }
+}
+@media (max-width: 1100px) {
+  body.cp6-redesign #recepcionAvaluosSection > .request-style-filter-panel .search-row { grid-template-columns: minmax(150px, .7fr) minmax(220px, 1fr) 190px; }
+  body.cp6-redesign #recepcionAvaluosSection > .request-style-filter-panel .reception-filter-actions { grid-column: 1 / -1; justify-self: end; }
+  body.cp6-redesign #crearAvaluoSection > .technical-search-panel .search-row { grid-template-columns: minmax(170px, .7fr) minmax(220px, 1fr) 200px; }
+  body.cp6-redesign #crearAvaluoSection > .technical-search-panel .search-row > :is(button, [data-v2-route]) { grid-column: auto; }
+}
+@media (max-width: 700px) {
+  body.cp6-redesign .cp6-module-banner { border-radius: 18px; min-height: 110px; padding: 20px; }
+  body.cp6-redesign .cp6-module-banner > i { font-size: 1.8rem; }
+  body.cp6-redesign #recepcionAvaluosSection > .request-style-filter-panel .search-row,
+  body.cp6-redesign #crearAvaluoSection > .technical-search-panel .search-row,
+  body.cp6-redesign #solicitudesView > .request-filter-row { display: flex; flex-direction: column; align-items: stretch; }
+  body.cp6-redesign .reception-filter-title,
+  body.cp6-redesign .reception-search-input-wrap,
+  body.cp6-redesign #statusViewSelect,
+  body.cp6-redesign #technicalStatusFilter,
+  body.cp6-redesign #technicalSearchInput,
+  body.cp6-redesign #requestSearchInput { max-width: none; width: 100%; }
+  body.cp6-redesign .reception-filter-actions { justify-content: stretch; width: 100%; }
+  body.cp6-redesign .reception-filter-actions button { flex: 1; }
+  body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-authorize-form { align-items: stretch; flex-direction: column; }
+  body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-field { max-width: none; }
+  body.cp6-redesign #perfilView #profileMetricsFilter { min-width: 0; width: 100%; }
+}
+
+/* El atributo hidden del panel debe seguir siendo autoritativo fuera de Validación. */
+body.cp6-redesign #avaluosAuthorizedFoliosPanel[hidden] { display: none !important; }

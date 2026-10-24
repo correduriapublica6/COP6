@@ -1,5 +1,5 @@
-const CACHE_NAME = "cp6-complete-design-desktop-20261023";
-const APP_SHELL = ["./cotizacion.html", "./cp6-presentation.js", "./cp6-cotizaciones.css", "./cp6-components.css", "./cp6-system.css", "./cp6-foundation.css", "./", "./index.html", "./styles.css", "./dashboard.css", "./override.css", "./app.js", "./automotriz-form.js", "./automotriz-model.js", "./mobiliario-form.js", "./solicitudes-form.js", "./messaging.js", "./image-utils.js", "./word-export.js", "./vendor/html-docx.js", "./manifest.webmanifest", "./assets/fondo.jpg", "./assets/pwa-icon-512.png"];
+const CACHE_NAME = "cp6-final-design-desktop-20261024";
+const APP_SHELL = ["./cotizacion.html", "./cp6-presentation.js", "./cp6-cotizaciones.css", "./cp6-components.css", "./cp6-final.css", "./cp6-system.css", "./cp6-foundation.css", "./", "./index.html", "./styles.css", "./dashboard.css", "./override.css", "./app.js", "./automotriz-form.js", "./automotriz-model.js", "./mobiliario-form.js", "./solicitudes-form.js", "./messaging.js", "./image-utils.js", "./word-export.js", "./vendor/html-docx.js", "./manifest.webmanifest", "./assets/fondo.jpg", "./assets/pwa-icon-512.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));

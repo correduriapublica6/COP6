@@ -26,7 +26,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
-<link href="cp6-foundation.css?v=complete-20261023" rel="stylesheet"/><link href="cp6-system.css?v=complete-20261023" rel="stylesheet"/><link href="cp6-components.css?v=complete-20261023" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/></head>
+<link href="cp6-foundation.css?v=final-20261024" rel="stylesheet"/><link href="cp6-system.css?v=final-20261024" rel="stylesheet"/><link href="cp6-components.css?v=final-20261024" rel="stylesheet"/><link href="cp6-final.css?v=final-20261024" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/></head>
 <body class="cp6-redesign" data-server-status="checking">
 <section aria-labelledby="publicEntryTitle" class="login-screen" id="loginScreen"><aside aria-hidden="false" class="login-visual"><div class="login-visual-logo"><div class="v2-login-logo"><span class="v2-brand-mark"><i class="fa-solid fa-building-columns"></i></span><div><strong>Correduría Pública 6</strong><small>Plaza Coahuila</small></div></div></div><div class="login-visual-copy" id="loginVisualBrand"><span class="v2-login-eyebrow">PRECISIÓN · CONFIANZA · CONTROL</span><h2>Una nueva forma<br/>de gestionar<br/><em>tus avalúos.</em></h2><p>Expedientes, solicitudes y seguimiento. La operación de tu correduría, conectada en un solo lugar.</p></div><section class="applicant-visual-panel" hidden="" id="applicantVisualPanel"><span class="section-kicker">SEGUIMIENTO PERSONAL</span><h2>Mis solicitudes</h2><div class="request-table-wrap" id="applicantVisualRequestsTable"></div><div class="applicant-visual-actions"><button class="primary-button" id="applicantVisualNewRequestButton" type="button">+ Solicitar servicio</button><button class="secondary-button" id="applicantVisualProfileButton" type="button">Editar perfil</button></div></section><div class="login-visual-footer">Av. Morelos 854 Oriente, Colonia Centro</div><div class="v2-login-points"><span><i class="fa-solid fa-shield-halved"></i>Acceso seguro</span><span><i class="fa-solid fa-cloud"></i>Datos sincronizados</span></div></aside>
 <section class="public-entry-panel">
@@ -594,6 +594,7 @@
 </section>
 </section>
 <section aria-label="Recepción" class="avaluos-subsection" hidden="" id="recepcionAvaluosSection">
+<div class="cp6-module-banner"><div><span>AVALÚOS</span><h2>Recepción</h2><p>Registra expedientes, pagos y entregas con claridad.</p></div><i aria-hidden="true" class="fa-solid fa-clipboard-check"></i></div>
 <section aria-label="Búsqueda y filtros de avalúos recibidos" class="search-panel request-style-filter-panel v2-operational-toolbar">
 <div class="search-row"><div class="reception-filter-title"><span aria-hidden="true" class="reception-filter-title-icon"><i class="fa-solid fa-clipboard-check"></i></span><strong>Recepción</strong></div><div class="reception-search-input-wrap"><input autocomplete="off" id="searchInput" placeholder="Buscar por folio, solicitante o tipo" type="search"/></div><select aria-label="Filtrar avalúos recibidos" id="statusViewSelect"><option value="todos">Todos los estados</option><option value="pendientes-entrega">Pendientes de entrega</option><option value="entregados-sin-pago">Entregados sin pago</option><option value="pagados">Pagados</option><option value="vencidos">Vencidos</option></select><div class="reception-filter-actions"><button class="subtle-action-button btn-copu-primary btn-gold-cream is-hidden" id="backAvaluosButton" type="button"><i aria-hidden="true" class="fa-solid fa-arrow-left"></i> Regresar</button><button class="subtle-action-button btn-copu-primary is-hidden" id="newRecordButton" type="button"><i aria-hidden="true" class="fa-solid fa-plus"></i> Nueva Recepción</button></div></div>
 </section>
@@ -654,6 +655,7 @@
 </section>
 </section>
 <section aria-label="Gestión de Avalúos" class="avaluos-subsection technical-appraisal-section" hidden="" id="crearAvaluoSection">
+<div class="cp6-module-banner"><div><span>AVALÚOS</span><h2>Gestión de Avalúos</h2><p>Elabora, consulta y da seguimiento a tus expedientes técnicos.</p></div><i aria-hidden="true" class="fa-solid fa-file-signature"></i></div>
 <section aria-label="Búsqueda y filtros de expedientes técnicos" class="search-panel technical-search-panel v2-operational-toolbar"><div class="search-row"><div class="v2-module-label"><span><i class="fa-solid fa-file-signature"></i></span><strong>Gestión de Avalúos</strong></div><input autocomplete="off" id="technicalSearchInput" placeholder="Buscar por folio, solicitante o tipo" type="search"/><select aria-label="Filtrar expedientes técnicos" id="technicalStatusFilter"><option value="todos">Todos los expedientes</option><option value="borradores">En proceso</option><option value="completos">Concluidos</option><option value="automotriz">Automotriz</option><option value="maquinaria">Maquinaria y equipo</option><option value="mobiliario">Mobiliario y Bienes Diversos</option></select><button class="subtle-action-button btn-copu-primary is-hidden" id="newTechnicalAppraisalButton" type="button">+ Crear avalúo</button><button class="secondary-button" data-v2-route="avaluos" type="button">Regresar</button></div></section>
 <section class="technical-list-panel" id="technicalListPanel">
 <section class="dashboard-tabs"><div class="section-heading status-list-heading"><h2>Expedientes técnicos</h2><span class="section-count" id="technicalListCount">0</span></div><div class="record-list operational-record-list" id="technicalAppraisalList"></div></section>
@@ -784,18 +786,18 @@
 </section>
 </main>
 <dialog class="record-dialog report-dialog" id="reportDialog"><form id="reportForm" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">REPORTE GENERAL</p><h2>Selecciona el periodo</h2></div><button aria-label="Cerrar" class="icon-button" id="closeReportDialogButton" type="button">×</button></div><p class="report-dialog-copy">Para generar un resumen primero selecciona las fechas y da clic en Generar resumen PDF.</p><div class="form-grid"><label>Desde *<input id="reportStartDate" required="" type="date"/></label><label>Hasta *<input id="reportEndDate" required="" type="date"/></label></div><p class="form-message" id="reportMessage" role="alert"></p><div class="dialog-actions"><button class="secondary-button btn-copu-primary" id="cancelReportDialogButton" type="button">Cancelar</button><button class="primary-button" type="submit">Generar resumen PDF</button></div></form></dialog>
-<script src="automotriz-model.js?v=complete-20261023"></script>
-<script src="app.js?v=complete-20261023"></script>
-<script src="image-utils.js?v=complete-20261023"></script>
-<script src="vendor/html-docx.js?v=complete-20261023"></script>
-<script src="word-export.js?v=complete-20261023"></script>
+<script src="automotriz-model.js?v=final-20261024"></script>
+<script src="app.js?v=final-20261024"></script>
+<script src="image-utils.js?v=final-20261024"></script>
+<script src="vendor/html-docx.js?v=final-20261024"></script>
+<script src="word-export.js?v=final-20261024"></script>
 <script>
       if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
     </script>
-<script src="mobile-pwa.js?v=complete-20261023"></script>
-<script src="automotriz-form.js?v=complete-20261023"></script>
-<script src="mobiliario-form.js?v=complete-20261023"></script>
-<script src="solicitudes-form.js?v=complete-20261023"></script>
-<script src="messaging.js?v=complete-20261023"></script>
-<script src="cp6-presentation.js?v=complete-20261023"></script></body>
+<script src="mobile-pwa.js?v=final-20261024"></script>
+<script src="automotriz-form.js?v=final-20261024"></script>
+<script src="mobiliario-form.js?v=final-20261024"></script>
+<script src="solicitudes-form.js?v=final-20261024"></script>
+<script src="messaging.js?v=final-20261024"></script>
+<script src="cp6-presentation.js?v=final-20261024"></script></body>
 </html>
