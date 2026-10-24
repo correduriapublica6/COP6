@@ -504,3 +504,21 @@ body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-ho
   line-height: 1.45;
   margin: 14px 0 0;
 }
+
+/* CP6 Login · titular sobre dirección e indicadores alineados a la derecha */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-holder {
+  color: #dbeafe;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+  font-size: .9rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+  line-height: 1.45;
+  margin: 0 0 6px;
+  position: relative;
+  text-align: left;
+  z-index: 1;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .v2-login-points {
+  align-self: stretch;
+  justify-content: flex-end;
+}
