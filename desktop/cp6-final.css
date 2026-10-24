@@ -485,3 +485,12 @@ body.cp6-redesign .messaging-access-blocked strong { color: #0f172a; }
   body.cp6-redesign .messaging-conversation { min-height: 470px; }
   body.cp6-redesign .messaging-contact { display: grid; }
 }
+
+/* CP6 Mensajería · chat general y envío por flecha */
+body.cp6-redesign .messaging-shell { grid-template-columns: minmax(300px, 360px) minmax(0, 1fr); height: min(82vh, 820px); min-height: 660px; }
+body.cp6-redesign .messaging-compose button { border-radius: 50%; height: 48px; min-height: 48px; padding: 0; width: 48px; }
+body.cp6-redesign .messaging-compose button i { font-size: .95rem; }
+@media (max-width: 800px) {
+  body.cp6-redesign .messaging-shell { min-height: 0; }
+  body.cp6-redesign .messaging-compose button { flex: 0 0 44px; height: 44px; min-height: 44px; width: 44px; }
+}
