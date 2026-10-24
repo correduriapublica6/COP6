@@ -429,3 +429,59 @@ body.cp6-redesign .v2-brand .cp6-brand-logo-image {
     width: 48px;
   }
 }
+
+/* CP6 Mensajería administrativa · estilo SaaS blanco, azul y sin acentos dorados */
+body.cp6-redesign .messaging-view { padding-bottom: 24px; }
+body.cp6-redesign .messaging-shell {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, .08);
+  color: #172033;
+  grid-template-columns: minmax(250px, 320px) minmax(0, 1fr);
+  height: min(76vh, 760px);
+  min-height: 590px;
+  overflow: hidden;
+}
+body.cp6-redesign .messaging-sidebar { background: #f8fafc; border-right: 1px solid #e5eaf2; }
+body.cp6-redesign .messaging-sidebar-head { background: linear-gradient(135deg, #0f172a, #1e3a8a); border-bottom: 0; color: #fff; height: auto; padding: 20px 18px; }
+body.cp6-redesign .messaging-sidebar-head strong, body.cp6-redesign .messaging-sidebar-head small { color: #fff; }
+body.cp6-redesign .messaging-sidebar-head small { color: #bfdbfe; }
+body.cp6-redesign .messaging-self-avatar, body.cp6-redesign .messaging-avatar, body.cp6-redesign .messaging-contact-avatar { background: #2563eb; border: 0; box-shadow: 0 8px 18px rgba(37, 99, 235, .2); color: #fff; }
+body.cp6-redesign .messaging-eyebrow { color: #93c5fd; display: block; font-size: .58rem; font-weight: 800; letter-spacing: .12em; margin-bottom: 4px; text-transform: uppercase; }
+body.cp6-redesign .messaging-sidebar-caption { align-items: center; background: #eff6ff; border-bottom: 1px solid #dbeafe; color: #2563eb; display: flex; font-size: .68rem; font-weight: 700; gap: 8px; padding: 10px 18px; }
+body.cp6-redesign .messaging-search-row { margin: 0; padding: 14px 14px 10px; }
+body.cp6-redesign .messaging-search { align-items: center; background: #fff; border: 1px solid #dbe3ef; border-radius: 999px; display: flex; gap: 8px; padding: 0 13px; }
+body.cp6-redesign .messaging-search i { color: #94a3b8; font-size: .75rem; }
+body.cp6-redesign .messaging-search input { background: transparent; border: 0; color: #172033; flex: 1; min-height: 38px; outline: 0; padding: 7px 0; }
+body.cp6-redesign .messaging-contacts { padding: 4px 10px 14px; scrollbar-color: #bfdbfe #f8fafc; }
+body.cp6-redesign .messaging-contact { border-radius: 13px; color: #334155; gap: 10px; padding: 11px 10px; }
+body.cp6-redesign .messaging-contact:hover, body.cp6-redesign .messaging-contact.is-active { background: #eaf2ff; color: #0f172a; }
+body.cp6-redesign .messaging-contact-copy strong { color: #1e293b; font-size: .78rem; font-weight: 750; }
+body.cp6-redesign .messaging-contact-copy small, body.cp6-redesign .messaging-contact time { color: #94a3b8; font-size: .66rem; }
+body.cp6-redesign .messaging-conversation { background: #f8fafc; }
+body.cp6-redesign .messaging-conversation-head { background: #fff; border-bottom: 1px solid #e5eaf2; height: 76px; padding: 0 22px; }
+body.cp6-redesign .messaging-conversation-head strong { color: #0f172a; font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif; font-size: 1rem; font-weight: 800; }
+body.cp6-redesign .messaging-conversation-head small { color: #64748b; font-size: .68rem; }
+body.cp6-redesign .messaging-info-button { background: #eff6ff; border: 0; border-radius: 10px; color: #2563eb; }
+body.cp6-redesign .messaging-messages { background: linear-gradient(180deg, #f8fafc, #f1f5f9); padding: 24px clamp(16px, 4vw, 44px); }
+body.cp6-redesign .messaging-message { margin-bottom: 17px; }
+body.cp6-redesign .messaging-message-author { color: #64748b; font-size: .66rem; margin-bottom: 5px; }
+body.cp6-redesign .messaging-bubble { background: #fff; border: 1px solid #e2e8f0; border-radius: 15px 15px 15px 5px; box-shadow: 0 5px 14px rgba(15, 23, 42, .05); color: #334155; padding: 11px 14px; }
+body.cp6-redesign .messaging-message.is-sent .messaging-bubble { background: #2563eb; border-color: #2563eb; border-radius: 15px 15px 5px 15px; color: #fff; }
+body.cp6-redesign .messaging-message.is-sent .messaging-message-author { color: #2563eb; }
+body.cp6-redesign .messaging-meta { color: #94a3b8; font-size: .62rem; }
+body.cp6-redesign .messaging-compose { background: #fff; border-top: 1px solid #e5eaf2; gap: 10px; padding: 14px 18px; }
+body.cp6-redesign .messaging-compose textarea { background: #f8fafc; border: 1px solid #dbe3ef; border-radius: 13px; color: #172033; min-height: 42px; padding: 11px 13px; resize: none; }
+body.cp6-redesign .messaging-compose textarea:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, .12); outline: 0; }
+body.cp6-redesign .messaging-compose button { align-items: center; background: #0f172a; border: 0; border-radius: 12px; color: #fff; display: inline-flex; gap: 7px; min-height: 42px; padding: 0 15px; }
+body.cp6-redesign .messaging-compose button:hover { background: #1e3a8a; }
+body.cp6-redesign .messaging-access-blocked { align-items: center; background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; color: #64748b; display: flex; flex-direction: column; gap: 8px; justify-content: center; min-height: 320px; text-align: center; }
+body.cp6-redesign .messaging-access-blocked i { color: #2563eb; font-size: 1.8rem; }
+body.cp6-redesign .messaging-access-blocked strong { color: #0f172a; }
+@media (max-width: 800px) {
+  body.cp6-redesign .messaging-shell { grid-template-columns: 1fr; height: auto; min-height: 0; }
+  body.cp6-redesign .messaging-sidebar { border-bottom: 1px solid #e5eaf2; border-right: 0; max-height: 250px; }
+  body.cp6-redesign .messaging-conversation { min-height: 470px; }
+  body.cp6-redesign .messaging-contact { display: grid; }
+}
