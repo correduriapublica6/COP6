@@ -81,3 +81,13 @@ body.mobile-mode :is(input,textarea,select){font-size:16px!important}
   body.mobile-mode #appShell.control-shell .cp6-home-hero-art { opacity: .42; transform: scale(.78); transform-origin: right center; }
   body.mobile-mode #appShell.control-shell :is(.operational-table-wrap, #statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) { overflow-x: auto; }
 }
+/* Logo institucional oficial en login y navegación móvil. */
+.cp6-brand-logo-image {
+  display: block;
+  flex: 0 0 auto;
+  height: 42px;
+  object-fit: contain;
+  width: 46px;
+}
+.v2-login-logo .cp6-brand-logo-image { height: 48px; width: 54px; }
+.v2-brand .cp6-brand-logo-image { height: 38px; width: 42px; }
