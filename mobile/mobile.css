@@ -91,3 +91,36 @@ body.mobile-mode :is(input,textarea,select){font-size:16px!important}
 }
 .v2-login-logo .cp6-brand-logo-image { height: 48px; width: 54px; }
 .v2-brand .cp6-brand-logo-image { height: 38px; width: 42px; }
+/* CP6 móvil · compactación de Solicitudes y Home */
+@media (max-width: 760px) {
+  body.mobile-mode #solicitudesView .request-filter-row {
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+    padding: 8px 10px !important;
+  }
+  body.mobile-mode #solicitudesView .request-filter-row input {
+    box-sizing: border-box !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 8px 12px !important;
+  }
+  body.mobile-mode #solicitudesView .request-filter-row select {
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 7px 12px !important;
+  }
+  body.mobile-mode .cp6-home-request-table {
+    margin-top: 10px !important;
+  }
+  body.mobile-mode .cp6-home-request-table .request-table th {
+    line-height: 1.15 !important;
+    padding: 7px 8px !important;
+  }
+  body.mobile-mode .cp6-home-request-table .request-table td {
+    line-height: 1.2 !important;
+    padding: 7px 8px !important;
+  }
+  body.mobile-mode .cp6-home-request-table .request-table tbody tr {
+    height: 34px !important;
+  }
+}
