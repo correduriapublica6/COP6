@@ -522,3 +522,15 @@ body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .v2-login-points
   align-self: stretch;
   justify-content: flex-end;
 }
+
+/* CP6 Login · titular estrictamente a la izquierda, sobre la dirección */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-holder,
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-footer {
+  align-self: flex-start;
+  display: block;
+  margin-left: 0;
+  margin-right: 0;
+  text-align: left;
+  width: auto;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-holder { margin-bottom: 6px; }
