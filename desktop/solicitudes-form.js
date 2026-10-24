@@ -7,6 +7,9 @@
   const applicantRegisterDialog = $("#applicantRegisterDialog");
   const applicantRequestsDialog = $("#applicantRequestsDialog");
   let requests = [];
+  let requestsLoadPromise = null;
+  let requestsLoadKey = "";
+  let requestsLoadSequence = 0;
   let requestsPage = 1;
   const REQUESTS_PAGE_SIZE = 10;
   let editingRequestId = "";
@@ -933,7 +936,30 @@
     return `<table class="request-table request-table-compact"><thead><tr><th>Folio</th><th class="request-appraisal-number-heading">No. de Avalúo</th><th>Solicitante</th><th>Asesor</th><th>Estado</th><th>PDF</th>${hasActions ? "<th>Acciones</th>" : ""}</tr></thead><tbody>${list.map((item) => { const finalPdf = item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url; return `<tr><td class="request-folio-cell"><strong>${escapeHtml(item.folio || "—")}</strong></td><td class="request-appraisal-number-cell">${escapeHtml(item.numeroAvaluo || "—")}</td><td class="requester-cell"><span class="cp6-cell-with-icon">${userCellIcon}${escapeHtml(item.solicitante?.nombre || item.solicitante?.name || "—")}</span></td><td class="user-cell"><span class="cp6-cell-with-icon">${userCellIcon}${escapeHtml(item.asesor || "Sin asignar")}</span></td><td><span class="request-status request-status-${String(item.estado || "").toLowerCase() === "concluida" ? "concluida" : "tramite"}">${String(item.estado || "").toLowerCase() === "concluida" ? "Concluida" : "En trámite"}</span></td><td class="request-pdf-cell">${finalPdf ? `<span class="request-pdf-ready" title="PDF final cargado">✓</span>` : `<span class="request-pdf-pending">—</span>`}</td>${hasActions ? `<td class="request-action-cell">${canViewDetail ? `<button type="button" class="request-icon-button request-info-button" title="Ver detalle" aria-label="Ver detalle" data-request-detail="${escapeHtml(item.id)}">${infoIcon}</button>` : ""}${canUploadFinal ? `<button type="button" class="request-icon-button request-upload-pdf-button" title="${finalPdf ? "Reemplazar archivo" : "Subir archivo"}" aria-label="${finalPdf ? "Reemplazar archivo" : "Subir archivo"}" data-upload-final-row="${escapeHtml(item.id)}">${finalPdf ? replaceIcon : uploadIcon}</button>` : ""}${canDelete ? `<button type="button" class="request-icon-button request-delete-button" title="Eliminar" aria-label="Eliminar" data-delete-request="${escapeHtml(item.id)}">${deleteIcon}</button>` : ""}</td>` : ""}</tr>`; }).join("")}</tbody></table>`;
   }
 
-  async function loadRequests(role = "", user = "") { try { const query = role === "valuador" && user ? `?asesor=${encodeURIComponent(user)}` : ""; requests = await api(`/service-requests${query}`); window.__controlSolicitudes = requests; } catch { requests = []; window.__controlSolicitudes = requests; } return requests; }
+  async function loadRequests(role = "", user = "") {
+    if (!user) return requests;
+    const key = `${role}:${user}`;
+    if (requestsLoadPromise && requestsLoadKey === key) return requestsLoadPromise;
+    const sequence = ++requestsLoadSequence;
+    requestsLoadKey = key;
+    const promise = (async () => {
+      try {
+        const query = role === "valuador" ? `?asesor=${encodeURIComponent(user)}` : "";
+        const result = await api(`/service-requests${query}`);
+        if (sequence !== requestsLoadSequence || window.ControlAvaluosDesktop?.getActiveUser?.() !== user) return requests;
+        if (!Array.isArray(result)) throw new Error("Respuesta de solicitudes inválida.");
+        requests = result;
+        window.__controlSolicitudes = requests;
+        window.dispatchEvent(new CustomEvent("control-avaluos:home-refresh"));
+      } catch {
+        // Un fallo de red no equivale a cero solicitudes: conservar los datos válidos.
+        if (sequence === requestsLoadSequence && window.ControlAvaluosDesktop?.getActiveUser?.() === user && Array.isArray(window.__controlSolicitudes)) requests = window.__controlSolicitudes;
+      }
+      return requests;
+    })();
+    requestsLoadPromise = promise;
+    try { return await promise; } finally { if (requestsLoadPromise === promise) requestsLoadPromise = null; }
+  }
   async function renderRegisteredApplicants() {
     const table = $("#registeredApplicantsTable");
     if (!table) return;
@@ -971,12 +997,13 @@
     const buttons = Array.from({ length: pages }, (_, index) => { const number = index + 1; return `<button type="button" class="table-page-button${number === current ? " is-active" : ""}" data-requests-page="${number}" aria-current="${number === current ? "page" : "false"}">${number}</button>`; }).join("");
     return `<nav class="table-pagination request-table-pagination" aria-label="Paginación de solicitudes"><span>Mostrando ${Math.min((current - 1) * REQUESTS_PAGE_SIZE + 1, total)}-${Math.min(current * REQUESTS_PAGE_SIZE, total)} de ${total}</span><div><button type="button" class="table-page-button" data-requests-page="${current - 1}" ${current === 1 ? "disabled" : ""} aria-label="Página anterior">‹</button>${buttons}<button type="button" class="table-page-button" data-requests-page="${current + 1}" ${current === pages ? "disabled" : ""} aria-label="Página siguiente">›</button></div></nav>`;
   }
-  async function renderRequests() {
+  async function renderRequests(refresh = true) {
     const table = $("#serviceRequestsTable");
     if (!table) return;
     const role = $("#appShell")?.dataset.role || "viewer";
     const user = window.ControlAvaluosDesktop?.getActiveUser?.() || "";
-    await loadRequests(role, user);
+    if (refresh) await loadRequests(role, user);
+    if (user !== window.ControlAvaluosDesktop?.getActiveUser?.()) return;
     let visible = requests;
     const query = String($("#requestSearchInput")?.value || "").toLowerCase();
     const status = $("#requestStatusFilter")?.value || "";
@@ -990,14 +1017,15 @@
     table.querySelectorAll("[data-delete-request]").forEach((button) => button?.addEventListener("click", () => deleteRequest(button.dataset.deleteRequest))); table.querySelectorAll("[data-upload-final-row]").forEach((button) => button?.addEventListener("click", () => { const item = requests.find((request) => request.id === button.dataset.uploadFinalRow); if (item) uploadFinalPdf(item); }));
   }
 
-  async function renderWelcomeRequests() {
+  async function renderWelcomeRequests(refresh = true) {
     const panel = $("#welcomeRequestsPanel");
     const table = $("#welcomeRequestsTable");
     if (!panel || !table) return;
     const role = $("#appShell")?.dataset.role || "viewer";
     if (!["admin", "auditor", "valuador"].includes(role)) { panel.hidden = true; return; }
     const user = window.ControlAvaluosDesktop?.getActiveUser?.() || "";
-    await loadRequests(role, user);
+    if (refresh) await loadRequests(role, user);
+    if (user !== window.ControlAvaluosDesktop?.getActiveUser?.()) return;
     window.dispatchEvent(new CustomEvent("control-avaluos:home-refresh"));
     const visible = requests;
     panel.hidden = false; table.innerHTML = requestRows(visible.slice(0, 8), false, true); bindRequestDetailButtons(table, visible.slice(0, 8));
@@ -1082,6 +1110,14 @@
     $("#registeredApplicantsSearchInput")?.addEventListener("input", renderRegisteredApplicants);
     $("#requestStatusFilter")?.addEventListener("change", () => { requestsPage = 1; renderRequests(); });
     window.addEventListener("control-avaluos:authenticated", () => { renderWelcomeRequests(); renderRequests(); });
+    window.addEventListener("control-avaluos:state-ready", event => {
+      const user = window.ControlAvaluosDesktop?.getActiveUser?.();
+      if (!user || event.detail?.user !== user) return;
+      requests = Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : requests;
+      renderWelcomeRequests(false); renderRequests(false);
+    });
+    // La sesión restaurada puede haberse anunciado antes de cargar este módulo.
+    if (window.ControlAvaluosDesktop?.getActiveUser?.()) { renderWelcomeRequests(); renderRequests(); }
     window.addEventListener("control-avaluos:users-view", renderRegisteredApplicants);
     window.addEventListener("control-avaluos:section", (event) => { if (event.detail === "solicitudes") renderRequests(); });
     $("#closeFileViewerButton")?.addEventListener("click", () => closeDialog($("#fileViewerDialog")));

@@ -38,6 +38,12 @@
   let editingId = null;
   let serverMonitorId = null;
   let versionMonitorId = null;
+  let stateLoadPromise = null;
+  let stateLoadUser = "";
+  let validationRegistryPage = 1;
+  const VALIDATION_PAGE_SIZE = 10;
+  let validationRegistryRows = [];
+  let validationRegistryRequest = 0;
 
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -93,11 +99,11 @@
     return null;
   }
   function applyProfileAvatar(user, avatar = getProfileAvatar(user)) {
+    // El acceso del navbar siempre usa el mismo icono de línea que las demás herramientas.
     const image = $("#profileAvatarImage");
     const fallback = $("#profileButton .user-icon");
-    if (!image) return;
-    if (avatar) { image.src = avatar; image.hidden = false; if (fallback) fallback.hidden = true; }
-    else { image.hidden = true; if (fallback) fallback.hidden = false; }
+    if (image) image.hidden = true;
+    if (fallback) { fallback.hidden = false; fallback.removeAttribute("hidden"); }
   }
   function renderProfileAvatarGallery(selected = getProfileAvatar(activeSessionUser)) {
     const gallery = $("#profileAvatarGallery");
@@ -202,9 +208,11 @@
   function startServerMonitor() {
     if (serverMonitorId) return;
     serverMonitorId = window.setInterval(async () => {
-      if (editingId || document.hidden) return;
+      if (editingId || document.hidden || !activeSessionUser || stateLoadPromise) return;
+      const monitoredUser = activeSessionUser;
       try {
         const latestState = await apiRequest("/state");
+        if (monitoredUser !== activeSessionUser) return;
         const latestRecords = Array.isArray(latestState.records) ? latestState.records : [];
         const latestAppraisals = Array.isArray(latestState.appraisals) ? latestState.appraisals : [];
         const latestTasks = Array.isArray(latestState.tasks) ? latestState.tasks : [];
@@ -233,46 +241,57 @@
           renderWelcomeTasks();
           renderAdminHome();
           render();
+          window.dispatchEvent(new CustomEvent("control-avaluos:state-ready", { detail: { user: activeSessionUser } }));
         }
+        // Repintar también cuando el servidor devuelve la misma firma inicial.
+        renderAdminHome();
       } catch {
         setServerStatus("offline");
       }
     }, 2000);
   }
   async function loadRemoteState() {
-    setServerStatus("checking");
-    try {
-      const remoteState = await apiRequest("/state");
-      if (!Array.isArray(remoteState.records)) throw new Error("La respuesta del servidor no contiene registros válidos.");
-      records = remoteState.records.map(normalizeRecord);
-      technicalAppraisals = Array.isArray(remoteState.appraisals) ? remoteState.appraisals : loadTechnicalAppraisals();
-      tasks = Array.isArray(remoteState.tasks) ? remoteState.tasks : loadTasks();
-      chatMessages = Array.isArray(remoteState.chatMessages) ? remoteState.chatMessages : loadChatMessages();
-      window.__controlSolicitudes = Array.isArray(remoteState.serviceRequests) ? remoteState.serviceRequests : (window.__controlSolicitudes || []);
-      remoteUsers = Array.isArray(remoteState.users) ? remoteState.users : null;
-      notarias = Array.isArray(remoteState.notarias) ? remoteState.notarias : [];
-      authorizedAppraisalNumbers = Array.isArray(remoteState.authorizedAppraisalNumbers) ? remoteState.authorizedAppraisalNumbers : [];
-      window.__controlNotarias = notarias;
-      window.__controlAuthorizedFolios = authorizedAppraisalNumbers;
-      saveRecords();
-      saveTechnicalAppraisals();
-      saveTasks();
-      saveChatMessages();
-      setServerStatus("online");
-      if (activeSessionUser) refreshNotifications();
-      syncUserOptions();
-      syncCredentialSetupVisibility();
-      if (activeSessionUser) { applyRoleUi(); renderAuthorizedFolios(); }
-      render();
-      renderProfileDashboard();
-      // El registro depende de los datos remotos; se vuelve a pintar después de /state.
-      renderValidationRegistry();
-    } catch {
-      setServerStatus("offline");
-      render();
-    } finally {
-      startServerMonitor();
+    const requestedUser = activeSessionUser;
+    if (stateLoadPromise) {
+      if (stateLoadUser === requestedUser) return stateLoadPromise;
+      await stateLoadPromise;
+      if (requestedUser !== activeSessionUser) return;
+      return loadRemoteState();
     }
+    stateLoadUser = requestedUser;
+    setServerStatus("checking");
+    stateLoadPromise = (async () => {
+      try {
+        const remoteState = await apiRequest("/state");
+        // Una respuesta iniciada antes del Login no debe sobrescribir la sesión nueva.
+        if (requestedUser !== activeSessionUser) return;
+        if (!Array.isArray(remoteState.records)) throw new Error("La respuesta del servidor no contiene registros válidos.");
+        records = remoteState.records.map(normalizeRecord);
+        technicalAppraisals = Array.isArray(remoteState.appraisals) ? remoteState.appraisals : loadTechnicalAppraisals();
+        tasks = Array.isArray(remoteState.tasks) ? remoteState.tasks : loadTasks();
+        chatMessages = Array.isArray(remoteState.chatMessages) ? remoteState.chatMessages : loadChatMessages();
+        window.__controlSolicitudes = Array.isArray(remoteState.serviceRequests) ? remoteState.serviceRequests : (window.__controlSolicitudes || []);
+        remoteUsers = Array.isArray(remoteState.users) ? remoteState.users : remoteUsers;
+        notarias = Array.isArray(remoteState.notarias) ? remoteState.notarias : [];
+        authorizedAppraisalNumbers = Array.isArray(remoteState.authorizedAppraisalNumbers) ? remoteState.authorizedAppraisalNumbers : [];
+        window.__controlNotarias = notarias;
+        window.__controlAuthorizedFolios = authorizedAppraisalNumbers;
+        saveRecords(); saveTechnicalAppraisals(); saveTasks(); saveChatMessages();
+        setServerStatus("online");
+        syncUserOptions(); syncCredentialSetupVisibility();
+        if (activeSessionUser) { applyRoleUi(); renderAuthorizedFolios(); refreshNotifications(); }
+        render(); renderWelcomeTasks(); renderAdminHome(); renderProfileDashboard();
+        window.dispatchEvent(new CustomEvent("control-avaluos:state-ready", { detail: { user: activeSessionUser } }));
+        renderValidationRegistry();
+      } catch {
+        if (requestedUser !== activeSessionUser) return;
+        setServerStatus("offline");
+        render(); renderAdminHome();
+      } finally {
+        startServerMonitor();
+      }
+    })();
+    try { await stateLoadPromise; } finally { stateLoadPromise = null; }
   }
   async function saveRemoteRecord(record, editing) {
     if (!serverOnline) throw new Error("No fue posible comunicarse con el servidor de Recepción. Inicia el servidor y verifica /api/health antes de guardar.");
@@ -841,6 +860,7 @@
     renderWelcomeTasks();
     renderAdminHome();
     window.dispatchEvent(new CustomEvent("control-avaluos:authenticated", { detail: { user } }));
+    loadRemoteState();
     render();
     refreshNotifications();
     checkAppVersion();
@@ -1342,25 +1362,53 @@
     }).join("") : '<p class="settings-empty">Aún no hay folios autorizados.</p>';
     targets.forEach((target) => { target.innerHTML = markup; target.querySelectorAll("[data-delete-authorized-folio]").forEach((button) => button?.addEventListener("click", async () => { try { await apiRequest(`/authorized-folios/${encodeURIComponent(button.dataset.deleteAuthorizedFolio)}`, { method: "DELETE" }); authorizedAppraisalNumbers = authorizedAppraisalNumbers.filter((value) => value !== button.dataset.deleteAuthorizedFolio); renderAuthorizedFolios(); } catch (error) { const message = $("#authorizedFolioMessage") || $("#authorizedFolioMessageAvaluos"); if (message) message.textContent = error.message; } })); });
   }
+  function paintValidationRegistry() {
+    const target = $("#validationRegistryList");
+    if (!target) return;
+    const filter = $("#validationRegistryFilter")?.value || "todos";
+    const query = String($("#validationRegistrySearch")?.value || "").trim().toLocaleLowerCase("es-MX");
+    const visible = validationRegistryRows
+      .filter(item => filter === "todos" || (filter === "registrado" ? item.registrado : !item.registrado))
+      .filter(item => !query || [item.numeroAvaluo, item.valuador, item.estado].some(value => String(value || "").toLocaleLowerCase("es-MX").includes(query)))
+      .sort((a, b) => new Date(b.fechaRegistro || b.creadoEn || 0) - new Date(a.fechaRegistro || a.creadoEn || 0));
+    const pages = Math.max(1, Math.ceil(visible.length / VALIDATION_PAGE_SIZE));
+    validationRegistryPage = Math.min(Math.max(1, validationRegistryPage), pages);
+    const start = (validationRegistryPage - 1) * VALIDATION_PAGE_SIZE;
+    const items = visible.slice(start, start + VALIDATION_PAGE_SIZE);
+    if (!items.length) { target.innerHTML = '<p class="settings-empty">No hay avalúos para este filtro.</p>'; return; }
+    const firstButton = Math.max(1, Math.min(validationRegistryPage - 3, pages - 6));
+    const pageButtons = Array.from({length: Math.min(7, pages)}, (_, index) => firstButton + index)
+      .map(page => `<button type="button" class="table-page-button${page === validationRegistryPage ? " is-active" : ""}" data-validation-page="${page}" aria-current="${page === validationRegistryPage ? "page" : "false"}">${page}</button>`).join("");
+    target.innerHTML = `<table class="validation-registry-table"><thead><tr><th>No. de avalúo</th><th>Fecha</th><th>Valuador</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${items.map(item => {
+      const stamp = item.fechaRegistro || item.creadoEn;
+      const date = stamp ? new Date(stamp).toLocaleDateString("es-MX", { day: "2-digit", month: "2-digit", year: "numeric" }) : "—";
+      return `<tr><td><strong>#${escapeHtml(item.numeroAvaluo)}</strong></td><td>${escapeHtml(date)}</td><td>${escapeHtml(item.valuador || "Sin valuador")}</td><td><span class="folio-validation-status ${item.registrado ? "is-registered" : "is-pending"}">${escapeHtml(item.estado || (item.registrado ? "Registrado en Recepción" : "Pendiente de Recepción"))}</span></td><td><button type="button" class="validation-delete-button" data-delete-validation-folio="${escapeHtml(item.numeroAvaluo)}" aria-label="Eliminar folio ${escapeHtml(item.numeroAvaluo)}" title="Eliminar folio"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button></td></tr>`;
+    }).join("")}</tbody></table><nav class="table-pagination validation-pagination" aria-label="Paginación de avalúos validados"><span>Mostrando ${start + 1}-${start + items.length} de ${visible.length}</span><div><button type="button" class="table-page-button" data-validation-page="${validationRegistryPage - 1}" ${validationRegistryPage === 1 ? "disabled" : ""} aria-label="Página anterior">‹</button>${pageButtons}<button type="button" class="table-page-button" data-validation-page="${validationRegistryPage + 1}" ${validationRegistryPage === pages ? "disabled" : ""} aria-label="Página siguiente">›</button></div></nav>`;
+    target.querySelectorAll("[data-validation-page]").forEach(button => button.addEventListener("click", () => { if (button.disabled) return; validationRegistryPage = Number(button.dataset.validationPage); paintValidationRegistry(); }));
+    target.querySelectorAll("[data-delete-validation-folio]").forEach(button => button.addEventListener("click", async () => {
+      try {
+        await apiRequest(`/authorized-folios/${encodeURIComponent(button.dataset.deleteValidationFolio)}`, { method: "DELETE" });
+        authorizedAppraisalNumbers = authorizedAppraisalNumbers.filter(value => normalizeNumber(value) !== normalizeNumber(button.dataset.deleteValidationFolio));
+        validationRegistryRows = validationRegistryRows.filter(item => normalizeNumber(item.numeroAvaluo) !== normalizeNumber(button.dataset.deleteValidationFolio));
+        renderAuthorizedFolios(); paintValidationRegistry(); await renderValidationRegistry();
+      } catch (error) { window.alert(error.message); }
+    }));
+  }
   async function renderValidationRegistry() {
     const target = $("#validationRegistryList");
     if (!target || !serverOnline || !canAuthorizeFolios()) return;
+    const request = ++validationRegistryRequest;
+    const user = activeSessionUser;
     try {
       const rows = await apiRequest("/authorized-folios/registry");
-      const filter = $("#validationRegistryFilter")?.value || "todos";
-      const query = String($("#validationRegistrySearch")?.value || "").trim().toLocaleLowerCase("es-MX");
-      const visible = (Array.isArray(rows) ? rows : [])
-        .filter((item) => filter === "todos" || (filter === "registrado" ? item.registrado : !item.registrado))
-        .filter((item) => !query || [item.numeroAvaluo, item.valuador, item.estado].some((value) => String(value || "").toLocaleLowerCase("es-MX").includes(query)))
-        .sort((a, b) => new Date(b.fechaRegistro || 0).getTime() - new Date(a.fechaRegistro || 0).getTime());
-      target.innerHTML = visible.length ? `<table class="validation-registry-table"><thead><tr><th>No. de avalúo</th><th>Fecha</th><th>Valuador</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${visible.map((item) => {
-        const date = item.fechaRegistro ? new Date(item.fechaRegistro).toLocaleDateString("es-MX", { day: "2-digit", month: "2-digit", year: "numeric" }) : "—";
-        return `<tr><td><strong>#${escapeHtml(item.numeroAvaluo)}</strong></td><td>${escapeHtml(date)}</td><td>${escapeHtml(item.valuador || "Sin valuador")}</td><td><span class="folio-validation-status ${item.registrado ? "is-registered" : "is-pending"}">${escapeHtml(item.estado)}</span></td><td><button type="button" class="validation-delete-button" data-delete-validation-folio="${escapeHtml(item.numeroAvaluo)}" aria-label="Eliminar folio ${escapeHtml(item.numeroAvaluo)}" title="Eliminar folio"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button></td></tr>`;
-      }).join("")}</tbody></table>` : '<p class="settings-empty">No hay avalúos para este filtro.</p>';
-      target.querySelectorAll("[data-delete-validation-folio]").forEach((button) => button?.addEventListener("click", async () => {
-        try { await apiRequest(`/authorized-folios/${encodeURIComponent(button.dataset.deleteValidationFolio)}`, { method: "DELETE" }); authorizedAppraisalNumbers = authorizedAppraisalNumbers.filter((value) => normalizeNumber(value) !== normalizeNumber(button.dataset.deleteValidationFolio)); renderAuthorizedFolios(); renderValidationRegistry(); } catch (error) { window.alert(error.message); }
-      }));
-    } catch (error) { target.innerHTML = `<p class="settings-empty">${escapeHtml(error.message)}</p>`; }
+      if (request !== validationRegistryRequest || user !== activeSessionUser) return;
+      validationRegistryRows = Array.isArray(rows) ? rows : [];
+      paintValidationRegistry();
+    } catch (error) {
+      if (request !== validationRegistryRequest || user !== activeSessionUser) return;
+      if (validationRegistryRows.length) paintValidationRegistry();
+      else target.innerHTML = `<p class="settings-empty">${escapeHtml(error.message)}</p>`;
+    }
   }
   async function renderPendingReceptionSummary() {
     const target = $("#pendingReceptionSummary");
@@ -1593,8 +1641,8 @@
   $("#authorizedFolioFormAvaluos")?.addEventListener("submit", async (event) => { event.preventDefault(); await saveAuthorizedFolioFrom("#authorizedFolioInputAvaluos", "#authorizedFolioMessageAvaluos"); });
   $("#searchAuthorizedFolioButton")?.addEventListener("click", () => { const value = normalizeNumber($("#authorizedFolioSearchInputAvaluos")?.value || ""); const message = $("#authorizedFolioMessageAvaluos"); if (!/^\d{4}$/.test(value)) { if (message) message.textContent = "Escribe un número de avalúo de cuatro dígitos para buscar."; return; } const authorized = authorizedAppraisalNumbers.some((item) => normalizeNumber(item) === value); const technical = technicalAppraisals.some((item) => normalizeNumber(item.numeroAvaluo || item.numero) === value); const received = records.some((item) => normalizeNumber(item.numeroAvaluo) === value); if (message) { message.textContent = authorized || technical || received ? `El avalúo ${value} fue localizado${received ? " y ya está en Recepción" : technical ? " en expedientes técnicos" : " como folio autorizado"}.` : `No se encontró el avalúo ${value}.`; message.className = `form-message ${authorized || technical || received ? "is-success" : "is-error"}`; } });
   $("#refreshPendingSummaryButton")?.addEventListener("click", renderPendingReceptionSummary);
-  $("#validationRegistryFilter")?.addEventListener("change", renderValidationRegistry);
-  $("#validationRegistrySearch")?.addEventListener("input", renderValidationRegistry);
+  $("#validationRegistryFilter")?.addEventListener("change", () => { validationRegistryPage = 1; paintValidationRegistry(); });
+  $("#validationRegistrySearch")?.addEventListener("input", () => { validationRegistryPage = 1; paintValidationRegistry(); });
 
   // Cotizaciones se abre dentro del flujo normal de Avalúos, no como popup.
   const cotizacionesPanel = $("#cotizacionesEmbeddedPanel");
