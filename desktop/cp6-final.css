@@ -494,3 +494,13 @@ body.cp6-redesign .messaging-compose button i { font-size: .95rem; }
   body.cp6-redesign .messaging-shell { min-height: 0; }
   body.cp6-redesign .messaging-compose button { flex: 0 0 44px; height: 44px; min-height: 44px; width: 44px; }
 }
+
+/* CP6 Login · titular institucional */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-holder {
+  color: #475569;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+  font-size: .78rem;
+  font-weight: 600;
+  line-height: 1.45;
+  margin: 14px 0 0;
+}
