@@ -6,7 +6,7 @@
   "start_url": "/mobile/",
   "scope": "/mobile/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "theme_color": "#0f172a",
   "background_color": "#f8fafc",
   "icons": [
