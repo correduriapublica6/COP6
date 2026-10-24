@@ -407,3 +407,25 @@ body.cp6-redesign #welcomeRequestsTable table { min-width: 680px; }
 
 /* El atributo hidden del panel debe seguir siendo autoritativo fuera de Validación. */
 body.cp6-redesign #avaluosAuthorizedFoliosPanel[hidden] { display: none !important; }
+/* Logo institucional oficial: reemplaza el icono genérico de edificio. */
+body.cp6-redesign .cp6-brand-logo-image {
+  display: block;
+  flex: 0 0 auto;
+  height: 42px;
+  object-fit: contain;
+  width: 46px;
+}
+body.cp6-redesign .v2-login-logo .cp6-brand-logo-image {
+  height: 48px;
+  width: 54px;
+}
+body.cp6-redesign .v2-brand .cp6-brand-logo-image {
+  height: 38px;
+  width: 42px;
+}
+@media (max-width: 768px) {
+  body.cp6-redesign .v2-login-logo .cp6-brand-logo-image {
+    height: 42px;
+    width: 48px;
+  }
+}
