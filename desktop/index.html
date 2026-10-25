@@ -26,7 +26,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
-<link href="cp6-foundation.css?v=final-20261024" rel="stylesheet"/><link href="cp6-system.css?v=final-20261024" rel="stylesheet"/><link href="cp6-components.css?v=final-20261024" rel="stylesheet"/><link href="cp6-final.css?v=login-holder-left-20261024" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/></head>
+<link href="cp6-foundation.css?v=final-20261024" rel="stylesheet"/><link href="cp6-system.css?v=final-20261024" rel="stylesheet"/><link href="cp6-components.css?v=final-20261024" rel="stylesheet"/><link href="cp6-final.css?v=external-portal-logo-visible-20261025" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/></head>
 <body class="cp6-redesign" data-server-status="checking">
 <section aria-labelledby="publicEntryTitle" class="login-screen" id="loginScreen"><aside aria-hidden="false" class="login-visual"><div class="login-visual-logo"><div class="v2-login-logo"><img class="cp6-brand-logo-image" src="assets/cp6-logo-blanco.png" alt="Logotipo Correduría Pública 6" /><div><strong>Correduría Pública 6</strong><small>Plaza Coahuila</small></div></div></div><div class="login-visual-copy" id="loginVisualBrand"><span class="v2-login-eyebrow">PRECISIÓN · CONFIANZA · CONTROL</span><h2>Una nueva forma<br/>de gestionar<br/><em>tus avalúos.</em></h2><p>Expedientes, solicitudes y seguimiento. La operación de tu correduría, conectada en un solo lugar.</p></div><section class="applicant-visual-panel" hidden="" id="applicantVisualPanel"><span class="section-kicker">SEGUIMIENTO PERSONAL</span><h2>Mis solicitudes</h2><div class="request-table-wrap" id="applicantVisualRequestsTable"></div><div class="applicant-visual-actions"><button class="primary-button" id="applicantVisualNewRequestButton" type="button">+ Solicitar servicio</button><button class="secondary-button" id="applicantVisualProfileButton" type="button">Editar perfil</button></div></section><div class="login-visual-holder">Titular Lic. Juan Manuel Barrera Martinez</div><div class="login-visual-footer">Av. Morelos 854 Oriente, Colonia Centro</div><div class="v2-login-points"><span><i class="fa-solid fa-shield-halved"></i>Acceso seguro</span><span><i class="fa-solid fa-cloud"></i>Datos sincronizados</span></div></aside>
 <section class="public-entry-panel">
@@ -40,33 +40,35 @@
 </div>
 </div>
 <section aria-labelledby="applicantWelcomeTitle" class="applicant-home-panel" hidden="" id="applicantHomePanel">
-<header class="client-dashboard-header">
-<div class="client-brand"><div><strong>CP6</strong><span>MI PORTAL</span></div></div>
-<div class="client-header-actions">
-<button aria-expanded="false" aria-label="Notificaciones" class="applicant-notifications-button" id="applicantNotificationsButton" type="button"><span aria-hidden="true"><svg viewbox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg></span><b hidden="" id="applicantNotificationsCount">0</b></button>
-<button class="client-logout-button" id="applicantHomeLogoutButton" type="button">Cerrar sesión</button>
-<div class="applicant-notifications-panel" hidden="" id="applicantNotificationsPanel"><div class="applicant-notifications-heading"><strong>Notificaciones</strong><button id="applicantMarkNotificationsRead" type="button">Marcar como leídas</button></div><div class="applicant-notifications-list" id="applicantNotificationsList"><p>No hay notificaciones.</p></div></div>
-</div>
-</header>
 <div class="client-inbox-shell">
-<aside aria-label="Perfil y filtros de solicitudes" class="client-inbox-sidebar">
-<div class="client-sidebar-profile">
-<div aria-hidden="true" class="client-sidebar-avatar"><svg viewbox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-<h1 id="applicantWelcomeNameMirror">—</h1>
-<div class="client-sidebar-contact"><p id="applicantProfileEmail">—</p><p id="applicantProfilePhone">—</p></div>
-<button class="client-sidebar-profile-button" id="applicantHomeProfileButton" type="button">Editar perfil</button>
-</div>
-<nav aria-label="Filtros rápidos" class="client-inbox-nav">
-<button class="is-active" data-client-quick-filter="" type="button"><span>▣</span>Todas las solicitudes</button>
-<button data-client-quick-filter="proceso" type="button"><span>◷</span>En proceso</button>
-<button data-client-quick-filter="concluida" type="button"><span>✓</span>Concluidas</button>
-</nav>
-<button class="client-primary-button client-inbox-cta" id="applicantHomeNewRequestButton" type="button"><span aria-hidden="true">＋</span>Solicitar un servicio</button>
-</aside>
-<main class="client-inbox-main">
-<section class="applicant-messaging-view" hidden="" id="applicantMessagingView"><button class="applicant-messaging-back" id="applicantMessagingBackButton" type="button">← Volver a mis solicitudes</button><div class="messaging-app-container" id="applicantMessagingApp"></div></section>
-<section class="client-history-section"><div class="client-history-heading"><div><span class="client-sidebar-kicker">BANDEJA DE ENTRADA</span><h3>Mis solicitudes</h3></div><span class="client-history-caption">Actualizado en tiempo real</span></div><div class="client-request-toolbar" role="search"><label class="client-request-search"><span class="sr-only">Buscar solicitudes</span><span aria-hidden="true">⌕</span><input autocomplete="off" id="applicantRequestSearchInput" placeholder="Buscar por folio, tipo de bien o propietario..." type="search"/></label><label class="client-request-filter"><span class="sr-only">Filtrar por estatus</span><select id="applicantRequestStatusFilter"><option value="">Todos los estatus</option><option value="proceso">En proceso</option><option value="concluida">Concluidas</option><option value="recibida">Recibidas</option></select></label></div><div class="client-request-grid" id="applicantHomeRequestsTable"></div></section>
-</main>
+  <aside aria-label="Perfil y filtros de solicitudes" class="client-inbox-sidebar">
+    <div class="client-sidebar-profile">
+      <div aria-hidden="true" class="client-sidebar-avatar"><i class="fa-solid fa-user"></i></div>
+      <h1 id="applicantWelcomeNameMirror">—</h1>
+      <div class="client-sidebar-contact"><p><i class="fa-regular fa-envelope"></i><span id="applicantProfileEmail">—</span></p><p><i class="fa-solid fa-phone"></i><span id="applicantProfilePhone">—</span></p></div>
+      <button class="client-sidebar-profile-button" id="applicantHomeProfileButton" type="button"><i class="fa-solid fa-pen"></i> Editar perfil</button>
+    </div>
+    <nav aria-label="Filtros rápidos" class="client-inbox-nav">
+      <button class="is-active" data-client-quick-filter="" type="button"><i class="fa-solid fa-inbox"></i><span>Todas</span></button>
+      <button data-client-quick-filter="proceso" type="button"><i class="fa-regular fa-clock"></i><span>En proceso</span></button>
+      <button data-client-quick-filter="concluida" type="button"><i class="fa-solid fa-circle-check"></i><span>Concluidas</span></button>
+    </nav>
+    <button class="client-primary-button client-inbox-cta" id="applicantHomeNewRequestButton" type="button"><i class="fa-solid fa-plus"></i><span>Solicitar un servicio</span></button>
+    <div class="client-sidebar-footer"><strong>Tu portal, siempre disponible.</strong><span>Control de Avalúos · CP6</span></div>
+  </aside>
+  <main class="client-inbox-main">
+    <div class="client-main-actions"><span class="client-online-status"><i></i> Sesión activa</span><button aria-expanded="false" aria-label="Notificaciones" class="applicant-notifications-button" id="applicantNotificationsButton" type="button"><span aria-hidden="true"><i class="fa-solid fa-bell"></i></span><b hidden="" id="applicantNotificationsCount">0</b></button><button class="client-logout-button" id="applicantHomeLogoutButton" type="button"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Cerrar sesión</span></button><div class="applicant-notifications-panel" hidden="" id="applicantNotificationsPanel"><div class="applicant-notifications-heading"><strong>Notificaciones</strong><button id="applicantMarkNotificationsRead" type="button">Marcar como leídas</button></div><div class="applicant-notifications-list" id="applicantNotificationsList"><p>No hay notificaciones.</p></div></div></div>
+    <section class="client-portal-hero">
+      <div class="client-portal-hero-copy"><h2 id="applicantWelcomeTitle">Todo el control de tus avalúos en un solo lugar.</h2><p>Consulta el estado de tus solicitudes, revisa el avance y descarga tus avalúos finalizados.</p></div>
+      <div aria-hidden="true" class="client-portal-hero-art"><img class="client-hero-logo" src="assets/cp6-logo-blanco.png" alt="" /></div>
+    </section>
+    <section class="applicant-messaging-view" hidden="" id="applicantMessagingView"><button class="applicant-messaging-back" id="applicantMessagingBackButton" type="button">← Volver a mis solicitudes</button><div class="messaging-app-container" id="applicantMessagingApp"></div></section>
+    <section class="client-history-section">
+      <div class="client-history-heading"><div><span class="client-section-label">REGISTROS RECIENTES</span><h3>Mis solicitudes</h3><p>Consulta todos tus trámites registrados.</p></div><span class="client-history-caption"><i class="fa-solid fa-rotate"></i> Actualizado en tiempo real</span></div>
+      <div class="client-request-toolbar" role="search"><label class="client-request-search"><span class="sr-only">Buscar solicitudes</span><i aria-hidden="true" class="fa-solid fa-magnifying-glass"></i><input autocomplete="off" id="applicantRequestSearchInput" placeholder="Buscar por folio, tipo de bien o propietario..." type="search" /></label><label class="client-request-filter"><span class="sr-only">Filtrar por estatus</span><i aria-hidden="true" class="fa-solid fa-filter"></i><select id="applicantRequestStatusFilter"><option value="">Todos los estatus</option><option value="proceso">En proceso</option><option value="concluida">Concluidas</option><option value="recibida">Recibidas</option></select></label></div>
+      <div class="client-request-grid" id="applicantHomeRequestsTable"></div>
+    </section>
+  </main>
 </div>
 </section>
 <div class="public-entry-internal"><button class="internal-access-button" id="openInternalAccessButton" type="button">Acceso administrativo</button></div>
