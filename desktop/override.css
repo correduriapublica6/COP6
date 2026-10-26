@@ -14691,3 +14691,28 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
     grid-row: auto !important;
   }
 }
+
+/* CP6 LOGIN · Posicionamiento horizontal definitivo del texto institucional */
+#loginScreen:not(.applicant-dashboard-active) .left-panel .login-visual-copy {
+  position: absolute !important;
+  top: 50% !important;
+  left: 48px !important;
+  right: auto !important;
+  width: min(100% - 96px, 560px) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: translateY(-50%) !important;
+  align-self: auto !important;
+  text-align: left !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .left-panel .login-visual-copy h2,
+#loginScreen:not(.applicant-dashboard-active) .left-panel .login-visual-copy p,
+#loginScreen:not(.applicant-dashboard-active) .left-panel .login-visual-copy span {
+  text-align: left !important;
+}
+@media (max-width: 800px) {
+  #loginScreen:not(.applicant-dashboard-active) .left-panel .login-visual-copy {
+    left: 24px !important;
+    width: calc(100% - 48px) !important;
+  }
+}
