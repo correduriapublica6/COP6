@@ -14599,3 +14599,30 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   position: absolute !important;
   z-index: 2 !important;
 }
+
+/* CP6 LOGIN · Estructura aislada definitiva del panel izquierdo */
+#loginScreen:not(.applicant-dashboard-active) .left-panel {
+  position: relative !important;
+  overflow: hidden !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .left-panel > #fireflies-canvas {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .left-panel > .left-panel-content {
+  position: relative !important;
+  z-index: 2 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .left-panel-content > * {
+  z-index: 2 !important;
+}

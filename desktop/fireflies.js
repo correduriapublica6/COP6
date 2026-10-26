@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function resize() {
     const parent = canvas.parentElement;
-    width = canvas.width = canvas.parentElement.offsetWidth;
-    height = canvas.height = canvas.parentElement.offsetHeight;
+    width = canvas.width = canvas.parentElement.clientWidth;
+    height = canvas.height = canvas.parentElement.clientHeight;
     fireflies.forEach((firefly) => {
       firefly.x = Math.min(firefly.x, width);
       firefly.y = Math.min(firefly.y, height);
