@@ -14568,3 +14568,34 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   position: relative !important;
   overflow: hidden !important;
 }
+
+/* CP6 LOGIN · Canvas absolutamente posicionado sin alterar el layout original */
+#loginScreen:not(.applicant-dashboard-active) .login-visual {
+  position: relative !important;
+  overflow: hidden !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual > #fireflies-canvas,
+#fireflies-canvas {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+/* Solo la capa visual no posicionada necesita relative; logo, titular y dirección conservan sus offsets. */
+#loginScreen:not(.applicant-dashboard-active) .login-visual > *:not(#fireflies-canvas) {
+  z-index: 2 !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-copy,
+#loginScreen:not(.applicant-dashboard-active) #applicantVisualPanel {
+  position: relative !important;
+  z-index: 2 !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-logo,
+#loginScreen:not(.applicant-dashboard-active) .login-visual-holder,
+#loginScreen:not(.applicant-dashboard-active) .login-visual-footer {
+  position: absolute !important;
+  z-index: 2 !important;
+}
