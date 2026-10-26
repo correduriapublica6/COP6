@@ -14410,3 +14410,98 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 .cp6-activity-list { display: grid; gap: 2px; margin-top: 14px; }.cp6-activity-item { align-items: center; display: flex; gap: 10px; padding: 9px 0; }.cp6-activity-icon { align-items: center; border-radius: 10px; display: inline-flex; flex: 0 0 auto; height: 31px; justify-content: center; width: 31px; }.cp6-activity-icon.blue { background: #eff6ff; color: #2563eb; }.cp6-activity-icon.green { background: #ecfdf5; color: #16a34a; }.cp6-activity-icon.violet { background: #f5f3ff; color: #7c3aed; }.cp6-activity-item > div { display: grid; gap: 2px; min-width: 0; }.cp6-activity-item strong { color: #334155; font-size: .72rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.cp6-activity-item small,.cp6-activity-item time { color: #94a3b8; font-size: .63rem; }.cp6-activity-item time { margin-left: auto; white-space: nowrap; }.cp6-empty-state { color: #94a3b8; font-size: .76rem; margin: 14px 0 0; }.cp6-install-card { align-items: center; display: flex; gap: 12px; justify-content: space-between; padding: 18px; }.cp6-install-card h3 { color: #0f172a; font-size: .9rem; margin: 5px 0; }.cp6-install-card p { color: #64748b; font-size: .68rem; line-height: 1.45; margin: 0; }.cp6-install-card .mobile-qr-wrap { border: 0; padding: 0; }.cp6-install-card .mobile-qr-wrap img { height: 88px; width: 88px; }
 @media (max-width: 1120px) { .cp6-home-grid { grid-template-columns: 1fr; }.cp6-home-side-column { grid-template-columns: repeat(2,minmax(0,1fr)); }.cp6-install-card { grid-column: span 2; } }
 @media (max-width: 760px) { #appShell.control-shell #inicioView.cp6-home-view { padding: 14px 14px 30px !important; }.cp6-home-hero { min-height: 270px; padding: 25px 22px; }.cp6-home-hero-art { opacity: .45; right: -115px; }.cp6-home-grid,.cp6-home-side-column { grid-template-columns: 1fr; }.cp6-kpi-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }.cp6-install-card { grid-column: auto; }.cp6-home-hero h2 { font-size: 2rem; }.cp6-section-heading { align-items: flex-start; flex-direction: column; } }
+
+/* CP6 BUSCADOR GLOBAL · Un solo panel de resultados y contraste legible */
+#appShell.control-shell .global-search-palette {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, .16) !important;
+}
+#appShell.control-shell .global-search-palette .global-search-results > p {
+  color: #475569 !important;
+}
+#appShell.control-shell .global-search-palette .search-result {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+}
+#appShell.control-shell .global-search-palette .search-result:hover,
+#appShell.control-shell .global-search-palette .search-result:focus-visible {
+  background: #eff6ff !important;
+}
+#appShell.control-shell .global-search-palette .search-result span {
+  color: #2563eb !important;
+}
+#appShell.control-shell .global-search-palette .search-result strong {
+  color: #0f172a !important;
+  font-weight: 750 !important;
+}
+#appShell.control-shell .global-search-palette .search-result small {
+  color: #475569 !important;
+}
+
+/* CP6 LOGIN · Composición final: formulario directo, branding alineado y luciérnagas visibles */
+#loginScreen:not(.applicant-dashboard-active) .login-visual-logo {
+  top: 34px !important;
+  left: 40px !important;
+  right: auto !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual-logo .v2-login-logo { display: flex !important; align-items: center !important; gap: 12px !important; }
+#loginScreen:not(.applicant-dashboard-active) .login-visual-logo img { width: 56px !important; height: 56px !important; object-fit: contain !important; filter: grayscale(1) brightness(0) invert(1) !important; }
+#loginScreen:not(.applicant-dashboard-active) .login-visual-logo strong { display: block !important; color: #fff !important; font: 700 1rem/1.2 "Plus Jakarta Sans", Inter, sans-serif !important; }
+#loginScreen:not(.applicant-dashboard-active) .login-visual-logo small { display: block !important; margin-top: 3px !important; color: #bfdbfe !important; font: 500 .7rem/1.2 "Plus Jakarta Sans", Inter, sans-serif !important; }
+#loginScreen:not(.applicant-dashboard-active) .login-visual-holder { left: 40px !important; bottom: 64px !important; margin: 0 !important; color: #e2e8f0 !important; font: 600 .78rem/1.2 "Plus Jakarta Sans", Inter, sans-serif !important; }
+#loginScreen:not(.applicant-dashboard-active) .login-visual-footer { left: 40px !important; bottom: 38px !important; margin: 0 !important; color: #93c5fd !important; font: 400 .72rem/1.2 "Plus Jakarta Sans", Inter, sans-serif !important; }
+#loginScreen:not(.applicant-dashboard-active) .login-visual-copy { margin-top: 0 !important; }
+#loginScreen:not(.applicant-dashboard-active) .public-entry-content { width: min(100%, 510px) !important; max-width: 510px !important; margin: 0 auto !important; }
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-login-inline { margin-top: 0 !important; }
+#loginScreen:not(.applicant-dashboard-active) .login-visual::before,
+#loginScreen:not(.applicant-dashboard-active) .login-visual::after {
+  content: "" !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  background-color: transparent !important;
+  background-image:
+    radial-gradient(circle at 12% 28%, rgba(219,234,254,.98) 0 2.8px, transparent 5px),
+    radial-gradient(circle at 24% 71%, rgba(147,197,253,.98) 0 2.4px, transparent 5px),
+    radial-gradient(circle at 39% 19%, rgba(239,246,255,.98) 0 2.6px, transparent 5px),
+    radial-gradient(circle at 51% 62%, rgba(125,211,252,.98) 0 2.5px, transparent 5px),
+    radial-gradient(circle at 64% 32%, rgba(191,219,254,.98) 0 2.8px, transparent 5px),
+    radial-gradient(circle at 78% 77%, rgba(239,246,255,.98) 0 2.3px, transparent 5px),
+    radial-gradient(circle at 90% 22%, rgba(147,197,253,.98) 0 2.6px, transparent 5px),
+    radial-gradient(circle at 91% 57%, rgba(219,234,254,.98) 0 2.3px, transparent 5px) !important;
+  filter: drop-shadow(0 0 7px rgba(147,197,253,.95));
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual::before { animation: cp6-fireflies-visible 4.8s ease-in-out infinite alternate !important; opacity: .95 !important; }
+#loginScreen:not(.applicant-dashboard-active) .login-visual::after { animation: cp6-fireflies-visible 3.2s ease-in-out infinite reverse !important; opacity: .58 !important; transform: scale(1.04); }
+@keyframes cp6-fireflies-visible {
+  0% { opacity: .22; transform: translate3d(-7px, 9px, 0) scale(.82); filter: drop-shadow(0 0 2px rgba(147,197,253,.35)); }
+  35% { opacity: 1; transform: translate3d(5px, -7px, 0) scale(1.12); filter: drop-shadow(0 0 12px rgba(191,219,254,1)); }
+  70% { opacity: .55; transform: translate3d(-2px, 3px, 0) scale(.96); filter: drop-shadow(0 0 6px rgba(125,211,252,.8)); }
+  100% { opacity: .9; transform: translate3d(8px, -3px, 0) scale(1.04); filter: drop-shadow(0 0 10px rgba(147,197,253,.95)); }
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual,
+#loginScreen:not(.applicant-dashboard-active) .public-entry-panel { animation: cp6-login-fade-in .7s cubic-bezier(.22,.61,.36,1) both !important; }
+#loginScreen:not(.applicant-dashboard-active) .public-entry-panel { animation-delay: .08s !important; }
+@keyframes cp6-login-fade-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 800px) {
+  #loginScreen:not(.applicant-dashboard-active) .login-visual-logo { top: 22px !important; left: 24px !important; }
+  #loginScreen:not(.applicant-dashboard-active) .login-visual-logo img { width: 46px !important; height: 46px !important; }
+  #loginScreen:not(.applicant-dashboard-active) .login-visual-holder { left: 24px !important; bottom: 42px !important; }
+  #loginScreen:not(.applicant-dashboard-active) .login-visual-footer { display: block !important; left: 24px !important; bottom: 20px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #loginScreen:not(.applicant-dashboard-active) .login-visual::before,
+  #loginScreen:not(.applicant-dashboard-active) .login-visual::after,
+  #loginScreen:not(.applicant-dashboard-active) .login-visual,
+  #loginScreen:not(.applicant-dashboard-active) .public-entry-panel { animation: none !important; }
+}

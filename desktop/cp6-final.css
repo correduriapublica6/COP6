@@ -1093,3 +1093,140 @@ body.cp6-redesign #appShell.control-shell .global-search-palette .search-result:
 body.cp6-redesign #appShell.control-shell .global-search-palette .search-result span { color: #2563eb !important; }
 body.cp6-redesign #appShell.control-shell .global-search-palette .search-result strong { color: #0f172a !important; font-weight: 750 !important; }
 body.cp6-redesign #appShell.control-shell .global-search-palette .search-result small { color: #475569 !important; }
+
+/* CP6 LOGIN · Acceso externo directo y luciérnagas sutiles */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  opacity: .72;
+  background-image:
+    radial-gradient(circle at 12% 28%, rgba(191,219,254,.95) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 23% 72%, rgba(147,197,253,.9) 0 1.8px, transparent 3px),
+    radial-gradient(circle at 38% 19%, rgba(224,242,254,.95) 0 1.4px, transparent 3px),
+    radial-gradient(circle at 49% 61%, rgba(125,211,252,.95) 0 1.7px, transparent 3px),
+    radial-gradient(circle at 63% 31%, rgba(191,219,254,.85) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 76% 77%, rgba(224,242,254,.9) 0 1.8px, transparent 3px),
+    radial-gradient(circle at 88% 22%, rgba(147,197,253,.85) 0 1.4px, transparent 3px),
+    radial-gradient(circle at 91% 57%, rgba(191,219,254,.9) 0 1.7px, transparent 3px);
+  animation: cp6-fireflies-drift 8s ease-in-out infinite alternate;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  opacity: .38;
+  background-image:
+    radial-gradient(circle at 18% 45%, rgba(125,211,252,.8) 0 1px, transparent 2.8px),
+    radial-gradient(circle at 34% 84%, rgba(191,219,254,.75) 0 1px, transparent 2.8px),
+    radial-gradient(circle at 57% 13%, rgba(224,242,254,.75) 0 1px, transparent 2.8px),
+    radial-gradient(circle at 71% 52%, rgba(125,211,252,.8) 0 1px, transparent 2.8px),
+    radial-gradient(circle at 82% 38%, rgba(191,219,254,.75) 0 1px, transparent 2.8px);
+  animation: cp6-fireflies-flicker 4.8s ease-in-out infinite;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual > * { position: relative; z-index: 1; }
+@keyframes cp6-fireflies-drift {
+  0% { opacity: .32; transform: translate3d(0, 8px, 0) scale(.96); }
+  45% { opacity: .92; transform: translate3d(7px, -5px, 0) scale(1.02); }
+  100% { opacity: .48; transform: translate3d(-5px, 3px, 0) scale(.98); }
+}
+@keyframes cp6-fireflies-flicker {
+  0%, 100% { opacity: .16; transform: translate3d(0, 0, 0); }
+  38% { opacity: .62; transform: translate3d(-4px, -6px, 0); }
+  72% { opacity: .28; transform: translate3d(5px, 4px, 0); }
+}
+body.cp6-redesign .applicant-login-dialog {
+  width: min(560px, calc(100vw - 28px));
+  max-width: 560px;
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  background: transparent;
+  box-shadow: 0 28px 80px rgba(15,23,42,.26);
+  overflow: visible;
+}
+body.cp6-redesign .applicant-login-dialog::backdrop { background: rgba(15,23,42,.58); backdrop-filter: blur(5px); }
+body.cp6-redesign .cp6-applicant-login-card {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 36px 46px 30px;
+  border-radius: 28px;
+  background: #fff;
+  color: #0f172a;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+}
+body.cp6-redesign .cp6-login-card-top { display: flex; align-items: flex-start; justify-content: space-between; }
+body.cp6-redesign .cp6-login-lock {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 66px; height: 66px; border-radius: 20px;
+  background: #eff6ff; color: #2563eb; font-size: 28px;
+}
+body.cp6-redesign .cp6-login-close {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border: 0; border-radius: 50%;
+  background: #f1f5f9; color: #64748b; font-size: 30px; line-height: 1; cursor: pointer;
+}
+body.cp6-redesign .cp6-login-close:hover { background: #e2e8f0; color: #0f172a; }
+body.cp6-redesign .cp6-login-heading { margin: 34px 0 28px; }
+body.cp6-redesign .cp6-login-heading h2 { margin: 0 0 8px; color: #0f172a; font: 800 clamp(2rem, 4vw, 2.65rem)/1.1 "Plus Jakarta Sans", Inter, sans-serif; letter-spacing: -.045em; }
+body.cp6-redesign .cp6-login-heading p { margin: 0; color: #64748b; font-size: .98rem; line-height: 1.55; }
+body.cp6-redesign .cp6-login-field { display: block; margin: 0 0 22px; color: #334155; font-size: .92rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+body.cp6-redesign .cp6-login-field > span { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
+body.cp6-redesign .cp6-password-label small { color: #315c98; font-size: .9rem; font-weight: 500; letter-spacing: 0; text-transform: none; }
+body.cp6-redesign .cp6-login-input-wrap { position: relative; }
+body.cp6-redesign .cp6-login-input-wrap > i { position: absolute; left: 18px; top: 50%; z-index: 1; color: #94a3b8; font-size: 1.2rem; transform: translateY(-50%); pointer-events: none; }
+body.cp6-redesign .cp6-login-input-wrap input { width: 100%; min-height: 64px; box-sizing: border-box; padding: 0 18px 0 56px; border: 1px solid #dbe2ea; border-radius: 18px; background: #f8fafc; color: #0f172a; font: 500 1rem "Plus Jakarta Sans", Inter, sans-serif; outline: 0; transition: border-color .2s, box-shadow .2s, background .2s; }
+body.cp6-redesign .cp6-login-input-wrap input::placeholder { color: #94a3b8; font-weight: 400; }
+body.cp6-redesign .cp6-login-input-wrap input:focus { border-color: #3b82f6; background: #fff; box-shadow: 0 0 0 4px rgba(59,130,246,.12); }
+body.cp6-redesign .cp6-remember { display: flex; align-items: center; gap: 12px; margin: 6px 0 22px; color: #475569; font-size: .95rem; font-weight: 500; cursor: pointer; }
+body.cp6-redesign .cp6-remember input { width: 20px; height: 20px; accent-color: #2563eb; }
+body.cp6-redesign .cp6-login-message { min-height: 18px; margin: 0 0 8px; color: #dc2626; text-align: center; }
+body.cp6-redesign .cp6-login-submit { width: 100%; min-height: 60px; border: 0; border-radius: 18px; background: #2563eb; color: #fff; font: 800 1.05rem "Plus Jakarta Sans", Inter, sans-serif; cursor: pointer; box-shadow: 0 12px 22px rgba(37,99,235,.2); transition: background .2s, transform .2s; }
+body.cp6-redesign .cp6-login-submit:hover { background: #1d4ed8; transform: translateY(-1px); }
+body.cp6-redesign .cp6-login-divider { height: 1px; margin: 24px 0 18px; background: #eef2f7; }
+body.cp6-redesign .cp6-login-register { display: block; width: 100%; border: 0; background: transparent; color: #64748b; font: 500 .95rem "Plus Jakarta Sans", Inter, sans-serif; cursor: pointer; }
+body.cp6-redesign .cp6-login-register strong { color: #315c98; font-weight: 700; }
+body.cp6-redesign .cp6-login-cancel { display: block; margin: 15px auto 0; border: 0; background: transparent; color: #94a3b8; font: 500 .78rem "Plus Jakarta Sans", Inter, sans-serif; cursor: pointer; }
+@media (max-width: 620px) {
+  body.cp6-redesign .cp6-applicant-login-card { padding: 28px 22px 24px; border-radius: 22px; }
+  body.cp6-redesign .cp6-login-heading { margin-top: 26px; }
+  body.cp6-redesign .cp6-login-lock { width: 58px; height: 58px; font-size: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual::before,
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual::after { animation: none; }
+}
+
+/* CP6 LOGIN · Formulario externo visible dentro de la pantalla principal */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-content {
+  width: min(100%, 510px);
+  margin: 0 auto;
+}
+body.cp6-redesign .cp6-applicant-login-inline {
+  width: 100%;
+  max-width: 510px;
+  margin: 26px auto 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-card-top { margin-bottom: 0; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-lock { width: 58px; height: 58px; font-size: 24px; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-heading { margin: 22px 0 24px; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-heading h2 { font-size: clamp(1.65rem, 3vw, 2.15rem); }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-heading p { font-size: .86rem; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-field { font-size: .75rem; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-input-wrap input { min-height: 55px; border-radius: 14px; font-size: .86rem; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-submit { min-height: 54px; border-radius: 14px; font-size: .92rem; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-divider { margin: 18px 0 14px; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-remember { font-size: .82rem; }
+@media (max-width: 800px) {
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-content { width: 100%; }
+  body.cp6-redesign .cp6-applicant-login-inline { margin-top: 18px; }
+}

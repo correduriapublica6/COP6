@@ -465,7 +465,15 @@
     const pages = Math.max(1, Math.ceil(visible.length / APPLICANT_REQUESTS_PAGE_SIZE));
     applicantRequestsPage = Math.min(Math.max(1, applicantRequestsPage), pages);
     const pageItems = visible.slice((applicantRequestsPage - 1) * APPLICANT_REQUESTS_PAGE_SIZE, applicantRequestsPage * APPLICANT_REQUESTS_PAGE_SIZE);
-    const table=$("#applicantHomeRequestsTable"); if (!table) return; table.innerHTML=applicantOwnRequestsTable(pageItems) + applicantRequestsPagination(applicantRequestsPage, visible.length); bindRequestDetailButtons(table, pageItems); table.querySelector("#clientEmptyNewRequest")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
+    const table=$("#applicantHomeRequestsTable");
+    if (!table) return;
+    table.innerHTML=applicantOwnRequestsTable(pageItems) + applicantRequestsPagination(applicantRequestsPage, visible.length);
+    // La tabla nunca debe mostrar el CTA de nueva solicitud; se conserva únicamente en el sidebar.
+    table.querySelectorAll("button, a").forEach((element) => {
+      if (/solicitar\s+(un\s+)?servicio/i.test(element.textContent || "")) element.remove();
+    });
+    bindRequestDetailButtons(table, pageItems);
+    table.querySelector("#clientEmptyNewRequest")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
     table.querySelectorAll("[data-applicant-page]").forEach((button) => button?.addEventListener("click", () => { if (button.disabled) return; applicantRequestsPage = Number(button.dataset.applicantPage) || 1; filterApplicantRequests(); }));
   }
 
@@ -745,7 +753,15 @@
     </div>`;
     detail.querySelectorAll("h2, h3, h4, button, input").forEach((element) => { element.style.fontFamily = "Plus Jakarta Sans, system-ui, -apple-system, sans-serif"; });
     openDialog(dialog);
-    detail.querySelector("[data-close-request-detail]")?.addEventListener("click", () => closeDialog(dialog));
+    const closeRequestDetail = (event) => {
+      event?.preventDefault?.();
+      event?.stopPropagation?.();
+      if (dialog.open) dialog.close();
+      dialog.removeAttribute("open");
+      dialog.classList.remove("client-luxury-detail");
+    };
+    detail.querySelector("[data-close-request-detail]")?.addEventListener("click", closeRequestDetail);
+    dialog.addEventListener("cancel", closeRequestDetail, { once: true });
     detail.querySelectorAll("[data-view-file]").forEach((button) => button?.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
     detail.querySelectorAll("[data-delete-file]").forEach((button) => button?.addEventListener("click", async () => {
       const index = Number(button.dataset.deleteFile);
@@ -1076,6 +1092,7 @@
     $("#newApplicantRequestButton")?.addEventListener("click", () => { closeDialog(applicantRequestsDialog); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
     $("#openPublicRequestButton")?.addEventListener("click", () => { applicantSession = null; resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
     $("#openApplicantRegisterButton")?.addEventListener("click", () => { setMessage($("#applicantRegisterMessage"), ""); openDialog(applicantRegisterDialog); });
+    $("#applicantLoginRegisterButton")?.addEventListener("click", () => { closeDialog(applicantLoginDialog); setMessage($("#applicantRegisterMessage"), ""); openDialog(applicantRegisterDialog); });
     $("#openApplicantLoginButton")?.addEventListener("click", () => applicantSession ? showApplicantHome() : openDialog(applicantLoginDialog));
     ["closePublicRequestButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(requestDialog)));
     ["closeApplicantRegisterButton", "cancelApplicantRegisterButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(applicantRegisterDialog)));
@@ -1121,6 +1138,17 @@
     window.addEventListener("control-avaluos:users-view", renderRegisteredApplicants);
     window.addEventListener("control-avaluos:section", (event) => { if (event.detail === "solicitudes") renderRequests(); });
     $("#closeFileViewerButton")?.addEventListener("click", () => closeDialog($("#fileViewerDialog")));
+    // El detalle se renderiza dinámicamente; delegamos el cierre para que el botón siga funcionando después de cada actualización.
+    document.addEventListener("click", (event) => {
+      const closeButton = event.target?.closest?.("[data-close-request-detail]");
+      if (!closeButton) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const detailDialog = document.querySelector("#requestDetailDialog");
+      if (detailDialog?.open) detailDialog.close();
+      detailDialog?.removeAttribute("open");
+      detailDialog?.classList.remove("client-luxury-detail");
+    });
     try { const storedApplicant = JSON.parse(sessionStorage.getItem("control-avaluos.applicant") || "null"); if (storedApplicant?.email) { applicantSession = storedApplicant; showApplicantHome(); } } catch { sessionStorage.removeItem("control-avaluos.applicant"); }
     fillAdvisors();
     fillNotaries();
