@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('fireflies-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  if (!ctx) return;
+  if (!ctx || !canvas.parentElement) return;
 
   let width = 0;
   let height = 0;
@@ -10,16 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const fireflyCount = 40;
 
   function resize() {
-    const ratio = Math.min(window.devicePixelRatio || 1, 2);
-    width = canvas.offsetWidth;
-    height = canvas.offsetHeight;
-    canvas.width = Math.max(1, Math.floor(width * ratio));
-    canvas.height = Math.max(1, Math.floor(height * ratio));
-    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    const parent = canvas.parentElement;
+    width = canvas.width = canvas.parentElement.offsetWidth;
+    height = canvas.height = canvas.parentElement.offsetHeight;
+    fireflies.forEach((firefly) => {
+      firefly.x = Math.min(firefly.x, width);
+      firefly.y = Math.min(firefly.y, height);
+    });
   }
 
   window.addEventListener('resize', resize, { passive: true });
-  resize();
 
   class Firefly {
     constructor() {
@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  resize();
   for (let i = 0; i < fireflyCount; i += 1) fireflies.push(new Firefly());
 
   function animate() {
