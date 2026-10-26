@@ -1002,3 +1002,94 @@ body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-logo {
   body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-hero-art,
   body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-logo { animation: none !important; transform: none !important; }
 }
+
+/* CP6 LOGIN · Marca Mi Portal */
+body.cp6-redesign .v2-login-logo strong {
+  font-family: "Pacifico", "Segoe Script", cursive !important;
+  font-size: 1.35rem !important;
+  font-weight: 400 !important;
+  letter-spacing: .01em !important;
+}
+body.cp6-redesign .v2-login-logo small { letter-spacing: .16em !important; }
+
+/* CP6 LOGIN · Nombre institucional con estilo manuscrito */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-panel h1#publicEntryTitle {
+  color: #0f172a !important;
+  font-family: "Pacifico", "Segoe Script", cursive !important;
+  font-size: clamp(2.15rem, 5vw, 4.25rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: .01em !important;
+  line-height: 1.12 !important;
+}
+
+/* CP6 LOGIN · Nombre institucional compacto en una sola línea */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-panel h1#publicEntryTitle {
+  font-size: clamp(1.55rem, 3.3vw, 2.75rem) !important;
+  letter-spacing: 0 !important;
+  line-height: 1.2 !important;
+  max-width: none !important;
+  white-space: nowrap !important;
+}
+@media (max-width: 620px) {
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-panel h1#publicEntryTitle {
+    font-size: clamp(1.35rem, 7vw, 2rem) !important;
+  }
+}
+
+/* CP6 LOGIN · Tipografía corporativa definitiva */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-panel h1#publicEntryTitle,
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .v2-login-logo strong {
+  font-family: "Plus Jakarta Sans", "DM Sans", Inter, system-ui, sans-serif !important;
+  font-weight: 800 !important;
+  letter-spacing: -.035em !important;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-panel h1#publicEntryTitle {
+  font-size: clamp(1.55rem, 3.3vw, 2.75rem) !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+/* CP6 DETALLE · Botón de cierre siempre interactivo */
+#requestDetailDialog [data-close-request-detail] {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  position: absolute !important;
+  z-index: 30 !important;
+}
+
+/* CP6 PORTAL EXTERNO · La tabla no muestra CTA de solicitud */
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-section .client-inbox-cta,
+body.cp6-redesign #loginScreen.applicant-dashboard-active #applicantHomeRequestsTable [data-new-request],
+body.cp6-redesign #loginScreen.applicant-dashboard-active #applicantHomeRequestsTable .client-empty-new-request {
+  display: none !important;
+}
+
+/* CP6 VALIDACIÓN · Ocultar listados heredados fuera de la tabla oficial */
+body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-hidden-list,
+body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-pending-section,
+body.cp6-redesign #avaluosAuthorizedFoliosPanel #authorizedFoliosListAvaluos,
+body.cp6-redesign #avaluosAuthorizedFoliosPanel #pendingReceptionSummary {
+  display: none !important;
+}
+
+/* CP6 BUSCADOR GLOBAL · Contraste final y un solo panel */
+body.cp6-redesign #appShell.control-shell .global-search-palette {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, .16) !important;
+}
+body.cp6-redesign #appShell.control-shell .global-search-palette .global-search-results > p {
+  color: #475569 !important;
+}
+body.cp6-redesign #appShell.control-shell .global-search-palette .search-result {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+}
+body.cp6-redesign #appShell.control-shell .global-search-palette .search-result:hover,
+body.cp6-redesign #appShell.control-shell .global-search-palette .search-result:focus-visible {
+  background: #eff6ff !important;
+}
+body.cp6-redesign #appShell.control-shell .global-search-palette .search-result span { color: #2563eb !important; }
+body.cp6-redesign #appShell.control-shell .global-search-palette .search-result strong { color: #0f172a !important; font-weight: 750 !important; }
+body.cp6-redesign #appShell.control-shell .global-search-palette .search-result small { color: #475569 !important; }
