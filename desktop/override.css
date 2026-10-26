@@ -14626,3 +14626,18 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 #loginScreen:not(.applicant-dashboard-active) .left-panel-content > * {
   z-index: 2 !important;
 }
+
+/* CP6 LOGIN · Las luciérnagas no deben mover ningún contenido */
+#loginScreen:not(.applicant-dashboard-active) .left-panel,
+#loginScreen:not(.applicant-dashboard-active) .left-panel-content,
+#loginScreen:not(.applicant-dashboard-active) .login-visual-logo,
+#loginScreen:not(.applicant-dashboard-active) .login-visual-copy,
+#loginScreen:not(.applicant-dashboard-active) .login-visual-holder,
+#loginScreen:not(.applicant-dashboard-active) .login-visual-footer {
+  animation: none !important;
+  transform: none !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .left-panel > #fireflies-canvas {
+  animation: none !important;
+  transform: none !important;
+}
