@@ -14534,3 +14534,22 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
 /* CP6 LOGIN · Unión limpia entre panel azul y panel blanco */
 #loginScreen:not(.applicant-dashboard-active) { gap: 0 !important; }
 #loginScreen:not(.applicant-dashboard-active) .public-entry-panel { border-left: 0 !important; background: #fff !important; }
+
+/* CP6 LOGIN · Canvas de luciérnagas detrás del contenido */
+#loginScreen:not(.applicant-dashboard-active) .login-visual {
+  position: relative !important;
+  overflow: hidden !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual > #fireflies-canvas {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+#loginScreen:not(.applicant-dashboard-active) .login-visual > *:not(#fireflies-canvas) {
+  position: relative !important;
+  z-index: 2 !important;
+}
