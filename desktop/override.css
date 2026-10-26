@@ -14505,3 +14505,32 @@ body:has(#animaniaEmbeddedPanel:not([hidden])) { overflow: hidden !important; }
   #loginScreen:not(.applicant-dashboard-active) .login-visual,
   #loginScreen:not(.applicant-dashboard-active) .public-entry-panel { animation: none !important; }
 }
+
+/* CP6 LOGIN · Registro inline sin Notaría y transición entre formularios */
+#loginScreen:not(.applicant-dashboard-active) .public-entry-panel { border-left: 0 !important; box-shadow: none !important; }
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-login-inline,
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline { width: min(100%, 470px) !important; max-width: 470px !important; }
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-login-inline .cp6-login-input-wrap input,
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-input-wrap input { min-height: 48px !important; border-radius: 12px !important; font-size: .82rem !important; }
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-login-inline .cp6-login-field,
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field { margin-bottom: 14px !important; }
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-login-inline .cp6-login-input-wrap > i,
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-input-wrap > i { left: 15px !important; font-size: 1rem !important; }
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-login-inline .cp6-login-input-wrap input,
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-input-wrap input { padding-left: 48px !important; }
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline { margin-top: 0 !important; }
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-heading { margin: 0 0 18px !important; }
+#loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-heading h2 { font-size: 1.7rem !important; }
+#loginScreen:not(.applicant-dashboard-active) .cp6-login-back { display: block; width: 100%; margin-top: 14px; border: 0; background: transparent; color: #315c98; font: 600 .82rem "Plus Jakarta Sans", Inter, sans-serif; cursor: pointer; }
+#loginScreen:not(.applicant-dashboard-active) .cp6-login-swap-out { animation: cp6-login-swap-out .18s ease both; }
+#loginScreen:not(.applicant-dashboard-active) .cp6-login-swap-in { animation: cp6-login-swap-in .42s cubic-bezier(.22,.61,.36,1) both; }
+@keyframes cp6-login-swap-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-18px); } }
+@keyframes cp6-login-swap-in { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) {
+  #loginScreen:not(.applicant-dashboard-active) .cp6-login-swap-out,
+  #loginScreen:not(.applicant-dashboard-active) .cp6-login-swap-in { animation: none !important; }
+}
+
+/* CP6 LOGIN · Unión limpia entre panel azul y panel blanco */
+#loginScreen:not(.applicant-dashboard-active) { gap: 0 !important; }
+#loginScreen:not(.applicant-dashboard-active) .public-entry-panel { border-left: 0 !important; background: #fff !important; }

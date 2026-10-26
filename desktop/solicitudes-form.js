@@ -1092,7 +1092,19 @@
     $("#newApplicantRequestButton")?.addEventListener("click", () => { closeDialog(applicantRequestsDialog); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
     $("#openPublicRequestButton")?.addEventListener("click", () => { applicantSession = null; resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
     $("#openApplicantRegisterButton")?.addEventListener("click", () => { setMessage($("#applicantRegisterMessage"), ""); openDialog(applicantRegisterDialog); });
-    $("#applicantLoginRegisterButton")?.addEventListener("click", () => { closeDialog(applicantLoginDialog); setMessage($("#applicantRegisterMessage"), ""); openDialog(applicantRegisterDialog); });
+    $("#applicantLoginRegisterButton")?.addEventListener("click", () => {
+      const loginForm = $("#applicantLoginForm"), registerForm = $("#applicantRegisterForm");
+      if (!loginForm || !registerForm) return;
+      setMessage($("#applicantLoginMessage"), ""); setMessage($("#applicantRegisterMessage"), "");
+      loginForm.classList.add("cp6-login-swap-out");
+      window.setTimeout(() => { loginForm.hidden = true; loginForm.classList.remove("cp6-login-swap-out"); registerForm.hidden = false; registerForm.classList.add("cp6-login-swap-in"); registerForm.querySelector("input")?.focus(); }, 180);
+    });
+    $("#applicantRegisterBackButton")?.addEventListener("click", () => {
+      const loginForm = $("#applicantLoginForm"), registerForm = $("#applicantRegisterForm");
+      if (!loginForm || !registerForm) return;
+      registerForm.classList.add("cp6-login-swap-out");
+      window.setTimeout(() => { registerForm.hidden = true; registerForm.classList.remove("cp6-login-swap-out"); loginForm.hidden = false; loginForm.classList.add("cp6-login-swap-in"); loginForm.querySelector("input")?.focus(); }, 180);
+    });
     $("#openApplicantLoginButton")?.addEventListener("click", () => applicantSession ? showApplicantHome() : openDialog(applicantLoginDialog));
     ["closePublicRequestButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(requestDialog)));
     ["closeApplicantRegisterButton", "cancelApplicantRegisterButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(applicantRegisterDialog)));
