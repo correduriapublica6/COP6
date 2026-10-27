@@ -90,9 +90,14 @@
       connector.classList.toggle("bg-slate-200", number >= requestStep);
     });
     const previous = $("#btn-prev");
+    const previousLabel = $("#btn-prev-label");
     const next = $("#btn-next");
     const submit = $("#publicRequestSubmit");
-    if (previous) { previous.hidden = requestStep === 1; previous.classList.toggle("opacity-0", requestStep === 1); previous.classList.toggle("pointer-events-none", requestStep === 1); }
+    if (previous) {
+      previous.hidden = false;
+      previous.classList.remove("hidden", "opacity-0", "pointer-events-none");
+      if (previousLabel) previousLabel.textContent = requestStep === 1 ? "Regresar" : "Anterior";
+    }
     if (next) next.hidden = requestStep === 5;
     if (submit) submit.classList.toggle("hidden", requestStep !== 5);
     syncPrivacyConsentState();
@@ -1052,7 +1057,10 @@
     window.__controlSolicitudesBound = true;
     $("#publicRequestType")?.addEventListener("change", () => { renderDynamicFields(); fillNotaries(); });
     document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => tab?.addEventListener("click", () => showRequestStep(index + 1)));
-    $("#btn-prev")?.addEventListener("click", () => showRequestStep(requestStep - 1));
+    $("#btn-prev")?.addEventListener("click", () => {
+      if (requestStep === 1) { closeDialog(requestDialog); return; }
+      showRequestStep(requestStep - 1);
+    });
     $("#btn-next")?.addEventListener("click", () => { if (!requestStepValid(requestStep)) return; showRequestStep(requestStep + 1); });
     $("#requestPrivacyConsent")?.addEventListener("change", syncPrivacyConsentState);
     $("#publicRequestForm")?.addEventListener("click", (event) => {
