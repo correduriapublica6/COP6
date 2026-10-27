@@ -969,7 +969,10 @@
         const result = await api(`/service-requests${query}`);
         if (sequence !== requestsLoadSequence || window.ControlAvaluosDesktop?.getActiveUser?.() !== user) return requests;
         if (!Array.isArray(result)) throw new Error("Respuesta de solicitudes inválida.");
-        requests = result;
+        const normalizedUser = String(user || "").trim().toLocaleLowerCase("es-MX");
+        requests = role === "valuador" ? result.filter((item) => [item.asesor, item.valuadorAsignado, item.valuador, item.asesorValuador, item.usuario]
+          .map((value) => String(value || "").trim().toLocaleLowerCase("es-MX"))
+          .includes(normalizedUser)) : result;
         window.__controlSolicitudes = requests;
         window.dispatchEvent(new CustomEvent("control-avaluos:home-refresh"));
       } catch {
@@ -1025,7 +1028,9 @@
     const user = window.ControlAvaluosDesktop?.getActiveUser?.() || "";
     if (refresh) await loadRequests(role, user);
     if (user !== window.ControlAvaluosDesktop?.getActiveUser?.()) return;
-    let visible = requests;
+    let visible = role === "valuador" ? requests.filter((item) => [item.asesor, item.valuadorAsignado, item.valuador, item.asesorValuador, item.usuario]
+      .map((value) => String(value || "").trim().toLocaleLowerCase("es-MX"))
+      .includes(String(user || "").trim().toLocaleLowerCase("es-MX"))) : requests;
     const query = String($("#requestSearchInput")?.value || "").toLowerCase();
     const status = $("#requestStatusFilter")?.value || "";
     visible = visible.filter((item) => (!query || JSON.stringify(item).toLowerCase().includes(query)) && (!status || item.estado === status));

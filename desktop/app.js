@@ -217,7 +217,7 @@
         const latestAppraisals = Array.isArray(latestState.appraisals) ? latestState.appraisals : [];
         const latestTasks = Array.isArray(latestState.tasks) ? latestState.tasks : [];
         const latestChatMessages = Array.isArray(latestState.chatMessages) ? latestState.chatMessages : [];
-        const latestServiceRequests = Array.isArray(latestState.serviceRequests) ? latestState.serviceRequests : (Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : []);
+        const latestServiceRequests = scopeServiceRequestsForActiveUser(Array.isArray(latestState.serviceRequests) ? latestState.serviceRequests : (Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : []));
         const latestAuthorizedFolios = Array.isArray(latestState.authorizedAppraisalNumbers) ? latestState.authorizedAppraisalNumbers.map(normalizeNumber).sort() : [];
         const latestSignature = JSON.stringify({ records: latestRecords.map((record) => `${record.id}:${record.actualizadoEn || record.updatedAt || ""}`), appraisals: latestAppraisals.map((appraisal) => `${appraisal.id}:${appraisal.actualizadoEn || appraisal.updatedAt || ""}`), tasks: latestTasks.map((task) => `${task.id}:${task.completed}:${task.actualizadoEn || task.updatedAt || ""}`), chat: latestChatMessages.map((item) => `${item.id}:${item.creadoEn || ""}`), serviceRequests: latestServiceRequests.map((item) => `${item.id}:${item.numeroAvaluo || ""}:${item.estado || ""}:${item.actualizadoEn || item.updatedAt || ""}`), authorizedFolios: latestAuthorizedFolios });
         const currentSignature = JSON.stringify({ records: records.map((record) => `${record.id}:${record.actualizadoEn || record.updatedAt || ""}`), appraisals: technicalAppraisals.map((appraisal) => `${appraisal.id}:${appraisal.actualizadoEn || appraisal.updatedAt || ""}`), tasks: tasks.map((task) => `${task.id}:${task.completed}:${task.actualizadoEn || task.updatedAt || ""}`), chat: chatMessages.map((item) => `${item.id}:${item.creadoEn || ""}`), serviceRequests: (window.__controlSolicitudes || []).map((item) => `${item.id}:${item.numeroAvaluo || ""}:${item.estado || ""}:${item.actualizadoEn || item.updatedAt || ""}`), authorizedFolios: authorizedAppraisalNumbers.map(normalizeNumber).sort() });
@@ -270,7 +270,7 @@
         technicalAppraisals = Array.isArray(remoteState.appraisals) ? remoteState.appraisals : loadTechnicalAppraisals();
         tasks = Array.isArray(remoteState.tasks) ? remoteState.tasks : loadTasks();
         chatMessages = Array.isArray(remoteState.chatMessages) ? remoteState.chatMessages : loadChatMessages();
-        window.__controlSolicitudes = Array.isArray(remoteState.serviceRequests) ? remoteState.serviceRequests : (window.__controlSolicitudes || []);
+        window.__controlSolicitudes = scopeServiceRequestsForActiveUser(Array.isArray(remoteState.serviceRequests) ? remoteState.serviceRequests : (window.__controlSolicitudes || []));
         remoteUsers = Array.isArray(remoteState.users) ? remoteState.users : remoteUsers;
         notarias = Array.isArray(remoteState.notarias) ? remoteState.notarias : [];
         authorizedAppraisalNumbers = Array.isArray(remoteState.authorizedAppraisalNumbers) ? remoteState.authorizedAppraisalNumbers : [];
@@ -394,6 +394,18 @@
     const role = remoteMatch?.role || loadRoles()[canonicalUser];
     return VALID_ROLES.includes(role) ? role : "viewer";
   };
+  function assignedToActiveValuator(item) {
+    if (roleFor(activeSessionUser) !== "valuador") return true;
+    const active = normalizeUserName(activeSessionUser).toLocaleLowerCase("es-MX");
+    return [item?.asesor, item?.valuadorAsignado, item?.valuador, item?.asesorValuador, item?.usuario, item?.creadoPor, item?.creadoPorNombre]
+      .map((value) => normalizeUserName(value).toLocaleLowerCase("es-MX"))
+      .filter(Boolean)
+      .includes(active);
+  }
+  function scopeServiceRequestsForActiveUser(items) {
+    const list = Array.isArray(items) ? items : [];
+    return roleFor(activeSessionUser) === "valuador" ? list.filter(assignedToActiveValuator) : list;
+  }
   const roleLabel = (role) => ({ admin: "Administrador", editor: "Editor(a)", viewer: "Solo lectura", valuador: "Valuador", auditor: "Auditor" }[role] || "Solo lectura");
   const isAdmin = () => roleFor(activeSessionUser) === "admin";
   const canEdit = () => ["admin", "editor", "valuador", "auditor"].includes(roleFor(activeSessionUser));
@@ -602,10 +614,12 @@
     });
   }
   function renderAdminHome() {
-    const requests = Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : [];
+    const requests = scopeServiceRequestsForActiveUser(Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : []);
+    const visibleRecords = roleFor(activeSessionUser) === "valuador" ? records.filter(assignedToActiveValuator) : records;
+    const visibleTechnicalAppraisals = roleFor(activeSessionUser) === "valuador" ? technicalAppraisals.filter(assignedToActiveValuator) : technicalAppraisals;
     const completed = requests.filter((item) => String(item.estado || "").toLowerCase() === "concluida").length;
     const pending = requests.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
-    const totalAppraisals = records.length + technicalAppraisals.length;
+    const totalAppraisals = visibleRecords.length + visibleTechnicalAppraisals.length;
     const setText = (id, value) => { const element = document.getElementById(id); if (element) element.textContent = String(value); };
     setText("homeTotalRequests", requests.length); setText("homePendingRequests", pending); setText("homeCompletedRequests", completed); setText("homeTotalAppraisals", totalAppraisals);
     const badge = document.getElementById("homeServerBadge"); if (badge) { const online = document.body.dataset.serverStatus === "online"; badge.classList.toggle("is-offline", !online); badge.innerHTML = `<span></span>${online ? "Servidor conectado" : "Servidor sin conexión"}`; }
@@ -624,8 +638,8 @@
     if (activity) {
       const items = [
         ...requests.map((item) => ({ at: item.creadoEn || item.fecha, icon: "fa-envelope-open-text", tone: "blue", title: `Solicitud ${item.folio || item.id || "nueva"}`, detail: item.solicitante?.nombre || item.tipoBien || "Solicitud de servicio" })),
-        ...records.map((item) => ({ at: item.creadoEn || item.fechaAvaluo, icon: "fa-clipboard-check", tone: "green", title: `Avalúo ${item.numeroAvaluo || "sin número"}`, detail: item.solicitante || item.tipoBien || "Registro en Recepción" })),
-        ...technicalAppraisals.map((item) => ({ at: item.creadoEn || item.fechaAvaluo, icon: "fa-file-signature", tone: "violet", title: `Expediente ${item.numeroAvaluo || item.numero || "nuevo"}`, detail: item.solicitante || item.tipoBien || "Gestión de Avalúos" }))
+        ...visibleRecords.map((item) => ({ at: item.creadoEn || item.fechaAvaluo, icon: "fa-clipboard-check", tone: "green", title: `Avalúo ${item.numeroAvaluo || "sin número"}`, detail: item.solicitante || item.tipoBien || "Registro en Recepción" })),
+        ...visibleTechnicalAppraisals.map((item) => ({ at: item.creadoEn || item.fechaAvaluo, icon: "fa-file-signature", tone: "violet", title: `Expediente ${item.numeroAvaluo || item.numero || "nuevo"}`, detail: item.solicitante || item.tipoBien || "Gestión de Avalúos" }))
       ].filter((item) => item.at).sort((a, b) => new Date(b.at) - new Date(a.at)).slice(0, 5);
       activity.innerHTML = items.length ? items.map((item) => `<article class="cp6-activity-item"><span class="cp6-activity-icon ${item.tone}"><i class="fa-solid ${item.icon}"></i></span><div><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.detail)}</small></div><time>${relativeTime(item.at)}</time></article>`).join("") : `<p class="cp6-empty-state">Aún no hay actividad registrada.</p>`;
     }
