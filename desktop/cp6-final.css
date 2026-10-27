@@ -1230,3 +1230,26 @@ body.cp6-redesign .cp6-applicant-login-inline .cp6-remember { font-size: .82rem;
   body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-content { width: 100%; }
   body.cp6-redesign .cp6-applicant-login-inline { margin-top: 18px; }
 }
+
+/* CP6 LOGIN - Crear cuenta compacta: nombre/correo, telefono/contrasena y confirmacion/acciones */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline { display:grid !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important; column-gap:16px !important; row-gap:0 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-heading,
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-message { grid-column:1/-1 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field { min-width:0 !important; margin-bottom:10px !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field:nth-of-type(1) { grid-column:1 !important; grid-row:2 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field:nth-of-type(2) { grid-column:2 !important; grid-row:2 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field:nth-of-type(3) { grid-column:1 !important; grid-row:3 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field:nth-of-type(4) { grid-column:2 !important; grid-row:3 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field:nth-of-type(5) { grid-column:1 !important; grid-row:4 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-message { grid-row:5 !important; min-height:16px; margin:0 0 4px !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions { grid-column:2 !important; grid-row:4 !important; display:flex !important; align-items:flex-end !important; gap:8px !important; min-width:0 !important; padding-top:18px !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions .cp6-login-submit,
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions .cp6-login-back { width:50% !important; min-height:44px !important; margin:0 !important; border-radius:12px !important; font-size:.78rem !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions .cp6-login-back { display:inline-flex !important; align-items:center !important; justify-content:center !important; border:1px solid #cbd5e1 !important; background:#f8fafc !important; color:#315c98 !important; }
+@media (max-width:620px) {
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline { grid-template-columns:1fr !important; column-gap:0 !important; }
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field,
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-message,
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions { grid-column:1 !important; grid-row:auto !important; }
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions { padding-top:0 !important; }
+}
