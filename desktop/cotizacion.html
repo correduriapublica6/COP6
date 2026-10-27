@@ -52,14 +52,7 @@
     <div class="cp6-shell max-w-7xl mx-auto space-y-6">
         
         <!-- HEADER PRINCIPAL CON NAVEGACIÓN -->
-        <header class="cp6-topbar bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div>
-                <h1 class="text-2xl font-black text-slate-900 flex items-center gap-2.5">
-                    <i class="fa-solid fa-calculator text-blue-600"></i> Cotizaciones
-                </h1>
-                <p class="text-xs text-slate-500 mt-0.5">Gestión de registros y cálculo de ISR Estimado y Avalúos</p>
-            </div>
-            
+        <header class="cp6-topbar bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4" aria-label="Navegación de cotizaciones">
             <div class="flex items-center gap-2.5 w-full sm:w-auto">
                 <button id="btnNavTable" onclick="showView('table')" class="flex-1 sm:flex-none bg-slate-900 hover:bg-slate-800 text-white font-semibold px-4 py-2.5 rounded-xl shadow-sm transition flex items-center justify-center gap-2 text-xs">
                     <i class="fa-solid fa-list-check"></i> Registros
@@ -228,22 +221,6 @@
             <!-- PANEL VISTA PREVIA (RECIBO DERECHA) -->
             <div id="previewContainer" class="cp6-preview-panel lg:col-span-7 flex flex-col justify-start items-center space-y-4">
                 
-                <!-- Acciones de Exportación -->
-                <div id="actionsBar" class="cp6-actions-bar w-full flex flex-wrap justify-end gap-2.5 no-print">
-                    <button onclick="sendWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
-                        <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
-                    </button>
-                    <button onclick="printPDF()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
-                        <i class="fa-solid fa-file-pdf"></i> Imprimir / PDF
-                    </button>
-                    <button onclick="downloadImage()" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
-                        <i class="fa-solid fa-download"></i> Descargar PNG
-                    </button>
-                    <button onclick="shareImage()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
-                        <i class="fa-solid fa-share-nodes"></i> Compartir
-                    </button>
-                </div>
-
                 <!-- TARJETA DE VISTA PREVIA -->
                 <div class="cp6-quote-card w-full max-w-lg bg-white rounded-3xl card-shadow border border-slate-200/90 overflow-hidden" id="cotizacionCard">
                     <div class="h-3 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700"></div>
@@ -272,7 +249,7 @@
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
                                     <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Solicitante / Cliente</span>
-                                    <span class="text-xs font-bold text-slate-800 block truncate" id="outSolicitante">---</span>
+                                    <span class="text-xs font-bold text-slate-800 block whitespace-normal break-words" id="outSolicitante">---</span>
                                 </div>
                                 <div>
                                     <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Valor de Operación</span>
@@ -281,7 +258,7 @@
                             </div>
                             <div class="border-t border-slate-200/60 pt-2">
                                 <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Dirección de Inmueble</span>
-                                <span class="text-xs font-medium text-slate-700 block truncate" id="outDireccion">---</span>
+                                <span class="text-xs font-medium text-slate-700 block whitespace-normal break-words" id="outDireccion">---</span>
                             </div>
                         </div>
 
@@ -331,6 +308,22 @@
                     </div>
                 </div>
 
+                <!-- Acciones de Exportación: debajo de la imagen/tarjeta generada -->
+                <div id="actionsBar" class="cp6-actions-bar w-full flex flex-wrap justify-end gap-2.5 no-print">
+                    <button onclick="sendWhatsApp()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
+                        <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
+                    </button>
+                    <button onclick="printPDF()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
+                        <i class="fa-solid fa-file-pdf"></i> Imprimir / PDF
+                    </button>
+                    <button onclick="downloadImage()" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
+                        <i class="fa-solid fa-download"></i> Descargar PNG
+                    </button>
+                    <button onclick="shareImage()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-2 text-xs">
+                        <i class="fa-solid fa-share-nodes"></i> Compartir
+                    </button>
+                </div>
+
             </div>
         </section>
     </div>
@@ -338,7 +331,17 @@
     <!-- Script Lógico -->
     <script>
         let currentRecordId = null;
+        let quotationRecords = [];
+        let quotationsLoaded = false;
         const STORAGE_KEY = 'cotizaciones_avaluo_db';
+        const API_BASE_URL = 'https://api.cp6coahuila.com/api';
+        const currentUser = new URLSearchParams(window.location.search).get('usuario') || '';
+        const apiHeaders = () => ({ 'Content-Type': 'application/json', ...(currentUser ? { 'X-User-Name': encodeURIComponent(currentUser) } : {}) });
+        async function quotationApi(endpoint, options = {}) {
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, { cache: 'no-store', ...options, headers: { ...apiHeaders(), ...(options.headers || {}) } });
+            if (!response.ok) throw new Error((await response.json().catch(() => ({}))).error || 'No se pudo conectar con el servidor de Cotizaciones.');
+            return response.status === 204 ? null : response.json();
+        }
 
         function returnToAvaluos() {
             try {
@@ -355,15 +358,40 @@
 
         // Inicialización
         document.getElementById('inFecha').valueAsDate = new Date();
+        loadQuotationRecords();
         renderTable();
 
         function getRecords() {
-            const data = localStorage.getItem(STORAGE_KEY);
-            return data ? JSON.parse(data) : [];
+            if (quotationsLoaded) return quotationRecords;
+            try { const data = localStorage.getItem(STORAGE_KEY); return data ? JSON.parse(data) : []; } catch { return []; }
         }
 
         function saveRecordsToStorage(records) {
+            quotationRecords = Array.isArray(records) ? records : [];
             localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+        }
+
+        async function loadQuotationRecords() {
+            try {
+                const records = await quotationApi('/quotations');
+                quotationRecords = Array.isArray(records) ? records : [];
+                quotationsLoaded = true;
+                if (!quotationRecords.length) {
+                    let localRecords = [];
+                    try { localRecords = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch {}
+                    if (Array.isArray(localRecords) && localRecords.length) {
+                        const migrated = [];
+                        for (const record of localRecords) {
+                            try { migrated.push(await quotationApi('/quotations', { method: 'POST', body: JSON.stringify({ ...record, ownerName: currentUser }) })); } catch {}
+                        }
+                        if (migrated.length) quotationRecords = migrated;
+                    }
+                }
+                renderTable();
+            } catch (error) {
+                quotationsLoaded = false;
+                console.warn(error.message);
+            }
         }
 
         function showView(view) {
@@ -448,7 +476,7 @@
             document.getElementById('outAhorro').innerText = formatCurrency(ahorro > 0 ? ahorro : 0);
         }
 
-        function saveRecord() {
+        async function saveRecord() {
             const records = getRecords();
 
             const recordData = {
@@ -471,8 +499,17 @@
                 records.unshift(recordData);
             }
 
-            saveRecordsToStorage(records);
-            alert('Cotización guardada exitosamente.');
+            try {
+                const saved = await quotationApi(currentRecordId ? `/quotations/${encodeURIComponent(currentRecordId)}` : '/quotations', { method: currentRecordId ? 'PUT' : 'POST', body: JSON.stringify(recordData) });
+                const idx = records.findIndex(r => r.id === saved.id);
+                if (idx !== -1) records[idx] = saved; else records.unshift(saved);
+                quotationsLoaded = true;
+                saveRecordsToStorage(records);
+                alert('Cotización guardada en el servidor.');
+            } catch (error) {
+                saveRecordsToStorage(records);
+                alert(`Cotización guardada localmente. ${error.message}`);
+            }
             renderTable();
             showView('table');
         }
@@ -503,9 +540,15 @@
             editRecord(id);
         }
 
-        function deleteRecord(id) {
+        async function deleteRecord(id) {
             if (!confirm('¿Desea eliminar este registro de cotización?')) return;
             let records = getRecords();
+            try {
+                await quotationApi(`/quotations/${encodeURIComponent(id)}`, { method: 'DELETE' });
+            } catch (error) {
+                alert(`No se pudo eliminar del servidor. ${error.message}`);
+                return;
+            }
             records = records.filter(r => r.id !== id);
             saveRecordsToStorage(records);
             renderTable();
@@ -605,9 +648,41 @@
             window.print();
         }
 
-        function downloadImage() {
+        async function captureQuoteCard() {
             const card = document.getElementById('cotizacionCard');
-            html2canvas(card, { scale: 2, useCORS: true }).then(canvas => {
+            if (document.fonts?.ready) await document.fonts.ready;
+
+            const width = Math.ceil(card.scrollWidth);
+            const height = Math.ceil(card.scrollHeight);
+            return html2canvas(card, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                width,
+                height,
+                windowWidth: window.innerWidth,
+                windowHeight: window.innerHeight,
+                scrollX: 0,
+                scrollY: 0,
+                logging: false,
+                onclone: clonedDocument => {
+                    // Asegura que una captura no herede truncamiento de texto del documento original.
+                    ['outSolicitante', 'outDireccion'].forEach(id => {
+                        const element = clonedDocument.getElementById(id);
+                        if (!element) return;
+                        element.classList.remove('truncate');
+                        element.style.display = 'block';
+                        element.style.overflow = 'visible';
+                        element.style.whiteSpace = 'normal';
+                        element.style.textOverflow = 'clip';
+                        element.style.overflowWrap = 'anywhere';
+                    });
+                }
+            });
+        }
+
+        function downloadImage() {
+            captureQuoteCard().then(canvas => {
                 const link = document.createElement('a');
                 link.download = `Cotizacion_${document.getElementById('inFolio').value || 'Avaluo'}.png`;
                 link.href = canvas.toDataURL('image/png');
@@ -616,9 +691,9 @@
         }
 
         function shareImage() {
-            const card = document.getElementById('cotizacionCard');
-            html2canvas(card, { scale: 2, useCORS: true }).then(canvas => {
+            captureQuoteCard().then(canvas => {
                 canvas.toBlob(blob => {
+                    if (!blob) return;
                     const file = new File([blob], 'Cotizacion.png', { type: 'image/png' });
                     if (navigator.canShare && navigator.canShare({ files: [file] })) {
                         navigator.share({

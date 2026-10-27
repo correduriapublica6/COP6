@@ -1673,7 +1673,9 @@
   $$('[data-cotizaciones-open]').forEach((button) => button?.addEventListener("click", () => {
     if (!cotizacionesPanel || !cotizacionesFrame) return;
     cotizacionesPanel.hidden = false;
-    cotizacionesFrame.src = new URL("cotizacion.html", document.querySelector('script[src*="app.js"]')?.src || location.href).href;
+    const quotationUrl = new URL("cotizacion.html", document.querySelector('script[src*="app.js"]')?.src || location.href);
+    if (activeSessionUser) quotationUrl.searchParams.set("usuario", activeSessionUser);
+    cotizacionesFrame.src = quotationUrl.href;
     document.querySelector(".avaluos-choice-grid")?.classList.add("is-hidden");
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     document.querySelector("#appShell main")?.scrollTo?.({ top: 0, left: 0, behavior: "auto" });
