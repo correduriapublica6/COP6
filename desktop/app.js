@@ -879,6 +879,19 @@
     refreshNotifications();
     checkAppVersion();
   }
+  function resetAuthUiBeforeLogout() {
+    sessionStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem("control-avaluos.applicant");
+    // Evita que el formulario inline de Crear cuenta quede visible al cambiar
+    // de usuario. La recarga también elimina cualquier valor no persistido del DOM.
+    ["#applicantRegisterForm", "#applicantLoginForm"].forEach((selector) => {
+      document.querySelector(selector)?.reset();
+    });
+    document.querySelectorAll("#applicantRegisterForm input, #applicantLoginForm input").forEach((field) => { field.value = ""; });
+    document.querySelector("#applicantRegisterForm")?.setAttribute("hidden", "true");
+    document.querySelector("#applicantLoginForm")?.removeAttribute("hidden");
+    window.location.reload();
+  }
   function showLogin() {
     if (adminAccessDialog?.open) adminAccessDialog.close();
     activeSessionUser = "";
@@ -1578,8 +1591,8 @@
   };
   profileButton?.addEventListener("click", (event) => { event.stopPropagation(); openAdminProfile(); });
   $("#profileMetricsFilter")?.addEventListener("change", renderProfileDashboard);
-  $("#logoutHeaderButton")?.addEventListener("click", () => { sessionStorage.removeItem(SESSION_KEY); showLogin(); });
-  profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button?.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); sessionStorage.removeItem(SESSION_KEY); showLogin(); } }));
+  $("#logoutHeaderButton")?.addEventListener("click", resetAuthUiBeforeLogout);
+  profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button?.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); resetAuthUiBeforeLogout(); } }));
   document.addEventListener("click", (event) => { if (profileMenu && !event.target.closest(".profile-menu-wrap")) closeProfileMenu(); });
   $("#profilePageBackButton")?.addEventListener("click", () => switchAppView("inicio"));
   $("#newRecordButton")?.addEventListener("click", () => openDialog());
