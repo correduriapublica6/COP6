@@ -1285,3 +1285,33 @@ body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-
   top: auto !important;
   transform-origin: bottom !important;
 }
+
+/* CP6 RECEPCIÓN · Cantidad y fecha de pago en una sola línea */
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails:not(.is-hidden) {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: end;
+  column-gap: 14px;
+  row-gap: 14px;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(1),
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(2) {
+  grid-column: auto;
+  min-width: 0;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(3),
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(4) {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+@media (max-width: 700px) {
+  body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails:not(.is-hidden) {
+    grid-template-columns: 1fr;
+  }
+  body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(1),
+  body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(2),
+  body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(3),
+  body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(4) {
+    grid-column: 1;
+  }
+}
