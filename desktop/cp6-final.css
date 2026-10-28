@@ -1253,3 +1253,35 @@ body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-ac
   body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions { grid-column:1 !important; grid-row:auto !important; }
   body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions { padding-top:0 !important; }
 }
+
+/* CP6 RECEPCIÓN · Menús de pago completos y visibles sobre las tarjetas */
+body.cp6-redesign #appShell.control-shell #recordEditor,
+body.cp6-redesign #appShell.control-shell #recordEditor > .max-w-7xl,
+body.cp6-redesign #appShell.control-shell #recordEditor > .max-w-7xl > form,
+body.cp6-redesign #appShell.control-shell #recordEditor .overflow-hidden,
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails {
+  overflow: visible !important;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor,
+body.cp6-redesign #appShell.control-shell #recordEditor > .max-w-7xl {
+  position: relative;
+  z-index: 20;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails {
+  position: relative;
+  z-index: 40;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select {
+  position: relative;
+  z-index: 50;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select-menu {
+  max-height: 320px !important;
+  overflow-y: auto !important;
+  z-index: 9999 !important;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select:has(#paymentDeliveredToInput) .custom-select-menu {
+  bottom: calc(100% + 7px) !important;
+  top: auto !important;
+  transform-origin: bottom !important;
+}
