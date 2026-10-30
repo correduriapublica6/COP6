@@ -1332,3 +1332,34 @@ body.cp6-redesign .v2-ring-section.is-excellent .v2-ring {
 }
 body.cp6-redesign .v2-ring-section.is-excellent > div:last-child > strong,
 body.cp6-redesign .v2-ring-section.is-excellent p { color: #15803d; }
+
+/* CP6 HOME · Popup compacto de detalles rápidos */
+#homeQuickRequestDialog { border: 0; border-radius: 22px; padding: 0; width: min(560px, calc(100vw - 28px)); max-width: calc(100vw - 28px); background: transparent; color: #0f172a; overflow: visible; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
+#homeQuickRequestDialog::backdrop { background: rgba(15, 23, 42, .48); backdrop-filter: blur(3px); }
+.cp6-home-quick-card { position: relative; overflow: hidden; border: 1px solid #dbeafe; border-radius: 22px; background: #fff; box-shadow: 0 24px 70px rgba(15, 23, 42, .28); }
+.cp6-home-quick-accent { height: 7px; background: linear-gradient(90deg, #2563eb, #4f46e5, #1d4ed8); }
+.cp6-home-quick-card header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 20px 22px 14px; border-bottom: 1px solid #eef2f7; }
+.cp6-home-quick-kicker { display: block; margin-bottom: 4px; color: #2563eb; font-size: 10px; font-weight: 800; letter-spacing: .13em; }
+.cp6-home-quick-card h2 { margin: 0; color: #0f172a; font-size: 1.35rem; font-weight: 800; letter-spacing: -.025em; }
+.cp6-home-quick-close { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 34px; border: 0; border-radius: 50%; background: #f1f5f9; color: #64748b; cursor: pointer; transition: .18s ease; }
+.cp6-home-quick-close:hover { background: #dbeafe; color: #1d4ed8; transform: rotate(4deg); }
+.cp6-home-quick-status { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 22px; background: #f8fafc; }
+.cp6-home-quick-date { color: #64748b; font-size: 11px; font-weight: 600; }
+.cp6-home-quick-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 18px 22px 8px; }
+.cp6-home-quick-grid > div { min-width: 0; padding: 12px 13px; border: 1px solid #e2e8f0; border-radius: 14px; background: #fff; }
+.cp6-home-quick-grid small { display: block; margin-bottom: 5px; color: #94a3b8; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.cp6-home-quick-grid strong { display: flex; align-items: center; min-width: 0; gap: 7px; color: #1e293b; font-size: 12px; font-weight: 700; overflow-wrap: anywhere; }
+.cp6-home-quick-grid strong i { width: 15px; flex: 0 0 15px; color: #2563eb; text-align: center; }
+.cp6-home-quick-card footer { display: flex; justify-content: flex-end; gap: 9px; padding: 14px 22px 20px; }
+.cp6-home-quick-card footer button { border-radius: 11px; cursor: pointer; font-family: inherit; font-size: 11px; font-weight: 800; padding: 10px 14px; transition: .18s ease; }
+.cp6-home-quick-secondary { border: 1px solid #cbd5e1; background: #fff; color: #475569; }
+.cp6-home-quick-secondary:hover { background: #f8fafc; }
+.cp6-home-quick-primary { border: 1px solid #2563eb; background: #2563eb; color: #fff; box-shadow: 0 5px 12px rgba(37, 99, 235, .18); }
+.cp6-home-quick-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+@media (max-width: 560px) {
+  #homeQuickRequestDialog { width: calc(100vw - 18px); max-width: calc(100vw - 18px); }
+  .cp6-home-quick-card header, .cp6-home-quick-status, .cp6-home-quick-grid, .cp6-home-quick-card footer { padding-left: 15px; padding-right: 15px; }
+  .cp6-home-quick-grid { grid-template-columns: 1fr; }
+  .cp6-home-quick-card footer { flex-direction: column-reverse; }
+  .cp6-home-quick-card footer button { width: 100%; }
+}
