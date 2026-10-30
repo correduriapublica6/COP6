@@ -1315,3 +1315,20 @@ body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nt
     grid-column: 1;
   }
 }
+
+/* CP6 HOME · Estado visual del seguimiento de solicitudes */
+body.cp6-redesign .v2-ring-section.is-attention .v2-ring {
+  background: conic-gradient(#dc2626 0 var(--ratio), #fee2e2 var(--ratio) 100%);
+}
+body.cp6-redesign .v2-ring-section.is-attention > div:last-child > strong,
+body.cp6-redesign .v2-ring-section.is-attention p { color: #b91c1c; }
+body.cp6-redesign .v2-ring-section.is-stable .v2-ring {
+  background: conic-gradient(#eab308 0 var(--ratio), #fef3c7 var(--ratio) 100%);
+}
+body.cp6-redesign .v2-ring-section.is-stable > div:last-child > strong,
+body.cp6-redesign .v2-ring-section.is-stable p { color: #a16207; }
+body.cp6-redesign .v2-ring-section.is-excellent .v2-ring {
+  background: conic-gradient(#16a34a 0 var(--ratio), #dcfce7 var(--ratio) 100%);
+}
+body.cp6-redesign .v2-ring-section.is-excellent > div:last-child > strong,
+body.cp6-redesign .v2-ring-section.is-excellent p { color: #15803d; }

@@ -18,8 +18,27 @@
     const total = Number($('#homeTotalRequests')?.textContent || 0);
     const done = Number($('#homeCompletedRequests')?.textContent || 0);
     const ratio = total ? Math.round(done / total * 100) : 0;
+    const state = ratio < 50 ? {
+      key: 'attention',
+      title: 'Atención Requerida',
+      description: 'Alta acumulación en proceso'
+    } : ratio < 80 ? {
+      key: 'stable',
+      title: 'Estable',
+      description: 'Flujo de trabajo regular dentro de los parámetros aceptables.'
+    } : {
+      key: 'excellent',
+      title: 'Cumplimiento excelente',
+      description: ''
+    };
     set('v2CompletionRatio', `${ratio}%`);
-    $('#v2CompletionRing')?.style.setProperty('--ratio', `${ratio}%`);
+    set('v2CompletionStateTitle', state.title);
+    set('v2CompletionStateDescription', state.description);
+    const ring = $('#v2CompletionRing');
+    const stateSection = ring?.closest('.v2-ring-section');
+    ring?.style.setProperty('--ratio', `${ratio}%`);
+    stateSection?.classList.remove('is-attention', 'is-stable', 'is-excellent');
+    stateSection?.classList.add(`is-${state.key}`);
   }
   document.querySelectorAll('[data-v2-route]').forEach(button => button.addEventListener('click', () => {
     const route = button.dataset.v2Route;
