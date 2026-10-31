@@ -1458,7 +1458,7 @@
     try { notarias = await apiRequest("/notarias"); authorizedAppraisalNumbers = await apiRequest("/authorized-folios"); window.__controlNotarias = notarias; window.__controlAuthorizedFolios = authorizedAppraisalNumbers; renderNotarySettings(); renderAuthorizedFolios(); renderPendingReceptionSummary(); window.dispatchEvent(new CustomEvent("control-avaluos:notarias-updated", { detail: notarias })); } catch (error) { const message = $("#notaryMessage"); if (message) message.textContent = error.message; }
   }
   function closeCustomSelects(except) {
-    $$(".custom-select.is-open").forEach((wrapper) => { if (wrapper !== except) wrapper.classList.remove("is-open"); });
+    $$(".custom-select.is-open").forEach((wrapper) => { if (wrapper !== except) { wrapper.classList.remove("is-open"); wrapper.querySelector(".custom-select-menu")?.style.setProperty("display", "none", "important"); } });
   }
   function enhanceSelect(select) {
     if (!select || select.dataset.customEnhanced === "true") return;
@@ -1491,6 +1491,7 @@
       const open = !wrapper.classList.contains("is-open");
       closeCustomSelects(wrapper);
       wrapper.classList.toggle("is-open", open);
+      menu.style.setProperty("display", open ? "grid" : "none", "important");
       if (select.id === "methodInput") {
         menu.style.setProperty("top", "auto", "important");
         menu.style.setProperty("bottom", "calc(100% + 7px)", "important");
