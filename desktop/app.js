@@ -1079,9 +1079,11 @@
       }
       field.value = savedValue;
     });
+    normalizePaymentMethodOptions();
     paidInput.checked = Boolean(record.pagado);
     amountInput.value = record.pagado ? formatCurrency(record.montoPagado || 0) : "";
-    methodInput.value = record.pagado ? record.metodoPago || "" : "";
+    methodInput.value = record.pagado && ["Efectivo", "Transferencia", "Tarjeta"].includes(String(record.metodoPago || "")) ? record.metodoPago : "";
+    methodInput.dispatchEvent(new Event("change", { bubbles: true }));
     paymentDeliveredToInput.value = record.pagado ? record.pagoEntregadoA || "" : "";
     paymentDateInput.value = record.pagado ? record.fechaPago || today() : "";
     avaluoDateInput.value = record.fechaAvaluo || today();
