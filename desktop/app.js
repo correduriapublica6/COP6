@@ -1495,9 +1495,10 @@
   function normalizePaymentMethodOptions() {
     const select = $("#methodInput");
     if (!select) return;
-    const hasCash = [...select.options].some((option) => String(option.value || option.textContent || "").trim().toLocaleLowerCase("es-MX") === "efectivo");
-    if (!hasCash) select.add(new Option("Efectivo", "Efectivo"), select.options[1] || null);
-    [...select.options].filter((option) => String(option.value || option.textContent || "").trim().toLocaleLowerCase("es-MX") === "cheque").forEach((option) => option.remove());
+    const currentValue = String(select.value || "").trim();
+    const officialMethods = ["Efectivo", "Transferencia", "Tarjeta"];
+    select.replaceChildren(new Option("Selecciona una opción", ""), ...officialMethods.map((method) => new Option(method, method)));
+    select.value = officialMethods.includes(currentValue) ? currentValue : "";
   }
   document.addEventListener("pointerdown", (event) => { if (!event.target.closest(".custom-select")) closeCustomSelects(); });
   const selectObserver = new MutationObserver(enhanceAllSelects);
