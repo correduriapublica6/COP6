@@ -1487,7 +1487,17 @@
         syncOptions();
       }));
     }
-    trigger?.addEventListener("click", () => { const open = !wrapper.classList.contains("is-open"); closeCustomSelects(wrapper); wrapper.classList.toggle("is-open", open); syncOptions(); });
+    trigger?.addEventListener("click", () => {
+      const open = !wrapper.classList.contains("is-open");
+      closeCustomSelects(wrapper);
+      wrapper.classList.toggle("is-open", open);
+      if (select.id === "methodInput") {
+        menu.style.setProperty("top", "auto", "important");
+        menu.style.setProperty("bottom", "calc(100% + 7px)", "important");
+        menu.style.setProperty("transform-origin", "bottom", "important");
+      }
+      syncOptions();
+    });
     select?.addEventListener("change", syncOptions);
     const optionObserver = new MutationObserver(syncOptions);
     optionObserver.observe(select, { childList: true, subtree: true, attributes: true, attributeFilter: ["selected"] });

@@ -1286,6 +1286,20 @@ body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-
   transform-origin: bottom !important;
 }
 
+/* CP6 RECEPCIÓN · Método de pago siempre abre hacia arriba. */
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select:has(#methodInput),
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select.custom-select-opens-up {
+  position: relative !important;
+  z-index: 9999 !important;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select:has(#methodInput) > .custom-select-menu,
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select.custom-select-opens-up > .custom-select-menu {
+  bottom: calc(100% + 7px) !important;
+  top: auto !important;
+  transform-origin: bottom !important;
+  z-index: 10000 !important;
+}
+
 /* CP6 RECEPCIÓN · Cantidad y fecha de pago en una sola línea */
 body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails:not(.is-hidden) {
   display: grid !important;
