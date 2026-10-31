@@ -1458,7 +1458,7 @@
     try { notarias = await apiRequest("/notarias"); authorizedAppraisalNumbers = await apiRequest("/authorized-folios"); window.__controlNotarias = notarias; window.__controlAuthorizedFolios = authorizedAppraisalNumbers; renderNotarySettings(); renderAuthorizedFolios(); renderPendingReceptionSummary(); window.dispatchEvent(new CustomEvent("control-avaluos:notarias-updated", { detail: notarias })); } catch (error) { const message = $("#notaryMessage"); if (message) message.textContent = error.message; }
   }
   function closeCustomSelects(except) {
-    $$(".custom-select.is-open").forEach((wrapper) => { if (wrapper !== except) { wrapper.classList.remove("is-open"); wrapper.querySelector(".custom-select-menu")?.style.setProperty("display", "none", "important"); } });
+    $$(".custom-select.is-open").forEach((wrapper) => { if (wrapper !== except) { wrapper.classList.remove("is-open"); wrapper.querySelector(".custom-select-menu")?.style.setProperty("display", "none", "important"); wrapper.__restoreCustomMenu?.(); } });
   }
   function enhanceSelect(select) {
     if (!select || select.dataset.customEnhanced === "true") return;
@@ -1484,6 +1484,7 @@
         select.selectedIndex = Number(optionButton.dataset.optionIndex);
         select.dispatchEvent(new Event("change", { bubbles: true }));
         wrapper.classList.remove("is-open");
+        wrapper.__restoreCustomMenu?.();
         syncOptions();
       }));
     }
@@ -1492,9 +1493,39 @@
       closeCustomSelects(wrapper);
       wrapper.classList.toggle("is-open", open);
       menu.style.setProperty("display", open ? "grid" : "none", "important");
+      const floatingMenu = select.id === "methodInput" || select.id === "paymentDeliveredToInput";
+      if (!open && floatingMenu) wrapper.__restoreCustomMenu?.();
+      if (open && floatingMenu) {
+        const rect = trigger.getBoundingClientRect();
+        wrapper.__restoreCustomMenu = () => {
+          if (menu.parentNode !== wrapper) wrapper.appendChild(menu);
+          menu.classList.remove("custom-select-menu-floating");
+          menu.style.removeProperty("position");
+          menu.style.removeProperty("left");
+          menu.style.removeProperty("top");
+          menu.style.removeProperty("bottom");
+          menu.style.removeProperty("width");
+          menu.style.removeProperty("max-height");
+          menu.style.removeProperty("opacity");
+          menu.style.removeProperty("pointer-events");
+          menu.style.removeProperty("z-index");
+          menu.style.removeProperty("display");
+        };
+        document.body.appendChild(menu);
+        menu.classList.add("custom-select-menu-floating");
+        menu.style.setProperty("position", "fixed", "important");
+        menu.style.setProperty("left", `${Math.round(rect.left)}px`, "important");
+        menu.style.setProperty("width", `${Math.round(rect.width)}px`, "important");
+        menu.style.setProperty("bottom", `${Math.max(8, Math.round(window.innerHeight - rect.top + 7))}px`, "important");
+        menu.style.setProperty("top", "auto", "important");
+        menu.style.setProperty("max-height", `${Math.min(320, Math.max(150, Math.round(rect.top - 16)))}px`, "important");
+        menu.style.setProperty("opacity", "1", "important");
+        menu.style.setProperty("pointer-events", "auto", "important");
+        menu.style.setProperty("z-index", "30000", "important");
+      }
       if (select.id === "methodInput") {
         menu.style.setProperty("top", "auto", "important");
-        menu.style.setProperty("bottom", "calc(100% + 7px)", "important");
+        if (!floatingMenu) menu.style.setProperty("bottom", "calc(100% + 7px)", "important");
         menu.style.setProperty("transform-origin", "bottom", "important");
       }
       syncOptions();
