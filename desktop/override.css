@@ -1493,6 +1493,20 @@ body[data-server-status="online"] .sidebar-status-dot { box-shadow: 0 0 12px rgb
   border-radius: 50%;
   animation: client-loading-spin 0.75s linear infinite;
 }
+
+/* Recepción: el menú de Método de pago se despliega hacia arriba. */
+#appShell.control-shell #recordEditor #paymentDetails .custom-select.custom-select-opens-up {
+  position: relative !important;
+  z-index: 120 !important;
+}
+#appShell.control-shell #recordEditor #paymentDetails .custom-select.custom-select-opens-up .custom-select-menu {
+  bottom: calc(100% + 6px) !important;
+  top: auto !important;
+  transform-origin: bottom !important;
+}
+#appShell.control-shell #recordEditor #paymentDetails .custom-select.custom-select-opens-up.is-open .custom-select-menu {
+  transform: scaleY(1) !important;
+}
 @keyframes client-loading-spin { to { transform: rotate(360deg); } }
 .admin-final-upload-section { border-color: rgba(197, 160, 89, 0.55) !important; }
 

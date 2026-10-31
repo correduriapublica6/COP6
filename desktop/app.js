@@ -1464,7 +1464,7 @@
     if (!select || select.dataset.customEnhanced === "true") return;
     select.dataset.customEnhanced = "true";
     const wrapper = document.createElement("div");
-    wrapper.className = "custom-select";
+    wrapper.className = `custom-select${select.id === "methodInput" ? " custom-select-opens-up" : ""}`;
     select.parentNode.insertBefore(wrapper, select);
     wrapper.appendChild(select);
     select.classList.add("custom-select-native");
