@@ -1492,9 +1492,17 @@
     syncOptions();
   }
   function enhanceAllSelects() { $("body").querySelectorAll("select:not([data-custom-enhanced='true'])").forEach(enhanceSelect); }
+  function normalizePaymentMethodOptions() {
+    const select = $("#methodInput");
+    if (!select) return;
+    const hasCash = [...select.options].some((option) => String(option.value || option.textContent || "").trim().toLocaleLowerCase("es-MX") === "efectivo");
+    if (!hasCash) select.add(new Option("Efectivo", "Efectivo"), select.options[1] || null);
+    [...select.options].filter((option) => String(option.value || option.textContent || "").trim().toLocaleLowerCase("es-MX") === "cheque").forEach((option) => option.remove());
+  }
   document.addEventListener("pointerdown", (event) => { if (!event.target.closest(".custom-select")) closeCustomSelects(); });
   const selectObserver = new MutationObserver(enhanceAllSelects);
   selectObserver.observe(document.body, { childList: true, subtree: true });
+  normalizePaymentMethodOptions();
   enhanceAllSelects();
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker?.addEventListener("controllerchange", () => {
