@@ -1211,26 +1211,26 @@
     <title>Comprobante de Pago - Correduría Pública No. 6</title>
     <style>
         @page { size: letter; margin: 20mm; }
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333; line-height: 1.5; margin: 0; padding: 0; font-size: 14px; }
-        .container { width: 100%; max-width: 700px; margin: 0 auto; position: relative; min-height: 90vh; }
-        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
-        .header-left { font-family: Georgia, serif; font-style: italic; font-size: 20px; font-weight: bold; color: #111; }
-        .header-right { font-family: Georgia, serif; font-style: italic; font-size: 13px; color: #555; text-align: right; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #2c3e50; line-height: 1.6; margin: 0; padding: 0; font-size: 13.5px; }
+        .container { width: 100%; max-width: 700px; margin: 0 auto; position: relative; min-height: 88vh; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
+        .header-left { font-family: Georgia, serif; font-style: italic; font-size: 21px; font-weight: bold; color: #1a1a1a; }
+        .header-right { font-family: Georgia, serif; font-style: italic; font-size: 13px; color: #555; text-align: right; line-height: 1.4; }
         .title-container { text-align: center; margin-bottom: 35px; }
-        .title-container h1 { font-size: 16px; text-transform: uppercase; letter-spacing: 1px; margin: 0; display: inline-block; border-bottom: 1px solid #333; padding-bottom: 3px; font-weight: 600; }
-        .metadata-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; margin-bottom: 70px; }
-        .meta-item .label { font-size: 11px; color: #666; text-transform: uppercase; margin-bottom: 3px; }
-        .meta-item .value { font-size: 13px; font-weight: bold; }
-        .meta-item .value.folio { color: #800020; }
-        .body-section { margin-bottom: 40px; }
-        .row { margin-bottom: 18px; display: flex; border-bottom: 1px dotted #ccc; padding-bottom: 6px; }
-        .row .field-label { font-weight: bold; width: 140px; color: #444; flex: 0 0 140px; }
-        .row .field-value { flex-grow: 1; }
-        .signature-section { margin-top: 80px; text-align: center; }
-        .location-date { font-size: 13px; margin-bottom: 50px; }
-        .signature-line { width: 250px; border-top: 1px solid #333; margin: 0 auto 8px auto; }
-        .signature-label { font-size: 12px; color: #555; font-weight: bold; text-transform: uppercase; }
-        .footer-note { position: absolute; bottom: 0; width: 100%; text-align: center; font-size: 11px; color: #666; border-top: 1px solid #eee; padding-top: 10px; }
+        .title-container h1 { font-size: 15px; text-transform: uppercase; letter-spacing: 1.5px; margin: 0; display: inline-block; border-bottom: 1.5px solid #2c3e50; padding-bottom: 4px; font-weight: 700; color: #1a1a1a; }
+        .metadata-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; margin-bottom: 60px; }
+        .meta-item .label { font-size: 10px; color: #7f8c8d; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+        .meta-item .value { font-size: 13px; font-weight: 600; }
+        .meta-item .value.folio { color: #800020; font-size: 14px; }
+        .body-section { margin-bottom: 30px; }
+        .row { margin-bottom: 16px; display: flex; border-bottom: 1px dotted #dcdde1; padding-bottom: 8px; }
+        .row .field-label { font-weight: 600; width: 150px; flex: 0 0 150px; color: #34495e; }
+        .row .field-value { flex-grow: 1; color: #2c3e50; }
+        .signature-section { margin-top: 50px; text-align: center; }
+        .location-date { font-size: 13px; margin-bottom: 45px; color: #34495e; }
+        .signature-line { width: 260px; border-top: 1px solid #2c3e50; margin: 0 auto 8px auto; }
+        .signature-label { font-size: 11px; color: #555; font-weight: bold; text-transform: uppercase; letter-spacing: .5px; }
+        .footer-note { position: absolute; bottom: 0; width: 100%; text-align: center; font-size: 10.5px; color: #7f8c8d; border-top: 1px solid #ecf0f1; padding-top: 12px; }
         @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
     </style>
 </head>
