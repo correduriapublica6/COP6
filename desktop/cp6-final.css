@@ -1377,3 +1377,108 @@ body.cp6-redesign .v2-ring-section.is-excellent p { color: #15803d; }
   .cp6-home-quick-card footer { flex-direction: column-reverse; }
   .cp6-home-quick-card footer button { width: 100%; }
 }
+
+
+/* CP6 SOLICITUDES · Barra homologada con Gestión de Avalúos */
+body.cp6-redesign #solicitudesView > .solicitudes-toolbar {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(185px, .7fr) minmax(280px, 1.25fr) minmax(190px, .75fr) auto;
+  margin: 0 0 14px;
+  padding: 13px 16px;
+  width: 100%;
+}
+body.cp6-redesign #solicitudesView .solicitudes-filter-title {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+  white-space: nowrap;
+}
+body.cp6-redesign #solicitudesView .solicitudes-filter-title > span {
+  align-items: center;
+  background: #eff6ff;
+  border-radius: 11px;
+  color: #2563eb;
+  display: inline-flex;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+body.cp6-redesign #solicitudesView .solicitudes-filter-title strong {
+  color: #0f172a;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .86rem;
+  font-weight: 800;
+}
+body.cp6-redesign #solicitudesView .solicitudes-search-wrap {
+  min-width: 0;
+  position: relative;
+  width: 100%;
+}
+body.cp6-redesign #solicitudesView .solicitudes-search-wrap > i {
+  color: #94a3b8;
+  left: 14px;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+body.cp6-redesign #solicitudesView #requestSearchInput {
+  background: #fff;
+  border: 1px solid #dbe3ee;
+  border-radius: 999px;
+  box-shadow: none;
+  color: #334155;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .76rem;
+  font-weight: 400;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 16px 0 40px;
+  width: 100%;
+}
+body.cp6-redesign #solicitudesView #requestSearchInput:focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, .1);
+  outline: 0;
+}
+body.cp6-redesign #solicitudesView #requestStatusFilter {
+  max-width: none;
+  min-width: 0;
+  width: 100%;
+}
+body.cp6-redesign #solicitudesView .solicitudes-heading-actions {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin: 0;
+  white-space: nowrap;
+}
+body.cp6-redesign #solicitudesView .solicitudes-heading-actions button {
+  border-radius: 12px;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .75rem;
+  font-weight: 700;
+  min-height: 40px;
+  padding: 0 15px;
+  white-space: nowrap;
+}
+body.cp6-redesign #solicitudesView #backRequestsToAvaluosButton { background: #0f172a; color: #fff; }
+body.cp6-redesign #solicitudesView #newInternalRequestButton { background: #2563eb; color: #fff; }
+@media (max-width: 1100px) {
+  body.cp6-redesign #solicitudesView > .solicitudes-toolbar { grid-template-columns: minmax(170px, .7fr) minmax(230px, 1fr) 190px; }
+  body.cp6-redesign #solicitudesView .solicitudes-heading-actions { grid-column: 1 / -1; justify-self: end; }
+}
+@media (max-width: 700px) {
+  body.cp6-redesign #solicitudesView > .solicitudes-toolbar { align-items: stretch; display: flex; flex-direction: column; }
+  body.cp6-redesign #solicitudesView .solicitudes-filter-title,
+  body.cp6-redesign #solicitudesView .solicitudes-search-wrap,
+  body.cp6-redesign #solicitudesView #requestStatusFilter,
+  body.cp6-redesign #solicitudesView .solicitudes-heading-actions { width: 100%; }
+  body.cp6-redesign #solicitudesView .solicitudes-heading-actions { justify-content: stretch; }
+  body.cp6-redesign #solicitudesView .solicitudes-heading-actions button { flex: 1; }
+}
