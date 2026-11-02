@@ -1193,7 +1193,78 @@
     saveRecords();
     return folioRecibo;
   }
-  function receiptHtml(record) { return `<!doctype html><html lang="es-MX"><head><meta charset="UTF-8"><title>Recibo ${escapeHtml(record.folioRecibo || record.numeroAvaluo)}</title><style>@page{margin:0;size:letter}html,body{height:100%;margin:0}body{background:#fff;color:#1f303a;display:flex;font-family:Georgia,"Times New Roman",serif;align-items:flex-start;justify-content:center}.receipt{background:#fff;box-sizing:border-box;margin:.45in auto 0;min-height:10.1in;padding:.72in .78in;width:7.05in}.top{border-bottom:3px solid #bb8a32;padding-bottom:14px;text-align:center}.brand{color:#123e5a;font-family:Arial,sans-serif;font-size:22px;font-weight:800;letter-spacing:.05em;margin:0;text-transform:uppercase}.address{color:#5c6c75;font-family:Arial,sans-serif;font-size:12px;line-height:1.45;margin:7px 0 0}.receipt-title{color:#123e5a;font-family:Arial,sans-serif;font-size:19px;font-weight:800;letter-spacing:.14em;margin:24px 0 6px;text-align:center;text-transform:uppercase}.meta{color:#5b6971;font-family:Arial,sans-serif;font-size:12px;text-align:center}.folio{color:#123e5a;font-family:Arial,sans-serif;font-size:13px;font-weight:800;letter-spacing:.08em;margin:10px 0 0;text-align:center}.rule{border-top:1px solid #d9e1e5;margin:20px 0}.body-copy{font-size:16px;line-height:1.6}.amount{background:#eff7f3;border-left:5px solid #167a5c;color:#114f3b;font-family:Arial,sans-serif;font-size:25px;font-weight:800;line-height:1.35;margin:18px 0;padding:14px 16px}.amount-words{color:#345565;font-family:Arial,sans-serif;font-size:13px;font-style:italic;line-height:1.4}.summary{background:#f7fafb;border:1px solid #dbe5e9;font-family:Arial,sans-serif;margin-top:20px;padding:12px 14px}.summary p{font-size:13px;margin:5px 0}.signature{font-family:Arial,sans-serif;font-size:13px;margin-top:72px;text-align:center}.signature-line{border-top:1px solid #667982;margin:0 auto 8px;width:260px}@media print{body{background:#fff;min-height:100vh}.receipt{margin:0;min-height:11in;padding:.72in .78in;width:8.5in}}</style></head><body><section class="receipt"><header class="top"><p class="brand">Correduría Pública No.6</p><p class="address">Av. Morelos 854 Oriente, Col. Centro<br>Torreón, Coahuila.</p></header><h1 class="receipt-title">Recibo de pago</h1><p class="folio">Folio: ${escapeHtml(record.folioRecibo || "CP6AV10000")}</p><p class="meta">Fecha de pago: ${formatDate(record.fechaPago)}</p><div class="rule"></div><p class="body-copy">Recibí de <strong>${escapeHtml(record.seEntregoA || "________________")}</strong> la cantidad de:</p><div class="amount">${formatCurrency(record.montoPagado)}<br><span class="amount-words">(${escapeHtml(amountInWords(record.montoPagado))})</span></div><p class="body-copy">Por concepto del avalúo número <strong>${escapeHtml(record.numeroAvaluo)}</strong>, correspondiente a un avalúo de tipo <strong>${escapeHtml(record.tipoAvaluo)}</strong>.</p><section class="summary"><p><strong>Método de pago:</strong> ${escapeHtml(record.metodoPago || "No especificado")}</p></section><div class="signature"><div class="signature-line"></div>Firma de recibido</div></section><script>window.onload=()=>window.print()<\/script></body></html>`; }
+  function receiptHtml(record) {
+    const folio = escapeHtml(record.folioRecibo || "CP6AV10000");
+    const fechaPago = escapeHtml(formatDate(record.fechaPago));
+    const solicitante = escapeHtml(record.solicitante || "________________");
+    const importe = escapeHtml(formatCurrency(record.montoPagado));
+    const importeLetra = escapeHtml(amountInWords(record.montoPagado));
+    const numeroAvaluo = escapeHtml(record.numeroAvaluo || "________________");
+    const tipoBien = escapeHtml(record.tipoBien || "No especificado");
+    const tipoAvaluo = escapeHtml(record.tipoAvaluo || "No especificado");
+    const metodoPago = escapeHtml(record.metodoPago || "No especificado");
+    const concepto = `Elaboración y expedición de avalúo ${tipoAvaluo.toLocaleLowerCase("es-MX")}.`;
+    return `<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Comprobante de Pago - Correduría Pública No. 6</title>
+    <style>
+        @page { size: letter; margin: 20mm; }
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333333; line-height: 1.5; margin: 0; padding: 0; font-size: 14px; }
+        .container { width: 100%; max-width: 700px; margin: 0 auto; position: relative; min-height: 90vh; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
+        .header-left { font-family: Georgia, serif; font-style: italic; font-size: 20px; font-weight: bold; color: #111; }
+        .header-right { font-family: Georgia, serif; font-style: italic; font-size: 13px; color: #555; text-align: right; }
+        .title-container { text-align: center; margin-bottom: 35px; }
+        .title-container h1 { font-size: 16px; text-transform: uppercase; letter-spacing: 1px; margin: 0; display: inline-block; border-bottom: 1px solid #333; padding-bottom: 3px; font-weight: 600; }
+        .metadata-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; margin-bottom: 70px; }
+        .meta-item .label { font-size: 11px; color: #666; text-transform: uppercase; margin-bottom: 3px; }
+        .meta-item .value { font-size: 13px; font-weight: bold; }
+        .meta-item .value.folio { color: #800020; }
+        .body-section { margin-bottom: 40px; }
+        .row { margin-bottom: 18px; display: flex; border-bottom: 1px dotted #ccc; padding-bottom: 6px; }
+        .row .field-label { font-weight: bold; width: 140px; color: #444; flex: 0 0 140px; }
+        .row .field-value { flex-grow: 1; }
+        .signature-section { margin-top: 80px; text-align: center; }
+        .location-date { font-size: 13px; margin-bottom: 50px; }
+        .signature-line { width: 250px; border-top: 1px solid #333; margin: 0 auto 8px auto; }
+        .signature-label { font-size: 12px; color: #555; font-weight: bold; text-transform: uppercase; }
+        .footer-note { position: absolute; bottom: 0; width: 100%; text-align: center; font-size: 11px; color: #666; border-top: 1px solid #eee; padding-top: 10px; }
+        @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="header-left">Correduría Pública No. 6</div>
+        <div class="header-right">Av. Abasolo 330 Ote.<br>Torreón, Coahuila</div>
+    </div>
+    <div class="title-container"><h1>Comprobante de Pago</h1></div>
+    <div class="metadata-grid">
+        <div class="meta-item"><div class="label">Folio</div><div class="value folio">${folio}</div></div>
+        <div class="meta-item"><div class="label">Fecha de Pago</div><div class="value">${fechaPago}</div></div>
+        <div class="meta-item"><div class="label">Método de Pago</div><div class="value">${metodoPago}</div></div>
+    </div>
+    <div class="body-section">
+        <div class="row"><div class="field-label">Recibí de:</div><div class="field-value">${solicitante}</div></div>
+        <div class="row"><div class="field-label">Cantidad:</div><div class="field-value">${importe} (${importeLetra})</div></div>
+        <div class="row"><div class="field-label">Por concepto de:</div><div class="field-value">${escapeHtml(concepto)}</div></div>
+        <div class="row"><div class="field-label">Tipo de Bien:</div><div class="field-value">${tipoBien}</div></div>
+        <div class="row"><div class="field-label">Tipo de Avalúo:</div><div class="field-value">${tipoAvaluo}</div></div>
+        <div class="row"><div class="field-label">No. de Avalúo:</div><div class="field-value">${numeroAvaluo}</div></div>
+    </div>
+    <div class="signature-section">
+        <div class="location-date">Torreón, Coahuila a ${fechaPago}</div>
+        <div class="signature-line"></div>
+        <div class="signature-label">Firma de Conformidad</div>
+    </div>
+    <div class="footer-note">Se liquida a entera satisfacción el importe total pactado por la elaboración y expedición del avalúo antes mencionado.</div>
+</div>
+<script>window.onload = () => window.print();<\/script>
+</body>
+</html>`;
+  }
   async function openReceipt(record) { if (!record || !record.seEntregoA || !record.montoPagado || !record.numeroAvaluo || !record.tipoAvaluo) { $("#formMessage").textContent = "Completa quién recibe, cantidad, número y tipo de avalúo para generar el recibo."; return; } const receiptWindow = window.open("", "_blank", "width=980,height=900"); if (!receiptWindow) { alert("El navegador bloqueó la ventana del recibo. Permite ventanas emergentes e inténtalo de nuevo."); return; } try { const receiptRecord = { ...record, folioRecibo: await getReceiptFolio(record) }; receiptWindow.document.write(receiptHtml(receiptRecord)); receiptWindow.document.close(); } catch (error) { receiptWindow.close(); $("#formMessage").textContent = error.message; } }
 
   function reportData(start, end) {
