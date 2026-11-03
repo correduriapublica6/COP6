@@ -1200,64 +1200,69 @@
     const importe = escapeHtml(formatCurrency(record.montoPagado));
     const importeLetra = escapeHtml(amountInWords(record.montoPagado));
     const numeroAvaluo = escapeHtml(record.numeroAvaluo || "________________");
-    const tipoBien = escapeHtml(record.tipoBien || "No especificado");
-    const tipoAvaluo = escapeHtml(record.tipoAvaluo || "No especificado");
+    const rawTipoBien = record.tipoBien || "No especificado";
+    const rawTipoAvaluo = record.tipoAvaluo || "No especificado";
+    const tipoBien = escapeHtml(rawTipoBien);
+    const tipoAvaluo = escapeHtml(rawTipoAvaluo);
     const metodoPago = escapeHtml(record.metodoPago || "No especificado");
-    const concepto = `Elaboración y expedición de avalúo ${tipoAvaluo.toLocaleLowerCase("es-MX")}.`;
+    const concepto = escapeHtml(`Elaboración y expedición de avalúo ${String(rawTipoAvaluo).toLocaleLowerCase("es-MX")}.`);
     return `<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Comprobante de Pago - Correduría Pública No. 6</title>
     <style>
-        @page { size: letter; margin: 20mm; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #2c3e50; line-height: 1.6; margin: 0; padding: 0; font-size: 13.5px; }
-        .container { width: 100%; max-width: 700px; margin: 0 auto; position: relative; min-height: 88vh; }
-        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
+        @page { size: letter; margin: 15mm 20mm; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #2c3e50; line-height: 1.5; margin: 0; padding: 0; font-size: 13.5px; }
+        .container { width: 100%; max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; min-height: 94vh; }
+        .content-wrap { flex: 1; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
         .header-left { font-family: Georgia, serif; font-style: italic; font-size: 21px; font-weight: bold; color: #1a1a1a; }
-        .header-right { font-family: Georgia, serif; font-style: italic; font-size: 13px; color: #555; text-align: right; line-height: 1.4; }
-        .title-container { text-align: center; margin-bottom: 35px; }
+        .header-right { font-family: Georgia, serif; font-style: italic; font-size: 12.5px; color: #555; text-align: right; line-height: 1.4; }
+        .title-container { text-align: center; margin-bottom: 30px; }
         .title-container h1 { font-size: 15px; text-transform: uppercase; letter-spacing: 1.5px; margin: 0; display: inline-block; border-bottom: 1.5px solid #2c3e50; padding-bottom: 4px; font-weight: 700; color: #1a1a1a; }
-        .metadata-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; margin-bottom: 60px; }
+        .metadata-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; margin-bottom: 45px; }
         .meta-item .label { font-size: 10px; color: #7f8c8d; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
         .meta-item .value { font-size: 13px; font-weight: 600; }
         .meta-item .value.folio { color: #800020; font-size: 14px; }
-        .body-section { margin-bottom: 30px; }
-        .row { margin-bottom: 16px; display: flex; border-bottom: 1px dotted #dcdde1; padding-bottom: 8px; }
+        .body-section { margin-bottom: 35px; }
+        .row { margin-bottom: 14px; display: flex; border-bottom: 1px dotted #dcdde1; padding-bottom: 7px; }
         .row .field-label { font-weight: 600; width: 150px; flex: 0 0 150px; color: #34495e; }
         .row .field-value { flex-grow: 1; color: #2c3e50; }
-        .signature-section { margin-top: 50px; text-align: center; }
-        .location-date { font-size: 13px; margin-bottom: 45px; color: #34495e; }
+        .signature-section { margin-top: 60px; margin-bottom: 40px; text-align: center; }
+        .location-date { font-size: 13px; margin-bottom: 50px; color: #34495e; }
         .signature-line { width: 260px; border-top: 1px solid #2c3e50; margin: 0 auto 8px auto; }
         .signature-label { font-size: 11px; color: #555; font-weight: bold; text-transform: uppercase; letter-spacing: .5px; }
-        .footer-note { position: absolute; bottom: 0; width: 100%; text-align: center; font-size: 10.5px; color: #7f8c8d; border-top: 1px solid #ecf0f1; padding-top: 12px; }
+        .footer-note { text-align: center; font-size: 10.5px; color: #7f8c8d; border-top: 1px solid #ecf0f1; padding-top: 12px; margin-top: auto; }
         @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="header">
-        <div class="header-left">Correduría Pública No. 6</div>
-        <div class="header-right">Av. Abasolo 330 Ote.<br>Torreón, Coahuila</div>
-    </div>
-    <div class="title-container"><h1>Comprobante de Pago</h1></div>
-    <div class="metadata-grid">
-        <div class="meta-item"><div class="label">Folio</div><div class="value folio">${folio}</div></div>
-        <div class="meta-item"><div class="label">Fecha de Pago</div><div class="value">${fechaPago}</div></div>
-        <div class="meta-item"><div class="label">Método de Pago</div><div class="value">${metodoPago}</div></div>
-    </div>
-    <div class="body-section">
-        <div class="row"><div class="field-label">Recibí de:</div><div class="field-value">${solicitante}</div></div>
-        <div class="row"><div class="field-label">Cantidad:</div><div class="field-value">${importe} (${importeLetra})</div></div>
-        <div class="row"><div class="field-label">Por concepto de:</div><div class="field-value">${escapeHtml(concepto)}</div></div>
-        <div class="row"><div class="field-label">Tipo de Bien:</div><div class="field-value">${tipoBien}</div></div>
-        <div class="row"><div class="field-label">Tipo de Avalúo:</div><div class="field-value">${tipoAvaluo}</div></div>
-        <div class="row"><div class="field-label">No. de Avalúo:</div><div class="field-value">${numeroAvaluo}</div></div>
-    </div>
-    <div class="signature-section">
-        <div class="location-date">Torreón, Coahuila a ${fechaPago}</div>
-        <div class="signature-line"></div>
-        <div class="signature-label">Firma de Conformidad</div>
+    <div class="content-wrap">
+        <div class="header">
+            <div class="header-left">Correduría Pública No. 6</div>
+            <div class="header-right">Morelos 854 Ote.<br>Col. Centro, Torreón, Coahuila</div>
+        </div>
+        <div class="title-container"><h1>Comprobante de Pago</h1></div>
+        <div class="metadata-grid">
+            <div class="meta-item"><div class="label">Folio</div><div class="value folio">${folio}</div></div>
+            <div class="meta-item"><div class="label">Fecha de Pago</div><div class="value">${fechaPago}</div></div>
+            <div class="meta-item"><div class="label">Método de Pago</div><div class="value">${metodoPago}</div></div>
+        </div>
+        <div class="body-section">
+            <div class="row"><div class="field-label">Recibí de:</div><div class="field-value">${solicitante}</div></div>
+            <div class="row"><div class="field-label">Cantidad:</div><div class="field-value">${importe} (${importeLetra})</div></div>
+            <div class="row"><div class="field-label">Por concepto de:</div><div class="field-value">${concepto}</div></div>
+            <div class="row"><div class="field-label">Tipo de Bien:</div><div class="field-value">${tipoBien}</div></div>
+            <div class="row"><div class="field-label">Tipo de Avalúo:</div><div class="field-value">${tipoAvaluo}</div></div>
+            <div class="row"><div class="field-label">No. de Avalúo:</div><div class="field-value">${numeroAvaluo}</div></div>
+        </div>
+        <div class="signature-section">
+            <div class="location-date">Torreón, Coahuila a ${fechaPago}</div>
+            <div class="signature-line"></div>
+            <div class="signature-label">Firma de Conformidad</div>
+        </div>
     </div>
     <div class="footer-note">Se liquida a entera satisfacción el importe total pactado por la elaboración y expedición del avalúo antes mencionado.</div>
 </div>
