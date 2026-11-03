@@ -1621,7 +1621,9 @@
     select.replaceChildren(new Option("Selecciona una opción", ""), ...officialMethods.map((method) => new Option(method, method)));
     select.value = officialMethods.includes(currentValue) ? currentValue : "";
   }
-  document.addEventListener("pointerdown", (event) => { if (!event.target.closest(".custom-select")) closeCustomSelects(); });
+  document.addEventListener("pointerdown", (event) => {
+    if (!event.target.closest(".custom-select") && !event.target.closest(".custom-select-menu-floating")) closeCustomSelects();
+  });
   const selectObserver = new MutationObserver(enhanceAllSelects);
   selectObserver.observe(document.body, { childList: true, subtree: true });
   normalizePaymentMethodOptions();
