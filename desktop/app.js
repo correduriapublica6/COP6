@@ -1566,10 +1566,10 @@
     }
     trigger?.addEventListener("click", () => {
       const open = !wrapper.classList.contains("is-open");
+      const floatingMenu = select.id === "methodInput" || select.id === "paymentDeliveredToInput";
       closeCustomSelects(wrapper);
       wrapper.classList.toggle("is-open", open);
       menu.style.setProperty("display", open ? "grid" : "none", "important");
-      const floatingMenu = select.id === "methodInput" || select.id === "paymentDeliveredToInput";
       if (!open && floatingMenu) wrapper.__restoreCustomMenu?.();
       if (open && floatingMenu) {
         const rect = trigger.getBoundingClientRect();
