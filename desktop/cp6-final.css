@@ -1482,3 +1482,21 @@ body.cp6-redesign #solicitudesView #newInternalRequestButton { background: #2563
   body.cp6-redesign #solicitudesView .solicitudes-heading-actions { justify-content: stretch; }
   body.cp6-redesign #solicitudesView .solicitudes-heading-actions button { flex: 1; }
 }
+
+/* CP6 · Solicitud nueva: resultados de usuario externo y descarga legible */
+.request-external-results {
+  margin-top: 6px;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(15,23,42,.10);
+}
+.request-external-result { display:flex; flex-direction:column; width:100%; padding:9px 12px; border:0; border-bottom:1px solid #f1f5f9; background:#fff; text-align:left; cursor:pointer; }
+.request-external-result:hover { background:#eff6ff; }
+.request-external-result strong { color:#0f172a; font-size:.75rem; }
+.request-external-result small, .request-external-empty, .request-external-selected { color:#64748b; font-size:.68rem; }
+.request-external-selected { display:block; padding:8px 12px; color:#2563eb; font-weight:700; }
+#fileViewerDialog .file-viewer-download,
+#requestDetailDialog .client-download-button { color:#fff !important; }

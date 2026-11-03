@@ -334,10 +334,58 @@
     window.clearTimeout(requestDraftTimer);
     try { localStorage.removeItem(REQUEST_DRAFT_KEY); } catch {}
   }
+  async function hydrateRequestFromActiveSession() {
+    const form = getRequestForm();
+    if (!form || applicantSession) return;
+    const activeName = String(window.ControlAvaluosDesktop?.getActiveUser?.() || "").trim();
+    if (!activeName) return;
+    const nameField = form.elements.nombre;
+    const emailField = form.elements.correo;
+    const phoneField = form.elements.telefono;
+    if (nameField && !nameField.value) nameField.value = activeName;
+    try {
+      const users = await api("/users");
+      const normalized = activeName.toLocaleLowerCase("es-MX");
+      const active = (Array.isArray(users) ? users : []).find((user) => String(user.name || "").trim().toLocaleLowerCase("es-MX") === normalized);
+      if (!active) return;
+      if (nameField) nameField.value = active.name || activeName;
+      if (emailField && !emailField.value) emailField.value = active.email || active.correo || "";
+      if (phoneField && !phoneField.value) phoneField.value = active.phone || active.telefono || "";
+    } catch { /* El nombre activo ya queda visible aunque el catálogo no responda. */ }
+  }
+  function bindNewRequestExternalAssignment() {
+    const form = getRequestForm();
+    if (!form || form.dataset.externalAssignmentBound === "true") return;
+    const search = form.querySelector("[data-new-external-search]");
+    const results = form.querySelector("[data-new-external-results]");
+    const clear = form.querySelector("[data-clear-new-external]");
+    if (!search || !results) return;
+    form.dataset.externalAssignmentBound = "true";
+    let applicants = [];
+    let selected = null;
+    const render = () => {
+      const query = String(search.value || "").trim().toLocaleLowerCase("es-MX");
+      const matches = (query ? applicants.filter((user) => [user.name, user.email, user.phone].join(" ").toLocaleLowerCase("es-MX").includes(query)) : applicants).slice(0, 8);
+      results.innerHTML = matches.length ? matches.map((user) => `<button type="button" class="request-external-result" data-new-external-id="${escapeHtml(user.id)}"><strong>${escapeHtml(user.name)}</strong><small>${escapeHtml(user.email || "")} · ${escapeHtml(user.phone || "Sin teléfono")}</small></button>`).join("") : (query ? `<small class="request-external-empty">No se encontraron usuarios externos.</small>` : "");
+      results.querySelectorAll("[data-new-external-id]").forEach((button) => button.addEventListener("click", () => {
+        selected = applicants.find((user) => String(user.id) === String(button.dataset.newExternalId)) || null;
+        if (!selected) return;
+        form.dataset.externalId = selected.id || "";
+        form.dataset.externalName = selected.name || "";
+        form.dataset.externalEmail = selected.email || "";
+        search.value = selected.name || "";
+        results.innerHTML = `<small class="request-external-selected">Seleccionado: ${escapeHtml(selected.name)}</small>`;
+      }));
+    };
+    search.addEventListener("input", () => { selected = null; delete form.dataset.externalId; delete form.dataset.externalName; delete form.dataset.externalEmail; render(); });
+    clear?.addEventListener("click", () => { selected = null; search.value = ""; delete form.dataset.externalId; delete form.dataset.externalName; delete form.dataset.externalEmail; render(); });
+    api("/applicants").then((list) => { applicants = Array.isArray(list) ? list : []; render(); }).catch(() => { results.innerHTML = `<small class="request-external-empty">No se pudieron cargar los usuarios externos.</small>`; });
+  }
   function resetRequestForm() {
     const form = getRequestForm();
     if (!form) return;
     ensureRequestFieldNames();
+    clearRequestDraft();
     form.reset();
     showRequestStep(1);
     archivosSeleccionados = [];
@@ -363,6 +411,12 @@
       form.elements.telefono.readOnly = false;
     }
     setMessage($("#publicRequestMessage"), "");
+    delete form.dataset.externalId; delete form.dataset.externalName; delete form.dataset.externalEmail;
+    const externalSearch = form.querySelector("[data-new-external-search]");
+    if (externalSearch) externalSearch.value = "";
+    const externalResults = form.querySelector("[data-new-external-results]");
+    if (externalResults) externalResults.innerHTML = "";
+    hydrateRequestFromActiveSession();
   }
   function requestStatusClass(status) { return String(status || "recibida").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-"); }
   function requestDate(value) { const date = value ? new Date(value) : null; return date && !Number.isNaN(date.getTime()) ? date.toLocaleDateString("es-MX", { day: "2-digit", month: "short", year: "numeric" }) : "Sin fecha"; }
@@ -855,7 +909,7 @@
     setBusy(form, true, "Enviando…");
     try {
       const files = await readFiles(archivosSeleccionados);
-      const payload = { solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo }, tipoBien: values.tipoBien, tipoAvaluo: values.tipoAvaluo, asesor: values.asesor, notaria: values.notaria || values.notariaReferida || "", modalidad: values.modalidadInmueble || "", datosEspecificos: { ...values, tipoBien: values.tipoBien }, archivos: [...archivosExistentesEnEdicion, ...files], contactoVisita: { nombre: values.contactoVisitaNombre, telefono: values.contactoVisitaTelefono }, observaciones: values.observaciones, usuario_id: applicantSession?.id || values.usuario_id || "", requesterEmail: values.correo || applicantSession?.email || "" };
+      const payload = { solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo }, asignadoExternoId: form.dataset.externalId || "", asignadoExternoEmail: form.dataset.externalEmail || "", asignadoExternoNombre: form.dataset.externalName || "", tipoBien: values.tipoBien, tipoAvaluo: values.tipoAvaluo, asesor: values.asesor, notaria: values.notaria || values.notariaReferida || "", modalidad: values.modalidadInmueble || "", datosEspecificos: { ...values, tipoBien: values.tipoBien }, archivos: [...archivosExistentesEnEdicion, ...files], contactoVisita: { nombre: values.contactoVisitaNombre, telefono: values.contactoVisitaTelefono }, observaciones: values.observaciones, usuario_id: applicantSession?.id || values.usuario_id || "", requesterEmail: values.correo || applicantSession?.email || "" };
       const result = await api(editingRequestId ? `/service-requests/${encodeURIComponent(editingRequestId)}` : "/service-requests", { method: editingRequestId ? "PUT" : "POST", body: JSON.stringify(payload) });
       clearRequestDraft();
       const actionLabel = editingRequestId ? "Solicitud actualizada" : "Solicitud registrada";
@@ -1128,8 +1182,8 @@
     $("#applicantLoginForm")?.addEventListener("submit", loginApplicant);
     $("#closeApplicantRequestsButton")?.addEventListener("click", () => closeDialog(applicantRequestsDialog));
     $("#cancelApplicantRequestsButton")?.addEventListener("click", () => closeDialog(applicantRequestsDialog));
-    $("#newApplicantRequestButton")?.addEventListener("click", () => { closeDialog(applicantRequestsDialog); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
-    $("#openPublicRequestButton")?.addEventListener("click", () => { applicantSession = null; resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
+    $("#newApplicantRequestButton")?.addEventListener("click", () => { closeDialog(applicantRequestsDialog); clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); bindNewRequestExternalAssignment(); });
+    $("#openPublicRequestButton")?.addEventListener("click", () => { applicantSession = null; clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); bindNewRequestExternalAssignment(); });
     $("#openApplicantRegisterButton")?.addEventListener("click", () => { setMessage($("#applicantRegisterMessage"), ""); openDialog(applicantRegisterDialog); });
     $("#applicantLoginRegisterButton")?.addEventListener("click", () => {
       const loginForm = $("#applicantLoginForm"), registerForm = $("#applicantRegisterForm");
@@ -1148,14 +1202,14 @@
     ["closePublicRequestButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(requestDialog)));
     ["closeApplicantRegisterButton", "cancelApplicantRegisterButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(applicantRegisterDialog)));
     ["closeApplicantLoginButton", "cancelApplicantLoginButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(applicantLoginDialog)));
-    $("#newInternalRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
+    $("#newInternalRequestButton")?.addEventListener("click", () => { clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); bindNewRequestExternalAssignment(); });
     window.selectCategory = selectCategory;
     showRequestStep(1);
     refreshRequestIcons();
     $("#openRequestsViewButton")?.addEventListener("click", () => $("[data-app-view=solicitudes]")?.click());
     $("#backRequestsToAvaluosButton")?.addEventListener("click", () => $("[data-app-view=avaluos]")?.click());
     $("#applicantProfileForm")?.addEventListener("submit", saveApplicantProfile);
-    $("#applicantHomeNewRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
+    $("#applicantHomeNewRequestButton")?.addEventListener("click", () => { clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); bindNewRequestExternalAssignment(); });
     $("#applicantRequestSearchInput")?.addEventListener("input", () => filterApplicantRequests(true));
     $("#applicantRequestStatusFilter")?.addEventListener("change", () => filterApplicantRequests(true));
     document.querySelectorAll("[data-client-quick-filter]").forEach((button) => button?.addEventListener("click", () => {
@@ -1165,7 +1219,7 @@
       document.querySelectorAll("[data-client-quick-filter]").forEach((item) => item.classList.toggle("is-active", item === button));
       filterApplicantRequests(true);
     }));
-    $("#applicantVisualNewRequestButton")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); restoreRequestDraft(); });
+    $("#applicantVisualNewRequestButton")?.addEventListener("click", () => { clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); bindNewRequestExternalAssignment(); });
     window.addEventListener("pagehide", saveRequestDraft);
     $("#applicantVisualProfileButton")?.addEventListener("click", openApplicantProfile);
     $("#applicantHomeProfileButton")?.addEventListener("click", openApplicantProfile);
@@ -1205,6 +1259,6 @@
     fillNotaries();
     window.addEventListener("control-avaluos:notarias-updated", (event) => { window.__controlNotarias = event.detail || []; fillNotaries(); });
   }
-  window.SolicitudesControl = { renderRequests, renderWelcomeRequests, renderApplicantRequests, openDetail: (id) => { const item = requests.find((candidate) => candidate.id === id); if (item) renderRequestDetail(item); }, open: () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); fillNotaries(); } };
+  window.SolicitudesControl = { renderRequests, renderWelcomeRequests, renderApplicantRequests, openDetail: (id) => { const item = requests.find((candidate) => candidate.id === id); if (item) renderRequestDetail(item); }, open: () => { clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); fillNotaries(); bindNewRequestExternalAssignment(); } };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind); else bind();
 })();
