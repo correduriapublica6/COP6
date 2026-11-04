@@ -356,6 +356,10 @@
   function bindNewRequestExternalAssignment() {
     const form = getRequestForm();
     if (!form || form.dataset.externalAssignmentBound === "true") return;
+    const assignment = form.querySelector(".request-external-assignment");
+    const activeName = String(window.ControlAvaluosDesktop?.getActiveUser?.() || "").trim();
+    if (assignment) assignment.hidden = !(activeName && !applicantSession);
+    if (!activeName || applicantSession) return;
     const search = form.querySelector("[data-new-external-search]");
     const results = form.querySelector("[data-new-external-results]");
     const clear = form.querySelector("[data-clear-new-external]");
@@ -365,6 +369,10 @@
     let selected = null;
     const render = () => {
       const query = String(search.value || "").trim().toLocaleLowerCase("es-MX");
+      if (!query) {
+        results.innerHTML = "";
+        return;
+      }
       const matches = (query ? applicants.filter((user) => [user.name, user.email, user.phone].join(" ").toLocaleLowerCase("es-MX").includes(query)) : applicants).slice(0, 8);
       results.innerHTML = matches.length ? matches.map((user) => `<button type="button" class="request-external-result" data-new-external-id="${escapeHtml(user.id)}"><strong>${escapeHtml(user.name)}</strong><small>${escapeHtml(user.email || "")} · ${escapeHtml(user.phone || "Sin teléfono")}</small></button>`).join("") : (query ? `<small class="request-external-empty">No se encontraron usuarios externos.</small>` : "");
       results.querySelectorAll("[data-new-external-id]").forEach((button) => button.addEventListener("click", () => {
@@ -379,7 +387,7 @@
     };
     search.addEventListener("input", () => { selected = null; delete form.dataset.externalId; delete form.dataset.externalName; delete form.dataset.externalEmail; render(); });
     clear?.addEventListener("click", () => { selected = null; search.value = ""; delete form.dataset.externalId; delete form.dataset.externalName; delete form.dataset.externalEmail; render(); });
-    api("/applicants").then((list) => { applicants = Array.isArray(list) ? list : []; render(); }).catch(() => { results.innerHTML = `<small class="request-external-empty">No se pudieron cargar los usuarios externos.</small>`; });
+    api("/applicants").then((list) => { applicants = Array.isArray(list) ? list : []; }).catch(() => { applicants = []; });
   }
   function resetRequestForm() {
     const form = getRequestForm();
