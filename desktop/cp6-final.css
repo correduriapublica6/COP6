@@ -1,6 +1,1507 @@
+/* CP6 · Capa final de integración visual
+   Se carga después de las hojas del rediseño para neutralizar estilos heredados
+   sin modificar IDs, datos ni contratos de JavaScript. */
+:root {
+  --cp6-final-blue: #2563eb;
+  --cp6-final-navy: #0f172a;
+  --cp6-final-ink: #172033;
+  --cp6-final-muted: #64748b;
+  --cp6-final-line: #e5eaf2;
+  --cp6-final-canvas: #f6f8fb;
+}
+
+body.cp6-redesign {
+  background: var(--cp6-final-canvas);
+  color: var(--cp6-final-ink);
+  font-family: "Plus Jakarta Sans", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* El shell administrativo conserva el ancho completo y una única superficie de trabajo. */
+body.cp6-redesign #appShell.control-shell {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  background: var(--cp6-final-canvas);
+}
+body.cp6-redesign #appShell.control-shell > .app-workspace {
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+  overflow: visible;
+}
+
+/* Recepción y Gestión reciben la misma cabecera visual que Solicitudes. */
+body.cp6-redesign #recepcionAvaluosSection,
+body.cp6-redesign #crearAvaluoSection,
+body.cp6-redesign #solicitudesView {
+  width: 100%;
+  max-width: 1520px;
+  margin-inline: auto;
+}
+body.cp6-redesign .cp6-module-banner {
+  align-items: center;
+  background: linear-gradient(115deg, #0f172a 0%, #172554 58%, #2563eb 100%);
+  border: 0;
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, .14);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 16px;
+  min-height: 122px;
+  overflow: hidden;
+  padding: 24px 28px;
+  position: relative;
+}
+body.cp6-redesign .cp6-module-banner::after {
+  border: 1px solid rgba(191, 219, 254, .2);
+  border-radius: 50%;
+  content: "";
+  height: 220px;
+  position: absolute;
+  right: -68px;
+  top: -112px;
+  width: 220px;
+}
+body.cp6-redesign .cp6-module-banner > div,
+body.cp6-redesign .cp6-module-banner > i { position: relative; z-index: 1; }
+body.cp6-redesign .cp6-module-banner span {
+  color: #93c5fd;
+  display: block;
+  font-size: .66rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+body.cp6-redesign .cp6-module-banner h2 {
+  color: #fff;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: clamp(1.55rem, 2.6vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -.045em;
+  line-height: 1.1;
+  margin: 7px 0 0;
+}
+body.cp6-redesign .cp6-module-banner p {
+  color: #cbd5e1;
+  font-size: .76rem;
+  line-height: 1.5;
+  margin: 7px 0 0;
+}
+body.cp6-redesign .cp6-module-banner > i {
+  color: #bfdbfe;
+  font-size: 2.25rem;
+  margin-right: 12px;
+  opacity: .88;
+}
+
+/* Barras de controles: mismo contenedor, misma altura, sin posición fija. */
+body.cp6-redesign #recepcionAvaluosSection > .request-style-filter-panel,
+body.cp6-redesign #crearAvaluoSection > .technical-search-panel,
+body.cp6-redesign #solicitudesView > .request-filter-row {
+  background: #fff;
+  border: 1px solid var(--cp6-final-line);
+  border-radius: 18px;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, .055);
+  margin: 0 0 14px;
+  padding: 13px 16px;
+  position: static;
+  width: 100%;
+}
+body.cp6-redesign #recepcionAvaluosSection > .request-style-filter-panel .search-row {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(150px, .7fr) minmax(280px, 1.4fr) minmax(190px, .75fr) auto;
+  width: 100%;
+}
+body.cp6-redesign #crearAvaluoSection > .technical-search-panel .search-row {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(185px, .75fr) minmax(280px, 1.25fr) minmax(210px, .8fr) auto;
+  width: 100%;
+}
+body.cp6-redesign #solicitudesView > .request-filter-row {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(300px, 1fr) 220px;
+}
+body.cp6-redesign .reception-filter-title,
+body.cp6-redesign .v2-module-label {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+  white-space: nowrap;
+}
+body.cp6-redesign .reception-filter-title strong,
+body.cp6-redesign .v2-module-label strong {
+  color: var(--cp6-final-navy);
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: 1.02rem;
+  font-weight: 800;
+  letter-spacing: -.025em;
+  text-shadow: none;
+}
+body.cp6-redesign .reception-filter-title-icon,
+body.cp6-redesign .v2-module-label > span {
+  align-items: center;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  color: var(--cp6-final-blue);
+  display: inline-flex;
+  flex: 0 0 36px;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+body.cp6-redesign .reception-search-input-wrap {
+  max-width: none;
+  min-width: 0;
+  width: 100%;
+}
+body.cp6-redesign :is(#searchInput, #technicalSearchInput, #requestSearchInput, #validationRegistrySearch) {
+  background: #fff;
+  border: 1px solid #dbe3ee;
+  border-radius: 999px;
+  box-shadow: none;
+  color: var(--cp6-final-ink);
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .76rem;
+  font-weight: 400;
+  height: 40px;
+  line-height: 1.2;
+  min-height: 40px;
+  padding: 0 16px 0 40px;
+  width: 100%;
+}
+body.cp6-redesign #technicalSearchInput,
+body.cp6-redesign #requestSearchInput { padding-left: 16px; }
+body.cp6-redesign :is(#searchInput, #technicalSearchInput, #requestSearchInput, #validationRegistrySearch):focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, .1);
+  outline: 0;
+}
+body.cp6-redesign .reception-search-input-wrap::before {
+  color: #94a3b8;
+  content: "\f002";
+  font-family: "Font Awesome 6 Free";
+  font-size: 12px;
+  font-weight: 900;
+  left: 14px;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+body.cp6-redesign :is(#statusViewSelect, #technicalStatusFilter, #requestStatusFilter, #validationRegistryFilter) {
+  background: #fff;
+  border: 1px solid #dbe3ee;
+  border-radius: 12px;
+  color: #334155;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .72rem;
+  font-weight: 500;
+  height: 40px;
+  min-height: 40px;
+  min-width: 0;
+  max-width: none;
+  padding-inline: 12px 30px;
+  white-space: nowrap;
+  width: 100%;
+}
+body.cp6-redesign .reception-filter-actions {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin: 0;
+  white-space: nowrap;
+}
+body.cp6-redesign .reception-filter-actions button,
+body.cp6-redesign .technical-search-panel .search-row > button,
+body.cp6-redesign .solicitudes-heading-actions button {
+  border-radius: 12px;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .75rem;
+  font-weight: 700;
+  min-height: 40px;
+  padding: 0 15px;
+  white-space: nowrap;
+}
+body.cp6-redesign #backAvaluosButton { background: var(--cp6-final-navy); color: #fff; }
+body.cp6-redesign #newRecordButton,
+body.cp6-redesign #newTechnicalAppraisalButton,
+body.cp6-redesign #newInternalRequestButton { background: var(--cp6-final-blue); color: #fff; }
+body.cp6-redesign #backAvaluosButton i { color: #fff; }
+
+/* Tablas: franja azul fina, encabezado celeste bajo y filas compactas. */
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) {
+  background: #fff;
+  border: 1px solid var(--cp6-final-line);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, .055);
+  margin: 0;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-top: 4px;
+  position: relative;
+  width: 100%;
+}
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList)::before {
+  background: linear-gradient(90deg, #2563eb, #60a5fa);
+  content: "";
+  display: block;
+  height: 4px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+}
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) table {
+  background: #fff;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 860px;
+  table-layout: auto;
+  width: 100%;
+}
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) thead th {
+  background: #f8fbff;
+  border-bottom: 1px solid #e8eef6;
+  color: #64748b;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  line-height: 1.2;
+  padding: 11px 15px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) tbody td {
+  background: #fff;
+  border-bottom: 1px solid #eef2f7;
+  color: #334155;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .76rem;
+  font-weight: 400;
+  line-height: 1.3;
+  padding: 10px 15px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) tbody tr:last-child td { border-bottom: 0; }
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) tbody tr:hover td { background: #f8fbff; }
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) .table-action-cell,
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) .record-actions { white-space: nowrap; }
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) :is(.table-action-cell button, .record-action, .table-action-button) {
+  align-items: center;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 9px;
+  color: #2563eb;
+  display: inline-flex;
+  height: 32px;
+  justify-content: center;
+  margin-left: 5px;
+  padding: 0;
+  width: 32px;
+}
+body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) :is(.table-action-cell button:hover, .record-action:hover, .table-action-button:hover) { background: #dbeafe; }
+
+/* Validación: el panel se pinta al cargar /api/state y queda separado de los filtros. */
+body.cp6-redesign #avaluosAuthorizedFoliosPanel {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  display: block;
+  margin-inline: auto;
+  padding: 0;
+  width: 100%;
+}
+body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-authorize-form {
+  align-items: end;
+  background: #fff;
+  border: 1px solid var(--cp6-final-line);
+  border-radius: 18px;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, .055);
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 0 auto 14px;
+  max-width: 700px;
+  padding: 15px 18px;
+}
+body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-field { max-width: 360px; width: 100%; }
+body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-actions button { min-height: 40px; }
+body.cp6-redesign #validationRegistrySection { background: transparent; border: 0; box-shadow: none; padding: 0; }
+body.cp6-redesign .validation-registry-heading {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 10px;
+}
+body.cp6-redesign .validation-registry-search-wrap { max-width: 350px; position: relative; width: 100%; }
+body.cp6-redesign .validation-registry-search-wrap > i { color: #94a3b8; left: 14px; position: absolute; top: 50%; transform: translateY(-50%); z-index: 1; }
+body.cp6-redesign .validation-registry-filter-label { display: none; }
+body.cp6-redesign #validationRegistryList { margin-top: 0; }
+body.cp6-redesign .validation-registry-table { min-width: 720px !important; }
+body.cp6-redesign .validation-registry-table td,
+body.cp6-redesign .validation-registry-table th { padding-block: 9px; }
+body.cp6-redesign .validation-delete-button { align-items: center; background: #fff1f2; border: 1px solid #ffe4e6; border-radius: 8px; color: #e11d48; display: inline-flex; height: 30px; justify-content: center; width: 30px; }
+body.cp6-redesign .validation-delete-button:hover { background: #ffe4e6; }
+
+/* Perfil: datos legibles, avatar sin círculo de fondo y filtro amplio. */
+body.cp6-redesign #perfilView .profile-left-heading { display: none; }
+body.cp6-redesign #perfilView .profile-avatar-light {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--cp6-final-blue);
+}
+body.cp6-redesign #perfilView .profile-card-light h2,
+body.cp6-redesign #perfilView .profile-contact-value { color: #0f172a !important; font-weight: 400 !important; }
+body.cp6-redesign #perfilView .profile-main-light { min-width: 0; }
+body.cp6-redesign #perfilView .profile-filter-light { color: var(--cp6-final-blue); font-size: .85rem; font-weight: 700; }
+body.cp6-redesign #perfilView #profileMetricsFilter { min-width: 300px; width: min(440px, 100%); }
+body.cp6-redesign #perfilView .profile-root-light { min-width: 0; }
+
+/* Folios de las solicitudes recientes en una sola línea. */
+body.cp6-redesign #welcomeRequestsTable :is(.request-folio, .request-folio-number, td:first-child) { min-width: 122px; white-space: nowrap; }
+body.cp6-redesign #welcomeRequestsTable table { min-width: 680px; }
+
+@media (min-width: 901px) {
+  body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable) { overflow-x: visible; }
+  body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable) table { min-width: 0; }
+}
+@media (max-width: 1100px) {
+  body.cp6-redesign #recepcionAvaluosSection > .request-style-filter-panel .search-row { grid-template-columns: minmax(150px, .7fr) minmax(220px, 1fr) 190px; }
+  body.cp6-redesign #recepcionAvaluosSection > .request-style-filter-panel .reception-filter-actions { grid-column: 1 / -1; justify-self: end; }
+  body.cp6-redesign #crearAvaluoSection > .technical-search-panel .search-row { grid-template-columns: minmax(170px, .7fr) minmax(220px, 1fr) 200px; }
+  body.cp6-redesign #crearAvaluoSection > .technical-search-panel .search-row > :is(button, [data-v2-route]) { grid-column: auto; }
+}
+@media (max-width: 700px) {
+  body.cp6-redesign .cp6-module-banner { border-radius: 18px; min-height: 110px; padding: 20px; }
+  body.cp6-redesign .cp6-module-banner > i { font-size: 1.8rem; }
+  body.cp6-redesign #recepcionAvaluosSection > .request-style-filter-panel .search-row,
+  body.cp6-redesign #crearAvaluoSection > .technical-search-panel .search-row,
+  body.cp6-redesign #solicitudesView > .request-filter-row { display: flex; flex-direction: column; align-items: stretch; }
+  body.cp6-redesign .reception-filter-title,
+  body.cp6-redesign .reception-search-input-wrap,
+  body.cp6-redesign #statusViewSelect,
+  body.cp6-redesign #technicalStatusFilter,
+  body.cp6-redesign #technicalSearchInput,
+  body.cp6-redesign #requestSearchInput { max-width: none; width: 100%; }
+  body.cp6-redesign .reception-filter-actions { justify-content: stretch; width: 100%; }
+  body.cp6-redesign .reception-filter-actions button { flex: 1; }
+  body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-authorize-form { align-items: stretch; flex-direction: column; }
+  body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-field { max-width: none; }
+  body.cp6-redesign #perfilView #profileMetricsFilter { min-width: 0; width: 100%; }
+}
+
+/* El atributo hidden del panel debe seguir siendo autoritativo fuera de Validación. */
+body.cp6-redesign #avaluosAuthorizedFoliosPanel[hidden] { display: none !important; }
+/* Logo institucional oficial: reemplaza el icono genérico de edificio. */
+body.cp6-redesign .cp6-brand-logo-image {
+  display: block;
+  flex: 0 0 auto;
+  height: 42px;
+  object-fit: contain;
+  width: 46px;
+}
+body.cp6-redesign .v2-login-logo .cp6-brand-logo-image {
+  height: 48px;
+  width: 54px;
+}
+body.cp6-redesign .v2-brand .cp6-brand-logo-image {
+  height: 38px;
+  width: 42px;
+}
+@media (max-width: 768px) {
+  body.cp6-redesign .v2-login-logo .cp6-brand-logo-image {
+    height: 42px;
+    width: 48px;
+  }
+}
+
+/* CP6 Mensajería administrativa · estilo SaaS blanco, azul y sin acentos dorados */
+body.cp6-redesign .messaging-view { padding-bottom: 24px; }
+body.cp6-redesign .messaging-shell {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, .08);
+  color: #172033;
+  grid-template-columns: minmax(250px, 320px) minmax(0, 1fr);
+  height: min(76vh, 760px);
+  min-height: 590px;
+  overflow: hidden;
+}
+body.cp6-redesign .messaging-sidebar { background: #f8fafc; border-right: 1px solid #e5eaf2; }
+body.cp6-redesign .messaging-sidebar-head { background: linear-gradient(135deg, #0f172a, #1e3a8a); border-bottom: 0; color: #fff; height: auto; padding: 20px 18px; }
+body.cp6-redesign .messaging-sidebar-head strong, body.cp6-redesign .messaging-sidebar-head small { color: #fff; }
+body.cp6-redesign .messaging-sidebar-head small { color: #bfdbfe; }
+body.cp6-redesign .messaging-self-avatar, body.cp6-redesign .messaging-avatar, body.cp6-redesign .messaging-contact-avatar { background: #2563eb; border: 0; box-shadow: 0 8px 18px rgba(37, 99, 235, .2); color: #fff; }
+body.cp6-redesign .messaging-eyebrow { color: #93c5fd; display: block; font-size: .58rem; font-weight: 800; letter-spacing: .12em; margin-bottom: 4px; text-transform: uppercase; }
+body.cp6-redesign .messaging-sidebar-caption { align-items: center; background: #eff6ff; border-bottom: 1px solid #dbeafe; color: #2563eb; display: flex; font-size: .68rem; font-weight: 700; gap: 8px; padding: 10px 18px; }
+body.cp6-redesign .messaging-search-row { margin: 0; padding: 14px 14px 10px; }
+body.cp6-redesign .messaging-search { align-items: center; background: #fff; border: 1px solid #dbe3ef; border-radius: 999px; display: flex; gap: 8px; padding: 0 13px; }
+body.cp6-redesign .messaging-search i { color: #94a3b8; font-size: .75rem; }
+body.cp6-redesign .messaging-search input { background: transparent; border: 0; color: #172033; flex: 1; min-height: 38px; outline: 0; padding: 7px 0; }
+body.cp6-redesign .messaging-contacts { padding: 4px 10px 14px; scrollbar-color: #bfdbfe #f8fafc; }
+body.cp6-redesign .messaging-contact { border-radius: 13px; color: #334155; gap: 10px; padding: 11px 10px; }
+body.cp6-redesign .messaging-contact:hover, body.cp6-redesign .messaging-contact.is-active { background: #eaf2ff; color: #0f172a; }
+body.cp6-redesign .messaging-contact-copy strong { color: #1e293b; font-size: .78rem; font-weight: 750; }
+body.cp6-redesign .messaging-contact-copy small, body.cp6-redesign .messaging-contact time { color: #94a3b8; font-size: .66rem; }
+body.cp6-redesign .messaging-conversation { background: #f8fafc; }
+body.cp6-redesign .messaging-conversation-head { background: #fff; border-bottom: 1px solid #e5eaf2; height: 76px; padding: 0 22px; }
+body.cp6-redesign .messaging-conversation-head strong { color: #0f172a; font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif; font-size: 1rem; font-weight: 800; }
+body.cp6-redesign .messaging-conversation-head small { color: #64748b; font-size: .68rem; }
+body.cp6-redesign .messaging-info-button { background: #eff6ff; border: 0; border-radius: 10px; color: #2563eb; }
+body.cp6-redesign .messaging-messages { background: linear-gradient(180deg, #f8fafc, #f1f5f9); padding: 24px clamp(16px, 4vw, 44px); }
+body.cp6-redesign .messaging-message { margin-bottom: 17px; }
+body.cp6-redesign .messaging-message-author { color: #64748b; font-size: .66rem; margin-bottom: 5px; }
+body.cp6-redesign .messaging-bubble { background: #fff; border: 1px solid #e2e8f0; border-radius: 15px 15px 15px 5px; box-shadow: 0 5px 14px rgba(15, 23, 42, .05); color: #334155; padding: 11px 14px; }
+body.cp6-redesign .messaging-message.is-sent .messaging-bubble { background: #2563eb; border-color: #2563eb; border-radius: 15px 15px 5px 15px; color: #fff; }
+body.cp6-redesign .messaging-message.is-sent .messaging-message-author { color: #2563eb; }
+body.cp6-redesign .messaging-meta { color: #94a3b8; font-size: .62rem; }
+body.cp6-redesign .messaging-compose { background: #fff; border-top: 1px solid #e5eaf2; gap: 10px; padding: 14px 18px; }
+body.cp6-redesign .messaging-compose textarea { background: #f8fafc; border: 1px solid #dbe3ef; border-radius: 13px; color: #172033; min-height: 42px; padding: 11px 13px; resize: none; }
+body.cp6-redesign .messaging-compose textarea:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, .12); outline: 0; }
+body.cp6-redesign .messaging-compose button { align-items: center; background: #0f172a; border: 0; border-radius: 12px; color: #fff; display: inline-flex; gap: 7px; min-height: 42px; padding: 0 15px; }
+body.cp6-redesign .messaging-compose button:hover { background: #1e3a8a; }
+body.cp6-redesign .messaging-access-blocked { align-items: center; background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; color: #64748b; display: flex; flex-direction: column; gap: 8px; justify-content: center; min-height: 320px; text-align: center; }
+body.cp6-redesign .messaging-access-blocked i { color: #2563eb; font-size: 1.8rem; }
+body.cp6-redesign .messaging-access-blocked strong { color: #0f172a; }
+@media (max-width: 800px) {
+  body.cp6-redesign .messaging-shell { grid-template-columns: 1fr; height: auto; min-height: 0; }
+  body.cp6-redesign .messaging-sidebar { border-bottom: 1px solid #e5eaf2; border-right: 0; max-height: 250px; }
+  body.cp6-redesign .messaging-conversation { min-height: 470px; }
+  body.cp6-redesign .messaging-contact { display: grid; }
+}
+
+/* CP6 Mensajería · chat general y envío por flecha */
+body.cp6-redesign .messaging-shell { grid-template-columns: minmax(300px, 360px) minmax(0, 1fr); height: min(82vh, 820px); min-height: 660px; }
+body.cp6-redesign .messaging-compose button { border-radius: 50%; height: 48px; min-height: 48px; padding: 0; width: 48px; }
+body.cp6-redesign .messaging-compose button i { font-size: .95rem; }
+@media (max-width: 800px) {
+  body.cp6-redesign .messaging-shell { min-height: 0; }
+  body.cp6-redesign .messaging-compose button { flex: 0 0 44px; height: 44px; min-height: 44px; width: 44px; }
+}
+
+/* CP6 Login · titular institucional */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-holder {
+  color: #475569;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+  font-size: .78rem;
+  font-weight: 600;
+  line-height: 1.45;
+  margin: 14px 0 0;
+}
+
+/* CP6 Login · titular sobre dirección e indicadores alineados a la derecha */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-holder {
+  color: #dbeafe;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+  font-size: .9rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+  line-height: 1.45;
+  margin: 0 0 6px;
+  position: relative;
+  text-align: left;
+  z-index: 1;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .v2-login-points {
+  align-self: stretch;
+  justify-content: flex-end;
+}
+
+/* CP6 Login · titular estrictamente a la izquierda, sobre la dirección */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-holder,
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-footer {
+  align-self: flex-start;
+  display: block;
+  margin-left: 0;
+  margin-right: 0;
+  text-align: left;
+  width: auto;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-holder { margin-bottom: 6px; }
+
+/* CP6 PREVIEW · Portal externo alineado con el SaaS administrativo
+   Capa visual de prueba: no modifica lógica, datos ni eventos. */
+body.cp6-redesign #loginScreen.applicant-dashboard-active,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .public-entry-panel,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .applicant-home-panel {
+  background: #f4f7fb !important;
+  color: #172033 !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .public-entry-panel { min-height: 100vh !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .applicant-home-panel {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  max-width: none !important;
+  min-height: 100vh !important;
+  padding: 0 0 44px !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-dashboard-header {
+  align-items: center !important;
+  background: #0f172a !important;
+  border: 0 !important;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, .14) !important;
+  margin: 0 !important;
+  min-height: 76px !important;
+  padding: 16px clamp(20px, 5vw, 72px) !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-brand strong {
+  color: #fff !important;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -.02em !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-brand span {
+  color: #93c5fd !important;
+  font-family: Inter, system-ui, sans-serif !important;
+  font-size: .6rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .16em !important;
+  margin-top: 4px !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-header-actions { gap: 10px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .applicant-notifications-button {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  border-radius: 11px !important;
+  color: #bfdbfe !important;
+  height: 38px !important;
+  width: 38px !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-logout-button {
+  background: #fff !important;
+  border: 1px solid #dbe3ef !important;
+  border-radius: 11px !important;
+  color: #1e293b !important;
+  font-family: Inter, system-ui, sans-serif !important;
+  font-size: .72rem !important;
+  font-weight: 700 !important;
+  min-height: 38px !important;
+  padding: 0 14px !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-shell {
+  align-items: start !important;
+  display: grid !important;
+  gap: 22px !important;
+  grid-template-columns: minmax(238px, 280px) minmax(0, 1fr) !important;
+  margin: 0 auto !important;
+  max-width: 1440px !important;
+  padding: 28px clamp(18px, 4vw, 72px) 0 !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-sidebar,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-section {
+  background: #fff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, .06) !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-sidebar {
+  padding: 18px !important;
+  position: sticky !important;
+  top: 22px !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile {
+  border-bottom: 1px solid #edf2f7 !important;
+  padding: 8px 4px 18px !important;
+  text-align: left !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-avatar {
+  align-items: center !important;
+  background: #eff6ff !important;
+  border: 1px solid #dbeafe !important;
+  border-radius: 16px !important;
+  color: #2563eb !important;
+  display: flex !important;
+  height: 58px !important;
+  justify-content: center !important;
+  margin: 0 0 14px !important;
+  width: 58px !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-avatar svg { height: 27px !important; width: 27px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile h1 {
+  color: #0f172a !important;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  margin: 0 0 8px !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-contact p {
+  color: #64748b !important;
+  font-family: Inter, system-ui, sans-serif !important;
+  font-size: .72rem !important;
+  margin: 4px 0 !important;
+  overflow-wrap: anywhere !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile-button {
+  background: #f8fafc !important;
+  border: 1px solid #dbe3ef !important;
+  border-radius: 10px !important;
+  color: #2563eb !important;
+  font-family: Inter, system-ui, sans-serif !important;
+  font-size: .72rem !important;
+  font-weight: 700 !important;
+  margin-top: 12px !important;
+  min-height: 36px !important;
+  padding: 0 12px !important;
+  width: 100% !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav {
+  display: grid !important;
+  gap: 5px !important;
+  margin: 16px 0 !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  color: #64748b !important;
+  font-family: Inter, system-ui, sans-serif !important;
+  font-size: .74rem !important;
+  font-weight: 650 !important;
+  padding: 10px 11px !important;
+  text-align: left !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button.is-active,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button:hover {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button span { color: #60a5fa !important; margin-right: 8px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-primary-button {
+  background: #0f172a !important;
+  border: 1px solid #0f172a !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, .14) !important;
+  color: #fff !important;
+  font-family: Inter, system-ui, sans-serif !important;
+  font-size: .76rem !important;
+  font-weight: 750 !important;
+  min-height: 42px !important;
+  width: 100% !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-primary-button:hover { background: #1e3a8a !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-section {
+  min-width: 0 !important;
+  padding: 22px !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-heading {
+  align-items: end !important;
+  margin-bottom: 18px !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-kicker {
+  color: #2563eb !important;
+  font-family: Inter, system-ui, sans-serif !important;
+  font-size: .62rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .12em !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-heading h3 {
+  color: #0f172a !important;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  font-size: 1.35rem !important;
+  font-weight: 800 !important;
+  margin: 5px 0 0 !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-caption { color: #94a3b8 !important; font-size: .68rem !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar { gap: 10px !important; margin: 0 0 16px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar input,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar select {
+  background: #fff !important;
+  border: 1px solid #dbe3ef !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  color: #334155 !important;
+  font-family: Inter, system-ui, sans-serif !important;
+  min-height: 42px !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar input:focus,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar select:focus { border-color: #60a5fa !important; box-shadow: 0 0 0 3px rgba(37, 99, 235, .1) !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-table-wrap { border: 1px solid #e5eaf2 !important; border-radius: 14px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-table th { background: #f8fafc !important; border-bottom: 1px solid #e2e8f0 !important; color: #64748b !important; font-family: Inter, system-ui, sans-serif !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-table td { border-bottom: 1px solid #f1f5f9 !important; font-family: Inter, system-ui, sans-serif !important; padding: 12px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-table tbody tr:hover td { background: #f8fbff !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-folio { color: #2563eb !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-pdf-link { background: #eff6ff !important; color: #2563eb !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-table-view-button { color: #2563eb !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-section .client-status-badge { border-radius: 999px !important; font-family: Inter, system-ui, sans-serif !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .public-entry-internal { display: none !important; }
+@media (max-width: 820px) {
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-shell { grid-template-columns: 1fr !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-sidebar { position: static !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-section { padding: 16px !important; }
+}
+
+/* CP6 PORTAL EXTERNO · Rediseño integral unificado con el panel administrativo */
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-dashboard-header { position: relative !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-brand { gap: 11px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-brand img { height: 38px !important; object-fit: contain !important; width: 38px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-header-context { display: grid !important; gap: 2px !important; margin-left: auto !important; margin-right: 30px !important; text-align: right !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-header-context span { color: #93c5fd !important; font: 800 .57rem/1 Inter, system-ui, sans-serif !important; letter-spacing: .15em !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-header-context strong { color: #e2e8f0 !important; font: 650 .73rem/1.2 Inter, system-ui, sans-serif !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-main { min-width: 0 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-main-heading { align-items: end !important; display: flex !important; gap: 20px !important; justify-content: space-between !important; margin: 0 0 18px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-main-heading h2 { color: #0f172a !important; font: 800 clamp(1.55rem, 2.4vw, 2rem)/1.15 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important; letter-spacing: -.035em !important; margin: 6px 0 7px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-main-heading p { color: #64748b !important; font: 400 .78rem/1.5 Inter, system-ui, sans-serif !important; margin: 0 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-main-heading .client-inbox-cta { flex: 0 0 auto !important; margin: 0 !important; width: auto !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-profile-kicker,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-nav-heading,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-section-label { color: #94a3b8 !important; display: block !important; font: 800 .58rem/1.2 Inter, system-ui, sans-serif !important; letter-spacing: .12em !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-profile-kicker { margin: 0 0 15px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-nav-heading { margin: 0 10px 8px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-contact p { align-items: center !important; display: flex !important; gap: 8px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-contact p i { color: #94a3b8 !important; flex: 0 0 13px !important; font-size: .72rem !important; text-align: center !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-contact p span { min-width: 0 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile-button { align-items: center !important; display: inline-flex !important; gap: 7px !important; justify-content: center !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile-button i { font-size: .66rem !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button { align-items: center !important; display: flex !important; gap: 10px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button i { color: #94a3b8 !important; font-size: .82rem !important; width: 15px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button.is-active i,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button:hover i { color: #2563eb !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-heading h3 { font-size: 1.18rem !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-caption { align-items: center !important; display: inline-flex !important; gap: 6px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-caption i { color: #60a5fa !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-search,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-filter { position: relative !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar .client-request-search { flex: 1 1 auto !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar .client-request-filter { flex: 0 0 190px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar label > i { color: #94a3b8 !important; left: 14px !important; pointer-events: none !important; position: absolute !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 1 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar input { padding-left: 39px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar select { appearance: auto !important; padding-left: 38px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-grid { min-width: 0 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-table { min-width: 760px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-table th { font-size: .61rem !important; letter-spacing: .08em !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-table td { color: #475569 !important; font-size: .75rem !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-table td strong { color: #2563eb !important; font-weight: 800 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-table-view-button { font-size: .72rem !important; font-weight: 750 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-pdf-link { border: 1px solid #bfdbfe !important; border-radius: 8px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-empty-state { background: #f8fbff !important; border: 1px dashed #bfdbfe !important; border-radius: 16px !important; padding: 38px 20px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-empty-icon { background: #eff6ff !important; border-radius: 14px !important; color: #2563eb !important; }
+@media (max-width: 820px) {
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-header-context { display: none !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-main-heading { align-items: stretch !important; flex-direction: column !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-main-heading .client-inbox-cta { width: 100% !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar { flex-direction: column !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar .client-request-filter { flex-basis: auto !important; }
+}
+
+/* CP6 PORTAL EXTERNO · Composición final tipo Home administrativo */
+body.cp6-redesign #loginScreen.applicant-dashboard-active .applicant-home-panel { background: #f3f6fb !important; padding: 0 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-shell {
+  align-items: stretch !important;
+  display: grid !important;
+  gap: 0 !important;
+  grid-template-columns: 292px minmax(0, 1fr) !important;
+  margin: 0 !important;
+  max-width: none !important;
+  min-height: 100vh !important;
+  padding: 0 !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-sidebar {
+  align-self: stretch !important;
+  background: linear-gradient(180deg, #0f172a 0%, #16264a 58%, #18366d 100%) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: 8px 0 28px rgba(15, 23, 42, .1) !important;
+  color: #fff !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 100vh !important;
+  padding: 25px 20px 22px !important;
+  position: relative !important;
+  top: auto !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-sidebar::after { background: radial-gradient(circle at 20% 84%, rgba(37,99,235,.32), transparent 34%); content: ""; inset: auto 0 0; height: 45%; pointer-events: none; position: absolute; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-sidebar > * { position: relative; z-index: 1; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-dashboard-header {
+  align-items: stretch !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+  margin: 0 !important;
+  min-height: auto !important;
+  padding: 0 !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-brand { align-items: center !important; display: flex !important; gap: 11px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-brand img { background: rgba(255,255,255,.08) !important; border: 1px solid rgba(191,219,254,.25) !important; border-radius: 12px !important; height: 44px !important; padding: 7px !important; width: 44px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-brand strong { color: #fff !important; display: block !important; font: 800 .84rem/1.2 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-brand span { color: #93c5fd !important; display: block !important; font: 800 .55rem/1.2 Inter, system-ui, sans-serif !important; letter-spacing: .16em !important; margin-top: 5px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-header-actions { align-items: center !important; display: flex !important; gap: 8px !important; justify-content: flex-end !important; position: absolute !important; right: 0 !important; top: 0 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .applicant-notifications-button { background: rgba(255,255,255,.08) !important; border: 1px solid rgba(191,219,254,.2) !important; border-radius: 10px !important; color: #bfdbfe !important; height: 34px !important; width: 34px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-logout-button { background: transparent !important; border: 0 !important; color: #bfdbfe !important; font-size: .65rem !important; min-height: 34px !important; padding: 0 4px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-logout-button i { margin-right: 5px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile { border-bottom: 1px solid rgba(191,219,254,.18) !important; padding: 27px 4px 21px !important; text-align: left !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-profile-kicker { color: #93c5fd !important; font-size: .56rem !important; margin-bottom: 14px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-avatar { background: linear-gradient(145deg,#2563eb,#60a5fa) !important; border: 0 !important; border-radius: 50% !important; box-shadow: 0 10px 22px rgba(37,99,235,.28) !important; color: #fff !important; height: 58px !important; margin-bottom: 13px !important; width: 58px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile h1 { color: #fff !important; font-size: 1rem !important; margin-bottom: 10px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-contact p { color: #bfdbfe !important; font-size: .68rem !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-contact p i { color: #93c5fd !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile-button { background: rgba(255,255,255,.08) !important; border: 1px solid rgba(191,219,254,.24) !important; color: #e0efff !important; margin-top: 13px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav { gap: 5px !important; margin: 23px 0 0 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-nav-heading { color: #7fa9dc !important; margin: 0 10px 9px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button { color: #bfdbfe !important; font-size: .71rem !important; padding: 11px 10px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button i { color: #7fa9dc !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button.is-active { background: rgba(96,165,250,.17) !important; color: #fff !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button.is-active i { color: #93c5fd !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-cta { margin-top: 20px !important; width: 100% !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-footer { border-top: 1px solid rgba(191,219,254,.16) !important; display: grid !important; gap: 5px !important; margin-top: auto !important; padding: 18px 4px 0 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-footer strong { color: #dbeafe !important; font: 650 .68rem/1.3 Inter, system-ui, sans-serif !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-footer span { color: #7fa9dc !important; font: 500 .62rem/1.3 Inter, system-ui, sans-serif !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-main { background: #f3f6fb !important; min-width: 0 !important; padding: 27px clamp(20px, 4vw, 58px) 48px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-topbar { align-items: center !important; display: flex !important; justify-content: space-between !important; margin: 0 0 19px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-topbar div { display: grid !important; gap: 4px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-topbar span:first-child { color: #64748b !important; font: 800 .57rem/1 Inter, system-ui, sans-serif !important; letter-spacing: .15em !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-topbar strong { color: #0f172a !important; font: 800 1rem/1.2 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-online-status { color: #64748b !important; font: 650 .68rem/1 Inter, system-ui, sans-serif !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-online-status i { background: #22c55e !important; border-radius: 50% !important; box-shadow: 0 0 0 4px rgba(34,197,94,.12) !important; display: inline-block !important; height: 7px !important; margin-right: 5px !important; width: 7px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-hero { background: linear-gradient(120deg,#0f172a 0%,#16366f 67%,#2563eb 100%) !important; border-radius: 19px !important; box-shadow: 0 16px 32px rgba(15,23,42,.14) !important; min-height: 220px !important; overflow: hidden !important; padding: 32px 34px !important; position: relative !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-hero::after { border: 1px solid rgba(191,219,254,.15) !important; border-radius: 50% !important; box-shadow: 0 0 0 33px rgba(191,219,254,.035), 0 0 0 66px rgba(191,219,254,.025) !important; content: "" !important; height: 270px !important; position: absolute !important; right: -60px !important; top: -155px !important; width: 270px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-hero-copy { max-width: 530px !important; position: relative !important; z-index: 1 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-kicker { color: #93c5fd !important; font: 800 .57rem/1 Inter, system-ui, sans-serif !important; letter-spacing: .16em !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-kicker i { color: #34d399 !important; font-size: .4rem !important; margin-right: 7px !important; vertical-align: middle !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-hero h2 { color: #fff !important; font: 800 clamp(1.65rem, 3vw, 2.55rem)/1.12 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important; letter-spacing: -.045em !important; margin: 16px 0 12px !important; max-width: 570px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-hero p { color: #cbdcf5 !important; font: 400 .77rem/1.6 Inter, system-ui, sans-serif !important; margin: 0 !important; max-width: 430px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-hero-art { bottom: 35px !important; opacity: .75 !important; position: absolute !important; right: 55px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-chart { align-items: end !important; display: flex !important; gap: 7px !important; height: 75px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-chart span { background: linear-gradient(180deg,#bfdbfe,#60a5fa) !important; border-radius: 5px 5px 0 0 !important; display: block !important; width: 16px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-section { border: 1px solid #e2e8f0 !important; border-radius: 18px !important; box-shadow: 0 10px 25px rgba(15,23,42,.045) !important; margin-top: 22px !important; padding: 22px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-heading { align-items: end !important; margin-bottom: 17px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-heading h3 { color: #0f172a !important; font-size: 1.18rem !important; margin: 7px 0 4px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-heading p { color: #94a3b8 !important; font: 400 .7rem/1.4 Inter, system-ui, sans-serif !important; margin: 0 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar input,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-request-toolbar select { min-height: 40px !important; }
+@media (max-width: 820px) {
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-shell { display: block !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-sidebar { min-height: auto !important; padding: 16px !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-dashboard-header { gap: 14px !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile { padding: 20px 4px 16px !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav { margin-top: 15px !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-footer { display: none !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-main { padding: 20px 15px 32px !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-hero { min-height: 210px !important; padding: 25px 22px !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-hero-art { opacity: .3 !important; right: 20px !important; }
+}
+
+/* CP6 PORTAL EXTERNO · Ajustes finales solicitados */
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile { text-align: center !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile .client-sidebar-avatar { margin-left: auto !important; margin-right: auto !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-contact { text-align: center !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-contact p { justify-content: center !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile-button { width: 100% !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button { white-space: nowrap !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button span { white-space: nowrap !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button:first-of-type span { font-size: .7rem !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-dashboard-header .client-header-actions { display: none !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-main-actions { align-items: center !important; display: flex !important; gap: 10px !important; justify-content: flex-end !important; margin: 0 0 12px !important; min-height: 36px !important; position: relative !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-main-actions .client-online-status { margin-right: 6px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-main-actions .applicant-notifications-button { background: #fff !important; border: 1px solid #dbe3ef !important; border-radius: 10px !important; color: #2563eb !important; height: 36px !important; width: 36px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-main-actions .client-logout-button { background: #0f172a !important; border: 1px solid #0f172a !important; border-radius: 10px !important; color: #fff !important; font: 700 .68rem/1 Inter, system-ui, sans-serif !important; min-height: 36px !important; padding: 0 13px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-main-actions .applicant-notifications-panel { right: 105px !important; top: 43px !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-main > .client-portal-hero,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-main > .client-history-section { width: 100% !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-section { box-sizing: border-box !important; }
+@media (max-width: 820px) {
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-main-actions { margin-bottom: 10px !important; }
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-main-actions .client-online-status { display: none !important; }
+}
+
+/* CP6 PORTAL EXTERNO · Animación sutil de barras y tipografía uniforme */
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button span { font-size: .71rem !important; font-weight: 650 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-chart span { animation: cp6PortalBarRise 2.8s ease-in-out infinite alternate !important; transform-origin: bottom !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-chart span:nth-child(2) { animation-delay: -.45s !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-chart span:nth-child(3) { animation-delay: -.9s !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-chart span:nth-child(4) { animation-delay: -1.35s !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-chart span:nth-child(5) { animation-delay: -1.8s !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-chart span:nth-child(6) { animation-delay: -2.25s !important; }
+@keyframes cp6PortalBarRise { from { opacity: .68; transform: scaleY(.82); } to { opacity: 1; transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) {
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-chart span { animation: none !important; }
+}
+
+/* CP6 PORTAL EXTERNO · Logo institucional en el hero */
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-hero-art { align-items: center !important; display: flex !important; justify-content: center !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-logo { animation: cp6PortalLogoFloat 4.8s ease-in-out infinite !important; filter: drop-shadow(0 14px 22px rgba(96,165,250,.24)) !important; height: auto !important; max-width: 190px !important; object-fit: contain !important; opacity: .9 !important; width: 190px !important; }
+@keyframes cp6PortalLogoFloat { 0%,100% { opacity: .78; transform: translateY(4px) scale(.98); } 50% { opacity: 1; transform: translateY(-5px) scale(1.02); } }
+@media (prefers-reduced-motion: reduce) {
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-logo { animation: none !important; }
+}
+@media (max-width: 820px) {
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-logo { max-width: 125px !important; width: 125px !important; }
+}
+
+/* CP6 PORTAL EXTERNO · Cuadros del logo más claros */
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-logo {
+  filter: brightness(1.32) contrast(1.12) saturate(.72) drop-shadow(0 14px 22px rgba(191,219,254,.3)) !important;
+  opacity: 1 !important;
+}
+
+/* CP6 PORTAL EXTERNO · Animación refinada del logo */
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-logo {
+  animation: cp6PortalLogoMotion 4.2s ease-in-out infinite !important;
+  will-change: transform, filter, opacity !important;
+}
+@keyframes cp6PortalLogoMotion {
+  0%, 100% {
+    filter: brightness(1.18) contrast(1.08) saturate(.72) drop-shadow(0 11px 19px rgba(191,219,254,.23));
+    opacity: .86;
+    transform: translate3d(0, 5px, 0) rotate(-1deg) scale(.98);
+  }
+  50% {
+    filter: brightness(1.5) contrast(1.16) saturate(.62) drop-shadow(0 20px 30px rgba(191,219,254,.45));
+    opacity: 1;
+    transform: translate3d(0, -7px, 0) rotate(1deg) scale(1.045);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-logo {
+    animation: none !important;
+    filter: brightness(1.32) contrast(1.12) saturate(.72) drop-shadow(0 14px 22px rgba(191,219,254,.3)) !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* CP6 PORTAL EXTERNO · Animación visible del logo */
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-hero-art {
+  animation: cp6PortalLogoStage 2.8s ease-in-out infinite !important;
+  will-change: transform !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-logo {
+  animation: cp6PortalLogoVisible 2.8s ease-in-out infinite !important;
+  filter: brightness(1.32) contrast(1.12) saturate(.72) drop-shadow(0 14px 22px rgba(191,219,254,.34)) !important;
+  will-change: transform, opacity !important;
+}
+@keyframes cp6PortalLogoStage {
+  0%, 100% { transform: translateY(7px) rotate(-1.5deg); }
+  50% { transform: translateY(-12px) rotate(1.5deg); }
+}
+@keyframes cp6PortalLogoVisible {
+  0%, 100% { opacity: .72; transform: scale(.92); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-portal-hero-art,
+  body.cp6-redesign #loginScreen.applicant-dashboard-active .client-hero-logo { animation: none !important; transform: none !important; }
+}
+
+/* CP6 LOGIN · Marca Mi Portal */
+body.cp6-redesign .v2-login-logo strong {
+  font-family: "Pacifico", "Segoe Script", cursive !important;
+  font-size: 1.35rem !important;
+  font-weight: 400 !important;
+  letter-spacing: .01em !important;
+}
+body.cp6-redesign .v2-login-logo small { letter-spacing: .16em !important; }
+
+/* CP6 LOGIN · Nombre institucional con estilo manuscrito */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-panel h1#publicEntryTitle {
+  color: #0f172a !important;
+  font-family: "Pacifico", "Segoe Script", cursive !important;
+  font-size: clamp(2.15rem, 5vw, 4.25rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: .01em !important;
+  line-height: 1.12 !important;
+}
+
+/* CP6 LOGIN · Nombre institucional compacto en una sola línea */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-panel h1#publicEntryTitle {
+  font-size: clamp(1.55rem, 3.3vw, 2.75rem) !important;
+  letter-spacing: 0 !important;
+  line-height: 1.2 !important;
+  max-width: none !important;
+  white-space: nowrap !important;
+}
+@media (max-width: 620px) {
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-panel h1#publicEntryTitle {
+    font-size: clamp(1.35rem, 7vw, 2rem) !important;
+  }
+}
+
+/* CP6 LOGIN · Tipografía corporativa definitiva */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-panel h1#publicEntryTitle,
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .v2-login-logo strong {
+  font-family: "Plus Jakarta Sans", "DM Sans", Inter, system-ui, sans-serif !important;
+  font-weight: 800 !important;
+  letter-spacing: -.035em !important;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-panel h1#publicEntryTitle {
+  font-size: clamp(1.55rem, 3.3vw, 2.75rem) !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+/* CP6 DETALLE · Botón de cierre siempre interactivo */
+#requestDetailDialog [data-close-request-detail] {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  position: absolute !important;
+  z-index: 30 !important;
+}
+
+/* CP6 PORTAL EXTERNO · La tabla no muestra CTA de solicitud */
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-history-section .client-inbox-cta,
+body.cp6-redesign #loginScreen.applicant-dashboard-active #applicantHomeRequestsTable [data-new-request],
+body.cp6-redesign #loginScreen.applicant-dashboard-active #applicantHomeRequestsTable .client-empty-new-request {
+  display: none !important;
+}
+
+/* CP6 VALIDACIÓN · Ocultar listados heredados fuera de la tabla oficial */
+body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-hidden-list,
+body.cp6-redesign #avaluosAuthorizedFoliosPanel .validation-pending-section,
+body.cp6-redesign #avaluosAuthorizedFoliosPanel #authorizedFoliosListAvaluos,
+body.cp6-redesign #avaluosAuthorizedFoliosPanel #pendingReceptionSummary {
+  display: none !important;
+}
+
+/* CP6 BUSCADOR GLOBAL · Contraste final y un solo panel */
+body.cp6-redesign #appShell.control-shell .global-search-palette {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, .16) !important;
+}
+body.cp6-redesign #appShell.control-shell .global-search-palette .global-search-results > p {
+  color: #475569 !important;
+}
+body.cp6-redesign #appShell.control-shell .global-search-palette .search-result {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+}
+body.cp6-redesign #appShell.control-shell .global-search-palette .search-result:hover,
+body.cp6-redesign #appShell.control-shell .global-search-palette .search-result:focus-visible {
+  background: #eff6ff !important;
+}
+body.cp6-redesign #appShell.control-shell .global-search-palette .search-result span { color: #2563eb !important; }
+body.cp6-redesign #appShell.control-shell .global-search-palette .search-result strong { color: #0f172a !important; font-weight: 750 !important; }
+body.cp6-redesign #appShell.control-shell .global-search-palette .search-result small { color: #475569 !important; }
+
+/* CP6 LOGIN · Acceso externo directo y luciérnagas sutiles */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  opacity: .72;
+  background-image:
+    radial-gradient(circle at 12% 28%, rgba(191,219,254,.95) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 23% 72%, rgba(147,197,253,.9) 0 1.8px, transparent 3px),
+    radial-gradient(circle at 38% 19%, rgba(224,242,254,.95) 0 1.4px, transparent 3px),
+    radial-gradient(circle at 49% 61%, rgba(125,211,252,.95) 0 1.7px, transparent 3px),
+    radial-gradient(circle at 63% 31%, rgba(191,219,254,.85) 0 1.5px, transparent 3px),
+    radial-gradient(circle at 76% 77%, rgba(224,242,254,.9) 0 1.8px, transparent 3px),
+    radial-gradient(circle at 88% 22%, rgba(147,197,253,.85) 0 1.4px, transparent 3px),
+    radial-gradient(circle at 91% 57%, rgba(191,219,254,.9) 0 1.7px, transparent 3px);
+  animation: cp6-fireflies-drift 8s ease-in-out infinite alternate;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  opacity: .38;
+  background-image:
+    radial-gradient(circle at 18% 45%, rgba(125,211,252,.8) 0 1px, transparent 2.8px),
+    radial-gradient(circle at 34% 84%, rgba(191,219,254,.75) 0 1px, transparent 2.8px),
+    radial-gradient(circle at 57% 13%, rgba(224,242,254,.75) 0 1px, transparent 2.8px),
+    radial-gradient(circle at 71% 52%, rgba(125,211,252,.8) 0 1px, transparent 2.8px),
+    radial-gradient(circle at 82% 38%, rgba(191,219,254,.75) 0 1px, transparent 2.8px);
+  animation: cp6-fireflies-flicker 4.8s ease-in-out infinite;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual > * { position: relative; z-index: 1; }
+@keyframes cp6-fireflies-drift {
+  0% { opacity: .32; transform: translate3d(0, 8px, 0) scale(.96); }
+  45% { opacity: .92; transform: translate3d(7px, -5px, 0) scale(1.02); }
+  100% { opacity: .48; transform: translate3d(-5px, 3px, 0) scale(.98); }
+}
+@keyframes cp6-fireflies-flicker {
+  0%, 100% { opacity: .16; transform: translate3d(0, 0, 0); }
+  38% { opacity: .62; transform: translate3d(-4px, -6px, 0); }
+  72% { opacity: .28; transform: translate3d(5px, 4px, 0); }
+}
+body.cp6-redesign .applicant-login-dialog {
+  width: min(560px, calc(100vw - 28px));
+  max-width: 560px;
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  background: transparent;
+  box-shadow: 0 28px 80px rgba(15,23,42,.26);
+  overflow: visible;
+}
+body.cp6-redesign .applicant-login-dialog::backdrop { background: rgba(15,23,42,.58); backdrop-filter: blur(5px); }
+body.cp6-redesign .cp6-applicant-login-card {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 36px 46px 30px;
+  border-radius: 28px;
+  background: #fff;
+  color: #0f172a;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+}
+body.cp6-redesign .cp6-login-card-top { display: flex; align-items: flex-start; justify-content: space-between; }
+body.cp6-redesign .cp6-login-lock {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 66px; height: 66px; border-radius: 20px;
+  background: #eff6ff; color: #2563eb; font-size: 28px;
+}
+body.cp6-redesign .cp6-login-close {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border: 0; border-radius: 50%;
+  background: #f1f5f9; color: #64748b; font-size: 30px; line-height: 1; cursor: pointer;
+}
+body.cp6-redesign .cp6-login-close:hover { background: #e2e8f0; color: #0f172a; }
+body.cp6-redesign .cp6-login-heading { margin: 34px 0 28px; }
+body.cp6-redesign .cp6-login-heading h2 { margin: 0 0 8px; color: #0f172a; font: 800 clamp(2rem, 4vw, 2.65rem)/1.1 "Plus Jakarta Sans", Inter, sans-serif; letter-spacing: -.045em; }
+body.cp6-redesign .cp6-login-heading p { margin: 0; color: #64748b; font-size: .98rem; line-height: 1.55; }
+body.cp6-redesign .cp6-login-field { display: block; margin: 0 0 22px; color: #334155; font-size: .92rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+body.cp6-redesign .cp6-login-field > span { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
+body.cp6-redesign .cp6-password-label small { color: #315c98; font-size: .9rem; font-weight: 500; letter-spacing: 0; text-transform: none; }
+body.cp6-redesign .cp6-login-input-wrap { position: relative; }
+body.cp6-redesign .cp6-login-input-wrap > i { position: absolute; left: 18px; top: 50%; z-index: 1; color: #94a3b8; font-size: 1.2rem; transform: translateY(-50%); pointer-events: none; }
+body.cp6-redesign .cp6-login-input-wrap input { width: 100%; min-height: 64px; box-sizing: border-box; padding: 0 18px 0 56px; border: 1px solid #dbe2ea; border-radius: 18px; background: #f8fafc; color: #0f172a; font: 500 1rem "Plus Jakarta Sans", Inter, sans-serif; outline: 0; transition: border-color .2s, box-shadow .2s, background .2s; }
+body.cp6-redesign .cp6-login-input-wrap input::placeholder { color: #94a3b8; font-weight: 400; }
+body.cp6-redesign .cp6-login-input-wrap input:focus { border-color: #3b82f6; background: #fff; box-shadow: 0 0 0 4px rgba(59,130,246,.12); }
+body.cp6-redesign .cp6-remember { display: flex; align-items: center; gap: 12px; margin: 6px 0 22px; color: #475569; font-size: .95rem; font-weight: 500; cursor: pointer; }
+body.cp6-redesign .cp6-remember input { width: 20px; height: 20px; accent-color: #2563eb; }
+body.cp6-redesign .cp6-login-message { min-height: 18px; margin: 0 0 8px; color: #dc2626; text-align: center; }
+body.cp6-redesign .cp6-login-submit { width: 100%; min-height: 60px; border: 0; border-radius: 18px; background: #2563eb; color: #fff; font: 800 1.05rem "Plus Jakarta Sans", Inter, sans-serif; cursor: pointer; box-shadow: 0 12px 22px rgba(37,99,235,.2); transition: background .2s, transform .2s; }
+body.cp6-redesign .cp6-login-submit:hover { background: #1d4ed8; transform: translateY(-1px); }
+body.cp6-redesign .cp6-login-divider { height: 1px; margin: 24px 0 18px; background: #eef2f7; }
+body.cp6-redesign .cp6-login-register { display: block; width: 100%; border: 0; background: transparent; color: #64748b; font: 500 .95rem "Plus Jakarta Sans", Inter, sans-serif; cursor: pointer; }
+body.cp6-redesign .cp6-login-register strong { color: #315c98; font-weight: 700; }
+body.cp6-redesign .cp6-login-cancel { display: block; margin: 15px auto 0; border: 0; background: transparent; color: #94a3b8; font: 500 .78rem "Plus Jakarta Sans", Inter, sans-serif; cursor: pointer; }
+@media (max-width: 620px) {
+  body.cp6-redesign .cp6-applicant-login-card { padding: 28px 22px 24px; border-radius: 22px; }
+  body.cp6-redesign .cp6-login-heading { margin-top: 26px; }
+  body.cp6-redesign .cp6-login-lock { width: 58px; height: 58px; font-size: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual::before,
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual::after { animation: none; }
+}
+
+/* CP6 LOGIN · Formulario externo visible dentro de la pantalla principal */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-content {
+  width: min(100%, 510px);
+  margin: 0 auto;
+}
+body.cp6-redesign .cp6-applicant-login-inline {
+  width: 100%;
+  max-width: 510px;
+  margin: 26px auto 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-card-top { margin-bottom: 0; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-lock { width: 58px; height: 58px; font-size: 24px; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-heading { margin: 22px 0 24px; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-heading h2 { font-size: clamp(1.65rem, 3vw, 2.15rem); }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-heading p { font-size: .86rem; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-field { font-size: .75rem; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-input-wrap input { min-height: 55px; border-radius: 14px; font-size: .86rem; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-submit { min-height: 54px; border-radius: 14px; font-size: .92rem; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-login-divider { margin: 18px 0 14px; }
+body.cp6-redesign .cp6-applicant-login-inline .cp6-remember { font-size: .82rem; }
+@media (max-width: 800px) {
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .public-entry-content { width: 100%; }
+  body.cp6-redesign .cp6-applicant-login-inline { margin-top: 18px; }
+}
+
+/* CP6 LOGIN - Crear cuenta compacta: nombre/correo, telefono/contrasena y confirmacion/acciones */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline { display:grid !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important; column-gap:16px !important; row-gap:0 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-heading,
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-message { grid-column:1/-1 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field { min-width:0 !important; margin-bottom:10px !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field:nth-of-type(1) { grid-column:1 !important; grid-row:2 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field:nth-of-type(2) { grid-column:2 !important; grid-row:2 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field:nth-of-type(3) { grid-column:1 !important; grid-row:3 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field:nth-of-type(4) { grid-column:2 !important; grid-row:3 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field:nth-of-type(5) { grid-column:1 !important; grid-row:4 !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-message { grid-row:5 !important; min-height:16px; margin:0 0 4px !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions { grid-column:2 !important; grid-row:4 !important; display:flex !important; align-items:flex-end !important; gap:8px !important; min-width:0 !important; padding-top:18px !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions .cp6-login-submit,
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions .cp6-login-back { width:50% !important; min-height:44px !important; margin:0 !important; border-radius:12px !important; font-size:.78rem !important; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions .cp6-login-back { display:inline-flex !important; align-items:center !important; justify-content:center !important; border:1px solid #cbd5e1 !important; background:#f8fafc !important; color:#315c98 !important; }
+@media (max-width:620px) {
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline { grid-template-columns:1fr !important; column-gap:0 !important; }
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field,
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-message,
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions { grid-column:1 !important; grid-row:auto !important; }
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-register-actions { padding-top:0 !important; }
+}
+
+/* CP6 RECEPCIÓN · Menús de pago completos y visibles sobre las tarjetas */
+body.cp6-redesign #appShell.control-shell #recordEditor,
+body.cp6-redesign #appShell.control-shell #recordEditor > .max-w-7xl,
+body.cp6-redesign #appShell.control-shell #recordEditor > .max-w-7xl > form,
+body.cp6-redesign #appShell.control-shell #recordEditor .overflow-hidden,
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails {
+  overflow: visible !important;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor,
+body.cp6-redesign #appShell.control-shell #recordEditor > .max-w-7xl {
+  position: relative;
+  z-index: 20;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails {
+  position: relative;
+  z-index: 40;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select {
+  position: relative;
+  z-index: 50;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select-menu {
+  max-height: 320px !important;
+  overflow-y: auto !important;
+  z-index: 9999 !important;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select:has(#paymentDeliveredToInput) .custom-select-menu {
+  bottom: calc(100% + 7px) !important;
+  top: auto !important;
+  transform-origin: bottom !important;
+}
+
+/* CP6 RECEPCIÓN · Método de pago siempre abre hacia arriba. */
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select:has(#methodInput),
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select.custom-select-opens-up {
+  position: relative !important;
+  z-index: 9999 !important;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select:has(#methodInput) > .custom-select-menu,
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails .custom-select.custom-select-opens-up > .custom-select-menu {
+  bottom: calc(100% + 7px) !important;
+  top: auto !important;
+  transform-origin: bottom !important;
+  z-index: 10000 !important;
+}
+
+/* CP6 RECEPCIÓN · Cantidad y fecha de pago en una sola línea */
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails:not(.is-hidden) {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: end;
+  column-gap: 14px;
+  row-gap: 14px;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(1),
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(2) {
+  grid-column: auto;
+  min-width: 0;
+}
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(3),
+body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(4) {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+@media (max-width: 700px) {
+  body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails:not(.is-hidden) {
+    grid-template-columns: 1fr;
+  }
+  body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(1),
+  body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(2),
+  body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(3),
+  body.cp6-redesign #appShell.control-shell #recordEditor #paymentDetails > div:nth-child(4) {
+    grid-column: 1;
+  }
+}
+
+/* CP6 HOME · Estado visual del seguimiento de solicitudes */
+body.cp6-redesign .v2-ring-section.is-attention .v2-ring {
+  background: conic-gradient(#dc2626 0 var(--ratio), #fee2e2 var(--ratio) 100%);
+}
+body.cp6-redesign .v2-ring-section.is-attention > div:last-child > strong,
+body.cp6-redesign .v2-ring-section.is-attention p { color: #b91c1c; }
+body.cp6-redesign .v2-ring-section.is-stable .v2-ring {
+  background: conic-gradient(#eab308 0 var(--ratio), #fef3c7 var(--ratio) 100%);
+}
+body.cp6-redesign .v2-ring-section.is-stable > div:last-child > strong,
+body.cp6-redesign .v2-ring-section.is-stable p { color: #a16207; }
+body.cp6-redesign .v2-ring-section.is-excellent .v2-ring {
+  background: conic-gradient(#16a34a 0 var(--ratio), #dcfce7 var(--ratio) 100%);
+}
+body.cp6-redesign .v2-ring-section.is-excellent > div:last-child > strong,
+body.cp6-redesign .v2-ring-section.is-excellent p { color: #15803d; }
+
+/* CP6 HOME · Popup compacto de detalles rápidos */
+#homeQuickRequestDialog { border: 0; border-radius: 22px; padding: 0; width: min(560px, calc(100vw - 28px)); max-width: calc(100vw - 28px); background: transparent; color: #0f172a; overflow: visible; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
+#homeQuickRequestDialog::backdrop { background: rgba(15, 23, 42, .48); backdrop-filter: blur(3px); }
+.cp6-home-quick-card { position: relative; overflow: hidden; border: 1px solid #dbeafe; border-radius: 22px; background: #fff; box-shadow: 0 24px 70px rgba(15, 23, 42, .28); }
+.cp6-home-quick-accent { height: 7px; background: linear-gradient(90deg, #2563eb, #4f46e5, #1d4ed8); }
+.cp6-home-quick-card header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 20px 22px 14px; border-bottom: 1px solid #eef2f7; }
+.cp6-home-quick-kicker { display: block; margin-bottom: 4px; color: #2563eb; font-size: 10px; font-weight: 800; letter-spacing: .13em; }
+.cp6-home-quick-card h2 { margin: 0; color: #0f172a; font-size: 1.35rem; font-weight: 800; letter-spacing: -.025em; }
+.cp6-home-quick-close { display: grid; place-items: center; width: 34px; height: 34px; flex: 0 0 34px; border: 0; border-radius: 50%; background: #f1f5f9; color: #64748b; cursor: pointer; transition: .18s ease; }
+.cp6-home-quick-close:hover { background: #dbeafe; color: #1d4ed8; transform: rotate(4deg); }
+.cp6-home-quick-status { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 22px; background: #f8fafc; }
+.cp6-home-quick-date { color: #64748b; font-size: 11px; font-weight: 600; }
+.cp6-home-quick-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 18px 22px 8px; }
+.cp6-home-quick-grid > div { min-width: 0; padding: 12px 13px; border: 1px solid #e2e8f0; border-radius: 14px; background: #fff; }
+.cp6-home-quick-grid small { display: block; margin-bottom: 5px; color: #94a3b8; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.cp6-home-quick-grid strong { display: flex; align-items: center; min-width: 0; gap: 7px; color: #1e293b; font-size: 12px; font-weight: 700; overflow-wrap: anywhere; }
+.cp6-home-quick-grid strong i { width: 15px; flex: 0 0 15px; color: #2563eb; text-align: center; }
+.cp6-home-quick-card footer { display: flex; justify-content: flex-end; gap: 9px; padding: 14px 22px 20px; }
+.cp6-home-quick-card footer button { border-radius: 11px; cursor: pointer; font-family: inherit; font-size: 11px; font-weight: 800; padding: 10px 14px; transition: .18s ease; }
+.cp6-home-quick-secondary { border: 1px solid #cbd5e1; background: #fff; color: #475569; }
+.cp6-home-quick-secondary:hover { background: #f8fafc; }
+.cp6-home-quick-primary { border: 1px solid #2563eb; background: #2563eb; color: #fff; box-shadow: 0 5px 12px rgba(37, 99, 235, .18); }
+.cp6-home-quick-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+@media (max-width: 560px) {
+  #homeQuickRequestDialog { width: calc(100vw - 18px); max-width: calc(100vw - 18px); }
+  .cp6-home-quick-card header, .cp6-home-quick-status, .cp6-home-quick-grid, .cp6-home-quick-card footer { padding-left: 15px; padding-right: 15px; }
+  .cp6-home-quick-grid { grid-template-columns: 1fr; }
+  .cp6-home-quick-card footer { flex-direction: column-reverse; }
+  .cp6-home-quick-card footer button { width: 100%; }
+}
 
 
-/* CP6 LOGIN · Registro más amplio y etiquetas compactas */
+/* CP6 SOLICITUDES · Barra homologada con Gestión de Avalúos */
+body.cp6-redesign #solicitudesView > .solicitudes-toolbar {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(185px, .7fr) minmax(280px, 1.25fr) minmax(190px, .75fr) auto;
+  margin: 0 0 14px;
+  padding: 13px 16px;
+  width: 100%;
+}
+body.cp6-redesign #solicitudesView .solicitudes-filter-title {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+  white-space: nowrap;
+}
+body.cp6-redesign #solicitudesView .solicitudes-filter-title > span {
+  align-items: center;
+  background: #eff6ff;
+  border-radius: 11px;
+  color: #2563eb;
+  display: inline-flex;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+body.cp6-redesign #solicitudesView .solicitudes-filter-title strong {
+  color: #0f172a;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .86rem;
+  font-weight: 800;
+}
+body.cp6-redesign #solicitudesView .solicitudes-search-wrap {
+  min-width: 0;
+  position: relative;
+  width: 100%;
+}
+body.cp6-redesign #solicitudesView .solicitudes-search-wrap > i {
+  color: #94a3b8;
+  left: 14px;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+body.cp6-redesign #solicitudesView #requestSearchInput {
+  background: #fff;
+  border: 1px solid #dbe3ee;
+  border-radius: 999px;
+  box-shadow: none;
+  color: #334155;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .76rem;
+  font-weight: 400;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 16px 0 40px;
+  width: 100%;
+}
+body.cp6-redesign #solicitudesView #requestSearchInput:focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, .1);
+  outline: 0;
+}
+body.cp6-redesign #solicitudesView #requestStatusFilter {
+  max-width: none;
+  min-width: 0;
+  width: 100%;
+}
+body.cp6-redesign #solicitudesView .solicitudes-heading-actions {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin: 0;
+  white-space: nowrap;
+}
+body.cp6-redesign #solicitudesView .solicitudes-heading-actions button {
+  border-radius: 12px;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  font-size: .75rem;
+  font-weight: 700;
+  min-height: 40px;
+  padding: 0 15px;
+  white-space: nowrap;
+}
+body.cp6-redesign #solicitudesView #backRequestsToAvaluosButton { background: #0f172a; color: #fff; }
+body.cp6-redesign #solicitudesView #newInternalRequestButton { background: #2563eb; color: #fff; }
+@media (max-width: 1100px) {
+  body.cp6-redesign #solicitudesView > .solicitudes-toolbar { grid-template-columns: minmax(170px, .7fr) minmax(230px, 1fr) 190px; }
+  body.cp6-redesign #solicitudesView .solicitudes-heading-actions { grid-column: 1 / -1; justify-self: end; }
+}
+@media (max-width: 700px) {
+  body.cp6-redesign #solicitudesView > .solicitudes-toolbar { align-items: stretch; display: flex; flex-direction: column; }
+  body.cp6-redesign #solicitudesView .solicitudes-filter-title,
+  body.cp6-redesign #solicitudesView .solicitudes-search-wrap,
+  body.cp6-redesign #solicitudesView #requestStatusFilter,
+  body.cp6-redesign #solicitudesView .solicitudes-heading-actions { width: 100%; }
+  body.cp6-redesign #solicitudesView .solicitudes-heading-actions { justify-content: stretch; }
+  body.cp6-redesign #solicitudesView .solicitudes-heading-actions button { flex: 1; }
+}
+
+/* CP6 · Solicitud nueva: resultados de usuario externo y descarga legible */
+.request-external-results {
+  margin-top: 6px;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(15,23,42,.10);
+}
+.request-external-result { display:flex; flex-direction:column; width:100%; padding:9px 12px; border:0; border-bottom:1px solid #f1f5f9; background:#fff; text-align:left; cursor:pointer; }
+.request-external-result:hover { background:#eff6ff; }
+.request-external-result strong { color:#0f172a; font-size:.75rem; }
+.request-external-result small, .request-external-empty, .request-external-selected { color:#64748b; font-size:.68rem; }
+.request-external-selected { display:block; padding:8px 12px; color:#2563eb; font-weight:700; }
+#fileViewerDialog .file-viewer-download,
+#requestDetailDialog .client-download-button { color:#fff !important; }
+
+/* CP6 LOGIN · Registro externo amplio, aislado del formulario Iniciar sesión */
 body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline {
   width: min(100%, 620px) !important;
   max-width: 620px !important;
