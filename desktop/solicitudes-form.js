@@ -942,7 +942,11 @@
       applicantSession = result;
       sessionStorage.setItem("control-avaluos.applicant", JSON.stringify(result));
       setMessage(message, "Registro realizado. Ya puedes enviar solicitudes y consultar su avance.", "success");
-      window.setTimeout(() => { closeDialog(applicantRegisterDialog); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); }, 900);
+      window.setTimeout(() => {
+        closeDialog(applicantRegisterDialog);
+        showApplicantHome();
+        renderApplicantHomeRequests();
+      }, 900);
     } catch (error) { setMessage(message, error.message || "No se pudo registrar el usuario."); }
     finally { setBusy(form, false); }
   }
