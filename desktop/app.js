@@ -30,7 +30,7 @@
   let authorizedAppraisalNumbers = [];
   let operationalView = "todos";
   let receptionPage = 1;
-  const AVALUOS_PAGE_SIZE = 10;
+  const AVALUOS_PAGE_SIZE = 9;
   let activeAppView = "avaluos";
   let activeSessionUser = "";
   let notifications = [];
@@ -1017,7 +1017,7 @@
     const printButton = paid ? `<button class="record-action request-icon-button request-print-button icon-only" data-print="${record.id}" type="button" title="Imprimir" aria-label="Imprimir recibo">${printIcon}</button>` : "";
     const linkedRequest = (window.__controlSolicitudes || []).find((request) => normalizeNumber(request.numeroAvaluo) === normalizeNumber(record.numeroAvaluo));
     const requestFolio = linkedRequest?.folio || record.folioSolicitud || record.solicitudFolio || "—";
-    return `<tr><td class="appraisal-number-cell"><strong class="avaluo-list-number">${escapeHtml(record.numeroAvaluo)}</strong></td><td class="avaluo-list-request-folio request-folio-cell">${escapeHtml(requestFolio)}</td><td class="avaluo-list-requester requester-cell"><span class="cp6-cell-with-icon">${userCellIcon}${escapeHtml(record.solicitante)}</span></td><td class="avaluo-list-user user-cell"><span class="cp6-cell-with-icon">${userCellIcon}${escapeHtml(record.usuario)}</span></td><td class="money-cell"><span class="cp6-cell-with-icon">${moneyCellIcon}${formatCurrency(record.valorAvaluo)}</span></td><td><span class="avaluo-status ${statusClass}">${statusLabel}</span></td><td class="table-action-cell reception-actions">${editButton}${receiptButton}${deleteButton}${printButton}</td></tr>`;
+    return `<tr><td class="avaluo-list-request-folio request-folio-cell"><strong>${escapeHtml(requestFolio)}</strong></td><td class="appraisal-number-cell"><strong class="avaluo-list-number">${escapeHtml(record.numeroAvaluo)}</strong></td><td class="avaluo-list-requester requester-cell"><span class="cp6-cell-with-icon">${userCellIcon}${escapeHtml(record.solicitante)}</span></td><td class="avaluo-list-user user-cell"><span class="cp6-cell-with-icon">${userCellIcon}${escapeHtml(record.usuario)}</span></td><td class="money-cell"><span class="cp6-cell-with-icon">${moneyCellIcon}${formatCurrency(record.valorAvaluo)}</span></td><td><span class="avaluo-status ${statusClass}">${statusLabel}</span></td><td class="table-action-cell reception-actions">${editButton}${receiptButton}${deleteButton}${printButton}</td></tr>`;
   }
   function paginationMarkup(scope, page, totalItems) {
     const pages = Math.max(1, Math.ceil(totalItems / AVALUOS_PAGE_SIZE));
@@ -1030,7 +1030,7 @@
     const pages = Math.max(1, Math.ceil(items.length / AVALUOS_PAGE_SIZE));
     receptionPage = Math.min(Math.max(1, receptionPage), pages);
     const pageItems = items.slice((receptionPage - 1) * AVALUOS_PAGE_SIZE, receptionPage * AVALUOS_PAGE_SIZE);
-    $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>No.</th><th>Solicitud</th><th>Solicitante</th><th>Valuador</th><th>Honorarios</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${pageItems.length ? pageItems.map(renderListRow).join("") : `<tr><td colspan="7" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>${paginationMarkup("reception", receptionPage, items.length)}`;
+    $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact"><thead><tr><th>Folio</th><th>No. de Avalúo</th><th>Solicitante</th><th>Valuador</th><th>Honorarios</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${pageItems.length ? pageItems.map(renderListRow).join("") : `<tr><td colspan="7" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>${paginationMarkup("reception", receptionPage, items.length)}`;
   }
   function bindRecordActions() {
     $$('[data-edit]').forEach((button) => button?.addEventListener("click", () => openDialog(button.dataset.edit)));

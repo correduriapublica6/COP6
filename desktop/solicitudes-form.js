@@ -11,7 +11,7 @@
   let requestsLoadKey = "";
   let requestsLoadSequence = 0;
   let requestsPage = 1;
-  const REQUESTS_PAGE_SIZE = 10;
+  const REQUESTS_PAGE_SIZE = 9;
   let editingRequestId = "";
   let applicantSession = null;
   let archivosSeleccionados = [];
