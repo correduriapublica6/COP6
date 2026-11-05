@@ -1922,13 +1922,13 @@ body.cp6-redesign #appShell.control-shell .app-workspace :is(button, .cp6-nav-li
   text-shadow: none !important;
 }
 
-/* CP6 · Ajuste final de legibilidad: secundarios y etiquetas a 14 px */
+/* CP6 · Ajuste final de legibilidad: secundarios y etiquetas a 13 px */
 body.cp6-redesign #appShell.control-shell .app-workspace :is(.v2-page-banner p, .cp6-module-banner p, .section-description, .helper-text, .empty-state, .table-empty-state, .cp6-card-caption, .cp6-activity-item small, .cp6-status-caption, .v2-ring-section p, .v2-topbar small, label, .field-label, .validation-field-label, .form-label, .v2-nav-label, .section-kicker, .cp6-module-banner span) {
-  font-size: 14px !important;
+  font-size: 13px !important;
 }
 body.cp6-redesign #appShell.control-shell .app-workspace :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList, #welcomeRequestsTable, #registeredApplicantsTable) th {
-  font-size: 14px !important;
+  font-size: 13px !important;
 }
 body.cp6-redesign #appShell.control-shell .app-workspace :is(.status-pill, .status-badge, .request-status, .operational-status, .table-status-badge, .avaluo-status, .request-status-badge) {
-  font-size: 14px !important;
+  font-size: 13px !important;
 }
