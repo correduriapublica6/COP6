@@ -1,0 +1,720 @@
+/* CP6 · Propuesta visual aprobada, 05 noviembre 2026.
+   Capa aislada en #appShell.cp6-approved-ui. No afecta Login ni portal externo.
+   Los selectores prioritarios neutralizan las capas tipográficas heredadas.
+   No reemplaza animaciones, permisos, API, formularios ni cálculos. */
+body.cp6-redesign #appShell.cp6-approved-ui {
+  --approved-navy: #101e36;
+  --approved-blue: #2563eb;
+  --approved-canvas: #f5f7fb;
+  --approved-ink: #1a202c;
+  --approved-muted: #64748b;
+  --approved-line: #e4eaf2;
+  --approved-shadow: 0 5px 18px rgba(16, 30, 54, .035);
+  background: var(--approved-canvas);
+  grid-template-columns: 236px minmax(0, 1fr);
+  min-height: 100dvh;
+}
+body.cp6-redesign #appShell.cp6-approved-ui > .app-workspace {
+  background: var(--approved-canvas);
+  min-width: 0;
+  padding: 28px 30px 40px;
+}
+/* La fuente de los iconos y los pseudo-elementos se conserva. */
+body.cp6-redesign #appShell.cp6-approved-ui :is(.v2-sidebar, .app-workspace),
+body.cp6-redesign #appShell.cp6-approved-ui :is(.v2-sidebar, .app-workspace) :not(i):not(.fa-solid):not(.fa-regular):not(.fa-brands) {
+  font-family: Arial, Helvetica, sans-serif !important;
+  text-shadow: none !important;
+}
+body.cp6-redesign #appShell.cp6-approved-ui > .v2-sidebar {
+  background: var(--approved-navy) !important;
+  border: 0;
+  color: #d7e3f5;
+  gap: 14px;
+  padding: 26px 16px 18px;
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow-y: auto;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .v2-brand {
+  align-items: center;
+  gap: 12px;
+  padding: 0 0 16px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-approved-mark {
+  color: #fff;
+  display: block;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .v2-brand strong {
+  color: #fff;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: -.2px;
+  line-height: 1.35;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .v2-brand small {
+  color: #adbed7;
+  font-size: 12px !important;
+  line-height: 1.4;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .v2-user {
+  background: #182b48;
+  border: 1px solid rgba(185, 209, 242, .1);
+  border-radius: 14px;
+  padding: 12px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .v2-user strong {
+  color: #fff;
+  font-size: 13px !important;
+  font-weight: 600;
+  line-height: 1.4;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .v2-user small,
+body.cp6-redesign #appShell.cp6-approved-ui .v2-online {
+  font-size: 12px !important;
+  color: #b0c3df;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .v2-nav-label {
+  color: #8ea5c7;
+  font-size: 10px !important;
+  letter-spacing: .1em;
+  font-weight: 500 !important;
+  margin: 8px 10px 0;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(.v2-nav, .v2-operation-nav) {
+  gap: 4px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(.v2-nav a, .v2-operation-nav button) {
+  align-items: center;
+  background: transparent;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  color: #d0ddef;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  gap: 10px;
+  min-height: 42px;
+  padding: 10px 12px;
+  box-shadow: none;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(.v2-nav a, .v2-operation-nav button):hover {
+  background: #1c3457;
+  color: #fff;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(.v2-nav a.is-active, .v2-operation-nav button.v2-active) {
+  background: #1b437e;
+  border-left: 3px solid #60a5fa;
+  color: #fff;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .v2-sidebar-foot {
+  border-top: 1px solid rgba(197, 218, 245, .13);
+  color: #bdcde4;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .v2-sidebar-foot :is(strong, small) {
+  font-size: 12px;
+  line-height: 1.6;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .v2-topbar {
+  align-items: center;
+  gap: 20px;
+  min-height: 62px;
+  margin-bottom: 24px;
+  padding: 0;
+}
+body.cp6-redesign #appShell#appShell.cp6-approved-ui .v2-context strong {
+  color: var(--approved-ink) !important;
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -.5px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui #v2ContextDescription {
+  color: var(--approved-muted);
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  margin-top: 5px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-nav-tools {
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-nav-tools .cp6-icon-btn {
+  background: #fff;
+  border: 1px solid var(--approved-line);
+  border-radius: 11px;
+  color: #475569;
+  width: 38px;
+  height: 38px;
+  box-shadow: var(--approved-shadow);
+}
+/* Cabeceras de módulo: el contexto ya se muestra en la barra superior. */
+body.cp6-redesign #appShell.cp6-approved-ui :is(#solicitudesView > .v2-page-banner, #recepcionAvaluosSection > .cp6-module-banner, #crearAvaluoSection > .cp6-module-banner) {
+  display: none;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(#solicitudesView, #recepcionAvaluosSection, #crearAvaluoSection) {
+  margin: 0;
+  max-width: none;
+  padding: 0;
+  width: 100%;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(#solicitudesView > .request-filter-row, #recepcionAvaluosSection > .request-style-filter-panel, #crearAvaluoSection > .technical-search-panel) {
+  background: #fff;
+  border: 1px solid var(--approved-line);
+  border-top: 3px solid var(--approved-blue);
+  border-bottom: 0;
+  border-radius: 16px 16px 0 0;
+  box-shadow: none;
+  margin: 0;
+  padding: 18px 20px;
+  position: static;
+  width: 100%;
+}
+body.cp6-redesign #appShell.cp6-approved-ui #solicitudesView > .solicitudes-toolbar,
+body.cp6-redesign #appShell.cp6-approved-ui :is(#recepcionAvaluosSection, #crearAvaluoSection) .search-row {
+  align-items: center;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: auto minmax(200px, 1fr) minmax(160px, 190px) auto;
+  width: 100%;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(.v2-module-label, .reception-filter-title) {
+  gap: 10px;
+  min-width: 0;
+}
+body.cp6-redesign #appShell#appShell.cp6-approved-ui :is(.v2-module-label, .reception-filter-title) strong {
+  color: var(--approved-ink);
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(.v2-module-label > span, .reception-filter-title-icon) {
+  align-items: center;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 11px;
+  box-shadow: none;
+  color: var(--approved-blue);
+  display: inline-flex;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  justify-content: center;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(.solicitudes-search-wrap, .reception-search-input-wrap, .cp6-approved-technical-search) {
+  display: block;
+  min-width: 0;
+  max-width: none;
+  position: relative;
+  width: 100%;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-approved-technical-search > i,
+body.cp6-redesign #appShell.cp6-approved-ui .solicitudes-search-wrap > i {
+  color: #94a3b8;
+  font-size: 14px;
+  left: 14px;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+body.cp6-redesign #appShell#appShell.cp6-approved-ui :is(#searchInput, #technicalSearchInput, #requestSearchInput) {
+  background: #fff;
+  border: 1px solid #dce4ee;
+  border-radius: 11px;
+  box-shadow: none;
+  color: var(--approved-ink) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 12px 0 38px !important;
+  max-width: none;
+  width: 100%;
+}
+body.cp6-redesign #appShell#appShell.cp6-approved-ui :is(#statusViewSelect, #technicalStatusFilter, #requestStatusFilter),
+body.cp6-redesign #appShell#appShell.cp6-approved-ui :is(#solicitudesView, #recepcionAvaluosSection, #crearAvaluoSection) .custom-select-trigger {
+  background: #fff;
+  border: 1px solid #dce4ee;
+  border-radius: 11px;
+  box-shadow: none;
+  color: #475569 !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 12px;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  line-height: 1.3;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(.reception-filter-actions, .solicitudes-heading-actions, .cp6-technical-actions) {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 10px;
+  margin: 0;
+}
+body.cp6-redesign #appShell#appShell.cp6-approved-ui :is(.reception-filter-actions, .solicitudes-heading-actions, .cp6-technical-actions) button {
+  background: #fff;
+  border: 1px solid #9bbbf6;
+  border-radius: 10px;
+  box-shadow: none;
+  color: var(--approved-blue);
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  height: 40px;
+  line-height: 1.3;
+  min-height: 40px;
+  padding: 0 15px;
+  white-space: nowrap;
+}
+body.cp6-redesign #appShell#appShell.cp6-approved-ui :is(#newRecordButton, #newInternalRequestButton, #newTechnicalAppraisalButton) {
+  background: var(--approved-blue);
+  border-color: var(--approved-blue);
+  color: #fff;
+}
+body.cp6-redesign #appShell#appShell.cp6-approved-ui #backAvaluosButton i {
+  color: currentColor;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(#recepcionAvaluosSection, #technicalListPanel) > .dashboard-tabs {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(#recepcionAvaluosSection, #technicalListPanel) .status-list-heading {
+  display: none;
+}
+/* Todas las tablas operativas comparten una sola escala tipográfica. */
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList, #registeredApplicantsTable) {
+  background: #fff;
+  border: 1px solid var(--approved-line);
+  border-top: 0;
+  border-radius: 0 0 16px 16px;
+  box-shadow: var(--approved-shadow);
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  width: 100%;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable) :is(.operational-table-wrap, .request-table-wrap) {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  overflow: visible;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable)::before,
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable) :is(.operational-table-wrap, .request-table-wrap)::before {
+  display: none;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList, #welcomeRequestsTable, #registeredApplicantsTable) table {
+  border: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+  min-width: 880px;
+  table-layout: auto;
+  width: 100%;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList, #welcomeRequestsTable, #registeredApplicantsTable) :is(th, td),
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList, #welcomeRequestsTable, #registeredApplicantsTable) :is(th, td) :is(span, strong, b, small, p, a, time, div, em, label, button):not([aria-hidden="true"]):not(.fa-solid):not(.fa-regular):not(.fa-brands):not(.cp6-cell-icon):not(.action-icon) {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400;
+  line-height: 1.4 !important;
+  text-shadow: none !important;
+  letter-spacing: normal;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList, #welcomeRequestsTable, #registeredApplicantsTable) th {
+  background: #f5f8fc;
+  border: 0;
+  border-bottom: 1px solid #e9eef5;
+  color: #53647c !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 13px 18px !important;
+  text-align: left;
+  text-transform: none;
+  white-space: nowrap;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList, #welcomeRequestsTable, #registeredApplicantsTable) td {
+  background: #fff;
+  border: 0;
+  border-bottom: 1px solid #eef2f7;
+  color: var(--approved-ink) !important;
+  height: auto;
+  padding: 15px 18px !important;
+  vertical-align: middle;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList, #welcomeRequestsTable, #registeredApplicantsTable) tbody tr:hover td {
+  background: #f2f7ff;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList, #welcomeRequestsTable, #registeredApplicantsTable) td :is(small, .technical-record-status, .request-cell-secondary) {
+  color: var(--approved-muted);
+  font-size: 13px !important;
+}
+/* No aplicar gris a etiquetas de estado: conservan sus colores existentes. */
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(.avaluo-status, .status-badge, .request-status-badge, .status-pill, .request-status) {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+  padding: 5px 9px;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable) :is(.table-action-cell, .technical-row-actions, .request-actions, .request-row-actions, .request-action-cell) {
+  white-space: nowrap;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable) :is(.table-action-button, .record-action, .technical-icon-button, .request-action-button, .request-icon-button, .reception-icon-button, .request-row-actions button) {
+  background: #f5f9ff;
+  border: 1px solid #e7edf6;
+  border-radius: 9px;
+  box-shadow: none;
+  color: #2563eb;
+  height: 32px;
+  width: 32px;
+  min-height: 32px;
+  min-width: 32px;
+  padding: 6px;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable) :is(.action-delete, [data-delete], [data-delete-request], [data-delete-technical], .action-delete, .request-delete-button) {
+  color: #dc4758;
+  background: #fff5f6;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable) .action-pdf {
+  width: auto;
+  min-width: 44px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(.table-pagination, .request-pagination, .operational-pagination, .pagination) {
+  background: #fff;
+  border-top: 0;
+  color: #64748b;
+  font-size: 13px !important;
+  padding: 16px 18px;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #statusRecordList td:nth-child(1) { min-width: 62px; }
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #statusRecordList td:nth-child(2) { min-width: 108px; }
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #statusRecordList :is(td:nth-child(3), td:nth-child(4)) { min-width: 170px; }
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #statusRecordList td:nth-child(6) { min-width: 152px; }
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #statusRecordList .money-cell { white-space: nowrap; }
+/* Home: solicitudes a la izquierda, seguimiento a la derecha; gráfica conservada. */
+body.cp6-redesign #appShell.cp6-approved-ui #inicioView {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-hero {
+  border-radius: 16px;
+  min-height: 212px;
+  padding: 28px 32px;
+  margin: 0 0 22px;
+  box-shadow: var(--approved-shadow);
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-hero-copy { max-width: 600px; }
+body.cp6-redesign #appShell#appShell.cp6-approved-ui .cp6-home-hero #welcomeTitle {
+  color: #fff !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  line-height: 1.2;
+  letter-spacing: -.5px;
+  margin: 8px 0 12px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-hero .welcome-copy {
+  color: #c6d9f6;
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 550px;
+}
+body.cp6-redesign #appShell#appShell.cp6-approved-ui .cp6-home-user {
+  font-size: 13px !important;
+  color: #d2e1f7 !important;
+  margin: 12px 0;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .v2-hero-action {
+  background: #2563eb;
+  border: 1px solid rgba(191, 219, 254, .2);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 40px;
+  padding: 10px 16px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-hero-art {
+  flex-basis: 240px;
+  width: 240px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-section-heading { margin: 18px 0 12px; }
+body.cp6-redesign #appShell.cp6-approved-ui :is(.cp6-section-kicker, .cp6-home-eyebrow) {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .07em;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(.cp6-card-heading h3, .cp6-section-heading h3) {
+  color: #1a202c;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -.2px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-kpi-card {
+  background: #fff;
+  border: 1px solid #eaf0f6;
+  border-radius: 14px;
+  box-shadow: var(--approved-shadow);
+  padding: 20px 18px;
+  min-height: 120px;
+  gap: 14px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-kpi-card span {
+  color: #53647c;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-kpi-card strong {
+  color: #1a202c;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-kpi-card small {
+  color: #64748b;
+  font-size: 12px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(310px, 1fr);
+  gap: 18px;
+  align-items: start;
+  margin: 0 0 20px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-main-column { display: contents; }
+body.cp6-redesign #appShell.cp6-approved-ui #welcomeRequestsPanel {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  height: 100%;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-side-column {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-chart-card {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+body.cp6-redesign #appShell.cp6-approved-ui :is(.cp6-requests-card, .cp6-quick-card, .cp6-chart-card, .cp6-activity-card, .cp6-install-card) {
+  background: #fff;
+  border: 1px solid var(--approved-line);
+  border-radius: 16px;
+  box-shadow: var(--approved-shadow);
+  padding: 22px;
+  min-width: 0;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #welcomeRequestsTable {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: auto;
+  padding: 0;
+  margin-top: 14px;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #welcomeRequestsTable table { min-width: 0; }
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #welcomeRequestsTable td { padding: 13px 10px !important; }
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #welcomeRequestsTable th { padding: 11px 10px !important; }
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #welcomeRequestsTable :is(td:first-child, .request-folio, .request-folio-number) {
+  min-width: 110px;
+  white-space: nowrap;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .v2-ring-section { gap: 18px; }
+body.cp6-redesign #appShell#appShell.cp6-approved-ui :is(#v2CompletionStateTitle, #v2CompletionStateDescription) {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-quick-grid {
+  gap: 8px;
+  margin-top: 16px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-quick-grid strong { font-size: 13px; }
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-quick-grid small { font-size: 12px; }
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-bars-chart { margin-top: 20px; }
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-card-caption { font-size: 13px !important; }
+/* Mantener visible el panel de cotizaciones: su iframe tiene su propia capa. */
+body.cp6-redesign #appShell.cp6-approved-ui #cotizacionesFrame {
+  border: 0;
+  border-radius: 0;
+  min-height: 650px;
+}
+@media (max-width: 1280px) {
+  body.cp6-redesign #appShell.cp6-approved-ui { grid-template-columns: 214px minmax(0, 1fr); }
+  body.cp6-redesign #appShell.cp6-approved-ui > .app-workspace { padding: 24px 22px 32px; }
+  body.cp6-redesign #appShell.cp6-approved-ui #solicitudesView > .solicitudes-toolbar,
+  body.cp6-redesign #appShell.cp6-approved-ui :is(#recepcionAvaluosSection, #crearAvaluoSection) .search-row {
+    grid-template-columns: auto minmax(180px, 1fr) minmax(150px, 180px);
+  }
+  body.cp6-redesign #appShell.cp6-approved-ui :is(.reception-filter-actions, .solicitudes-heading-actions, .cp6-technical-actions) {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-hero-art { flex-basis: 170px; width: 170px; }
+}
+@media (max-width: 1000px) and (min-width: 761px) {
+  body.cp6-redesign #appShell.cp6-approved-ui { grid-template-columns: 82px minmax(0, 1fr); }
+  body.cp6-redesign #appShell.cp6-approved-ui > .v2-sidebar { padding: 20px 10px; }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-grid { grid-template-columns: 1fr; }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-side-column { grid-column: 1; grid-row: 2; }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-chart-card { grid-column: 1; grid-row: 3; }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  body.cp6-redesign #appShell.cp6-approved-ui {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  body.cp6-redesign #appShell.cp6-approved-ui > .v2-sidebar {
+    align-items: center;
+    flex-direction: row;
+    height: auto;
+    min-height: 58px;
+    padding: 8px 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
+  body.cp6-redesign #appShell.cp6-approved-ui .v2-sidebar :is(.v2-brand, .v2-user, .v2-nav-label, .v2-sidebar-foot) { display: none !important; }
+  body.cp6-redesign #appShell.cp6-approved-ui .v2-main-nav { flex: 0 0 auto; width: auto; }
+  body.cp6-redesign #appShell.cp6-approved-ui :is(.v2-nav, .v2-operation-nav) {
+    display: flex !important;
+    flex-direction: row;
+    flex: 0 0 auto;
+    min-width: max-content;
+    margin: 0;
+  }
+  body.cp6-redesign #appShell.cp6-approved-ui :is(.v2-nav a, .v2-operation-nav button) { font-size: 13px !important; padding: 9px 10px !important; }
+  body.cp6-redesign #appShell.cp6-approved-ui .v2-operation-nav button > span { display: inline !important; }
+  body.cp6-redesign #appShell.cp6-approved-ui > .app-workspace { padding: 16px 12px 28px; width: 100%; }
+  body.cp6-redesign #appShell.cp6-approved-ui .v2-topbar { flex-wrap: wrap; gap: 14px; margin-bottom: 18px; }
+  body.cp6-redesign #appShell#appShell.cp6-approved-ui .v2-context strong { font-size: 22px !important; }
+  body.cp6-redesign #appShell.cp6-approved-ui #v2ContextDescription { font-size: 13px; }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-nav-tools { gap: 6px; }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-nav-tools .cp6-icon-btn { width: 34px; height: 34px; }
+  body.cp6-redesign #appShell.cp6-approved-ui #solicitudesView > .solicitudes-toolbar,
+  body.cp6-redesign #appShell.cp6-approved-ui :is(#recepcionAvaluosSection, #crearAvaluoSection) .search-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  body.cp6-redesign #appShell.cp6-approved-ui :is(#solicitudesView > .request-filter-row, #recepcionAvaluosSection > .request-style-filter-panel, #crearAvaluoSection > .technical-search-panel) {
+    padding: 14px !important;
+    margin: 0 !important;
+  }
+  body.cp6-redesign #appShell.cp6-approved-ui :is(.reception-filter-actions, .solicitudes-heading-actions, .cp6-technical-actions) {
+    grid-column: auto;
+    justify-self: stretch;
+    justify-content: stretch;
+  }
+  body.cp6-redesign #appShell.cp6-approved-ui :is(.reception-filter-actions, .solicitudes-heading-actions, .cp6-technical-actions) button { flex: 1; padding: 0 10px; }
+  body.cp6-redesign #appShell#appShell.cp6-approved-ui :is(#searchInput, #technicalSearchInput, #requestSearchInput) { font-size: 16px !important; }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-hero { min-height: 235px; padding: 24px 22px; }
+  body.cp6-redesign #appShell#appShell.cp6-approved-ui .cp6-home-hero #welcomeTitle { font-size: 25px !important; }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-kpi-card { padding: 16px; min-height: 115px; }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-grid { grid-template-columns: 1fr; gap: 14px; }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-side-column { grid-column: 1; grid-row: 2; }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-chart-card { grid-column: 1; grid-row: 3; }
+  body.cp6-redesign #appShell.cp6-approved-ui :is(.cp6-requests-card, .cp6-quick-card, .cp6-chart-card, .cp6-activity-card, .cp6-install-card) { padding: 18px 14px; }
+  body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #welcomeRequestsTable :is(td, th) { padding: 11px 8px !important; }
+  body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #welcomeRequestsTable :is(td:first-child, .request-folio, .request-folio-number) { min-width: 94px; }
+}
+@media print {
+  body.cp6-redesign #appShell.cp6-approved-ui { display: block; }
+  body.cp6-redesign #appShell.cp6-approved-ui > .app-workspace { padding: 0; }
+}
+
+/* Ajustes sobre los componentes reales comprobados en la prueba de navegación. */
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #welcomeRequestsTable) th {
+  letter-spacing: 0 !important;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #welcomeRequestsTable) :is(td > strong, .request-folio-cell strong, .avaluo-list-number, .requester-cell .cp6-cell-with-icon, .user-cell .cp6-cell-with-icon, .money-cell .cp6-cell-with-icon) {
+  color: #1a202c !important;
+  font-weight: 400 !important;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #welcomeRequestsTable) :is(.request-action-cell, .table-action-cell) {
+  display: table-cell !important;
+  vertical-align: middle;
+  min-width: 130px;
+  white-space: nowrap;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #welcomeRequestsTable) :is(.request-icon-button, .technical-icon-button) {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  color: #2563eb !important;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #welcomeRequestsTable) :is(.request-icon-button, .technical-icon-button) :is(svg, .action-icon) {
+  color: inherit !important;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable) :is(.request-delete-button, .action-delete, [data-delete], [data-delete-request]) {
+  color: #dc4758 !important;
+  background: #fff5f6;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #serviceRequestsTable :is(th, td) {
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #serviceRequestsTable :is(th:first-child, td:first-child) {
+  min-width: 85px !important;
+  white-space: nowrap;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #serviceRequestsTable :is(th:nth-child(3), td:nth-child(3)) { min-width: 170px !important; }
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #serviceRequestsTable :is(th:nth-child(4), td:nth-child(4)) { min-width: 210px !important; }
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #serviceRequestsTable :is(th:nth-child(5), td:nth-child(5)) { min-width: 135px !important; }
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #serviceRequestsTable .request-action-cell { min-width: 130px !important; }
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #welcomeRequestsTable :is(.cp6-recent-action, .request-icon-button, .cp6-recent-icon-button) {
+  background: #f2f7ff;
+  border: 1px solid #e7edf6;
+  border-radius: 9px;
+  color: #2563eb;
+  height: 32px;
+  min-width: 32px;
+  padding: 6px;
+}
+body.cp6-redesign #appShell.cp6-approved-ui:has(.v2-operation-nav .v2-active) .v2-nav a[data-app-view="avaluos"] {
+  background: transparent;
+  border-left: 1px solid transparent;
+  color: #d0ddef;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #welcomeRequestsTable table::before { display: none; }
+body.cp6-redesign #appShell.cp6-approved-ui .cp6-home-user :is(span, strong) { font-size: 13px !important; }
+@media (max-width: 760px) {
+  body.cp6-redesign #appShell.cp6-approved-ui .v2-context { text-align: left; width: 100%; }
+  body.cp6-redesign #appShell.cp6-approved-ui .cp6-nav-tools { justify-content: flex-start; }
+}

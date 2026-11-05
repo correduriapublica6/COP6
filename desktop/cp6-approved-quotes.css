@@ -1,0 +1,459 @@
+/* CP6 Cotizaciones · propuesta visual aprobada · 2026-11-05 */
+/* Este archivo es un override visual: no modifica markup, datos ni comportamiento. */
+
+.cp6-cotizaciones {
+  --approved-blue: #2563eb;
+  --approved-blue-dark: #1d4ed8;
+  --approved-blue-soft: #eff6ff;
+  --approved-canvas: #f5f7fb;
+  --approved-card: #ffffff;
+  --approved-border: #e4eaf2;
+  --approved-ink: #1f2d42;
+  --approved-muted: #718096;
+  --approved-shadow: 0 10px 28px rgba(31, 45, 66, 0.07);
+  --approved-shadow-sm: 0 5px 16px rgba(31, 45, 66, 0.06);
+
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 24px 28px 36px !important;
+  color: var(--approved-ink) !important;
+  background: var(--approved-canvas) !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  text-shadow: none !important;
+}
+
+.cp6-cotizaciones *,
+.cp6-cotizaciones *::before,
+.cp6-cotizaciones *::after {
+  box-sizing: border-box;
+}
+
+.cp6-cotizaciones h1,
+.cp6-cotizaciones h2,
+.cp6-cotizaciones h3,
+.cp6-cotizaciones h4,
+.cp6-cotizaciones p,
+.cp6-cotizaciones button,
+.cp6-cotizaciones input,
+.cp6-cotizaciones textarea,
+.cp6-cotizaciones select {
+  font-family: Arial, Helvetica, sans-serif !important;
+  text-shadow: none !important;
+}
+
+.cp6-cotizaciones button,
+.cp6-cotizaciones input,
+.cp6-cotizaciones textarea,
+.cp6-cotizaciones select {
+  font-size: 14px;
+}
+
+.cp6-shell {
+  width: min(1240px, 100%);
+  gap: 20px !important;
+}
+
+/* The parent application owns the sidebar and page title. Keep this iframe toolbar compact. */
+.cp6-topbar {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 !important;
+  gap: 12px;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.cp6-topbar > div:first-child {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cp6-topbar button {
+  min-height: 40px;
+  padding: 0 16px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--approved-blue) !important;
+  background: #fff !important;
+  border: 1px solid #cfd9e8 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 7px rgba(31, 45, 66, 0.04) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1;
+  transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.cp6-topbar button:hover {
+  color: var(--approved-blue-dark) !important;
+  background: var(--approved-blue-soft) !important;
+  border-color: #b8cdf5 !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.10) !important;
+  transform: translateY(-1px);
+}
+
+.cp6-topbar button:active {
+  transform: scale(.97);
+}
+
+#btnNavTable {
+  color: #53627a !important;
+  background: #fff !important;
+  border-color: #d7e0eb !important;
+}
+
+#btnBackToAvaluos {
+  color: var(--approved-blue) !important;
+  background: #fff !important;
+  border-color: #b9ccef !important;
+  box-shadow: none !important;
+}
+
+#btnBackToAvaluos:hover {
+  color: var(--approved-blue-dark) !important;
+  background: var(--approved-blue-soft) !important;
+  border-color: #93b3ef !important;
+}
+
+#btnNavForm {
+  color: #fff !important;
+  background: var(--approved-blue) !important;
+  border-color: var(--approved-blue) !important;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.20) !important;
+}
+
+#btnNavForm:hover {
+  color: #fff !important;
+  background: var(--approved-blue-dark) !important;
+  border-color: var(--approved-blue-dark) !important;
+}
+
+/* The approved composition has no embedded hero; the host app provides the surrounding context. */
+.cp6-hero {
+  display: none !important;
+}
+
+/* Main records card */
+#tableView#tableView#tableView.cp6-table-panel {
+  position: relative;
+  overflow: hidden;
+  padding: 0 !important;
+  background: var(--approved-card) !important;
+  border: 1px solid var(--approved-border) !important;
+  border-top: 3px solid var(--approved-blue) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--approved-shadow) !important;
+}
+
+#tableView#tableView#tableView .cp6-table-head {
+  min-height: 88px;
+  padding: 18px 24px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: #fff !important;
+  border-bottom: 1px solid var(--approved-border) !important;
+}
+
+#tableView#tableView#tableView .cp6-section-heading {
+  min-width: 0;
+}
+
+#tableView#tableView#tableView .cp6-section-heading h2 {
+  margin: 0;
+  color: var(--approved-ink) !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  line-height: 1.2;
+  letter-spacing: -.25px;
+}
+
+#tableView#tableView#tableView .cp6-section-heading p {
+  margin: 6px 0 0;
+  color: var(--approved-muted) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.4;
+}
+
+.cp6-search-wrap {
+  width: min(394px, 100%);
+  min-width: 220px;
+  flex: 0 1 394px;
+}
+
+.cp6-search-wrap > i {
+  top: 50% !important;
+  left: 14px !important;
+  color: #7d8da5 !important;
+  font-size: 14px !important;
+  transform: translateY(-50%);
+}
+
+#tableView#tableView#tableView #inSearch {
+  width: 100%;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 14px 0 40px !important;
+  color: var(--approved-ink) !important;
+  background: #fff !important;
+  border: 1px solid #d8e1ed !important;
+  border-radius: 8px !important;
+  outline: 0;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 40px;
+  box-shadow: none !important;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+#tableView#tableView#tableView #inSearch::placeholder {
+  color: #8b98aa !important;
+  opacity: 1;
+}
+
+#tableView#tableView#tableView #inSearch:focus {
+  border-color: var(--approved-blue) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+}
+
+#tableView#tableView#tableView .overflow-x-auto {
+  overflow-x: auto;
+}
+
+#tableView#tableView#tableView table {
+  width: 100%;
+  min-width: 820px;
+  border-collapse: collapse;
+}
+
+#tableView#tableView#tableView thead tr {
+  background: #f7faff !important;
+  border-bottom: 1px solid var(--approved-border) !important;
+}
+
+#tableView#tableView#tableView thead th {
+  padding: 13px 24px !important;
+  color: #34435a !important;
+  background: #f7faff !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--approved-border) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.35;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  white-space: nowrap;
+}
+
+#tableView#tableView#tableView tbody {
+  color: var(--approved-ink) !important;
+}
+
+#tableView#tableView#tableView tbody tr {
+  background: #fff !important;
+  border-top: 1px solid #edf1f6 !important;
+  transition: background-color .18s ease;
+}
+
+#tableView#tableView#tableView tbody tr:first-child {
+  border-top: 0 !important;
+}
+
+#tableView#tableView#tableView tbody tr:nth-child(even) {
+  background: #fbfcfe !important;
+}
+
+#tableView#tableView#tableView tbody tr:hover {
+  background: #f3f7ff !important;
+}
+
+#tableView#tableView#tableView tbody td {
+  padding: 16px 24px !important;
+  color: var(--approved-ink) !important;
+  border: 0 !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+#tableView#tableView#tableView tbody td:first-child span:first-child,
+#tableView#tableView#tableView tbody td:nth-child(2) span:first-child {
+  color: var(--approved-ink) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+#tableView#tableView#tableView tbody td:first-child span:first-child {
+  color: #263b59 !important;
+}
+
+#tableView#tableView#tableView tbody td:first-child span:nth-child(2),
+#tableView#tableView#tableView tbody td:nth-child(2) span:nth-child(2),
+#tableView#tableView#tableView tbody td:nth-child(5) span {
+  color: var(--approved-muted) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+}
+
+#tableView#tableView#tableView tbody td:nth-child(3) {
+  color: #29384f !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  white-space: nowrap;
+}
+
+#tableView#tableView#tableView tbody td:nth-child(4) {
+  color: #159a6b !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  white-space: nowrap;
+}
+
+#tableView#tableView#tableView tbody td:nth-child(5) {
+  max-width: 290px;
+}
+
+#tableView#tableView#tableView tbody td:last-child {
+  white-space: nowrap;
+}
+
+#tableView#tableView#tableView tbody td:last-child > div {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+#tableView#tableView#tableView tbody td:last-child button {
+  width: 36px;
+  height: 36px;
+  padding: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--approved-blue) !important;
+  background: #f5f8ff !important;
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  line-height: 1;
+  transition: background-color .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+}
+
+#tableView#tableView#tableView tbody td:last-child button:hover {
+  color: var(--approved-blue-dark) !important;
+  background: #eaf2ff !important;
+  border-color: #cbdcff !important;
+  transform: translateY(-1px);
+}
+
+#tableView#tableView#tableView tbody td:last-child button:nth-child(2) {
+  color: #3b82f6 !important;
+}
+
+#tableView#tableView#tableView tbody td:last-child button:last-child {
+  color: #dc4b5a !important;
+  background: #fff6f7 !important;
+}
+
+#tableView#tableView#tableView tbody td:last-child button:last-child:hover {
+  color: #b83243 !important;
+  background: #ffebee !important;
+  border-color: #f7c9cf !important;
+}
+
+#actionsBar button {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+@media (max-width: 900px) {
+  .cp6-cotizaciones {
+    padding: 18px 16px 28px !important;
+  }
+
+  #tableView#tableView#tableView .cp6-table-head {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .cp6-search-wrap {
+    width: 100%;
+    min-width: 0;
+    flex-basis: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .cp6-cotizaciones {
+    padding: 14px 10px 24px !important;
+  }
+
+  .cp6-topbar {
+    min-height: 0;
+  }
+
+  .cp6-topbar > div:first-child {
+    flex-wrap: wrap;
+    justify-content: stretch;
+    gap: 8px;
+  }
+
+  .cp6-topbar button {
+    flex: 1 1 calc(50% - 4px);
+    padding-right: 10px !important;
+    padding-left: 10px !important;
+  }
+
+  #btnNavForm {
+    flex-basis: 100%;
+  }
+
+  #tableView#tableView#tableView .cp6-table-head {
+    padding: 16px !important;
+  }
+
+  #tableView#tableView#tableView .cp6-section-heading h2 {
+    font-size: 20px !important;
+  }
+
+  #tableView#tableView#tableView thead th,
+  #tableView#tableView#tableView tbody td {
+    padding-right: 14px !important;
+    padding-left: 14px !important;
+  }
+
+  #tableView#tableView#tableView tbody td:last-child > div {
+    gap: 5px;
+  }
+}
+
+/* Doble línea explícita: independiente del CDN de utilidades. */
+#tableView#tableView#tableView tbody td:first-child span,
+#tableView#tableView#tableView tbody td:nth-child(2) span {
+  display: block;
+}
+#tableView#tableView#tableView tbody td:first-child {
+  min-width: 125px;
+  white-space: nowrap;
+}
+#tableView#tableView#tableView tbody td:nth-child(2) { min-width: 200px; }
+#tableView#tableView#tableView tbody td:first-child span:nth-child(2),
+#tableView#tableView#tableView tbody td:nth-child(2) span:nth-child(2) { margin-top: 4px; }
+#tableView#tableView#tableView .cp6-section-heading h2 { font-size: 16px !important; font-weight: 600 !important; }
+#tableView#tableView#tableView .cp6-section-heading p { display: none; }
