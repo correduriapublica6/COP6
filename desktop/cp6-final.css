@@ -1734,3 +1734,43 @@ body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-r
     padding-right: 22px !important;
   }
 }
+
+/* Solicitudes · Editar información visible como botón de acción */
+#requestDetailDialog [data-edit-request-info] {
+  align-items: center !important;
+  background: #2563eb !important;
+  border: 1px solid #2563eb !important;
+  border-radius: 10px !important;
+  box-shadow: 0 5px 12px rgba(37, 99, 235, .18) !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif !important;
+  font-size: .72rem !important;
+  font-weight: 800 !important;
+  gap: 7px !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  min-height: 34px !important;
+  padding: 8px 12px !important;
+  text-decoration: none !important;
+  transition: background-color .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease !important;
+  white-space: nowrap !important;
+  width: auto !important;
+}
+#requestDetailDialog [data-edit-request-info]:hover {
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+  box-shadow: 0 7px 16px rgba(29, 78, 216, .24) !important;
+  color: #fff !important;
+}
+#requestDetailDialog [data-edit-request-info]:active { transform: scale(.97) !important; }
+#requestDetailDialog [data-edit-request-info]:focus-visible {
+  outline: 3px solid rgba(96, 165, 250, .55) !important;
+  outline-offset: 2px !important;
+}
+#requestDetailDialog [data-edit-request-info] i { color: currentColor !important; font-size: .7rem !important; }
+@media (max-width: 560px) {
+  #requestDetailDialog [data-edit-request-info] { font-size: .68rem !important; min-height: 32px !important; padding: 8px 10px !important; }
+}
