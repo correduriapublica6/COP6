@@ -65,11 +65,11 @@
 
 /* Compact command-centre style header */
 .cp6-topbar {
-  min-height: 72px;
-  padding: 14px 18px !important;
+  min-height: 54px;
+  padding: 8px 18px !important;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 18px;
   background: rgba(255, 255, 255, 0.96) !important;
   border: 1px solid var(--cp6-line) !important;
@@ -713,6 +713,16 @@
   border-radius: 15px !important;
 }
 
+#cotizacionCard #outSolicitante,
+#cotizacionCard #outDireccion {
+  display: block;
+  overflow: visible !important;
+  white-space: normal !important;
+  text-overflow: clip !important;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
 #cotizacionCard .bg-slate-50,
 #cotizacionCard .bg-emerald-50\/60 {
   border: 1px solid #edf2f8;
@@ -852,7 +862,7 @@
   }
 
   .cp6-topbar {
-    padding: 14px !important;
+    padding: 8px 14px !important;
   }
 
   .cp6-topbar h1 {
@@ -906,4 +916,39 @@
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
+}
+
+/* CP6 Cotizaciones · mejora de legibilidad */
+.cp6-cotizaciones {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: auto;
+}
+.cp6-cotizaciones .cp6-topbar p { font-size: 13px !important; line-height: 1.5 !important; }
+.cp6-cotizaciones .cp6-topbar button,
+.cp6-cotizaciones .cp6-action-button { font-size: 12px !important; }
+.cp6-cotizaciones .cp6-section-heading h2 { font-size: 19px !important; }
+.cp6-cotizaciones .cp6-section-heading p { font-size: 12px !important; line-height: 1.45 !important; }
+.cp6-cotizaciones #inSearch { font-size: 13px !important; min-height: 42px; }
+.cp6-cotizaciones .cp6-table-panel thead th { font-size: 11px !important; letter-spacing: .055em; padding: 14px 21px !important; }
+.cp6-cotizaciones .cp6-table-panel tbody td { font-size: 13px !important; line-height: 1.45; padding: 15px 21px !important; }
+.cp6-cotizaciones .cp6-table-panel tbody td:first-child span:first-child { font-size: 13px !important; }
+.cp6-cotizaciones .cp6-table-panel tbody td:nth-child(5) span { font-size: 11px !important; }
+.cp6-cotizaciones .cp6-table-actions button { font-size: 12px !important; height: 34px; width: 34px; }
+.cp6-cotizaciones #formPanel label { font-size: 12px !important; }
+.cp6-cotizaciones #formPanel input,
+.cp6-cotizaciones #formPanel textarea { font-size: 13px !important; }
+.cp6-cotizaciones #formPanel > button[onclick="saveRecord()"] { font-size: 13px !important; }
+.cp6-cotizaciones #actionsBar button { font-size: 12px !important; }
+.cp6-cotizaciones #cotizacionCard #outFolio { font-size: 12px !important; }
+.cp6-cotizaciones #cotizacionCard #outFecha { font-size: 12px !important; }
+.cp6-cotizaciones #cotizacionCard p { font-size: 12px !important; line-height: 1.45 !important; }
+.cp6-cotizaciones #cotizacionCard .text-\[10px\],
+.cp6-cotizaciones #cotizacionCard .text-\[11px\],
+.cp6-cotizaciones #cotizacionCard .text-xs { font-size: 12px !important; }
+@media (max-width: 700px) {
+  .cp6-cotizaciones .cp6-table-panel thead th { font-size: 10px !important; padding: 12px 15px !important; }
+  .cp6-cotizaciones .cp6-table-panel tbody td { font-size: 12px !important; padding: 13px 15px !important; }
+  .cp6-cotizaciones #formPanel label { font-size: 11px !important; }
+  .cp6-cotizaciones #formPanel input,
+  .cp6-cotizaciones #formPanel textarea { font-size: 13px !important; }
 }
