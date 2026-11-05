@@ -1632,3 +1632,53 @@ body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-r
     max-width: 100% !important;
   }
 }
+
+
+/* CP6 LOGIN · Espaciado generoso para Crear cuenta (solo registro) */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline {
+  gap: 21px 26px !important;
+  padding: 38px 42px 34px !important;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-heading {
+  margin: 0 0 5px !important;
+  padding-bottom: 10px !important;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-heading h2 {
+  font-size: clamp(1.85rem, 3vw, 2.25rem) !important;
+  line-height: 1.2 !important;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-field > span {
+  margin-bottom: 9px !important;
+  font-size: .8rem !important;
+  line-height: 1.4 !important;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-input-wrap input {
+  min-height: 58px !important;
+  padding-right: 16px !important;
+  font-size: .9rem !important;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-register-actions {
+  gap: 12px !important;
+  padding-top: 25px !important;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-register-actions > * {
+  min-height: 56px !important;
+  font-size: .82rem !important;
+}
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-message {
+  min-height: 19px !important;
+  line-height: 1.45 !important;
+}
+@media (max-width: 620px) {
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline {
+    gap: 16px !important;
+    padding: 28px 22px 24px !important;
+  }
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-login-input-wrap input {
+    min-height: 54px !important;
+  }
+  body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-applicant-register-inline .cp6-register-actions {
+    gap: 10px !important;
+    padding-top: 4px !important;
+  }
+}
