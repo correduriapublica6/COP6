@@ -952,3 +952,47 @@
   .cp6-cotizaciones #formPanel input,
   .cp6-cotizaciones #formPanel textarea { font-size: 13px !important; }
 }
+
+/* CP6 Cotizaciones · tipografía Arial solicitada · Login intacto */
+.cp6-cotizaciones,
+.cp6-cotizaciones :not(i):not(.fa-solid):not(.fa-regular):not(.fa-brands) {
+  font-family: Arial, Helvetica, sans-serif !important;
+  text-shadow: none !important;
+}
+.cp6-cotizaciones :is(i.fa-solid, i.fa-regular, i.fa-brands, .fa-solid, .fa-regular, .fa-brands) {
+  text-shadow: none !important;
+}
+.cp6-cotizaciones {
+  color: #1a202c;
+}
+.cp6-cotizaciones :is(.cp6-topbar p, .cp6-section-heading p, .cp6-hero p, .cp6-hero-note, #formPanel label, #badgeEditMode) {
+  color: #718096 !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  line-height: 1.45 !important;
+}
+.cp6-cotizaciones :is(.cp6-topbar h1, .cp6-section-heading h2, .cp6-form-title h2, .cp6-hero h2) {
+  color: #1a202c !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+}
+.cp6-cotizaciones :is(input, textarea, select) {
+  color: #1a202c !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+}
+.cp6-cotizaciones .cp6-table-panel thead th {
+  color: #718096 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+}
+.cp6-cotizaciones .cp6-table-panel tbody td {
+  color: #1a202c !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+}
+.cp6-cotizaciones :is(.cp6-table-panel tbody td:first-child span:first-child, #cotizacionCard #outFolio, #cotizacionCard #outFecha, #cotizacionCard #outSolicitante, #cotizacionCard #outDireccion, #cotizacionCard #outTotalCon, #cotizacionCard #outAhorro) {
+  color: #1a202c !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}

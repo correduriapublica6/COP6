@@ -1853,3 +1853,71 @@ body.cp6-redesign #appShell.control-shell .app-workspace :is(.cp6-home-user, .cp
   body.cp6-redesign #appShell.control-shell .app-workspace :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) th { font-size: .7rem !important; padding: 12px 13px !important; }
   body.cp6-redesign #appShell.control-shell .app-workspace :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) td { font-size: .82rem !important; padding: 12px 13px !important; }
 }
+
+/* CP6 · Tipografía administrativa solicitada · Login intacto */
+body.cp6-redesign #appShell.control-shell,
+body.cp6-redesign #appShell.control-shell :not(i):not(.fa-solid):not(.fa-regular):not(.fa-brands) {
+  font-family: Arial, Helvetica, sans-serif !important;
+  text-shadow: none !important;
+}
+body.cp6-redesign #appShell.control-shell :is(i.fa-solid, i.fa-regular, i.fa-brands, .fa-solid, .fa-regular, .fa-brands) {
+  text-shadow: none !important;
+}
+body.cp6-redesign #appShell.control-shell .app-workspace {
+  color: #1a202c;
+}
+body.cp6-redesign #appShell.control-shell .app-workspace :is(.v2-page-banner p, .cp6-module-banner p, .section-description, .helper-text, .empty-state, .table-empty-state, .cp6-card-caption, .cp6-activity-item small, .cp6-status-caption, .v2-ring-section p, .v2-topbar small) {
+  color: #718096 !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  line-height: 1.45 !important;
+}
+body.cp6-redesign #appShell.control-shell .app-workspace :is(.v2-page-banner h2, .cp6-module-banner h2, .avaluos-section-heading h2, .solicitudes-heading h2, .status-list-heading h2, .cp6-section-heading h2, .v2-context strong) {
+  color: #1a202c !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
+body.cp6-redesign #appShell.control-shell .app-workspace :is(label, .field-label, .validation-field-label, .form-label, .v2-nav-label, .section-kicker, .cp6-module-banner span) {
+  color: #718096 !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  text-shadow: none !important;
+}
+body.cp6-redesign #appShell.control-shell .app-workspace :is(input, select, textarea, .custom-select-trigger) {
+  color: #1a202c !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  text-shadow: none !important;
+}
+body.cp6-redesign #appShell.control-shell .app-workspace :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList, #welcomeRequestsTable, #registeredApplicantsTable) td {
+  color: #1a202c !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  text-shadow: none !important;
+}
+body.cp6-redesign #appShell.control-shell .app-workspace :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList, #welcomeRequestsTable, #registeredApplicantsTable) th {
+  color: #718096 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
+body.cp6-redesign #appShell.control-shell .app-workspace :is(.table-appraisal-number, .solicitud-folio, .request-folio, .request-folio-number, .record-number, .table-money, .record-value, .currency-cell) {
+  color: #1a202c !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
+body.cp6-redesign #appShell.control-shell .app-workspace :is(.table-person, .table-person-cell) {
+  color: #1a202c !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+}
+body.cp6-redesign #appShell.control-shell .app-workspace :is(.status-pill, .status-badge, .request-status, .operational-status, .table-status-badge, .avaluo-status, .request-status-badge) {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
+body.cp6-redesign #appShell.control-shell .app-workspace :is(button, .cp6-nav-link, .cp6-text-action) {
+  text-shadow: none !important;
+}
