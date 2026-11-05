@@ -345,6 +345,7 @@
     if (nameField && !nameField.value) nameField.value = activeName;
     try {
       const users = await api("/users");
+      if (editingRequestId) return;
       const normalized = activeName.toLocaleLowerCase("es-MX");
       const active = (Array.isArray(users) ? users : []).find((user) => String(user.name || "").trim().toLocaleLowerCase("es-MX") === normalized);
       if (!active) return;
@@ -712,50 +713,62 @@
   }
   function openRequestEditor(item) {
     const form = getRequestForm();
-    if (!form || !item) return;
-    closeDialog($("#requestDetailDialog"));
-    resetRequestForm();
-    editingRequestId = item.id || "";
-    archivosExistentesEnEdicion = Array.isArray(item.archivos) ? item.archivos : [];
-    archivosSeleccionados = [];
-    ensureRequestFieldNames();
+    if (!form || !requestDialog || !item) return;
+    const detailDialog = $("#requestDetailDialog");
+    if (detailDialog?.open) detailDialog.close();
+    if (!requestDialog.open) {
+      try { requestDialog.showModal(); }
+      catch { requestDialog.setAttribute("open", ""); }
+    }
+    try {
+        resetRequestForm();
+        editingRequestId = item.id || "";
+        archivosExistentesEnEdicion = Array.isArray(item.archivos) ? item.archivos : [];
+        archivosSeleccionados = [];
+        ensureRequestFieldNames();
+        const specific = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
+        const setField = (name, value) => {
+          const field = form.elements[name];
+          if (!field || field.length) return;
+          field.value = value == null ? "" : String(value);
+        };
+        setField("nombre", item.solicitante?.nombre || item.nombre || "");
+        setField("telefono", item.solicitante?.telefono || item.solicitante?.phone || item.telefono || "");
+        setField("correo", item.solicitante?.correo || item.solicitante?.email || item.requesterEmail || "");
+        setField("asesor", item.asesor || specific.asesor || "");
+        setField("tipoAvaluo", item.tipoAvaluo || specific.tipoAvaluo || specific.tipo_avaluo || "");
 
-    const specific = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
-    const setField = (name, value) => {
-      const field = form.elements[name];
-      if (!field || field.length) return;
-      field.value = value == null ? "" : String(value);
-    };
-    setField("nombre", item.solicitante?.nombre || item.nombre || "");
-    setField("telefono", item.solicitante?.telefono || item.solicitante?.phone || item.telefono || "");
-    setField("correo", item.solicitante?.correo || item.solicitante?.email || item.requesterEmail || "");
-    setField("asesor", item.asesor || specific.asesor || "");
-    setField("tipoAvaluo", item.tipoAvaluo || specific.tipoAvaluo || specific.tipo_avaluo || "");
+        const category = item.tipoBien || specific.tipoBien || specific.tipo_bien || "";
+        if (category) selectCategory(category);
+        Object.entries(specific).forEach(([key, value]) => {
+          const field = key === "tipoBien" || key === "tipo_bien" ? null : form.elements[key];
+          if (field && !field.length && value != null) field.value = String(value);
+        });
+        setField("propietario", item.propietario || specific.propietario || "");
+        setField("valorOperacion", item.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "");
+        setField("contactoVisitaNombre", item.contactoVisita?.nombre || specific.contactoVisitaNombre || specific.contacto_visita || "");
+        setField("contactoVisitaTelefono", item.contactoVisita?.telefono || specific.contactoVisitaTelefono || specific.telefono_visita || "");
+        setField("direccionVisita", specific.direccionVisita || specific.direccion_visita || "");
+        setField("observaciones", item.observaciones || specific.observaciones || "");
+        if (item.notaria || specific.notariaReferida) setField("notariaReferida", item.notaria || specific.notariaReferida);
 
-    const category = item.tipoBien || specific.tipoBien || specific.tipo_bien || "";
-    if (category) selectCategory(category);
-    Object.entries(specific).forEach(([key, value]) => {
-      const field = key === "tipoBien" || key === "tipo_bien" ? null : form.elements[key];
-      if (field && !field.length && value != null) field.value = String(value);
-    });
-    setField("propietario", item.propietario || specific.propietario || "");
-    setField("valorOperacion", item.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "");
-    setField("contactoVisitaNombre", item.contactoVisita?.nombre || specific.contactoVisitaNombre || specific.contacto_visita || "");
-    setField("contactoVisitaTelefono", item.contactoVisita?.telefono || specific.contactoVisitaTelefono || specific.telefono_visita || "");
-    setField("direccionVisita", specific.direccionVisita || specific.direccion_visita || "");
-    setField("observaciones", item.observaciones || specific.observaciones || "");
-    if (item.notaria || specific.notariaReferida) setField("notariaReferida", item.notaria || specific.notariaReferida);
-
-    const consent = $("#requestPrivacyConsent");
-    if (consent) consent.checked = true;
-    renderSelectedFiles();
-    showRequestStep(1);
-    updateOperationMoneyPreview();
-    updateSummary();
-    openDialog(requestDialog);
-    fillAdvisors().then(() => setField("asesor", item.asesor || specific.asesor || ""));
-    if (item.notaria || specific.notariaReferida) window.setTimeout(() => renderNotarySearch(item.notaria || specific.notariaReferida), 0);
-    bindNewRequestExternalAssignment();
+        const consent = $("#requestPrivacyConsent");
+        if (consent) consent.checked = true;
+        renderSelectedFiles();
+        showRequestStep(1);
+        updateOperationMoneyPreview();
+        updateSummary();
+        fillAdvisors().then(() => setField("asesor", item.asesor || specific.asesor || ""));
+        if (item.notaria || specific.notariaReferida) window.setTimeout(() => renderNotarySearch(item.notaria || specific.notariaReferida), 0);
+        bindNewRequestExternalAssignment();
+      } catch (error) {
+        console.error("No se pudo abrir la solicitud para edición:", error);
+        editingRequestId = item.id || "";
+        if (!requestDialog.open) {
+          try { requestDialog.showModal(); } catch { requestDialog.setAttribute("open", ""); }
+        }
+        setMessage($("#publicRequestMessage"), "No se pudieron cargar todos los datos de esta solicitud. Revisa la información antes de guardar.");
+    }
   }
 
   function renderRequestDetail(item) {
