@@ -4684,3 +4684,12 @@ body.cp6-redesign .cp6-nav-tools .cp6-icon-btn svg{display:block;width:18px;heig
 body.cp6-redesign .v2-sidebar .cp6-hand-icon svg{display:block;width:17px;height:17px;stroke:currentColor;color:inherit;fill:none}
 body.cp6-redesign .v2-sidebar .cp6-hand-icon{width:18px;height:18px;flex:0 0 18px}
 @media(max-width:740px){body.cp6-redesign #publicRequestDialog .v2-request-header :is(h1,h2){font-size:20px}body.cp6-redesign #publicRequestDialog #step-content-1>.grid{row-gap:16px}body.cp6-redesign #publicRequestDialog .request-privacy-box{margin-top:7px}body.cp6-redesign #publicRequestDialog .v2-request-footer{padding:13px 16px}body.cp6-redesign #publicRequestDialog .v2-request-header{padding:20px}}
+
+/* CP6 Solicitudes · edición completa de datos capturados */
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-request-button) { background:#eff6ff; border:1px solid #bfdbfe; border-radius:9px; color:#2563eb; font-size:10px; font-weight:800; padding:7px 9px; white-space:nowrap; }
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form) { align-items:start; }
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form .cp6-edit-info-wide) { grid-column:1 / -1; }
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form textarea) { min-height:70px; resize:vertical; }
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-actions) { align-items:center; display:flex; gap:8px; grid-column:1 / -1; justify-content:flex-end; padding-top:4px; }
+body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-actions small) { color:#dc2626; flex:1; font-size:10px; }
+@media (max-width:760px) { body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form) { grid-template-columns:1fr; } body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-form .cp6-edit-info-wide, #requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-actions) { grid-column:auto; } body :where(#requestDetailDialog.cp6-request-detail-dialog .cp6-edit-info-actions) { flex-wrap:wrap; } }

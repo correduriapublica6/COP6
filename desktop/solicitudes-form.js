@@ -784,6 +784,28 @@
     const typeBien = item.tipoBien || specific.tipoBien || specific.tipo_bien || "";
     const typeAppraisal = item.tipoAvaluo || item.tipo_avaluo || specific.tipoAvaluo || specific.tipo_avaluo || specific.tipo_de_avaluo || "";
 
+    const canEditRequestInfo = Boolean(applicantSession || ["admin", "auditor"].includes(activeRole));
+    const editField = (label, name, value, type = "text", extra = "") => `<label><span>${escapeHtml(label)}</span><input type="${type}" name="${escapeHtml(name)}" value="${escapeHtml(value ?? "")}" ${extra}></label>`;
+    const displayLabel = (key) => String(key).replace(/([A-Z])/g, " $1").replace(/[_-]+/g, " ").replace(/^./, (letter) => letter.toUpperCase()).trim();
+    const reservedSpecific = new Set(["archivos", "files", "documentos", "documentacion", "imagenes", "fotografias", "fotos", "contactoVisita", "contacto_visita", "valorOperacion", "valor_operacion", "tipoBien", "tipo_bien", "tipoAvaluo", "tipo_avaluo", "propietario", "observaciones"]);
+    const specificFields = Object.entries(specific).filter(([key, value]) => !reservedSpecific.has(key) && ["string", "number", "boolean"].includes(typeof value)).map(([key, value]) => editField(displayLabel(key), `specific:${key}`, value, typeof value === "number" ? "number" : "text")).join("");
+    const editMarkup = canEditRequestInfo ? `<button type="button" class="cp6-detail-button cp6-edit-request-button" data-edit-request-info><i class="fa-solid fa-pen-to-square"></i> Editar información</button>` : "";
+    const editFormMarkup = canEditRequestInfo ? `<form class="cp6-edit-info-form" data-request-info-form hidden>
+      ${editField("Nombre del solicitante", "nombre", currentApplicant.nombre || item.nombre || "", "text", "required")}
+      ${editField("Teléfono", "telefono", currentApplicant.telefono || currentApplicant.phone || item.telefono || "", "tel")}
+      ${editField("Correo electrónico", "correo", currentApplicant.correo || currentApplicant.email || item.requesterEmail || "", "email", applicantSession ? "readonly" : "")}
+      ${editField("Propietario", "propietario", item.propietario || specific.propietario || "")}
+      ${editField("Valor de operación", "valorOperacion", valueOperation, "text")}
+      ${editField("Tipo de bien", "tipoBien", typeBien)}
+      ${editField("Tipo de avalúo", "tipoAvaluo", typeAppraisal)}
+      ${editField("Modalidad / subtipo", "modalidad", item.modalidad || specific.modalidad || specific.modalidadInmueble || "")}
+      ${editField("Notaría", "notaria", item.notaria || specific.notaria || "")}
+      ${editField("Contacto para visita", "contactoVisitaNombre", contactName)}
+      ${editField("Teléfono de visita", "contactoVisitaTelefono", visitPhone, "tel")}
+      <label class="cp6-edit-info-wide"><span>Observaciones</span><textarea name="observaciones" rows="2">${escapeHtml(item.observaciones || specific.observaciones || "")}</textarea></label>
+      ${specificFields}
+      <div class="cp6-edit-info-actions"><small data-edit-message hidden></small><button type="button" class="cp6-secondary-button" data-cancel-request-info>Cancelar</button><button type="submit" class="cp6-primary-button" data-save-request-info><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button></div>
+    </form>` : "";
     detail.innerHTML = `<div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden relative my-2" data-request-card>
       <div class="h-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700"></div>
       <div class="px-6 py-4 border-b border-slate-100 flex flex-col justify-between gap-3 bg-slate-50/50 relative pr-14">
@@ -806,13 +828,13 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 min-h-[300px] max-h-[360px] overflow-y-auto cp6-custom-scroll pr-1.5">${filesMarkup}</div>
         </div>
         ${finalSection}
-        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 space-y-3 shadow-sm"><div class="border-b border-slate-100 pb-2.5 flex items-center justify-between"><div class="flex items-center gap-2"><i class="fa-solid fa-address-card text-blue-600"></i><h3 class="text-xs font-bold text-slate-900">Información registrada</h3></div><span class="text-[10px] font-semibold text-slate-400">Detalles del trámite</span></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 space-y-3 shadow-sm"><div class="border-b border-slate-100 pb-2.5 flex items-center justify-between"><div class="flex items-center gap-2"><i class="fa-solid fa-address-card text-blue-600"></i><h3 class="text-xs font-bold text-slate-900">Información registrada</h3></div><div class="flex items-center gap-2"><span class="text-[10px] font-semibold text-slate-400 hidden sm:inline">Detalles del trámite</span>${editMarkup}</div></div><div data-read-request-info><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-0.5">Valor de operación</span><p class="font-extrabold text-blue-700 text-xs">${readValue(valueOperation, "$0.00")}</p></div>
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-0.5">Contacto para visita</span><p class="font-bold text-slate-800 text-xs">${readValue(contactName)}</p></div>
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-0.5">Teléfono de visita</span><p class="font-semibold text-slate-800 text-xs"><i class="fa-solid fa-phone text-blue-600 mr-1 text-[10px]"></i> ${readValue(visitPhone)}</p></div>
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-0.5">Tipo de bien</span><p class="font-semibold text-slate-800 text-xs"><i class="fa-solid fa-building text-blue-600 mr-1 text-[10px]"></i> ${readValue(typeBien)}</p></div>
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-0.5">Tipo de avalúo</span><p class="font-semibold text-slate-800 text-xs"><i class="fa-solid fa-file-invoice-dollar text-blue-600 mr-1 text-[10px]"></i> ${readValue(typeAppraisal)}</p></div>
-        </div></div>
+        </div><div class="mt-3 text-xs text-slate-600"><span class="text-[10px] font-bold uppercase text-slate-400">Solicitante</span><span class="ml-2">${readValue(currentApplicant.nombre || item.nombre)}</span><span class="mx-2 text-slate-300">•</span><span>${readValue(currentApplicant.correo || item.requesterEmail)}</span></div></div>${editFormMarkup}
       </div>
       <div class="cp6-submodal" data-appraisal-popup hidden><div class="cp6-submodal-card"><h3>Asignar avalúo</h3><p>Escribe el número de avalúo de 4 dígitos.</p><input data-popup-appraisal-number inputmode="numeric" maxlength="4" value="${escapeHtml(appraisalNumber)}" placeholder="0000" /><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-appraisal>Aceptar</button></div></div></div>
       <div class="cp6-submodal" data-valuator-popup hidden><div class="cp6-submodal-card"><h3>Cambiar valuador</h3><p>Selecciona un usuario administrativo, Administrador, Auditor o Valuador.</p><select data-popup-valuator><option value="">Selecciona un usuario</option></select><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-valuator>Aceptar</button></div></div></div>
