@@ -996,3 +996,8 @@
   font-size: 16px !important;
   font-weight: 700 !important;
 }
+
+/* CP6 Cotizaciones · secundarios y etiquetas a 14 px */
+.cp6-cotizaciones :is(.cp6-topbar p, .cp6-section-heading p, .cp6-hero p, .cp6-hero-note, #formPanel label, #badgeEditMode, .cp6-table-panel thead th) {
+  font-size: 14px !important;
+}

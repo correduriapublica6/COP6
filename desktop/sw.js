@@ -1,4 +1,4 @@
-const CACHE_NAME = "cp6-final-design-desktop-arial-20261105-01";
+const CACHE_NAME = "cp6-final-design-desktop-arial-20261105-02";
 const APP_SHELL = ["./cotizacion.html", "./cp6-presentation.js", "./cp6-cotizaciones.css", "./cp6-components.css", "./cp6-final.css", "./cp6-system.css", "./cp6-foundation.css", "./", "./index.html", "./styles.css", "./dashboard.css", "./override.css", "./app.js", "./automotriz-form.js", "./automotriz-model.js", "./mobiliario-form.js", "./solicitudes-form.js", "./messaging.js", "./image-utils.js", "./word-export.js", "./vendor/html-docx.js", "./manifest.webmanifest", "./assets/fondo.jpg", "./assets/pwa-icon-512.png"];
 
 self.addEventListener("install", (event) => {
