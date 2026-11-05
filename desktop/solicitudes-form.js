@@ -678,34 +678,6 @@
     if (!file) return;
     openResourceViewer(file.url || safeFileData(file), file.name || `Archivo ${index + 1}`, file.type || "", requestFileUrl(item, index, true));
   }
-  async function saveRequestInfo(item, form) {
-    const values = Object.fromEntries(new FormData(form).entries());
-    const message = form.querySelector("[data-edit-message]");
-    const button = form.querySelector("[data-save-request-info]");
-    if (!values.nombre?.trim()) { if (message) { message.textContent = "El nombre es obligatorio."; message.hidden = false; } return; }
-    if (button) { button.disabled = true; button.textContent = "Guardando…"; }
-    try {
-      const result = await api(`/service-requests/${encodeURIComponent(item.id)}`, {
-        method: "PUT",
-        body: JSON.stringify({
-          solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo },
-          propietario: values.propietario,
-          valorOperacion: values.valorOperacion,
-          tipoAvaluo: values.tipoAvaluo,
-          datosEspecificos: { propietario: values.propietario, valorOperacion: values.valorOperacion, tipoAvaluo: values.tipoAvaluo }
-        })
-      });
-      const updated = result?.solicitud || result;
-      applicantRequestsCache = applicantRequestsCache.map((candidate) => candidate.id === updated.id ? updated : candidate);
-      filterApplicantRequests();
-      renderRequestDetail(updated);
-      window.alert("Los cambios de la solicitud se guardaron correctamente.");
-    } catch (error) {
-      if (message) { message.textContent = error.message || "No fue posible guardar los cambios."; message.hidden = false; }
-    } finally {
-      if (button) { button.disabled = false; button.textContent = "Guardar cambios"; }
-    }
-  }
   async function bindExternalAssignment(detail, item) {
     const nameInput = detail.querySelector("[data-external-name]");
     const emailInput = detail.querySelector("[data-external-email]");
@@ -738,6 +710,54 @@
       });
     } catch { results.innerHTML = `<small class="request-external-empty">No se pudieron cargar los usuarios externos.</small>`; save.disabled = true; }
   }
+  function openRequestEditor(item) {
+    const form = getRequestForm();
+    if (!form || !item) return;
+    closeDialog($("#requestDetailDialog"));
+    resetRequestForm();
+    editingRequestId = item.id || "";
+    archivosExistentesEnEdicion = Array.isArray(item.archivos) ? item.archivos : [];
+    archivosSeleccionados = [];
+    ensureRequestFieldNames();
+
+    const specific = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
+    const setField = (name, value) => {
+      const field = form.elements[name];
+      if (!field || field.length) return;
+      field.value = value == null ? "" : String(value);
+    };
+    setField("nombre", item.solicitante?.nombre || item.nombre || "");
+    setField("telefono", item.solicitante?.telefono || item.solicitante?.phone || item.telefono || "");
+    setField("correo", item.solicitante?.correo || item.solicitante?.email || item.requesterEmail || "");
+    setField("asesor", item.asesor || specific.asesor || "");
+    setField("tipoAvaluo", item.tipoAvaluo || specific.tipoAvaluo || specific.tipo_avaluo || "");
+
+    const category = item.tipoBien || specific.tipoBien || specific.tipo_bien || "";
+    if (category) selectCategory(category);
+    Object.entries(specific).forEach(([key, value]) => {
+      const field = key === "tipoBien" || key === "tipo_bien" ? null : form.elements[key];
+      if (field && !field.length && value != null) field.value = String(value);
+    });
+    setField("propietario", item.propietario || specific.propietario || "");
+    setField("valorOperacion", item.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "");
+    setField("contactoVisitaNombre", item.contactoVisita?.nombre || specific.contactoVisitaNombre || specific.contacto_visita || "");
+    setField("contactoVisitaTelefono", item.contactoVisita?.telefono || specific.contactoVisitaTelefono || specific.telefono_visita || "");
+    setField("direccionVisita", specific.direccionVisita || specific.direccion_visita || "");
+    setField("observaciones", item.observaciones || specific.observaciones || "");
+    if (item.notaria || specific.notariaReferida) setField("notariaReferida", item.notaria || specific.notariaReferida);
+
+    const consent = $("#requestPrivacyConsent");
+    if (consent) consent.checked = true;
+    renderSelectedFiles();
+    showRequestStep(1);
+    updateOperationMoneyPreview();
+    updateSummary();
+    openDialog(requestDialog);
+    fillAdvisors().then(() => setField("asesor", item.asesor || specific.asesor || ""));
+    if (item.notaria || specific.notariaReferida) window.setTimeout(() => renderNotarySearch(item.notaria || specific.notariaReferida), 0);
+    bindNewRequestExternalAssignment();
+  }
+
   function renderRequestDetail(item) {
     const detail = $("#requestDetailContent");
     const dialog = $("#requestDetailDialog");
@@ -785,27 +805,7 @@
     const typeAppraisal = item.tipoAvaluo || item.tipo_avaluo || specific.tipoAvaluo || specific.tipo_avaluo || specific.tipo_de_avaluo || "";
 
     const canEditRequestInfo = Boolean(applicantSession || ["admin", "auditor"].includes(activeRole));
-    const editField = (label, name, value, type = "text", extra = "") => `<label><span>${escapeHtml(label)}</span><input type="${type}" name="${escapeHtml(name)}" value="${escapeHtml(value ?? "")}" ${extra}></label>`;
-    const displayLabel = (key) => String(key).replace(/([A-Z])/g, " $1").replace(/[_-]+/g, " ").replace(/^./, (letter) => letter.toUpperCase()).trim();
-    const reservedSpecific = new Set(["archivos", "files", "documentos", "documentacion", "imagenes", "fotografias", "fotos", "contactoVisita", "contacto_visita", "valorOperacion", "valor_operacion", "tipoBien", "tipo_bien", "tipoAvaluo", "tipo_avaluo", "propietario", "observaciones"]);
-    const specificFields = Object.entries(specific).filter(([key, value]) => !reservedSpecific.has(key) && ["string", "number", "boolean"].includes(typeof value)).map(([key, value]) => editField(displayLabel(key), `specific:${key}`, value, typeof value === "number" ? "number" : "text")).join("");
     const editMarkup = canEditRequestInfo ? `<button type="button" class="cp6-detail-button cp6-edit-request-button" data-edit-request-info><i class="fa-solid fa-pen-to-square"></i> Editar información</button>` : "";
-    const editFormMarkup = canEditRequestInfo ? `<form class="cp6-edit-info-form" data-request-info-form hidden>
-      ${editField("Nombre del solicitante", "nombre", currentApplicant.nombre || item.nombre || "", "text", "required")}
-      ${editField("Teléfono", "telefono", currentApplicant.telefono || currentApplicant.phone || item.telefono || "", "tel")}
-      ${editField("Correo electrónico", "correo", currentApplicant.correo || currentApplicant.email || item.requesterEmail || "", "email", applicantSession ? "readonly" : "")}
-      ${editField("Propietario", "propietario", item.propietario || specific.propietario || "")}
-      ${editField("Valor de operación", "valorOperacion", valueOperation, "text")}
-      ${editField("Tipo de bien", "tipoBien", typeBien)}
-      ${editField("Tipo de avalúo", "tipoAvaluo", typeAppraisal)}
-      ${editField("Modalidad / subtipo", "modalidad", item.modalidad || specific.modalidad || specific.modalidadInmueble || "")}
-      ${editField("Notaría", "notaria", item.notaria || specific.notaria || "")}
-      ${editField("Contacto para visita", "contactoVisitaNombre", contactName)}
-      ${editField("Teléfono de visita", "contactoVisitaTelefono", visitPhone, "tel")}
-      <label class="cp6-edit-info-wide"><span>Observaciones</span><textarea name="observaciones" rows="2">${escapeHtml(item.observaciones || specific.observaciones || "")}</textarea></label>
-      ${specificFields}
-      <div class="cp6-edit-info-actions"><small data-edit-message hidden></small><button type="button" class="cp6-secondary-button" data-cancel-request-info>Cancelar</button><button type="submit" class="cp6-primary-button" data-save-request-info><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button></div>
-    </form>` : "";
     detail.innerHTML = `<div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden relative my-2" data-request-card>
       <div class="h-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700"></div>
       <div class="px-6 py-4 border-b border-slate-100 flex flex-col justify-between gap-3 bg-slate-50/50 relative pr-14">
@@ -834,7 +834,7 @@
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-0.5">Teléfono de visita</span><p class="font-semibold text-slate-800 text-xs"><i class="fa-solid fa-phone text-blue-600 mr-1 text-[10px]"></i> ${readValue(visitPhone)}</p></div>
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-0.5">Tipo de bien</span><p class="font-semibold text-slate-800 text-xs"><i class="fa-solid fa-building text-blue-600 mr-1 text-[10px]"></i> ${readValue(typeBien)}</p></div>
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-[10px] font-bold uppercase text-slate-400 block tracking-wider mb-0.5">Tipo de avalúo</span><p class="font-semibold text-slate-800 text-xs"><i class="fa-solid fa-file-invoice-dollar text-blue-600 mr-1 text-[10px]"></i> ${readValue(typeAppraisal)}</p></div>
-        </div><div class="mt-3 text-xs text-slate-600"><span class="text-[10px] font-bold uppercase text-slate-400">Solicitante</span><span class="ml-2">${readValue(currentApplicant.nombre || item.nombre)}</span><span class="mx-2 text-slate-300">•</span><span>${readValue(currentApplicant.correo || item.requesterEmail)}</span></div></div>${editFormMarkup}
+        </div><div class="mt-3 text-xs text-slate-600"><span class="text-[10px] font-bold uppercase text-slate-400">Solicitante</span><span class="ml-2">${readValue(currentApplicant.nombre || item.nombre)}</span><span class="mx-2 text-slate-300">•</span><span>${readValue(currentApplicant.correo || item.requesterEmail)}</span></div></div>
       </div>
       <div class="cp6-submodal" data-appraisal-popup hidden><div class="cp6-submodal-card"><h3>Asignar avalúo</h3><p>Escribe el número de avalúo de 4 dígitos.</p><input data-popup-appraisal-number inputmode="numeric" maxlength="4" value="${escapeHtml(appraisalNumber)}" placeholder="0000" /><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-appraisal>Aceptar</button></div></div></div>
       <div class="cp6-submodal" data-valuator-popup hidden><div class="cp6-submodal-card"><h3>Cambiar valuador</h3><p>Selecciona un usuario administrativo, Administrador, Auditor o Valuador.</p><select data-popup-valuator><option value="">Selecciona un usuario</option></select><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-valuator>Aceptar</button></div></div></div>
@@ -899,10 +899,7 @@
     detail.querySelector("[data-open-external-popup]")?.addEventListener("click", async () => { closeSubmodals(); externalPopup.hidden = false; search.focus(); try { externalUsers = await api("/applicants"); } catch (error) { resultBox.innerHTML = `<small>${escapeHtml(error.message || "No se pudieron cargar los usuarios.")}</small>`; } });
     search?.addEventListener("input", () => { selectedExternal = null; acceptExternal.disabled = true; const query = search.value.trim().toLocaleLowerCase("es-MX"); if (!query) { resultBox.innerHTML = ""; return; } const matches = externalUsers.filter((user) => [user.name, user.email, user.phone].join(" ").toLocaleLowerCase("es-MX").includes(query)).slice(0, 8); resultBox.innerHTML = matches.length ? matches.map((user) => `<button type="button" class="cp6-popup-result w-full text-left px-3 py-2 hover:bg-slate-50 transition flex flex-col" data-external-id="${escapeHtml(user.id)}"><span class="text-xs font-bold text-slate-800">${escapeHtml(user.name)}</span><span class="text-[11px] text-slate-500">${escapeHtml(user.email || "")} • ${escapeHtml(user.phone || "")}</span></button>`).join("") : `<small>No se encontraron usuarios.</small>`; resultBox.querySelectorAll("[data-external-id]").forEach((button) => button?.addEventListener("click", () => { selectedExternal = externalUsers.find((user) => user.id === button.dataset.externalId); search.value = selectedExternal?.name || ""; acceptExternal.disabled = !selectedExternal; resultBox.innerHTML = selectedExternal ? `<small>Seleccionado: ${escapeHtml(selectedExternal.name)}</small>` : ""; })); });
     acceptExternal?.addEventListener("click", async () => { if (!selectedExternal) return; try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ asignadoExternoId: selectedExternal.id, asignadoExternoEmail: selectedExternal.email || "", asignadoExternoNombre: selectedExternal.name || "" }) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); } catch (error) { window.alert(error.message || "No se pudo asignar el usuario externo."); } });
-    const editButton = detail.querySelector("[data-edit-request-info]"); const readPanel = detail.querySelector("[data-read-request-info]"); const editForm = detail.querySelector("[data-request-info-form]");
-    editButton?.addEventListener("click", () => { if (!readPanel || !editForm) return; readPanel.hidden = true; editButton.hidden = true; editForm.hidden = false; editForm.querySelector("input, textarea, select")?.focus(); });
-    detail.querySelector("[data-cancel-request-info]")?.addEventListener("click", () => { if (!editForm || !readPanel || !editButton) return; editForm.hidden = true; readPanel.hidden = false; editButton.hidden = false; });
-    editForm?.addEventListener("submit", async (event) => { event.preventDefault(); const values = Object.fromEntries(new FormData(editForm).entries()); const nextSpecific = { ...specific }; Object.entries(values).forEach(([key, value]) => { if (key.startsWith("specific:")) nextSpecific[key.slice(9)] = value; }); const body = { solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo }, propietario: values.propietario, valorOperacion: values.valorOperacion, tipoBien: values.tipoBien, tipoAvaluo: values.tipoAvaluo, asesor: values.asesor, notaria: values.notaria, modalidad: values.modalidad, observaciones: values.observaciones, datosEspecificos: { ...nextSpecific, ...Object.fromEntries(Object.entries(values).filter(([key]) => !key.startsWith("specific:") && !["nombre", "telefono", "correo"].includes(key))) } }; try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify(body) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); } catch (error) { const message = editForm.querySelector("[data-edit-message]"); message.textContent = error.message || "No se pudieron guardar los cambios."; message.hidden = false; } });
+    detail.querySelector("[data-edit-request-info]")?.addEventListener("click", () => openRequestEditor(item));
   }
   function renderHomeQuickDetail(item) {
     let dialog = $("#homeQuickRequestDialog");
@@ -983,22 +980,8 @@
     table.querySelectorAll("[data-edit-own-request]").forEach((button) => button?.addEventListener("click", () => { const item = own.find((candidate) => candidate.id === button.dataset.editOwnRequest); if (item) editOwnRequest(item); }));
     openDialog(applicantRequestsDialog);
   }
-  function editOwnRequest(item) {
-    editingRequestId = item.id;
-    archivosExistentesEnEdicion = Array.isArray(item.archivos) ? item.archivos : [];
-    archivosSeleccionados = [];
-    renderSelectedFiles();
-    const form = $("#publicRequestForm");
-    form.elements.nombre.value = item.solicitante?.nombre || "";
-    form.elements.telefono.value = item.solicitante?.telefono || "";
-    form.elements.correo.value = item.solicitante?.correo || applicantSession?.email || "";
-    form.elements.tipoAvaluo.value = item.tipoAvaluo || "";
-    renderDynamicFields();
-    form.elements.asesor.value = item.asesor || "";
-    if (item.datosEspecificos) Object.entries(item.datosEspecificos).forEach(([key, value]) => { const field = key === "tipoBien" ? (form.elements.subtipoBien || form.querySelector("#publicRequestType")) : form.elements[key]; if (field && !field.length) field.value = value; });
-    if (item.notaria || item.datosEspecificos?.notariaReferida) renderNotarySearch(item.notaria || item.datosEspecificos.notariaReferida);
-    closeDialog(applicantRequestsDialog); openDialog(requestDialog); fillAdvisors();
-  }
+  function editOwnRequest(item) { openRequestEditor(item); }
+
   async function saveApplicantProfile(event) {
     event.preventDefault();
     if (!applicantSession) return;
