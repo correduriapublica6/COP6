@@ -1932,3 +1932,13 @@ body.cp6-redesign #appShell.control-shell .app-workspace :is(#statusRecordList, 
 body.cp6-redesign #appShell.control-shell .app-workspace :is(.status-pill, .status-badge, .request-status, .operational-status, .table-status-badge, .avaluo-status, .request-status-badge) {
   font-size: 13px !important;
 }
+
+/* CP6 · Tablas operativas: 13 px también en textos internos de las celdas.
+   La prioridad explícita neutraliza tamaños heredados de las capas anteriores.
+   No modifica colores, iconos, dimensiones, barras ni animaciones. */
+body.cp6-redesign #appShell#appShell.control-shell .app-workspace :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList, #welcomeRequestsTable, #registeredApplicantsTable) :is(th, td),
+body.cp6-redesign #appShell#appShell.control-shell .app-workspace :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList, #welcomeRequestsTable, #registeredApplicantsTable) :is(th, td) :is(span, strong, b, small, p, a, time, div, em, label, button):not([aria-hidden="true"]):not(.fa-solid):not(.fa-regular):not(.fa-brands):not(.cp6-cell-icon):not(.action-icon) {
+  font-size: 13px !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  text-shadow: none !important;
+}

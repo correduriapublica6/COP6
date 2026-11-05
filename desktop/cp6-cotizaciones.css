@@ -1001,3 +1001,11 @@
 .cp6-cotizaciones :is(.cp6-topbar p, .cp6-section-heading p, .cp6-hero p, .cp6-hero-note, #formPanel label, #badgeEditMode, .cp6-table-panel thead th) {
   font-size: 13px !important;
 }
+
+/* CP6 · Tabla de Cotizaciones uniforme, incluida fecha, folio y observaciones. */
+.cp6-cotizaciones #tableView#tableView.cp6-table-panel :is(th, td),
+.cp6-cotizaciones #tableView#tableView.cp6-table-panel :is(th, td) :is(span, strong, b, small, p, a, time, div, em, label, button):not([aria-hidden="true"]):not(.fa-solid):not(.fa-regular):not(.fa-brands):not(.action-icon) {
+  font-size: 13px !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  text-shadow: none !important;
+}
