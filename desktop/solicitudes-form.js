@@ -720,55 +720,64 @@
       try { requestDialog.showModal(); }
       catch { requestDialog.setAttribute("open", ""); }
     }
-    try {
-        resetRequestForm();
-        editingRequestId = item.id || "";
-        archivosExistentesEnEdicion = Array.isArray(item.archivos) ? item.archivos : [];
-        archivosSeleccionados = [];
-        ensureRequestFieldNames();
-        const specific = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
-        const setField = (name, value) => {
-          const field = form.elements[name];
-          if (!field || field.length) return;
-          field.value = value == null ? "" : String(value);
-        };
-        setField("nombre", item.solicitante?.nombre || item.nombre || "");
-        setField("telefono", item.solicitante?.telefono || item.solicitante?.phone || item.telefono || "");
-        setField("correo", item.solicitante?.correo || item.solicitante?.email || item.requesterEmail || "");
-        setField("asesor", item.asesor || specific.asesor || "");
-        setField("tipoAvaluo", item.tipoAvaluo || specific.tipoAvaluo || specific.tipo_avaluo || "");
+    const warnings = [];
+    const safely = (label, action) => {
+      try { return action(); }
+      catch (error) { console.warn(`Edición: no se pudo cargar ${label}.`, error); warnings.push(label); return undefined; }
+    };
+    safely("el reinicio del formulario", () => resetRequestForm());
+    editingRequestId = item.id || "";
+    archivosExistentesEnEdicion = Array.isArray(item.archivos) ? item.archivos : [];
+    archivosSeleccionados = [];
+    safely("los nombres de campos", ensureRequestFieldNames);
+    const specific = item.datosEspecificos && typeof item.datosEspecificos === "object" && !Array.isArray(item.datosEspecificos) ? item.datosEspecificos : {};
+    const normalized = (value) => String(value ?? "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("es-MX");
+    const setField = (name, value) => safely(`el campo ${name}`, () => {
+      if (value == null) return;
+      const found = form.elements.namedItem(name);
+      const controls = found?.nodeType === 1 ? [found] : found && typeof found.length === "number" ? Array.from(found) : [];
+      if (!controls.length) return;
+      const text = String(value);
+      controls.forEach((field) => {
+        if (field.disabled || field.type === "file") return;
+        if (field.tagName === "SELECT") {
+          const option = Array.from(field.options).find((candidate) => candidate.value === text) || Array.from(field.options).find((candidate) => normalized(candidate.value) === normalized(text) || normalized(candidate.textContent) === normalized(text));
+          field.value = option ? option.value : "";
+          field.dispatchEvent(new Event("change", { bubbles: true }));
+        } else if (field.type === "checkbox") field.checked = value === true || text === "true" || text === "1";
+        else if (field.type === "radio") field.checked = normalized(field.value) === normalized(text);
+        else field.value = text;
+      });
+    });
 
-        const category = item.tipoBien || specific.tipoBien || specific.tipo_bien || "";
-        if (category) selectCategory(category);
-        Object.entries(specific).forEach(([key, value]) => {
-          const field = key === "tipoBien" || key === "tipo_bien" ? null : form.elements[key];
-          if (field && !field.length && value != null) field.value = String(value);
-        });
-        setField("propietario", item.propietario || specific.propietario || "");
-        setField("valorOperacion", item.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "");
-        setField("contactoVisitaNombre", item.contactoVisita?.nombre || specific.contactoVisitaNombre || specific.contacto_visita || "");
-        setField("contactoVisitaTelefono", item.contactoVisita?.telefono || specific.contactoVisitaTelefono || specific.telefono_visita || "");
-        setField("direccionVisita", specific.direccionVisita || specific.direccion_visita || "");
-        setField("observaciones", item.observaciones || specific.observaciones || "");
-        if (item.notaria || specific.notariaReferida) setField("notariaReferida", item.notaria || specific.notariaReferida);
+    const category = item.tipoBien || specific.tipoBien || specific.tipo_bien || "";
+    if (category) safely("la categoría del bien", () => selectCategory(category));
+    setField("nombre", item.solicitante?.nombre || item.solicitante?.name || item.nombre || "");
+    setField("telefono", item.solicitante?.telefono || item.solicitante?.phone || item.telefono || "");
+    setField("correo", item.solicitante?.correo || item.solicitante?.email || item.requesterEmail || "");
+    setField("tipoAvaluo", item.tipoAvaluo || specific.tipoAvaluo || specific.tipo_avaluo || "");
+    Object.entries(specific).forEach(([key, value]) => {
+      if (["tipoBien", "tipo_bien"].includes(key) || value == null || typeof value === "object") return;
+      setField(key, value);
+    });
+    setField("asesor", item.asesor || specific.asesor || "");
+    setField("propietario", item.propietario || specific.propietario || "");
+    setField("valorOperacion", item.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "");
+    setField("contactoVisitaNombre", item.contactoVisita?.nombre || item.contactoVisita?.name || specific.contactoVisitaNombre || specific.contacto_visita || "");
+    setField("contactoVisitaTelefono", item.contactoVisita?.telefono || item.contactoVisita?.phone || specific.contactoVisitaTelefono || specific.telefono_visita || "");
+    setField("direccionVisita", item.contactoVisita?.direccion || specific.direccionVisita || specific.direccion_visita || "");
+    setField("observaciones", item.observaciones || specific.observaciones || "");
+    if (item.notaria || specific.notariaReferida) setField("notariaReferida", item.notaria || specific.notariaReferida);
 
-        const consent = $("#requestPrivacyConsent");
-        if (consent) consent.checked = true;
-        renderSelectedFiles();
-        showRequestStep(1);
-        updateOperationMoneyPreview();
-        updateSummary();
-        fillAdvisors().then(() => setField("asesor", item.asesor || specific.asesor || ""));
-        if (item.notaria || specific.notariaReferida) window.setTimeout(() => renderNotarySearch(item.notaria || specific.notariaReferida), 0);
-        bindNewRequestExternalAssignment();
-      } catch (error) {
-        console.error("No se pudo abrir la solicitud para edición:", error);
-        editingRequestId = item.id || "";
-        if (!requestDialog.open) {
-          try { requestDialog.showModal(); } catch { requestDialog.setAttribute("open", ""); }
-        }
-        setMessage($("#publicRequestMessage"), "No se pudieron cargar todos los datos de esta solicitud. Revisa la información antes de guardar.");
-    }
+    safely("la casilla de privacidad", () => { const consent = $("#requestPrivacyConsent"); if (consent) consent.checked = true; });
+    safely("los archivos adjuntos", renderSelectedFiles);
+    safely("la primera página", () => showRequestStep(1));
+    safely("el cálculo de valor", updateOperationMoneyPreview);
+    safely("el resumen", updateSummary);
+    safely("los valuadores", () => fillAdvisors().then(() => setField("asesor", item.asesor || specific.asesor || "")).catch((error) => console.warn("Edición: no se pudo cargar el catálogo de valuadores.", error)));
+    if (item.notaria || specific.notariaReferida) safely("la notaría", () => window.setTimeout(() => renderNotarySearch(item.notaria || specific.notariaReferida), 0));
+    safely("la asignación de usuario externo", bindNewRequestExternalAssignment);
+    setMessage($("#publicRequestMessage"), warnings.length ? `Se abrió la solicitud, pero algunos campos no pudieron precargarse: ${warnings.join(", ")}.` : "");
   }
 
   function renderRequestDetail(item) {
