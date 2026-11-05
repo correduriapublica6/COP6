@@ -247,3 +247,42 @@ body.cp6-redesign #appShell#appShell#appShell#appShell.cp6-approved-ui #technica
 body.cp6-redesign #appShell#appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #serviceRequestsTable, #technicalAppraisalList) :is(.request-icon-button, .record-action, .technical-icon-button) { box-sizing: border-box; width: 28px !important; min-width: 28px !important; height: 28px !important; min-height: 28px !important; padding: 5px !important; margin: 0 !important; }
 body.cp6-redesign #appShell#appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #serviceRequestsTable) .request-icon-button + .request-icon-button { margin-left: 4px !important; }
 body.cp6-redesign #appShell#appShell#appShell#appShell.cp6-approved-ui #technicalAppraisalList .technical-row-actions { gap: 6px !important; flex-wrap: nowrap; }
+
+/* Solicitudes y Recepción: solicitud/avalúo, nombre/correo y ubicación. */
+body.cp6-redesign #appShell#appShell#appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #serviceRequestsTable) .cp6-request-stacked :is(th, td) {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  white-space: normal !important;
+  text-align: left;
+}
+body.cp6-redesign #appShell#appShell#appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #serviceRequestsTable) .cp6-request-stacked :is(th:first-child, td:first-child) { width: 120px !important; }
+body.cp6-redesign #appShell#appShell#appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #serviceRequestsTable) .cp6-request-stacked :is(th:nth-child(2), td:nth-child(2)) { width: 22% !important; }
+body.cp6-redesign #appShell#appShell#appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #serviceRequestsTable) .cp6-request-stacked :is(th:nth-child(4), td:nth-child(4)) { width: 18% !important; }
+body.cp6-redesign #appShell#appShell#appShell#appShell#appShell.cp6-approved-ui #statusRecordList .cp6-request-stacked :is(th:nth-child(5), td:nth-child(5)) { width: 104px !important; text-align: right; }
+body.cp6-redesign #appShell#appShell#appShell#appShell#appShell.cp6-approved-ui #statusRecordList .cp6-request-stacked :is(th:nth-child(6), td:nth-child(6)) { width: 145px !important; }
+body.cp6-redesign #appShell#appShell#appShell#appShell#appShell.cp6-approved-ui #serviceRequestsTable .cp6-request-stacked :is(th:nth-child(5), td:nth-child(5)) { width: 125px !important; }
+body.cp6-redesign #appShell#appShell#appShell#appShell#appShell.cp6-approved-ui #serviceRequestsTable .cp6-request-stacked :is(th:nth-child(6), td:nth-child(6)) { width: 54px !important; }
+body.cp6-redesign #appShell#appShell#appShell#appShell#appShell.cp6-approved-ui #statusRecordList .cp6-request-stacked :is(th:last-child, td:last-child) { width: 148px !important; white-space: nowrap !important; }
+body.cp6-redesign #appShell#appShell#appShell#appShell#appShell.cp6-approved-ui #serviceRequestsTable .cp6-request-stacked :is(th:last-child, td:last-child) { width: 120px !important; white-space: nowrap !important; }
+body.cp6-redesign #appShell#appShell#appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #serviceRequestsTable) .cp6-table-primary {
+  display: block !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  color: #263b59 !important;
+  overflow-wrap: anywhere;
+}
+body.cp6-redesign #appShell#appShell#appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #serviceRequestsTable) .cp6-table-secondary {
+  display: block !important;
+  color: #718096 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  text-shadow: none !important;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  white-space: normal !important;
+}
+body.cp6-redesign #appShell#appShell#appShell#appShell#appShell.cp6-approved-ui :is(#statusRecordList, #serviceRequestsTable) .cp6-table-location .cp6-table-secondary { margin-top: 0; }
