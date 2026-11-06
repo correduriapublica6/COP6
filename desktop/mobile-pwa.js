@@ -3,6 +3,13 @@
   const installButton = () => document.querySelector("#mobileInstallButton");
   const installCard = () => document.querySelector("#mobileInstallCard");
 
+  const showInstallAction = () => {
+    const button = installButton();
+    if (button) button.hidden = false;
+    const card = installCard();
+    if (card) card.hidden = false;
+  };
+
   const hideInstallAction = () => {
     const button = installButton();
     if (button) button.hidden = true;
@@ -13,11 +20,16 @@
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     deferredInstallPrompt = event;
-    const button = installButton();
-    if (button) button.hidden = false;
-    const card = installCard();
-    if (card) card.hidden = false;
+    showInstallAction();
   });
+
+  // Algunos navegadores no exponen beforeinstallprompt, pero sí permiten
+  // instalar desde su menú. Mantener visible la opción evita que desaparezca.
+  const revealInstallOptionWhenReady = () => {
+    if (!window.matchMedia?.("(display-mode: standalone)").matches && !window.navigator.standalone) showInstallAction();
+  };
+  if (document.readyState === "loading") window.addEventListener("DOMContentLoaded", revealInstallOptionWhenReady, { once: true });
+  else revealInstallOptionWhenReady();
 
   window.addEventListener("appinstalled", () => {
     deferredInstallPrompt = null;
