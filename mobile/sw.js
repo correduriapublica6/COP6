@@ -1,11 +1,11 @@
-const CACHE_NAME = "cp6-mobile-portrait-lock-20261105-02";
+const CACHE_NAME = "cp6-mobile-apple-icon-20261106-01";
 const APP_SHELL = ["../desktop/cp6-tables-quotes-style.css", "../desktop/cp6-approved.css", "../desktop/cp6-approved-quotes.css", "../desktop/cotizacion.html", "../desktop/cp6-presentation.js", "../desktop/cp6-cotizaciones.css", "../desktop/cp6-components.css", "../desktop/cp6-final.css", "../desktop/cp6-system.css", "../desktop/cp6-foundation.css",
   "./", "./index.html", "./mobile.css", "./manifest.webmanifest", "./sw.js",
   "../desktop/styles.css", "../desktop/dashboard.css", "../desktop/override.css",
   "../desktop/app.js", "../desktop/automotriz-form.js", "../desktop/automotriz-model.js",
   "../desktop/mobiliario-form.js", "../desktop/solicitudes-form.js", "../desktop/messaging.js",
   "../desktop/image-utils.js", "../desktop/word-export.js", "../desktop/mobile-pwa.js",
-  "../desktop/assets/pwa-icon-192.png", "../desktop/assets/pwa-icon-512.png"
+  "../desktop/assets/pwa-icon-192.png", "../desktop/assets/pwa-icon-512.png", "./apple-touch-icon.png"
 ];
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
