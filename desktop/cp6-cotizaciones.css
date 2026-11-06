@@ -744,7 +744,7 @@
   font-family: "Manrope", sans-serif;
 }
 
-#cotizacionCard .bg-gradient-to-r {
+#cotizacionCard .bg-gradient-to-r:not(.h-3) {
   background: linear-gradient(115deg, #138a62, #16a574 60%, #0ea5c9) !important;
   border-radius: 15px !important;
 }
@@ -939,12 +939,6 @@
 .cp6-cotizaciones #formPanel textarea { font-size: 13px !important; }
 .cp6-cotizaciones #formPanel > button[onclick="saveRecord()"] { font-size: 13px !important; }
 .cp6-cotizaciones #actionsBar button { font-size: 12px !important; }
-.cp6-cotizaciones #cotizacionCard #outFolio { font-size: 12px !important; }
-.cp6-cotizaciones #cotizacionCard #outFecha { font-size: 12px !important; }
-.cp6-cotizaciones #cotizacionCard p { font-size: 12px !important; line-height: 1.45 !important; }
-.cp6-cotizaciones #cotizacionCard .text-\[10px\],
-.cp6-cotizaciones #cotizacionCard .text-\[11px\],
-.cp6-cotizaciones #cotizacionCard .text-xs { font-size: 12px !important; }
 @media (max-width: 700px) {
   .cp6-cotizaciones .cp6-table-panel thead th { font-size: 10px !important; padding: 12px 15px !important; }
   .cp6-cotizaciones .cp6-table-panel tbody td { font-size: 12px !important; padding: 13px 15px !important; }
@@ -955,7 +949,7 @@
 
 /* CP6 Cotizaciones · tipografía Arial solicitada · Login intacto */
 .cp6-cotizaciones,
-.cp6-cotizaciones :not(i):not(.fa-solid):not(.fa-regular):not(.fa-brands) {
+.cp6-cotizaciones :not(#cotizacionCard):not(#cotizacionCard *):not(i):not(.fa-solid):not(.fa-regular):not(.fa-brands) {
   font-family: Arial, Helvetica, sans-serif !important;
   text-shadow: none !important;
 }
@@ -991,7 +985,7 @@
   font-size: 16px !important;
   font-weight: 400 !important;
 }
-.cp6-cotizaciones :is(.cp6-table-panel tbody td:first-child span:first-child, #cotizacionCard #outFolio, #cotizacionCard #outFecha, #cotizacionCard #outSolicitante, #cotizacionCard #outDireccion, #cotizacionCard #outTotalCon, #cotizacionCard #outAhorro) {
+.cp6-cotizaciones .cp6-table-panel tbody td:first-child span:first-child {
   color: #1a202c !important;
   font-size: 16px !important;
   font-weight: 700 !important;
@@ -1008,4 +1002,9 @@
   font-size: 13px !important;
   font-family: Arial, Helvetica, sans-serif !important;
   text-shadow: none !important;
+}
+
+/* Comprobante independiente de la tipografía de tablas: conservar diseño original. */
+#cotizacionCard.cp6-quote-card {
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
 }

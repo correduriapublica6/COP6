@@ -28,11 +28,11 @@
   box-sizing: border-box;
 }
 
-.cp6-cotizaciones h1,
-.cp6-cotizaciones h2,
-.cp6-cotizaciones h3,
-.cp6-cotizaciones h4,
-.cp6-cotizaciones p,
+.cp6-cotizaciones h1:not(#cotizacionCard *),
+.cp6-cotizaciones h2:not(#cotizacionCard *),
+.cp6-cotizaciones h3:not(#cotizacionCard *),
+.cp6-cotizaciones h4:not(#cotizacionCard *),
+.cp6-cotizaciones p:not(#cotizacionCard *),
 .cp6-cotizaciones button,
 .cp6-cotizaciones input,
 .cp6-cotizaciones textarea,
