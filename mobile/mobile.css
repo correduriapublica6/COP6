@@ -1,6 +1,7 @@
 /* CP6 PWA: the same design and native safe areas. */
 body.mobile-mode{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
-body.mobile-mode #mobileInstallCard{display:none}
+/* La opción de instalación debe permanecer visible en la versión móvil. */
+body.mobile-mode #mobileInstallCard{display:flex}
 body.mobile-mode .v2-sidebar{top:env(safe-area-inset-top)}
 body.mobile-mode button,body.mobile-mode a{-webkit-tap-highlight-color:transparent}
 body.mobile-mode :is(input,textarea,select){font-size:16px!important}
