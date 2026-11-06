@@ -1,4 +1,4 @@
-const CACHE_NAME = "cp6-mobile-portrait-install-20261105-01";
+const CACHE_NAME = "cp6-mobile-portrait-lock-20261105-02";
 const APP_SHELL = ["../desktop/cp6-tables-quotes-style.css", "../desktop/cp6-approved.css", "../desktop/cp6-approved-quotes.css", "../desktop/cotizacion.html", "../desktop/cp6-presentation.js", "../desktop/cp6-cotizaciones.css", "../desktop/cp6-components.css", "../desktop/cp6-final.css", "../desktop/cp6-system.css", "../desktop/cp6-foundation.css",
   "./", "./index.html", "./mobile.css", "./manifest.webmanifest", "./sw.js",
   "../desktop/styles.css", "../desktop/dashboard.css", "../desktop/override.css",

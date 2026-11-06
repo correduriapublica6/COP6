@@ -1,7 +1,8 @@
 /* CP6 PWA: the same design and native safe areas. */
 body.mobile-mode{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
-/* La opción de instalación debe permanecer visible en la versión móvil. */
-body.mobile-mode #mobileInstallCard{display:flex}
+/* Mantener visible la tarjeta solo cuando el atributo hidden no esté activo. */
+body.mobile-mode #mobileInstallCard:not([hidden]){display:flex}
+body.mobile-mode #mobileInstallCard[hidden]{display:none!important}
 body.mobile-mode .v2-sidebar{top:env(safe-area-inset-top)}
 body.mobile-mode button,body.mobile-mode a{-webkit-tap-highlight-color:transparent}
 body.mobile-mode :is(input,textarea,select){font-size:16px!important}
@@ -82,6 +83,42 @@ body.mobile-mode :is(input,textarea,select){font-size:16px!important}
   body.mobile-mode #appShell.control-shell .cp6-home-hero-art { opacity: .42; transform: scale(.78); transform-origin: right center; }
   body.mobile-mode #appShell.control-shell :is(.operational-table-wrap, #statusRecordList, #technicalAppraisalList, #serviceRequestsTable, #validationRegistryList) { overflow-x: auto; }
 }
+/* En teléfonos, no cambiar la PWA a una composición de escritorio al girarla.
+   La orientación del dispositivo la bloquea el manifiesto y el JS instalado. */
+@media (orientation: landscape) and (max-height: 520px) and (pointer: coarse) {
+  body.mobile-mode #appShell.control-shell:not([hidden]) {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100dvh;
+  }
+  body.mobile-mode #appShell.control-shell:not([hidden]) .v2-sidebar {
+    align-items: center !important;
+    display: flex !important;
+    flex: 0 0 auto !important;
+    flex-direction: row !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 54px;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    position: sticky !important;
+    top: 0;
+    width: 100% !important;
+  }
+  body.mobile-mode #appShell.control-shell:not([hidden]) .v2-sidebar nav {
+    display: flex !important;
+    flex-direction: row !important;
+    min-width: max-content !important;
+    overflow: visible !important;
+  }
+  body.mobile-mode #appShell.control-shell:not([hidden]) .app-workspace {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    padding: 12px !important;
+    width: 100% !important;
+  }
+}
+
 /* Logo institucional oficial en login y navegación móvil. */
 .cp6-brand-logo-image {
   display: block;
