@@ -1208,68 +1208,31 @@
     const tipoBien = escapeHtml(rawTipoBien);
     const tipoAvaluo = escapeHtml(rawTipoAvaluo);
     const metodoPago = escapeHtml(record.metodoPago || "No especificado");
-    const concepto = escapeHtml(`Elaboración y expedición de avalúo ${String(rawTipoAvaluo).toLocaleLowerCase("es-MX")}.`);
+    const concepto = escapeHtml(`Elaboración y expedición de ${String(rawTipoAvaluo).toLocaleLowerCase("es-MX")} · Número de avalúo: ${record.numeroAvaluo || "________________"}.`);
     return `<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Comprobante de Pago - Correduría Pública No. 6</title>
-    <style>
-        @page { size: letter; margin: 15mm 20mm; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #2c3e50; line-height: 1.5; margin: 0; padding: 0; font-size: 13.5px; }
-        .container { width: 100%; max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; min-height: 94vh; }
-        .content-wrap { flex: 1; }
-        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
-        .header-left { font-family: Georgia, serif; font-style: italic; font-size: 21px; font-weight: bold; color: #1a1a1a; }
-        .header-right { font-family: Georgia, serif; font-style: italic; font-size: 12.5px; color: #555; text-align: right; line-height: 1.4; }
-        .title-container { text-align: center; margin-bottom: 30px; }
-        .title-container h1 { font-size: 15px; text-transform: uppercase; letter-spacing: 1.5px; margin: 0; display: inline-block; border-bottom: 1.5px solid #2c3e50; padding-bottom: 4px; font-weight: 700; color: #1a1a1a; }
-        .metadata-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; margin-bottom: 45px; }
-        .meta-item .label { font-size: 10px; color: #7f8c8d; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
-        .meta-item .value { font-size: 13px; font-weight: 600; }
-        .meta-item .value.folio { color: #800020; font-size: 14px; }
-        .body-section { margin-bottom: 35px; }
-        .row { margin-bottom: 14px; display: flex; border-bottom: 1px dotted #dcdde1; padding-bottom: 7px; }
-        .row .field-label { font-weight: 600; width: 150px; flex: 0 0 150px; color: #34495e; }
-        .row .field-value { flex-grow: 1; color: #2c3e50; }
-        .signature-section { margin-top: 60px; margin-bottom: 40px; text-align: center; }
-        .location-date { font-size: 13px; margin-bottom: 50px; color: #34495e; }
-        .signature-line { width: 260px; border-top: 1px solid #2c3e50; margin: 0 auto 8px auto; }
-        .signature-label { font-size: 11px; color: #555; font-weight: bold; text-transform: uppercase; letter-spacing: .5px; }
-        .footer-note { text-align: center; font-size: 10.5px; color: #7f8c8d; border-top: 1px solid #ecf0f1; padding-top: 12px; margin-top: auto; }
-        @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
-    </style>
+<meta charset="UTF-8">
+<title>Recibo de Pago - Correduría Pública No. 6</title>
+<style>
+@page{size:letter;margin:15mm 20mm}*{box-sizing:border-box}body{margin:0;background:#fff;color:#17243a;font-family:Arial,Helvetica,sans-serif;line-height:1.5;font-size:13px;-webkit-print-color-adjust:exact;print-color-adjust:exact}.receipt{width:100%;max-width:700px;min-height:94vh;margin:0 auto;display:flex;flex-direction:column;position:relative;overflow:hidden}.receipt-inner{flex:1;padding:34px 0 0;position:relative}.corner{position:absolute;right:-86px;top:112px;width:205px;height:205px;border-radius:50%;background:#f4f8ff;z-index:0}.header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e4eaf2;padding-bottom:21px;position:relative;z-index:1}.brand-name{font-size:17px;font-weight:800;letter-spacing:.2px;color:#162943}.brand-sub{margin-top:4px;font-size:10px;color:#718096;letter-spacing:1.1px;text-transform:uppercase}.brand-address{margin-top:5px;font-size:10px;color:#718096;line-height:1.45}.logo{width:82px;height:58px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:4px;align-content:center;justify-items:center;filter:drop-shadow(0 2px 3px rgba(26,43,67,.12))}.logo i{display:block;width:21px;height:21px;border-radius:2px;background:#111b2d}.logo i:nth-child(1),.logo i:nth-child(2),.logo i:nth-child(3){grid-row:1}.logo i:nth-child(1){grid-column:1}.logo i:nth-child(2){grid-column:2}.logo i:nth-child(3){grid-column:3}.logo i:nth-child(4){grid-row:2;grid-column:2}.logo i:nth-child(5){grid-row:2;grid-column:3}.logo i:nth-child(6){grid-row:3;grid-column:3}.title-row{text-align:center;padding:26px 0 21px;position:relative;z-index:1}.title{margin:0;color:#14253f;font-size:24px;letter-spacing:-.4px;font-weight:800}.meta{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:11px;margin-bottom:24px;position:relative;z-index:1}.meta-card{padding:13px 15px;border:1px solid #e4eaf2;border-radius:12px;background:#fbfcfe}.label{display:block;color:#8a98ab;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}.value{display:block;color:#1d2e49;font-size:13px;font-weight:700}.folio{color:#800020}.section-title{display:flex;align-items:center;gap:9px;margin:0 0 11px;color:#263b59;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;position:relative;z-index:1}.section-title:before{content:"";width:4px;height:15px;border-radius:4px;background:#246bfe}.client{padding:17px 19px;border:1px solid #e4eaf2;border-radius:14px;background:#f8fbff;margin-bottom:25px;position:relative;z-index:1}.client .value{font-size:14px}.location{margin-top:14px;padding-top:13px;border-top:1px solid #e5ebf3}.details{margin-bottom:24px;position:relative;z-index:1}.row{display:flex;align-items:baseline;gap:22px;padding:12px 0;border-bottom:1px solid #edf1f6;font-size:12px}.row:first-child{border-top:1px solid #edf1f6}.row .key{width:150px;flex:0 0 150px;color:#718096;font-weight:700}.row .data{color:#243752;font-weight:600}.money{margin:5px 0 24px;padding:19px 21px;border-radius:15px;background:#f1f4f8;color:#263b59;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}.money-copy .label{color:#718096;margin-bottom:5px}.money-copy small{color:#8a98ab;font-size:9px}.amount{text-align:right;font-size:25px;font-weight:800;color:#246bfe;letter-spacing:-.5px}.signature{min-height:155px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;text-align:center;position:relative;z-index:1}.date{font-size:12px;color:#718096;margin-bottom:48px}.line{width:245px;border-top:1px solid #263b59;margin-bottom:7px}.sign-label{font-size:10px;color:#53627a;font-weight:800;letter-spacing:1px;text-transform:uppercase}.footer{margin-top:27px;padding-top:12px;border-top:1px solid #e4eaf2;text-align:center;color:#8a98ab;font-size:9px;line-height:1.5;position:relative;z-index:1}.footer strong{color:#53627a}@media print{body{background:#fff}.receipt{max-width:100%;box-shadow:none}}
+</style>
 </head>
 <body>
-<div class="container">
-    <div class="content-wrap">
-        <div class="header">
-            <div class="header-left">Correduría Pública No. 6</div>
-            <div class="header-right">Morelos 854 Ote.<br>Col. Centro, Torreón, Coahuila</div>
-        </div>
-        <div class="title-container"><h1>Comprobante de Pago</h1></div>
-        <div class="metadata-grid">
-            <div class="meta-item"><div class="label">Folio</div><div class="value folio">${folio}</div></div>
-            <div class="meta-item"><div class="label">Fecha de Pago</div><div class="value">${fechaPago}</div></div>
-            <div class="meta-item"><div class="label">Método de Pago</div><div class="value">${metodoPago}</div></div>
-        </div>
-        <div class="body-section">
-            <div class="row"><div class="field-label">Recibí de:</div><div class="field-value">${solicitante}</div></div>
-            <div class="row"><div class="field-label">Cantidad:</div><div class="field-value">${importe} (${importeLetra})</div></div>
-            <div class="row"><div class="field-label">Por concepto de:</div><div class="field-value">${concepto}</div></div>
-            <div class="row"><div class="field-label">Tipo de Bien:</div><div class="field-value">${tipoBien}</div></div>
-            <div class="row"><div class="field-label">Tipo de Avalúo:</div><div class="field-value">${tipoAvaluo}</div></div>
-            <div class="row"><div class="field-label">No. de Avalúo:</div><div class="field-value">${numeroAvaluo}</div></div>
-        </div>
-        <div class="signature-section">
-            <div class="location-date">Torreón, Coahuila a ${fechaPago}</div>
-            <div class="signature-line"></div>
-            <div class="signature-label">Firma de Conformidad</div>
-        </div>
-    </div>
-    <div class="footer-note">Se liquida a entera satisfacción el importe total pactado por la elaboración y expedición del avalúo antes mencionado.</div>
+<div class="receipt">
+<div class="receipt-inner">
+<div class="corner"></div>
+<header class="header"><div><div class="brand-name">Correduría Pública 6</div><div class="brand-sub">Plaza Coahuila</div><div class="brand-address">Morelos 854 Ote., Col. Centro<br>Torreón, Coahuila</div></div><div class="logo" aria-label="Logo institucional"><i></i><i></i><i></i><i></i><i></i><i></i></div></header>
+<section class="title-row"><h1 class="title">Recibo de pago</h1></section>
+<section class="meta"><div class="meta-card"><span class="label">Folio del recibo</span><span class="value folio">${folio}</span></div><div class="meta-card"><span class="label">Fecha de pago</span><span class="value">${fechaPago}</span></div><div class="meta-card"><span class="label">Método de pago</span><span class="value">${metodoPago}</span></div></section>
+<h2 class="section-title">Datos del solicitante</h2><section class="client"><div><span class="label">Recibí de</span><span class="value">${solicitante}</span></div><div class="location"><span class="label">Concepto</span><span class="value">${concepto}</span></div></section>
+<h2 class="section-title">Detalle del servicio</h2><section class="details"><div class="row"><span class="key">Tipo de bien</span><span class="data">${tipoBien}</span></div><div class="row"><span class="key">Tipo de avalúo</span><span class="data">${tipoAvaluo}</span></div></section>
+<section class="money"><div class="money-copy"><span class="label">Importe recibido</span><small>Pago realizado a entera satisfacción</small></div><div class="amount">${importe}</div></section>
+<section class="signature"><div class="date">Torreón, Coahuila a ${fechaPago}</div><div class="line"></div><div class="sign-label">Firma de conformidad</div></section>
 </div>
-<script>window.onload = () => window.print();<\/script>
+<footer class="footer"><strong>Correduría Pública No. 6 · Plaza Coahuila</strong><br>Este comprobante acredita la recepción del importe indicado por el servicio de elaboración y expedición del avalúo.</footer>
+</div>
+<script>window.onload=()=>window.print();<\/script>
 </body>
 </html>`;
   }
