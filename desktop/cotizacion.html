@@ -46,7 +46,7 @@
         }
     </style>
     <link rel="stylesheet" href="cp6-cotizaciones.css?v=quote-card-original-20261106-01">
-    <link rel="stylesheet" href="cp6-approved-quotes.css?v=quote-card-fields-20261106-03">
+    <link rel="stylesheet" href="cp6-approved-quotes.css?v=quote-pagination-20261106-01">
 </head>
 <body class="cp6-cotizaciones bg-slate-100/80 min-h-screen text-slate-800 p-3 sm:p-6 md:p-8">
 
@@ -113,6 +113,7 @@
                     </tbody>
                 </table>
             </div>
+            <div id="quotationPagination" class="cp6-quotation-pagination"></div>
         </section>
 
         <!-- ========================================== -->
@@ -333,6 +334,8 @@
         let currentRecordId = null;
         let quotationRecords = [];
         let quotationsLoaded = false;
+        let quotationPage = 1;
+        const QUOTATIONS_PAGE_SIZE = 5;
         const STORAGE_KEY = 'cotizaciones_avaluo_db';
         const API_BASE_URL = 'https://api.cp6coahuila.com/api';
         const currentUser = new URLSearchParams(window.location.search).get('usuario') || '';
@@ -575,11 +578,15 @@
                         </td>
                     </tr>
                 `;
+                const pagination = document.getElementById('quotationPagination');
+                if (pagination) pagination.innerHTML = '';
                 return;
             }
 
-            // La bandeja de registros muestra como máximo cinco cotizaciones.
-            const visibleRecords = filtered.slice(0, 5);
+            const pages = Math.max(1, Math.ceil(filtered.length / QUOTATIONS_PAGE_SIZE));
+            quotationPage = Math.min(Math.max(1, quotationPage), pages);
+            const start = (quotationPage - 1) * QUOTATIONS_PAGE_SIZE;
+            const visibleRecords = filtered.slice(start, start + QUOTATIONS_PAGE_SIZE);
             tbody.innerHTML = visibleRecords.map(r => {
                 const totalCon = (r.isrCon || 0) + (r.honorarios || 0);
                 const ahorro = (r.isrSin || 0) - totalCon;
@@ -619,6 +626,27 @@
                     </tr>
                 `;
             }).join('');
+
+            renderQuotationPagination(filtered.length, pages);
+        }
+
+        function changeQuotationPage(page) {
+            quotationPage = Number(page) || 1;
+            renderTable();
+        }
+
+        function renderQuotationPagination(total, pages) {
+            const target = document.getElementById('quotationPagination');
+            if (!target) return;
+            if (total <= QUOTATIONS_PAGE_SIZE) {
+                target.innerHTML = '';
+                return;
+            }
+            const buttons = Array.from({ length: pages }, (_, index) => {
+                const page = index + 1;
+                return `<button type="button" class="quote-page-button${page === quotationPage ? ' is-active' : ''}" onclick="changeQuotationPage(${page})" aria-current="${page === quotationPage ? 'page' : 'false'}">${page}</button>`;
+            }).join('');
+            target.innerHTML = `<span class="quote-page-summary">Mostrando ${((quotationPage - 1) * QUOTATIONS_PAGE_SIZE) + 1}-${Math.min(quotationPage * QUOTATIONS_PAGE_SIZE, total)} de ${total}</span><div class="quote-page-controls"><button type="button" class="quote-page-button quote-page-arrow" onclick="changeQuotationPage(${quotationPage - 1})" ${quotationPage === 1 ? 'disabled' : ''} aria-label="Página anterior">‹</button>${buttons}<button type="button" class="quote-page-button quote-page-arrow" onclick="changeQuotationPage(${quotationPage + 1})" ${quotationPage === pages ? 'disabled' : ''} aria-label="Página siguiente">›</button></div>`;
         }
 
         function sendWhatsApp() {
