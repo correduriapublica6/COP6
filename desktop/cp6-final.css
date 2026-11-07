@@ -1946,9 +1946,9 @@ body.cp6-redesign #appShell#appShell.control-shell .app-workspace :is(#statusRec
 /* Recepción · indicador visual no bloqueante junto al número de avalúo */
 body.cp6-redesign #appShell.control-shell .reception-final-pending-icon {
   display: inline-block;
-  margin-left: 6px;
+  margin-left: 5px;
   color: #d08a00 !important;
-  font-size: 12px !important;
+  font-size: 7px !important;
   vertical-align: middle;
   cursor: help;
   text-shadow: none !important;
