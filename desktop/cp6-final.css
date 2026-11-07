@@ -1982,3 +1982,33 @@ body.cp6-redesign #appShell.control-shell #validationRegistryFilter {
   opacity: 1 !important;
   visibility: visible !important;
 }
+
+/* Validación · buscador y filtro de estado en la misma línea */
+body.cp6-redesign #appShell.control-shell .validation-registry-heading {
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+}
+body.cp6-redesign #appShell.control-shell .validation-registry-search-wrap {
+  flex: 1 1 360px;
+  max-width: 420px;
+}
+body.cp6-redesign #appShell.control-shell .validation-registry-filter-label {
+  flex: 0 0 auto;
+}
+@media (max-width: 700px) {
+  body.cp6-redesign #appShell.control-shell .validation-registry-heading {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  body.cp6-redesign #appShell.control-shell .validation-registry-search-wrap,
+  body.cp6-redesign #appShell.control-shell .validation-registry-filter-label {
+    width: 100%;
+    max-width: none;
+  }
+  body.cp6-redesign #appShell.control-shell #validationRegistryFilter {
+    flex: 1;
+  }
+}
