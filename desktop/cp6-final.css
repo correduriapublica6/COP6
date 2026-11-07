@@ -1943,30 +1943,13 @@ body.cp6-redesign #appShell#appShell.control-shell .app-workspace :is(#statusRec
   text-shadow: none !important;
 }
 
-/* Recepción · aviso visual no bloqueante para avalúo final pendiente */
-body.cp6-redesign #appShell.control-shell .reception-final-pending {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: 5px;
-  padding: 3px 7px;
-  border: 1px solid #f6d58a;
-  border-radius: 999px;
-  background: #fff8e6;
-  color: #9a6700 !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  line-height: 1.25;
-  white-space: nowrap;
+/* Recepción · indicador visual no bloqueante junto al número de avalúo */
+body.cp6-redesign #appShell.control-shell .reception-final-pending-icon {
+  display: inline-block;
+  margin-left: 6px;
+  color: #d08a00 !important;
+  font-size: 12px !important;
+  vertical-align: middle;
+  cursor: help;
   text-shadow: none !important;
-}
-body.cp6-redesign #appShell.control-shell .reception-final-pending i {
-  color: #d08a00;
-  font-size: 10px;
-}
-@media (max-width: 900px) {
-  body.cp6-redesign #appShell.control-shell .reception-final-pending {
-    white-space: normal;
-    max-width: 150px;
-  }
 }
