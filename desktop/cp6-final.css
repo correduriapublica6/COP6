@@ -1953,3 +1953,32 @@ body.cp6-redesign #appShell.control-shell .reception-final-pending-icon {
   cursor: help;
   text-shadow: none !important;
 }
+
+/* Validación · filtro de estados claramente visible */
+body.cp6-redesign #appShell.control-shell .validation-registry-filter-label {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 5px 8px 5px 12px;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #1e3a8a !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+body.cp6-redesign #appShell.control-shell #validationRegistryFilter {
+  display: block !important;
+  min-width: 190px !important;
+  height: 34px !important;
+  padding: 0 28px 0 10px !important;
+  border: 1px solid #bfdbfe !important;
+  border-radius: 9px !important;
+  background: #fff !important;
+  color: #1e293b !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
