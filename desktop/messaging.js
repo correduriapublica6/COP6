@@ -7,7 +7,7 @@
   const initials = (name) => String(name || "CP6").split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
   const time = (value) => value ? new Date(value).toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" }) : "";
   let currentUser = null;
-  let contacts = [], messages = [], activeConversation = "general", activeContact = null, timer = null, loadedIds = new Set(), lastSeenByConversation = new Map();
+  let contacts = [], messages = [], activeConversation = "general", activeContact = null, timer = null, loadedIds = new Set(), lastSeenByConversation = new Map(), unreadByConversation = new Map();
 
   function getIdentity() {
     const internal = sessionStorage.getItem(INTERNAL_SESSION);
@@ -23,6 +23,14 @@
   }
   const administrativeContacts = (list) => (Array.isArray(list) ? list : []).filter((item) => item && (item.kind === "channel" || item.kind === "internal"));
   const isMine = (item) => Boolean(currentUser && item.sender_kind === "internal" && item.sender_id === currentUser.id);
+  function updateChatIcon() {
+    const button = document.querySelector("#messagingHeaderButton"); if (!button) return;
+    const total = [...unreadByConversation.values()].reduce((sum, value) => sum + Number(value || 0), 0);
+    button.classList.toggle("has-unread", total > 0);
+    button.dataset.unread = total > 99 ? "99+" : String(total);
+    button.title = total ? `Mensajes nuevos (${total})` : "Mensajes";
+    button.setAttribute("aria-label", total ? `Mensajes nuevos (${total})` : "Mensajes");
+  }
 
   function viewMarkup() {
     return `<div class="messaging-shell"><aside class="messaging-sidebar"><div class="messaging-sidebar-head"><div class="messaging-self-avatar" id="messagingSelfAvatar">CP</div><div><span class="messaging-eyebrow">MENSAJERÍA INTERNA</span><strong id="messagingSelfName">Usuario CP6</strong><small id="messagingSelfEmail">Correo no registrado</small></div></div><div class="messaging-sidebar-caption"><i class="fa-solid fa-users"></i><span>Chat general para usuarios administrativos</span></div><div class="messaging-search-row"><label class="messaging-search"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="messagingSearch" type="search" placeholder="Buscar usuario administrativo..." autocomplete="off"></label></div><div id="messagingContacts" class="messaging-contacts"></div></aside><section class="messaging-conversation"><header class="messaging-conversation-head" id="messagingConversationHead"><div id="messagingContactAvatar" class="messaging-contact-avatar">CG</div><div><span class="messaging-eyebrow">CONVERSACIÓN ACTIVA</span><strong id="messagingContactName">Chat General</strong><small id="messagingContactRole">Canal administrativo CP6</small></div><button id="messagingInfoButton" class="messaging-info-button" type="button" aria-label="Ver información"><i class="fa-solid fa-circle-info" aria-hidden="true"></i></button></header><div id="messagingMessages" class="messaging-messages" aria-live="polite"></div><form id="messagingForm" class="messaging-compose"><textarea id="messagingInput" rows="1" maxlength="2000" placeholder="Escribe un mensaje para el equipo administrativo..." required></textarea><button type="submit" aria-label="Enviar mensaje" title="Enviar"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></form></section></div><div id="messagingProfileCard" class="messaging-profile-card" hidden></div>`;
@@ -46,7 +54,7 @@
     if (avatar) avatar.textContent = initials(c.name); if (name) name.textContent = c.name; if (role) role.textContent = c.role || "Usuario administrativo";
   }
   async function selectConversation(id) {
-    activeConversation = id; activeContact = contacts.find((item) => item.id === id) || null; loadedIds = new Set();
+    activeConversation = id; activeContact = contacts.find((item) => item.id === id) || null; loadedIds = new Set(); unreadByConversation.delete(id); updateChatIcon();
     const target = document.querySelector("#messagingMessages"); if (target) target.innerHTML = ""; renderContacts(); updateHeader();
     try { messages = await api(`/messaging/messages?conversationId=${encodeURIComponent(id)}`); messages.forEach((item) => loadedIds.add(item.id)); renderMessages(); }
     catch (error) { if (target) target.innerHTML = `<p class="messaging-error">${esc(error.message)}</p>`; }
@@ -76,11 +84,12 @@
         lastSeenByConversation.set(contact.id, contact.lastAt);
         if (!changed) continue;
         const latest = await api(`/messaging/messages?conversationId=${encodeURIComponent(contact.id)}`);
-        const newest = latest.at(-1);
-        if (newest && !isMine(newest)) showToast(newest);
-        if (contact.id === activeConversation && document.querySelector(".messaging-shell")) { messages = latest; latest.forEach((item) => loadedIds.add(item.id)); renderMessages(); }
+        const incoming = latest.filter((item) => !isMine(item));
+        const newest = incoming.at(-1);
+        if (newest && contact.id !== activeConversation) { unreadByConversation.set(contact.id, (unreadByConversation.get(contact.id) || 0) + 1); showToast(newest); }
+        if (contact.id === activeConversation && document.querySelector(".messaging-shell")) { unreadByConversation.delete(contact.id); messages = latest; latest.forEach((item) => loadedIds.add(item.id)); renderMessages(); }
       }
-      contacts = nextContacts; renderContacts(); updateHeader();
+      contacts = nextContacts; renderContacts(); updateHeader(); updateChatIcon();
     } catch {}
   }
   async function startBackgroundMessaging() {
@@ -99,13 +108,13 @@
     if (timer) { clearInterval(timer); timer = null; }
     root.innerHTML = viewMarkup();
     try {
-      const data = await api("/messaging/contacts"); currentUser = data.me || null; contacts = administrativeContacts(data.contacts || []); lastSeenByConversation = new Map(contacts.filter((item) => item.lastAt).map((item) => [item.id, item.lastAt]));
+      const data = await api("/messaging/contacts"); currentUser = data.me || null; contacts = administrativeContacts(data.contacts || []); unreadByConversation.clear(); updateChatIcon(); lastSeenByConversation = new Map(contacts.filter((item) => item.lastAt).map((item) => [item.id, item.lastAt]));
       const self = document.querySelector("#messagingSelfAvatar"); if (self) self.textContent = initials(currentUser?.name || identity.name);
       const selfName = document.querySelector("#messagingSelfName"); const selfEmail = document.querySelector("#messagingSelfEmail"); if (selfName) selfName.textContent = displayName(currentUser?.name || identity.name) || "Usuario CP6"; if (selfEmail) selfEmail.textContent = currentUser?.email || "Correo no registrado";
       renderContacts(); await selectConversation(contacts[0]?.id || "general");
       document.querySelector("#messagingSearch")?.addEventListener("input", renderContacts);
       document.querySelector("#messagingInput")?.addEventListener("keydown", (event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); document.querySelector("#messagingForm")?.requestSubmit(); } });
-      document.querySelector("#messagingForm")?.addEventListener("submit", async (event) => { event.preventDefault(); const input = document.querySelector("#messagingInput"); const text = input.value.trim(); if (!text) return; input.disabled = true; try { const sent = await api("/messaging/messages", { method: "POST", body: JSON.stringify({ conversationId: activeConversation, message: text }) }); messages.push(sent); loadedIds.add(sent.id); lastSeenByConversation.set(activeConversation, sent.created_at); input.value = ""; renderMessages(); const refreshed = await api("/messaging/contacts"); contacts = administrativeContacts(refreshed.contacts || contacts); renderContacts(); } catch (error) { window.alert(error.message); } finally { input.disabled = false; input.focus(); } });
+      document.querySelector("#messagingForm")?.addEventListener("submit", async (event) => { event.preventDefault(); const input = document.querySelector("#messagingInput"); const text = input.value.trim(); if (!text) return; input.disabled = true; try { const sent = await api("/messaging/messages", { method: "POST", body: JSON.stringify({ conversationId: activeConversation, message: text }) }); messages.push(sent); loadedIds.add(sent.id); unreadByConversation.delete(activeConversation); lastSeenByConversation.set(activeConversation, sent.created_at); updateChatIcon(); input.value = ""; renderMessages(); const refreshed = await api("/messaging/contacts"); contacts = administrativeContacts(refreshed.contacts || contacts); renderContacts(); } catch (error) { window.alert(error.message); } finally { input.disabled = false; input.focus(); } });
       document.querySelector("#messagingInfoButton")?.addEventListener("click", () => { const card = document.querySelector("#messagingProfileCard"); const c = activeContact || {}; card.innerHTML = `<strong>${esc(c.fullName || c.name || "Chat General")}</strong>${c.email ? `<span>${esc(c.email)}</span>` : ""}`; card.hidden = !card.hidden; });
     } catch (error) { root.innerHTML = `<div class="messaging-error">${esc(error.message)}</div>`; }
     timer = setInterval(pollMessages, 4000);
