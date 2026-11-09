@@ -8,7 +8,6 @@
   const TECHNICAL_APPRAISALS_KEY = "control-avaluos.desktop.technical-appraisals.v1";
   const TECHNICAL_OBJECTIVES_KEY = "control-avaluos.desktop.technical-objectives.v1";
   const TASKS_KEY = "control-avaluos.desktop.tasks.v1";
-  const CHAT_MESSAGES_KEY = "control-avaluos.desktop.chat.v1";
   const PROFILE_AVATARS_KEY = "control-avaluos.desktop.profile-avatars.v1";
   const BACKUP_VERSION = 1;
   const USERS = ["Juan Manuel Barrera Martínez", "Gabriel Barrera Martínez", "Cesar Delgado Armendáriz", "Diana Barrera Rivera", "Francisco Gabriel Hernández Estrada", "Emmanuel Barrera Atilano", "Caridad Rojas Vázquez", "Ivan de Luna Aldape"];
@@ -23,7 +22,6 @@
   let records = loadRecords();
   let technicalAppraisals = loadTechnicalAppraisals();
   let tasks = loadTasks();
-  let chatMessages = loadChatMessages();
   let serverOnline = false;
   let remoteUsers = null;
   let notarias = [];
@@ -151,8 +149,6 @@
   const saveTechnicalAppraisals = () => localStorage.setItem(TECHNICAL_APPRAISALS_KEY, JSON.stringify(technicalAppraisals.map(stripInlineImages)));
   function loadTasks() { try { const saved = JSON.parse(localStorage.getItem(TASKS_KEY) || "[]"); return Array.isArray(saved) ? saved : []; } catch { return []; } }
   const saveTasks = () => localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
-  function loadChatMessages() { try { const saved = JSON.parse(localStorage.getItem(CHAT_MESSAGES_KEY) || "[]"); return Array.isArray(saved) ? saved : []; } catch { return []; } }
-  const saveChatMessages = () => localStorage.setItem(CHAT_MESSAGES_KEY, JSON.stringify(chatMessages));
   function setServerStatus(status) {
     const normalized = status === "online" ? "online" : status === "checking" ? "checking" : "offline";
     serverOnline = normalized === "online";
@@ -216,27 +212,20 @@
         const latestRecords = Array.isArray(latestState.records) ? latestState.records : [];
         const latestAppraisals = Array.isArray(latestState.appraisals) ? latestState.appraisals : [];
         const latestTasks = Array.isArray(latestState.tasks) ? latestState.tasks : [];
-        const latestChatMessages = Array.isArray(latestState.chatMessages) ? latestState.chatMessages : [];
         const latestServiceRequests = scopeServiceRequestsForActiveUser(Array.isArray(latestState.serviceRequests) ? latestState.serviceRequests : (Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : []));
         const latestAuthorizedFolios = Array.isArray(latestState.authorizedAppraisalNumbers) ? latestState.authorizedAppraisalNumbers.map(normalizeNumber).sort() : [];
-        const latestSignature = JSON.stringify({ records: latestRecords.map((record) => `${record.id}:${record.actualizadoEn || record.updatedAt || ""}`), appraisals: latestAppraisals.map((appraisal) => `${appraisal.id}:${appraisal.actualizadoEn || appraisal.updatedAt || ""}`), tasks: latestTasks.map((task) => `${task.id}:${task.completed}:${task.actualizadoEn || task.updatedAt || ""}`), chat: latestChatMessages.map((item) => `${item.id}:${item.creadoEn || ""}`), serviceRequests: latestServiceRequests.map((item) => `${item.id}:${item.numeroAvaluo || ""}:${item.estado || ""}:${item.actualizadoEn || item.updatedAt || ""}`), authorizedFolios: latestAuthorizedFolios });
-        const currentSignature = JSON.stringify({ records: records.map((record) => `${record.id}:${record.actualizadoEn || record.updatedAt || ""}`), appraisals: technicalAppraisals.map((appraisal) => `${appraisal.id}:${appraisal.actualizadoEn || appraisal.updatedAt || ""}`), tasks: tasks.map((task) => `${task.id}:${task.completed}:${task.actualizadoEn || task.updatedAt || ""}`), chat: chatMessages.map((item) => `${item.id}:${item.creadoEn || ""}`), serviceRequests: (window.__controlSolicitudes || []).map((item) => `${item.id}:${item.numeroAvaluo || ""}:${item.estado || ""}:${item.actualizadoEn || item.updatedAt || ""}`), authorizedFolios: authorizedAppraisalNumbers.map(normalizeNumber).sort() });
+        const latestSignature = JSON.stringify({ records: latestRecords.map((record) => `${record.id}:${record.actualizadoEn || record.updatedAt || ""}`), appraisals: latestAppraisals.map((appraisal) => `${appraisal.id}:${appraisal.actualizadoEn || appraisal.updatedAt || ""}`), tasks: latestTasks.map((task) => `${task.id}:${task.completed}:${task.actualizadoEn || task.updatedAt || ""}`), serviceRequests: latestServiceRequests.map((item) => `${item.id}:${item.numeroAvaluo || ""}:${item.estado || ""}:${item.actualizadoEn || item.updatedAt || ""}`), authorizedFolios: latestAuthorizedFolios });
+        const currentSignature = JSON.stringify({ records: records.map((record) => `${record.id}:${record.actualizadoEn || record.updatedAt || ""}`), appraisals: technicalAppraisals.map((appraisal) => `${appraisal.id}:${appraisal.actualizadoEn || appraisal.updatedAt || ""}`), tasks: tasks.map((task) => `${task.id}:${task.completed}:${task.actualizadoEn || task.updatedAt || ""}`), serviceRequests: (window.__controlSolicitudes || []).map((item) => `${item.id}:${item.numeroAvaluo || ""}:${item.estado || ""}:${item.actualizadoEn || item.updatedAt || ""}`), authorizedFolios: authorizedAppraisalNumbers.map(normalizeNumber).sort() });
         if (latestSignature !== currentSignature) {
-          const previousChatId = chatMessages.at(-1)?.id || "";
-          const incomingChatMessage = latestChatMessages.at(-1);
-          const chatPanelClosed = $("#chatPanel")?.hidden !== false;
-          if (incomingChatMessage && incomingChatMessage.id !== previousChatId && incomingChatMessage.author !== activeSessionUser && chatPanelClosed) playChatNotification();
           records = latestRecords.map(normalizeRecord);
           technicalAppraisals = latestAppraisals;
           tasks = latestTasks;
-          chatMessages = latestChatMessages;
           window.__controlSolicitudes = latestServiceRequests;
           authorizedAppraisalNumbers = latestAuthorizedFolios;
           window.__controlAuthorizedFolios = authorizedAppraisalNumbers;
           saveRecords();
           saveTechnicalAppraisals();
           saveTasks();
-          saveChatMessages();
           window.dispatchEvent(new CustomEvent("control-avaluos:technical-appraisals-updated"));
           renderWelcomeTasks();
           renderAdminHome();
@@ -269,14 +258,13 @@
         records = remoteState.records.map(normalizeRecord);
         technicalAppraisals = Array.isArray(remoteState.appraisals) ? remoteState.appraisals : loadTechnicalAppraisals();
         tasks = Array.isArray(remoteState.tasks) ? remoteState.tasks : loadTasks();
-        chatMessages = Array.isArray(remoteState.chatMessages) ? remoteState.chatMessages : loadChatMessages();
         window.__controlSolicitudes = scopeServiceRequestsForActiveUser(Array.isArray(remoteState.serviceRequests) ? remoteState.serviceRequests : (window.__controlSolicitudes || []));
         remoteUsers = Array.isArray(remoteState.users) ? remoteState.users : remoteUsers;
         notarias = Array.isArray(remoteState.notarias) ? remoteState.notarias : [];
         authorizedAppraisalNumbers = Array.isArray(remoteState.authorizedAppraisalNumbers) ? remoteState.authorizedAppraisalNumbers : [];
         window.__controlNotarias = notarias;
         window.__controlAuthorizedFolios = authorizedAppraisalNumbers;
-        saveRecords(); saveTechnicalAppraisals(); saveTasks(); saveChatMessages();
+        saveRecords(); saveTechnicalAppraisals(); saveTasks();
         setServerStatus("online");
         syncUserOptions(); syncCredentialSetupVisibility();
         if (activeSessionUser) { applyRoleUi(); renderAuthorizedFolios(); refreshNotifications(); }
@@ -326,17 +314,6 @@
     if (serverOnline) await apiRequest(`/tasks/${encodeURIComponent(id)}`, { method: "DELETE" });
     tasks = tasks.filter((item) => item.id !== id);
     saveTasks();
-  }
-  async function saveChatMessage(message) {
-    if (!serverOnline) {
-      chatMessages = [...chatMessages, message].slice(-100);
-      saveChatMessages();
-      return message;
-    }
-    const saved = await apiRequest("/chat", { method: "POST", body: JSON.stringify(message) });
-    chatMessages = [...chatMessages, saved].slice(-100);
-    saveChatMessages();
-    return saved;
   }
   async function deleteTechnicalAppraisal(id) {
     if (!serverOnline) {
@@ -422,27 +399,6 @@
   function bindMoneyInputs() { document.querySelectorAll("[data-money-input], #appraisalValueInput, #amountInput").forEach((input) => { if (input.dataset.moneyBound === "true") return; input.dataset.moneyBound = "true"; input.addEventListener("input", () => formatMoneyInput(input)); input.addEventListener("blur", () => { if (input.value) formatMoneyInput(input); }); }); if (document.body.dataset.moneyDelegated !== "true") { document.body.dataset.moneyDelegated = "true"; document.addEventListener("input", (event) => { const input = event.target; if (input instanceof HTMLInputElement && input.matches("[data-money-input]")) formatMoneyInput(input); }); } }
   const formatDate = (value) => value ? new Intl.DateTimeFormat("es-MX", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${value.slice(0, 10)}T12:00:00`)) : "Sin fecha";
   const formatTaskDate = (value) => value ? formatDate(value) : "Pendiente";
-  let lastSeenChatId = chatMessages.at(-1)?.id || "";
-  function playChatNotification() {
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContext) return;
-      const context = new AudioContext();
-      const oscillator = context.createOscillator();
-      const gain = context.createGain();
-      oscillator.type = "sine";
-      oscillator.frequency.setValueAtTime(740, context.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(980, context.currentTime + 0.12);
-      gain.gain.setValueAtTime(0.0001, context.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.12, context.currentTime + 0.015);
-      gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.22);
-      oscillator.connect(gain).connect(context.destination);
-      oscillator.start();
-      oscillator.stop(context.currentTime + 0.24);
-      oscillator?.addEventListener("ended", () => context.close(), { once: true });
-    } catch {}
-  }
-
   function syncUserOptions() {
     const users = allUsers();
     const targets = [loginUser, credentialUser, $("#inlineCredentialUser"), form.elements.namedItem("usuario"), $("#taskAssignedTo")].filter(Boolean);
@@ -692,28 +648,6 @@
       renderWelcomeTasks();
     } catch (error) { messageElement.textContent = error.message; }
     finally { buttonElement.disabled = false; }
-  }
-  function renderChat() {
-    const container = $("#chatMessages");
-    const widget = $("#chatWidget");
-    if (!container || !widget || !activeSessionUser) return;
-    widget.hidden = false;
-    container.innerHTML = chatMessages.length ? chatMessages.slice(-100).map((item) => `<article class="chat-message${item.author === activeSessionUser ? " is-mine" : ""}"><div class="chat-message-meta"><strong>${escapeHtml(item.author)}</strong><time>${escapeHtml(formatDate(item.creadoEn))}</time></div><p>${escapeHtml(item.message)}</p></article>`).join("") : `<p class="chat-empty">Aún no hay mensajes.</p>`;
-    container.scrollTop = container.scrollHeight;
-  }
-  async function createChatMessage(event) {
-    event.preventDefault();
-    const input = $("#chatMessageInput");
-    const button = $("#chatSendButton");
-    const message = String(input?.value || "").trim();
-    if (!message || !activeSessionUser) return;
-    try {
-      button.disabled = true;
-      await saveChatMessage({ id: `${Date.now()}-${Math.random().toString(16).slice(2)}`, author: activeSessionUser, message, creadoEn: new Date().toISOString() });
-      input.value = "";
-      renderChat();
-    } catch (error) { window.alert(error.message); }
-    finally { button.disabled = false; input.focus(); }
   }
   const activityIcon = (kind) => kind === "creation" ? "＋" : kind === "status" ? "↔" : kind === "request" ? "▤" : "✎";
   const relativeTime = (value) => { const time = new Date(value || 0).getTime(); if (!time) return "ahora"; const minutes = Math.max(0, Math.floor((Date.now() - time) / 60000)); return minutes < 1 ? "ahora" : minutes < 60 ? `hace ${minutes} min` : minutes < 1440 ? `hace ${Math.floor(minutes / 60)} h` : `hace ${Math.floor(minutes / 1440)} d`; };
@@ -1615,9 +1549,6 @@
   $("#taskForm")?.addEventListener("submit", createTask);
   $("#homeButton")?.addEventListener("click", () => { switchAppView("inicio"); renderHomeActions(); });
   $$('[data-home-action]').forEach((card) => card?.addEventListener('click', () => openHomeAction(card.dataset.homeAction)));
-  $("#chatForm")?.addEventListener("submit", createChatMessage);
-  $("#chatToggleButton")?.addEventListener("click", () => { const widget = $("#chatWidget"); const panel = $("#chatPanel"); const button = $("#chatToggleButton"); const isOpening = widget.hidden || panel.hidden; widget.hidden = false; panel.hidden = !isOpening; button.setAttribute("aria-expanded", String(isOpening)); button.textContent = isOpening ? "Cerrar" : "Abrir Chat"; if (isOpening) { renderChat(); $("#chatMessageInput").focus(); } });
-  $("#closeChatButton")?.addEventListener("click", () => { $("#chatPanel").hidden = true; $("#chatWidget").hidden = true; $("#chatToggleButton").setAttribute("aria-expanded", "false"); $("#chatToggleButton").textContent = "Chat"; });
   $("#openCredentialSetupButton")?.addEventListener("click", openCredentialSetup);
   $("#adminProfileButton")?.addEventListener("click", openCredentialSetup);
   manageUsersButton?.addEventListener("click", () => switchAppView("usuarios"));
