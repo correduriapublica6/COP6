@@ -21,7 +21,7 @@
     if (!response.ok) throw new Error(data.error || "No fue posible conectar con Mensajería.");
     return data;
   }
-  const administrativeContacts = (list) => (Array.isArray(list) ? list : []).filter((item) => item && (item.kind === "channel" || item.kind === "internal"));
+  const administrativeContacts = (list) => (Array.isArray(list) ? list : []).filter((item) => item && item.id !== "admin" && (item.kind === "channel" || item.kind === "internal"));
   const isMine = (item) => Boolean(currentUser && item.sender_kind === "internal" && item.sender_id === currentUser.id);
   function updateChatIcon() {
     const button = document.querySelector("#messagingHeaderButton"); if (!button) return;
@@ -85,8 +85,9 @@
         if (!changed) continue;
         const latest = await api(`/messaging/messages?conversationId=${encodeURIComponent(contact.id)}`);
         const incoming = latest.filter((item) => !isMine(item));
+        const newIncoming = previous ? incoming.filter((item) => item.created_at && new Date(item.created_at).getTime() > new Date(previous).getTime()) : incoming;
         const newest = incoming.at(-1);
-        if (newest && contact.id !== activeConversation) { unreadByConversation.set(contact.id, (unreadByConversation.get(contact.id) || 0) + 1); showToast(newest); }
+        if (newest && contact.id !== activeConversation && newIncoming.length) { const previousUnread = unreadByConversation.get(contact.id) || 0; unreadByConversation.set(contact.id, previousUnread + newIncoming.length); showToast(newIncoming.at(-1)); }
         if (contact.id === activeConversation && document.querySelector(".messaging-shell")) { unreadByConversation.delete(contact.id); messages = latest; latest.forEach((item) => loadedIds.add(item.id)); renderMessages(); }
       }
       contacts = nextContacts; renderContacts(); updateHeader(); updateChatIcon();
@@ -99,7 +100,7 @@
       currentUser = data.me || null;
       contacts = administrativeContacts(data.contacts || []);
       lastSeenByConversation = new Map(contacts.filter((item) => item.lastAt).map((item) => [item.id, item.lastAt]));
-      timer = setInterval(pollMessages, 4000);
+      timer = setInterval(pollMessages, 2000);
     } catch {}
   }
   async function loadMessaging(root) {
@@ -117,7 +118,7 @@
       document.querySelector("#messagingForm")?.addEventListener("submit", async (event) => { event.preventDefault(); const input = document.querySelector("#messagingInput"); const text = input.value.trim(); if (!text) return; input.disabled = true; try { const sent = await api("/messaging/messages", { method: "POST", body: JSON.stringify({ conversationId: activeConversation, message: text }) }); messages.push(sent); loadedIds.add(sent.id); unreadByConversation.delete(activeConversation); lastSeenByConversation.set(activeConversation, sent.created_at); updateChatIcon(); input.value = ""; renderMessages(); const refreshed = await api("/messaging/contacts"); contacts = administrativeContacts(refreshed.contacts || contacts); renderContacts(); } catch (error) { window.alert(error.message); } finally { input.disabled = false; input.focus(); } });
       document.querySelector("#messagingInfoButton")?.addEventListener("click", () => { const card = document.querySelector("#messagingProfileCard"); const c = activeContact || {}; card.innerHTML = `<strong>${esc(c.fullName || c.name || "Chat General")}</strong>${c.email ? `<span>${esc(c.email)}</span>` : ""}`; card.hidden = !card.hidden; });
     } catch (error) { root.innerHTML = `<div class="messaging-error">${esc(error.message)}</div>`; }
-    timer = setInterval(pollMessages, 4000);
+    timer = setInterval(pollMessages, 2000);
   }
   function boot() {
     document.querySelectorAll('[data-app-view="mensajeria"]').forEach((button) => button.addEventListener("click", () => loadMessaging(document.querySelector("#messagingApp"))));
