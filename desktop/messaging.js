@@ -7,7 +7,7 @@
   const initials = (name) => String(name || "CP6").split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
   const time = (value) => value ? new Date(value).toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" }) : "";
   let currentUser = null;
-  let contacts = [], messages = [], activeConversation = "general", activeContact = null, timer = null, loadedIds = new Set();
+  let contacts = [], messages = [], activeConversation = "general", activeContact = null, timer = null, loadedIds = new Set(), lastSeenByConversation = new Map();
 
   function getIdentity() {
     const internal = sessionStorage.getItem(INTERNAL_SESSION);
@@ -51,17 +51,46 @@
     try { messages = await api(`/messaging/messages?conversationId=${encodeURIComponent(id)}`); messages.forEach((item) => loadedIds.add(item.id)); renderMessages(); }
     catch (error) { if (target) target.innerHTML = `<p class="messaging-error">${esc(error.message)}</p>`; }
   }
+  function chatIsVisible() {
+    const view = document.querySelector("#mensajeriaView");
+    return Boolean(view && !view.hidden && document.visibilityState !== "hidden");
+  }
   function showToast(item) {
-    if (isMine(item)) return;
-    let toast = document.querySelector("#messagingToast"); if (!toast) { toast = document.createElement("div"); toast.id = "messagingToast"; toast.className = "messaging-toast"; document.body.appendChild(toast); }
-    toast.innerHTML = `<strong>${esc(displayName(item.sender_name))}</strong><span>${esc(item.message)}</span>`; toast.onclick = () => { document.querySelector('[data-app-view="mensajeria"]')?.click(); setTimeout(() => selectConversation(item.conversation_id), 80); }; toast.hidden = false; clearTimeout(toast._timer); toast._timer = setTimeout(() => { toast.hidden = true; }, 7000);
+    if (!item || isMine(item) || (chatIsVisible() && item.conversation_id === activeConversation)) return;
+    let toast = document.querySelector("#messagingToast");
+    if (!toast) { toast = document.createElement("div"); toast.id = "messagingToast"; toast.className = "messaging-toast messenger-style-toast"; document.body.appendChild(toast); }
+    const contact = contacts.find((entry) => entry.id === item.conversation_id);
+    toast.innerHTML = `<button class="messaging-toast-close" type="button" aria-label="Cerrar">×</button><span class="messaging-toast-avatar">${esc(initials(item.sender_name))}</span><div><strong>${esc(displayName(item.sender_name))}</strong><small>${esc(contact?.name || "Mensajería administrativa")}</small><span>${esc(item.message)}</span></div>`;
+    toast.onclick = (event) => { if (event.target.closest(".messaging-toast-close")) { toast.hidden = true; return; } toast.hidden = true; document.querySelector('[data-app-view="mensajeria"]')?.click(); setTimeout(() => selectConversation(item.conversation_id), 100); };
+    toast.hidden = false; clearTimeout(toast._timer); toast._timer = setTimeout(() => { toast.hidden = true; }, 8000);
   }
   async function pollMessages() {
-    if (!currentUser || !document.querySelector(".messaging-shell")) return;
+    if (!currentUser || !getIdentity()) return;
     try {
-      const latest = await api(`/messaging/messages?conversationId=${encodeURIComponent(activeConversation)}`);
-      const newItems = latest.filter((item) => !loadedIds.has(item.id)); latest.forEach((item) => loadedIds.add(item.id)); newItems.filter((item) => !isMine(item)).forEach(showToast); messages = latest; renderMessages();
-      const data = await api("/messaging/contacts"); contacts = administrativeContacts(data.contacts || contacts); renderContacts();
+      const data = await api("/messaging/contacts");
+      const nextContacts = administrativeContacts(data.contacts || []);
+      for (const contact of nextContacts) {
+        const previous = lastSeenByConversation.get(contact.id);
+        const changed = Boolean(previous && contact.lastAt && contact.lastAt !== previous);
+        if (!contact.lastAt) continue;
+        lastSeenByConversation.set(contact.id, contact.lastAt);
+        if (!changed) continue;
+        const latest = await api(`/messaging/messages?conversationId=${encodeURIComponent(contact.id)}`);
+        const newest = latest.at(-1);
+        if (newest && !isMine(newest)) showToast(newest);
+        if (contact.id === activeConversation && document.querySelector(".messaging-shell")) { messages = latest; latest.forEach((item) => loadedIds.add(item.id)); renderMessages(); }
+      }
+      contacts = nextContacts; renderContacts(); updateHeader();
+    } catch {}
+  }
+  async function startBackgroundMessaging() {
+    if (timer || !getIdentity()) return;
+    try {
+      const data = await api("/messaging/contacts");
+      currentUser = data.me || null;
+      contacts = administrativeContacts(data.contacts || []);
+      lastSeenByConversation = new Map(contacts.filter((item) => item.lastAt).map((item) => [item.id, item.lastAt]));
+      timer = setInterval(pollMessages, 4000);
     } catch {}
   }
   async function loadMessaging(root) {
@@ -70,20 +99,21 @@
     if (timer) { clearInterval(timer); timer = null; }
     root.innerHTML = viewMarkup();
     try {
-      const data = await api("/messaging/contacts"); currentUser = data.me || null; contacts = administrativeContacts(data.contacts || []);
+      const data = await api("/messaging/contacts"); currentUser = data.me || null; contacts = administrativeContacts(data.contacts || []); lastSeenByConversation = new Map(contacts.filter((item) => item.lastAt).map((item) => [item.id, item.lastAt]));
       const self = document.querySelector("#messagingSelfAvatar"); if (self) self.textContent = initials(currentUser?.name || identity.name);
       const selfName = document.querySelector("#messagingSelfName"); const selfEmail = document.querySelector("#messagingSelfEmail"); if (selfName) selfName.textContent = displayName(currentUser?.name || identity.name) || "Usuario CP6"; if (selfEmail) selfEmail.textContent = currentUser?.email || "Correo no registrado";
       renderContacts(); await selectConversation(contacts[0]?.id || "general");
       document.querySelector("#messagingSearch")?.addEventListener("input", renderContacts);
       document.querySelector("#messagingInput")?.addEventListener("keydown", (event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); document.querySelector("#messagingForm")?.requestSubmit(); } });
-      document.querySelector("#messagingForm")?.addEventListener("submit", async (event) => { event.preventDefault(); const input = document.querySelector("#messagingInput"); const text = input.value.trim(); if (!text) return; input.disabled = true; try { const sent = await api("/messaging/messages", { method: "POST", body: JSON.stringify({ conversationId: activeConversation, message: text }) }); messages.push(sent); loadedIds.add(sent.id); input.value = ""; renderMessages(); const refreshed = await api("/messaging/contacts"); contacts = administrativeContacts(refreshed.contacts || contacts); renderContacts(); } catch (error) { window.alert(error.message); } finally { input.disabled = false; input.focus(); } });
+      document.querySelector("#messagingForm")?.addEventListener("submit", async (event) => { event.preventDefault(); const input = document.querySelector("#messagingInput"); const text = input.value.trim(); if (!text) return; input.disabled = true; try { const sent = await api("/messaging/messages", { method: "POST", body: JSON.stringify({ conversationId: activeConversation, message: text }) }); messages.push(sent); loadedIds.add(sent.id); lastSeenByConversation.set(activeConversation, sent.created_at); input.value = ""; renderMessages(); const refreshed = await api("/messaging/contacts"); contacts = administrativeContacts(refreshed.contacts || contacts); renderContacts(); } catch (error) { window.alert(error.message); } finally { input.disabled = false; input.focus(); } });
       document.querySelector("#messagingInfoButton")?.addEventListener("click", () => { const card = document.querySelector("#messagingProfileCard"); const c = activeContact || {}; card.innerHTML = `<strong>${esc(c.fullName || c.name || "Chat General")}</strong>${c.email ? `<span>${esc(c.email)}</span>` : ""}`; card.hidden = !card.hidden; });
     } catch (error) { root.innerHTML = `<div class="messaging-error">${esc(error.message)}</div>`; }
     timer = setInterval(pollMessages, 4000);
   }
   function boot() {
     document.querySelectorAll('[data-app-view="mensajeria"]').forEach((button) => button.addEventListener("click", () => loadMessaging(document.querySelector("#messagingApp"))));
-    window.addEventListener("control-avaluos:authenticated", () => document.querySelector('[data-app-view="mensajeria"]')?.classList.remove("is-hidden"));
+    window.addEventListener("control-avaluos:authenticated", () => { document.querySelector('[data-app-view="mensajeria"]')?.classList.remove("is-hidden"); startBackgroundMessaging(); });
+    startBackgroundMessaging();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();
