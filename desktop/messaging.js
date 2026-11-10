@@ -8,6 +8,7 @@
   const time = (value) => value ? new Date(value).toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" }) : "";
   let currentUser = null;
   let contacts = [], messages = [], activeConversation = "general", activeContact = null, timer = null, loadedIds = new Set(), lastSeenByConversation = new Map(), unreadByConversation = new Map();
+  const unreadStorageKey = "control-avaluos.messaging.unread.v1";
 
   function getIdentity() {
     const internal = sessionStorage.getItem(INTERNAL_SESSION);
@@ -23,6 +24,12 @@
   }
   const administrativeContacts = (list) => (Array.isArray(list) ? list : []).filter((item) => item && item.id !== "admin" && (item.kind === "channel" || item.kind === "internal"));
   const isMine = (item) => Boolean(currentUser && item.sender_kind === "internal" && item.sender_id === currentUser.id);
+  function loadUnreadState() {
+    try { unreadByConversation = new Map(Object.entries(JSON.parse(sessionStorage.getItem(unreadStorageKey) || "{}"))); } catch { unreadByConversation = new Map(); }
+  }
+  function saveUnreadState() {
+    try { sessionStorage.setItem(unreadStorageKey, JSON.stringify(Object.fromEntries(unreadByConversation))); } catch {}
+  }
   function updateChatIcon() {
     const button = document.querySelector("#messagingHeaderButton"); if (!button) return;
     const total = [...unreadByConversation.values()].reduce((sum, value) => sum + Number(value || 0), 0);
@@ -30,6 +37,7 @@
     button.dataset.unread = total > 99 ? "99+" : String(total);
     button.title = total ? `Mensajes nuevos (${total})` : "Mensajes";
     button.setAttribute("aria-label", total ? `Mensajes nuevos (${total})` : "Mensajes");
+    saveUnreadState();
   }
 
   function viewMarkup() {
@@ -87,7 +95,8 @@
         const incoming = latest.filter((item) => !isMine(item));
         const newIncoming = previous ? incoming.filter((item) => item.created_at && new Date(item.created_at).getTime() > new Date(previous).getTime()) : incoming;
         const newest = incoming.at(-1);
-        if (newest && contact.id !== activeConversation && newIncoming.length) { const previousUnread = unreadByConversation.get(contact.id) || 0; unreadByConversation.set(contact.id, previousUnread + newIncoming.length); showToast(newIncoming.at(-1)); }
+        const conversationIsOpen = chatIsVisible() && contact.id === activeConversation;
+        if (newest && !conversationIsOpen && newIncoming.length) { const previousUnread = Number(unreadByConversation.get(contact.id) || 0); unreadByConversation.set(contact.id, previousUnread + newIncoming.length); showToast(newIncoming.at(-1)); }
         if (contact.id === activeConversation && document.querySelector(".messaging-shell")) { unreadByConversation.delete(contact.id); messages = latest; latest.forEach((item) => loadedIds.add(item.id)); renderMessages(); }
       }
       contacts = nextContacts; renderContacts(); updateHeader(); updateChatIcon();
@@ -98,6 +107,7 @@
     try {
       const data = await api("/messaging/contacts");
       currentUser = data.me || null;
+      loadUnreadState();
       contacts = administrativeContacts(data.contacts || []);
       lastSeenByConversation = new Map(contacts.filter((item) => item.lastAt).map((item) => [item.id, item.lastAt]));
       timer = setInterval(pollMessages, 2000);
@@ -109,7 +119,7 @@
     if (timer) { clearInterval(timer); timer = null; }
     root.innerHTML = viewMarkup();
     try {
-      const data = await api("/messaging/contacts"); currentUser = data.me || null; contacts = administrativeContacts(data.contacts || []); unreadByConversation.clear(); updateChatIcon(); lastSeenByConversation = new Map(contacts.filter((item) => item.lastAt).map((item) => [item.id, item.lastAt]));
+      const data = await api("/messaging/contacts"); currentUser = data.me || null; contacts = administrativeContacts(data.contacts || []); loadUnreadState(); updateChatIcon(); lastSeenByConversation = new Map(contacts.filter((item) => item.lastAt).map((item) => [item.id, item.lastAt]));
       const self = document.querySelector("#messagingSelfAvatar"); if (self) self.textContent = initials(currentUser?.name || identity.name);
       const selfName = document.querySelector("#messagingSelfName"); const selfEmail = document.querySelector("#messagingSelfEmail"); if (selfName) selfName.textContent = displayName(currentUser?.name || identity.name) || "Usuario CP6"; if (selfEmail) selfEmail.textContent = currentUser?.email || "Correo no registrado";
       renderContacts(); await selectConversation(contacts[0]?.id || "general");
@@ -123,7 +133,7 @@
   function boot() {
     document.querySelectorAll('[data-app-view="mensajeria"]').forEach((button) => button.addEventListener("click", () => loadMessaging(document.querySelector("#messagingApp"))));
     window.addEventListener("control-avaluos:authenticated", () => { document.querySelector('[data-app-view="mensajeria"]')?.classList.remove("is-hidden"); startBackgroundMessaging(); });
-    startBackgroundMessaging();
+    loadUnreadState(); updateChatIcon(); startBackgroundMessaging();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();
