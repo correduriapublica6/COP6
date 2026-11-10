@@ -31,6 +31,7 @@
   const AVALUOS_PAGE_SIZE = 9;
   let activeAppView = "avaluos";
   let activeSessionUser = "";
+  let workspaceSelectedUser = "__all";
   let notifications = [];
   let pendingCredentialAuthorization = null;
   let editingId = null;
@@ -411,6 +412,29 @@
     });
   }
 
+  function workspaceUserMatches(item, selected = workspaceSelectedUser) {
+    if (selected === "__all") return true;
+    const normalized = String(selected || "").trim().toLowerCase();
+    const candidates = [item?.asesor, item?.usuario, item?.valuadorAsignado, item?.valuador, item?.creadoPor, item?.creadoPorNombre, item?.asignadoA, item?.responsable, item?.solicitante?.nombre, item?.solicitante?.correo].map((value) => String(value || "").trim().toLowerCase()).filter(Boolean);
+    const remote = Array.isArray(remoteUsers) ? remoteUsers.find((user) => String(user.name || "").trim().toLowerCase() === normalized) : null;
+    return candidates.includes(normalized) || Boolean(remote?.email && candidates.includes(String(remote.email).toLowerCase()));
+  }
+  function syncWorkspaceUserFilter() {
+    const wrap = $("#workspaceUserFilterWrap");
+    const select = $("#workspaceUserFilter");
+    const admin = roleFor(activeSessionUser) === "admin";
+    if (!wrap || !select) return;
+    wrap.hidden = !admin;
+    const name = String(activeSessionUser || "Mi cuenta");
+    $("#navbarUserName") && ($("#navbarUserName").textContent = name);
+    $("#navbarUserRole") && ($("#navbarUserRole").textContent = roleLabel(roleFor(activeSessionUser)));
+    if (!admin) { workspaceSelectedUser = name; return; }
+    const users = Array.isArray(remoteUsers) && remoteUsers.length ? remoteUsers : allUsers().map((name) => ({ name }));
+    const selected = workspaceSelectedUser;
+    select.innerHTML = `<option value="__all">Todos los usuarios</option>${users.map((user) => `<option value="${escapeHtml(user.name)}">${escapeHtml(user.name)}</option>`).join("")}`;
+    select.value = selected === "__all" || users.some((user) => user.name === selected) ? selected : "__all";
+    workspaceSelectedUser = select.value;
+  }
   function loadCredentials() { try { return JSON.parse(localStorage.getItem(CREDENTIALS_KEY) || "{}") || {}; } catch { return {}; } }
   function saveCredentials(credentials) { localStorage.setItem(CREDENTIALS_KEY, JSON.stringify(credentials)); }
   function closeCredentialSetup() { credentialDialog.close(); }
@@ -546,6 +570,7 @@
     if (activeAppView === "resumen" && !canViewSummary()) switchAppView("avaluos");
     if (activeAppView === "fe-publica" && !canViewFePublica()) switchAppView("avaluos");
     $$(".solicitudes-access").forEach((button) => button.classList.toggle("is-hidden", !canViewRequests()));
+    syncWorkspaceUserFilter();
     if (activeAppView === "solicitudes" && !canViewRequests()) switchAppView("avaluos");
     renderHomeActions();
   }
@@ -570,9 +595,12 @@
     });
   }
   function renderAdminHome() {
-    const requests = scopeServiceRequestsForActiveUser(Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : []);
-    const visibleRecords = roleFor(activeSessionUser) === "valuador" ? records.filter(assignedToActiveValuator) : records;
-    const visibleTechnicalAppraisals = roleFor(activeSessionUser) === "valuador" ? technicalAppraisals.filter(assignedToActiveValuator) : technicalAppraisals;
+    const requestsBase = scopeServiceRequestsForActiveUser(Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : []);
+    const requests = roleFor(activeSessionUser) === "admin" ? requestsBase.filter((item) => workspaceUserMatches(item)) : requestsBase;
+    const visibleRecordsBase = roleFor(activeSessionUser) === "valuador" ? records.filter(assignedToActiveValuator) : records;
+    const visibleTechnicalBase = roleFor(activeSessionUser) === "valuador" ? technicalAppraisals.filter(assignedToActiveValuator) : technicalAppraisals;
+    const visibleRecords = roleFor(activeSessionUser) === "admin" ? visibleRecordsBase.filter((item) => workspaceUserMatches(item)) : visibleRecordsBase;
+    const visibleTechnicalAppraisals = roleFor(activeSessionUser) === "admin" ? visibleTechnicalBase.filter((item) => workspaceUserMatches(item)) : visibleTechnicalBase;
     const completed = requests.filter((item) => String(item.estado || "").toLowerCase() === "concluida").length;
     const pending = requests.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
     const totalAppraisals = visibleRecords.length + visibleTechnicalAppraisals.length;
@@ -1620,7 +1648,8 @@
     $("#profilePageBrokerage") && ($("#profilePageBrokerage").textContent = remote?.brokerage || "Correduría Pública 6 - Torreón");
     switchAppView("perfil");
   };
-  profileButton?.addEventListener("click", (event) => { event.stopPropagation(); openAdminProfile(); });
+  profileButton?.addEventListener("click", (event) => { event.stopPropagation(); const open = profileMenu?.hidden !== false; if (profileMenu) profileMenu.hidden = !open; profileButton.setAttribute("aria-expanded", String(open)); });
+  $("#workspaceUserFilter")?.addEventListener("change", (event) => { workspaceSelectedUser = event.target.value || "__all"; renderAdminHome(); });
   $("#profileMetricsFilter")?.addEventListener("change", renderProfileDashboard);
   $("#logoutHeaderButton")?.addEventListener("click", resetAuthUiBeforeLogout);
   profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button?.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); resetAuthUiBeforeLogout(); } }));
