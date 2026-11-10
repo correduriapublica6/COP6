@@ -2130,3 +2130,8 @@ body.messaging-popup-open { overflow: hidden !important; }
   #messagingPopupLayer .messaging-popup-window { width: calc(100vw - 20px) !important; height: calc(100vh - 20px) !important; border-radius: 16px !important; }
   #messagingPopupLayer .messaging-shell { border-radius: 16px !important; }
 }
+
+/* CP6 Mensajería · historial desplazable y envío hacia la derecha */
+#messagingPopupLayer .messaging-conversation { min-height: 0; overflow: hidden; }
+#messagingPopupLayer .messaging-messages { flex: 1 1 auto; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scroll-behavior: smooth; }
+#messagingPopupLayer .messaging-compose { flex: 0 0 auto; }
