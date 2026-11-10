@@ -2135,3 +2135,13 @@ body.messaging-popup-open { overflow: hidden !important; }
 #messagingPopupLayer .messaging-conversation { min-height: 0; overflow: hidden; }
 #messagingPopupLayer .messaging-messages { flex: 1 1 auto; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scroll-behavior: smooth; }
 #messagingPopupLayer .messaging-compose { flex: 0 0 auto; }
+
+/* CP6 Mensajería · composición visible y controles simplificados */
+#messagingPopupLayer { box-sizing: border-box !important; }
+#messagingPopupLayer .messaging-popup-window { max-height: calc(100vh - 48px) !important; overflow: hidden !important; }
+#messagingPopupLayer .messaging-compose { align-items: center !important; background: #fff !important; gap: 10px !important; padding: 12px 18px 14px !important; }
+#messagingPopupLayer .messaging-compose textarea { box-sizing: border-box !important; height: 46px !important; min-height: 46px !important; max-height: 46px !important; overflow: hidden !important; padding: 12px 14px !important; line-height: 20px !important; white-space: nowrap !important; }
+#messagingPopupLayer .messaging-compose button { align-items: center !important; background: #2563eb !important; border: 0 !important; border-radius: 50% !important; color: #fff !important; display: inline-flex !important; flex: 0 0 46px !important; height: 46px !important; justify-content: center !important; min-height: 46px !important; padding: 0 !important; width: 46px !important; }
+#messagingPopupLayer .messaging-compose button:hover { background: #1d4ed8 !important; }
+#messagingPopupLayer .messaging-compose button i { font-size: 1rem !important; line-height: 1 !important; }
+#messagingPopupLayer .messaging-conversation-head { min-height: 68px !important; }
