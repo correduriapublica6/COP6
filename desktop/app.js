@@ -1649,7 +1649,6 @@
     switchAppView("perfil");
   };
   profileButton?.addEventListener("click", (event) => { event.stopPropagation(); const open = profileMenu?.hidden !== false; if (profileMenu) profileMenu.hidden = !open; profileButton.setAttribute("aria-expanded", String(open)); });
-  $("#workspaceUserFilter")?.addEventListener("change", (event) => { workspaceSelectedUser = event.target.value || "__all"; renderAdminHome(); });
   $("#profileMetricsFilter")?.addEventListener("change", renderProfileDashboard);
   $("#logoutHeaderButton")?.addEventListener("click", resetAuthUiBeforeLogout);
   profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button?.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); resetAuthUiBeforeLogout(); } }));
