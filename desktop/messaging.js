@@ -9,6 +9,39 @@
   let currentUser = null;
   let contacts = [], messages = [], activeConversation = "general", activeContact = null, timer = null, loadedIds = new Set(), lastSeenByConversation = new Map(), unreadByConversation = new Map();
   const unreadStorageKey = "control-avaluos.messaging.unread.v1";
+  let audioContext = null;
+  function playIncomingSound() {
+    try {
+      const AudioCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtor) return;
+      audioContext ||= new AudioCtor();
+      if (audioContext.state === "suspended") audioContext.resume().catch(() => {});
+      const start = audioContext.currentTime;
+      [[880, 0], [1175, 0.13]].forEach(([frequency, offset]) => {
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(frequency, start + offset);
+        gain.gain.setValueAtTime(0.0001, start + offset);
+        gain.gain.exponentialRampToValueAtTime(0.16, start + offset + 0.018);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + offset + 0.22);
+        oscillator.connect(gain).connect(audioContext.destination);
+        oscillator.start(start + offset);
+        oscillator.stop(start + offset + 0.24);
+      });
+    } catch {}
+  }
+  function openMessagingPopup() {
+    const layer = document.querySelector("#messagingPopupLayer");
+    if (layer) { layer.hidden = false; document.body.classList.add("messaging-popup-open"); }
+    if (!document.querySelector("#messagingShellReady")) document.querySelector("#messagingInput")?.focus();
+  }
+  function closeMessagingPopup() {
+    const layer = document.querySelector("#messagingPopupLayer");
+    if (layer) layer.hidden = true;
+    document.body.classList.remove("messaging-popup-open");
+    document.querySelector("#homeButton")?.click();
+  }
 
   function getIdentity() {
     const internal = sessionStorage.getItem(INTERNAL_SESSION);
@@ -41,7 +74,7 @@
   }
 
   function viewMarkup() {
-    return `<div class="messaging-shell"><aside class="messaging-sidebar"><div class="messaging-sidebar-head"><div class="messaging-self-avatar" id="messagingSelfAvatar">CP</div><div><span class="messaging-eyebrow">MENSAJERÍA INTERNA</span><strong id="messagingSelfName">Usuario CP6</strong><small id="messagingSelfEmail">Correo no registrado</small></div></div><div class="messaging-sidebar-caption"><i class="fa-solid fa-users"></i><span>Chat general para usuarios administrativos</span></div><div class="messaging-search-row"><label class="messaging-search"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="messagingSearch" type="search" placeholder="Buscar usuario administrativo..." autocomplete="off"></label></div><div id="messagingContacts" class="messaging-contacts"></div></aside><section class="messaging-conversation"><header class="messaging-conversation-head" id="messagingConversationHead"><div id="messagingContactAvatar" class="messaging-contact-avatar">CG</div><div><span class="messaging-eyebrow">CONVERSACIÓN ACTIVA</span><strong id="messagingContactName">Chat General</strong><small id="messagingContactRole">Canal administrativo CP6</small></div><button id="messagingInfoButton" class="messaging-info-button" type="button" aria-label="Ver información"><i class="fa-solid fa-circle-info" aria-hidden="true"></i></button></header><div id="messagingMessages" class="messaging-messages" aria-live="polite"></div><form id="messagingForm" class="messaging-compose"><textarea id="messagingInput" rows="1" maxlength="2000" placeholder="Escribe un mensaje para el equipo administrativo..." required></textarea><button type="submit" aria-label="Enviar mensaje" title="Enviar"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></form></section></div><div id="messagingProfileCard" class="messaging-profile-card" hidden></div>`;
+    return `<div class="messaging-popup-layer" id="messagingPopupLayer" role="dialog" aria-modal="true" aria-label="Mensajería administrativa"><div class="messaging-popup-window"><button class="messaging-popup-close" id="messagingPopupClose" type="button" aria-label="Cerrar mensajería">×</button><div class="messaging-shell" id="messagingShellReady"><aside class="messaging-sidebar"><div class="messaging-sidebar-head"><div class="messaging-self-avatar" id="messagingSelfAvatar">CP</div><div><span class="messaging-eyebrow">MENSAJERÍA INTERNA</span><strong id="messagingSelfName">Usuario CP6</strong><small id="messagingSelfEmail">Correo no registrado</small></div></div><div class="messaging-sidebar-caption"><i class="fa-solid fa-users"></i><span>Chat general para usuarios administrativos</span></div><div class="messaging-search-row"><label class="messaging-search"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="messagingSearch" type="search" placeholder="Buscar usuario administrativo..." autocomplete="off"></label></div><div id="messagingContacts" class="messaging-contacts"></div></aside><section class="messaging-conversation"><header class="messaging-conversation-head" id="messagingConversationHead"><div id="messagingContactAvatar" class="messaging-contact-avatar">CG</div><div><span class="messaging-eyebrow">CONVERSACIÓN ACTIVA</span><strong id="messagingContactName">Chat General</strong><small id="messagingContactRole">Canal administrativo CP6</small></div><button id="messagingInfoButton" class="messaging-info-button" type="button" aria-label="Ver información"><i class="fa-solid fa-circle-info" aria-hidden="true"></i></button></header><div id="messagingMessages" class="messaging-messages" aria-live="polite"></div><form id="messagingForm" class="messaging-compose"><textarea id="messagingInput" rows="1" maxlength="2000" placeholder="Escribe un mensaje para el equipo administrativo..." required></textarea><button type="submit" aria-label="Enviar mensaje" title="Enviar"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></form></section></div></div></div><div id="messagingProfileCard" class="messaging-profile-card" hidden></div>`;
   }
   function renderContacts() {
     const target = document.querySelector("#messagingContacts"); if (!target) return;
@@ -96,7 +129,7 @@
         const newIncoming = previous ? incoming.filter((item) => item.created_at && new Date(item.created_at).getTime() > new Date(previous).getTime()) : incoming;
         const newest = incoming.at(-1);
         const conversationIsOpen = chatIsVisible() && contact.id === activeConversation;
-        if (newest && !conversationIsOpen && newIncoming.length) { const previousUnread = Number(unreadByConversation.get(contact.id) || 0); unreadByConversation.set(contact.id, previousUnread + newIncoming.length); showToast(newIncoming.at(-1)); }
+        if (newest && !conversationIsOpen && newIncoming.length) { playIncomingSound(); const previousUnread = Number(unreadByConversation.get(contact.id) || 0); unreadByConversation.set(contact.id, previousUnread + newIncoming.length); showToast(newIncoming.at(-1)); }
         if (contact.id === activeConversation && document.querySelector(".messaging-shell")) { unreadByConversation.delete(contact.id); messages = latest; latest.forEach((item) => loadedIds.add(item.id)); renderMessages(); }
       }
       contacts = nextContacts; renderContacts(); updateHeader(); updateChatIcon();
@@ -118,6 +151,8 @@
     if (!identity) { if (root) root.innerHTML = `<div class="messaging-access-blocked"><i class="fa-solid fa-lock"></i><strong>Mensajería administrativa</strong><span>Inicia sesión con un usuario administrativo para acceder.</span></div>`; return; }
     if (timer) { clearInterval(timer); timer = null; }
     root.innerHTML = viewMarkup();
+    document.querySelector("#messagingPopupClose")?.addEventListener("click", closeMessagingPopup);
+    openMessagingPopup();
     try {
       const data = await api("/messaging/contacts"); currentUser = data.me || null; contacts = administrativeContacts(data.contacts || []); loadUnreadState(); updateChatIcon(); lastSeenByConversation = new Map(contacts.filter((item) => item.lastAt).map((item) => [item.id, item.lastAt]));
       const self = document.querySelector("#messagingSelfAvatar"); if (self) self.textContent = initials(currentUser?.name || identity.name);
@@ -131,8 +166,9 @@
     timer = setInterval(pollMessages, 2000);
   }
   function boot() {
-    document.querySelectorAll('[data-app-view="mensajeria"]').forEach((button) => button.addEventListener("click", () => loadMessaging(document.querySelector("#messagingApp"))));
+    document.querySelectorAll('[data-app-view="mensajeria"]').forEach((button) => button.addEventListener("click", () => window.setTimeout(() => { loadMessaging(document.querySelector("#messagingApp")); }, 0)));
     window.addEventListener("control-avaluos:authenticated", () => { document.querySelector('[data-app-view="mensajeria"]')?.classList.remove("is-hidden"); startBackgroundMessaging(); });
+    document.addEventListener("pointerdown", () => { if (audioContext?.state === "suspended") audioContext.resume().catch(() => {}); }, { once: true });
     loadUnreadState(); updateChatIcon(); startBackgroundMessaging();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();

@@ -2078,3 +2078,55 @@ body.cp6-redesign #appShell.control-shell .navbar-profile-identity small { margi
 body.cp6-redesign #appShell.control-shell .navbar-profile-chevron { color: #64748b; flex: 0 0 16px; }
 @media (max-width: 900px) { body.cp6-redesign #appShell.control-shell .v2-context { align-items: flex-start; flex-direction: column; gap: 8px; } }
 @media (max-width: 640px) { body.cp6-redesign #appShell.control-shell .workspace-user-filter { align-items: stretch; flex-direction: column; width: min(100%, 280px); gap: 4px; padding: 8px; } body.cp6-redesign #appShell.control-shell .workspace-user-filter select { width: 100%; } body.cp6-redesign #appShell.control-shell .navbar-profile-identity { display: none; } body.cp6-redesign #appShell.control-shell .navbar-profile-button { min-width: 42px; width: 42px; padding: 4px; } }
+
+/* CP6 · Mensajería en ventana flotante tipo WhatsApp */
+body.messaging-popup-open { overflow: hidden !important; }
+#messagingPopupLayer {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147482000 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 24px !important;
+  background: rgba(15,23,42,.42) !important;
+  backdrop-filter: blur(3px) !important;
+}
+#messagingPopupLayer[hidden] { display: none !important; }
+#messagingPopupLayer .messaging-popup-window {
+  position: relative !important;
+  width: min(1120px, calc(100vw - 48px)) !important;
+  height: min(760px, calc(100vh - 48px)) !important;
+  min-height: 0 !important;
+  border-radius: 20px !important;
+  background: #fff !important;
+  box-shadow: 0 24px 80px rgba(15,23,42,.32) !important;
+}
+#messagingPopupLayer .messaging-shell {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  border-radius: 20px !important;
+  box-shadow: none !important;
+}
+#messagingPopupLayer .messaging-popup-close {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 4 !important;
+  width: 32px !important;
+  height: 32px !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 50% !important;
+  background: rgba(255,255,255,.94) !important;
+  color: #334155 !important;
+  font: 700 22px/1 Arial, Helvetica, sans-serif !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(15,23,42,.12) !important;
+}
+#messagingPopupLayer .messaging-popup-close:hover { background: #eff6ff !important; color: #1d4ed8 !important; }
+@media (max-width: 800px) {
+  #messagingPopupLayer { padding: 10px !important; }
+  #messagingPopupLayer .messaging-popup-window { width: calc(100vw - 20px) !important; height: calc(100vh - 20px) !important; border-radius: 16px !important; }
+  #messagingPopupLayer .messaging-shell { border-radius: 16px !important; }
+}
