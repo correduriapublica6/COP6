@@ -34,13 +34,12 @@
   function openMessagingPopup() {
     const layer = document.querySelector("#messagingPopupLayer");
     if (layer) { layer.hidden = false; document.body.classList.add("messaging-popup-open"); }
-    if (!document.querySelector("#messagingShellReady")) document.querySelector("#messagingInput")?.focus();
+    window.setTimeout(() => document.querySelector("#messagingInput")?.focus(), 40);
   }
   function closeMessagingPopup() {
     const layer = document.querySelector("#messagingPopupLayer");
     if (layer) layer.hidden = true;
     document.body.classList.remove("messaging-popup-open");
-    document.querySelector("#homeButton")?.click();
   }
 
   function getIdentity() {
@@ -101,8 +100,8 @@
     catch (error) { if (target) target.innerHTML = `<p class="messaging-error">${esc(error.message)}</p>`; }
   }
   function chatIsVisible() {
-    const view = document.querySelector("#mensajeriaView");
-    return Boolean(view && !view.hidden && document.visibilityState !== "hidden");
+    const layer = document.querySelector("#messagingPopupLayer");
+    return Boolean(layer && !layer.hidden && document.visibilityState !== "hidden");
   }
   function showToast(item) {
     if (!item || isMine(item) || (chatIsVisible() && item.conversation_id === activeConversation)) return;
@@ -110,7 +109,7 @@
     if (!toast) { toast = document.createElement("div"); toast.id = "messagingToast"; toast.className = "messaging-toast messenger-style-toast"; document.body.appendChild(toast); }
     const contact = contacts.find((entry) => entry.id === item.conversation_id);
     toast.innerHTML = `<button class="messaging-toast-close" type="button" aria-label="Cerrar">×</button><span class="messaging-toast-avatar">${esc(initials(item.sender_name))}</span><div><strong>${esc(displayName(item.sender_name))}</strong><small>${esc(contact?.name || "Mensajería administrativa")}</small><span>${esc(item.message)}</span></div>`;
-    toast.onclick = (event) => { if (event.target.closest(".messaging-toast-close")) { toast.hidden = true; return; } toast.hidden = true; document.querySelector('[data-app-view="mensajeria"]')?.click(); setTimeout(() => selectConversation(item.conversation_id), 100); };
+    toast.onclick = (event) => { if (event.target.closest(".messaging-toast-close")) { toast.hidden = true; return; } toast.hidden = true; const layer = document.querySelector("#messagingPopupLayer"); if (layer) { openMessagingPopup(); selectConversation(item.conversation_id); } else { loadMessaging(document.querySelector("#messagingApp")).then(() => selectConversation(item.conversation_id)); } };
     toast.hidden = false; clearTimeout(toast._timer); toast._timer = setTimeout(() => { toast.hidden = true; }, 8000);
   }
   async function pollMessages() {
@@ -150,7 +149,12 @@
     const identity = getIdentity();
     if (!identity) { if (root) root.innerHTML = `<div class="messaging-access-blocked"><i class="fa-solid fa-lock"></i><strong>Mensajería administrativa</strong><span>Inicia sesión con un usuario administrativo para acceder.</span></div>`; return; }
     if (timer) { clearInterval(timer); timer = null; }
+    document.querySelectorAll("#messagingPopupLayer, #messagingProfileCard").forEach((node) => node.remove());
     root.innerHTML = viewMarkup();
+    const popupLayer = root.querySelector("#messagingPopupLayer");
+    const profileCard = root.querySelector("#messagingProfileCard");
+    if (popupLayer) document.body.appendChild(popupLayer);
+    if (profileCard) document.body.appendChild(profileCard);
     document.querySelector("#messagingPopupClose")?.addEventListener("click", closeMessagingPopup);
     openMessagingPopup();
     try {
@@ -166,7 +170,7 @@
     timer = setInterval(pollMessages, 2000);
   }
   function boot() {
-    document.querySelectorAll('[data-app-view="mensajeria"]').forEach((button) => button.addEventListener("click", () => window.setTimeout(() => { loadMessaging(document.querySelector("#messagingApp")); }, 0)));
+    window.addEventListener("control-avaluos:open-messaging-popup", () => loadMessaging(document.querySelector("#messagingApp")));
     window.addEventListener("control-avaluos:authenticated", () => { document.querySelector('[data-app-view="mensajeria"]')?.classList.remove("is-hidden"); startBackgroundMessaging(); });
     document.addEventListener("pointerdown", () => { if (audioContext?.state === "suspended") audioContext.resume().catch(() => {}); }, { once: true });
     loadUnreadState(); updateChatIcon(); startBackgroundMessaging();
