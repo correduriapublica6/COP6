@@ -1,0 +1,86 @@
+/* CP6 · Maquinaria y Equipo · Capa visual aislada
+   No modifica navegación, datos, eventos ni cálculos. */
+#technicalCreationPanel {
+  --me-blue:#0b72e7; --me-navy:#123f68; --me-ink:#17324d; --me-muted:#6b8195;
+  --me-line:#dce9f3; --me-soft:#f5faff; --me-pale:#eaf5ff;
+  color:var(--me-ink);
+}
+#technicalCreationPanel .technical-intro,
+#technicalCreationPanel .technical-form-section,
+#technicalCreationPanel .vehicle-card,
+#technicalCreationPanel .obsolescence-panel,
+#technicalCreationPanel .technical-list-panel,
+#technicalCreationPanel .market-research-card,
+#technicalCreationPanel .technical-editor-card {
+  border:1px solid var(--me-line)!important;
+  border-radius:18px!important;
+  box-shadow:0 10px 28px rgba(25,84,130,.07)!important;
+}
+#technicalCreationPanel .technical-intro {
+  background:linear-gradient(135deg,#0d4775,#087bf5)!important;
+  color:#fff!important; padding:24px 28px!important;
+}
+#technicalCreationPanel .technical-intro h2,
+#technicalCreationPanel .technical-intro p {color:#fff!important}
+#technicalCreationPanel .technical-status {background:rgba(255,255,255,.15)!important;border-color:rgba(255,255,255,.3)!important}
+#technicalCreationPanel .technical-stepper,
+#technicalCreationPanel .mobiliario-stepper {
+  background:#fff!important;border:1px solid var(--me-line)!important;border-radius:16px!important;
+  box-shadow:0 8px 20px rgba(25,84,130,.05)!important;padding:15px 18px!important;
+}
+#technicalCreationPanel .technical-step strong,
+#technicalCreationPanel .mobiliario-step strong {color:var(--me-navy)!important}
+#technicalCreationPanel .technical-step.is-active,
+#technicalCreationPanel .mobiliario-step.is-active {color:var(--me-blue)!important}
+#technicalCreationPanel .technical-step.is-active .technical-step-number,
+#technicalCreationPanel .mobiliario-step.is-active .mobiliario-step-number {background:var(--me-blue)!important;border-color:var(--me-blue)!important;color:#fff!important}
+#technicalCreationPanel .technical-section-heading {border-bottom:1px solid var(--me-line)!important;padding-bottom:15px!important;margin-bottom:20px!important}
+#technicalCreationPanel .technical-section-heading>span {background:var(--me-pale)!important;border:1px solid #c8e3fb!important;color:var(--me-blue)!important;border-radius:10px!important}
+#technicalCreationPanel .technical-section-heading h3,
+#technicalCreationPanel .subsection-heading h5,
+#technicalCreationPanel .vehicle-card-header h4,
+#technicalCreationPanel .factor-group h6 {color:var(--me-navy)!important;font-family:Arial,Helvetica,sans-serif!important}
+#technicalCreationPanel .technical-section-heading p,
+#technicalCreationPanel .subsection-heading p {color:var(--me-muted)!important}
+#technicalCreationPanel label {color:#38556f!important;font-family:Arial,Helvetica,sans-serif!important}
+#technicalCreationPanel input,
+#technicalCreationPanel select,
+#technicalCreationPanel textarea,
+#technicalCreationPanel .custom-select-trigger {
+  background:#fff!important;border:1px solid #cbddea!important;border-radius:10px!important;
+  color:var(--me-ink)!important;font-family:Arial,Helvetica,sans-serif!important;
+  box-shadow:inset 0 1px 2px rgba(20,65,100,.03)!important;
+}
+#technicalCreationPanel input:focus,
+#technicalCreationPanel select:focus,
+#technicalCreationPanel textarea:focus,
+#technicalCreationPanel .custom-select-trigger:focus {border-color:var(--me-blue)!important;box-shadow:0 0 0 3px rgba(11,114,231,.14)!important;outline:none!important}
+#technicalCreationPanel .vehicle-card {background:#fbfdff!important;padding:20px!important}
+#technicalCreationPanel .vehicle-card-header {border-bottom:1px solid var(--me-line)!important}
+#technicalCreationPanel .photo-upload-button,
+#technicalCreationPanel .technical-add-vehicle-button,
+#technicalCreationPanel .technical-save-button,
+#technicalCreationPanel .technical-step-save,
+#technicalCreationPanel .technical-actions .btn-copu-primary,
+#technicalCreationPanel .technical-step-actions .btn-copu-primary {
+  background:var(--me-blue)!important;border-color:var(--me-blue)!important;color:#fff!important;
+  border-radius:10px!important;box-shadow:0 6px 14px rgba(11,114,231,.2)!important;
+}
+#technicalCreationPanel .technical-add-vehicle-button:hover,
+#technicalCreationPanel .technical-save-button:hover {background:#075fc2!important}
+#technicalCreationPanel .obsolescence-panel {background:#f8fcff!important}
+#technicalCreationPanel .obsolescence-summary,
+#technicalCreationPanel .demerit-summary {background:var(--me-pale)!important;border:1px solid #d0e8fa!important;border-radius:12px!important;color:var(--me-navy)!important}
+#technicalCreationPanel .values-table-wrap,
+#technicalCreationPanel .technical-table-wrap,
+#technicalCreationPanel .table-responsive {border:1px solid var(--me-line)!important;border-radius:12px!important;background:#fff!important}
+#technicalCreationPanel table thead th {background:#edf7ff!important;color:#28648e!important;font-size:.72rem!important;text-transform:uppercase!important;letter-spacing:.04em!important}
+#technicalCreationPanel table tbody tr:hover td {background:#f7fbff!important}
+#technicalCreationPanel .market-research-card>header {background:var(--me-pale)!important;border-bottom:1px solid var(--me-line)!important}
+#technicalCreationPanel .technical-message,
+#technicalCreationPanel .technical-type-hint {border-radius:12px!important}
+@media(max-width:740px){
+  #technicalCreationPanel .technical-intro{padding:18px!important}
+  #technicalCreationPanel .technical-form-section,#technicalCreationPanel .vehicle-card,#technicalCreationPanel .obsolescence-panel{padding:16px!important}
+  #technicalCreationPanel .technical-stepper,#technicalCreationPanel .mobiliario-stepper{padding:10px!important;overflow-x:auto}
+}
