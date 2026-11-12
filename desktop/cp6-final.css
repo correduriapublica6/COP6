@@ -376,6 +376,89 @@ body.cp6-redesign #perfilView .profile-root-light { min-width: 0; }
 body.cp6-redesign #welcomeRequestsTable :is(.request-folio, .request-folio-number, td:first-child) { min-width: 122px; white-space: nowrap; }
 body.cp6-redesign #welcomeRequestsTable table { min-width: 680px; }
 
+/* CP6 · Maquinaria y Equipo · estilos directos en la hoja principal */
+body.cp6-redesign #mobiliarioEditor { color: #17324d !important; }
+body.cp6-redesign #mobiliarioEditor > form > .technical-form-section {
+  background: #fff !important;
+  border: 1px solid #dce9f3 !important;
+  border-radius: 18px !important;
+  box-shadow: 0 10px 28px rgba(25,84,130,.07) !important;
+  margin: 0 0 22px !important;
+  padding: 24px !important;
+}
+body.cp6-redesign #mobiliarioEditor .technical-section-heading {
+  align-items: center !important;
+  border-bottom: 1px solid #dce9f3 !important;
+  display: flex !important;
+  gap: 14px !important;
+  margin-bottom: 20px !important;
+  padding-bottom: 15px !important;
+}
+body.cp6-redesign #mobiliarioEditor .technical-section-heading > span {
+  align-items: center !important;
+  background: #eaf5ff !important;
+  border: 1px solid #c8e3fb !important;
+  border-radius: 10px !important;
+  color: #0b72e7 !important;
+  display: flex !important;
+  flex: 0 0 38px !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  height: 38px !important;
+  justify-content: center !important;
+}
+body.cp6-redesign #mobiliarioEditor .technical-section-heading h3 {
+  color: #123f68 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+}
+body.cp6-redesign #mobiliarioEditor .technical-section-heading p { color: #6b8195 !important; margin: 4px 0 0 !important; }
+body.cp6-redesign #mobiliarioEditor .form-grid.technical-grid { gap: 18px !important; }
+body.cp6-redesign #mobiliarioEditor label { color: #38556f !important; font-family: Arial, Helvetica, sans-serif !important; font-weight: 600 !important; }
+body.cp6-redesign #mobiliarioEditor input,
+body.cp6-redesign #mobiliarioEditor select,
+body.cp6-redesign #mobiliarioEditor textarea {
+  background: #fff !important;
+  border: 1px solid #cbddea !important;
+  border-radius: 10px !important;
+  color: #17324d !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  margin-top: 6px !important;
+  min-height: 42px !important;
+}
+body.cp6-redesign #mobiliarioEditor textarea { min-height: 42px !important; resize: vertical !important; }
+body.cp6-redesign #mobiliarioEditor input:focus,
+body.cp6-redesign #mobiliarioEditor select:focus,
+body.cp6-redesign #mobiliarioEditor textarea:focus { border-color: #0b72e7 !important; box-shadow: 0 0 0 3px rgba(11,114,231,.14) !important; outline: none !important; }
+body.cp6-redesign #mobiliarioEditor .mobiliario-item-editor { background: #f7fbff !important; border: 1px solid #dce9f3 !important; border-radius: 14px !important; padding: 18px !important; }
+body.cp6-redesign #mobiliarioEditor .mobiliario-capture-grid { gap: 15px !important; }
+body.cp6-redesign #mobiliarioEditor .mobiliario-item-editor-actions { align-items: flex-end !important; display: flex !important; gap: 10px !important; justify-content: flex-end !important; margin-top: 16px !important; }
+body.cp6-redesign #mobiliarioEditor .mobiliario-items-list { margin-top: 18px !important; }
+body.cp6-redesign #mobiliarioEditor .mobiliario-items-list table,
+body.cp6-redesign #mobiliarioEditor .values-table { border: 1px solid #dce9f3 !important; border-radius: 12px !important; overflow: hidden !important; }
+body.cp6-redesign #mobiliarioEditor .mobiliario-items-list th,
+body.cp6-redesign #mobiliarioEditor .values-table th { background: #edf7ff !important; color: #28648e !important; font-size: 11px !important; letter-spacing: .04em !important; text-transform: uppercase !important; }
+body.cp6-redesign #mobiliarioEditor .mobiliario-items-list td,
+body.cp6-redesign #mobiliarioEditor .values-table td { color: #17324d !important; font-family: Arial, Helvetica, sans-serif !important; }
+body.cp6-redesign #mobiliarioEditor .values-table-wrap { border: 1px solid #dce9f3 !important; border-radius: 12px !important; overflow: auto !important; }
+body.cp6-redesign #mobiliarioEditor .values-table-block,
+body.cp6-redesign #mobiliarioEditor .mobiliario-replacement-summary { background: #fbfdff !important; border: 1px solid #dce9f3 !important; border-radius: 14px !important; padding: 14px !important; }
+body.cp6-redesign #mobiliarioEditor .values-table-heading { border-bottom: 1px solid #dce9f3 !important; margin-bottom: 12px !important; padding-bottom: 10px !important; }
+body.cp6-redesign #mobiliarioEditor .values-table-heading h4 { color: #123f68 !important; font-size: 16px !important; margin: 0 !important; }
+body.cp6-redesign #mobiliarioEditor .consideration-composer { align-items: flex-end !important; background: #f7fbff !important; border: 1px solid #dce9f3 !important; border-radius: 14px !important; display: flex !important; gap: 14px !important; padding: 16px !important; }
+body.cp6-redesign #mobiliarioEditor .consideration-composer label { flex: 1 !important; }
+body.cp6-redesign #mobiliarioEditor .technical-add-vehicle-button,
+body.cp6-redesign #mobiliarioEditor .technical-inline-button,
+body.cp6-redesign #mobiliarioEditor .btn-copu-primary { background: #0b72e7 !important; border-color: #0b72e7 !important; border-radius: 10px !important; color: #fff !important; font-family: Arial, Helvetica, sans-serif !important; font-weight: 700 !important; }
+@media (max-width: 760px) {
+  body.cp6-redesign #mobiliarioEditor > form > .technical-form-section { padding: 16px !important; }
+  body.cp6-redesign #mobiliarioEditor .consideration-composer { align-items: stretch !important; flex-direction: column !important; }
+  body.cp6-redesign #mobiliarioEditor .mobiliario-item-editor-actions { align-items: stretch !important; flex-direction: column !important; }
+  body.cp6-redesign #mobiliarioEditor .mobiliario-item-editor-actions button { width: 100% !important; }
+}
+
 @media (min-width: 901px) {
   body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable) { overflow-x: visible; }
   body.cp6-redesign :is(#statusRecordList, #technicalAppraisalList, #serviceRequestsTable) table { min-width: 0; }
