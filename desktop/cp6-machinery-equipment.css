@@ -84,3 +84,102 @@
   #technicalCreationPanel .technical-form-section,#technicalCreationPanel .vehicle-card,#technicalCreationPanel .obsolescence-panel{padding:16px!important}
   #technicalCreationPanel .technical-stepper,#technicalCreationPanel .mobiliario-stepper{padding:10px!important;overflow-x:auto}
 }
+
+/* CP6 · Selectores reales del formulario de Maquinaria y Equipo */
+#mobiliarioEditor {
+  color: #17324d!important;
+}
+#mobiliarioEditor > form > .technical-form-section {
+  background:#fff!important;
+  border:1px solid #dce9f3!important;
+  border-radius:18px!important;
+  box-shadow:0 10px 28px rgba(25,84,130,.07)!important;
+  margin:0 0 22px!important;
+  padding:24px!important;
+}
+#mobiliarioEditor .technical-section-heading {
+  display:flex!important;
+  align-items:center!important;
+  gap:14px!important;
+  border-bottom:1px solid #dce9f3!important;
+  margin-bottom:20px!important;
+  padding-bottom:15px!important;
+}
+#mobiliarioEditor .technical-section-heading>span {
+  align-items:center!important;
+  background:#eaf5ff!important;
+  border:1px solid #c8e3fb!important;
+  border-radius:10px!important;
+  color:#0b72e7!important;
+  display:flex!important;
+  flex:0 0 38px!important;
+  font-size:16px!important;
+  font-weight:800!important;
+  height:38px!important;
+  justify-content:center!important;
+}
+#mobiliarioEditor .technical-section-heading h3 {
+  color:#123f68!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-size:20px!important;
+  font-weight:700!important;
+  margin:0!important;
+}
+#mobiliarioEditor .technical-section-heading p {color:#6b8195!important;margin:4px 0 0!important}
+#mobiliarioEditor .form-grid.technical-grid {gap:18px!important}
+#mobiliarioEditor label {color:#38556f!important;font-family:Arial,Helvetica,sans-serif!important;font-weight:600!important}
+#mobiliarioEditor input,
+#mobiliarioEditor select,
+#mobiliarioEditor textarea {
+  background:#fff!important;
+  border:1px solid #cbddea!important;
+  border-radius:10px!important;
+  color:#17324d!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+  margin-top:6px!important;
+  min-height:42px!important;
+}
+#mobiliarioEditor textarea {min-height:42px!important;resize:vertical!important}
+#mobiliarioEditor input:focus,
+#mobiliarioEditor select:focus,
+#mobiliarioEditor textarea:focus {border-color:#0b72e7!important;box-shadow:0 0 0 3px rgba(11,114,231,.14)!important;outline:none!important}
+#mobiliarioEditor .mobiliario-item-editor {
+  background:#f7fbff!important;
+  border:1px solid #dce9f3!important;
+  border-radius:14px!important;
+  padding:18px!important;
+}
+#mobiliarioEditor .mobiliario-capture-grid {gap:15px!important}
+#mobiliarioEditor .mobiliario-item-editor-actions {align-items:flex-end!important;display:flex!important;gap:10px!important;justify-content:flex-end!important;margin-top:16px!important}
+#mobiliarioEditor .mobiliario-items-list {margin-top:18px!important}
+#mobiliarioEditor .mobiliario-items-list table,
+#mobiliarioEditor .values-table {border:1px solid #dce9f3!important;border-radius:12px!important;overflow:hidden!important}
+#mobiliarioEditor .mobiliario-items-list th,
+#mobiliarioEditor .values-table th {background:#edf7ff!important;color:#28648e!important;font-size:11px!important;letter-spacing:.04em!important;text-transform:uppercase!important}
+#mobiliarioEditor .mobiliario-items-list td,
+#mobiliarioEditor .values-table td {color:#17324d!important;font-family:Arial,Helvetica,sans-serif!important}
+#mobiliarioEditor .values-table-wrap {border:1px solid #dce9f3!important;border-radius:12px!important;overflow:auto!important}
+#mobiliarioEditor .values-table-block,
+#mobiliarioEditor .mobiliario-replacement-summary {background:#fbfdff!important;border:1px solid #dce9f3!important;border-radius:14px!important;padding:14px!important}
+#mobiliarioEditor .values-table-heading {border-bottom:1px solid #dce9f3!important;margin-bottom:12px!important;padding-bottom:10px!important}
+#mobiliarioEditor .values-table-heading h4 {color:#123f68!important;font-size:16px!important;margin:0!important}
+#mobiliarioEditor .consideration-composer {align-items:flex-end!important;background:#f7fbff!important;border:1px solid #dce9f3!important;border-radius:14px!important;display:flex!important;gap:14px!important;padding:16px!important}
+#mobiliarioEditor .consideration-composer label {flex:1!important}
+#mobiliarioEditor .technical-add-vehicle-button,
+#mobiliarioEditor .technical-inline-button,
+#mobiliarioEditor .btn-copu-primary {
+  background:#0b72e7!important;
+  border-color:#0b72e7!important;
+  border-radius:10px!important;
+  color:#fff!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-weight:700!important;
+}
+#mobiliarioEditor .technical-add-vehicle-button:hover,
+#mobiliarioEditor .technical-inline-button:hover {background:#075fc2!important}
+@media(max-width:760px){
+  #mobiliarioEditor > form > .technical-form-section {padding:16px!important}
+  #mobiliarioEditor .consideration-composer {align-items:stretch!important;flex-direction:column!important}
+  #mobiliarioEditor .mobiliario-item-editor-actions {align-items:stretch!important;flex-direction:column!important}
+  #mobiliarioEditor .mobiliario-item-editor-actions button {width:100%!important}
+}
