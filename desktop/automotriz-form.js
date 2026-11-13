@@ -1077,7 +1077,8 @@
     if (sharedTechnicalSearchPanel && typeSelect.value) sharedTechnicalSearchPanel.hidden = true;
     const mobiliarioEditor = document.querySelector("#mobiliarioEditor");
     editor.hidden = !automotriz;
-    if (mobiliarioEditor) mobiliarioEditor.hidden = !mobiliario;
+    // Maquinaria y Equipo utiliza el mismo editor visual y funcional de Mobiliario.
+    if (mobiliarioEditor) mobiliarioEditor.hidden = !(mobiliario || maquinaria);
     typeHint.hidden = automotriz || mobiliario || maquinaria;
     document.querySelector(".appraisal-type-panel")?.classList.add("is-hidden");
     if (selectedTypeMessage) { selectedTypeMessage.hidden = !typeSelect.value; selectedTypeMessage.textContent = typeSelect.value ? `Tipo de avalúo: ${typeSelect.options[typeSelect.selectedIndex]?.text || typeSelect.value}` : ""; }
