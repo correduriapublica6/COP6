@@ -2731,3 +2731,28 @@ body.cp6-redesign #appShell.control-shell .v2-sidebar-foot > .cp6-sidebar-tools 
   position: relative !important;
   width: auto !important;
 }
+
+/* CP6 · Cuenta centrada y menú de perfil hacia arriba */
+body.cp6-redesign #appShell.control-shell .v2-sidebar-foot,
+body.cp6-redesign #appShell.control-shell .v2-sidebar-foot > .cp6-sidebar-account,
+body.cp6-redesign #appShell.control-shell .v2-sidebar-foot > .cp6-sidebar-tools {
+  overflow: visible !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar-foot > .cp6-sidebar-account {
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar-foot > .cp6-sidebar-account > .cp6-sidebar-status {
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: left !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar-foot > .cp6-sidebar-account > .profile-menu-wrap > .profile-menu {
+  bottom: calc(100% + 8px) !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  transform: translateX(-50%) !important;
+  z-index: 10000 !important;
+}
