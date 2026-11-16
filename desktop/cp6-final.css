@@ -2576,3 +2576,45 @@ body.cp6-redesign #appShell.control-shell .cp6-sidebar-account .cp6-sidebar-stat
 body.cp6-redesign #appShell.control-shell .cp6-sidebar-tools {
   margin-top: 12px !important;
 }
+
+/* CP6 · Perfil idéntico a los demás accesos del sidebar */
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-account .profile-menu-wrap > #profileButton.cp6-icon-btn {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 9px !important;
+  box-shadow: none !important;
+  color: #dbeafe !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  min-width: 30px !important;
+  padding: 0 !important;
+  transform: none !important;
+  width: 30px !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-account .profile-menu-wrap > #profileButton.cp6-icon-btn:hover,
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-account .profile-menu-wrap > #profileButton.cp6-icon-btn:focus-visible {
+  background: rgba(96,165,250,.22) !important;
+  border-color: rgba(147,197,253,.35) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-account .profile-menu-wrap > #profileButton .navbar-profile-avatar {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  height: 17px !important;
+  width: 17px !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-account .profile-menu-wrap > #profileButton .user-icon {
+  color: currentColor !important;
+  height: 17px !important;
+  stroke: currentColor !important;
+  width: 17px !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-account .profile-menu-wrap > #profileButton .navbar-profile-chevron,
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-account .profile-menu-wrap > #profileButton .profile-status-dot {
+  display: none !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-account + .cp6-sidebar-tools {
+  margin-top: 12px !important;
+}
