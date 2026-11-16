@@ -2228,3 +2228,45 @@ body.messaging-popup-open { overflow: hidden !important; }
 #messagingPopupLayer .messaging-compose button:hover { background: #1d4ed8 !important; }
 #messagingPopupLayer .messaging-compose button i { font-size: 1rem !important; line-height: 1 !important; }
 #messagingPopupLayer .messaging-conversation-head { min-height: 68px !important; }
+
+/* CP6 · Navegación lateral: mayor presencia y contraste */
+body.cp6-redesign #appShell.control-shell .v2-sidebar :is(.v2-nav-label, .cp6-nav-link, .v2-operation-nav button) {
+  color: #ffffff !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-nav-link {
+  font-weight: 600 !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-hand-icon {
+  width: 23px !important;
+  height: 23px !important;
+  flex-basis: 23px !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-hand-icon svg {
+  width: 23px !important;
+  height: 23px !important;
+  stroke: #ffffff !important;
+  stroke-width: 1.8 !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button {
+  font-weight: 600 !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button > i {
+  color: #ffffff !important;
+  font-size: 21px !important;
+  width: 23px !important;
+  min-width: 23px !important;
+  text-align: center !important;
+}
+@media (max-width: 1000px) {
+  body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-hand-icon {
+    width: 23px !important;
+    height: 23px !important;
+    flex-basis: 23px !important;
+  }
+  body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-hand-icon svg {
+    width: 23px !important;
+    height: 23px !important;
+  }
+}
