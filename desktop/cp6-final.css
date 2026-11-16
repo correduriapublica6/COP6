@@ -2299,3 +2299,64 @@ body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button >
   font-size: 21px !important;
   color: #ffffff !important;
 }
+
+/* CP6 · Barra lateral uniforme según referencia visual */
+body.cp6-redesign #appShell.control-shell .v2-sidebar {
+  background: #101f3d !important;
+  color: #ffffff !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar :is(.v2-nav, .v2-operation-nav) {
+  gap: 4px !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar :is(.v2-nav .cp6-nav-link, .v2-operation-nav button) {
+  align-items: center !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  display: flex !important;
+  gap: 10px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 10px 12px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar :is(.v2-nav .cp6-nav-link:hover, .v2-operation-nav button:hover) {
+  background: rgba(255,255,255,.08) !important;
+  color: #ffffff !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar :is(.v2-nav .cp6-nav-link.is-active, .v2-nav .cp6-nav-link.active, .v2-operation-nav button.v2-active) {
+  background: #214e8d !important;
+  border-left: 3px solid #62a8ff !important;
+  color: #ffffff !important;
+  padding-left: 9px !important;
+  box-shadow: none !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-nav .cp6-hand-icon,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-nav .cp6-hand-icon i,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button > i {
+  align-items: center !important;
+  color: #ffffff !important;
+  display: inline-flex !important;
+  flex: 0 0 21px !important;
+  font-size: 20px !important;
+  height: 21px !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  width: 21px !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-nav .cp6-hand-icon svg {
+  display: none !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-nav-label {
+  color: #ffffff !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  letter-spacing: .08em !important;
+  margin-top: 8px !important;
+}
