@@ -2690,3 +2690,44 @@ body.cp6-redesign #appShell.control-shell .cp6-sidebar-account + .cp6-sidebar-to
   margin: 0 -4px !important;
   padding: 12px 4px 2px !important;
 }
+
+/* CP6 · Bloques independientes: cuenta arriba, herramientas abajo */
+body.cp6-redesign #appShell.control-shell .v2-sidebar-foot {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar-foot > .cp6-sidebar-account {
+  align-items: center !important;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  flex-direction: row !important;
+  gap: 9px !important;
+  margin: 0 4px !important;
+  min-height: 38px !important;
+  padding: 0 0 8px !important;
+  position: relative !important;
+  width: auto !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar-foot > .cp6-sidebar-account > .profile-menu-wrap {
+  flex: 0 0 30px !important;
+  height: 30px !important;
+  position: relative !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar-foot > .cp6-sidebar-account > .cp6-sidebar-status {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  margin: 0 !important;
+  min-height: 16px !important;
+  white-space: nowrap !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar-foot > .cp6-sidebar-tools {
+  border-top: 1px solid rgba(197,218,245,.18) !important;
+  clear: both !important;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  padding: 12px 4px 2px !important;
+  position: relative !important;
+  width: auto !important;
+}
