@@ -2618,3 +2618,33 @@ body.cp6-redesign #appShell.control-shell .cp6-sidebar-account .profile-menu-wra
 body.cp6-redesign #appShell.control-shell .cp6-sidebar-account + .cp6-sidebar-tools {
   margin-top: 12px !important;
 }
+
+/* CP6 · Bloque superior separado de accesos inferiores */
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-account {
+  align-items: flex-start !important;
+  border-bottom: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  justify-content: flex-start !important;
+  margin: 0 4px 0 !important;
+  min-height: 58px !important;
+  padding: 0 0 8px !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-account .profile-menu-wrap {
+  flex: 0 0 30px !important;
+  height: 30px !important;
+  order: 1 !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-account .cp6-sidebar-status {
+  align-self: flex-start !important;
+  flex: 0 0 auto !important;
+  margin: 0 0 0 4px !important;
+  min-height: 16px !important;
+  order: 2 !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-account + .cp6-sidebar-tools {
+  border-top: 1px solid rgba(197,218,245,.13) !important;
+  margin: 0 -4px !important;
+  padding: 12px 4px 2px !important;
+}
