@@ -2467,3 +2467,83 @@ body.cp6-redesign #appShell.control-shell .cp6-sidebar-tools .calculator-toggle-
 body.cp6-redesign #appShell.control-shell .cp6-sidebar-tools .header-alerts-button { order: 4 !important; }
 body.cp6-redesign #appShell.control-shell .cp6-sidebar-tools .navbar-profile-wrap { order: 5 !important; }
 body.cp6-redesign #appShell.control-shell .cp6-sidebar-tools .logout-header-button { order: 6 !important; }
+
+/* CP6 · Estado del servidor debajo de los accesos */
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-status {
+  align-items: center !important;
+  color: #a9bdd8 !important;
+  display: flex !important;
+  font-size: 10px !important;
+  gap: 6px !important;
+  justify-content: flex-start !important;
+  margin: 10px 4px 0 !important;
+  min-height: 16px !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-status::before {
+  background: #22c55e !important;
+  border-radius: 50% !important;
+  content: "" !important;
+  display: inline-block !important;
+  flex: 0 0 6px !important;
+  height: 6px !important;
+  width: 6px !important;
+}
+body.cp6-redesign #appShell.control-shell[data-server-status="offline"] .cp6-sidebar-status::before {
+  background: #ef4444 !important;
+}
+body.cp6-redesign #appShell.control-shell[data-server-status="checking"] .cp6-sidebar-status::before {
+  background: #f59e0b !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-status #serverConnectionStatus {
+  color: inherit !important;
+  display: inline !important;
+}
+/* Perfil con el mismo tratamiento que los otros iconos */
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-tools .profile-button {
+  align-items: center !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 9px !important;
+  box-shadow: none !important;
+  color: #dbeafe !important;
+  display: grid !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  min-width: 30px !important;
+  padding: 0 !important;
+  place-items: center !important;
+  width: 30px !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-tools .profile-button .navbar-profile-avatar {
+  align-items: center !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: grid !important;
+  height: 17px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  place-items: center !important;
+  width: 17px !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-tools .profile-button .user-icon,
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-tools .profile-button .profile-avatar-image {
+  height: 17px !important;
+  width: 17px !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-tools .profile-button .navbar-profile-chevron,
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-tools .profile-button .profile-status-dot {
+  display: none !important;
+}
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-tools .profile-button:hover,
+body.cp6-redesign #appShell.control-shell .cp6-sidebar-tools .profile-button:focus-visible {
+  background: rgba(96,165,250,.22) !important;
+  border-color: rgba(147,197,253,.35) !important;
+  color: #ffffff !important;
+}
+@media (max-width: 1000px) {
+  body.cp6-redesign #appShell.control-shell .cp6-sidebar-status {
+    display: none !important;
+  }
+}
