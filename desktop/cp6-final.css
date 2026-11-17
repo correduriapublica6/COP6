@@ -2756,3 +2756,13 @@ body.cp6-redesign #appShell.control-shell .v2-sidebar-foot > .cp6-sidebar-accoun
   transform: translateX(-50%) !important;
   z-index: 10000 !important;
 }
+
+/* CP6 · Menú de perfil hacia la derecha del icono */
+body.cp6-redesign #appShell.control-shell .v2-sidebar-foot > .cp6-sidebar-account > .profile-menu-wrap > .profile-menu {
+  bottom: auto !important;
+  left: calc(100% + 8px) !important;
+  right: auto !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 10000 !important;
+}
