@@ -1624,10 +1624,10 @@
   }
   function profileRequestCategory(item) {
     const workflowStatus = profileRequestStatus(item);
-    if (workflowStatus !== "concluida") return workflowStatus;
+    if (workflowStatus === "vencido") return "vencido";
     const appraisalNumber = String(item?.numeroAvaluo || item?.numeroAvalúo || item?.avaluo || "").replace(/\D/g, "");
     const source = appraisalNumber ? records.find((record) => String(record?.numeroAvaluo || "").replace(/\D/g, "") === appraisalNumber) : null;
-    if (!source) return "concluida";
+    if (!source) return workflowStatus;
     const flag = (value) => [true, 1, "1", "true", "si", "sí", "yes", "pagado"].includes(typeof value === "string" ? value.trim().toLowerCase() : value);
     const paid = flag(source?.pagado);
     const deliveryValue = String(source?.seEntregoA || "").trim().toLowerCase();

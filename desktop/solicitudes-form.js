@@ -938,7 +938,7 @@
     dialog.querySelector("[data-open-full-request]")?.addEventListener("click", () => { dialog.close(); renderRequestDetail(item); });
     dialog.addEventListener("cancel", (event) => { event.preventDefault(); dialog.close(); }, { once: true });
   }
-  function bindRequestDetailButtons(container, list) { const isHomeRecent = container?.id === "welcomeRequestsTable"; container.querySelectorAll("[data-request-detail]").forEach((button) => button?.addEventListener("click", () => { const item = list.find((candidate) => candidate.id === button.dataset.requestDetail); if (!item) return; if (isHomeRecent) renderHomeQuickDetail(item); else renderRequestDetail(item); })); }
+  function bindRequestDetailButtons(container, list) { const isHomeRecent = container?.id === "welcomeRequestsTable"; container.querySelectorAll("[data-request-detail]").forEach((button) => button?.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); const item = list.find((candidate) => String(candidate.id) === String(button.dataset.requestDetail)); if (!item) return; if (isHomeRecent) renderHomeQuickDetail(item); else renderRequestDetail(item); })); }
 
   async function submitPublicRequest(event) {
     event.preventDefault();
