@@ -2856,3 +2856,28 @@ body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-status.is-venci
 body.cp6-redesign #perfilView.cp6-workspace-profile { padding-top: 0; }
 body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-lower-grid { grid-template-columns: minmax(0, 1fr); }
 @media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile { padding-top: 0; } }
+
+/* CP6 · Rendimiento consolidado por usuario */
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-card { background: #fff; border: 1px solid #e3ebf3; border-radius: 13px; box-shadow: 0 8px 24px rgb(26 61 93 / 4%); margin: 0 auto 24px; max-width: 1320px; overflow: hidden; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-heading { padding: 19px 22px 13px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-heading span { color: #6f89a2; display: block; font-size: 10px; font-weight: 800; letter-spacing: .14em; margin-bottom: 5px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-heading h2 { color: #17324d; font-size: 18px; font-weight: 800; margin: 0; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-heading p { color: #7890a7; font-size: 12px; margin: 5px 0 0; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-blocks { display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0 22px 18px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-block { background: #f8fbff; border: 1px solid #e4edf6; border-radius: 10px; padding: 14px 15px 13px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-block.is-collection { background: #f7fcfa; border-color: #e0efe8; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-block-heading { align-items: center; display: grid; gap: 10px; grid-template-columns: 36px minmax(0, 1fr) auto; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-icon { align-items: center; background: #e8f2ff; border-radius: 9px; color: #237bd4; display: flex; font-size: 16px; height: 36px; justify-content: center; width: 36px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-block.is-collection .cp6-performance-icon { background: #e5f7ed; color: #15925a; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-block b { color: #28445f; display: block; font-size: 13px; font-weight: 800; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-block small { color: #7890a7; display: block; font-size: 11px; margin-top: 3px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-block-heading > strong { color: #237bd4; font-size: 25px; line-height: 1; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-block.is-collection .cp6-performance-block-heading > strong { color: #15925a; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-bar { background: #e7eff8; border-radius: 8px; height: 7px; margin-top: 14px; overflow: hidden; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-bar i { background: #237bd4; border-radius: inherit; display: block; height: 100%; transition: width .25s ease; width: 0; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-block.is-collection .cp6-performance-bar { background: #e5f1ea; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-block.is-collection .cp6-performance-bar i { background: #15925a; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-global { align-items: center; background: #f2f7fc; border-top: 1px solid #e4edf6; display: flex; justify-content: space-between; padding: 14px 22px 16px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-global span { color: #28445f; font-size: 13px; font-weight: 800; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-global strong { color: #176bc0; font-size: 27px; line-height: 1; }
+@media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-blocks { grid-template-columns: 1fr; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-block-heading > strong { font-size: 22px; } }

@@ -1702,6 +1702,23 @@
     const completed = baseList.filter((item) => profileRequestStatus(item) === "concluida").length;
     const pending = baseList.filter((item) => profileRequestStatus(item) === "pendiente").length;
     const categoryCounts = baseList.reduce((counts, item) => { const category = profileRequestCategory(item); counts[category] = (counts[category] || 0) + 1; return counts; }, {});
+    const performanceUser = selected === "__all" ? (roleFor(user) === "admin" ? "" : user) : selected;
+    const productionRate = baseList.length ? Math.round((completed / baseList.length) * 100) : 0;
+    const paid = categoryCounts.pagado || 0;
+    const collectionRate = completed ? Math.round((paid / completed) * 100) : 0;
+    const globalPerformance = Math.round((productionRate + collectionRate) / 2);
+    const performanceCard = $("#profilePerformanceCard");
+    if (performanceCard) {
+      performanceCard.hidden = !performanceUser;
+      $("#profilePerformanceUser") && ($("#profilePerformanceUser").textContent = performanceUser ? `Usuario seleccionado: ${performanceUser}` : "Selecciona un usuario para consultar su rendimiento.");
+      $("#profileProductionRate") && ($("#profileProductionRate").textContent = `${productionRate}%`);
+      $("#profileProductionBreakdown") && ($("#profileProductionBreakdown").textContent = `${completed} concluidos de ${baseList.length} solicitudes`);
+      $("#profileProductionBar") && ($("#profileProductionBar").style.width = `${productionRate}%`);
+      $("#profileCollectionRate") && ($("#profileCollectionRate").textContent = `${collectionRate}%`);
+      $("#profileCollectionBreakdown") && ($("#profileCollectionBreakdown").textContent = `${paid} pagados de ${completed} concluidos`);
+      $("#profileCollectionBar") && ($("#profileCollectionBar").style.width = `${collectionRate}%`);
+      $("#profileGlobalPerformance") && ($("#profileGlobalPerformance").textContent = `${globalPerformance}%`);
+    }
     $("#profileTotalRequests") && ($("#profileTotalRequests").textContent = String(baseList.length));
     $("#profilePendingRequests") && ($("#profilePendingRequests").textContent = String(pending));
     $("#profileCompletedRequests") && ($("#profileCompletedRequests").textContent = String(completed));
