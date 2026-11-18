@@ -2852,3 +2852,7 @@ body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-status.is-entre
 body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-status.is-vencido { background: #ffe7e7; color: #bd3636; }
 @media (max-width: 1050px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { grid-template-columns: 1fr; } }
+/* CP6 · Perfil compacto: sin encabezado vacío ni panel de seguimiento */
+body.cp6-redesign #perfilView.cp6-workspace-profile { padding-top: 0; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-lower-grid { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile { padding-top: 0; } }
