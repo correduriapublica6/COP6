@@ -2888,3 +2888,18 @@ body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-global { al
 body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-global span { color: #28445f; font-size: 13px; font-weight: 800; }
 body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-global strong { color: #176bc0; font-size: 27px; line-height: 1; }
 @media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-blocks { grid-template-columns: 1fr; } }
+/* CP6 · KPIs del perfil compactos, sin iconos y en una sola línea */
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { gap: 10px; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi { border-color: transparent; gap: 0; min-height: 88px; padding: 13px 12px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-total { background: #eef6ff; border-color: #dcecff; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-pending { background: #fff8e7; border-color: #f5e7bd; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-completed { background: #eafaf3; border-color: #d4f0e1; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-paid { background: #eaf8ee; border-color: #d4efdc; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-delivery-pending { background: #fff6df; border-color: #f3e4b8; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-delivered-unpaid { background: #f3efff; border-color: #e3dafa; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-expired { background: #ffeded; border-color: #f4d8d8; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi b { font-size: 12px; line-height: 1.2; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi strong { font-size: 24px; margin-top: 7px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi small { font-size: 10px; }
+@media (max-width: 1250px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
