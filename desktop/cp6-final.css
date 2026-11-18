@@ -2839,3 +2839,16 @@ body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination butt
 body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination button:disabled { cursor: default; opacity: .35; }
 @media (max-width: 1050px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filters { grid-template-columns: 1fr 1fr; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter-note { grid-column: 1 / -1; max-width: none; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-lower-grid { grid-template-columns: 1fr; } }
 @media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile { padding: 22px 14px 30px; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-heading h1 { font-size: 24px; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filters, body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { grid-template-columns: 1fr; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-custom-dates { grid-column: 1 / -1; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-list-heading { align-items: stretch; flex-direction: column; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-list-controls { flex-wrap: wrap; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-search { flex: 1; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-search input { width: 100%; } }
+
+/* CP6 · Mi espacio de trabajo · categorías administrativas de avalúos */
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-paid .cp6-kpi-icon { background: #e8f8ed; color: #16934e; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-delivery-pending .cp6-kpi-icon { background: #fff5dd; color: #c58b13; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-delivered-unpaid .cp6-kpi-icon { background: #f0eaff; color: #7655c8; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-expired .cp6-kpi-icon { background: #ffe9e9; color: #c63c3c; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-status.is-pagado { background: #e4f8ea; color: #168d4b; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-status.is-pendiente-entrega { background: #fff5dc; color: #ae7a12; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-status.is-entregado-sin-pago { background: #f0eaff; color: #7655c8; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-status.is-vencido { background: #ffe7e7; color: #bd3636; }
+@media (max-width: 1050px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { grid-template-columns: 1fr; } }

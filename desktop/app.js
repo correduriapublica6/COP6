@@ -1618,6 +1618,24 @@
     const status = String(item?.estado || "recibida").trim().toLowerCase();
     return status === "concluida" ? "concluida" : status === "cancelada" ? "cancelada" : "pendiente";
   }
+  function profileRequestRecord(item) {
+    const appraisalNumber = String(item?.numeroAvaluo || "").replace(/\D/g, "");
+    return (appraisalNumber && records.find((record) => String(record?.numeroAvaluo || "").replace(/\D/g, "") === appraisalNumber)) || item;
+  }
+  function profileRequestCategory(item) {
+    const source = profileRequestRecord(item);
+    const paid = Boolean(source?.pagado || item?.pagado || source?.metodoPago || item?.metodoPago);
+    const delivered = Boolean(source?.seEntregoA || item?.seEntregoA);
+    const appraisalDate = source?.fechaAvaluo || item?.fechaAvaluo || "";
+    const expired = Boolean(!paid && !delivered && appraisalDate && getExpiryDate(appraisalDate) < today());
+    if (paid) return "pagado";
+    if (expired) return "vencido";
+    if (delivered) return "entregado-sin-pago";
+    return "pendiente-entrega";
+  }
+  function profileRequestCategoryLabel(item) {
+    return { pagado: "Pagado", "pendiente-entrega": "Pendiente de entrega", "entregado-sin-pago": "Entregado sin pago", vencido: "Vencido" }[profileRequestCategory(item)] || (profileRequestStatus(item) === "concluida" ? "Concluido" : "Pendiente");
+  }
   function profileDateRange() {
     const period = $("#profilePeriodFilter")?.value || "all";
     if (period === "all") return null;
@@ -1666,7 +1684,7 @@
     profileRequestsPage = Math.min(Math.max(1, profileRequestsPage), totalPages);
     const pageItems = list.slice((profileRequestsPage - 1) * PROFILE_REQUESTS_PAGE_SIZE, profileRequestsPage * PROFILE_REQUESTS_PAGE_SIZE);
     if (!pageItems.length) target.innerHTML = '<div class="cp6-profile-empty">No hay avalúos que coincidan con los filtros seleccionados.</div>';
-    else target.innerHTML = `<table class="cp6-profile-table"><thead><tr><th>Número de solicitud</th><th>Número de avalúo</th><th>Solicitante</th><th>Dirección del inmueble</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead><tbody>${pageItems.map((item) => { const status = profileRequestStatus(item); return `<tr><td><strong>${escapeHtml(profileRequestFolio(item))}</strong></td><td>${escapeHtml(profileRequestAppraisal(item))}</td><td>${escapeHtml(profileRequestApplicant(item))}</td><td>${escapeHtml(profileRequestAddress(item))}</td><td><span class="cp6-profile-status is-${status}"><i></i>${status === "concluida" ? "Concluido" : status === "cancelada" ? "Cancelado" : "Pendiente"}</span></td><td>${escapeHtml(profileRequestDisplayDate(item))}</td><td><button aria-label="Ver detalle" class="cp6-profile-view" data-profile-request-detail="${escapeHtml(item.id || "")}" title="Ver detalle" type="button"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></td></tr>`; }).join("")}</tbody></table>`;
+    else target.innerHTML = `<table class="cp6-profile-table"><thead><tr><th>Número de solicitud</th><th>Número de avalúo</th><th>Solicitante</th><th>Dirección del inmueble</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead><tbody>${pageItems.map((item) => { const status = profileRequestCategory(item); return `<tr><td><strong>${escapeHtml(profileRequestFolio(item))}</strong></td><td>${escapeHtml(profileRequestAppraisal(item))}</td><td>${escapeHtml(profileRequestApplicant(item))}</td><td>${escapeHtml(profileRequestAddress(item))}</td><td><span class="cp6-profile-status is-${status}"><i></i>${escapeHtml(profileRequestCategoryLabel(item))}</span></td><td>${escapeHtml(profileRequestDisplayDate(item))}</td><td><button aria-label="Ver detalle" class="cp6-profile-view" data-profile-request-detail="${escapeHtml(item.id || "")}" title="Ver detalle" type="button"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></td></tr>`; }).join("")}</tbody></table>`;
     const first = list.length ? (profileRequestsPage - 1) * PROFILE_REQUESTS_PAGE_SIZE + 1 : 0;
     const last = Math.min(profileRequestsPage * PROFILE_REQUESTS_PAGE_SIZE, list.length);
     const pages = Array.from({ length: totalPages }, (_, index) => { const page = index + 1; return `<button type="button" data-profile-page="${page}" class="${page === profileRequestsPage ? "is-active" : ""}">${page}</button>`; }).join("");
@@ -1683,12 +1701,17 @@
     const baseList = allRequests.filter((item) => profileRequestMatches(item, selected) && profileRequestMatchesDate(item, range));
     const completed = baseList.filter((item) => profileRequestStatus(item) === "concluida").length;
     const pending = baseList.filter((item) => profileRequestStatus(item) === "pendiente").length;
+    const categoryCounts = baseList.reduce((counts, item) => { const category = profileRequestCategory(item); counts[category] = (counts[category] || 0) + 1; return counts; }, {});
     $("#profileTotalRequests") && ($("#profileTotalRequests").textContent = String(baseList.length));
     $("#profilePendingRequests") && ($("#profilePendingRequests").textContent = String(pending));
     $("#profileCompletedRequests") && ($("#profileCompletedRequests").textContent = String(completed));
+    $("#profilePaidRequests") && ($("#profilePaidRequests").textContent = String(categoryCounts.pagado || 0));
+    $("#profileDeliveryPendingRequests") && ($("#profileDeliveryPendingRequests").textContent = String(categoryCounts["pendiente-entrega"] || 0));
+    $("#profileUnpaidDeliveredRequests") && ($("#profileUnpaidDeliveredRequests").textContent = String(categoryCounts["entregado-sin-pago"] || 0));
+    $("#profileExpiredRequests") && ($("#profileExpiredRequests").textContent = String(categoryCounts.vencido || 0));
     const search = String($("#profileRequestsSearch")?.value || "").trim().toLowerCase();
     const status = String($("#profileStatusFilter")?.value || "").toLowerCase();
-    const visible = baseList.filter((item) => { const haystack = [profileRequestFolio(item), profileRequestAppraisal(item), profileRequestApplicant(item), profileRequestAddress(item), item.estado].join(" ").toLowerCase(); return (!search || haystack.includes(search)) && (!status || profileRequestStatus(item) === status); });
+    const visible = baseList.filter((item) => { const haystack = [profileRequestFolio(item), profileRequestAppraisal(item), profileRequestApplicant(item), profileRequestAddress(item), item.estado, profileRequestCategoryLabel(item)].join(" ").toLowerCase(); const category = profileRequestCategory(item); return (!search || haystack.includes(search)) && (!status || (status === "pendiente" || status === "concluida" ? profileRequestStatus(item) === status : category === status)); });
     const periodLabel = { all: "Todas las fechas", today: "Hoy", week: "Esta semana", month: "Este mes", custom: "Rango personalizado" }[$("#profilePeriodFilter")?.value || "all"];
     $("#profileListSummary") && ($("#profileListSummary").textContent = `Mostrando: ${selected === "__all" ? "Todos los usuarios" : selected} · ${periodLabel}`);
     const followups = [{ label: "Recibidas", value: baseList.length, color: "blue", description: "Solicitudes recibidas en el sistema." }, { label: "En proceso", value: pending, color: "gold", description: "Solicitudes en proceso de asignación o evaluación." }, { label: "Concluidas", value: completed, color: "green", description: "Solicitudes finalizadas y entregadas." }];
