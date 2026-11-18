@@ -2903,3 +2903,11 @@ body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi strong { 
 body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi small { font-size: 10px; }
 @media (max-width: 1250px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* CP6 · Perfil aún más compacto: filtros en una sola línea */
+body.cp6-redesign #perfilView.cp6-workspace-profile { margin-top: -12px; padding-top: 0; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filters { align-items: center; grid-template-columns: max-content max-content auto; gap: 12px 18px; margin-bottom: 16px; padding: 12px 16px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter { align-items: center; display: flex; gap: 8px; grid-template-columns: none; white-space: nowrap; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter select { min-width: 174px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter-note { display: none; }
+@media (max-width: 1050px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filters { grid-template-columns: max-content max-content; } }
+@media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile { margin-top: -8px; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filters { align-items: stretch; grid-template-columns: 1fr; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter { justify-content: space-between; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter select { flex: 1; } }
