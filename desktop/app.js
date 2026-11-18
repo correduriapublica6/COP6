@@ -1623,6 +1623,8 @@
     return (appraisalNumber && records.find((record) => String(record?.numeroAvaluo || "").replace(/\D/g, "") === appraisalNumber)) || item;
   }
   function profileRequestCategory(item) {
+    const workflowStatus = profileRequestStatus(item);
+    if (workflowStatus !== "concluida") return workflowStatus;
     const source = profileRequestRecord(item);
     const paid = Boolean(source?.pagado || item?.pagado || source?.metodoPago || item?.metodoPago);
     const delivered = Boolean(source?.seEntregoA || item?.seEntregoA);
