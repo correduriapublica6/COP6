@@ -33,7 +33,7 @@
   let activeSessionUser = "";
   let workspaceSelectedUser = "__all";
   let profileRequestsPage = 1;
-  const PROFILE_REQUESTS_PAGE_SIZE = 7;
+  const PROFILE_REQUESTS_PAGE_SIZE = 5;
   let notifications = [];
   let pendingCredentialAuthorization = null;
   let editingId = null;
@@ -1616,7 +1616,7 @@
   }
   function profileRequestStatus(item) {
     const status = String(item?.estado || "recibida").trim().toLowerCase();
-    return status === "concluida" ? "concluida" : status === "cancelada" ? "cancelada" : "pendiente";
+    return status === "concluida" ? "concluida" : status === "vencido" ? "vencido" : status === "cancelada" ? "cancelada" : "pendiente";
   }
   function profileRequestRecord(item) {
     const appraisalNumber = String(item?.numeroAvaluo || "").replace(/\D/g, "");
@@ -1625,13 +1625,14 @@
   function profileRequestCategory(item) {
     const workflowStatus = profileRequestStatus(item);
     if (workflowStatus !== "concluida") return workflowStatus;
-    const source = profileRequestRecord(item);
-    const paid = Boolean(source?.pagado || item?.pagado || source?.metodoPago || item?.metodoPago);
-    const delivered = Boolean(source?.seEntregoA || item?.seEntregoA);
-    const appraisalDate = source?.fechaAvaluo || item?.fechaAvaluo || "";
-    const expired = Boolean(!paid && !delivered && appraisalDate && getExpiryDate(appraisalDate) < today());
+    const appraisalNumber = String(item?.numeroAvaluo || item?.numeroAvalúo || item?.avaluo || "").replace(/\D/g, "");
+    const source = appraisalNumber ? records.find((record) => String(record?.numeroAvaluo || "").replace(/\D/g, "") === appraisalNumber) : null;
+    if (!source) return "concluida";
+    const flag = (value) => [true, 1, "1", "true", "si", "sí", "yes", "pagado"].includes(typeof value === "string" ? value.trim().toLowerCase() : value);
+    const paid = flag(source?.pagado);
+    const deliveryValue = String(source?.seEntregoA || "").trim().toLowerCase();
+    const delivered = Boolean(deliveryValue && !["no", "false", "0", "pendiente", "sin entregar"].includes(deliveryValue));
     if (paid) return "pagado";
-    if (expired) return "vencido";
     if (delivered) return "entregado-sin-pago";
     return "pendiente-entrega";
   }
@@ -1686,13 +1687,13 @@
     profileRequestsPage = Math.min(Math.max(1, profileRequestsPage), totalPages);
     const pageItems = list.slice((profileRequestsPage - 1) * PROFILE_REQUESTS_PAGE_SIZE, profileRequestsPage * PROFILE_REQUESTS_PAGE_SIZE);
     if (!pageItems.length) target.innerHTML = '<div class="cp6-profile-empty">No hay avalúos que coincidan con los filtros seleccionados.</div>';
-    else target.innerHTML = `<table class="cp6-profile-table"><thead><tr><th>Número de solicitud</th><th>Número de avalúo</th><th>Solicitante</th><th>Dirección del inmueble</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead><tbody>${pageItems.map((item) => { const status = profileRequestCategory(item); return `<tr><td><strong>${escapeHtml(profileRequestFolio(item))}</strong></td><td>${escapeHtml(profileRequestAppraisal(item))}</td><td>${escapeHtml(profileRequestApplicant(item))}</td><td>${escapeHtml(profileRequestAddress(item))}</td><td><span class="cp6-profile-status is-${status}"><i></i>${escapeHtml(profileRequestCategoryLabel(item))}</span></td><td>${escapeHtml(profileRequestDisplayDate(item))}</td><td><button aria-label="Ver detalle" class="cp6-profile-view" data-profile-request-detail="${escapeHtml(item.id || "")}" title="Ver detalle" type="button"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></td></tr>`; }).join("")}</tbody></table>`;
+    else target.innerHTML = `<table class="cp6-profile-table"><thead><tr><th>Número de solicitud</th><th>Número de avalúo</th><th>Solicitante</th><th>Dirección del inmueble</th><th>Estado</th><th>Fecha</th><th>Ver</th></tr></thead><tbody>${pageItems.map((item) => { const status = profileRequestCategory(item); return `<tr><td><strong>${escapeHtml(profileRequestFolio(item))}</strong></td><td>${escapeHtml(profileRequestAppraisal(item))}</td><td>${escapeHtml(profileRequestApplicant(item))}</td><td>${escapeHtml(profileRequestAddress(item))}</td><td><span class="cp6-profile-status is-${status}"><i></i>${escapeHtml(profileRequestCategoryLabel(item))}</span></td><td>${escapeHtml(profileRequestDisplayDate(item))}</td><td><button aria-label="Ver detalle" class="cp6-profile-view" data-profile-request-detail="${escapeHtml(item.id || "")}" title="Ver detalle" type="button"><i class="fa-regular fa-eye" aria-hidden="true"></i><span class="cp6-profile-view-label">Ver</span></button></td></tr>`; }).join("")}</tbody></table>`;
     const first = list.length ? (profileRequestsPage - 1) * PROFILE_REQUESTS_PAGE_SIZE + 1 : 0;
     const last = Math.min(profileRequestsPage * PROFILE_REQUESTS_PAGE_SIZE, list.length);
     const pages = Array.from({ length: totalPages }, (_, index) => { const page = index + 1; return `<button type="button" data-profile-page="${page}" class="${page === profileRequestsPage ? "is-active" : ""}">${page}</button>`; }).join("");
     pagination.innerHTML = `<span>Mostrando ${first}-${last} de ${list.length} resultados</span><div><button type="button" data-profile-page="${profileRequestsPage - 1}" ${profileRequestsPage === 1 ? "disabled" : ""}>‹</button>${pages}<button type="button" data-profile-page="${profileRequestsPage + 1}" ${profileRequestsPage === totalPages ? "disabled" : ""}>›</button></div>`;
     pagination.querySelectorAll("[data-profile-page]").forEach((button) => button.addEventListener("click", () => { if (button.disabled) return; profileRequestsPage = Number(button.dataset.profilePage) || 1; renderProfileDashboard(); }));
-    target.querySelectorAll("[data-profile-request-detail]").forEach((button) => button.addEventListener("click", () => window.SolicitudesControl?.openDetail?.(button.dataset.profileRequestDetail)));
+    target.querySelectorAll("[data-profile-request-detail]").forEach((button) => button.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); window.SolicitudesControl?.openDetail?.(button.dataset.profileRequestDetail); }));
   }
   function renderProfileDashboard() {
     const user = String(activeSessionUser || "");
