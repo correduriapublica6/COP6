@@ -2881,3 +2881,10 @@ body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-global { al
 body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-global span { color: #28445f; font-size: 13px; font-weight: 800; }
 body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-global strong { color: #176bc0; font-size: 27px; line-height: 1; }
 @media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-blocks { grid-template-columns: 1fr; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-block-heading > strong { font-size: 22px; } }
+/* CP6 · Rendimiento simplificado en una sola línea */
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-heading { display: none; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-blocks { grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 16px 18px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-global { align-items: center; background: #f2f7fc; border: 1px solid #e4edf6; border-radius: 10px; display: flex; justify-content: space-between; min-height: 84px; padding: 14px 15px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-global span { color: #28445f; font-size: 13px; font-weight: 800; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-global strong { color: #176bc0; font-size: 27px; line-height: 1; }
+@media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-blocks { grid-template-columns: 1fr; } }
