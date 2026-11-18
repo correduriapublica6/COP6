@@ -26,7 +26,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
-<link href="cp6-foundation.css?v=final-20261024" rel="stylesheet"/><link href="cp6-system.css?v=final-20261024" rel="stylesheet"/><link href="cp6-components.css?v=request-prefill-safe-20261105-03" rel="stylesheet"/><link href="cp6-final.css?v=sidebar-profile-menu-right-20261116-16" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link rel="stylesheet" href="cp6-approved.css?v=approved-20261105-01"/><link rel="stylesheet" href="cp6-tables-quotes-style.css?v=reception-final-dot-small-20261107-04"/>
+<link href="cp6-foundation.css?v=final-20261024" rel="stylesheet"/><link href="cp6-system.css?v=final-20261024" rel="stylesheet"/><link href="cp6-components.css?v=request-prefill-safe-20261105-03" rel="stylesheet"/><link href="cp6-final.css?v=workspace-profile-v5-20261118-01" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link rel="stylesheet" href="cp6-approved.css?v=approved-20261105-01"/><link rel="stylesheet" href="cp6-tables-quotes-style.css?v=reception-final-dot-small-20261107-04"/>
 </head>
 <body class="cp6-redesign" data-server-status="checking">
 <section aria-label="Inicio de sesión" class="login-screen" id="loginScreen"><aside aria-hidden="false" class="login-visual left-panel" style="position: relative; overflow: hidden;"><div class="left-panel-content"><div class="login-visual-logo"><div class="v2-login-logo"><img class="cp6-brand-logo-image" src="assets/cp6-logo-blanco.png" alt="Logotipo Correduría Pública 6" /><div><strong>Correduría Pública 6</strong><small>Plaza Coahuila</small></div></div></div><div class="login-visual-copy" id="loginVisualBrand"><span class="v2-login-eyebrow">PRECISIÓN · CONFIANZA · CONTROL</span><h2>Una nueva forma<br/>de gestionar<br/><em>tus avalúos.</em></h2><p>Expedientes, solicitudes y seguimiento. La operación de tu correduría, conectada en un solo lugar.</p></div><section class="applicant-visual-panel" hidden="" id="applicantVisualPanel"><span class="section-kicker">SEGUIMIENTO PERSONAL</span><h2>Mis solicitudes</h2><div class="request-table-wrap" id="applicantVisualRequestsTable"></div><div class="applicant-visual-actions"><button class="primary-button" id="applicantVisualNewRequestButton" type="button">+ Solicitar servicio</button><button class="secondary-button" id="applicantVisualProfileButton" type="button">Editar perfil</button></div></section><div class="login-visual-holder">Titular Lic. Juan Manuel Barrera Martinez</div><div class="login-visual-footer">Av. Morelos 854 Oriente, Colonia Centro</div></div></aside>
@@ -743,40 +743,25 @@
 </section>
 </section>
 </section>
-<section aria-labelledby="profilePageName" class="app-view profile-root-light" hidden="" id="perfilView">
-<div class="profile-left-column">
-<header class="profile-left-heading"><h1>Mi espacio de trabajo</h1><p>Consulta tus solicitudes y métricas en CP6.</p></header>
-<aside aria-label="Información del perfil" class="profile-card-light">
-<div aria-hidden="true" class="profile-avatar-light"><svg viewbox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-<h2 id="profilePageName">—</h2>
-<p class="profile-role-light" id="profilePageRole">Administrador</p>
-<div class="profile-contact-list">
-<div class="profile-contact-item"><span aria-hidden="true" class="profile-contact-icon">@</span><div><span class="profile-contact-label">CORREO</span><strong class="profile-contact-value" id="profilePageEmail">No registrado</strong></div></div>
-<div class="profile-contact-item"><span aria-hidden="true" class="profile-contact-icon">☎</span><div><span class="profile-contact-label">TELÉFONO</span><strong class="profile-contact-value" id="profilePagePhone">No registrado</strong></div></div>
-<div class="profile-contact-item"><span aria-hidden="true" class="profile-contact-icon">CP6</span><div><span class="profile-contact-label">CORREDURÍA ASOCIADA</span><strong class="profile-contact-value" id="profilePageBrokerage">Correduría Pública 6 - Torreón</strong></div></div>
-</div>
-<section aria-labelledby="profileAchievementsTitle" class="profile-progress-light">
-<div class="profile-progress-heading"><div><span>PROGRESO</span><h3 id="profileAchievementsTitle">Puntuación y Logros</h3></div><b>Nivel 1</b></div>
-<div class="profile-score-line"><div class="profile-score-ring"><strong id="profilePoints">0</strong><span>puntos</span></div><div><strong>Perfil en crecimiento</strong><p>Completa solicitudes y mantén tus datos actualizados.</p></div></div>
-<div class="profile-badges-light"><span>Primer acceso</span><span>Constancia</span><span>Experto CP6</span></div>
-<div class="profile-games-score-light"><div class="profile-score-ring profile-games-ring"><strong id="profileGamePoints">0</strong><span>puntos</span></div><div><strong>Puntos de juegos</strong><p>Acumulados en Solitario, Sudoku y Buscaminas.</p></div></div>
+<section aria-labelledby="profilePageName" class="app-view profile-root-light cp6-workspace-profile" hidden="" id="perfilView">
+<header class="cp6-workspace-heading">
+  <div><span class="cp6-workspace-kicker">ESPACIO DE TRABAJO</span><h1 id="profilePageName">Mi espacio de trabajo</h1><p>Resumen de tus avalúos, solicitudes y actividad reciente.</p></div>
+</header>
+<section aria-label="Filtros del espacio de trabajo" class="cp6-workspace-filters">
+  <label class="cp6-workspace-filter" id="profileMetricsFilterWrap">Usuario<select aria-label="Seleccionar usuario para métricas" id="profileMetricsFilter"><option value="__all">Todos los usuarios</option></select></label>
+  <label class="cp6-workspace-filter">Periodo<select aria-label="Seleccionar periodo" id="profilePeriodFilter"><option value="all">Todas las fechas</option><option value="today">Hoy</option><option value="week">Esta semana</option><option value="month">Este mes</option><option value="custom">Rango personalizado</option></select></label>
+  <div class="cp6-workspace-custom-dates" hidden id="profileCustomDates"><label>Desde<input id="profileStartDate" type="date"></label><label>Hasta<input id="profileEndDate" type="date"></label></div>
+  <p class="cp6-workspace-filter-note"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Los administradores pueden filtrar las métricas, el seguimiento y el listado de avalúos por usuario y periodo.</p>
 </section>
-</aside>
-</div>
-<main class="profile-main-light">
-<header class="profile-heading-light"><label class="profile-filter-light" hidden="" id="profileMetricsFilterWrap">Ver métricas de:<select aria-label="Seleccionar usuario para métricas" id="profileMetricsFilter"><option value="__all">Todos los usuarios</option></select></label></header>
-<section aria-label="Resumen de actividad" class="profile-dashboard-light">
-<div aria-label="Métricas de solicitudes" class="profile-kpis-light">
-<article class="profile-metric-light"><div class="profile-metric-ring ring-total" id="profileTotalRing" style="--progress:0%;"><div><strong id="profileTotalRequests">0</strong><span>total</span></div></div><div><b>Total de solicitudes</b><small>Registradas en tu cuenta</small></div></article>
-<article class="profile-metric-light"><div class="profile-metric-ring ring-pending" id="profilePendingRing" style="--progress:0%;"><div><strong id="profilePendingRequests">0</strong><span>pendientes</span></div></div><div><b>Solicitudes pendientes</b><small>Requieren seguimiento</small></div></article>
-<article class="profile-metric-light"><div class="profile-metric-ring ring-completed" id="profileCompletedRing" style="--progress:0%;"><div><strong id="profileCompletedRequests">0</strong><span>concluidas</span></div></div><div><b>Solicitudes concluidas</b><small>Procesos finalizados</small></div></article>
-</div>
-<section aria-labelledby="profileChartTitle" class="profile-visual-light">
-<div class="profile-visual-heading"><div><span>ACTIVIDAD</span><h2 id="profileChartTitle">Distribución de solicitudes</h2></div><div class="profile-legend-light"><span><i class="legend-pending"></i>Pendientes</span><span><i class="legend-completed"></i>Concluidas</span></div></div>
-<div class="profile-visual-grid profile-donut-only"><div class="profile-donut-panel-light"><div class="profile-donut-light" id="profileRequestsDonut" style="--pending-angle:0deg;"><div><strong id="profileDonutTotal">0</strong><span>total</span></div></div><div class="profile-donut-label-light">Pendientes vs. concluidas</div></div></div>
+<section aria-label="Métricas de avalúos" class="cp6-workspace-kpis">
+  <button class="cp6-workspace-kpi is-total" data-profile-quick-filter="" type="button"><span class="cp6-kpi-icon"><i class="fa-regular fa-file-lines" aria-hidden="true"></i></span><span><b>Avalúos totales</b><strong id="profileTotalRequests">0</strong><small>Ver listado <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></small></span></button>
+  <button class="cp6-workspace-kpi is-pending" data-profile-quick-filter="pendiente" type="button"><span class="cp6-kpi-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></span><span><b>Avalúos pendientes</b><strong id="profilePendingRequests">0</strong><small>Ver listado <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></small></span></button>
+  <button class="cp6-workspace-kpi is-completed" data-profile-quick-filter="concluida" type="button"><span class="cp6-kpi-icon"><i class="fa-solid fa-check" aria-hidden="true"></i></span><span><b>Avalúos concluidos</b><strong id="profileCompletedRequests">0</strong><small>Ver listado <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></small></span></button>
 </section>
+<section class="cp6-workspace-lower-grid">
+  <article class="cp6-followup-card"><div class="cp6-card-heading"><div><span>SEGUIMIENTO</span><h2>Seguimiento de solicitudes</h2></div></div><div class="cp6-followup-list" id="profileFollowupList"></div></article>
+  <article class="cp6-appraisals-card"><header class="cp6-list-heading"><div><span>EXPEDIENTES</span><h2>Listado de avalúos</h2><p id="profileListSummary">Mostrando todos los usuarios · Todas las fechas</p></div><div class="cp6-list-controls"><label class="cp6-profile-search"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input aria-label="Buscar avalúo" id="profileRequestsSearch" placeholder="Buscar avalúo" type="search"></label><select aria-label="Filtrar por estado" id="profileStatusFilter"><option value="">Todos los estados</option><option value="pendiente">Pendientes</option><option value="concluida">Concluidos</option></select></div></header><div class="cp6-profile-table-wrap" id="profileRequestsTable"></div><div class="cp6-profile-pagination" id="profileRequestsPagination"></div></article>
 </section>
-</main>
 </section>
 <section aria-labelledby="summaryViewTitle" class="app-view admin-view" hidden="" id="resumenView"><div class="v2-page-banner"><div><span>ESPACIO DE TRABAJO</span><h2>Resumen general</h2><p>Indicadores y control de saldos de tu operación.</p></div><i aria-hidden="true" class="fa-solid fa-chart-pie"></i></div>
 <div class="admin-intro"><h2 id="summaryViewTitle">Control de saldos</h2></div>
@@ -810,7 +795,7 @@
 </main>
 <dialog class="record-dialog report-dialog" id="reportDialog"><form id="reportForm" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">REPORTE GENERAL</p><h2>Selecciona el periodo</h2></div><button aria-label="Cerrar" class="icon-button" id="closeReportDialogButton" type="button">×</button></div><p class="report-dialog-copy">Para generar un resumen primero selecciona las fechas y da clic en Generar resumen PDF.</p><div class="form-grid"><label>Desde *<input id="reportStartDate" required="" type="date"/></label><label>Hasta *<input id="reportEndDate" required="" type="date"/></label></div><p class="form-message" id="reportMessage" role="alert"></p><div class="dialog-actions"><button class="secondary-button btn-copu-primary" id="cancelReportDialogButton" type="button">Cancelar</button><button class="primary-button" type="submit">Generar resumen PDF</button></div></form></dialog>
 <script src="automotriz-model.js?v=final-20261024"></script>
-<script src="app.js?v=chat-overlay-preserve-view-20261110-01"></script>
+<script src="app.js?v=workspace-profile-v5-20261118-01"></script>
 <script src="image-utils.js?v=final-20261024"></script>
 <script src="vendor/html-docx.js?v=final-20261024"></script>
 <script src="word-export.js?v=final-20261024"></script>

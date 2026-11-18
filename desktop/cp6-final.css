@@ -2766,3 +2766,76 @@ body.cp6-redesign #appShell.control-shell .v2-sidebar-foot > .cp6-sidebar-accoun
   transform: translateY(-50%) !important;
   z-index: 10000 !important;
 }
+
+/* CP6 · Mi espacio de trabajo v5 · aislado del resto de módulos */
+body.cp6-redesign #perfilView.cp6-workspace-profile { background: #f5f8fc; color: #17324d; display: block; min-height: 100%; padding: 30px 28px 42px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-heading { margin: 0 auto 24px; max-width: 1320px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kicker,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-card-heading > div > span,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-list-heading > div > span { color: #6f89a2; display: block; font-size: 10px; font-weight: 800; letter-spacing: .14em; margin-bottom: 6px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-heading h1 { color: #132d47; font-size: 28px; font-weight: 800; letter-spacing: -.03em; line-height: 1.15; margin: 0; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-heading p { color: #71869d; font-size: 14px; margin: 7px 0 0; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filters { align-items: end; background: #fff; border: 1px solid #e2eaf2; border-radius: 13px; box-shadow: 0 8px 24px rgb(26 61 93 / 5%); display: grid; gap: 16px; grid-template-columns: minmax(180px, 245px) minmax(180px, 245px) auto; margin: 0 auto 24px; max-width: 1320px; padding: 16px 19px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter { color: #71869d; display: grid; font-size: 11px; font-weight: 800; gap: 6px; letter-spacing: .04em; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter select,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-custom-dates input { background: #fff; border: 1px solid #dce6f0; border-radius: 8px; color: #1d3954; font-size: 13px; min-height: 38px; padding: 0 11px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter-note { align-items: center; color: #7890a7; display: flex; font-size: 12px; gap: 8px; line-height: 1.45; margin: 0; max-width: 390px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter-note i { color: #237bd4; font-size: 15px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-custom-dates { align-items: end; display: flex; gap: 8px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-custom-dates[hidden] { display: none; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-custom-dates label { color: #71869d; display: grid; font-size: 10px; font-weight: 800; gap: 4px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); margin: 0 auto 24px; max-width: 1320px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi { align-items: center; background: #fff; border: 1px solid #e3ebf3; border-radius: 13px; color: #17324d; cursor: pointer; display: flex; gap: 14px; min-height: 99px; padding: 17px 20px; text-align: left; transition: transform .16s ease, box-shadow .16s ease; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi:hover { box-shadow: 0 10px 24px rgb(26 61 93 / 10%); transform: translateY(-2px); }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi:active { transform: scale(.985); }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-kpi-icon { align-items: center; background: #edf5ff; border-radius: 50%; color: #2179d2; display: flex; font-size: 20px; height: 43px; justify-content: center; min-width: 43px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-pending .cp6-kpi-icon { background: #fff7df; color: #d39a1c; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-completed .cp6-kpi-icon { background: #e3f8f1; color: #0baf78; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi b { color: #304a64; display: block; font-size: 13px; font-weight: 700; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi strong { color: #132d47; display: block; font-size: 26px; line-height: 1.12; margin: 4px 0 3px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi small { color: #2779cc; font-size: 11px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-lower-grid { align-items: start; display: grid; gap: 16px; grid-template-columns: minmax(280px, .75fr) minmax(0, 1.55fr); margin: 0 auto; max-width: 1320px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-card,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-appraisals-card { background: #fff; border: 1px solid #e3ebf3; border-radius: 13px; box-shadow: 0 8px 24px rgb(26 61 93 / 4%); min-width: 0; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-card { padding: 20px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-card-heading h2,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-list-heading h2 { color: #17324d; font-size: 17px; font-weight: 800; margin: 0; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-list { display: grid; gap: 22px; margin-top: 25px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-title { align-items: center; display: flex; justify-content: space-between; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-title span { color: #28445f; font-size: 13px; font-weight: 700; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-title span i { background: #237bd4; border-radius: 50%; display: inline-block; height: 12px; margin-right: 8px; vertical-align: -1px; width: 12px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-title span i.is-gold { background: #e0a51e; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-title span i.is-green { background: #12b67d; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-title strong { color: #17324d; font-size: 14px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-title small { color: #607993; font-size: 11px; font-weight: 500; margin-left: 7px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-row p { color: #7890a7; font-size: 11px; margin: 5px 0 9px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-bar { background: #edf2f7; border-radius: 9px; height: 8px; overflow: hidden; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-bar i { background: #237bd4; border-radius: inherit; display: block; height: 100%; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-bar i.is-gold { background: #e0a51e; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-followup-bar i.is-green { background: #12b67d; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-list-heading { align-items: end; display: flex; gap: 15px; justify-content: space-between; padding: 20px 20px 15px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-list-heading p { color: #7890a7; font-size: 11px; margin: 7px 0 0; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-list-controls { align-items: center; display: flex; gap: 8px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-search { align-items: center; border: 1px solid #e1e9f1; border-radius: 8px; display: flex; gap: 7px; padding: 0 10px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-search i { color: #7d94aa; font-size: 12px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-search input { border: 0; color: #29445e; font-size: 12px; height: 34px; outline: 0; width: 118px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-list-controls select { background: #fff; border: 1px solid #e1e9f1; border-radius: 8px; color: #36526d; font-size: 12px; height: 36px; padding: 0 9px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-table-wrap { overflow-x: auto; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-table { border-collapse: collapse; min-width: 760px; width: 100%; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-table th { background: #f8fbfd; border-bottom: 1px solid #e4edf4; color: #7890a7; font-size: 9px; font-weight: 800; letter-spacing: .04em; padding: 11px 12px; text-align: left; text-transform: uppercase; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-table td { border-bottom: 1px solid #edf2f6; color: #4b657d; font-size: 11px; line-height: 1.35; padding: 12px; vertical-align: middle; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-table td:first-child strong { color: #276bb0; font-weight: 700; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-status { align-items: center; background: #fff5dc; border-radius: 12px; color: #ae7a12; display: inline-flex; font-size: 10px; gap: 5px; padding: 5px 8px; white-space: nowrap; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-status.is-concluida { background: #e4f8f0; color: #0a9b6b; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-status.is-cancelada { background: #f7e7e7; color: #b54b4b; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-status i { background: currentColor; border-radius: 50%; height: 5px; width: 5px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-view { background: transparent; border: 0; color: #506b84; cursor: pointer; font-size: 14px; padding: 4px 6px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-view:hover { color: #1670cf; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-empty { color: #7890a7; font-size: 13px; padding: 38px 20px; text-align: center; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination { align-items: center; color: #7890a7; display: flex; font-size: 11px; justify-content: space-between; padding: 13px 18px 17px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination div { display: flex; gap: 4px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination button { background: #fff; border: 0; border-radius: 5px; color: #52708e; cursor: pointer; font-size: 11px; height: 26px; min-width: 26px; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination button.is-active { background: #1675dc; color: #fff; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination button:disabled { cursor: default; opacity: .35; }
+@media (max-width: 1050px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filters { grid-template-columns: 1fr 1fr; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter-note { grid-column: 1 / -1; max-width: none; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-lower-grid { grid-template-columns: 1fr; } }
+@media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile { padding: 22px 14px 30px; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-heading h1 { font-size: 24px; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filters, body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { grid-template-columns: 1fr; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-custom-dates { grid-column: 1 / -1; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-list-heading { align-items: stretch; flex-direction: column; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-list-controls { flex-wrap: wrap; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-search { flex: 1; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-search input { width: 100%; } }

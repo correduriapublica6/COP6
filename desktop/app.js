@@ -32,6 +32,8 @@
   let activeAppView = "avaluos";
   let activeSessionUser = "";
   let workspaceSelectedUser = "__all";
+  let profileRequestsPage = 1;
+  const PROFILE_REQUESTS_PAGE_SIZE = 7;
   let notifications = [];
   let pendingCredentialAuthorization = null;
   let editingId = null;
@@ -1607,49 +1609,114 @@
     select.innerHTML = `<option value="__all">Todos los usuarios</option>${users.map((item) => `<option value="${escapeHtml(item.name)}">${escapeHtml(item.name)}</option>`).join("")}`;
     select.value = users.some((item) => item.name === selected) || selected === "__all" ? selected : "__all";
   }
+  function profileRequestDate(item) {
+    const value = item?.fechaSolicitud || item?.createdAt || item?.fecha || item?.date || item?.creadoEn || item?.updatedAt || "";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+  function profileRequestStatus(item) {
+    const status = String(item?.estado || "recibida").trim().toLowerCase();
+    return status === "concluida" ? "concluida" : status === "cancelada" ? "cancelada" : "pendiente";
+  }
+  function profileDateRange() {
+    const period = $("#profilePeriodFilter")?.value || "all";
+    if (period === "all") return null;
+    if (period === "custom") {
+      const start = $("#profileStartDate")?.value ? new Date(`${$("#profileStartDate").value}T00:00:00`) : null;
+      const end = $("#profileEndDate")?.value ? new Date(`${$("#profileEndDate").value}T23:59:59`) : null;
+      return { start, end };
+    }
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    if (period === "week") start.setDate(start.getDate() - ((start.getDay() + 6) % 7));
+    if (period === "month") start.setDate(1);
+    return { start, end: now };
+  }
+  function profileRequestMatchesDate(item, range) {
+    if (!range) return true;
+    const date = profileRequestDate(item);
+    if (!date) return false;
+    return (!range.start || date >= range.start) && (!range.end || date <= range.end);
+  }
+  function profileRequestDisplayDate(item) {
+    const date = profileRequestDate(item);
+    return date ? date.toLocaleDateString("es-MX", { day: "2-digit", month: "short", year: "numeric" }).replace(" de ", " ") : "—";
+  }
+  function profileRequestAddress(item) {
+    const specific = item?.datosEspecificos || {};
+    return String(specific.direccionVisita || specific.direccion_visita || item?.contactoVisita?.direccion || item?.direccionVisita || item?.direccion || "").trim() || "Sin ubicación registrada";
+  }
+  function profileRequestApplicant(item) {
+    return String(item?.solicitante?.nombre || item?.solicitante?.name || item?.nombreSolicitante || item?.nombre || "—").trim();
+  }
+  function profileRequestFolio(item) { return String(item?.folio || item?.numeroSolicitud || item?.id || "—"); }
+  function profileRequestAppraisal(item) { return String(item?.numeroAvaluo || item?.numeroAvalúo || item?.avaluo || "—"); }
+  function profileRequestMatches(item, selectedUser) {
+    const normalizedSelected = String(selectedUser || "").trim().toLowerCase();
+    if (normalizedSelected === "__all") return true;
+    const candidates = [item.asesor, item.usuario, item.creadoPor, item.creadoPorNombre, item.asignadoA, item.responsable, item.solicitante?.nombre, item.solicitante?.correo].map((value) => String(value || "").trim().toLowerCase()).filter(Boolean);
+    const selected = Array.isArray(remoteUsers) ? remoteUsers.find((user) => String(user.name || "").toLowerCase() === normalizedSelected) : null;
+    return candidates.includes(normalizedSelected) || Boolean(selected?.email && candidates.includes(String(selected.email).toLowerCase()));
+  }
+  function renderProfileRequestsTable(list) {
+    const target = $("#profileRequestsTable");
+    const pagination = $("#profileRequestsPagination");
+    if (!target || !pagination) return;
+    const totalPages = Math.max(1, Math.ceil(list.length / PROFILE_REQUESTS_PAGE_SIZE));
+    profileRequestsPage = Math.min(Math.max(1, profileRequestsPage), totalPages);
+    const pageItems = list.slice((profileRequestsPage - 1) * PROFILE_REQUESTS_PAGE_SIZE, profileRequestsPage * PROFILE_REQUESTS_PAGE_SIZE);
+    if (!pageItems.length) target.innerHTML = '<div class="cp6-profile-empty">No hay avalúos que coincidan con los filtros seleccionados.</div>';
+    else target.innerHTML = `<table class="cp6-profile-table"><thead><tr><th>Número de solicitud</th><th>Número de avalúo</th><th>Solicitante</th><th>Dirección del inmueble</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead><tbody>${pageItems.map((item) => { const status = profileRequestStatus(item); return `<tr><td><strong>${escapeHtml(profileRequestFolio(item))}</strong></td><td>${escapeHtml(profileRequestAppraisal(item))}</td><td>${escapeHtml(profileRequestApplicant(item))}</td><td>${escapeHtml(profileRequestAddress(item))}</td><td><span class="cp6-profile-status is-${status}"><i></i>${status === "concluida" ? "Concluido" : status === "cancelada" ? "Cancelado" : "Pendiente"}</span></td><td>${escapeHtml(profileRequestDisplayDate(item))}</td><td><button aria-label="Ver detalle" class="cp6-profile-view" data-profile-request-detail="${escapeHtml(item.id || "")}" title="Ver detalle" type="button"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></td></tr>`; }).join("")}</tbody></table>`;
+    const first = list.length ? (profileRequestsPage - 1) * PROFILE_REQUESTS_PAGE_SIZE + 1 : 0;
+    const last = Math.min(profileRequestsPage * PROFILE_REQUESTS_PAGE_SIZE, list.length);
+    const pages = Array.from({ length: totalPages }, (_, index) => { const page = index + 1; return `<button type="button" data-profile-page="${page}" class="${page === profileRequestsPage ? "is-active" : ""}">${page}</button>`; }).join("");
+    pagination.innerHTML = `<span>Mostrando ${first}-${last} de ${list.length} resultados</span><div><button type="button" data-profile-page="${profileRequestsPage - 1}" ${profileRequestsPage === 1 ? "disabled" : ""}>‹</button>${pages}<button type="button" data-profile-page="${profileRequestsPage + 1}" ${profileRequestsPage === totalPages ? "disabled" : ""}>›</button></div>`;
+    pagination.querySelectorAll("[data-profile-page]").forEach((button) => button.addEventListener("click", () => { if (button.disabled) return; profileRequestsPage = Number(button.dataset.profilePage) || 1; renderProfileDashboard(); }));
+    target.querySelectorAll("[data-profile-request-detail]").forEach((button) => button.addEventListener("click", () => window.SolicitudesControl?.openDetail?.(button.dataset.profileRequestDetail)));
+  }
   function renderProfileDashboard() {
     const user = String(activeSessionUser || "");
     syncProfileMetricsFilter(user);
-    const selected = roleFor(user) === "admin" ? ($( "#profileMetricsFilter")?.value || "__all") : user;
+    const selected = roleFor(user) === "admin" ? ($("#profileMetricsFilter")?.value || "__all") : user;
     const allRequests = Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : [];
-    const list = roleFor(user) === "admin" && selected === "__all" ? allRequests : allRequests.filter((item) => profileRequestMatches(item, selected));
-    const total = list.length;
-    const completed = list.filter((item) => String(item.estado || "").toLowerCase() === "concluida").length;
-    const pending = list.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
-    const metricUsers = selected === "__all" ? [...new Set([...(Array.isArray(remoteUsers) ? remoteUsers.map((item) => item.name) : []), user].filter(Boolean))] : [selected];
-    const gamePoints = metricUsers.reduce((sum, metricUser) => { try { return sum + Number(JSON.parse(localStorage.getItem(`cp6_game_stats_${metricUser}`) || "{}").points || 0); } catch { return sum; } }, 0);
-    const points = total * 250 + completed * 250 + gamePoints;
-    $("#profileTotalRequests") && ($("#profileTotalRequests").textContent = String(total));
+    const range = profileDateRange();
+    const baseList = allRequests.filter((item) => profileRequestMatches(item, selected) && profileRequestMatchesDate(item, range));
+    const completed = baseList.filter((item) => profileRequestStatus(item) === "concluida").length;
+    const pending = baseList.filter((item) => profileRequestStatus(item) === "pendiente").length;
+    $("#profileTotalRequests") && ($("#profileTotalRequests").textContent = String(baseList.length));
     $("#profilePendingRequests") && ($("#profilePendingRequests").textContent = String(pending));
     $("#profileCompletedRequests") && ($("#profileCompletedRequests").textContent = String(completed));
-    $("#profilePoints") && ($("#profilePoints").textContent = String(points));
-    $("#profileGamePoints") && ($("#profileGamePoints").textContent = String(gamePoints));
-    const setRingProgress = (id, value, color) => { const ring = $(id); if (!ring) return; ring.style.setProperty("--progress", `${Math.round(value * 100)}%`); ring.style.setProperty("--ring-color", color); };
-    setRingProgress("#profileTotalRing", total ? 1 : 0, "#2563eb");
-    setRingProgress("#profilePendingRing", total ? pending / total : 0, "#f59e0b");
-    setRingProgress("#profileCompletedRing", total ? completed / total : 0, "#16a34a");
-    const chart = $("#profileRequestsChart");
-    if (chart) {
-      const max = Math.max(pending, completed, 1);
-      chart.innerHTML = [{ label: "Pendientes", value: pending, className: "pending" }, { label: "Concluidas", value: completed, className: "completed" }].map((item) => `<div class="profile-chart-column"><span class="profile-chart-value">${item.value}</span><div class="profile-chart-bar ${item.className}" style="height:${Math.max(8, Math.round((item.value / max) * 120))}px"></div><span class="profile-chart-label">${item.label}</span></div>`).join("");
-    }
-    const donut = $("#profileRequestsDonut");
-    if (donut) { donut.style.setProperty("--pending-angle", `${total ? Math.round((pending / total) * 360) : 0}deg`); donut.style.background = total ? "" : "#e2e8f0"; donut.setAttribute("aria-label", `Distribución: ${pending} pendientes y ${completed} concluidas`); }
-    $("#profileDonutTotal") && ($("#profileDonutTotal").textContent = String(total));
+    const search = String($("#profileRequestsSearch")?.value || "").trim().toLowerCase();
+    const status = String($("#profileStatusFilter")?.value || "").toLowerCase();
+    const visible = baseList.filter((item) => { const haystack = [profileRequestFolio(item), profileRequestAppraisal(item), profileRequestApplicant(item), profileRequestAddress(item), item.estado].join(" ").toLowerCase(); return (!search || haystack.includes(search)) && (!status || profileRequestStatus(item) === status); });
+    const periodLabel = { all: "Todas las fechas", today: "Hoy", week: "Esta semana", month: "Este mes", custom: "Rango personalizado" }[$("#profilePeriodFilter")?.value || "all"];
+    $("#profileListSummary") && ($("#profileListSummary").textContent = `Mostrando: ${selected === "__all" ? "Todos los usuarios" : selected} · ${periodLabel}`);
+    const followups = [{ label: "Recibidas", value: baseList.length, color: "blue", description: "Solicitudes recibidas en el sistema." }, { label: "En proceso", value: pending, color: "gold", description: "Solicitudes en proceso de asignación o evaluación." }, { label: "Concluidas", value: completed, color: "green", description: "Solicitudes finalizadas y entregadas." }];
+    const max = Math.max(baseList.length, 1);
+    $("#profileFollowupList") && ($("#profileFollowupList").innerHTML = followups.map((item) => `<div class="cp6-followup-row"><div class="cp6-followup-title"><span><i class="is-${item.color}"></i>${item.label}</span><strong>${Math.round((item.value / max) * 100)}% <small>${item.value}</small></strong></div><p>${item.description}</p><div class="cp6-followup-bar"><i class="is-${item.color}" style="width:${Math.max(item.value ? 5 : 0, Math.round((item.value / max) * 100))}%"></i></div></div>`).join(""));
+    renderProfileRequestsTable(visible);
   }
   const openAdminProfile = () => {
     closeProfileMenu();
     const user = String(activeSessionUser || "");
     const remote = Array.isArray(remoteUsers) ? remoteUsers.find((item) => item.name === user) : null;
-    $("#profilePageName") && ($("#profilePageName").textContent = user || "—");
     $("#profilePageEmail") && ($("#profilePageEmail").textContent = remote?.email || "No registrado");
     $("#profilePagePhone") && ($("#profilePagePhone").textContent = remote?.phone || "No registrado");
     $("#profilePageRole") && ($("#profilePageRole").textContent = roleLabel(roleFor(user)));
     $("#profilePageBrokerage") && ($("#profilePageBrokerage").textContent = remote?.brokerage || "Correduría Pública 6 - Torreón");
     switchAppView("perfil");
+    profileRequestsPage = 1;
+    renderProfileDashboard();
   };
   profileButton?.addEventListener("click", (event) => { event.stopPropagation(); const open = profileMenu?.hidden !== false; if (profileMenu) profileMenu.hidden = !open; profileButton.setAttribute("aria-expanded", String(open)); });
-  $("#profileMetricsFilter")?.addEventListener("change", renderProfileDashboard);
+  $("#profileMetricsFilter")?.addEventListener("change", () => { profileRequestsPage = 1; renderProfileDashboard(); });
+  $("#profilePeriodFilter")?.addEventListener("change", (event) => { $("#profileCustomDates") && ($("#profileCustomDates").hidden = event.target.value !== "custom"); profileRequestsPage = 1; renderProfileDashboard(); });
+  $("#profileStartDate")?.addEventListener("change", () => { profileRequestsPage = 1; renderProfileDashboard(); });
+  $("#profileEndDate")?.addEventListener("change", () => { profileRequestsPage = 1; renderProfileDashboard(); });
+  $("#profileRequestsSearch")?.addEventListener("input", () => { profileRequestsPage = 1; renderProfileDashboard(); });
+  $("#profileStatusFilter")?.addEventListener("change", () => { profileRequestsPage = 1; renderProfileDashboard(); });
+  document.querySelectorAll("[data-profile-quick-filter]").forEach((button) => button.addEventListener("click", () => { const select = $("#profileStatusFilter"); if (select) select.value = button.dataset.profileQuickFilter || ""; profileRequestsPage = 1; renderProfileDashboard(); }));
+  window.addEventListener("control-avaluos:home-refresh", () => { if (activeAppView === "perfil") renderProfileDashboard(); });
   $("#logoutHeaderButton")?.addEventListener("click", resetAuthUiBeforeLogout);
   profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button?.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); resetAuthUiBeforeLogout(); } }));
   document.addEventListener("click", (event) => { if (profileMenu && !event.target.closest(".profile-menu-wrap")) closeProfileMenu(); });
