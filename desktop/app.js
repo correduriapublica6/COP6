@@ -834,7 +834,7 @@
     // El selector de métricas debe estar disponible desde el primer inicio de sesión.
     window.setTimeout(() => { syncProfileMetricsFilter?.(user); renderProfileDashboard?.(); }, 0);
     window.setTimeout(() => appShell.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
-    switchAppView("inicio");
+    switchAppView("perfil");
     renderWelcomeTasks();
     renderAdminHome();
     window.dispatchEvent(new CustomEvent("control-avaluos:authenticated", { detail: { user } }));
@@ -898,7 +898,7 @@
     configuracion: { title: "Configuración", kicker: "", description: "Exporta, importa y respalda la información del equipo." },
     mensajeria: { title: "Mensajería", kicker: "COMUNICACIÓN INSTITUCIONAL", description: "Conecta con el equipo CP6 y los usuarios externos en conversaciones seguras." },
     juegos: { title: "Juegos", kicker: "ESPACIO DE DESCANSO", description: "Elige una actividad para despejar la mente entre tus actividades de trabajo." },
-    perfil: { title: "Mi Perfil", kicker: "CUENTA", description: "Información de la cuenta activa." },
+    perfil: { title: "Inicio", kicker: "ESPACIO DE TRABAJO", description: "Métricas y avalúos de tu operación." },
   };
   function setUsersSection(section = "menu") {
     const menu = $("#usuariosMenuSection");
@@ -923,7 +923,7 @@
     activeAppView = view;
     $("#pageTitle").closest(".workspace-header")?.classList.toggle("avaluos-header", view === "avaluos");
     $$(".app-view").forEach((section) => { const active = section.id === `${view}View`; section.hidden = !active; section.classList.toggle("is-active", active); });
-    $$("[data-app-view]").forEach((button) => button.classList.toggle("is-active", button.dataset.appView === view));
+    $$("[data-app-view]").forEach((button) => button.classList.toggle("is-active", button.dataset.appView === (view === "perfil" ? "inicio" : view)));
     const details = VIEW_DETAILS[view];
     $("#pageTitle").textContent = details.title;
     $("#pageKicker").textContent = details.kicker;
@@ -1577,7 +1577,7 @@
   $("#closeAdminAccessButton")?.addEventListener("click", () => adminAccessDialog.close());
   $("#cancelAdminAccessButton")?.addEventListener("click", () => adminAccessDialog.close());
   $("#taskForm")?.addEventListener("submit", createTask);
-  $("#homeButton")?.addEventListener("click", () => { switchAppView("inicio"); renderHomeActions(); });
+  $("#homeButton")?.addEventListener("click", (event) => { event.preventDefault(); switchAppView("perfil"); });
   $$('[data-home-action]').forEach((card) => card?.addEventListener('click', () => openHomeAction(card.dataset.homeAction)));
   $("#openCredentialSetupButton")?.addEventListener("click", openCredentialSetup);
   $("#adminProfileButton")?.addEventListener("click", openCredentialSetup);
@@ -1763,7 +1763,7 @@
   $("#logoutHeaderButton")?.addEventListener("click", resetAuthUiBeforeLogout);
   profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button?.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); resetAuthUiBeforeLogout(); } }));
   document.addEventListener("click", (event) => { if (profileMenu && !event.target.closest(".profile-menu-wrap")) closeProfileMenu(); });
-  $("#profilePageBackButton")?.addEventListener("click", () => switchAppView("inicio"));
+  $("#profilePageBackButton")?.addEventListener("click", () => switchAppView("perfil"));
   $("#newRecordButton")?.addEventListener("click", () => openDialog());
   $("#newTechnicalAppraisalButton")?.addEventListener("click", () => window.dispatchEvent(new CustomEvent("control-avaluos:open-technical-creation")));
   $("#backAvaluosButton")?.addEventListener("click", () => {
