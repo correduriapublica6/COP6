@@ -948,6 +948,7 @@
     setMessage(message, "");
     if (!requireFields(form, ["nombre", "telefono", "tipoBien"])) { setMessage(message, "Completa nombre, teléfono y tipo de avalúo."); return; }
     const values = formObject(form);
+    if (!String(values.asesor || "").trim() || /sin\s+asignar/i.test(String(values.asesor || ""))) { setMessage(message, "Selecciona un valuador antes de enviar la solicitud."); showRequestStep(1); $("#publicRequestAdvisor")?.focus(); return; }
     if (values.valorOperacion) values.valorOperacion = String(values.valorOperacion).replace(/,/g, "");
     // El formulario puede crear un segundo campo dinámico llamado tipoBien.
     // Siempre tomamos el selector principal para no dejar que el campo dinámico
