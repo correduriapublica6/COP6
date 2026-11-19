@@ -2911,3 +2911,53 @@ body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter select
 body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter-note { display: none; }
 @media (max-width: 1050px) { body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filters { grid-template-columns: max-content max-content; } }
 @media (max-width: 680px) { body.cp6-redesign #perfilView.cp6-workspace-profile { margin-top: -8px; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filters { align-items: stretch; grid-template-columns: 1fr; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter { justify-content: space-between; } body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter select { flex: 1; } }
+
+
+/* CP6 · Tema negro y gris grafito para navegación administrativa y portal externo */
+body.cp6-redesign #appShell.control-shell .v2-sidebar {
+  background: linear-gradient(180deg, #080a0d 0%, #101419 52%, #1a1f25 100%) !important;
+  box-shadow: 8px 0 28px rgba(0, 0, 0, .14) !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-nav-label { color: #8d99a6 !important; }
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-nav-link,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button { color: #f7f9fb !important; }
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-nav-link:hover,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button:hover { background: #252c34 !important; }
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-nav-link.active,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button.active,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button[aria-current="page"] { background: #303943 !important; }
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-brand { border-color: rgba(255, 255, 255, .12) !important; }
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-brand small,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-sidebar-status,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-sidebar-account small { color: #aeb7c2 !important; }
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-sidebar-account { border-color: rgba(255, 255, 255, .12) !important; }
+body.cp6-redesign #appShell.control-shell .v2-sidebar .navbar-profile-avatar { background: #303943 !important; color: #fff !important; }
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-sidebar-tools { border-color: rgba(255, 255, 255, .1) !important; }
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-sidebar-tools .cp6-icon-btn { background: #20262d !important; border-color: #3a434d !important; color: #fff !important; }
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-sidebar-tools .cp6-icon-btn:hover { background: #303943 !important; }
+body.cp6-redesign #appShell.control-shell .v2-sidebar .profile-menu { background: #20262d !important; border-color: #3a434d !important; box-shadow: 0 16px 28px rgba(0, 0, 0, .3) !important; }
+body.cp6-redesign #appShell.control-shell .v2-sidebar .profile-menu button { color: #f7f9fb !important; }
+body.cp6-redesign #appShell.control-shell .v2-sidebar .profile-menu button:hover { background: #303943 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-sidebar {
+  background: linear-gradient(180deg, #080a0d 0%, #101419 52%, #1a1f25 100%) !important;
+  box-shadow: 8px 0 28px rgba(0, 0, 0, .14) !important;
+}
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-sidebar::after { background: radial-gradient(circle at 20% 84%, rgba(148, 163, 184, .16), transparent 34%) !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-avatar { background: linear-gradient(145deg, #303943, #59636e) !important; box-shadow: 0 10px 22px rgba(0, 0, 0, .28) !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile { border-color: rgba(255, 255, 255, .12) !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-profile-kicker,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-nav-heading { color: #aeb7c2 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-contact p,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-contact p i { color: #c7ced6 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-profile-button { background: rgba(255, 255, 255, .08) !important; border-color: rgba(255, 255, 255, .2) !important; color: #f7f9fb !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button { color: #d8dee5 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button i { color: #aeb7c2 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button:hover,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button.is-active { background: #303943 !important; color: #fff !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button.is-active i,
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button:hover i { color: #fff !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-cta { background: #303943 !important; border-color: #4a5561 !important; color: #fff !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-cta:hover { background: #3b4651 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-footer { border-color: rgba(255, 255, 255, .12) !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-footer strong { color: #f0f3f6 !important; }
+body.cp6-redesign #loginScreen.applicant-dashboard-active .client-sidebar-footer span { color: #aeb7c2 !important; }
