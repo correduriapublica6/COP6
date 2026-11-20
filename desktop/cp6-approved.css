@@ -898,3 +898,30 @@ body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination butt
 @media (max-width: 680px) {
   body.cp6-redesign #perfilView.cp6-workspace-profile { margin-top: -16px !important; }
 }
+
+/* CP6 · Ajuste final Home v25: paginación compacta sin desbordamiento */
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination {
+  justify-content: flex-end !important;
+  overflow: visible !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination > div {
+  align-items: center !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+  justify-content: flex-end !important;
+  max-width: 100% !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination .cp6-pagination-ellipsis {
+  align-items: center !important;
+  color: #7890a7 !important;
+  display: inline-flex !important;
+  height: 32px !important;
+  justify-content: center !important;
+  min-width: 16px !important;
+  padding: 0 2px !important;
+}
+@media (max-width: 680px) {
+  body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination { justify-content: center !important; }
+  body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination > div { justify-content: center !important; }
+}
