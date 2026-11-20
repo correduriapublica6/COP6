@@ -745,3 +745,65 @@ body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-sidebar 
 body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-sidebar::after { background: radial-gradient(circle at 20% 84%, rgba(148, 163, 184, .16), transparent 34%) !important; }
 body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button:hover,
 body.cp6-redesign #loginScreen.applicant-dashboard-active .client-inbox-nav button.is-active { background: #303943 !important; color: #fff !important; }
+
+/* CP6 · Ajuste visual Home: fondo gris claro, filtros compactos y navegación activa grafito */
+body.cp6-redesign #appShell.control-shell:has(#perfilView.is-active) > .app-workspace {
+  background: linear-gradient(135deg, #f3f5f7 0%, #e5e9ee 100%) !important;
+}
+body.cp6-redesign #appShell.control-shell:has(#perfilView.is-active) #perfilView.cp6-workspace-profile {
+  background: transparent !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filter select {
+  min-width: 150px !important;
+  min-height: 33px !important;
+  height: 33px !important;
+  border-radius: 7px !important;
+  font-size: 12px !important;
+  padding: 0 9px !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-card {
+  background: #fff !important;
+  border-color: #dce2e8 !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-block-heading > strong,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-performance-global strong {
+  font-size: 29px !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-nav-link,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-nav-link > span:not(.cp6-hand-icon),
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button > span {
+  font-weight: 400 !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-nav-link.active,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button.active,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button[aria-current="page"] {
+  background: #3a424a !important;
+  border-left: 3px solid #cbd2d9 !important;
+  color: #fff !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.05) !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar .cp6-nav-link.active .cp6-hand-icon,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button.active i,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button[aria-current="page"] i {
+  color: #fff !important;
+}
+
+/* CP6 · Prioridad final del estado activo y tipografía de accesos */
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-nav .cp6-nav-link,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-nav .cp6-nav-link > span:last-child,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button > span {
+  font-weight: 400 !important;
+}
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-nav .cp6-nav-link.is-active,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-nav .cp6-nav-link.active,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button.v2-active,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button.active,
+body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button[aria-current="page"] {
+  background: #3a424a !important;
+  background-image: none !important;
+  border-left: 3px solid #cbd2d9 !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.05) !important;
+  color: #fff !important;
+}
