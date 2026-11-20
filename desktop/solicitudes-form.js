@@ -787,6 +787,8 @@
 
     dialog.classList.add("cp6-request-detail-dialog");
     const files = Array.isArray(item.archivos) ? item.archivos : [];
+    const annexFiles = Array.isArray(item.anexos) ? item.anexos : (Array.isArray(item.anexosDocumentos) ? item.anexosDocumentos : files.filter((file) => /anex/i.test(String(file?.categoria || file?.category || file?.tipoDocumento || file?.kind || ""))));
+    const hasAnnex = annexFiles.length > 0;
     const specific = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
     const currentApplicant = item.solicitante && typeof item.solicitante === "object" ? item.solicitante : {};
     const activeRole = $("#appShell")?.dataset.role || "";
@@ -797,6 +799,7 @@
     const creatorRole = item.creadorRol ? ({ admin: "Administrador", auditor: "Auditor", valuador: "Valuador", editor: "Editor", viewer: "Solo lectura" }[item.creadorRol] || item.creadorRol) : "";
     const externalName = item.asignadoExternoNombre || "";
     const appraisalNumber = String(item.numeroAvaluo || "").replace(/\D/g, "").slice(0, 4);
+    const requestNumber = item.folio || item.numeroSolicitud || item.requestNumber || "—";
     const finalPdf = apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "");
     const visitContact = item.contactoVisita && typeof item.contactoVisita === "object" ? item.contactoVisita : {};
 
@@ -818,6 +821,7 @@
       ? `<button type="button" class="cp6-action-button cp6-primary-button bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-1.5" data-view-final-pdf="${escapeHtml(finalPdf)}"><i class="fa-solid fa-eye text-[10px]"></i> Ver avalúo final</button>${isAdmin ? `<button type="button" class="cp6-action-button cp6-danger-button bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold px-3 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-1.5" data-delete-final-pdf="${escapeHtml(item.id)}" title="Eliminar avalúo"><i class="fa-solid fa-trash-can text-[10px]"></i></button>` : ""}`
       : `<button type="button" class="cp6-action-button cp6-primary-button bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-1.5" data-upload-final-pdf="${escapeHtml(item.id)}"><i class="fa-solid fa-cloud-arrow-up text-[10px]"></i> Subir avalúo final</button>`;
     const finalSection = `<div class="cp6-detail-deliverable ${finalPdf ? "is-complete" : "is-pending"}"><div class="cp6-detail-deliverable-title"><div class="cp6-detail-deliverable-icon"><i class="fa-solid ${finalPdf ? "fa-file-circle-check" : "fa-file-arrow-up"}"></i></div><div><h4>Avalúo final</h4><p>${finalPdf ? "El documento final está disponible para consulta." : "Aún no se ha adjuntado el documento final de este trámite."}</p></div></div><div class="cp6-detail-deliverable-action">${finalActions}</div></div>`;
+    const annexSection = `<div class="cp6-detail-deliverable ${hasAnnex ? "is-complete" : "is-annex"}"><div class="cp6-detail-deliverable-title"><div class="cp6-detail-deliverable-icon"><i class="fa-solid ${hasAnnex ? "fa-paperclip" : "fa-paperclip"}"></i></div><div><h4>Anexos</h4><p>${hasAnnex ? `${annexFiles.length} documento${annexFiles.length === 1 ? "" : "s"} complementario${annexFiles.length === 1 ? "" : "s"} cargado${annexFiles.length === 1 ? "" : "s"}.` : "Documentos complementarios del avalúo."}</p></div></div><div class="cp6-detail-deliverable-action"><button type="button" class="cp6-real-secondary-button" data-attach-missing="${escapeHtml(item.id)}"><i class="fa-solid fa-${hasAnnex ? "plus" : "paperclip"}"></i> ${hasAnnex ? "Subir otro anexo" : "Subir anexo"}</button></div></div>`;
     const valueOperation = item.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "";
     const contactName = visitContact.nombre || visitContact.name || item.contactoVisitaNombre || specific.contactoVisitaNombre || specific.contacto_visita || "";
     const visitPhone = visitContact.telefono || visitContact.phone || item.contactoVisitaTelefono || specific.contactoVisitaTelefono || specific.telefono_visita || "";
@@ -832,7 +836,7 @@
     detail.innerHTML = `<div class="cp6-real-request-card" data-request-card>
       <div class="cp6-real-detail-topline"></div>
       <div class="cp6-real-detail-header">
-        <div class="cp6-real-detail-heading"><div class="cp6-real-title-row"><h2>${readValue(currentApplicant.nombre || item.nombre || creatorName)}</h2><span class="cp6-real-status">${readValue(detailStatus)}</span></div><div class="cp6-real-applicant-email">${readValue(currentApplicant.correo || item.requesterEmail || "Correo no registrado")}</div></div>
+        <div class="cp6-real-detail-heading"><div class="cp6-real-title-row"><h2>Solicitud ${readValue(requestNumber)}</h2><span class="cp6-real-status">${readValue(detailStatus)}</span></div><div class="cp6-real-applicant-name">${readValue(currentApplicant.nombre || item.nombre || creatorName)}</div><div class="cp6-real-applicant-email">${readValue(currentApplicant.correo || item.requesterEmail || "Correo no registrado")}</div></div>
         <div class="cp6-real-header-actions"><span><i class="fa-solid fa-calendar-day"></i> ${escapeHtml(requestDate(item.creadoEn))}</span><button type="button" data-close-request-detail aria-label="Cerrar detalle"><i class="fa-solid fa-xmark"></i></button></div>
       </div>
       <div class="cp6-real-detail-body"><div class="cp6-real-detail-columns">
@@ -846,7 +850,7 @@
         </div>
         <div class="cp6-real-detail-stack">
           <section class="cp6-real-panel cp6-real-files-panel"><div class="cp6-real-panel-head"><div><h3>Expediente digital <small>(${files.length})</small></h3><p>Documentos técnicos, escrituras y antecedentes.</p></div><button type="button" class="cp6-real-primary-button" data-attach-missing="${escapeHtml(item.id)}"><i class="fa-solid fa-plus"></i> Anexar documentos</button></div><div class="cp6-real-file-list">${filesMarkup}</div></section>
-          <section class="cp6-real-panel cp6-real-deliverables-panel"><div class="cp6-real-panel-head"><h3>Entregables</h3></div><div class="cp6-real-deliverables-grid">${finalSection}<div class="cp6-detail-deliverable is-annex"><div class="cp6-detail-deliverable-title"><div class="cp6-detail-deliverable-icon"><i class="fa-solid fa-paperclip"></i></div><div><h4>Anexos</h4><p>Documentos complementarios del avalúo.</p></div></div><div class="cp6-detail-deliverable-action"><button type="button" class="cp6-real-secondary-button" data-attach-missing="${escapeHtml(item.id)}"><i class="fa-solid fa-plus"></i> Subir anexo</button></div></div></div></section>
+          <section class="cp6-real-panel cp6-real-deliverables-panel"><div class="cp6-real-panel-head"><h3>Entregables</h3></div><div class="cp6-real-deliverables-grid">${finalSection}${annexSection}</div></section>
         </div>
       </div></div>
       <div class="cp6-submodal" data-appraisal-popup hidden><div class="cp6-submodal-card"><h3>Asignar avalúo</h3><p>Escribe el número de avalúo de 4 dígitos.</p><input data-popup-appraisal-number inputmode="numeric" maxlength="4" value="${escapeHtml(appraisalNumber)}" placeholder="0000" /><div><button type="button" class="cp6-secondary-button" data-close-submodal>Cancelar</button><button type="button" class="cp6-primary-button" data-accept-appraisal>Aceptar</button></div></div></div>

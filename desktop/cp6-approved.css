@@ -1018,3 +1018,21 @@ body.cp6-redesign .cp6-detail-deliverable-action .cp6-real-secondary-button { wi
   body.cp6-redesign .cp6-real-info-grid > div:nth-child(2n) { border-right:0; }
   body.cp6-redesign .cp6-real-info-grid > div:last-child { border-bottom:0; }
 }
+
+/* CP6 · Correcciones de lectura y estados del detalle */
+body.cp6-redesign .cp6-real-detail-header { align-items: flex-start; }
+body.cp6-redesign .cp6-real-applicant-name { margin-top: 10px; color:#162536; font-size:16px; font-weight:700; }
+body.cp6-redesign .cp6-real-applicant-email { margin-top:3px; }
+body.cp6-redesign .cp6-real-header-actions { flex-direction:column; align-items:flex-end; gap:9px; }
+body.cp6-redesign .cp6-real-header-actions > span { line-height:1.2; }
+body.cp6-redesign .cp6-real-header-actions > button { flex:0 0 auto; }
+body.cp6-redesign .cp6-real-files-panel { height:430px; display:flex; flex-direction:column; overflow:hidden; }
+body.cp6-redesign .cp6-real-files-panel .cp6-real-panel-head { flex:0 0 auto; }
+body.cp6-redesign .cp6-real-file-list { flex:1 1 auto; min-height:0; max-height:none; overflow-y:auto; padding-right:4px; align-content:start; }
+body.cp6-redesign .cp6-real-file-list .cp6-file-card { min-height:62px; }
+body.cp6-redesign .cp6-detail-deliverable.is-complete .cp6-detail-deliverable-icon { background:#e1f6ed; color:#159a67; }
+body.cp6-redesign .cp6-detail-deliverable.is-complete .cp6-real-secondary-button { background:#159a67; }
+@media (max-width: 560px) {
+  body.cp6-redesign .cp6-real-files-panel { height:430px; }
+  body.cp6-redesign .cp6-real-header-actions { align-items:flex-end; }
+}
