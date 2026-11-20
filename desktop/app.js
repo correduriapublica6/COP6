@@ -33,6 +33,7 @@
   let activeSessionUser = "";
   let workspaceSelectedUser = "__all";
   let profileRequestsPage = 1;
+  let profileQuickFilter = "";
   const PROFILE_REQUESTS_PAGE_SIZE = 5;
   let notifications = [];
   let pendingCredentialAuthorization = null;
@@ -1729,9 +1730,8 @@
     $("#profileDeliveryPendingRequests") && ($("#profileDeliveryPendingRequests").textContent = String(categoryCounts["pendiente-entrega"] || 0));
     $("#profileUnpaidDeliveredRequests") && ($("#profileUnpaidDeliveredRequests").textContent = String(categoryCounts["entregado-sin-pago"] || 0));
     $("#profileExpiredRequests") && ($("#profileExpiredRequests").textContent = String(categoryCounts.vencido || 0));
-    const search = String($("#profileRequestsSearch")?.value || "").trim().toLowerCase();
-    const status = String($("#profileStatusFilter")?.value || "").toLowerCase();
-    const visible = baseList.filter((item) => { const haystack = [profileRequestFolio(item), profileRequestAppraisal(item), profileRequestApplicant(item), profileRequestAddress(item), item.estado, profileRequestCategoryLabel(item)].join(" ").toLowerCase(); const category = profileRequestCategory(item); return (!search || haystack.includes(search)) && (!status || (status === "pendiente" || status === "concluida" ? profileRequestStatus(item) === status : category === status)); });
+    const status = profileQuickFilter;
+    const visible = baseList.filter((item) => { const category = profileRequestCategory(item); return !status || (status === "pendiente" || status === "concluida" ? profileRequestStatus(item) === status : category === status); });
     const periodLabel = { all: "Todas las fechas", today: "Hoy", week: "Esta semana", month: "Este mes", custom: "Rango personalizado" }[$("#profilePeriodFilter")?.value || "all"];
     $("#profileListSummary") && ($("#profileListSummary").textContent = `Mostrando: ${selected === "__all" ? "Todos los usuarios" : selected} · ${periodLabel}`);
     const followups = [{ label: "Recibidas", value: baseList.length, color: "blue", description: "Solicitudes recibidas en el sistema." }, { label: "En proceso", value: pending, color: "gold", description: "Solicitudes en proceso de asignación o evaluación." }, { label: "Concluidas", value: completed, color: "green", description: "Solicitudes finalizadas y entregadas." }];
@@ -1756,9 +1756,7 @@
   $("#profilePeriodFilter")?.addEventListener("change", (event) => { $("#profileCustomDates") && ($("#profileCustomDates").hidden = event.target.value !== "custom"); profileRequestsPage = 1; renderProfileDashboard(); });
   $("#profileStartDate")?.addEventListener("change", () => { profileRequestsPage = 1; renderProfileDashboard(); });
   $("#profileEndDate")?.addEventListener("change", () => { profileRequestsPage = 1; renderProfileDashboard(); });
-  $("#profileRequestsSearch")?.addEventListener("input", () => { profileRequestsPage = 1; renderProfileDashboard(); });
-  $("#profileStatusFilter")?.addEventListener("change", () => { profileRequestsPage = 1; renderProfileDashboard(); });
-  document.querySelectorAll("[data-profile-quick-filter]").forEach((button) => button.addEventListener("click", () => { const select = $("#profileStatusFilter"); if (select) select.value = button.dataset.profileQuickFilter || ""; profileRequestsPage = 1; renderProfileDashboard(); }));
+  document.querySelectorAll("[data-profile-quick-filter]").forEach((button) => button.addEventListener("click", () => { profileQuickFilter = button.dataset.profileQuickFilter || ""; profileRequestsPage = 1; renderProfileDashboard(); }));
   window.addEventListener("control-avaluos:home-refresh", () => { if (activeAppView === "perfil") renderProfileDashboard(); });
   $("#logoutHeaderButton")?.addEventListener("click", resetAuthUiBeforeLogout);
   profileMenu?.querySelectorAll("[data-profile-action]").forEach((button) => button?.addEventListener("click", () => { const action = button.dataset.profileAction; if (action === "data") openAdminProfile(); else if (action === "password") { closeProfileMenu(); openCredentialSetup(); } else { closeProfileMenu(); resetAuthUiBeforeLogout(); } }));

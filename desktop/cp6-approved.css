@@ -807,3 +807,53 @@ body.cp6-redesign #appShell.control-shell .v2-sidebar .v2-operation-nav button[a
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.05) !important;
   color: #fff !important;
 }
+
+/* CP6 · Tarjetas del Home: orden administrativo y colores sólidos */
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis {
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  gap: 9px !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi {
+  border: 1px solid transparent !important;
+  border-radius: 10px !important;
+  box-shadow: 0 5px 12px rgba(31, 41, 55, .08) !important;
+  min-height: 88px !important;
+  padding: 13px 12px !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-total,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-completed,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-paid,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-pending,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-delivery-pending,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-delivered-unpaid,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-expired {
+  color: #fff !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-total {
+  background: #2f6fad !important; border-color: #245b91 !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-completed,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-paid {
+  background: #2f8f63 !important; border-color: #24734f !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-pending,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-delivery-pending {
+  background: #d39a22 !important; border-color: #b57d0d !important; color: #1f2937 !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-delivered-unpaid,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi.is-expired {
+  background: #c64b4b !important; border-color: #a83b3b !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi b,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi strong,
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi small {
+  color: inherit !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi b { font-weight: 600 !important; }
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpi small { opacity: .9; }
+@media (max-width: 1250px) {
+  body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 680px) {
+  body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
