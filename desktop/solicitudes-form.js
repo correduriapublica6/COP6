@@ -795,6 +795,12 @@
     const canManage = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
     const isAdmin = !applicantSession && activeRole === "admin";
     const readValue = (value, fallback = "N/D") => escapeHtml(value === undefined || value === null || value === "" ? fallback : String(value));
+    const formatOperationValue = (value) => {
+      const raw = String(value ?? "").trim();
+      const numeric = Number(raw.replace(/[^0-9.-]/g, ""));
+      if (!Number.isFinite(numeric)) return escapeHtml(raw || "$0.00 MXN");
+      return escapeHtml(`${new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numeric)} MXN`);
+    };
     const creatorName = item.creadoPorNombre || item.creadoPor || currentApplicant.nombre || "Usuario externo";
     const creatorRole = item.creadorRol ? ({ admin: "Administrador", auditor: "Auditor", valuador: "Valuador", editor: "Editor", viewer: "Solo lectura" }[item.creadorRol] || item.creadorRol) : "";
     const externalName = item.asignadoExternoNombre || "";
@@ -818,8 +824,8 @@
     }).join("") : `<div class="cp6-file-empty text-xs text-slate-500 p-3">No hay documentos cargados.</div>`;
 
     const finalActions = finalPdf
-      ? `<button type="button" class="cp6-action-button cp6-primary-button bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-1.5" data-view-final-pdf="${escapeHtml(finalPdf)}"><i class="fa-solid fa-eye text-[10px]"></i> Ver avalúo final</button>${isAdmin ? `<button type="button" class="cp6-action-button cp6-danger-button bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold px-3 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-1.5" data-delete-final-pdf="${escapeHtml(item.id)}" title="Eliminar avalúo"><i class="fa-solid fa-trash-can text-[10px]"></i></button>` : ""}`
-      : `<button type="button" class="cp6-action-button cp6-primary-button bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-1.5" data-upload-final-pdf="${escapeHtml(item.id)}"><i class="fa-solid fa-cloud-arrow-up text-[10px]"></i> Subir avalúo final</button>`;
+      ? `<div class="cp6-final-actions"><button type="button" class="cp6-action-button cp6-primary-button" data-view-final-pdf="${escapeHtml(finalPdf)}"><i class="fa-solid fa-eye"></i> Ver avalúo</button>${isAdmin ? `<button type="button" class="cp6-real-delete-button" data-delete-final-pdf="${escapeHtml(item.id)}" title="Eliminar avalúo" aria-label="Eliminar avalúo"><i class="fa-solid fa-trash-can"></i></button>` : ""}</div>`
+      : `<button type="button" class="cp6-action-button cp6-primary-button" data-upload-final-pdf="${escapeHtml(item.id)}"><i class="fa-solid fa-cloud-arrow-up"></i> Subir avalúo final</button>`;
     const finalSection = `<div class="cp6-detail-deliverable ${finalPdf ? "is-complete" : "is-pending"}"><div class="cp6-detail-deliverable-title"><div class="cp6-detail-deliverable-icon"><i class="fa-solid ${finalPdf ? "fa-file-circle-check" : "fa-file-arrow-up"}"></i></div><div><h4>Avalúo final</h4><p>${finalPdf ? "El documento final está disponible para consulta." : "Aún no se ha adjuntado el documento final de este trámite."}</p></div></div><div class="cp6-detail-deliverable-action">${finalActions}</div></div>`;
     const annexSection = `<div class="cp6-detail-deliverable ${hasAnnex ? "is-complete" : "is-annex"}"><div class="cp6-detail-deliverable-title"><div class="cp6-detail-deliverable-icon"><i class="fa-solid ${hasAnnex ? "fa-paperclip" : "fa-paperclip"}"></i></div><div><h4>Anexos</h4><p>${hasAnnex ? `${annexFiles.length} documento${annexFiles.length === 1 ? "" : "s"} complementario${annexFiles.length === 1 ? "" : "s"} cargado${annexFiles.length === 1 ? "" : "s"}.` : "Documentos complementarios del avalúo."}</p></div></div><div class="cp6-detail-deliverable-action"><button type="button" class="cp6-real-secondary-button" data-attach-missing="${escapeHtml(item.id)}"><i class="fa-solid fa-${hasAnnex ? "plus" : "paperclip"}"></i> ${hasAnnex ? "Subir otro anexo" : "Subir anexo"}</button></div></div>`;
     const valueOperation = item.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "";
@@ -842,7 +848,7 @@
       <div class="cp6-real-detail-body"><div class="cp6-real-detail-columns">
         <div class="cp6-real-detail-stack">
           <section class="cp6-real-panel cp6-real-general-panel"><div class="cp6-real-panel-head"><h3>Información general</h3>${editMarkup}</div><div class="cp6-real-info-grid">
-            <div><span>Valor de operación</span><strong class="is-operation-value">${readValue(valueOperation, "$0.00")}</strong></div><div><span>Tipo de bien</span><strong>${readValue(typeBien)}</strong></div>
+            <div><span>Valor de operación</span><strong class="is-operation-value">${formatOperationValue(valueOperation)}</strong></div><div><span>Tipo de bien</span><strong>${readValue(typeBien)}</strong></div>
             <div><span>Contacto para visita</span><strong>${readValue(contactName)}</strong></div><div><span>Teléfono de visita</span><strong>${readValue(visitPhone)}</strong></div>
             <div class="is-full"><span>Propietario</span><strong>${readValue(ownerName)}</strong></div><div class="is-full"><span>Dirección del inmueble</span><strong>${readValue(propertyAddress)}</strong></div>
           </div></section>

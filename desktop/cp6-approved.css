@@ -1036,3 +1036,23 @@ body.cp6-redesign .cp6-detail-deliverable.is-complete .cp6-real-secondary-button
   body.cp6-redesign .cp6-real-files-panel { height:430px; }
   body.cp6-redesign .cp6-real-header-actions { align-items:flex-end; }
 }
+
+/* CP6 · Ajuste de coincidencia visual con la propuesta aprobada */
+body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog .cp6-real-request-card,
+body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog .cp6-real-request-card * { font-family: "Plus Jakarta Sans", Arial, Helvetica, sans-serif; }
+body.cp6-redesign .cp6-real-detail-header { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:start; }
+body.cp6-redesign .cp6-real-header-actions { width:178px; display:grid; grid-template-columns:minmax(0,1fr) 36px; align-items:start; gap:10px; }
+body.cp6-redesign .cp6-real-header-actions > span { min-width:0; overflow:visible; text-align:right; line-height:36px; font-size:12px; }
+body.cp6-redesign .cp6-real-header-actions > button { grid-column:2; grid-row:1; }
+body.cp6-redesign .cp6-real-info-grid > div .is-operation-value { font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
+body.cp6-redesign .cp6-final-actions { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; }
+body.cp6-redesign .cp6-final-actions .cp6-primary-button { flex:1 1 auto; min-width:0; }
+body.cp6-redesign .cp6-detail-deliverable-action > .cp6-primary-button { width:100%; justify-content:center; }
+body.cp6-redesign .cp6-real-delete-button { flex:0 0 42px; width:42px; height:42px; display:grid; place-items:center; border:1px solid #f4c9c9; border-radius:10px; background:#fff3f3; color:#d94b4b; cursor:pointer; font-size:12px; }
+body.cp6-redesign .cp6-real-delete-button:hover { background:#ffe5e5; }
+body.cp6-redesign .cp6-detail-deliverable-action .cp6-primary-button { min-height:42px; border:0; border-radius:11px; padding:10px 12px; background:#246bd1; color:#fff; box-shadow:0 5px 12px rgba(36,107,209,.2); font-size:11px; font-weight:800; white-space:nowrap; }
+@media (max-width: 560px) {
+  body.cp6-redesign .cp6-real-detail-header { grid-template-columns:minmax(0,1fr) auto; }
+  body.cp6-redesign .cp6-real-header-actions { width:154px; gap:6px; }
+  body.cp6-redesign .cp6-real-header-actions > span { font-size:10px; }
+}
