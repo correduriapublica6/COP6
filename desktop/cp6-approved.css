@@ -925,3 +925,96 @@ body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination .cp6
   body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination { justify-content: center !important; }
   body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination > div { justify-content: center !important; }
 }
+
+/* CP6 · Detalle real de solicitud · propuesta aplicada */
+body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog {
+  padding: 12px !important;
+}
+body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog .cp6-real-request-card {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid #cfd9e4;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 20px 60px rgba(22, 50, 80, .18);
+  color: #162536;
+}
+body.cp6-redesign .cp6-real-detail-topline { height: 8px; background: #424a53; }
+body.cp6-redesign .cp6-real-detail-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 18px;
+  padding: 20px 26px 16px; border-bottom: 1px solid #edf1f5; background: #fff;
+}
+body.cp6-redesign .cp6-real-title-row { display:flex; align-items:center; flex-wrap:wrap; gap:10px; }
+body.cp6-redesign .cp6-real-title-row h2 { margin:0; color:#162536; font-size:23px; font-weight:800; letter-spacing:-.03em; }
+body.cp6-redesign .cp6-real-status { border:1px solid #cfe0f3; border-radius:999px; background:#e8f2ff; color:#25527e; padding:7px 11px; font-size:11px; font-weight:700; }
+body.cp6-redesign .cp6-real-applicant-email { margin-top:8px; color:#637b91; font-size:13px; }
+body.cp6-redesign .cp6-real-header-actions { display:flex; align-items:center; gap:14px; flex-shrink:0; }
+body.cp6-redesign .cp6-real-header-actions > span { color:#526b84; font-size:13px; white-space:nowrap; }
+body.cp6-redesign .cp6-real-header-actions > span i { color:#2669c7; margin-right:5px; }
+body.cp6-redesign .cp6-real-header-actions > button { width:36px; height:36px; border:0; border-radius:50%; background:#eff4f8; color:#63788c; cursor:pointer; }
+body.cp6-redesign .cp6-real-detail-body { padding:20px 26px 26px; }
+body.cp6-redesign .cp6-real-detail-columns { display:grid; grid-template-columns:1.08fr .92fr; gap:18px; align-items:start; }
+body.cp6-redesign .cp6-real-detail-stack { display:grid; gap:18px; }
+body.cp6-redesign .cp6-real-panel { min-width:0; border:1px solid #dfe7ef; border-radius:16px; background:linear-gradient(180deg,#fff,#f9fbfd); padding:18px; box-shadow:0 8px 20px rgba(26,61,93,.05); }
+body.cp6-redesign .cp6-real-panel-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+body.cp6-redesign .cp6-real-panel-head h3 { margin:0; color:#162536; font-size:15px; font-weight:800; }
+body.cp6-redesign .cp6-real-panel-head h3 small { color:#718096; font-size:12px; font-weight:500; }
+body.cp6-redesign .cp6-real-panel-head p { margin:4px 0 0; color:#718096; font-size:11px; }
+body.cp6-redesign .cp6-real-info-grid { display:grid; grid-template-columns:1fr 1fr; border:1px solid #dfe7ef; border-radius:12px; overflow:hidden; }
+body.cp6-redesign .cp6-real-info-grid > div { min-width:0; padding:13px 14px; border-right:1px solid #dfe7ef; border-bottom:1px solid #dfe7ef; }
+body.cp6-redesign .cp6-real-info-grid > div:nth-child(2n) { border-right:0; }
+body.cp6-redesign .cp6-real-info-grid > div.is-full { grid-column:1 / -1; border-right:0; }
+body.cp6-redesign .cp6-real-info-grid > div:last-child { border-bottom:0; }
+body.cp6-redesign .cp6-real-info-grid > div span,
+body.cp6-redesign .cp6-real-assigned > span,
+body.cp6-redesign .cp6-real-management-pair span { display:block; margin-bottom:5px; color:#718096; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+body.cp6-redesign .cp6-real-info-grid > div strong { display:block; color:#162536; font-size:16px; font-weight:700; overflow-wrap:anywhere; }
+body.cp6-redesign .cp6-real-info-grid > div .is-operation-value { color:#159a67; font-size:20px; }
+body.cp6-redesign .cp6-real-panel-head > .cp6-detail-button { flex-shrink:0; }
+body.cp6-redesign .cp6-real-assigned { position:relative; padding-bottom:14px; border-bottom:1px solid #e9eff4; }
+body.cp6-redesign .cp6-real-assigned > strong { display:block; color:#162536; font-size:15px; }
+body.cp6-redesign .cp6-real-management-pair { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+body.cp6-redesign .cp6-real-management-pair > div { position:relative; min-width:0; padding:11px; border:1px solid #dfe7ef; border-radius:11px; }
+body.cp6-redesign .cp6-real-management-pair strong { display:inline-flex; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+body.cp6-redesign .cp6-real-badge { border-radius:999px; padding:6px 9px; font-size:11px; font-weight:700; }
+body.cp6-redesign .cp6-real-badge.is-green { background:#e1f6ed; color:#11744e; }
+body.cp6-redesign .cp6-real-badge.is-blue { background:#e8f1ff; color:#2d5f9c; }
+body.cp6-redesign .cp6-real-icon-action { position:absolute; top:10px; right:10px; border:0; background:transparent; color:#4b7097; font-size:13px; }
+body.cp6-redesign .cp6-real-primary-button,
+body.cp6-redesign .cp6-real-secondary-button { min-height:36px; border:0; border-radius:10px; padding:9px 13px; color:#fff; cursor:pointer; font-size:11px; font-weight:700; white-space:nowrap; }
+body.cp6-redesign .cp6-real-primary-button { background:#246bd1; box-shadow:0 5px 12px rgba(36,107,209,.23); }
+body.cp6-redesign .cp6-real-secondary-button { background:#159a67; box-shadow:0 5px 12px rgba(21,154,103,.2); }
+body.cp6-redesign .cp6-real-file-list { display:grid; gap:8px; max-height:360px; overflow-y:auto; }
+body.cp6-redesign .cp6-real-file-list .cp6-file-card { margin:0; }
+body.cp6-redesign .cp6-real-deliverables-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+body.cp6-redesign .cp6-detail-deliverable { min-width:0; min-height:150px; display:flex; flex-direction:column; justify-content:space-between; gap:15px; padding:16px; border:1px dashed #cbd8e5; border-radius:14px; background:#fbfdff; }
+body.cp6-redesign .cp6-detail-deliverable.is-complete { border-color:#b9dfcd; background:#f8fdfb; }
+body.cp6-redesign .cp6-detail-deliverable.is-annex { border-color:#cbded4; background:#fcfdfb; }
+body.cp6-redesign .cp6-detail-deliverable-title { display:flex; align-items:flex-start; gap:9px; }
+body.cp6-redesign .cp6-detail-deliverable-icon { flex:0 0 30px; width:30px; height:30px; display:grid; place-items:center; border-radius:8px; background:#e8f1ff; color:#246bd1; }
+body.cp6-redesign .is-annex .cp6-detail-deliverable-icon { background:#e1f6ed; color:#159a67; }
+body.cp6-redesign .cp6-detail-deliverable h4 { margin:2px 0 0; color:#162536; font-size:14px; font-weight:800; }
+body.cp6-redesign .cp6-detail-deliverable p { margin:5px 0 0; color:#718096; font-size:10px; line-height:1.35; }
+body.cp6-redesign .cp6-detail-deliverable-action { display:flex; justify-content:center; }
+body.cp6-redesign .cp6-detail-deliverable-action .cp6-action-button,
+body.cp6-redesign .cp6-detail-deliverable-action .cp6-real-secondary-button { width:100%; justify-content:center; }
+@media (max-width: 800px) {
+  body.cp6-redesign .cp6-real-detail-header { padding:16px 18px 14px; }
+  body.cp6-redesign .cp6-real-detail-body { padding:16px 18px 20px; }
+  body.cp6-redesign .cp6-real-detail-columns { grid-template-columns:1fr; }
+  body.cp6-redesign .cp6-real-detail-stack { gap:14px; }
+}
+@media (max-width: 560px) {
+  body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog { padding:5px !important; }
+  body.cp6-redesign .cp6-real-detail-header { gap:10px; }
+  body.cp6-redesign .cp6-real-title-row h2 { font-size:18px; }
+  body.cp6-redesign .cp6-real-header-actions { gap:7px; }
+  body.cp6-redesign .cp6-real-header-actions > span { font-size:11px; }
+  body.cp6-redesign .cp6-real-management-pair,
+  body.cp6-redesign .cp6-real-deliverables-grid { grid-template-columns:1fr; }
+  body.cp6-redesign .cp6-real-info-grid { grid-template-columns:1fr; }
+  body.cp6-redesign .cp6-real-info-grid > div,
+  body.cp6-redesign .cp6-real-info-grid > div:nth-child(2n) { border-right:0; }
+  body.cp6-redesign .cp6-real-info-grid > div:last-child { border-bottom:0; }
+}
