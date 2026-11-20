@@ -1073,3 +1073,17 @@ body.cp6-redesign .cp6-real-files-panel .cp6-file-delete { width:28px; height:28
 body.cp6-redesign .cp6-real-files-panel .cp6-detail-button:hover { background:#e7f2fb; color:#1d5d90; }
 body.cp6-redesign .cp6-real-files-panel .cp6-file-delete:hover { background:#ffe5e5; color:#a83b3b; }
 body.cp6-redesign .cp6-real-delete-button { border-width:1px; }
+
+/* CP6 · Fondo nítido al abrir el detalle; solo sombra de separación */
+body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog::backdrop {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog .cp6-real-request-card {
+  box-shadow: 0 10px 28px rgba(25, 52, 79, .16) !important;
+}
+body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog [data-close-request-detail] {
+  z-index: 40 !important;
+  pointer-events: auto !important;
+}
