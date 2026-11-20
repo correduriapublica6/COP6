@@ -874,3 +874,27 @@ body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-workspace-filters {
 @media (max-width: 680px) {
   body.cp6-redesign #perfilView.cp6-workspace-profile { margin-top: -12px !important; }
 }
+
+/* CP6 · Ajuste final Home v24: tabla compacta y paginación visible */
+body.cp6-redesign #perfilView.cp6-workspace-profile {
+  margin-top: -28px !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination {
+  align-items: center !important;
+  min-height: 56px !important;
+  overflow: visible !important;
+  padding: 10px 18px 12px !important;
+}
+body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination button {
+  align-items: center !important;
+  display: inline-flex !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  min-width: 32px !important;
+  padding: 0 8px !important;
+}
+@media (max-width: 680px) {
+  body.cp6-redesign #perfilView.cp6-workspace-profile { margin-top: -16px !important; }
+}
