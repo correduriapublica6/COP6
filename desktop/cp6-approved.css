@@ -1056,3 +1056,20 @@ body.cp6-redesign .cp6-detail-deliverable-action .cp6-primary-button { min-heigh
   body.cp6-redesign .cp6-real-header-actions { width:154px; gap:6px; }
   body.cp6-redesign .cp6-real-header-actions > span { font-size:10px; }
 }
+
+/* CP6 · Iconos visibles y expediente interno editable */
+body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog::backdrop { background: transparent !important; }
+body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog .fa-solid,
+body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog .fa-regular,
+body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog .fa-brands {
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+  font-weight: 900 !important;
+}
+body.cp6-redesign .cp6-real-icon-action { z-index:2; width:26px; height:26px; display:grid; place-items:center; padding:0; border:1px solid #bdd0e2; border-radius:7px; background:#f4f8fc; color:#2367a4; cursor:pointer; }
+body.cp6-redesign .cp6-real-icon-action:hover { background:#e5f0fb; color:#164d7c; }
+body.cp6-redesign .cp6-real-management-pair .cp6-real-icon-action { top:9px; right:9px; }
+body.cp6-redesign .cp6-real-files-panel .cp6-detail-button { width:28px; height:28px; display:grid; place-items:center; border:1px solid #c2d4e4; background:#f5f9fc; color:#47708f; }
+body.cp6-redesign .cp6-real-files-panel .cp6-file-delete { width:28px; height:28px; display:grid; place-items:center; border:1px solid #efc4c4; background:#fff5f5; color:#c75252; }
+body.cp6-redesign .cp6-real-files-panel .cp6-detail-button:hover { background:#e7f2fb; color:#1d5d90; }
+body.cp6-redesign .cp6-real-files-panel .cp6-file-delete:hover { background:#ffe5e5; color:#a83b3b; }
+body.cp6-redesign .cp6-real-delete-button { border-width:1px; }
