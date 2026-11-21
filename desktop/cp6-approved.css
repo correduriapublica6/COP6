@@ -1012,6 +1012,42 @@ body.cp6-redesign .admin-login-card #loginPassword::placeholder {
   opacity: 1;
 }
 
+/* El select personalizado es la única superficie visible del usuario. */
+body.cp6-redesign .admin-login-card .custom-select:has(#loginUser) > .custom-select-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  height: 49px;
+  min-height: 49px;
+  padding: 7px 38px 7px 13px;
+  line-height: 1.2;
+  white-space: normal;
+  text-overflow: clip;
+}
+body.cp6-redesign .admin-login-card .custom-select:has(#loginUser) > .custom-select-trigger strong {
+  color: #23384c;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+body.cp6-redesign .admin-login-card .custom-select:has(#loginUser) > .custom-select-trigger small {
+  color: #718096;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+body.cp6-redesign .admin-login-card .custom-select:has(#loginUser) > .custom-select-trigger > span {
+  color: #23384c;
+  font-size: 12px;
+  line-height: 1.2;
+}
+body.cp6-redesign .admin-login-card .custom-select:has(#loginUser) > .custom-select-trigger::after {
+  top: 0;
+  line-height: 49px;
+}
+
 /* CP6 · Ajuste final Home v25: paginación compacta sin desbordamiento */
 body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination {
   justify-content: flex-end !important;

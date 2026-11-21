@@ -412,6 +412,7 @@
       const prompt = firstOption ? firstOption.textContent : "Selecciona un usuario";
       select.innerHTML = `<option value="">${escapeHtml(prompt)}</option>${users.map((user) => `<option value="${escapeHtml(user)}">${escapeHtml(user)}</option>`).join("")}`;
       if (users.includes(selected)) select.value = selected;
+      select.__customWrapper?.__syncCustomOptions?.();
     });
     syncAdminLoginPreview();
   }
@@ -1504,7 +1505,16 @@
     menu.setAttribute("role", "listbox");
     function syncOptions() {
       const selected = select.options[select.selectedIndex];
-      trigger.textContent = selected?.textContent || "Selecciona una opción";
+      if (select.id === "loginUser") {
+        const selectedName = String(selected?.value || "").trim();
+        const remote = Array.isArray(remoteUsers) ? remoteUsers.find((item) => String(item.name || "") === selectedName) : null;
+        trigger.classList.toggle("admin-user-trigger-selected", Boolean(selectedName));
+        trigger.innerHTML = selectedName
+          ? `<strong>${escapeHtml(selectedName)}</strong><small>${escapeHtml(`${roleLabel(roleFor(selectedName))} · ${remote?.email || "Correo no registrado"}`)}</small>`
+          : `<span>Selecciona tu usuario</span>`;
+      } else {
+        trigger.textContent = selected?.textContent || "Selecciona una opción";
+      }
       trigger.setAttribute("aria-expanded", String(wrapper.classList.contains("is-open")));
       menu.innerHTML = [...select.options].map((option, index) => `<button type="button" class="custom-select-option${option.selected ? " is-selected" : ""}" role="option" aria-selected="${option.selected}" data-option-index="${index}">${escapeHtml(option.textContent || "")}</button>`).join("");
       menu.querySelectorAll("[data-option-index]").forEach((optionButton) => optionButton?.addEventListener("click", () => {
@@ -1560,6 +1570,8 @@
     select?.addEventListener("change", syncOptions);
     const optionObserver = new MutationObserver(syncOptions);
     optionObserver.observe(select, { childList: true, subtree: true, attributes: true, attributeFilter: ["selected"] });
+    wrapper.__syncCustomOptions = syncOptions;
+    select.__customWrapper = wrapper;
     wrapper.append(trigger, menu);
     syncOptions();
   }
