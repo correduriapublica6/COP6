@@ -1026,6 +1026,11 @@ body.cp6-redesign .admin-login-card .custom-select:has(#loginUser) > .custom-sel
   white-space: normal;
   text-overflow: clip;
 }
+body.cp6-redesign .admin-login-card .custom-select:has(#loginUser),
+body.cp6-redesign .admin-login-card .custom-select:has(#loginUser) > .custom-select-trigger {
+  height: 60px;
+  min-height: 60px;
+}
 body.cp6-redesign .admin-login-card .custom-select:has(#loginUser) > .custom-select-trigger strong {
   color: #23384c;
   font-size: 12px;
@@ -1045,7 +1050,11 @@ body.cp6-redesign .admin-login-card .custom-select:has(#loginUser) > .custom-sel
 }
 body.cp6-redesign .admin-login-card .custom-select:has(#loginUser) > .custom-select-trigger::after {
   top: 0;
-  line-height: 49px;
+  line-height: 60px;
+}
+body.cp6-redesign .admin-login-card #loginPassword::placeholder {
+  color: transparent !important;
+  opacity: 0 !important;
 }
 
 /* CP6 · Ajuste final Home v25: paginación compacta sin desbordamiento */
