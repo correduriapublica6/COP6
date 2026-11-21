@@ -1132,3 +1132,7 @@ body.cp6-redesign .cp6-external-results .cp6-popup-result::before { content:""; 
 body.cp6-redesign .cp6-external-results .cp6-popup-result span:first-child { color:#23384c; font-size:12px; font-weight:800; }
 body.cp6-redesign .cp6-external-results .cp6-popup-result span:last-child { color:#718096; font-size:10px; }
 body.cp6-redesign .cp6-submodal-confirm:disabled { border-color:#b9c8d6; background:#cbd5df; box-shadow:none; color:#fff; cursor:not-allowed; }
+
+/* CP6 · Los usuarios externos no usan imagen de perfil */
+body.cp6-redesign .cp6-external-results .cp6-popup-result::before { display:none !important; }
+body.cp6-redesign .cp6-external-results .cp6-popup-result { padding-left:14px; }
