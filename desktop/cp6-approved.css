@@ -1118,3 +1118,17 @@ body.cp6-redesign .cp6-submodal-actions button { min-height:40px; padding:0 17px
 body.cp6-redesign .cp6-submodal-cancel { border:1px solid #d9e2eb; background:#fff; color:#506276; }
 body.cp6-redesign .cp6-submodal-confirm { border:1px solid #246bd1; background:#246bd1; color:#fff; box-shadow:0 5px 12px rgba(36,107,209,.22); }
 body.cp6-redesign .cp6-submodal-caption { margin:14px 0 0 !important; text-align:center; color:#95a3b1 !important; font-size:10px !important; }
+
+/* CP6 · Propuesta aplicada: asignar usuario externo */
+body.cp6-redesign .cp6-external-search-wrap { position:relative; }
+body.cp6-redesign .cp6-external-search-wrap > i { position:absolute; left:14px; top:17px; z-index:1; color:#6e8297; font-size:13px; }
+body.cp6-redesign .cp6-submodal-search { width:100%; height:48px; border:1px solid #c9d7e5 !important; border-radius:12px !important; background:#fbfdff !important; padding:0 14px 0 40px !important; color:#23384c !important; outline:none !important; font-family:"Plus Jakarta Sans",Arial,sans-serif !important; font-size:12px !important; }
+body.cp6-redesign .cp6-submodal-search:focus { border-color:#246bd1 !important; box-shadow:0 0 0 3px rgba(36,107,209,.14) !important; }
+body.cp6-redesign .cp6-external-results { display:grid; gap:8px; max-height:150px; margin-top:10px; overflow-y:auto; }
+body.cp6-redesign .cp6-external-results:empty { display:none; }
+body.cp6-redesign .cp6-external-results .cp6-popup-result { display:flex; align-items:center; gap:11px; width:100%; min-height:58px; border:1px solid #b9d5f1; border-radius:12px; background:#f5faff; padding:10px 12px; color:#23384c; text-align:left; cursor:pointer; }
+body.cp6-redesign .cp6-external-results .cp6-popup-result:hover { background:#eaf4ff; }
+body.cp6-redesign .cp6-external-results .cp6-popup-result::before { content:""; width:34px; height:34px; flex:0 0 34px; display:grid; place-items:center; border-radius:50%; background:#dcebff; color:#246bd1; }
+body.cp6-redesign .cp6-external-results .cp6-popup-result span:first-child { color:#23384c; font-size:12px; font-weight:800; }
+body.cp6-redesign .cp6-external-results .cp6-popup-result span:last-child { color:#718096; font-size:10px; }
+body.cp6-redesign .cp6-submodal-confirm:disabled { border-color:#b9c8d6; background:#cbd5df; box-shadow:none; color:#fff; cursor:not-allowed; }
