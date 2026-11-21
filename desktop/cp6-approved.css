@@ -899,6 +899,46 @@ body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination butt
   body.cp6-redesign #perfilView.cp6-workspace-profile { margin-top: -16px !important; }
 }
 
+/* CP6 · Login aprobado: panel visual en grafito y acceso administrativo premium. */
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual { isolation:isolate; background:radial-gradient(circle at 88% 86%,rgba(105,116,131,.52),transparent 38%),radial-gradient(circle at 12% 18%,rgba(155,166,179,.13),transparent 30%),linear-gradient(145deg,#171b21 0%,#303841 51%,#626b75 100%) !important; color:#fff; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual::before { content:""; display:block; position:absolute; inset:-80px -180px auto auto; width:590px; height:590px; border:1px solid rgba(151,191,255,.12); border-radius:50%; box-shadow:0 0 0 44px rgba(151,191,255,.035),0 0 0 92px rgba(151,191,255,.02); pointer-events:none; z-index:-1; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual::after { width:540px; height:540px; left:-120px; right:auto; bottom:-190px; border:0; border-radius:50%; background:rgba(9,12,16,.34); box-shadow:none; filter:blur(1px); z-index:-1; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .left-panel-content { min-height:100%; display:flex; flex-direction:column; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .v2-login-logo { gap:15px; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .cp6-brand-logo-image { width:52px; height:52px; padding:9px; object-fit:contain; border:1px solid rgba(255,255,255,.28); border-radius:15px; background:rgba(255,255,255,.11); box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 10px 25px rgba(0,0,0,.12); }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .v2-login-logo small { color:#c5cbd1; letter-spacing:.12em; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .v2-login-eyebrow { color:#d0d5da; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-copy { max-width:570px; margin:auto 0; padding:70px 0; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-copy h2 { font-size:clamp(38px,4vw,54px); line-height:1.03; letter-spacing:-.065em; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-copy h2 em { color:#d4d9de; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-copy p { max-width:495px; margin-top:24px; color:#d1d6db; font-size:15px; line-height:1.65; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-holder { margin-top:auto; padding-top:18px; border-top:1px solid rgba(224,230,236,.18); color:#fff; font-size:13px; font-weight:700; }
+body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-footer { margin-top:6px; color:#c0c7cd; font-size:11px; letter-spacing:.08em; }
+body.cp6-redesign .admin-access-dialog { padding:0; border:0; background:transparent; overflow:visible; }
+body.cp6-redesign .admin-access-dialog::backdrop { background:rgba(11,22,40,.58); backdrop-filter:blur(4px); }
+body.cp6-redesign .admin-login-card { width:min(560px,calc(100vw - 32px)); margin:auto; padding:28px 30px 24px; border:1px solid rgba(255,255,255,.65); border-radius:26px; background:rgba(255,255,255,.98); box-shadow:0 25px 65px rgba(5,25,54,.30); color:#17283a; font-family:"Plus Jakarta Sans",Arial,sans-serif; }
+body.cp6-redesign .admin-login-card .dialog-heading { align-items:flex-start; padding-bottom:20px; border-bottom:1px solid #e9eef3; }
+body.cp6-redesign .admin-login-card .dialog-heading>div:first-child::before { content:"▣"; float:left; display:grid; place-items:center; width:42px; height:42px; margin:0 13px 0 0; border-radius:13px; background:#e9f2ff; color:#246bd1; font-size:19px; }
+body.cp6-redesign .admin-login-card .eyebrow { display:none; }
+body.cp6-redesign .admin-login-card #loginTitle { margin:0; color:#17283a; font-size:20px; font-weight:800; }
+body.cp6-redesign .admin-login-card #loginTitle::after { content:"Ingresa con tus credenciales para continuar."; display:block; margin-top:5px; color:#718096; font-size:11px; font-weight:500; }
+body.cp6-redesign .admin-login-card .icon-button { width:34px; height:34px; border:0; border-radius:10px; background:#edf5ff; color:#246bd1; font-size:18px; }
+body.cp6-redesign .admin-login-card .login-copy { padding-top:22px; margin-bottom:18px; color:#718096; font-size:11px; }
+body.cp6-redesign .admin-login-card>label { display:block; margin-bottom:18px; color:#40556b; font-size:12px; font-weight:700; }
+body.cp6-redesign .admin-login-card #loginUser,body.cp6-redesign .admin-login-card #loginPassword { display:block; width:100%; min-height:49px; margin-top:8px; border:1px solid #cfdae5; border-radius:12px; background:#fbfdff; color:#23384c; font-family:inherit; font-size:12px; outline:none; }
+body.cp6-redesign .admin-login-card #loginUser { padding:0 14px; }
+body.cp6-redesign .admin-login-card #loginPassword { padding:0 46px 0 14px; text-align:center; letter-spacing:.22em; font-size:18px; font-weight:700; }
+body.cp6-redesign .admin-login-card #loginUser:focus,body.cp6-redesign .admin-login-card #loginPassword:focus { border-color:#246bd1; box-shadow:0 0 0 3px rgba(36,107,209,.14); }
+body.cp6-redesign .admin-selected-user { display:grid; gap:3px; margin-top:8px; padding:9px 12px; border:1px solid #dbe7f2; border-radius:10px; background:#f5faff; }
+body.cp6-redesign .admin-selected-user strong { color:#23384c; font-size:12px; }
+body.cp6-redesign .admin-selected-user small { color:#718096; font-size:10px; font-weight:500; }
+body.cp6-redesign .admin-login-card .login-button { width:100%; min-height:44px; border:0; border-radius:12px; background:#246bd1; box-shadow:0 7px 16px rgba(36,107,209,.23); font-family:inherit; font-size:12px; font-weight:800; }
+body.cp6-redesign .admin-login-card .login-hint { margin:14px 0 0; text-align:center; color:#8998a8; font-size:10px; }
+body.cp6-redesign .admin-login-card .credential-setup-button { margin-top:12px; color:#246bd1; font-size:11px; }
+body.cp6-redesign .admin-login-card .dialog-actions { justify-content:flex-end; margin-top:28px; padding-top:17px; border-top:1px solid #edf1f5; }
+body.cp6-redesign .admin-login-card .btn-gold-cream { min-height:40px; padding:0 20px; border:1px solid #d9e2eb; border-radius:10px; background:#fff; color:#506276; font-family:inherit; font-size:12px; font-weight:700; }
+@media(max-width:740px){ body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-copy{padding:40px 0 15px} body.cp6-redesign #loginScreen:not(.applicant-dashboard-active) .login-visual-copy h2{font-size:34px} body.cp6-redesign .admin-login-card{padding:24px 22px 20px;border-radius:22px} }
+
 /* CP6 · Ajuste final Home v25: paginación compacta sin desbordamiento */
 body.cp6-redesign #perfilView.cp6-workspace-profile .cp6-profile-pagination {
   justify-content: flex-end !important;

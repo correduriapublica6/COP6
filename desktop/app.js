@@ -413,6 +413,24 @@
       select.innerHTML = `<option value="">${escapeHtml(prompt)}</option>${users.map((user) => `<option value="${escapeHtml(user)}">${escapeHtml(user)}</option>`).join("")}`;
       if (users.includes(selected)) select.value = selected;
     });
+    syncAdminLoginPreview();
+  }
+  function syncAdminLoginPreview() {
+    const preview = $("#adminSelectedUser");
+    if (!preview) return;
+    const selected = String(loginUser?.value || "").trim();
+    const name = preview.querySelector("strong");
+    const detail = preview.querySelector("small");
+    if (!selected) {
+      if (name) name.textContent = "Selecciona un usuario";
+      if (detail) detail.textContent = "Personal autorizado";
+      preview.classList.remove("has-selection");
+      return;
+    }
+    const remote = Array.isArray(remoteUsers) ? remoteUsers.find((item) => String(item.name || "") === selected) : null;
+    if (name) name.textContent = selected;
+    if (detail) detail.textContent = `${roleLabel(roleFor(selected))} · ${remote?.email || "Correo no registrado"}`;
+    preview.classList.add("has-selection");
   }
 
   function workspaceUserMatches(item, selected = workspaceSelectedUser) {
@@ -1573,8 +1591,8 @@
     });
   }
   loginForm?.addEventListener("submit", authenticate);
-  loginUser?.addEventListener("change", syncCredentialSetupVisibility);
-  $("#openInternalAccessButton")?.addEventListener("click", () => { loginMessage.textContent = ""; loginPassword.value = ""; syncCredentialSetupVisibility(); adminAccessDialog.showModal(); window.setTimeout(() => loginUser.focus(), 40); });
+  loginUser?.addEventListener("change", () => { syncCredentialSetupVisibility(); syncAdminLoginPreview(); });
+  $("#openInternalAccessButton")?.addEventListener("click", () => { loginMessage.textContent = ""; loginPassword.value = ""; syncCredentialSetupVisibility(); syncAdminLoginPreview(); adminAccessDialog.showModal(); window.setTimeout(() => loginUser.focus(), 40); });
   $("#closeAdminAccessButton")?.addEventListener("click", () => adminAccessDialog.close());
   $("#cancelAdminAccessButton")?.addEventListener("click", () => adminAccessDialog.close());
   $("#taskForm")?.addEventListener("submit", createTask);
