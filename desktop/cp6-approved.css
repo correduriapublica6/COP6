@@ -1087,3 +1087,13 @@ body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog [data-close-req
   z-index: 40 !important;
   pointer-events: auto !important;
 }
+
+/* CP6 · Submodales del detalle sin velo gris */
+body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog .cp6-submodal {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+body.cp6-redesign #requestDetailDialog.cp6-request-detail-dialog .cp6-submodal-card {
+  box-shadow: 0 12px 30px rgba(25, 52, 79, .18) !important;
+}
