@@ -1136,3 +1136,22 @@ body.cp6-redesign .cp6-submodal-confirm:disabled { border-color:#b9c8d6; backgro
 /* CP6 · Los usuarios externos no usan imagen de perfil */
 body.cp6-redesign .cp6-external-results .cp6-popup-result::before { display:none !important; }
 body.cp6-redesign .cp6-external-results .cp6-popup-result { padding-left:14px; }
+
+/* CP6 · Modal de usuario externo con altura estable */
+body.cp6-redesign .cp6-external-assignment-card {
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+body.cp6-redesign .cp6-external-assignment-card .cp6-external-results {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 72px;
+  max-height: none;
+  overflow-y: auto;
+}
+@media (max-width: 560px) {
+  body.cp6-redesign .cp6-external-assignment-card {
+    height: min(500px, calc(100vh - 24px));
+  }
+}
