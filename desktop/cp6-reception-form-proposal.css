@@ -25,10 +25,11 @@
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-request{min-height:38px;padding:0 2px}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-request strong{display:block;color:#26384b;font-size:13px;font-weight:700;line-height:1.2}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-search{padding:0 16px;border:0;border-radius:9px;background:#286fcf;color:#fff;font:700 10px Inter;box-shadow:0 5px 11px rgba(40,111,207,.18)}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-icon-button{width:40px;min-width:40px;padding:0;display:grid;place-items:center;font-size:14px}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-clear{padding:0 14px;border:1px solid #d2dbe4;border-radius:9px;background:#fff;color:#5f6f80;font:700 10px Inter}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-lookup-status{grid-column:1/-1;display:flex;align-items:center;gap:7px;margin-top:1px;color:#15966d;font-size:9px}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-lookup-status:not(.is-found){color:#8995a2}
-#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:16px;align-items:start}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-card{border:1px solid #e1e7ed;border-radius:15px;background:#fff;box-shadow:0 10px 25px rgba(32,50,72,.055);min-width:0}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;padding:17px 18px 14px;border-bottom:1px solid #e1e7ed}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-card-head h3{margin:0!important;color:#263445!important;font-size:14px!important;letter-spacing:-.025em}
