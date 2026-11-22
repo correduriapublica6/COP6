@@ -1136,7 +1136,7 @@
     const appraisalType = match?.tipoAvaluo || match?.tipoAvalúo || specific.tipoAvaluo || specific.tipoAvalúo || specific.tipo_avaluo || "";
     const money = Number(String(operation).replace(/[$, MXN]/g, ""));
     setReceptionSummary("summaryOperationValue", operation !== "" && Number.isFinite(money) ? formatCurrency(money) : operation); setReceptionSummary("summaryFeesValue", operation !== "" && Number.isFinite(money) ? formatCurrency(money) : operation);
-    setReceptionSummary("summaryRequestNumber", match?.folio || match?.numeroSolicitud || match?.solicitud || "");
+    setReceptionSummary("summaryRequestNumber", match?.folio || match?.numeroSolicitud || match?.numeroSolicitudAsignado || match?.folioSolicitud || match?.solicitud || match?.id || "");
     setReceptionSummary("summaryApplicant", match?.solicitante?.nombre || match?.nombreSolicitante || "");
     setReceptionSummary("summaryValuator", match?.asesor || match?.valuadorAsignado || "");
     setReceptionSummary("receptionAssignedName", match?.asesor || match?.valuadorAsignado || "");
@@ -1150,7 +1150,7 @@
   function renderReceptionRecordSummary(record) {
     const linkedRequest = (window.__controlSolicitudes || []).find((request) => requestAppraisalNumber(request) === normalizeNumber(record?.numeroAvaluo));
     if (linkedRequest) { renderReceptionSummary(linkedRequest, record.numeroAvaluo); return; }
-    setReceptionSummary("summaryRequestNumber", record?.folio || record?.numeroSolicitud || record?.solicitud || "");
+    setReceptionSummary("summaryRequestNumber", record?.folio || record?.numeroSolicitud || record?.numeroSolicitudAsignado || record?.folioSolicitud || record?.solicitud || record?.id || "");
     setReceptionSummary("summaryApplicant", record?.solicitante || "");
     setReceptionSummary("summaryValuator", record?.usuario || record?.asesorValuador || "");
     setReceptionSummary("summaryOwner", record?.propietario || "");
