@@ -2,11 +2,13 @@
 (() => {
   const $ = (query) => document.querySelector(query);
   const set = (id, text) => { const el = document.getElementById(id); if (el && el.textContent !== text) el.textContent = text; };
-  const titles = { inicio: ['Inicio', 'Todo tu trabajo, en un solo lugar.'], avaluos: ['Avalúos', 'Gestiona cada etapa de tu operación.'], solicitudes: ['Solicitudes', 'Encargos, documentación y seguimiento.'], 'fe-publica': ['Fe Pública', 'El espacio de trabajo de tu correduría.'], resumen: ['Resumen general', 'Una visión clara de tu operación.'], usuarios: ['Usuarios', 'Tu equipo, conectado.'], configuracion: ['Configuración', 'Todo listo para trabajar.'], perfil: ['', ''], mensajeria: ['Mensajes', 'Mantén a tu equipo conectado.'], juegos: ['Juegos', 'Un momento para despejar la mente.'] };
+  const titles = { inicio: ['Inicio', 'Todo tu trabajo, en un solo lugar.'], avaluos: ['Avalúos', 'Gestiona cada etapa de tu operación.'], solicitudes: ['', ''], 'fe-publica': ['Fe Pública', 'El espacio de trabajo de tu correduría.'], resumen: ['Resumen general', 'Una visión clara de tu operación.'], usuarios: ['Usuarios', 'Tu equipo, conectado.'], configuracion: ['Configuración', 'Todo listo para trabajar.'], perfil: ['', ''], mensajeria: ['Mensajes', 'Mantén a tu equipo conectado.'], juegos: ['Juegos', 'Un momento para despejar la mente.'] };
   const currentView = () => $('.app-view.is-active')?.id.replace(/View$/, '') || 'inicio';
   const refreshContext = (view = currentView()) => {
     const [title, description] = titles[view] || titles.inicio;
     set('v2ContextTitle', title); set('v2ContextDescription', description);
+    const context = $('.v2-context');
+    if (context) context.hidden = view === 'solicitudes';
     document.querySelectorAll('.v2-operation-nav button').forEach(button => button.classList.remove('v2-active'));
   };
   function syncSession() {

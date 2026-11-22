@@ -25,3 +25,16 @@
 :where(#loginScreen, #appShell) #serviceRequestsTable .request-table-pagination{margin-top:14px}
 @media (max-width:1150px){:where(#loginScreen, #appShell) .cp6-request-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:700px){:where(#loginScreen, #appShell) .cp6-request-card-grid{grid-template-columns:1fr;gap:12px}:where(#loginScreen, #appShell) .cp6-request-card{min-height:330px;padding:18px 16px 14px}:where(#loginScreen, #appShell) .cp6-request-folio{font-size:19px}:where(#loginScreen, #appShell) .cp6-request-operation>strong{font-size:20px}}
+
+/* La capa de tablas operativas aplica Arial/13px con !important. Esta regla final
+   devuelve a las tarjetas la misma Inter y escala del detalle de solicitud. */
+body.cp6-redesign #appShell#appShell.control-shell .app-workspace :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card,
+body.cp6-redesign #loginScreen :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card{font-family:Inter,"Segoe UI",system-ui,sans-serif !important}
+body.cp6-redesign #appShell#appShell.control-shell .app-workspace :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card :is(.cp6-request-folio,.cp6-request-date,.cp6-request-meta,.cp6-request-card-field>span,.cp6-request-card-field>strong,.cp6-request-location>strong,.cp6-request-operation>strong,.cp6-request-operation small,.cp6-card-detail-button,.cp6-card-download,.cp6-card-icon-action),
+body.cp6-redesign #loginScreen :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card :is(.cp6-request-folio,.cp6-request-date,.cp6-request-meta,.cp6-request-card-field>span,.cp6-request-card-field>strong,.cp6-request-location>strong,.cp6-request-operation>strong,.cp6-request-operation small,.cp6-card-detail-button,.cp6-card-download,.cp6-card-icon-action){font-family:Inter,"Segoe UI",system-ui,sans-serif !important}
+body.cp6-redesign #appShell#appShell.control-shell .app-workspace :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card .cp6-request-card-field>span,
+body.cp6-redesign #loginScreen :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card .cp6-request-card-field>span{font-size:10px !important;font-weight:800 !important;letter-spacing:.06em !important}
+body.cp6-redesign #appShell#appShell.control-shell .app-workspace :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card .cp6-request-card-field>strong,
+body.cp6-redesign #loginScreen :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card .cp6-request-card-field>strong{font-size:16px !important;font-weight:800 !important;line-height:1.28 !important}
+body.cp6-redesign #appShell#appShell.control-shell .app-workspace :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card .cp6-request-operation>strong,
+body.cp6-redesign #loginScreen :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card .cp6-request-operation>strong{font-size:22px !important;font-weight:800 !important;line-height:1.08 !important}
