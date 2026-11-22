@@ -1163,7 +1163,7 @@
   async function lookupReceptionFile() {
     const number = normalizeNumber(numberInput?.value || "");
     if (!/^\d{4}$/.test(number)) { clearReceptionSummary("Escribe un número de avalúo de cuatro dígitos."); return; }
-    if (receptionSearchButton) { receptionSearchButton.disabled = true; receptionSearchButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Buscando…</span>'; }
+    if (receptionSearchButton) { receptionSearchButton.disabled = true; receptionSearchButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; }
     try {
       const requests = await apiRequest("/service-requests");
       const requestList = Array.isArray(requests) ? requests : [];
@@ -1176,7 +1176,7 @@
       const operation = match.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? ""; if (operation !== "") setField("valorAvaluo", operation);
       renderReceptionSummary(match, number); $("#formMessage").textContent = `Datos de la solicitud ${match.folio || number} cargados para un nuevo registro.`;
     } catch { clearReceptionSummary("No fue posible consultar el expediente; puedes capturarlo manualmente."); }
-    finally { if (receptionSearchButton) { receptionSearchButton.disabled = false; receptionSearchButton.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i><span>Buscar expediente</span>'; } }
+    finally { if (receptionSearchButton) { receptionSearchButton.disabled = false; receptionSearchButton.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>'; } }
   }
   receptionSearchButton?.addEventListener("click", lookupReceptionFile);
   receptionClearButton?.addEventListener("click", () => {
