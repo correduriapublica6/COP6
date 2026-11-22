@@ -133,3 +133,13 @@
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-delivery{margin-top:16px;margin-bottom:0}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-observation-field{margin-top:16px;margin-bottom:0}
 #appShell.control-shell.reception-context-hidden .v2-context{display:none!important}
+
+/* v21: fila de búsqueda compacta y formulario elevado */
+#appShell.control-shell #recepcionAvaluosSection .cp6-module-banner{display:none!important}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line{align-items:flex-end;gap:8px}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line>input#numeroInput{width:105px;max-width:105px}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date{display:flex;flex-direction:column;justify-content:flex-end;width:145px;margin:0}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date .reception-new-label{margin-bottom:6px;white-space:nowrap}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date input{width:145px}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-fees label,#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-delivery label,#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-observation-field label{font-size:7px;letter-spacing:.06em}
+@media(max-width:650px){#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line>input#numeroInput{width:100%;max-width:100%}#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date{width:100%}#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date input{width:100%}}
