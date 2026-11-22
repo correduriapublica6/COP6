@@ -55,6 +55,7 @@
   const paymentDetails = $("#paymentDetails");
   const numberInput = $("#numeroInput");
   const receptionSearchButton = $("#receptionSearchButton");
+  const receptionClearButton = $("#receptionClearButton");
   const avaluoDateInput = $("#avaluoDateInput");
   const amountInput = $("#amountInput");
   const methodInput = $("#methodInput");
@@ -1137,6 +1138,9 @@
     setReceptionSummary("summaryOperationValue", operation !== "" && Number.isFinite(money) ? formatCurrency(money) : operation);
     setReceptionSummary("summaryApplicant", match?.solicitante?.nombre || match?.nombreSolicitante || "");
     setReceptionSummary("summaryValuator", match?.asesor || match?.valuadorAsignado || "");
+    setReceptionSummary("receptionAssignedName", match?.asesor || match?.valuadorAsignado || "");
+    setReceptionSummary("receptionVisibleDate", avaluoDateInput?.value || today());
+    setReceptionSummary("receptionTotalValue", operation !== "" && Number.isFinite(money) ? formatCurrency(money) : operation);
     syncReceptionReadonlyTypes(type, appraisalType);
     setReceptionSummary("summaryPropertyType", type); setReceptionSummary("summaryVisitContact", contact); setReceptionSummary("summaryVisitPhone", phone); setReceptionSummary("summaryOwner", owner); setReceptionSummary("summaryAddress", address);
     const state = $("#receptionSummaryState"); if (state) { state.textContent = `Solicitud ${match?.folio || ""}`; state.classList.add("is-found"); }
@@ -1153,7 +1157,7 @@
     const state = $("#receptionSummaryState"); if (state) { state.textContent = `Avalúo ${record?.numeroAvaluo || ""}`; state.classList.add("is-found"); }
     const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status is-found"; status.innerHTML = '<i class="fa-solid fa-circle-check"></i><span>Registro cargado para edición.</span>'; }
   }
-  function clearReceptionSummary(message = "Busca el número asignado en Solicitudes.") { ["summaryOperationValue","summaryPropertyType","summaryVisitContact","summaryVisitPhone","summaryApplicant","summaryValuator","summaryOwner","summaryAddress"].forEach((id) => setReceptionSummary(id, "")); const state = $("#receptionSummaryState"); if (state) { state.textContent = "Sin búsqueda"; state.classList.remove("is-found"); } const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status"; status.innerHTML = `<i class="fa-solid fa-circle-info"></i><span>${message}</span>`; } }
+  function clearReceptionSummary(message = "Busca el número asignado en Solicitudes.") { ["summaryOperationValue","summaryPropertyType","summaryVisitContact","summaryVisitPhone","summaryApplicant","summaryValuator","receptionAssignedName","receptionVisibleDate","receptionTotalValue","summaryOwner","summaryAddress","receptionTypeBienValue","receptionTypeAvaluoValue"].forEach((id) => setReceptionSummary(id, "")); const state = $("#receptionSummaryState"); if (state) { state.textContent = "Sin búsqueda"; state.classList.remove("is-found"); } const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status"; status.innerHTML = `<i class="fa-solid fa-circle-info"></i><span>${message}</span>`; } }
   async function lookupReceptionFile() {
     const number = normalizeNumber(numberInput?.value || "");
     if (!/^\d{4}$/.test(number)) { clearReceptionSummary("Escribe un número de avalúo de cuatro dígitos."); return; }
@@ -1173,6 +1177,10 @@
     finally { if (receptionSearchButton) { receptionSearchButton.disabled = false; receptionSearchButton.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i><span>Buscar expediente</span>'; } }
   }
   receptionSearchButton?.addEventListener("click", lookupReceptionFile);
+  receptionClearButton?.addEventListener("click", () => {
+    ["numeroAvaluo", "tipoBien", "tipoAvaluo", "usuario", "solicitante", "valorAvaluo"].forEach((name) => { const field = form.elements.namedItem(name); if (field) field.value = ""; });
+    clearReceptionSummary();
+  });
   numberInput?.addEventListener("keydown", (event) => {
     if (event.key === "Enter") { event.preventDefault(); lookupReceptionFile(); }
   });
