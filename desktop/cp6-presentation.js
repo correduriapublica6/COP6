@@ -60,6 +60,9 @@
     if (!labels[section]) return;
     set('v2ContextTitle', labels[section][0]); set('v2ContextDescription', labels[section][1]);
     const actions = { recepcion: 'recepcion', crear: 'gestion', validacion: 'validacion' };
+    const context = $('.v2-context');
+    if (context) context.hidden = section === 'recepcion' || section === 'solicitudes';
+    document.body.classList.toggle('reception-context-hidden', section === 'recepcion');
     document.querySelectorAll('.v2-operation-nav button').forEach(button => button.classList.toggle('v2-active', button.dataset.homeAction === actions[section]));
   });
   const observer = new MutationObserver(syncSession);
