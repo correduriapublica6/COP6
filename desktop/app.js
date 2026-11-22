@@ -1046,12 +1046,15 @@
   }
 
   function setPaymentVisibility() {
-    paymentDetails.classList.toggle("is-hidden", !paidInput.checked);
-    amountInput.required = paidInput.checked;
-    methodInput.required = paidInput.checked;
-    paymentDeliveredToInput.required = paidInput.checked;
-    paymentDateInput.required = paidInput.checked;
-    if (!paidInput.checked) { amountInput.value = ""; methodInput.value = ""; paymentDeliveredToInput.value = ""; paymentDateInput.value = ""; }
+    const paymentEnabled = paidInput.checked;
+    const paymentLocked = !paymentEnabled || form?.dataset.viewOnly === "true";
+    paymentDetails.classList.remove("is-hidden");
+    [amountInput, methodInput, paymentDeliveredToInput, paymentDateInput].forEach((field) => { field.disabled = paymentLocked; });
+    amountInput.required = paymentEnabled;
+    methodInput.required = paymentEnabled;
+    paymentDeliveredToInput.required = paymentEnabled;
+    paymentDateInput.required = paymentEnabled;
+    if (!paymentEnabled) { amountInput.value = ""; methodInput.value = ""; paymentDeliveredToInput.value = ""; paymentDateInput.value = ""; }
     else if (!paymentDateInput.value) paymentDateInput.value = today();
   }
   function openDialog(id = null, readOnly = false) {
@@ -1084,6 +1087,7 @@
     const headerDate = document.getElementById("receptionHeaderDate");
     if (headerDate) headerDate.textContent = formatDate(record.fechaAvaluo);
     if (id && record.numeroAvaluo) renderReceptionRecordSummary(record);
+    form.dataset.viewOnly = String(viewOnly);
     form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = viewOnly; });
     form.querySelectorAll("[data-record-save-action]").forEach((button) => button.classList.toggle("is-hidden", viewOnly));
     const dialogTitle = $("#dialogTitle");
@@ -1107,7 +1111,9 @@
     // Los combobox personalizados no se actualizan solos con form.reset().
     form.querySelectorAll("select").forEach((select) => select.dispatchEvent(new Event("change", { bubbles: true })));
     paidInput.checked = false;
-    paymentDetails.classList.add("is-hidden");
+    form.dataset.viewOnly = "false";
+    paymentDetails.classList.remove("is-hidden");
+    setPaymentVisibility();
     $("#formMessage").textContent = "";
   }
   async function removeRecord(id) { if (!isAdmin()) return; const record = records.find((item) => item.id === id); if (!record || !window.confirm(`¿Eliminar el avalúo ${record.numeroAvaluo}? Esta acción no se puede deshacer.`)) return; try { await deleteRemoteRecord(id); records = records.filter((item) => item.id !== id); saveRecords(); render(); } catch (error) { window.alert(error.message); } }

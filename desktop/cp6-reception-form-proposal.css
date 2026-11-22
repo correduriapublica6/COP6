@@ -115,3 +115,15 @@
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-inline .reception-new-toggle{color:#536679;font-size:9px;letter-spacing:0;text-transform:none}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-inline .reception-payment-details{margin-top:10px}
 @media(max-width:650px){#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-notes{display:flex!important;flex-direction:column!important;margin-top:12px}}
+
+/* v19: honorarios y observación debajo de la fecha/entrega; pago visible y bloqueado */
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-main{display:flex;flex-direction:column}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-fees{width:250px;margin-top:10px;margin-bottom:0}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-delivery{width:250px}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-observation-field{width:100%;margin-top:0;margin-bottom:0}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-observation-field input{height:38px}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-notes{display:block}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-inline{height:100%}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-details{display:grid!important;opacity:1}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-details input:disabled,#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-details select:disabled{background:#edf1f4;color:#8995a2;cursor:not-allowed;opacity:1}
+@media(max-width:650px){#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-fees,#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-delivery{width:100%}}
