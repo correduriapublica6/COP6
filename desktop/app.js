@@ -54,6 +54,7 @@
   const paidInput = $("#paidInput");
   const paymentDetails = $("#paymentDetails");
   const numberInput = $("#numeroInput");
+  const receptionSearchButton = $("#receptionSearchButton");
   const avaluoDateInput = $("#avaluoDateInput");
   const amountInput = $("#amountInput");
   const methodInput = $("#methodInput");
@@ -1060,6 +1061,7 @@
     if (!record) return;
     const viewOnly = readOnly || !canEditReception();
     form.reset();
+    clearReceptionSummary();
     Object.entries(initialDraft).forEach(([key, value]) => {
       const field = form.elements.namedItem(key);
       if (!field || field.type === "checkbox") return;
@@ -1109,25 +1111,43 @@
     return { numeroAvaluo: normalizeNumber(data.get("numeroAvaluo")), usuario: String(data.get("usuario") || "").trim(), asesorValuador: String(data.get("asesorValuador") || "").trim(), tipoBien: String(data.get("tipoBien") || "").trim(), tipoAvaluo: String(data.get("tipoAvaluo") || "").trim(), solicitante: String(data.get("solicitante") || "").trim(), valorAvaluo: parseMoney(data.get("valorAvaluo")), seEntregoA: String(data.get("seEntregoA") || "").trim(), pagoEntregadoA: paidInput.checked ? String(data.get("pagoEntregadoA") || "") : "", observacion: String(data.get("observacion") || "").trim(), fechaAvaluo: String(data.get("fechaAvaluo") || ""), pagado: paidInput.checked, montoPagado: paidInput.checked ? parseMoney(data.get("montoPagado")) : 0, metodoPago: paidInput.checked ? String(data.get("metodoPago") || "") : "", fechaPago: paidInput.checked ? String(data.get("fechaPago") || "") : "" };
   }
   let receptionLookupTimer = null;
-  numberInput?.addEventListener("input", () => {
-    window.clearTimeout(receptionLookupTimer);
-    const number = normalizeNumber(numberInput.value || "");
-    if (!/^\d{4}$/.test(number)) return;
-    receptionLookupTimer = window.setTimeout(async () => {
-      try {
-        const requests = await apiRequest("/service-requests");
-        const match = (Array.isArray(requests) ? requests : []).find((item) => normalizeNumber(item.numeroAvaluo) === number);
-        if (!match) return;
-        const setField = (name, value) => { const field = form.elements.namedItem(name); if (field && value) { if (field.tagName === "SELECT" && !Array.from(field.options).some((option) => option.value === String(value))) field.add(new Option(String(value), String(value))); field.value = value; } };
-        setField("tipoBien", match.tipoBien || match.tipoAvaluo);
-        setField("tipoAvaluo", match.tipoAvaluo || "");
-        setField("usuario", match.asesor || "");
-        const requester = match.solicitante?.nombre || match.nombreSolicitante || "";
-        setField("solicitante", requester);
-        $("#formMessage").textContent = `Datos de la solicitud ${match.folio || number} cargados.`;
-      } catch { /* La captura manual sigue disponible si el servidor no responde. */ }
-    }, 250);
-  });
+  function setReceptionSummary(id, value) { const node = document.getElementById(id); if (node) node.textContent = value || "—"; }
+  function renderReceptionSummary(match, number) {
+    const specific = match?.datosEspecificos || {};
+    const visit = match?.contactoVisita && typeof match.contactoVisita === "object" ? match.contactoVisita : {};
+    const operation = match?.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "";
+    const contact = visit.nombre || visit.name || match?.contactoVisitaNombre || specific.contactoVisitaNombre || specific.contacto_visita || "";
+    const phone = visit.telefono || visit.phone || match?.contactoVisitaTelefono || specific.contactoVisitaTelefono || specific.telefono_visita || "";
+    const owner = match?.propietario || specific.propietario || specific.razonSocial || "";
+    const address = visit.direccion || match?.direccion || match?.direccionVisita || specific.direccionVisita || specific.direccion_visita || "";
+    const type = match?.tipoBien || specific.tipoBien || specific.tipo_bien || "";
+    const money = Number(String(operation).replace(/[$, MXN]/g, ""));
+    setReceptionSummary("summaryOperationValue", operation !== "" && Number.isFinite(money) ? formatCurrency(money) : operation);
+    setReceptionSummary("summaryApplicant", match?.solicitante?.nombre || match?.nombreSolicitante || "");
+    setReceptionSummary("summaryValuator", match?.asesor || match?.valuadorAsignado || "");
+    setReceptionSummary("summaryPropertyType", type); setReceptionSummary("summaryVisitContact", contact); setReceptionSummary("summaryVisitPhone", phone); setReceptionSummary("summaryOwner", owner); setReceptionSummary("summaryAddress", address);
+    const state = $("#receptionSummaryState"); if (state) { state.textContent = `Expediente ${match?.folio || number}`; state.classList.add("is-found"); }
+    const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status is-found"; status.innerHTML = '<i class="fa-solid fa-circle-check"></i><span>Expediente localizado y cargado.</span>'; }
+  }
+  function clearReceptionSummary(message = "Los datos aparecerán aquí.") { ["summaryOperationValue","summaryPropertyType","summaryVisitContact","summaryVisitPhone","summaryOwner","summaryAddress"].forEach((id) => setReceptionSummary(id, "")); const state = $("#receptionSummaryState"); if (state) { state.textContent = "Sin búsqueda"; state.classList.remove("is-found"); } const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status"; status.innerHTML = `<i class="fa-solid fa-circle-info"></i><span>${message}</span>`; } }
+  async function lookupReceptionFile() {
+    const number = normalizeNumber(numberInput?.value || "");
+    if (!/^\d{4}$/.test(number)) { clearReceptionSummary("Escribe un número de avalúo de cuatro dígitos."); return; }
+    if (receptionSearchButton) { receptionSearchButton.disabled = true; receptionSearchButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Buscando…</span>'; }
+    try {
+      const requests = await apiRequest("/service-requests");
+      const match = (Array.isArray(requests) ? requests : []).find((item) => normalizeNumber(item.numeroAvaluo) === number);
+      if (!match) { clearReceptionSummary("No se encontró una solicitud con ese número."); $("#formMessage").textContent = `No se encontró el expediente ${number}.`; return; }
+      const setField = (name, value) => { const field = form.elements.namedItem(name); if (field && value) { if (field.tagName === "SELECT" && !Array.from(field.options).some((option) => option.value === String(value))) field.add(new Option(String(value), String(value))); field.value = value; } };
+      const specific = match.datosEspecificos || {}; const type = match.tipoBien || specific.tipoBien || specific.tipo_bien || "";
+      setField("tipoBien", type); setField("tipoAvaluo", match.tipoAvaluo || specific.tipoAvaluo || ""); setField("usuario", match.asesor || match.valuadorAsignado || ""); setField("solicitante", match.solicitante?.nombre || match.nombreSolicitante || "");
+      const operation = match.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? ""; if (operation !== "") setField("valorAvaluo", operation);
+      renderReceptionSummary(match, number); $("#formMessage").textContent = `Datos de la solicitud ${match.folio || number} cargados.`;
+    } catch { clearReceptionSummary("No fue posible consultar el expediente; puedes capturarlo manualmente."); }
+    finally { if (receptionSearchButton) { receptionSearchButton.disabled = false; receptionSearchButton.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i><span>Buscar expediente</span>'; } }
+  }
+  receptionSearchButton?.addEventListener("click", lookupReceptionFile);
+  numberInput?.addEventListener("input", () => { window.clearTimeout(receptionLookupTimer); if (/^\d{4}$/.test(normalizeNumber(numberInput.value || ""))) receptionLookupTimer = window.setTimeout(lookupReceptionFile, 350); });
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!canEditReception()) return;
