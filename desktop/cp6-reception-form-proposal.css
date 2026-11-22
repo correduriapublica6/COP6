@@ -143,3 +143,12 @@
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date input{width:145px}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-fees label,#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-delivery label,#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-observation-field label{font-size:7px;letter-spacing:.06em}
 @media(max-width:650px){#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line>input#numeroInput{width:100%;max-width:100%}#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date{width:100%}#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date input{width:100%}}
+
+/* v22: alineación fina de número/fecha y espacio superior mínimo */
+#appShell.control-shell.reception-context-hidden .v2-topbar{display:none!important;min-height:0!important;height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line{flex-wrap:nowrap;align-items:flex-end;gap:7px}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line>input#numeroInput{width:82px;max-width:82px;flex:0 0 82px}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date{width:125px;flex:0 0 125px}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date input{width:125px}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-clear{padding-left:8px;padding-right:8px}
+@media(max-width:650px){#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line{flex-wrap:wrap}#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line>input#numeroInput{width:100%;max-width:100%;flex-basis:100%}#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date{width:100%;flex:1 1 100%}#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date input{width:100%}}

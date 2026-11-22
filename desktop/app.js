@@ -1179,7 +1179,7 @@
       const setField = (name, value) => { const field = form.elements.namedItem(name); if (field && value) { if (field.tagName === "SELECT" && !Array.from(field.options).some((option) => option.value === String(value))) field.add(new Option(String(value), String(value))); field.value = value; } };
       const specific = match.datosEspecificos || {}; const type = match.tipoBien || specific.tipoBien || specific.tipo_bien || ""; const appraisalType = match.tipoAvaluo || match.tipoAvalúo || specific.tipoAvaluo || specific.tipoAvalúo || specific.tipo_avaluo || "";
       setField("tipoBien", type); setField("tipoAvaluo", appraisalType); setField("usuario", match.asesor || match.valuadorAsignado || ""); setField("solicitante", match.solicitante?.nombre || match.nombreSolicitante || "");
-      const operation = match.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? ""; if (operation !== "") setField("valorAvaluo", operation);
+      // Honorarios es captura manual; nunca se copia el valor de operación de la Solicitud.
       renderReceptionSummary(match, number); $("#formMessage").textContent = `Datos de la solicitud ${match.folio || number} cargados para un nuevo registro.`;
     } catch { clearReceptionSummary("No fue posible consultar el expediente; puedes capturarlo manualmente."); }
     finally { if (receptionSearchButton) { receptionSearchButton.disabled = false; receptionSearchButton.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>'; } }
