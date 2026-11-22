@@ -1,24 +1,24 @@
 /* Tarjetas cuadradas de solicitudes externas y administrativas. Solo presentación; conserva los hooks funcionales existentes. */
 :where(#loginScreen, #appShell) .cp6-request-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;width:100%;padding:2px 0 4px}
-:where(#loginScreen, #appShell) .cp6-request-card{display:flex;flex-direction:column;min-width:0;min-height:360px;padding:20px 18px 15px;background:#fff;border:1px solid #e3eaf2;border-radius:17px;box-shadow:0 6px 18px rgba(31,55,84,.055);transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+:where(#loginScreen, #appShell) .cp6-request-card{display:flex;flex-direction:column;min-width:0;min-height:360px;padding:20px 18px 15px;background:#fff;border:1px solid #e3eaf2;border-radius:17px;box-shadow:0 6px 18px rgba(31,55,84,.055);font-family:Inter,"Segoe UI",system-ui,sans-serif;transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}
 :where(#loginScreen, #appShell) .cp6-request-card:hover{border-color:#bfd5f1;box-shadow:0 12px 24px rgba(31,55,84,.09);transform:translateY(-2px)}
 :where(#loginScreen, #appShell) .cp6-request-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:0 0 17px;border-bottom:1px solid #e4e9ef}
-:where(#loginScreen, #appShell) .cp6-request-folio{display:block;color:#172538;font:800 21px/1 Manrope,system-ui,sans-serif;letter-spacing:-.035em}
-:where(#loginScreen, #appShell) .cp6-request-date{display:block;margin-top:8px;color:#4c5d70;font:400 11px/1.2 "DM Sans",system-ui,sans-serif}
-:where(#loginScreen, #appShell) .cp6-request-meta{display:block;max-width:190px;margin-top:6px;overflow:hidden;color:#8a99ab;font:400 10px/1.25 "DM Sans",system-ui,sans-serif;text-overflow:ellipsis;white-space:nowrap}
+:where(#loginScreen, #appShell) .cp6-request-folio{display:block;color:#111827;font:800 21px/1 Inter,"Segoe UI",system-ui,sans-serif;letter-spacing:-.025em}
+:where(#loginScreen, #appShell) .cp6-request-date{display:block;margin-top:8px;color:#64748b;font:400 11px/1.2 Inter,"Segoe UI",system-ui,sans-serif}
+:where(#loginScreen, #appShell) .cp6-request-meta{display:block;max-width:190px;margin-top:6px;overflow:hidden;color:#64748b;font:400 10px/1.25 Inter,"Segoe UI",system-ui,sans-serif;text-overflow:ellipsis;white-space:nowrap}
 :where(#loginScreen, #appShell) .cp6-request-card-top .client-status-badge,:where(#loginScreen, #appShell) .cp6-request-card-top .request-status{flex:0 0 auto;white-space:nowrap}
 :where(#loginScreen, #appShell) .cp6-request-card-field{padding-top:16px}
-:where(#loginScreen, #appShell) .cp6-request-card-field>span{display:block;margin-bottom:7px;color:#788697;font:700 10px/1.2 "DM Sans",system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase}
-:where(#loginScreen, #appShell) .cp6-request-card-field>strong{display:block;color:#172538;font:800 16px/1.28 Manrope,system-ui,sans-serif;letter-spacing:-.02em;overflow-wrap:anywhere}
-:where(#loginScreen, #appShell) .cp6-request-location>strong{color:#42566a;font:600 13px/1.35 "DM Sans",system-ui,sans-serif;letter-spacing:0}
+:where(#loginScreen, #appShell) .cp6-request-card-field>span{display:block;margin-bottom:7px;color:#64748b;font:800 10px/1.2 Inter,"Segoe UI",system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+:where(#loginScreen, #appShell) .cp6-request-card-field>strong{display:block;color:#1e293b;font:800 16px/1.28 Inter,"Segoe UI",system-ui,sans-serif;letter-spacing:-.015em;overflow-wrap:anywhere}
+:where(#loginScreen, #appShell) .cp6-request-location>strong{color:#1e293b;font:800 13px/1.35 Inter,"Segoe UI",system-ui,sans-serif;letter-spacing:-.01em}
 :where(#loginScreen, #appShell) .cp6-request-location i{margin-right:5px;color:#667d93}
-:where(#loginScreen, #appShell) .cp6-request-operation>strong{color:#16845b;font:800 22px/1.08 Manrope,system-ui,sans-serif;letter-spacing:-.03em}
-:where(#loginScreen, #appShell) .cp6-request-operation small{margin-left:4px;color:#16845b;font:800 12px/1 Manrope,system-ui,sans-serif}
+:where(#loginScreen, #appShell) .cp6-request-operation>strong{color:#16845b;font:800 22px/1.08 Inter,"Segoe UI",system-ui,sans-serif;letter-spacing:-.025em}
+:where(#loginScreen, #appShell) .cp6-request-operation small{margin-left:4px;color:#16845b;font:800 12px/1 Inter,"Segoe UI",system-ui,sans-serif}
 :where(#loginScreen, #appShell) .cp6-request-card-actions{display:flex;align-items:center;gap:7px;margin-top:auto;padding-top:20px}
-:where(#loginScreen, #appShell) .cp6-request-card-actions .cp6-card-detail-button{flex:1;min-width:0;height:38px;border:1px solid #19324b;border-radius:10px;background:#19324b;color:#fff;font:700 11px/1 "DM Sans",system-ui,sans-serif}
+:where(#loginScreen, #appShell) .cp6-request-card-actions .cp6-card-detail-button{flex:1;min-width:0;height:38px;border:1px solid #19324b;border-radius:10px;background:#19324b;color:#fff;font:700 11px/1 Inter,"Segoe UI",system-ui,sans-serif}
 :where(#loginScreen, #appShell) .cp6-request-card-actions .cp6-card-detail-button svg{width:15px;height:15px;margin-right:6px;stroke:currentColor;fill:none;stroke-width:1.7;vertical-align:-3px}
 :where(#loginScreen, #appShell) .cp6-client-request-cards .cp6-card-detail-button{border-color:#246bd1;background:#246bd1}
-:where(#loginScreen, #appShell) .cp6-card-download,:where(#loginScreen, #appShell) .cp6-card-icon-action{display:inline-flex;align-items:center;justify-content:center;flex:0 0 38px;width:38px;height:38px;padding:0;border:1px solid #9aa8b5;border-radius:10px;background:#fff;color:#26384e;font:700 17px/1 "DM Sans",system-ui,sans-serif;text-decoration:none;cursor:pointer}
+:where(#loginScreen, #appShell) .cp6-card-download,:where(#loginScreen, #appShell) .cp6-card-icon-action{display:inline-flex;align-items:center;justify-content:center;flex:0 0 38px;width:38px;height:38px;padding:0;border:1px solid #9aa8b5;border-radius:10px;background:#fff;color:#26384e;font:700 17px/1 Inter,"Segoe UI",system-ui,sans-serif;text-decoration:none;cursor:pointer}
 :where(#loginScreen, #appShell) .cp6-card-download.is-disabled{color:#8794a1;cursor:default}
 :where(#loginScreen, #appShell) .cp6-card-icon-action svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8}
 :where(#loginScreen, #appShell) .cp6-request-card.is-notification-highlight{border-color:#246bd1;box-shadow:0 0 0 3px rgba(36,107,209,.13)}
