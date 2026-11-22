@@ -38,3 +38,8 @@ body.cp6-redesign #appShell#appShell.control-shell .app-workspace :is(#serviceRe
 body.cp6-redesign #loginScreen :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card .cp6-request-card-field>strong{font-size:16px !important;font-weight:800 !important;line-height:1.28 !important}
 body.cp6-redesign #appShell#appShell.control-shell .app-workspace :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card .cp6-request-operation>strong,
 body.cp6-redesign #loginScreen :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card .cp6-request-operation>strong{font-size:22px !important;font-weight:800 !important;line-height:1.08 !important}
+
+/* Ajuste final: la referencia usa una lectura firme, pero no tan pesada. */
+body.cp6-redesign #appShell#appShell.control-shell .app-workspace :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card :is(.cp6-request-folio,.cp6-request-card-field>strong,.cp6-request-location>strong,.cp6-request-operation>strong),
+body.cp6-redesign #loginScreen :is(#serviceRequestsTable,#welcomeRequestsTable) .cp6-request-card :is(.cp6-request-folio,.cp6-request-card-field>strong,.cp6-request-location>strong,.cp6-request-operation>strong){font-weight:700 !important}
+body.cp6-redesign #appShell#appShell.control-shell .app-workspace #serviceRequestsTable .cp6-admin-request-card .cp6-card-detail-button{background:#19324b !important;border:1px solid #19324b !important;border-radius:8px !important;color:#fff !important;font-size:11px !important;font-weight:700 !important;padding:6px 16px !important}
