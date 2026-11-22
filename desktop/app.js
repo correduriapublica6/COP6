@@ -1135,7 +1135,7 @@
     const type = match?.tipoBien || specific.tipoBien || specific.tipo_bien || "";
     const appraisalType = match?.tipoAvaluo || match?.tipoAvalúo || specific.tipoAvaluo || specific.tipoAvalúo || specific.tipo_avaluo || "";
     const money = Number(String(operation).replace(/[$, MXN]/g, ""));
-    setReceptionSummary("summaryOperationValue", operation !== "" && Number.isFinite(money) ? formatCurrency(money) : operation);
+    setReceptionSummary("summaryOperationValue", operation !== "" && Number.isFinite(money) ? formatCurrency(money) : operation); setReceptionSummary("summaryFeesValue", operation !== "" && Number.isFinite(money) ? formatCurrency(money) : operation);
     setReceptionSummary("summaryApplicant", match?.solicitante?.nombre || match?.nombreSolicitante || "");
     setReceptionSummary("summaryValuator", match?.asesor || match?.valuadorAsignado || "");
     setReceptionSummary("receptionAssignedName", match?.asesor || match?.valuadorAsignado || "");
@@ -1157,7 +1157,7 @@
     const state = $("#receptionSummaryState"); if (state) { state.textContent = `Avalúo ${record?.numeroAvaluo || ""}`; state.classList.add("is-found"); }
     const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status is-found"; status.innerHTML = '<i class="fa-solid fa-circle-check"></i><span>Registro cargado para edición.</span>'; }
   }
-  function clearReceptionSummary(message = "Busca el número asignado en Solicitudes.") { ["summaryOperationValue","summaryPropertyType","summaryVisitContact","summaryVisitPhone","summaryApplicant","summaryValuator","receptionAssignedName","receptionVisibleDate","receptionTotalValue","summaryOwner","summaryAddress","receptionTypeBienValue","receptionTypeAvaluoValue"].forEach((id) => setReceptionSummary(id, "")); const state = $("#receptionSummaryState"); if (state) { state.textContent = "Sin búsqueda"; state.classList.remove("is-found"); } const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status"; status.innerHTML = `<i class="fa-solid fa-circle-info"></i><span>${message}</span>`; } }
+  function clearReceptionSummary(message = "Busca el número asignado en Solicitudes.") { ["summaryOperationValue","summaryFeesValue","summaryPropertyType","summaryVisitContact","summaryVisitPhone","summaryApplicant","summaryValuator","receptionAssignedName","receptionVisibleDate","receptionTotalValue","summaryOwner","summaryAddress","receptionTypeBienValue","receptionTypeAvaluoValue"].forEach((id) => setReceptionSummary(id, "")); const state = $("#receptionSummaryState"); if (state) { state.textContent = "Sin búsqueda"; state.classList.remove("is-found"); } const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status"; status.innerHTML = `<i class="fa-solid fa-circle-info"></i><span>${message}</span>`; } }
   async function lookupReceptionFile() {
     const number = normalizeNumber(numberInput?.value || "");
     if (!/^\d{4}$/.test(number)) { clearReceptionSummary("Escribe un número de avalúo de cuatro dígitos."); return; }
