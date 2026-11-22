@@ -158,3 +158,9 @@ body.reception-context-hidden #appShell.control-shell > .app-workspace{padding-t
 body.reception-context-hidden #appShell.control-shell .v2-topbar{display:none!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line>input#numeroInput{width:82px;max-width:82px;flex:0 0 82px}
 @media(max-width:650px){body.reception-context-hidden #appShell.control-shell > .app-workspace{padding-top:6px!important}#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line>input#numeroInput{width:100%;max-width:100%;flex-basis:100%}}
+
+/* v24: anular el padding heredado de 88px en Recepción */
+#appShell.control-shell:has(#recepcionAvaluosSection:not([hidden])) > .app-workspace,
+#appShell.control-shell > .app-workspace.is-registration-mode{padding-top:8px!important}
+#appShell.control-shell:has(#recepcionAvaluosSection:not([hidden])) .v2-topbar,
+#appShell.control-shell > .app-workspace.is-registration-mode > .v2-topbar{display:none!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important}
