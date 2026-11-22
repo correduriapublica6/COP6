@@ -1136,6 +1136,7 @@
     const appraisalType = match?.tipoAvaluo || match?.tipoAvalúo || specific.tipoAvaluo || specific.tipoAvalúo || specific.tipo_avaluo || "";
     const money = Number(String(operation).replace(/[$, MXN]/g, ""));
     setReceptionSummary("summaryOperationValue", operation !== "" && Number.isFinite(money) ? formatCurrency(money) : operation); setReceptionSummary("summaryFeesValue", operation !== "" && Number.isFinite(money) ? formatCurrency(money) : operation);
+    setReceptionSummary("summaryRequestNumber", match?.folio || match?.numeroSolicitud || match?.solicitud || "");
     setReceptionSummary("summaryApplicant", match?.solicitante?.nombre || match?.nombreSolicitante || "");
     setReceptionSummary("summaryValuator", match?.asesor || match?.valuadorAsignado || "");
     setReceptionSummary("receptionAssignedName", match?.asesor || match?.valuadorAsignado || "");
@@ -1149,6 +1150,7 @@
   function renderReceptionRecordSummary(record) {
     const linkedRequest = (window.__controlSolicitudes || []).find((request) => requestAppraisalNumber(request) === normalizeNumber(record?.numeroAvaluo));
     if (linkedRequest) { renderReceptionSummary(linkedRequest, record.numeroAvaluo); return; }
+    setReceptionSummary("summaryRequestNumber", record?.folio || record?.numeroSolicitud || record?.solicitud || "");
     setReceptionSummary("summaryApplicant", record?.solicitante || "");
     setReceptionSummary("summaryValuator", record?.usuario || record?.asesorValuador || "");
     setReceptionSummary("summaryOwner", record?.propietario || "");
@@ -1157,7 +1159,7 @@
     const state = $("#receptionSummaryState"); if (state) { state.textContent = `Avalúo ${record?.numeroAvaluo || ""}`; state.classList.add("is-found"); }
     const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status is-found"; status.innerHTML = '<i class="fa-solid fa-circle-check"></i><span>Registro cargado para edición.</span>'; }
   }
-  function clearReceptionSummary(message = "Busca el número asignado en Solicitudes.") { ["summaryOperationValue","summaryFeesValue","summaryPropertyType","summaryVisitContact","summaryVisitPhone","summaryApplicant","summaryValuator","receptionAssignedName","receptionVisibleDate","receptionTotalValue","summaryOwner","summaryAddress","receptionTypeBienValue","receptionTypeAvaluoValue"].forEach((id) => setReceptionSummary(id, "")); const state = $("#receptionSummaryState"); if (state) { state.textContent = "Sin búsqueda"; state.classList.remove("is-found"); } const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status"; status.innerHTML = `<i class="fa-solid fa-circle-info"></i><span>${message}</span>`; } }
+  function clearReceptionSummary(message = "Busca el número asignado en Solicitudes.") { ["summaryOperationValue","summaryFeesValue","summaryPropertyType","summaryVisitContact","summaryVisitPhone","summaryRequestNumber","summaryApplicant","summaryValuator","receptionAssignedName","receptionVisibleDate","receptionTotalValue","summaryOwner","summaryAddress","receptionTypeBienValue","receptionTypeAvaluoValue"].forEach((id) => setReceptionSummary(id, "")); const state = $("#receptionSummaryState"); if (state) { state.textContent = "Sin búsqueda"; state.classList.remove("is-found"); } const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status"; status.innerHTML = `<i class="fa-solid fa-circle-info"></i><span>${message}</span>`; } }
   async function lookupReceptionFile() {
     const number = normalizeNumber(numberInput?.value || "");
     if (!/^\d{4}$/.test(number)) { clearReceptionSummary("Escribe un número de avalúo de cuatro dígitos."); return; }
