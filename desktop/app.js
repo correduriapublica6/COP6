@@ -1082,7 +1082,7 @@
     syncReceptionReadonlyTypes(record.tipoBien, record.tipoAvaluo);
     const headerDate = document.getElementById("receptionHeaderDate");
     if (headerDate) headerDate.textContent = formatDate(record.fechaAvaluo);
-    renderReceptionRecordSummary(record);
+    if (id && record.numeroAvaluo) renderReceptionRecordSummary(record);
     form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = viewOnly; });
     form.querySelectorAll("[data-record-save-action]").forEach((button) => button.classList.toggle("is-hidden", viewOnly));
     const dialogTitle = $("#dialogTitle");
@@ -1173,6 +1173,9 @@
     finally { if (receptionSearchButton) { receptionSearchButton.disabled = false; receptionSearchButton.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i><span>Buscar expediente</span>'; } }
   }
   receptionSearchButton?.addEventListener("click", lookupReceptionFile);
+  numberInput?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") { event.preventDefault(); lookupReceptionFile(); }
+  });
   numberInput?.addEventListener("input", () => { window.clearTimeout(receptionLookupTimer); clearReceptionSummary(); });
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();

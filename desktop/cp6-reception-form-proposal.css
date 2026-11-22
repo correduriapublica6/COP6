@@ -26,3 +26,9 @@
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-location .reception-info-value{max-width:none!important;white-space:normal!important;}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-readonly-field .reception-readonly-value{display:inline-flex!important;min-height:26px!important;padding:0 9px!important;border:0!important;border-radius:999px!important;background:#eff4f9!important;color:#5e7184!important;font-size:8px!important;font-weight:700!important;}
 @media(max-width:800px){#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-file-card,#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-bottom-grid{grid-template-columns:1fr!important}}
+
+/* Ajuste v11: la maqueta usa una página contenida; evitar una tarjeta extendida de borde a borde. */
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-editor-shell{max-width:1080px!important;}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-record-header{padding-bottom:12px!important;}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-file-info{align-content:start!important;}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-info-value{font-size:11px!important;}
