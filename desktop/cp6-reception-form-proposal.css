@@ -152,3 +152,9 @@
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date input{width:125px}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-clear{padding-left:8px;padding-right:8px}
 @media(max-width:650px){#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line{flex-wrap:wrap}#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line>input#numeroInput{width:100%;max-width:100%;flex-basis:100%}#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date{width:100%;flex:1 1 100%}#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-inline-date input{width:100%}}
+
+/* v23: eliminar el espacio del encabezado general y dejar solo búsqueda/fecha */
+body.reception-context-hidden #appShell.control-shell > .app-workspace{padding-top:10px!important}
+body.reception-context-hidden #appShell.control-shell .v2-topbar{display:none!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line>input#numeroInput{width:82px;max-width:82px;flex:0 0 82px}
+@media(max-width:650px){body.reception-context-hidden #appShell.control-shell > .app-workspace{padding-top:6px!important}#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number-line>input#numeroInput{width:100%;max-width:100%;flex-basis:100%}}
