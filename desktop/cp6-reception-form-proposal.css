@@ -15,3 +15,14 @@
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-readonly-field .reception-readonly-value{display:flex;align-items:center;min-height:30px;margin:0;padding:0 10px;border:1px solid #cbd5df;border-radius:9px;background:#f5f7fa;color:#405166;font-size:9px;font-weight:700;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:default;}
 #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-readonly-field input[type=hidden]{display:none!important;}
 @media(max-width:800px){#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-form-v7{grid-template-columns:minmax(0,1fr)!important}#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-file-card,#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-bottom-grid{grid-template-columns:1fr!important}}
+
+
+/* Ajuste v10: proporciones y jerarquía visual alineadas con la propuesta original. */
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-editor-shell{max-width:1180px!important;}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-form-v7{gap:14px!important;}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-file-card{grid-template-columns:252px minmax(0,1fr)!important;}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-bottom-grid{grid-template-columns:252px minmax(0,1fr)!important;}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-file-info{min-height:0!important;padding:20px 19px 17px!important;}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-location .reception-info-value{max-width:none!important;white-space:normal!important;}
+#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-readonly-field .reception-readonly-value{display:inline-flex!important;min-height:26px!important;padding:0 9px!important;border:0!important;border-radius:999px!important;background:#eff4f9!important;color:#5e7184!important;font-size:8px!important;font-weight:700!important;}
+@media(max-width:800px){#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-file-card,#appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-bottom-grid{grid-template-columns:1fr!important}}

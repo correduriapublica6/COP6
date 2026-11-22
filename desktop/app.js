@@ -1080,10 +1080,13 @@
     paymentDateInput.value = record.pagado ? record.fechaPago || today() : "";
     avaluoDateInput.value = record.fechaAvaluo || today();
     syncReceptionReadonlyTypes(record.tipoBien, record.tipoAvaluo);
+    const headerDate = document.getElementById("receptionHeaderDate");
+    if (headerDate) headerDate.textContent = formatDate(record.fechaAvaluo);
+    renderReceptionRecordSummary(record);
     form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = viewOnly; });
     form.querySelectorAll("[data-record-save-action]").forEach((button) => button.classList.toggle("is-hidden", viewOnly));
     const dialogTitle = $("#dialogTitle");
-    if (dialogTitle) dialogTitle.innerHTML = `<i class="fa-solid fa-file-signature" aria-hidden="true"></i><span>${viewOnly ? "Consulta de avalúo" : id ? "Editar avalúo" : "Registro de Avalúos"}</span>`;
+    if (dialogTitle) dialogTitle.innerHTML = `<i class="fa-solid fa-file-signature" aria-hidden="true"></i><span>${viewOnly ? "Consulta de avalúo" : id ? "Editar avalúo" : "Recepción del avalúo"}</span>`;
     $("#formMessage").textContent = "";
     setPaymentVisibility();
     recordEditor.hidden = false;
@@ -1129,14 +1132,26 @@
     const owner = match?.propietario || specific.propietario || specific.razonSocial || "";
     const address = visit.direccion || match?.direccion || match?.direccionVisita || specific.direccionVisita || specific.direccion_visita || "";
     const type = match?.tipoBien || specific.tipoBien || specific.tipo_bien || "";
+    const appraisalType = match?.tipoAvaluo || match?.tipoAvalúo || specific.tipoAvaluo || specific.tipoAvalúo || specific.tipo_avaluo || "";
     const money = Number(String(operation).replace(/[$, MXN]/g, ""));
     setReceptionSummary("summaryOperationValue", operation !== "" && Number.isFinite(money) ? formatCurrency(money) : operation);
     setReceptionSummary("summaryApplicant", match?.solicitante?.nombre || match?.nombreSolicitante || "");
     setReceptionSummary("summaryValuator", match?.asesor || match?.valuadorAsignado || "");
-    syncReceptionReadonlyTypes(type, match?.tipoAvaluo || specific.tipoAvaluo || "");
+    syncReceptionReadonlyTypes(type, appraisalType);
     setReceptionSummary("summaryPropertyType", type); setReceptionSummary("summaryVisitContact", contact); setReceptionSummary("summaryVisitPhone", phone); setReceptionSummary("summaryOwner", owner); setReceptionSummary("summaryAddress", address);
     const state = $("#receptionSummaryState"); if (state) { state.textContent = `Solicitud ${match?.folio || ""}`; state.classList.add("is-found"); }
     const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status is-found"; status.innerHTML = '<i class="fa-solid fa-circle-check"></i><span>Solicitud localizada y cargada.</span>'; }
+  }
+  function renderReceptionRecordSummary(record) {
+    const linkedRequest = (window.__controlSolicitudes || []).find((request) => requestAppraisalNumber(request) === normalizeNumber(record?.numeroAvaluo));
+    if (linkedRequest) { renderReceptionSummary(linkedRequest, record.numeroAvaluo); return; }
+    setReceptionSummary("summaryApplicant", record?.solicitante || "");
+    setReceptionSummary("summaryValuator", record?.usuario || record?.asesorValuador || "");
+    setReceptionSummary("summaryOwner", record?.propietario || "");
+    setReceptionSummary("summaryAddress", record?.direccion || record?.ubicacion || "");
+    syncReceptionReadonlyTypes(record?.tipoBien, record?.tipoAvaluo);
+    const state = $("#receptionSummaryState"); if (state) { state.textContent = `Avalúo ${record?.numeroAvaluo || ""}`; state.classList.add("is-found"); }
+    const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status is-found"; status.innerHTML = '<i class="fa-solid fa-circle-check"></i><span>Registro cargado para edición.</span>'; }
   }
   function clearReceptionSummary(message = "Busca el número asignado en Solicitudes.") { ["summaryOperationValue","summaryPropertyType","summaryVisitContact","summaryVisitPhone","summaryApplicant","summaryValuator","summaryOwner","summaryAddress"].forEach((id) => setReceptionSummary(id, "")); const state = $("#receptionSummaryState"); if (state) { state.textContent = "Sin búsqueda"; state.classList.remove("is-found"); } const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status"; status.innerHTML = `<i class="fa-solid fa-circle-info"></i><span>${message}</span>`; } }
   async function lookupReceptionFile() {
@@ -1150,8 +1165,8 @@
       if (!match) { clearReceptionSummary("No se encontró una solicitud con ese número de avalúo asignado."); $("#formMessage").textContent = `No se encontró una solicitud con el número de avalúo ${number}.`; return; }
       if (records.some((record) => normalizeNumber(record.numeroAvaluo) === number)) { clearReceptionSummary("Ese número ya tiene un registro en Recepción."); $("#formMessage").textContent = `El avalúo ${number} ya está registrado en Recepción; busca otro número asignado en Solicitudes.`; return; }
       const setField = (name, value) => { const field = form.elements.namedItem(name); if (field && value) { if (field.tagName === "SELECT" && !Array.from(field.options).some((option) => option.value === String(value))) field.add(new Option(String(value), String(value))); field.value = value; } };
-      const specific = match.datosEspecificos || {}; const type = match.tipoBien || specific.tipoBien || specific.tipo_bien || "";
-      setField("tipoBien", type); setField("tipoAvaluo", match.tipoAvaluo || specific.tipoAvaluo || ""); setField("usuario", match.asesor || match.valuadorAsignado || ""); setField("solicitante", match.solicitante?.nombre || match.nombreSolicitante || "");
+      const specific = match.datosEspecificos || {}; const type = match.tipoBien || specific.tipoBien || specific.tipo_bien || ""; const appraisalType = match.tipoAvaluo || match.tipoAvalúo || specific.tipoAvaluo || specific.tipoAvalúo || specific.tipo_avaluo || "";
+      setField("tipoBien", type); setField("tipoAvaluo", appraisalType); setField("usuario", match.asesor || match.valuadorAsignado || ""); setField("solicitante", match.solicitante?.nombre || match.nombreSolicitante || "");
       const operation = match.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? ""; if (operation !== "") setField("valorAvaluo", operation);
       renderReceptionSummary(match, number); $("#formMessage").textContent = `Datos de la solicitud ${match.folio || number} cargados para un nuevo registro.`;
     } catch { clearReceptionSummary("No fue posible consultar el expediente; puedes capturarlo manualmente."); }
