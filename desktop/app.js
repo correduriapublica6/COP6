@@ -1079,6 +1079,7 @@
     paymentDeliveredToInput.value = record.pagado ? record.pagoEntregadoA || "" : "";
     paymentDateInput.value = record.pagado ? record.fechaPago || today() : "";
     avaluoDateInput.value = record.fechaAvaluo || today();
+    syncReceptionReadonlyTypes(record.tipoBien, record.tipoAvaluo);
     form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = viewOnly; });
     form.querySelectorAll("[data-record-save-action]").forEach((button) => button.classList.toggle("is-hidden", viewOnly));
     const dialogTitle = $("#dialogTitle");
@@ -1112,6 +1113,10 @@
   }
   let receptionLookupTimer = null;
   function setReceptionSummary(id, value) { const node = document.getElementById(id); if (node) node.textContent = value || "—"; }
+  function syncReceptionReadonlyTypes(typeBien = form?.elements.namedItem("tipoBien")?.value, typeAvaluo = form?.elements.namedItem("tipoAvaluo")?.value) {
+    setReceptionSummary("receptionTypeBienValue", typeBien);
+    setReceptionSummary("receptionTypeAvaluoValue", typeAvaluo);
+  }
   function requestAppraisalNumber(request) {
     return normalizeNumber(request?.numeroAvaluo || request?.numeroAvaluoAsignado || request?.numeroAvalúo || request?.numero || "");
   }
@@ -1128,6 +1133,7 @@
     setReceptionSummary("summaryOperationValue", operation !== "" && Number.isFinite(money) ? formatCurrency(money) : operation);
     setReceptionSummary("summaryApplicant", match?.solicitante?.nombre || match?.nombreSolicitante || "");
     setReceptionSummary("summaryValuator", match?.asesor || match?.valuadorAsignado || "");
+    syncReceptionReadonlyTypes(type, match?.tipoAvaluo || specific.tipoAvaluo || "");
     setReceptionSummary("summaryPropertyType", type); setReceptionSummary("summaryVisitContact", contact); setReceptionSummary("summaryVisitPhone", phone); setReceptionSummary("summaryOwner", owner); setReceptionSummary("summaryAddress", address);
     const state = $("#receptionSummaryState"); if (state) { state.textContent = `Solicitud ${match?.folio || ""}`; state.classList.add("is-found"); }
     const status = $("#receptionLookupStatus"); if (status) { status.className = "reception-lookup-status is-found"; status.innerHTML = '<i class="fa-solid fa-circle-check"></i><span>Solicitud localizada y cargada.</span>'; }
