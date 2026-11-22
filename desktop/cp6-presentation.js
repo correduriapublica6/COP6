@@ -9,6 +9,7 @@
     set('v2ContextTitle', title); set('v2ContextDescription', description);
     const context = $('.v2-context');
     if (context) context.hidden = view === 'solicitudes';
+    document.body.classList.toggle('solicitudes-context-hidden', view === 'solicitudes');
     document.querySelectorAll('.v2-operation-nav button').forEach(button => button.classList.remove('v2-active'));
   };
   function syncSession() {
