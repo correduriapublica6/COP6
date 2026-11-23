@@ -26,6 +26,7 @@
   const APPLICANT_APP_VERSION_KEY = "app_version";
   const REQUEST_DRAFT_KEY = "control-avaluos.public-request-draft.v1";
   let requestDraftTimer = null;
+  let requestStatusButtonsBound = false;
 
   const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
   async function api(endpoint, options = {}) {
@@ -1183,6 +1184,28 @@
     const buttons = Array.from({ length: pages }, (_, index) => { const number = index + 1; return `<button type="button" class="table-page-button${number === current ? " is-active" : ""}" data-requests-page="${number}" aria-current="${number === current ? "page" : "false"}">${number}</button>`; }).join("");
     return `<nav class="table-pagination request-table-pagination" aria-label="Paginación de solicitudes"><span>Mostrando ${Math.min((current - 1) * REQUESTS_PAGE_SIZE + 1, total)}-${Math.min(current * REQUESTS_PAGE_SIZE, total)} de ${total}</span><div><button type="button" class="table-page-button" data-requests-page="${current - 1}" ${current === 1 ? "disabled" : ""} aria-label="Página anterior">‹</button>${buttons}<button type="button" class="table-page-button" data-requests-page="${current + 1}" ${current === pages ? "disabled" : ""} aria-label="Página siguiente">›</button></div></nav>`;
   }
+  function requestAdminStatusGroup(status) {
+    const normalized = String(status || "").trim().toLocaleLowerCase("es-MX").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (normalized === "concluida" || normalized === "concluido") return "concluida";
+    if (normalized === "recibida" || normalized === "recibido") return "recibida";
+    return normalized;
+  }
+  function bindRequestStatusButtons() {
+    if (requestStatusButtonsBound) return;
+    requestStatusButtonsBound = true;
+    document.addEventListener("click", (event) => {
+      const button = event.target?.closest?.("#solicitudesView [data-request-status]");
+      if (!button) return;
+      event.preventDefault();
+      document.querySelectorAll("#solicitudesView [data-request-status]").forEach((item) => {
+        const active = item === button;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+      requestsPage = 1;
+      renderRequests();
+    });
+  }
   async function renderRequests(refresh = true) {
     const table = $("#serviceRequestsTable");
     if (!table) return;
@@ -1195,7 +1218,7 @@
       .includes(String(user || "").trim().toLocaleLowerCase("es-MX"))) : requests;
     const query = String($("#requestSearchInput")?.value || "").toLowerCase();
     const status = document.querySelector("#solicitudesView .request-status-pill.is-active")?.dataset.requestStatus || "";
-    visible = visible.filter((item) => (!query || JSON.stringify(item).toLowerCase().includes(query)) && (!status || item.estado === status));
+    visible = visible.filter((item) => (!query || JSON.stringify(item).toLowerCase().includes(query)) && (!status || requestAdminStatusGroup(item.estado) === status));
     const pages = Math.max(1, Math.ceil(visible.length / REQUESTS_PAGE_SIZE));
     requestsPage = Math.min(Math.max(1, requestsPage), pages);
     const pageItems = visible.slice((requestsPage - 1) * REQUESTS_PAGE_SIZE, requestsPage * REQUESTS_PAGE_SIZE);
@@ -1313,15 +1336,7 @@
     $("#applicantHomeLogoutButton")?.addEventListener("click", () => { applicantSession = null; sessionStorage.removeItem("control-avaluos.applicant"); showPublicEntry(); });
     $("#requestSearchInput")?.addEventListener("input", () => { requestsPage = 1; renderRequests(); });
     $("#registeredApplicantsSearchInput")?.addEventListener("input", renderRegisteredApplicants);
-    document.querySelectorAll("#solicitudesView [data-request-status]").forEach((button) => button?.addEventListener("click", () => {
-      document.querySelectorAll("#solicitudesView [data-request-status]").forEach((item) => {
-        const active = item === button;
-        item.classList.toggle("is-active", active);
-        item.setAttribute("aria-pressed", String(active));
-      });
-      requestsPage = 1;
-      renderRequests();
-    }));
+    bindRequestStatusButtons();
     window.addEventListener("control-avaluos:authenticated", () => { renderWelcomeRequests(); renderRequests(); });
     window.addEventListener("control-avaluos:state-ready", event => {
       const user = window.ControlAvaluosDesktop?.getActiveUser?.();

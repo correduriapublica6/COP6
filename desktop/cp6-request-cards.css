@@ -114,3 +114,59 @@ body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #solicitudesView >
     font-size: 10px !important;
   }
 }
+
+/* Filtro administrativo de solicitudes: reglas directas para evitar superposición heredada. */
+#solicitudesView > .solicitudes-toolbar {
+  position: relative !important;
+  z-index: 45 !important;
+}
+#solicitudesView > .solicitudes-toolbar .request-status-pills {
+  position: relative !important;
+  z-index: 46 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 42px !important;
+  padding: 4px !important;
+  box-sizing: border-box !important;
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  overflow: visible !important;
+}
+#solicitudesView > .solicitudes-toolbar .request-status-pill {
+  position: relative !important;
+  z-index: 47 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 1 1 0 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: 32px !important;
+  margin: 0 !important;
+  padding: 0 10px !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 7px !important;
+  color: #475569 !important;
+  font: 700 11px/1 Inter, "Segoe UI", sans-serif !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  white-space: nowrap !important;
+}
+#solicitudesView > .solicitudes-toolbar .request-status-pill.is-active {
+  background: #263b59 !important;
+  border-color: #263b59 !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 8px rgba(38,59,89,.2) !important;
+}
+#solicitudesView > .solicitudes-toolbar .request-status-pill:not(.is-active):hover {
+  background: #e2e8f0 !important;
+  color: #1e293b !important;
+}
+@media (max-width: 760px) {
+  #solicitudesView > .solicitudes-toolbar .request-status-pill { padding-inline: 5px !important; font-size: 10px !important; }
+}
