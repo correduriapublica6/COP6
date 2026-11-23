@@ -651,12 +651,21 @@
     });
     input.click();
   }
-  async function annexDocuments(item) {
+  function isAnnexFile(file) {
+    return /anex/i.test(String(file?.categoria || file?.category || file?.tipoDocumento || file?.kind || ""));
+  }
+  function annexFilesFor(item) {
+    const files = Array.isArray(item?.archivos) ? item.archivos : [];
+    if (Array.isArray(item?.anexos) && item.anexos.length) return item.anexos;
+    if (Array.isArray(item?.anexosDocumentos) && item.anexosDocumentos.length) return item.anexosDocumentos;
+    return files.filter(isAnnexFile);
+  }
+  async function annexDocuments(item, kind = "anexo") {
     if (!item?.id) return;
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "image/*,.pdf,.doc,.docx,.zip";
-    input.multiple = true;
+    input.multiple = kind !== "anexo";
     input?.addEventListener("change", async () => {
       const selected = Array.from(input.files || []);
       if (!selected.length) return;
@@ -664,13 +673,29 @@
       selected.slice(0, 8).forEach((file) => formData.append("documentos", file, file.name));
       try {
         const result = await api(`/solicitudes/${encodeURIComponent(item.id)}/anexar-documento`, { method: "POST", body: formData });
-        const updated = result.solicitud || { ...item, archivos: [...(item.archivos || []), ...(result.archivos || [])] };
+        const saved = (result.archivos || []).map((file) => ({ ...file, categoria: kind }));
+        const nextFiles = [...(Array.isArray(item.archivos) ? item.archivos : []), ...saved];
+        let updated = { ...(result.solicitud || item), archivos: nextFiles };
+        if (kind === "anexo") updated.anexos = [...annexFilesFor(item), ...saved];
+        try {
+          const categorized = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ archivos: nextFiles }) });
+          updated = categorized?.solicitud || categorized || updated;
+          if (kind === "anexo") updated.anexos = [...annexFilesFor(item), ...saved];
+        } catch (categoryError) {
+          console.warn("No se pudo persistir la categoría visual del archivo; se conserva la carga.", categoryError);
+        }
+        requests = requests.map((request) => request.id === item.id ? updated : request);
         await renderApplicantHomeRequests();
         renderRequestDetail(updated);
-        window.alert("Documento(s) anexado(s) correctamente al expediente.");
+        window.alert(kind === "anexo" ? "Anexo cargado correctamente." : "Documento(s) anexado(s) correctamente al expediente.");
       } catch (error) { window.alert(error.message || "No fue posible anexar el documento."); }
     });
     input.click();
+  }
+  function openAnnexViewer(item) {
+    const file = annexFilesFor(item)[0];
+    if (!file) return;
+    openResourceViewer(file.url || safeFileData(file), file.name || "Anexo", file.type || "", file.url || safeFileData(file));
   }
   function openResourceViewer(resourceUrl, resourceName = "Archivo", resourceType = "application/pdf", downloadUrl = resourceUrl) {
     const viewer = $("#fileViewerDialog");
@@ -800,7 +825,10 @@
 
     dialog.classList.add("cp6-request-detail-dialog");
     const files = Array.isArray(item.archivos) ? item.archivos : [];
-    const annexFiles = Array.isArray(item.anexos) ? item.anexos : (Array.isArray(item.anexosDocumentos) ? item.anexosDocumentos : files.filter((file) => /anex/i.test(String(file?.categoria || file?.category || file?.tipoDocumento || file?.kind || ""))));
+    const annexFiles = annexFilesFor(item);
+    const annexFileSet = new Set(annexFiles);
+    const annexFileKeys = new Set(annexFiles.map((file) => String(file?.url || file?.storageName || file?.name || "").trim()).filter(Boolean));
+    const digitalFiles = files.filter((file) => !annexFileSet.has(file) && !annexFileKeys.has(String(file?.url || file?.storageName || file?.name || "").trim()));
     const hasAnnex = annexFiles.length > 0;
     const specific = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
     const currentApplicant = item.solicitante && typeof item.solicitante === "object" ? item.solicitante : {};
@@ -822,7 +850,8 @@
     const finalPdf = apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "");
     const visitContact = item.contactoVisita && typeof item.contactoVisita === "object" ? item.contactoVisita : {};
 
-    const filesMarkup = files.length ? files.map((file, index) => {
+    const filesMarkup = digitalFiles.length ? digitalFiles.map((file) => {
+      const index = files.indexOf(file);
       const name = escapeHtml(file.name || `Archivo ${index + 1}`);
       const source = apiResourceUrl(file.url || safeFileData(file));
       if (!source) return `<div class="cp6-file-card cp6-file-unavailable"><span>${name}</span></div>`;
@@ -840,7 +869,7 @@
       ? `<div class="cp6-final-actions"><button type="button" class="cp6-action-button cp6-primary-button" data-view-final-pdf="${escapeHtml(finalPdf)}"><i class="fa-solid fa-eye"></i> Ver avalúo</button>${isAdmin ? `<button type="button" class="cp6-real-delete-button" data-delete-final-pdf="${escapeHtml(item.id)}" title="Eliminar avalúo" aria-label="Eliminar avalúo"><i class="fa-solid fa-trash-can"></i></button>` : ""}</div>`
       : `<button type="button" class="cp6-action-button cp6-primary-button" data-upload-final-pdf="${escapeHtml(item.id)}"><i class="fa-solid fa-cloud-arrow-up"></i> Subir avalúo final</button>`;
     const finalSection = `<div class="cp6-detail-deliverable ${finalPdf ? "is-complete" : "is-pending"}"><div class="cp6-detail-deliverable-title"><div class="cp6-detail-deliverable-icon"><i class="fa-solid ${finalPdf ? "fa-file-circle-check" : "fa-file-arrow-up"}"></i></div><div><h4>Avalúo final</h4><p>${finalPdf ? "El documento final está disponible para consulta." : "Aún no se ha adjuntado el documento final de este trámite."}</p></div></div><div class="cp6-detail-deliverable-action">${finalActions}</div></div>`;
-    const annexSection = `<div class="cp6-detail-deliverable ${hasAnnex ? "is-complete" : "is-annex"}"><div class="cp6-detail-deliverable-title"><div class="cp6-detail-deliverable-icon"><i class="fa-solid ${hasAnnex ? "fa-paperclip" : "fa-paperclip"}"></i></div><div><h4>Anexos</h4><p>${hasAnnex ? `${annexFiles.length} documento${annexFiles.length === 1 ? "" : "s"} complementario${annexFiles.length === 1 ? "" : "s"} cargado${annexFiles.length === 1 ? "" : "s"}.` : "Documentos complementarios del avalúo."}</p></div></div><div class="cp6-detail-deliverable-action"><button type="button" class="cp6-real-secondary-button" data-attach-missing="${escapeHtml(item.id)}"><i class="fa-solid fa-${hasAnnex ? "plus" : "paperclip"}"></i> ${hasAnnex ? "Subir otro anexo" : "Subir anexo"}</button></div></div>`;
+    const annexSection = `<div class="cp6-detail-deliverable ${hasAnnex ? "is-complete" : "is-annex"}"><div class="cp6-detail-deliverable-title"><div class="cp6-detail-deliverable-icon"><i class="fa-solid fa-paperclip"></i></div><div><h4>Anexo</h4><p>${hasAnnex ? `${annexFiles.length} documento${annexFiles.length === 1 ? "" : "s"} complementario${annexFiles.length === 1 ? "" : "s"} cargado${annexFiles.length === 1 ? "" : "s"}.` : "Documento complementario del avalúo."}</p></div></div><div class="cp6-detail-deliverable-action">${hasAnnex ? `<button type="button" class="cp6-real-secondary-button" data-view-annex><i class="fa-solid fa-eye"></i> Ver anexo</button>` : `<button type="button" class="cp6-real-secondary-button" data-upload-annex="${escapeHtml(item.id)}"><i class="fa-solid fa-paperclip"></i> Subir anexo</button>`}</div></div>`;
     const valueOperation = item.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "";
     const contactName = visitContact.nombre || visitContact.name || item.contactoVisitaNombre || specific.contactoVisitaNombre || specific.contacto_visita || "";
     const visitPhone = visitContact.telefono || visitContact.phone || item.contactoVisitaTelefono || specific.contactoVisitaTelefono || specific.telefono_visita || "";
@@ -868,7 +897,7 @@
           <section class="cp6-real-panel cp6-real-management-panel"><div class="cp6-real-panel-head"><h3>Asignación y gestión</h3></div><div class="cp6-real-assigned"><span>Valuador asignado</span><strong>${readValue(item.asesor || specific.asesor || "Sin asignar")}</strong>${["admin", "auditor"].includes(String($("#appShell")?.dataset.role || "")) ? `<button type="button" class="cp6-real-icon-action" data-open-valuator-popup title="Cambiar valuador"><i class="fa-solid fa-pen-to-square"></i></button>` : ""}</div><div class="cp6-real-management-pair"><div><span>Expediente interno</span><strong class="cp6-real-badge is-green">${readValue(appraisalNumber || "Sin asignar")}</strong><button type="button" class="cp6-real-icon-action" data-open-appraisal-popup title="Asignar número de avalúo" aria-label="Asignar número de avalúo"><i class="fa-solid fa-pen-to-square"></i></button></div><div><span>Acceso portal usuario</span><strong class="cp6-real-badge is-blue">${externalName ? readValue(item.asignadoExternoEmail || externalName) : "Sin usuario externo"}</strong><button type="button" class="cp6-real-icon-action" data-open-external-popup title="Asignar usuario externo"><i class="fa-solid fa-pen-to-square"></i></button></div></div></section>
         </div>
         <div class="cp6-real-detail-stack">
-          <section class="cp6-real-panel cp6-real-files-panel"><div class="cp6-real-panel-head"><div><h3>Expediente digital <small>(${files.length})</small></h3><p>Documentos técnicos, escrituras y antecedentes.</p></div><button type="button" class="cp6-real-primary-button" data-attach-missing="${escapeHtml(item.id)}"><i class="fa-solid fa-plus"></i> Anexar documentos</button></div><div class="cp6-real-file-list">${filesMarkup}</div></section>
+          <section class="cp6-real-panel cp6-real-files-panel"><div class="cp6-real-panel-head"><div><h3>Expediente digital <small>(${digitalFiles.length})</small></h3><p>Documentos técnicos, escrituras y antecedentes.</p></div><button type="button" class="cp6-real-primary-button" data-attach-digital="${escapeHtml(item.id)}"><i class="fa-solid fa-plus"></i> Anexar documentos</button></div><div class="cp6-real-file-list">${filesMarkup}</div></section>
           <section class="cp6-real-panel cp6-real-deliverables-panel"><div class="cp6-real-panel-head"><h3>Entregables</h3></div><div class="cp6-real-deliverables-grid">${finalSection}${annexSection}</div></section>
         </div>
       </div></div>
@@ -899,7 +928,9 @@
       } catch (error) { window.alert(error.message || "No se pudo eliminar el archivo."); }
     }));
     detail.querySelector("[data-view-final-pdf]")?.addEventListener("click", (event) => openResourceViewer(event.currentTarget.dataset.viewFinalPdf, "Avalúo final.pdf", "application/pdf"));
-    detail.querySelectorAll("[data-attach-missing]").forEach((button) => button.addEventListener("click", () => annexDocuments(item)));
+    detail.querySelectorAll("[data-attach-digital]").forEach((button) => button.addEventListener("click", () => annexDocuments(item, "expediente")));
+    detail.querySelector("[data-upload-annex]")?.addEventListener("click", () => annexDocuments(item, "anexo"));
+    detail.querySelector("[data-view-annex]")?.addEventListener("click", () => openAnnexViewer(item));
     detail.querySelector("[data-upload-final-pdf]")?.addEventListener("click", () => uploadFinalPdf(item));
     detail.querySelector("[data-delete-final-pdf]")?.addEventListener("click", async () => {
       if (!window.confirm("¿Eliminar el avalúo final? El estatus cambiará a En trámite.")) return;
