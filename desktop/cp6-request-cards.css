@@ -170,3 +170,34 @@ body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #solicitudesView >
 @media (max-width: 760px) {
   #solicitudesView > .solicitudes-toolbar .request-status-pill { padding-inline: 5px !important; font-size: 10px !important; }
 }
+
+/* Solicitudes: búsqueda compacta para que quepan los tres filtros de estado. */
+@media (min-width: 761px) {
+  #solicitudesView > .solicitudes-toolbar {
+    grid-template-columns: minmax(220px, 330px) minmax(390px, 1fr) !important;
+    column-gap: 14px !important;
+  }
+  #solicitudesView > .solicitudes-toolbar .solicitudes-search-wrap {
+    width: 100% !important;
+    max-width: 330px !important;
+  }
+  #solicitudesView > .solicitudes-toolbar .request-status-pills {
+    min-width: 390px !important;
+  }
+}
+@media (max-width: 1180px) and (min-width: 761px) {
+  #solicitudesView > .solicitudes-toolbar {
+    grid-template-columns: minmax(190px, 270px) minmax(390px, 1fr) !important;
+  }
+  #solicitudesView > .solicitudes-toolbar .solicitudes-search-wrap {
+    max-width: 270px !important;
+  }
+}
+@media (max-width: 760px) {
+  #solicitudesView > .solicitudes-toolbar .solicitudes-search-wrap,
+  #solicitudesView > .solicitudes-toolbar .request-status-pills {
+    max-width: none !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+}
