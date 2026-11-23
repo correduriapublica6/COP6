@@ -1194,7 +1194,7 @@
       .map((value) => String(value || "").trim().toLocaleLowerCase("es-MX"))
       .includes(String(user || "").trim().toLocaleLowerCase("es-MX"))) : requests;
     const query = String($("#requestSearchInput")?.value || "").toLowerCase();
-    const status = $("#requestStatusFilter")?.value || "";
+    const status = document.querySelector("#solicitudesView .request-status-pill.is-active")?.dataset.requestStatus || "";
     visible = visible.filter((item) => (!query || JSON.stringify(item).toLowerCase().includes(query)) && (!status || item.estado === status));
     const pages = Math.max(1, Math.ceil(visible.length / REQUESTS_PAGE_SIZE));
     requestsPage = Math.min(Math.max(1, requestsPage), pages);
@@ -1313,7 +1313,15 @@
     $("#applicantHomeLogoutButton")?.addEventListener("click", () => { applicantSession = null; sessionStorage.removeItem("control-avaluos.applicant"); showPublicEntry(); });
     $("#requestSearchInput")?.addEventListener("input", () => { requestsPage = 1; renderRequests(); });
     $("#registeredApplicantsSearchInput")?.addEventListener("input", renderRegisteredApplicants);
-    $("#requestStatusFilter")?.addEventListener("change", () => { requestsPage = 1; renderRequests(); });
+    document.querySelectorAll("#solicitudesView [data-request-status]").forEach((button) => button?.addEventListener("click", () => {
+      document.querySelectorAll("#solicitudesView [data-request-status]").forEach((item) => {
+        const active = item === button;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+      requestsPage = 1;
+      renderRequests();
+    }));
     window.addEventListener("control-avaluos:authenticated", () => { renderWelcomeRequests(); renderRequests(); });
     window.addEventListener("control-avaluos:state-ready", event => {
       const user = window.ControlAvaluosDesktop?.getActiveUser?.();
