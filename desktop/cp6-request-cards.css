@@ -248,3 +248,40 @@ body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #solicitudesView >
     justify-content: center !important;
   }
 }
+
+/* Nueva solicitud comparte la misma barra que los filtros; no usa una capa absoluta. */
+#solicitudesView > .solicitudes-toolbar .request-status-pills .request-new-button {
+  position: relative !important;
+  z-index: 48 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: 142px !important;
+  height: 32px !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  border: 1px solid #263b59 !important;
+  border-radius: 7px !important;
+  background: #263b59 !important;
+  color: #ffffff !important;
+  font: 700 11px/1 Inter, "Segoe UI", sans-serif !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+}
+#solicitudesView > .solicitudes-toolbar .request-status-pills .request-new-button:hover {
+  background: #1e2f49 !important;
+  border-color: #1e2f49 !important;
+}
+#solicitudesView > .solicitudes-toolbar > .solicitudes-heading-actions {
+  display: none !important;
+}
+@media (max-width: 760px) {
+  #solicitudesView > .solicitudes-toolbar .request-status-pills .request-new-button {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    padding-inline: 8px !important;
+    font-size: 10px !important;
+  }
+}
