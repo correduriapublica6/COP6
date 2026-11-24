@@ -377,15 +377,19 @@ body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #solicitudesView >
 :where(#loginScreen, #appShell) .cp6-admin-request-card.is-concluded .cp6-request-card-top {
   margin: -20px -18px 0;
   padding: 20px 18px 17px;
-  border-bottom-color: #b6e3c3;
+  border-bottom-color: #d3dce6;
   border-radius: 16px 16px 0 0;
-  background: #dcf5e5;
+  background: #e4eaf0;
 }
 :where(#loginScreen, #appShell) .cp6-admin-request-card.is-concluded .cp6-request-applicant-name {
   color: #334155;
 }
+:where(#loginScreen, #appShell) .cp6-admin-request-card.is-concluded .cp6-request-status-stack .request-status {
+  background: #d3dce6;
+  color: #334155;
+}
 :where(#loginScreen, #appShell) .cp6-admin-request-card.is-concluded .cp6-request-appraisal-number {
-  color: #166534;
+  color: #334155;
 }
 @media (max-width: 700px) {
   :where(#loginScreen, #appShell) .cp6-admin-request-card.is-concluded .cp6-request-card-top {
