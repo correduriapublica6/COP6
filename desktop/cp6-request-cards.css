@@ -335,3 +335,13 @@ body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #solicitudesView >
     min-width: 0 !important;
   }
 }
+
+/* Los tres filtros de estado comparten una medida uniforme. */
+#solicitudesView > .solicitudes-toolbar .request-status-pills .request-status-pill {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  padding-left: 7px !important;
+  padding-right: 7px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
