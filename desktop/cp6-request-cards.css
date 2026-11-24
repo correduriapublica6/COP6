@@ -352,7 +352,7 @@ body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #solicitudesView >
   max-width: 235px;
   margin-top: 6px;
   color: #172033;
-  font: 800 15px/1.25 Inter, "Segoe UI", system-ui, sans-serif;
+  font: 400 14px/1.25 Inter, "Segoe UI", system-ui, sans-serif;
   letter-spacing: -.012em;
   overflow-wrap: anywhere;
 }
@@ -370,5 +370,26 @@ body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #solicitudesView >
   white-space: nowrap;
 }
 @media (max-width: 700px) {
-  :where(#loginScreen, #appShell) .cp6-request-applicant-name { max-width: 190px; font-size: 14px; }
+  :where(#loginScreen, #appShell) .cp6-request-applicant-name { max-width: 190px; font-size: 13px; }
+}
+
+/* Solicitudes concluidas · resaltar solo el encabezado, no el contenido. */
+:where(#loginScreen, #appShell) .cp6-admin-request-card.is-concluded .cp6-request-card-top {
+  margin: -20px -18px 0;
+  padding: 20px 18px 17px;
+  border-bottom-color: #b6e3c3;
+  border-radius: 16px 16px 0 0;
+  background: #dcf5e5;
+}
+:where(#loginScreen, #appShell) .cp6-admin-request-card.is-concluded .cp6-request-applicant-name {
+  color: #334155;
+}
+:where(#loginScreen, #appShell) .cp6-admin-request-card.is-concluded .cp6-request-appraisal-number {
+  color: #166534;
+}
+@media (max-width: 700px) {
+  :where(#loginScreen, #appShell) .cp6-admin-request-card.is-concluded .cp6-request-card-top {
+    margin: -18px -16px 0;
+    padding: 18px 16px 16px;
+  }
 }
