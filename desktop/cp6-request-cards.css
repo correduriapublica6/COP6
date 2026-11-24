@@ -285,3 +285,53 @@ body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #solicitudesView >
     font-size: 10px !important;
   }
 }
+
+/* Nueva solicitud fuera del grupo de estados, siempre visible. */
+#solicitudesView > .solicitudes-toolbar {
+  overflow: visible !important;
+}
+#solicitudesView > .solicitudes-toolbar > .solicitudes-heading-actions {
+  position: static !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  z-index: 55 !important;
+}
+#solicitudesView > .solicitudes-toolbar > .solicitudes-heading-actions #newInternalRequestButton {
+  position: static !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: auto !important;
+  min-width: 146px !important;
+  max-width: none !important;
+  height: 40px !important;
+  padding: 0 14px !important;
+  white-space: nowrap !important;
+}
+@media (min-width: 761px) {
+  #solicitudesView > .solicitudes-toolbar {
+    grid-template-columns: minmax(180px, 285px) minmax(300px, 1fr) minmax(146px, auto) !important;
+  }
+  #solicitudesView > .solicitudes-toolbar .request-status-pills {
+    min-width: 0 !important;
+  }
+}
+@media (max-width: 760px) {
+  #solicitudesView > .solicitudes-toolbar > .solicitudes-heading-actions {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    width: 100% !important;
+    justify-content: stretch !important;
+  }
+  #solicitudesView > .solicitudes-toolbar > .solicitudes-heading-actions #newInternalRequestButton {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
