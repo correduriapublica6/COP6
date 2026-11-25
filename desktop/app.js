@@ -1873,17 +1873,6 @@
   $("#profilePeriodFilter")?.addEventListener("change", (event) => { $("#profileCustomDates") && ($("#profileCustomDates").hidden = event.target.value !== "custom"); profileRequestsPage = 1; renderProfileDashboard(); });
   $("#profileStartDate")?.addEventListener("change", () => { profileRequestsPage = 1; renderProfileDashboard(); });
   $("#profileEndDate")?.addEventListener("change", () => { profileRequestsPage = 1; renderProfileDashboard(); });
-  $("#sendProfileSummaryWhatsApp")?.addEventListener("click", async () => {
-    const button = $("#sendProfileSummaryWhatsApp"); const message = $("#profileSummaryWhatsAppMessage");
-    const currentUser = String(activeSessionUser || ""); const selectedUser = roleFor(currentUser) === "admin" ? ($("#profileMetricsFilter")?.value || "__all") : currentUser;
-    const period = $("#profilePeriodFilter")?.value || "all";
-    button.disabled = true; if (message) { message.textContent = "Enviando resumen…"; message.className = "form-message cp6-summary-whatsapp-message is-loading"; }
-    try {
-      await apiRequest("/profile-summary/whatsapp", { method: "POST", body: JSON.stringify({ selectedUser, period, startDate: $("#profileStartDate")?.value || "", endDate: $("#profileEndDate")?.value || "" }) });
-      if (message) { message.textContent = selectedUser === "__all" ? "Resumen enviado a los usuarios configurados." : "Resumen enviado por WhatsApp."; message.className = "form-message cp6-summary-whatsapp-message is-success"; }
-    } catch (error) { if (message) { message.textContent = error.message || "No se pudo enviar el resumen."; message.className = "form-message cp6-summary-whatsapp-message is-error"; } }
-    finally { button.disabled = false; }
-  });
   document.querySelectorAll("[data-profile-quick-filter]").forEach((button) => button.addEventListener("click", () => { profileQuickFilter = button.dataset.profileQuickFilter || ""; profileRequestsPage = 1; renderProfileDashboard(); }));
   window.addEventListener("control-avaluos:home-refresh", () => { if (activeAppView === "perfil") renderProfileDashboard(); });
   $("#logoutHeaderButton")?.addEventListener("click", resetAuthUiBeforeLogout);

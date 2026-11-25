@@ -694,8 +694,6 @@
   <label class="cp6-workspace-filter" id="profileMetricsFilterWrap">Usuario<select aria-label="Seleccionar usuario para métricas" id="profileMetricsFilter"><option value="__all">Todos los usuarios</option></select></label>
   <label class="cp6-workspace-filter">Periodo<select aria-label="Seleccionar periodo" id="profilePeriodFilter"><option value="all">Todas las fechas</option><option value="today">Hoy</option><option value="week">Esta semana</option><option value="month">Este mes</option><option value="custom">Rango personalizado</option></select></label>
   <div class="cp6-workspace-custom-dates" hidden id="profileCustomDates"><label>Desde<input id="profileStartDate" type="date"></label><label>Hasta<input id="profileEndDate" type="date"></label></div>
-  <button class="primary-button btn-copu-primary" id="sendProfileSummaryWhatsApp" type="button"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>Enviar resumen por WhatsApp</span></button>
-  <p class="form-message" id="profileSummaryWhatsAppMessage" role="status" aria-live="polite"></p>
 </section>
 <section aria-label="Rendimiento consolidado" class="cp6-performance-card" hidden id="profilePerformanceCard">
   <div class="cp6-performance-blocks">
@@ -749,7 +747,7 @@
 </main>
 <dialog class="record-dialog report-dialog" id="reportDialog"><form id="reportForm" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">REPORTE GENERAL</p><h2>Selecciona el periodo</h2></div><button aria-label="Cerrar" class="icon-button" id="closeReportDialogButton" type="button">×</button></div><p class="report-dialog-copy">Para generar un resumen primero selecciona las fechas y da clic en Generar resumen PDF.</p><div class="form-grid"><label>Desde *<input id="reportStartDate" required="" type="date"/></label><label>Hasta *<input id="reportEndDate" required="" type="date"/></label></div><p class="form-message" id="reportMessage" role="alert"></p><div class="dialog-actions"><button class="secondary-button btn-copu-primary" id="cancelReportDialogButton" type="button">Cancelar</button><button class="primary-button" type="submit">Generar resumen PDF</button></div></form></dialog>
 <script src="automotriz-model.js?v=final-20261024"></script>
-<script src="app.js?v=detail-request-v37-reception-20261122-01"></script><script src="profile-summary-whatsapp.js?v=summary-button-20261125-01"></script>
+<script src="app.js?v=detail-request-v37-reception-20261122-01"></script>
 <script src="image-utils.js?v=final-20261024"></script>
 <script src="vendor/html-docx.js?v=final-20261024"></script>
 <script src="word-export.js?v=final-20261024"></script>
