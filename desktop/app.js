@@ -14,8 +14,10 @@
   const DEFAULT_ROLE_BY_USER = { "Juan Manuel Barrera Martínez": "admin", "Francisco Gabriel Hernández Estrada": "admin", "Caridad Rojas Vázquez": "editor", "Ivan de Luna Aldape": "valuador" };
   const VALID_ROLES = ["admin", "editor", "viewer", "valuador", "auditor"];
   const LEGACY_KEYS = ["control-avaluos.desktop.v2", "control-avaluos.desktop.v1"];
-  // API pública fija para despliegues externos como GitHub Pages.
-  const API_BASE_URL = "https://api.cp6coahuila.com/api";
+  // En una instalación local, la API debe ser el mismo servidor que entrega el frontend.
+  // Solo los despliegues externos conservan la API pública.
+  const localHost = /^(localhost|127\.0\.0\.1|192\.168\..*|10\..*|172\.(1[6-9]|2\d|3[0-1])\..*)$/i.test(window.location.hostname) || window.location.hostname === "";
+  const API_BASE_URL = localHost ? `${window.location.origin}/api` : "https://api.cp6coahuila.com/api";
   const today = () => new Date().toISOString().slice(0, 10);
   const initialDraft = { numeroAvaluo: "", usuario: "", asesorValuador: "", tipoBien: "", tipoAvaluo: "", solicitante: "", valorAvaluo: "", seEntregoA: "", pagoEntregadoA: "", observacion: "", fechaAvaluo: today(), pagado: false, montoPagado: 0, metodoPago: "", fechaPago: "" };
 
@@ -485,7 +487,7 @@
       loginMessage.textContent = "Selecciona un perfil Administrador.";
       return;
     }
-    if (!selfChange && !isAdmin()) {
+    if (!selfChange && !isAdmin() && !firstAdminAccess) {
       const currentPassword = String(loginPassword.value || "");
       if (!currentPassword) {
         loginMessage.textContent = "Escribe la contraseña actual del Administrador antes de cambiarla.";
