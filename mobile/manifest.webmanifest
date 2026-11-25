@@ -1,0 +1,16 @@
+{
+  "name": "Control de Avalúos CP6 · Móvil",
+  "short_name": "CP6 Móvil",
+  "description": "Versión móvil instalable de Control de Avalúos de la Correduría Pública 6.",
+  "lang": "es-MX",
+  "start_url": "/mobile/",
+  "scope": "/mobile/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0f172a",
+  "background_color": "#f8fafc",
+  "icons": [
+    { "src": "../desktop/assets/pwa-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "../desktop/assets/pwa-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
