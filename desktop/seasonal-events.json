@@ -1,0 +1,58 @@
+{
+  "mode": "automatic",
+  "showLoginDecoration": true,
+  "showExternalPortalDecoration": false,
+  "showAdminDecoration": false,
+  "events": [
+    {
+      "id": "halloween",
+      "name": "Halloween",
+      "enabled": true,
+      "start": "10-15",
+      "end": "11-02",
+      "image": "assets/halloween-login-cp6.png",
+      "priority": 20,
+      "opacity": 0.22
+    },
+    {
+      "id": "dia-de-muertos",
+      "name": "Día de Muertos",
+      "enabled": true,
+      "start": "10-28",
+      "end": "11-03",
+      "image": "assets/dia-de-muertos-catrina-catrin.png",
+      "priority": 40,
+      "opacity": 0.27
+    },
+    {
+      "id": "navidad",
+      "name": "Navidad",
+      "enabled": true,
+      "start": "12-01",
+      "end": "01-06",
+      "image": "assets/navidad-login-cp6.png",
+      "priority": 30,
+      "opacity": 0.22
+    },
+    {
+      "id": "dia-de-la-bandera",
+      "name": "Día de la Bandera",
+      "enabled": false,
+      "start": "02-24",
+      "end": "02-24",
+      "image": "assets/dia-bandera-cp6.png",
+      "priority": 50,
+      "opacity": 0.2
+    },
+    {
+      "id": "aniversario-cp6",
+      "name": "Aniversario de Correduría Pública 6",
+      "enabled": false,
+      "start": "03-15",
+      "end": "03-31",
+      "image": "assets/aniversario-cp6.png",
+      "priority": 60,
+      "opacity": 0.2
+    }
+  ]
+}

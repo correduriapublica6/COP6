@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<script>window.CP6_GAME_NAME = "Avaluando";</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaluando</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #38bdf8;
+            margin-bottom: 3px;
+            letter-spacing: 1px;
+        }
+
+        /* Pantalla de Instrucciones */
+        #start-screen {
+            background-color: #1e293b;
+            border: 2px solid #38bdf8;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+            margin-top: 10px;
+        }
+
+        #start-screen h2 {
+            color: #38bdf8;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+
+        .instructions-list {
+            text-align: left;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #e2e8f0;
+            margin-bottom: 15px;
+        }
+
+        .color-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 15px 0;
+            background-color: #0f172a;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+
+        .legend-tile {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .legend-tile.green { background-color: #16a34a; }
+        .legend-tile.yellow { background-color: #ca8a04; }
+        .legend-tile.gray { background-color: #475569; }
+
+        .start-btn {
+            padding: 12px 24px;
+            background-color: #0284c7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            width: 100%;
+        }
+
+        .start-btn:hover {
+            background-color: #0369a1;
+            transform: translateY(-1px);
+        }
+
+        /* Contenedor del Juego */
+        #game-section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Caja de Pista */
+        .hint-box {
+            background-color: #1e293b;
+            border: 2px solid #38bdf8;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 15px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+        }
+
+        .hint-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #38bdf8;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .hint-text {
+            font-size: 0.95rem;
+            color: #f1f5f9;
+            font-weight: 500;
+            line-height: 1.35;
+        }
+
+        #game-container {
+            display: grid;
+            grid-template-rows: repeat(6, 1fr);
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+        }
+
+        .tile {
+            width: 48px;
+            height: 48px;
+            border: 2px solid #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 4px;
+            background-color: #1e293b;
+            color: #ffffff;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .tile.active-cell {
+            border-color: #38bdf8 !important;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+        }
+
+        .tile.filled {
+            border-color: #64748b;
+        }
+
+        .tile.correct {
+            background-color: #16a34a !important;
+            border-color: #16a34a !important;
+            color: #ffffff !important;
+        }
+
+        .tile.present {
+            background-color: #ca8a04 !important;
+            border-color: #ca8a04 !important;
+            color: #ffffff !important;
+        }
+
+        .tile.absent {
+            background-color: #475569 !important;
+            border-color: #475569 !important;
+            color: #ffffff !important;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.4s ease;
+        }
+
+        #keyboard {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .key {
+            background-color: #334155;
+            color: #f8fafc;
+            border: none;
+            padding: 12px 0;
+            flex: 1;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            transition: background-color 0.2s;
+            user-select: none;
+        }
+
+        .key:hover {
+            background-color: #475569;
+        }
+
+        .key.action-btn {
+            background-color: #0284c7;
+            flex: 1.5;
+            font-size: 0.75rem;
+        }
+
+        .key.action-btn:hover {
+            background-color: #0369a1;
+        }
+
+        .key.correct {
+            background-color: #16a34a !important;
+            color: #ffffff !important;
+        }
+
+        .key.present {
+            background-color: #ca8a04 !important;
+            color: #ffffff !important;
+        }
+
+        .key.absent {
+            background-color: #1e293b !important;
+            color: #64748b !important;
+        }
+
+        #message {
+            margin-top: 8px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            min-height: 22px;
+            text-align: center;
+            color: #38bdf8;
+        }
+
+        #restart-btn {
+            padding: 10px 20px;
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        #restart-btn:hover {
+            background-color: #15803d;
+        }
+    </style>
+<style>.cp6-session-badge{position:fixed;top:10px;left:14px;z-index:9999;padding:5px 10px;border:1px solid rgba(59,130,246,.55);border-radius:999px;background:rgba(15,23,42,.86);color:#dbeafe;font:500 11px Segoe UI,sans-serif;pointer-events:none}</style></head>
+<body class="cp6-integrated-game">
+
+    <header>
+        <h1>Avaluando</h1>
+    </header>
+
+    <!-- PANTALLA INICIAL DE INSTRUCCIONES -->
+    <div id="start-screen">
+        <h2>¿Cómo jugar?</h2>
+        <div class="instructions-list">
+            <p style="margin-bottom: 8px;">Adivina el término técnico pericial de <b>5 letras</b> en 6 intentos con ayuda de la pista.</p>
+            <p>Después de cada intento, el color de las casillas cambiará para mostrar qué tan cerca estás:</p>
+        </div>
+
+        <div class="color-legend">
+            <div class="legend-item">
+                <div class="legend-tile green">V</div>
+                <span><b>Verde:</b> La letra está en la palabra y en la posición correcta.</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-tile yellow">A</div>
+                <span><b>Amarillo:</b> La letra está en la palabra pero en otra posición.</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-tile gray">G</div>
+                <span><b>Gris:</b> La letra no forma parte del término.</span>
+            </div>
+        </div>
+
+        <button id="start-btn" class="start-btn">Comenzar Juego</button>
+    </div>
+
+    <!-- SECCIÓN PRINCIPAL DEL JUEGO -->
+    <div id="game-section">
+        <div class="hint-box">
+            <div class="hint-title">💡 Adivina la palabra de:</div>
+            <div id="hint-text" class="hint-text">Cargando pista...</div>
+        </div>
+
+        <div id="game-container"></div>
+        <div id="message"></div>
+        <button id="restart-btn">Siguiente Palabra</button>
+
+        <div id="keyboard">
+            <div class="keyboard-row">
+                <button class="key" data-key="Q">Q</button>
+                <button class="key" data-key="W">W</button>
+                <button class="key" data-key="E">E</button>
+                <button class="key" data-key="R">R</button>
+                <button class="key" data-key="T">T</button>
+                <button class="key" data-key="Y">Y</button>
+                <button class="key" data-key="U">U</button>
+                <button class="key" data-key="I">I</button>
+                <button class="key" data-key="O">O</button>
+                <button class="key" data-key="P">P</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key" data-key="A">A</button>
+                <button class="key" data-key="S">S</button>
+                <button class="key" data-key="D">D</button>
+                <button class="key" data-key="F">F</button>
+                <button class="key" data-key="G">G</button>
+                <button class="key" data-key="H">H</button>
+                <button class="key" data-key="J">J</button>
+                <button class="key" data-key="K">K</button>
+                <button class="key" data-key="L">L</button>
+                <button class="key" data-key="Ñ">Ñ</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key action-btn" data-key="ENTER">ENVIAR</button>
+                <button class="key" data-key="Z">Z</button>
+                <button class="key" data-key="X">X</button>
+                <button class="key" data-key="C">C</button>
+                <button class="key" data-key="V">V</button>
+                <button class="key" data-key="B">B</button>
+                <button class="key" data-key="N">N</button>
+                <button class="key" data-key="M">M</button>
+                <button class="key action-btn" data-key="BACK">⌫ BORRAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Términos en español de 5 letras estrictas para avalúos, derecho, construcción y maquinaria
+        const wordDictionary = [
+            { word: "VALOR", hint: "Cualificación económica de un bien según la oferta y la demanda de mercado." },
+            { word: "NORMA", hint: "Disposición o estándar metodológico emitido por organismos reguladores de valuación." },
+            { word: "PERITO", hint: "Profesional especialista con registro autorizado para emitir dictámenes periciales." },
+            { word: "TASAR", hint: "Acción de determinar técnicamente el valor monetario o canon de renta de un bien." },
+            { word: "PLANO", hint: "Representación gráfica a escala de un levantamiento topográfico o arquitectónico." },
+            { word: "COSTO", hint: "Erogación necesaria para reproducir o reponer un bien en condiciones actuales." },
+            { word: "SUELO", hint: "Superficie o terreno considerado como recurso matriz y base de avalúos." },
+            { word: "RENTA", hint: "Canon o contraprestación periódica recibida por el arrendamiento de un inmueble." },
+            { word: "SALDO", hint: "Monto pendiente de liquidar en un crédito con garantía hipotecaria." },
+            { word: "TASAS", hint: "Porcentajes de descuento, capitalización o rendimiento financiero aplicados." },
+            { word: "BRUTO", hint: "Monto total de ingresos o área construida antes de deducciones u holguras." },
+            { word: "NETOS", hint: "Ingreso o superficie rentable final tras descontar gastos operativos." },
+            { word: "OBRAS", hint: "Construcciones, infraestructuras e instalaciones inspeccionadas en el predio." },
+            { word: "FIRMA", hint: "Acreditación y responsabilidad legal del valuador asentada en el reporte." },
+            { word: "SELLO", hint: "Marca o validación oficial de la unidad de valuación o correduría." },
+            { word: "FECHA", hint: "Día y año de la inspección física que fija el momento del valor." },
+            { word: "PLAZO", hint: "Período estipulado de vigencia comercial o legal de un dictamen." },
+            { word: "MONTO", hint: "Suma cuantificada en moneda nacional del valor conclusivo." },
+            { word: "TOTAL", hint: "Resultado final tras ponderar los enfoques de costos, ingresos y mercado." },
+            { word: "FINCA", hint: "Inmueble o unidad registral con folio individual en el Registro Público." },
+            { word: "LOTES", hint: "Fracciones de terreno resultantes de una subdivisión o fraccionamiento." },
+            { word: "NAVES", hint: "Edificaciones industriales o de almacenamiento de gran claro estructural." },
+            { word: "LOCAL", hint: "Unidad inmobiliaria individual destinada al comercio o la prestación de servicios." },
+            { word: "PLAZA", hint: "Desarrollo inmobiliario integrado por locales comerciales e infraestructura común." },
+            { word: "TORRE", hint: "Edificación vertical destinada a departamentos u oficinas bajo condominio." },
+            { word: "PATIO", hint: "Área abierta dentro del terreno destinada a maniobras o servicios." },
+            { word: "MUROS", hint: "Elementos estructurales divisorios de carga evaluados en su conservación." },
+            { word: "PISOS", hint: "Niveles construidos o acabados de superficie evaluados por deterioro." },
+            { word: "VENTA", hint: "Transacción traslativa de dominio tomada como homologación en comparables." },
+            { word: "VALIA", hint: "Incremento del valor comercial del suelo debido a obras o entorno." },
+            { word: "VIGOR", hint: "Estado legal mientras el dictamen conserva validez de mercado." },
+            { word: "PAGOS", hint: "Amortizaciones del crédito o erogación de derechos municipales." },
+            { word: "BANCO", hint: "Institución fiduciaria o acreedora que requiere el avalúo como garantía." },
+            { word: "ACTAS", hint: "Documentos legales donde consta una diligencia, fe pública o deslinde." },
+            { word: "NOTAR", hint: "Intervención de fedatario público que formaliza la escritura del bien." },
+            { word: "PODER", hint: "Facultad legal otorgada para representar a un propietario en actos de dominio." },
+            { word: "DEUDA", hint: "Pasivo o compromiso financiero garantizado mediante la propiedad." },
+            { word: "FOLIO", hint: "Matrícula o clave única registral asignada por el Registro Público." },
+            { word: "TOMOS", hint: "Libros físicos donde se asentaban las inscripciones registrales tradicionales." },
+            { word: "CLAVE", hint: "Identificador alfanumérico catastral asignado por el municipio." },
+            { word: "ZONAS", hint: "Sectores urbanos delimitados que comparten servicios y densidad similar." },
+            { word: "RURAL", hint: "Suelo ubicado fuera de la mancha urbana, generalmente agrícola o pecuario." },
+            { word: "EJIDO", hint: "Régimen de propiedad social regulado por la Ley Agraria." },
+            { word: "SOLAR", hint: "Terreno urbano asignado a un poblador dentro del área de un ejido." },
+            { word: "PARTE", hint: "Porcentaje o cuota indivisa que posee un copropietario en un bien." },
+            { word: "AVISO", hint: "Notificación preventiva notarial ingresada al RPP previo a escriturar." },
+            { word: "GASTO", hint: "Costos operativos e indirectos considerados en la tasa de capitalización." },
+            { word: "VIDAS", hint: "Años de duración total o remanente evaluados en la técnica Ross-Heidecke." },
+            { word: "NUEVA", hint: "Condición de una edificación sin demérito por depreciación acumulada." },
+            { word: "DANOS", hint: "Deterioro estructural o afectación física identificada en la inspección." },
+            { word: "ACERO", hint: "Material estructural cuyos perfiles metálicos definen la tipología." },
+            { word: "CARGA", hint: "Capacidad resistente en losas o cimentación contemplada en la estructura." },
+            { word: "LOSAS", hint: "Estructuras horizontales de entrepiso o azotea cuantificadas en el avalúo." },
+            { word: "MOTOR", hint: "Componente electromecánico evaluado en el enfoque de maquinaria y equipo." },
+            { word: "AUTOS", hint: "Flota vehicular utilitaria evaluada mediante guías o estudios de mercado." },
+            { word: "MARCA", hint: "Identificador del fabricante relevante en la valuación de maquinaria." },
+            { word: "HORAS", hint: "Lectura del horómetro que indica el desgaste operativo en maquinaria." },
+            { word: "USADO", hint: "Condición de un activo que presenta depreciación acumulada por uso previo." },
+            { word: "USADA", hint: "Condición de la edificación o maquinaria con demérito físico acumulado." },
+            { word: "REDES", hint: "Infraestructura de servicios públicos (agua, luz, drenaje) instalados." },
+            { word: "AGUAS", hint: "Derechos de concesión o disponibilidad de recurso hídrico para el predio." },
+            { word: "DRENA", hint: "Red sanitaria municipal de desalojo de aguas residuales." },
+            { word: "CABLE", hint: "Conductores de energía o redes de datos identificados en la instalación." },
+            { word: "DUCTO", hint: "Canalización fija de aire acondicionado, hidrocarburos o fluidos." },
+            { word: "PLACA", hint: "Identificación metálica adherida a la maquinaria con sus datos de fábrica." },
+            { word: "VIGAS", hint: "Elementos perimetrales o centrales de soporte en cubiertas y losas." },
+            { word: "TECHO", hint: "Cubierta superior del inmueble evaluada en su impermeabilidad y conservación." },
+            { word: "FONDO", hint: "Profundidad promedio del terreno utilizada para calcular el factor de forma." },
+            { word: "FORMA", hint: "Factor de ajuste aplicado cuando la geometría del predio es irregular." },
+            { word: "CANON", hint: "Monto periódico acordado por el uso, goce o concesión de un bien." },
+            { word: "CORTE", hint: "Sección arquitectónica o fecha límite de la información pericial." },
+            { word: "HOTEL", hint: "Inmueble de uso comercial enfocado en servicios de hospedaje." },
+            { word: "REJAS", hint: "Protecciones de herrería en accesos y ventanas del inmueble." },
+            { word: "BARDA", hint: "Muro perimetral que delimita la colindancia del terreno." },
+            { word: "FIRME", hint: "Base de concreto simple sobre terreno natural previa al piso final." },
+            { word: "VINIL", hint: "Recubrimiento plástico en muros o pisos considerado en acabados." },
+            { word: "BASES", hint: "Estructuras de concreto para desplante de maquinaria pesada." },
+            { word: "TURBO", hint: "Componente o turbina evaluado en maquinaria especializada." },
+            { word: "TURNO", hint: "Período operativo que determina la intensidad de uso de un equipo." },
+            { word: "TURBA", hint: "Tipo de suelo orgánico altamente compresible evaluado en topografía." },
+            { word: "PIEZA", hint: "Unidad individual de refacción o elemento de maquinaria." },
+            { word: "SERIE", hint: "Número consecutivo de fábrica para rastreo de maquinaria." },
+            { word: "ANODO", hint: "Elemento de protección catódica en tanques o tuberías metálicas." },
+            { word: "SALON", hint: "Área amplia destinada a eventos o espacios abiertos en oficinas." },
+            { word: "RESTO", hint: "Área o valor remanente tras una expropiación o afectación parcial." },
+            { word: "BOMBA", hint: "Equipo hidráulico para presurización o suministro de agua potable." },
+            { word: "CANAL", hint: "Ducto de desaguë pluvial o perfil metálico C en estructuras." },
+            { word: "BAJAS", hint: "Tuberías o bajadas pluviales de desahogo en cubiertas." },
+            { word: "ANEXO", hint: "Documento adjunto al avalúo que contiene planos, fotos o escrituras." },
+            { word: "BONOS", hint: "Instrumentos de deuda tomados en cuenta en tasas de descuento." },
+            { word: "CEDULA", hint: "Documento oficial de empadronamiento catastral o registro del inmueble." },
+            { word: "LINDES", hint: "Límites o colindancias perimetrales que delimitan una propiedad." }
+        ];
+
+        // Filtro estricto automatizado que descarta cualquier palabra que no tenga exactamente 5 letras
+        const validList = wordDictionary
+            .map(item => ({
+                word: item.word.toUpperCase().trim(),
+                hint: item.hint
+            }))
+            .filter(item => item.word.length === 5);
+
+        let currentItem = validList[Math.floor(Math.random() * validList.length)];
+        let targetWord = currentItem.word;
+        let targetHint = currentItem.hint;
+
+        let currentRow = 0;
+        let currentCol = 0;
+        let board = Array(6).fill().map(() => Array(5).fill(''));
+        let gameOver = false;
+        let gameStarted = false;
+
+        const startScreen = document.getElementById('start-screen');
+        const gameSection = document.getElementById('game-section');
+        const startBtn = document.getElementById('start-btn');
+        const gameContainer = document.getElementById('game-container');
+        const messageEl = document.getElementById('message');
+        const hintTextEl = document.getElementById('hint-text');
+        const restartBtn = document.getElementById('restart-btn');
+
+        function startGame() {
+            startScreen.style.display = 'none';
+            gameSection.style.display = 'flex';
+            gameStarted = true;
+            initBoard();
+        }
+
+        function initBoard() {
+            gameContainer.innerHTML = '';
+            for (let r = 0; r < 6; r++) {
+                const rowEl = document.createElement('div');
+                rowEl.classList.add('row');
+                rowEl.id = `row-${r}`;
+                for (let c = 0; c < 5; c++) {
+                    const tileEl = document.createElement('div');
+                    tileEl.classList.add('tile');
+                    tileEl.id = `tile-${r}-${c}`;
+                    rowEl.appendChild(tileEl);
+                }
+                gameContainer.appendChild(rowEl);
+            }
+            hintTextEl.textContent = targetHint;
+            updateActiveCell();
+        }
+
+        function updateActiveCell() {
+            for (let r = 0; r < 6; r++) {
+                for (let c = 0; c < 5; c++) {
+                    const tile = document.getElementById(`tile-${r}-${c}`);
+                    if (tile) tile.classList.remove('active-cell');
+                }
+            }
+            if (!gameOver && currentRow < 6 && currentCol < 5) {
+                const activeTile = document.getElementById(`tile-${currentRow}-${currentCol}`);
+                if (activeTile) {
+                    activeTile.classList.add('active-cell');
+                }
+            }
+        }
+
+        function handleKey(key) {
+            if (!gameStarted || gameOver) return;
+
+            if (key === 'ENTER') {
+                submitGuess();
+            } else if (key === 'BACK') {
+                if (currentCol > 0) {
+                    currentCol--;
+                    board[currentRow][currentCol] = '';
+                    updateTile(currentRow, currentCol, '');
+                    updateActiveCell();
+                }
+            } else {
+                if (currentCol < 5) {
+                    board[currentRow][currentCol] = key;
+                    updateTile(currentRow, currentCol, key);
+                    currentCol++;
+                    updateActiveCell();
+                }
+            }
+        }
+
+        function updateTile(r, c, letter) {
+            const tile = document.getElementById(`tile-${r}-${c}`);
+            tile.textContent = letter;
+            if (letter !== '') {
+                tile.classList.add('filled');
+            } else {
+                tile.classList.remove('filled');
+            }
+        }
+
+        function submitGuess() {
+            if (currentCol < 5) {
+                messageEl.textContent = "Completa las 5 letras antes de enviar";
+                const rowEl = document.getElementById(`row-${currentRow}`);
+                rowEl.classList.add('shake');
+                setTimeout(() => rowEl.classList.remove('shake'), 400);
+                return;
+            }
+
+            const guess = board[currentRow].join('');
+            const targetChars = targetWord.split('');
+            const guessChars = guess.split('');
+            const rowStatus = Array(5).fill('absent');
+
+            // 1. Verdes
+            for (let i = 0; i < 5; i++) {
+                if (guessChars[i] === targetChars[i]) {
+                    rowStatus[i] = 'correct';
+                    targetChars[i] = null;
+                    guessChars[i] = null;
+                }
+            }
+
+            // 2. Amarillos
+            for (let i = 0; i < 5; i++) {
+                if (guessChars[i] !== null) {
+                    const index = targetChars.indexOf(guessChars[i]);
+                    if (index !== -1) {
+                        rowStatus[i] = 'present';
+                        targetChars[index] = null;
+                    }
+                }
+            }
+
+            // 3. Pintar celdas
+            for (let i = 0; i < 5; i++) {
+                const tile = document.getElementById(`tile-${currentRow}-${i}`);
+                tile.classList.remove('active-cell');
+                tile.classList.add(rowStatus[i]);
+                updateKeyColor(board[currentRow][i], rowStatus[i]);
+            }
+
+            if (guess === targetWord) {
+                messageEl.textContent = "🎉 ¡Excelente! Adivinaste el término pericial.";
+                window.cp6RecordGameResult?.(100);
+                gameOver = true;
+                restartBtn.style.display = 'block';
+                return;
+            }
+
+            currentRow++;
+            currentCol = 0;
+
+            if (currentRow === 6) {
+                messageEl.textContent = `Fin del juego. El término correcto era: ${targetWord}`;
+                gameOver = true;
+                restartBtn.style.display = 'block';
+            } else {
+                messageEl.textContent = "";
+                updateActiveCell();
+            }
+        }
+
+        function updateKeyColor(letter, status) {
+            const keys = document.querySelectorAll('.key');
+            keys.forEach(key => {
+                if (key.getAttribute('data-key') === letter) {
+                    if (status === 'correct') {
+                        key.className = 'key correct';
+                    } else if (status === 'present' && !key.classList.contains('correct')) {
+                        key.className = 'key present';
+                    } else if (status === 'absent' && !key.classList.contains('correct') && !key.classList.contains('present')) {
+                        key.className = 'key absent';
+                    }
+                }
+            });
+        }
+
+        function resetGame() {
+            currentItem = validList[Math.floor(Math.random() * validList.length)];
+            targetWord = currentItem.word;
+            targetHint = currentItem.hint;
+
+            currentRow = 0;
+            currentCol = 0;
+            board = Array(6).fill().map(() => Array(5).fill(''));
+            gameOver = false;
+            messageEl.textContent = '';
+            restartBtn.style.display = 'none';
+            initBoard();
+
+            const keys = document.querySelectorAll('.key');
+            keys.forEach(key => {
+                const k = key.getAttribute('data-key');
+                if (k !== 'ENTER' && k !== 'BACK') {
+                    key.className = 'key';
+                } else {
+                    key.className = 'key action-btn';
+                }
+            });
+        }
+
+        // Listeners
+        startBtn.addEventListener('click', startGame);
+
+        document.querySelectorAll('.key').forEach(button => {
+            button.addEventListener('click', () => {
+                const keyValue = button.getAttribute('data-key');
+                handleKey(keyValue);
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                handleKey('ENTER');
+            } else if (e.key === 'Backspace') {
+                handleKey('BACK');
+            } else {
+                const key = e.key.toUpperCase();
+                if (/^[A-ZÑ]$/.test(key)) {
+                    handleKey(key);
+                }
+            }
+        });
+
+        restartBtn.addEventListener('click', resetGame);
+    </script>
+
+<script>
+(() => {
+  const sessionKey = "control-avaluos.desktop.session.v1";
+  const user = sessionStorage.getItem(sessionKey) || "Usuario CP6";
+  const game = window.CP6_GAME_NAME || document.title.split(" - ")[0] || "Juego";
+  const key = `cp6_game_stats_${user}`;
+  window.CP6_GAME_USER = user;
+  window.cp6RecordGameResult = (points) => {
+    let stats = {}; try { stats = JSON.parse(localStorage.getItem(key) || "{}"); } catch {}
+    const history = Array.isArray(stats.history) ? stats.history : [];
+    const result = { game, points: Number(points) || 0, score: Number(points) || 0, completedAt: new Date().toISOString() };
+    stats.points = Number(stats.points || 0) + result.points; stats.games = Number(stats.games || 0) + 1;
+    stats.best = Math.max(Number(stats.best || 0), result.score); stats.history = [result, ...history].slice(0, 40);
+    localStorage.setItem(key, JSON.stringify(stats));
+  };
+  const badge = document.createElement("div"); badge.className = "cp6-session-badge"; badge.textContent = user;
+  document.body.appendChild(badge);
+})();
+</script>
+</body>
+</html>
+    

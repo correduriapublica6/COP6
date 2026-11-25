@@ -1,0 +1,15 @@
+
+
+/* Home · no conservar offsets o transformaciones de otra vista al regresar. */
+body.cp6-redesign #appShell.control-shell #perfilView.profile-root-light {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
+  scroll-margin-top: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell > .app-workspace {
+  scroll-behavior: auto;
+}

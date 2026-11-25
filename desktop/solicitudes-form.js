@@ -1,0 +1,1370 @@
+(() => {
+  const API = window.ControlAvaluosDesktop?.getApiBaseUrl?.() || "/api";
+  const $ = (selector) => document.querySelector(selector);
+  const escapeHtml = (value) => String(value || "").replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#039;", '"': "&quot;" }[character]));
+  const requestDialog = $("#publicRequestDialog");
+  const applicantLoginDialog = $("#applicantLoginDialog");
+  const applicantRegisterDialog = $("#applicantRegisterDialog");
+  const applicantRequestsDialog = $("#applicantRequestsDialog");
+  let requests = [];
+  let requestsLoadPromise = null;
+  let requestsLoadKey = "";
+  let requestsLoadSequence = 0;
+  let requestsPage = 1;
+  const REQUESTS_PAGE_SIZE = 9;
+  let editingRequestId = "";
+  let applicantSession = null;
+  let archivosSeleccionados = [];
+  let archivosExistentesEnEdicion = [];
+  let applicantRefreshTimer = null;
+  let applicantNotificationTimer = null;
+  let applicantRequestsCache = [];
+  let applicantRequestsPage = 1;
+  const APPLICANT_REQUESTS_PAGE_SIZE = 5;
+  let applicantNotifications = [];
+  let applicantHighlightRequestId = "";
+  const APPLICANT_APP_VERSION_KEY = "app_version";
+  const REQUEST_DRAFT_KEY = "control-avaluos.public-request-draft.v1";
+  let requestDraftTimer = null;
+  let requestStatusButtonsBound = false;
+
+  const wait = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+  async function api(endpoint, options = {}) {
+    const maxAttempts = 3;
+    const { retries: _retries, signal: _signal, ...requestOptions } = options;
+    let lastError;
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 10000);
+      try {
+        const activeInternalUser = window.ControlAvaluosDesktop?.getActiveUser?.() || "";
+        const isFormData = typeof FormData !== "undefined" && requestOptions.body instanceof FormData;
+        const headers = { ...(isFormData ? {} : { "Content-Type": "application/json" }), ...(activeInternalUser ? { "X-User-Name": encodeURIComponent(activeInternalUser) } : {}), ...(applicantSession?.email ? { "X-Applicant-Email": applicantSession.email } : {}), ...(applicantSession?.id ? { "X-Applicant-Id": applicantSession.id } : {}), ...(requestOptions.headers || {}) };
+        const response = await fetch(`${API}${endpoint}`, { ...requestOptions, cache: "no-store", headers, signal: controller.signal });
+        if (response.ok) return response.status === 204 ? null : response.json();
+        if (![429, 502, 503, 504].includes(response.status) || attempt === maxAttempts) {
+          let message = "No se pudo completar la operación.";
+          try { message = (await response.json()).error || message; } catch {}
+          throw new Error(message);
+        }
+        lastError = new Error(`Servidor temporalmente no disponible (${response.status}).`);
+      } catch (error) {
+        lastError = error?.name === "AbortError" ? new Error("El servidor tardó demasiado en responder.") : error;
+        if (attempt === maxAttempts || (error?.name !== "AbortError" && !(error instanceof TypeError))) throw error;
+      } finally {
+        window.clearTimeout(timeout);
+      }
+      await wait(450 * attempt);
+    }
+    throw new Error(lastError?.message || "No fue posible comunicarse con el servidor. Verifica la conexión y la dirección de Recepción.");
+  }
+
+  let requestStep = 1;
+  function refreshRequestIcons() { window.lucide?.createIcons?.(); }
+  function syncPrivacyConsentState() {
+    const consent = $("#requestPrivacyConsent");
+    const next = $("#btn-next");
+    if (!next) return;
+    const blocked = requestStep === 1 && !Boolean(consent?.checked);
+    next.disabled = blocked;
+    next.setAttribute("aria-disabled", String(blocked));
+    next.classList.toggle("is-consent-disabled", blocked);
+  }
+  function showRequestStep(step) {
+    requestStep = Math.max(1, Math.min(5, Number(step) || 1));
+    document.querySelectorAll("#publicRequestForm .step-content").forEach((panel, index) => {
+      const hidden = index + 1 !== requestStep;
+      panel.classList.toggle("hidden", hidden);
+      panel.hidden = hidden;
+    });
+    const requestScrollRegion = document.querySelector("#publicRequestForm > .flex-1.overflow-y-auto");
+    if (requestScrollRegion) requestScrollRegion.scrollTop = 0;
+    document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => {
+      const number = index + 1;
+      tab.classList.toggle("is-active", number === requestStep);
+      tab.classList.toggle("is-completed", number < requestStep);
+      tab.setAttribute("aria-current", number === requestStep ? "step" : "false");
+    });
+    document.querySelectorAll("[data-step-connector]").forEach((connector) => {
+      const number = Number(connector.dataset.stepConnector);
+      connector.classList.toggle("bg-brand-600", number < requestStep);
+      connector.classList.toggle("bg-slate-200", number >= requestStep);
+    });
+    const previous = $("#btn-prev");
+    const previousLabel = $("#btn-prev-label");
+    const next = $("#btn-next");
+    const submit = $("#publicRequestSubmit");
+    if (previous) {
+      previous.hidden = false;
+      previous.classList.remove("hidden", "opacity-0", "pointer-events-none");
+      if (previousLabel) previousLabel.textContent = requestStep === 1 ? "Regresar" : "Anterior";
+    }
+    if (next) next.hidden = requestStep === 5;
+    if (submit) submit.classList.toggle("hidden", requestStep !== 5);
+    syncPrivacyConsentState();
+    updateSummary?.();
+    refreshRequestIcons();
+  }
+
+  const requestCategoryStyles = {
+    inmuebles: ["border-blue-500", "bg-blue-50", "text-blue-700"],
+    vehiculos: ["border-emerald-500", "bg-emerald-50", "text-emerald-700"],
+    maquinaria: ["border-amber-500", "bg-amber-50", "text-amber-700"],
+    mobiliario: ["border-violet-500", "bg-violet-50", "text-violet-700"],
+    intangibles: ["border-rose-500", "bg-rose-50", "text-rose-700"]
+  };
+  const requestCategoryValues = {
+    inmuebles: "Inmuebles",
+    vehiculos: "Vehículo Automotriz",
+    maquinaria: "Maquinaria y equipo",
+    mobiliario: "Mobiliario y Bienes Diversos",
+    intangibles: "Intangibles"
+  };
+  function selectCategory(category) {
+    const key = String(category || "").toLowerCase();
+    const selected = requestCategoryValues[key] ? key : Object.keys(requestCategoryValues).find((candidate) => requestCategoryValues[candidate] === category);
+    if (!selected) return;
+    const typeField = $("#publicRequestType");
+    if (typeField) typeField.value = requestCategoryValues[selected];
+    const allColors = Object.values(requestCategoryStyles).flat();
+    document.querySelectorAll("#publicRequestForm [data-request-category]").forEach((button) => {
+      button.classList.remove(...allColors, "border-slate-200", "bg-white", "text-slate-800");
+      if (button.dataset.requestCategory === requestCategoryValues[selected]) button.classList.add(...requestCategoryStyles[selected]);
+      else button.classList.add("border-slate-200", "bg-white", "text-slate-800");
+    });
+    renderDynamicFields();
+    document.querySelectorAll("#publicRequestForm [data-request-category]").forEach((button) => {
+      const active = button.dataset.requestCategory === requestCategoryValues[selected];
+      button.querySelector("[data-lucide]")?.classList.toggle("text-white", active);
+      button.querySelector("[data-lucide]")?.classList.toggle("text-slate-500", !active);
+    });
+    fillNotaries();
+    updateSummary?.();
+  }
+  function requestStepValid(step) {
+    const form = $("#publicRequestForm");
+    if (step === 1) return requireFields(form, ["nombre", "telefono"]) && Boolean($("#requestPrivacyConsent")?.checked);
+    if (step === 2) return requireFields(form, ["tipoBien", "tipoAvaluo"]);
+    return true;
+  }
+  function fileIconName(file) {
+    const name = String(file?.name || "").toLowerCase();
+    if (name.endsWith(".pdf")) return "file-text";
+    if (/\.(png|jpe?g|gif|webp|bmp)$/i.test(name)) return "image";
+    if (/\.(docx?|rtf)$/i.test(name)) return "file-type-2";
+    if (/\.(xlsx?|csv)$/i.test(name)) return "file-spreadsheet";
+    if (/\.(zip|rar|7z)$/i.test(name)) return "archive";
+    return "file";
+  }
+  function renderSelectedFiles() {
+    const list = $("#publicRequestAttachmentsList");
+    if (!list) return;
+    list.innerHTML = archivosSeleccionados.length ? `<ul>${archivosSeleccionados.map((file, index) => `<li><span class="request-file-icon request-file-icon-${fileIconName(file)}"><i data-lucide="${fileIconName(file)}" class="w-5 h-5"></i></span><span class="request-file-meta"><strong title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</strong><small>${Math.max(1, Math.round(file.size / 1024))} KB</small></span><button type="button" data-remove-request-file="${index}" aria-label="Quitar ${escapeHtml(file.name)}"><i data-lucide="x" class="w-4 h-4"></i></button></li>`).join("")}</ul>` : `<p class="text-xs text-slate-400 italic text-center py-4">No se han adjuntado archivos aún.</p>`;
+    list.querySelectorAll("[data-remove-request-file]").forEach((button) => button?.addEventListener("click", () => { archivosSeleccionados.splice(Number(button.dataset.removeRequestFile), 1); renderSelectedFiles(); }));
+    refreshRequestIcons();
+  }
+  function addSelectedFiles(fileList) {
+    Array.from(fileList || []).forEach((file) => {
+      if (!(file instanceof File)) return;
+      const duplicate = archivosSeleccionados.some((saved) => saved.name === file.name && saved.size === file.size && saved.lastModified === file.lastModified);
+      if (!duplicate && archivosSeleccionados.length < 8) archivosSeleccionados.push(file);
+    });
+    const input = $("#publicRequestAttachments");
+    if (input) input.value = "";
+    renderSelectedFiles();
+    updateSummary?.();
+  }
+  async function readFiles(files) {
+    const selectedFiles = Array.from(files || []);
+    if (!selectedFiles.length) return [];
+    return (await window.ControlAvaluosImageUtils?.uploadFiles(selectedFiles, { maxFiles: 8 })) || [];
+  }
+
+  function valuadores() {
+    const users = window.ControlAvaluosDesktop?.allUsers?.() || [];
+    const remote = window.__controlRemoteUsers || [];
+    const names = [...new Set([...users, ...remote.filter((user) => user.role === "valuador").map((user) => user.name)])].filter((name) => /Ivan|Juan|Gabriel|Cesar|Diana|Caridad|Francisco|Emmanuel/i.test(name)); return names.sort((a, b) => { const priority = (name) => /juan manuel barrera mart[ií]nez/i.test(name) ? 0 : 1; return priority(a) - priority(b) || a.localeCompare(b, "es"); });
+  }
+
+  async function fillAdvisors() {
+    const select = $("#publicRequestAdvisor");
+    if (!select) return;
+    let names = valuadores();
+    try { const state = await api("/state"); window.__controlRemoteUsers = state.users || []; names = [...new Set((state.users || []).filter((user) => user.role === "valuador").map((user) => user.name).concat(names))].sort((a, b) => (/juan manuel barrera mart[ií]nez/i.test(a) ? 0 : 1) - (/juan manuel barrera mart[ií]nez/i.test(b) ? 0 : 1) || a.localeCompare(b, "es")); } catch {}
+    select.innerHTML = `<option value="">Selecciona un valuador</option>${names.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("")}`;
+  }
+  function notaryOptions(selected = "") {
+    const list = Array.isArray(window.__controlNotarias) ? window.__controlNotarias : [];
+    return `<option value="">Selecciona una notaría</option>${list.map((item) => { const value = `${item.numero} · ${item.municipio} · ${item.nombre}`; return `<option value="${escapeHtml(value)}" ${value === selected ? "selected" : ""}>${escapeHtml(value)}</option>`; }).join("")}`;
+  }
+  function normalizeSearch(value) { return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim(); }
+  function notaryMunicipalities() { return [...new Set((Array.isArray(window.__controlNotarias) ? window.__controlNotarias : []).map((item) => String(item.municipio || "").trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es")); }
+  function renderNotarySearch(selected = "") {
+    const municipality = $("#requestNotaryMunicipality");
+    const query = $("#requestNotarySearch");
+    const results = $("#requestNotaryResults");
+    const hidden = $("#requestNotaryValue");
+    if (!municipality || !query || !results || !hidden) return;
+    municipality.innerHTML = `<option value="">Selecciona un municipio</option>${notaryMunicipalities().map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join("")}`;
+    const selectedItem = (Array.isArray(window.__controlNotarias) ? window.__controlNotarias : []).find((item) => `${item.numero} · ${item.municipio} · ${item.nombre}` === selected || `${item.numero} · ${item.municipio} · ${item.nombre}` === hidden.value);
+    if (selectedItem) { municipality.value = selectedItem.municipio; query.value = `${selectedItem.numero} · ${selectedItem.nombre}`; hidden.value = `${selectedItem.numero} · ${selectedItem.municipio} · ${selectedItem.nombre}`; }
+    const render = () => {
+      const municipalityValue = normalizeSearch(municipality.value);
+      const text = normalizeSearch(query.value);
+      const list = (Array.isArray(window.__controlNotarias) ? window.__controlNotarias : []).filter((item) => (!municipalityValue || normalizeSearch(item.municipio) === municipalityValue) && (!text || normalizeSearch(`${item.numero} ${item.nombre}`).includes(text))).slice(0, 30);
+      results.innerHTML = list.length ? list.map((item) => { const value = `${item.numero} · ${item.municipio} · ${item.nombre}`; return `<button type="button" class="notary-search-result${hidden.value === value ? " is-selected" : ""}" data-notary-value="${escapeHtml(value)}"><strong>${escapeHtml(item.numero)} · ${escapeHtml(item.nombre)}</strong><span>${escapeHtml(item.municipio)}${item.direccion ? ` · ${escapeHtml(item.direccion)}` : ""}</span></button>`; }).join("") : `<p class="notary-search-empty">Selecciona un municipio y escribe el número o nombre de la notaría.</p>`;
+      results.querySelectorAll("[data-notary-value]").forEach((button) => button?.addEventListener("click", () => { hidden.value = button.dataset.notaryValue || ""; const item = (Array.isArray(window.__controlNotarias) ? window.__controlNotarias : []).find((candidate) => `${candidate.numero} · ${candidate.municipio} · ${candidate.nombre}` === hidden.value); if (item) { municipality.value = item.municipio; query.value = `${item.numero} · ${item.nombre}`; } results.querySelectorAll(".notary-search-result").forEach((candidate) => candidate.classList.toggle("is-selected", candidate === button)); }));
+    };
+    municipality.onchange = render; query.oninput = render; render();
+  }
+  function selectedNotaryValue() { return $("#requestNotaryValue")?.value || ""; }
+  async function fillNotaries() {
+    let list = Array.isArray(window.__controlNotarias) ? window.__controlNotarias : [];
+    try { const remoteList = await api("/notarias"); if (Array.isArray(remoteList)) { list = remoteList; window.__controlNotarias = remoteList; } } catch {}
+    const selectors = [$("#applicantRegisterNotary")].filter(Boolean);
+    selectors.forEach((select) => { const selected = select.value; select.innerHTML = notaryOptions(selected); if (selected) select.value = selected; });
+  }
+
+  function renderDynamicFields() {
+    const type = String($("#publicRequestType")?.value || "");
+    const keyByType = { "Inmuebles": "inmuebles", "Vehículo Automotriz": "vehiculos", "Automotriz": "vehiculos", "Maquinaria y equipo": "maquinaria", "Mobiliario y Bienes Diversos": "mobiliario", "Intangibles": "intangibles" };
+    const selected = keyByType[type] || "";
+    document.querySelectorAll("#publicRequestForm .cat-specific-block").forEach((block) => {
+      const active = block.id === `cat-fields-${selected}`;
+      block.classList.toggle("hidden", !active);
+      block.querySelectorAll("input, select, textarea").forEach((field) => { field.required = active; });
+    });
+    $("#valor-operacion-container")?.classList.toggle("hidden", selected !== "inmuebles");
+  }
+
+  function renderInmuebleModeFields() {
+    const mode = $("#requestInmuebleMode")?.value;
+    const target = $("#requestInmuebleModeFields");
+    if (!target) return;
+    target.innerHTML = mode === "Referido" ? `<div class="notary-search-field"><label>Municipio *<select id="requestNotaryMunicipality" required><option value="">Selecciona un municipio</option></select></label><label>Buscar número o nombre de notaría *<input id="requestNotarySearch" type="search" autocomplete="off" placeholder="Ej. 14 o Emilio Darwi" required /></label><input type="hidden" id="requestNotaryValue" name="notariaReferida" /><div id="requestNotaryResults" class="notary-search-results" role="listbox"></div><p class="field-help">Primero selecciona el municipio; después escribe el número o una parte del nombre.</p></div>` : mode === "Otro" ? `<label>Describe la modalidad<input name="otraModalidad" required /></label>` : "";
+    if (mode === "Referido") { fillNotaries().then(() => renderNotarySearch()); }
+  }
+
+  function ensureRequestFieldNames() {
+    const names = { solicitante_nombre: "nombre", solicitante_telefono: "telefono", solicitante_correo: "correo", publicRequestAdvisor: "asesor", publicRequestAppraisalType: "tipoAvaluo", inmueble_subtipo: "subtipoBien", inmueble_enajenantes: "numeroEnajenantes", inmueble_propietario: "propietario", vehiculo_marca: "marcaVehiculo", vehiculo_modelo: "modeloVehiculo", vehiculo_km: "kilometraje", maquinaria_tipo: "tipoMaquinaria", maquinaria_serie: "serieMaquinaria", mobiliario_tipo: "tipoMobiliario", mobiliario_estado: "estadoMobiliario", intangible_tipo: "tipoIntangible", intangible_registro: "registroIntangible", descripcion_bien: "descripcion", valor_operacion: "valorOperacion", contacto_visita: "contactoVisitaNombre", telefono_visita: "contactoVisitaTelefono", direccion_visita: "direccionVisita", observaciones_solicitud: "observaciones" };
+    const form = $("#publicRequestForm");
+    Object.entries(names).forEach(([id, name]) => { const field = form?.querySelector(`#${id}`); if (field && !field.name) field.name = name; });
+  }
+  const unidadesTexto = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve", "veinte", "veintiuno", "veintidós", "veintitrés", "veinticuatro", "veinticinco", "veintiséis", "veintisiete", "veintiocho", "veintinueve"];
+  const decenasTexto = ["", "", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"];
+  function numeroEnLetrasMenorMil(number) {
+    const n = Math.floor(Number(number) || 0);
+    if (n < 30) return unidadesTexto[n];
+    if (n < 100) return decenasTexto[Math.floor(n / 10)] + (n % 10 ? ` y ${unidadesTexto[n % 10]}` : "");
+    if (n === 100) return "cien";
+    if (n < 200) return `ciento ${numeroEnLetrasMenorMil(n - 100)}`;
+    if (n < 300) return `doscientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    if (n < 400) return `trescientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    if (n < 500) return `cuatrocientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    if (n < 600) return `quinientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    if (n < 700) return `seiscientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    if (n < 800) return `setecientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    if (n < 900) return `ochocientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+    return `novecientos ${n % 100 ? numeroEnLetrasMenorMil(n % 100) : ""}`.trim();
+  }
+  function numeroEnLetras(number) {
+    const n = Math.floor(Number(number) || 0);
+    if (n < 1000) return numeroEnLetrasMenorMil(n);
+    if (n < 1000000) { const miles = Math.floor(n / 1000); return `${miles === 1 ? "mil" : `${numeroEnLetrasMenorMil(miles)} mil`} ${n % 1000 ? numeroEnLetrasMenorMil(n % 1000) : ""}`.trim(); }
+    const millones = Math.floor(n / 1000000); return `${millones === 1 ? "un millón" : `${numeroEnLetrasMenorMil(millones)} millones`} ${n % 1000000 ? numeroEnLetras(n % 1000000) : ""}`.trim();
+  }
+  function moneyNumber(value) { return Number(String(value || "").replace(/,/g, "").replace(/[^0-9.]/g, "")) || 0; }
+  function formattedMoney(value) { return moneyNumber(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function updateOperationMoneyPreview() {
+    const input = $("#valor_operacion");
+    if (!input) return;
+    const raw = String(input.value || "").replace(/,/g, "").replace(/[^0-9.]/g, "");
+    if (raw) input.value = raw.replace(/^(\d+)(\.\d{0,2})?.*$/, (_, integer, decimal = "") => `${Number(integer).toLocaleString("en-US")}${decimal}`);
+  }
+  function textValue(id, fallback = "-") { return String($("#" + id)?.value || "").trim() || fallback; }
+  function updateSummary() {
+    ensureRequestFieldNames();
+    const values = { solicitante: textValue("solicitante_nombre"), telefono: textValue("solicitante_telefono"), correo: textValue("solicitante_correo"), valuador: textValue("publicRequestAdvisor"), tipo: textValue("publicRequestType"), tipoAvaluo: textValue("publicRequestAppraisalType"), subtipo: textValue("inmueble_subtipo"), propietario: textValue("inmueble_propietario"), contacto: textValue("contacto_visita"), telefonoVisita: textValue("telefono_visita"), direccion: textValue("direccion_visita"), descripcion: textValue("descripcion_bien"), observaciones: textValue("observaciones_solicitud"), archivos: String(archivosSeleccionados.length) };
+    const set = (id, value) => { const node = $("#" + id); if (node) node.textContent = value; };
+    set("sum-solicitante", values.solicitante); set("sum-telefono", values.telefono); set("sum-correo", values.correo); set("sum-valuador", values.valuador); set("sum-categoria", values.tipo); set("sum-tipo-avaluo", values.tipoAvaluo); set("sum-contacto-visita", values.contacto); set("sum-telefono-visita", values.telefonoVisita); set("sum-direccion", values.direccion); set("sum-descripcion", values.descripcion); set("sum-archivos", `${values.archivos} archivo(s)`); set("sum-observaciones", values.observaciones);
+    const inmueble = values.tipo === "Inmuebles"; $("#sum-inmueble-enajenantes-row")?.classList.toggle("hidden", !inmueble); $("#sum-inmueble-propietario-row")?.classList.toggle("hidden", !inmueble); set("sum-inmueble-enajenantes", textValue("inmueble_enajenantes")); set("sum-inmueble-propietario", values.propietario); const amount = moneyNumber(textValue("valor_operacion", "0")); set("sum-valor-num", `$${formattedMoney(amount)} MXN`); set("sum-valor-letras", amount ? `${numeroEnLetras(Math.floor(amount))} pesos mexicanos${Math.round((amount % 1) * 100) ? ` con ${String(Math.round((amount % 1) * 100)).padStart(2, "0")} centavos` : ""}` : "-");
+  }
+  window.updateSummary = updateSummary;
+  window.formatTitleCase = (input) => { if (input?.value) input.value = input.value.replace(/\s+/g, " ").replace(/(^|\s)\S/g, (letter) => letter.toUpperCase()); updateSummary(); };
+  function openDialog(dialog) { if (dialog?.showModal) dialog.showModal(); }
+  function closeDialog(dialog) { if (dialog?.open) dialog.close(); }
+  function formObject(form) { return Object.fromEntries(new FormData(form).entries()); }
+  function setMessage(element, text, tone = "error") { if (!element) return; element.textContent = text; element.dataset.tone = tone; element.hidden = !text; }
+  function setBusy(form, busy, label) { const button = form?.querySelector('button[type="submit"]'); if (!button) return; if (!button.dataset.defaultLabel) button.dataset.defaultLabel = button.textContent; button.disabled = busy; button.textContent = busy ? label : button.dataset.defaultLabel; }
+  function requireFields(form, names) { const missing = names.find((name) => { const field = name === "tipoBien" ? form.querySelector("#publicRequestType") : form.elements[name]; return !String(field?.value || "").trim(); }); if (missing) { const field = missing === "tipoBien" ? form.querySelector("#publicRequestType") : form.elements[missing]; field?.focus(); return false; } return true; }
+  function getRequestForm() { return $("#publicRequestForm"); }
+  function saveRequestDraft() {
+    const form = getRequestForm();
+    if (!form || editingRequestId) return;
+    try {
+      const values = Object.fromEntries(new FormData(form).entries());
+      delete values.archivos;
+      localStorage.setItem(REQUEST_DRAFT_KEY, JSON.stringify({ values, savedAt: new Date().toISOString() }));
+    } catch {}
+  }
+  function scheduleRequestDraftSave() {
+    window.clearTimeout(requestDraftTimer);
+    requestDraftTimer = window.setTimeout(saveRequestDraft, 250);
+  }
+  function restoreRequestDraft() {
+    const form = getRequestForm();
+    if (!form || editingRequestId) return;
+    try {
+      const draft = JSON.parse(localStorage.getItem(REQUEST_DRAFT_KEY) || "null");
+      const values = draft?.values;
+      if (!values || typeof values !== "object") return;
+      Object.entries(values).forEach(([name, value]) => {
+        const field = form.elements[name];
+        if (field && typeof value === "string" && !field.readOnly) field.value = value;
+      });
+      if (form.elements.tipoAvaluo?.value) renderDynamicFields();
+      Object.entries(values).forEach(([name, value]) => {
+        const field = form.elements[name];
+        if (field && typeof value === "string" && !field.readOnly) field.value = value;
+      });
+      if (form.elements.tipoAvaluo?.value) fillNotaries();
+      setMessage($("#publicRequestMessage"), "Se restauró el borrador guardado localmente. Revisa los datos antes de enviar.", "success");
+    } catch {}
+  }
+  function clearRequestDraft() {
+    window.clearTimeout(requestDraftTimer);
+    try { localStorage.removeItem(REQUEST_DRAFT_KEY); } catch {}
+  }
+  async function hydrateRequestFromActiveSession() {
+    const form = getRequestForm();
+    if (!form || applicantSession) return;
+    const activeName = String(window.ControlAvaluosDesktop?.getActiveUser?.() || "").trim();
+    if (!activeName) return;
+    const nameField = form.elements.nombre;
+    const emailField = form.elements.correo;
+    const phoneField = form.elements.telefono;
+    if (nameField && !nameField.value) nameField.value = activeName;
+    try {
+      const users = await api("/users");
+      if (editingRequestId) return;
+      const normalized = activeName.toLocaleLowerCase("es-MX");
+      const active = (Array.isArray(users) ? users : []).find((user) => String(user.name || "").trim().toLocaleLowerCase("es-MX") === normalized);
+      if (!active) return;
+      if (nameField) nameField.value = active.name || activeName;
+      if (emailField && !emailField.value) emailField.value = active.email || active.correo || "";
+      if (phoneField && !phoneField.value) phoneField.value = active.phone || active.telefono || "";
+    } catch { /* El nombre activo ya queda visible aunque el catálogo no responda. */ }
+  }
+  function bindNewRequestExternalAssignment() {
+    const form = getRequestForm();
+    if (!form || form.dataset.externalAssignmentBound === "true") return;
+    const assignment = form.querySelector(".request-external-assignment");
+    const activeName = String(window.ControlAvaluosDesktop?.getActiveUser?.() || "").trim();
+    if (assignment) assignment.hidden = !(activeName && !applicantSession);
+    if (!activeName || applicantSession) return;
+    const search = form.querySelector("[data-new-external-search]");
+    const results = form.querySelector("[data-new-external-results]");
+    const clear = form.querySelector("[data-clear-new-external]");
+    if (!search || !results) return;
+    form.dataset.externalAssignmentBound = "true";
+    let applicants = [];
+    let selected = null;
+    const render = () => {
+      const query = String(search.value || "").trim().toLocaleLowerCase("es-MX");
+      if (!query) {
+        results.innerHTML = "";
+        return;
+      }
+      const matches = (query ? applicants.filter((user) => [user.name, user.email, user.phone].join(" ").toLocaleLowerCase("es-MX").includes(query)) : applicants).slice(0, 8);
+      results.innerHTML = matches.length ? matches.map((user) => `<button type="button" class="request-external-result" data-new-external-id="${escapeHtml(user.id)}"><strong>${escapeHtml(user.name)}</strong><small>${escapeHtml(user.email || "")} · ${escapeHtml(user.phone || "Sin teléfono")}</small></button>`).join("") : (query ? `<small class="request-external-empty">No se encontraron usuarios externos.</small>` : "");
+      results.querySelectorAll("[data-new-external-id]").forEach((button) => button.addEventListener("click", () => {
+        selected = applicants.find((user) => String(user.id) === String(button.dataset.newExternalId)) || null;
+        if (!selected) return;
+        form.dataset.externalId = selected.id || "";
+        form.dataset.externalName = selected.name || "";
+        form.dataset.externalEmail = selected.email || "";
+        search.value = selected.name || "";
+        results.innerHTML = `<small class="request-external-selected">Seleccionado: ${escapeHtml(selected.name)}</small>`;
+      }));
+    };
+    search.addEventListener("input", () => { selected = null; delete form.dataset.externalId; delete form.dataset.externalName; delete form.dataset.externalEmail; render(); });
+    clear?.addEventListener("click", () => { selected = null; search.value = ""; delete form.dataset.externalId; delete form.dataset.externalName; delete form.dataset.externalEmail; render(); });
+    api("/applicants").then((list) => { applicants = Array.isArray(list) ? list : []; }).catch(() => { applicants = []; });
+  }
+  function resetRequestForm() {
+    const form = getRequestForm();
+    if (!form) return;
+    ensureRequestFieldNames();
+    clearRequestDraft();
+    form.reset();
+    showRequestStep(1);
+    archivosSeleccionados = [];
+    archivosExistentesEnEdicion = [];
+    renderSelectedFiles();
+    document.querySelectorAll("#publicRequestForm .cat-specific-block").forEach((block) => { block.classList.add("hidden"); block.querySelectorAll("input, select, textarea").forEach((field) => { field.required = false; }); });
+    $("#valor-operacion-container")?.classList.add("hidden");
+    document.querySelectorAll("#publicRequestForm [data-request-category]").forEach((button) => { button.className = "category-btn border-2 border-slate-200 bg-white rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center transition"; button.querySelector("[data-lucide]")?.classList.remove("text-white"); button.querySelector("[data-lucide]")?.classList.add("text-slate-500"); });
+    updateSummary();
+    $("#publicRequestDynamicFields").innerHTML = "";
+    editingRequestId = "";
+    if (applicantSession) {
+      form.elements.nombre.value = applicantSession.name || "";
+      form.elements.telefono.value = applicantSession.phone || "";
+      form.elements.correo.value = applicantSession.email || "";
+      if (form.elements.notaria) form.elements.notaria.value = applicantSession.notaria || "";
+      form.elements.correo.readOnly = true;
+      form.elements.nombre.readOnly = true;
+      form.elements.telefono.readOnly = Boolean(applicantSession.phone);
+    } else {
+      form.elements.correo.readOnly = false;
+      form.elements.nombre.readOnly = false;
+      form.elements.telefono.readOnly = false;
+    }
+    setMessage($("#publicRequestMessage"), "");
+    delete form.dataset.externalId; delete form.dataset.externalName; delete form.dataset.externalEmail;
+    const externalSearch = form.querySelector("[data-new-external-search]");
+    if (externalSearch) externalSearch.value = "";
+    const externalResults = form.querySelector("[data-new-external-results]");
+    if (externalResults) externalResults.innerHTML = "";
+    hydrateRequestFromActiveSession();
+  }
+  function requestStatusClass(status) { return String(status || "recibida").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-"); }
+  function requestDate(value) { const date = value ? new Date(value) : null; return date && !Number.isNaN(date.getTime()) ? date.toLocaleDateString("es-MX", { day: "2-digit", month: "short", year: "numeric" }) : "Sin fecha"; }
+  function applicantRequestStatusGroup(status) {
+    const normalized = String(status || "recibida").toLowerCase();
+    if (normalized === "concluida") return "concluida";
+    if (["recibida", "recibido"].includes(normalized)) return "recibida";
+    return "proceso";
+  }
+  function applicantRequestOwner(item) {
+    return item.propietario || item.datosEspecificos?.propietario || item.datosEspecificos?.razonSocial || item.solicitante?.nombre || "No especificado";
+  }
+  function applicantRequestAssetType(item) {
+    return item.tipoBien || item.datosEspecificos?.tipoBien || item.datosEspecificos?.tipoBienSolicitado || item.modalidad || item.datosEspecificos?.modalidadInmueble || "No especificado";
+  }
+  function applicantRequestAppraisalType(item) {
+    return item.modalidad || item.datosEspecificos?.modalidadInmueble || item.datosEspecificos?.tipoAvaluo || item.tipoAvaluo || "No especificado";
+  }
+  function applicantPdfUrl(item) {
+    return apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "");
+  }
+  function applicantRequestStatusGroup(status) {
+    const normalized = String(status || "recibida").toLowerCase();
+    if (normalized === "concluida") return "concluida";
+    if (["recibida", "recibido"].includes(normalized)) return "recibida";
+    return "proceso";
+  }
+  function applicantRequestOwner(item) { return item.propietario || item.datosEspecificos?.propietario || item.datosEspecificos?.razonSocial || item.solicitante?.nombre || "No especificado"; }
+  function applicantRequestAssetType(item) { return item.tipoBien || item.datosEspecificos?.tipoBien || item.datosEspecificos?.tipoBienSolicitado || item.modalidad || item.datosEspecificos?.modalidadInmueble || "No especificado"; }
+  function applicantRequestAppraisalType(item) { return item.modalidad || item.datosEspecificos?.modalidadInmueble || item.datosEspecificos?.tipoAvaluo || item.tipoAvaluo || "No especificado"; }
+  function applicantPdfUrl(item) { return apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || ""); }
+  function renderApplicantNotifications() {
+    const list = $("#applicantNotificationsList");
+    const count = $("#applicantNotificationsCount");
+    if (!list) return;
+    const unread = applicantNotifications.filter((item) => !item.leida).length;
+    if (count) { count.textContent = String(unread); count.hidden = unread < 1; }
+    list.innerHTML = applicantNotifications.length ? applicantNotifications.slice(0, 50).map((item) => `<button type="button" class="applicant-notification-item${item.leida ? " is-read" : ""}" data-applicant-notification-id="${escapeHtml(item.id)}"><span class="applicant-notification-icon">${item.tipo === "cambio_estatus" ? "↻" : item.tipo === "actualizacion" ? "↻" : "✓"}</span><span><strong>${escapeHtml(item.titulo)}</strong><small>${escapeHtml(item.mensaje)}<br />${escapeHtml(requestDate(item.created_at))}</small></span></button>`).join("") : "<p>No hay notificaciones.</p>";
+    list.querySelectorAll("[data-applicant-notification-id]").forEach((button) => button?.addEventListener("click", async () => {
+      const item = applicantNotifications.find((candidate) => candidate.id === button.dataset.applicantNotificationId);
+      if (!item) return;
+      try {
+        await api(`/notifications/${encodeURIComponent(item.id)}/read`, { method: "PUT" });
+        item.leida = true;
+        renderApplicantNotifications();
+        if (item.url_destino === "app://refresh") { const version = item.mensaje.match(/app_version:([^\)]+)/)?.[1] || ""; if (version) localStorage.setItem(APPLICANT_APP_VERSION_KEY, version); const url = new URL(window.location.href); url.searchParams.set("v", version || String(Date.now())); window.location.replace(url.toString()); return; }
+        if (item.tipo === "cambio_estatus" && item.url_destino?.startsWith("solicitud:")) {
+          applicantHighlightRequestId = item.url_destino.slice("solicitud:".length);
+          $("#applicantNotificationsPanel").hidden = true;
+          $("#applicantNotificationsButton")?.setAttribute("aria-expanded", "false");
+          filterApplicantRequests();
+          window.setTimeout(() => { const row = document.querySelector(`[data-applicant-request-row="${CSS.escape(applicantHighlightRequestId)}"]`); row?.scrollIntoView({ behavior: "smooth", block: "center" }); }, 80);
+        }
+      } catch (error) { window.alert(error.message || "No fue posible marcar la notificación."); }
+    }));
+  }
+  function showApplicantVersionUpdatePopup(serverVersion) {
+    const dialog = $("#versionUpdateDialog");
+    const reloadButton = $("#versionUpdateReloadButton");
+    if (!dialog || !serverVersion) return;
+    dialog.dataset.version = serverVersion;
+    if (reloadButton && reloadButton.dataset.applicantVersionBound !== "true") {
+      reloadButton.dataset.applicantVersionBound = "true";
+      reloadButton.addEventListener("click", () => {
+        const version = dialog.dataset.version || serverVersion;
+        localStorage.setItem(APPLICANT_APP_VERSION_KEY, version);
+        const url = new URL(window.location.href);
+        url.searchParams.set("v", version);
+        window.location.replace(url.toString());
+      });
+    }
+    if (!dialog.open) dialog.showModal?.();
+  }
+  async function refreshApplicantNotifications() {
+    if (!applicantSession) return;
+    try {
+      const clientVersion = localStorage.getItem(APPLICANT_APP_VERSION_KEY) || "";
+      const serverVersion = await api("/version");
+      const currentVersion = String(serverVersion?.version || "").trim();
+      if (currentVersion && !clientVersion) localStorage.setItem(APPLICANT_APP_VERSION_KEY, currentVersion);
+      if (currentVersion && clientVersion && clientVersion !== currentVersion) {
+        await api("/notifications/system-version", { method: "POST", body: JSON.stringify({ clientVersion }) });
+        showApplicantVersionUpdatePopup(currentVersion);
+      }
+      applicantNotifications = await api("/notifications");
+      renderApplicantNotifications();
+    } catch { /* Se conserva el contador anterior durante una caída momentánea. */ }
+  }
+  function applicantRequestLocation(item) {
+    const specific = item?.datosEspecificos || {};
+    return item?.contactoVisita?.direccion || item?.direccion || specific.direccionVisita || specific.direccion_visita || "Sin ubicación registrada";
+  }
+  function requestMoneyValue(value) {
+    const raw = String(value ?? "").replace(/[^0-9.-]/g, "");
+    const amount = Number(raw);
+    return Number.isFinite(amount) && amount > 0 ? `$${amount.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <small>M.N.</small>` : "Sin valor registrado";
+  }
+  function applicantRequestOperationValue(item) {
+    const specific = item?.datosEspecificos || {};
+    return item?.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "";
+  }
+  function applicantOwnRequestsTable(list) {
+    if (!list.length) return `<div class="client-empty-state"><div class="client-empty-icon">＋</div><h4>Aún no tienes solicitudes</h4><p>Inicia tu primer trámite y consulta aquí todo su avance.</p></div>`;
+    return `<div class="cp6-request-card-grid cp6-client-request-cards">${list.map((item) => { const pdf=applicantPdfUrl(item); const status=String(item.estado || "Recibida"); const asset=applicantRequestAssetType(item); const appraisal=applicantRequestAppraisalType(item); const pdfAction=pdf ? `<a class="cp6-card-download" href="${escapeHtml(pdf)}" target="_blank" rel="noopener" download title="Descargar avalúo final" aria-label="Descargar avalúo final">↓</a>` : `<span class="cp6-card-download is-disabled" title="Avalúo en proceso">—</span>`; return `<article class="cp6-request-card${applicantHighlightRequestId === item.id ? " is-notification-highlight" : ""}" data-applicant-request-row="${escapeHtml(item.id)}"><div class="cp6-request-card-top"><div><strong class="cp6-request-folio">${escapeHtml(item.folio || "Pendiente")}</strong><span class="cp6-request-date">${escapeHtml(requestDate(item.creadoEn || item.createdAt))}</span><span class="cp6-request-meta">${escapeHtml(asset)} · ${escapeHtml(appraisal)}</span></div><span class="client-status-badge client-status-${requestStatusClass(item.estado)}">${escapeHtml(status)}</span></div><div class="cp6-request-card-field"><span>Propietario</span><strong>${escapeHtml(applicantRequestOwner(item))}</strong></div><div class="cp6-request-card-field cp6-request-location"><span>Ubicación</span><strong><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${escapeHtml(applicantRequestLocation(item))}</strong></div><div class="cp6-request-card-field cp6-request-operation"><span>Valor de operación</span><strong>${requestMoneyValue(applicantRequestOperationValue(item))}</strong></div><div class="cp6-request-card-actions"><button type="button" class="client-table-view-button cp6-card-detail-button" data-request-detail="${escapeHtml(item.id)}">Ver detalles</button>${pdfAction}</div></article>`; }).join("")}</div>`;
+  }
+  function applicantRequestsPagination(page, total) {
+    const pages = Math.max(1, Math.ceil(total / APPLICANT_REQUESTS_PAGE_SIZE));
+    const current = Math.min(Math.max(1, page), pages);
+    const first = total ? (current - 1) * APPLICANT_REQUESTS_PAGE_SIZE + 1 : 0;
+    const last = Math.min(current * APPLICANT_REQUESTS_PAGE_SIZE, total);
+    const buttons = Array.from({ length: pages }, (_, index) => { const number = index + 1; return `<button type="button" class="table-page-button${number === current ? " is-active" : ""}" data-applicant-page="${number}" aria-current="${number === current ? "page" : "false"}">${number}</button>`; }).join("");
+    return `<nav class="table-pagination applicant-table-pagination" aria-label="Paginación de mis solicitudes"><span>Mostrando ${first}-${last} de ${total}</span><div><button type="button" class="table-page-button" data-applicant-page="${current - 1}" ${current === 1 ? "disabled" : ""} aria-label="Página anterior">‹</button>${buttons}<button type="button" class="table-page-button" data-applicant-page="${current + 1}" ${current === pages ? "disabled" : ""} aria-label="Página siguiente">›</button></div></nav>`;
+  }
+  function filterApplicantRequests(resetPage = false) {
+    if (resetPage) applicantRequestsPage = 1;
+    const query=String($("#applicantRequestSearchInput")?.value || "").trim().toLowerCase(); const status=$("#applicantRequestStatusFilter")?.value || "";
+    const visible=applicantRequestsCache.filter((item) => { const owner=applicantRequestOwner(item).toLowerCase(); const folio=String(item.folio || "").toLowerCase(); const asset=applicantRequestAssetType(item).toLowerCase(); const appraisal=applicantRequestAppraisalType(item).toLowerCase(); return (!query || folio.includes(query) || owner.includes(query) || asset.includes(query) || appraisal.includes(query)) && (!status || applicantRequestStatusGroup(item.estado) === status); });
+    const pages = Math.max(1, Math.ceil(visible.length / APPLICANT_REQUESTS_PAGE_SIZE));
+    applicantRequestsPage = Math.min(Math.max(1, applicantRequestsPage), pages);
+    const pageItems = visible.slice((applicantRequestsPage - 1) * APPLICANT_REQUESTS_PAGE_SIZE, applicantRequestsPage * APPLICANT_REQUESTS_PAGE_SIZE);
+    const table=$("#applicantHomeRequestsTable");
+    if (!table) return;
+    table.innerHTML=applicantOwnRequestsTable(pageItems) + applicantRequestsPagination(applicantRequestsPage, visible.length);
+    // La tabla nunca debe mostrar el CTA de nueva solicitud; se conserva únicamente en el sidebar.
+    table.querySelectorAll("button, a").forEach((element) => {
+      if (/solicitar\s+(un\s+)?servicio/i.test(element.textContent || "")) element.remove();
+    });
+    bindRequestDetailButtons(table, pageItems);
+    table.querySelector("#clientEmptyNewRequest")?.addEventListener("click", () => { resetRequestForm(); openDialog(requestDialog); fillAdvisors(); });
+    table.querySelectorAll("[data-applicant-page]").forEach((button) => button?.addEventListener("click", () => { if (button.disabled) return; applicantRequestsPage = Number(button.dataset.applicantPage) || 1; filterApplicantRequests(); }));
+  }
+
+  function showApplicantHome() {
+    const content = $(".public-entry-content");
+    const home = $("#applicantHomePanel");
+    if (!content || !home || !applicantSession) return;
+    const requestsTable = $("#applicantHomeRequestsTable");
+    if (requestsTable && !requestsTable.dataset.loaded) requestsTable.innerHTML = '<div class="client-loading-state" role="status"><span class="client-loading-spinner" aria-hidden="true"></span><span>Cargando tus solicitudes…</span></div>';
+    content.hidden = true;
+    home.hidden = false;
+    $("#loginScreen")?.classList.add("applicant-dashboard-active");
+    if (!applicantRefreshTimer) applicantRefreshTimer = window.setInterval(() => renderApplicantHomeRequests(), 2500);
+    if (!applicantNotificationTimer) applicantNotificationTimer = window.setInterval(() => refreshApplicantNotifications(), 5 * 60 * 1000);
+    $("#loginVisualBrand")?.setAttribute("hidden", "true");
+    $("#applicantVisualPanel")?.setAttribute("hidden", "true");
+    $("#openInternalAccessButton")?.setAttribute("hidden", "true");
+    const applicantName = String(applicantSession.name || applicantSession.nombre || "—").trim() || "—";
+    const applicantEmail = String(applicantSession.email || applicantSession.correo || "—").trim() || "—";
+    const applicantPhone = String(applicantSession.phone || applicantSession.telefono || "—").trim() || "—";
+    $("#applicantWelcomeName") && ($("#applicantWelcomeName").textContent = applicantName);
+    $("#applicantWelcomeNameMessage") && ($("#applicantWelcomeNameMessage").textContent = applicantName);
+    $("#applicantWelcomeNameMirror") && ($("#applicantWelcomeNameMirror").textContent = applicantName);
+    $("#applicantProfileEmail") && ($("#applicantProfileEmail").textContent = applicantEmail);
+    $("#applicantProfilePhone") && ($("#applicantProfilePhone").textContent = applicantPhone);
+    $("#publicRequestForm")?.elements.correo && ($("#publicRequestForm").elements.correo.readOnly = true);
+    renderApplicantHomeRequests();
+    refreshApplicantNotifications();
+  }
+  function showPublicEntry() {
+    const content = $(".public-entry-content");
+    const home = $("#applicantHomePanel");
+    if (content) content.hidden = false;
+    if (home) home.hidden = true;
+    if (applicantRefreshTimer) { window.clearInterval(applicantRefreshTimer); applicantRefreshTimer = null; }
+    if (applicantNotificationTimer) { window.clearInterval(applicantNotificationTimer); applicantNotificationTimer = null; }
+    applicantNotifications = [];
+    renderApplicantNotifications();
+    $("#loginScreen")?.classList.remove("applicant-dashboard-active");
+    $("#loginVisualBrand")?.removeAttribute("hidden");
+    $("#applicantVisualPanel")?.setAttribute("hidden", "true");
+    $("#openInternalAccessButton")?.removeAttribute("hidden");
+    resetRequestForm();
+  }
+  async function renderApplicantHomeRequests() {
+    const table = $("#applicantHomeRequestsTable");
+    if (!table || !applicantSession) return;
+    try {
+      const own = await api(`/mis-solicitudes?email=${encodeURIComponent(applicantSession.email)}&usuario_id=${encodeURIComponent(applicantSession.id || "")}`);
+      applicantRequestsCache = own;
+      applicantRequestsPage = Math.min(applicantRequestsPage, Math.max(1, Math.ceil(own.length / APPLICANT_REQUESTS_PAGE_SIZE)));
+      table.dataset.loaded = "true";
+      if ($("#applicantTotalRequests")) $("#applicantTotalRequests").textContent = own.length;
+      if ($("#applicantActiveRequests")) $("#applicantActiveRequests").textContent = own.filter((item) => !["concluida", "cancelada"].includes(String(item.estado || "").toLowerCase())).length;
+      if ($("#applicantCompletedRequests")) $("#applicantCompletedRequests").textContent = own.filter((item) => String(item.estado || "").toLowerCase() === "concluida").length;
+      filterApplicantRequests();
+    } catch (error) { table.innerHTML = `<p class="request-empty">${escapeHtml(error.message)}</p>`; }
+  }
+  function apiResourceUrl(source) {
+    const value = String(source || "");
+    if (!value || value.startsWith("data:") || /^https?:\/\//i.test(value)) return value;
+    if (value.startsWith("/")) return `${API.replace(/\/api\/?$/, "")}${value}`;
+    return `${API.replace(/\/$/, "")}/${value}`;
+  }
+  function safeFileData(file) {
+    const data = String(file?.data || "");
+    const lower = data.toLowerCase();
+    const allowed = lower.startsWith("data:image/") || lower.startsWith("data:application/pdf") || lower.startsWith("data:application/msword") || lower.startsWith("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document") || lower.startsWith("data:application/zip") || lower.startsWith("data:application/x-zip-compressed");
+    return allowed ? data : "";
+  }
+  function requestFileUrl(item, index, download = false) {
+    const file = Array.isArray(item.archivos) ? item.archivos[index] : null;
+    const suffix = download ? (file?.url?.includes("?") ? "&download=1" : "?download=1") : "";
+    return file?.url ? `${apiResourceUrl(file.url)}${suffix}` : `${API}/service-requests/${encodeURIComponent(item.id)}/files/${index}${download ? "?download=1" : ""}`;
+  }
+  async function uploadFinalPdf(item) {
+    if (!item?.id) return;
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/pdf,.pdf";
+    input?.addEventListener("change", async () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      const formData = new FormData();
+      formData.append("pdf", file, file.name);
+      try {
+        const result = await api(`/admin/solicitudes/${encodeURIComponent(item.id)}/subir-pdf-final`, { method: "POST", body: formData });
+        const updated = result.solicitud || { ...item, estado: "concluida", finalPdfUrl: result.archivoFinal?.url || "" };
+        requests = requests.map((request) => request.id === updated.id ? updated : request);
+        await renderRequests();
+        renderRequestDetail(updated);
+        window.alert("Avalúo final cargado. El trámite quedó como concluido y ya está disponible para el cliente.");
+      } catch (error) { window.alert(error.message || "No fue posible subir el avalúo final."); }
+    });
+    input.click();
+  }
+  function isAnnexFile(file) {
+    return /anex/i.test(String(file?.categoria || file?.category || file?.tipoDocumento || file?.kind || ""));
+  }
+  function annexFilesFor(item) {
+    const files = Array.isArray(item?.archivos) ? item.archivos : [];
+    if (Array.isArray(item?.anexos) && item.anexos.length) return item.anexos;
+    if (Array.isArray(item?.anexosDocumentos) && item.anexosDocumentos.length) return item.anexosDocumentos;
+    return files.filter(isAnnexFile);
+  }
+  async function annexDocuments(item, kind = "anexo") {
+    if (!item?.id) return;
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*,.pdf,.doc,.docx,.zip";
+    input.multiple = kind !== "anexo";
+    input?.addEventListener("change", async () => {
+      const selected = Array.from(input.files || []);
+      if (!selected.length) return;
+      const formData = new FormData();
+      selected.slice(0, 8).forEach((file) => formData.append("documentos", file, file.name));
+      try {
+        const result = await api(`/solicitudes/${encodeURIComponent(item.id)}/anexar-documento`, { method: "POST", body: formData });
+        const saved = (result.archivos || []).map((file) => ({ ...file, categoria: kind }));
+        const nextFiles = [...(Array.isArray(item.archivos) ? item.archivos : []), ...saved];
+        let updated = { ...(result.solicitud || item), archivos: nextFiles };
+        if (kind === "anexo") updated.anexos = [...annexFilesFor(item), ...saved];
+        try {
+          const categorized = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ archivos: nextFiles }) });
+          updated = categorized?.solicitud || categorized || updated;
+          if (kind === "anexo") updated.anexos = [...annexFilesFor(item), ...saved];
+        } catch (categoryError) {
+          console.warn("No se pudo persistir la categoría visual del archivo; se conserva la carga.", categoryError);
+        }
+        requests = requests.map((request) => request.id === item.id ? updated : request);
+        await renderApplicantHomeRequests();
+        renderRequestDetail(updated);
+        window.alert(kind === "anexo" ? "Anexo cargado correctamente." : "Documento(s) anexado(s) correctamente al expediente.");
+      } catch (error) { window.alert(error.message || "No fue posible anexar el documento."); }
+    });
+    input.click();
+  }
+  function openAnnexViewer(item) {
+    const file = annexFilesFor(item)[0];
+    if (!file) return;
+    openResourceViewer(file.url || safeFileData(file), file.name || "Anexo", file.type || "", file.url || safeFileData(file));
+  }
+  function openResourceViewer(resourceUrl, resourceName = "Archivo", resourceType = "application/pdf", downloadUrl = resourceUrl) {
+    const viewer = $("#fileViewerDialog");
+    const content = $("#fileViewerContent");
+    const source = apiResourceUrl(resourceUrl);
+    if (!viewer || !content || !source) { window.alert("El archivo no está disponible para visualizar."); return; }
+    const name = escapeHtml(resourceName);
+    const type = String(resourceType || "").toLowerCase();
+    const media = type.startsWith("image/")
+      ? `<img class="file-viewer-image" src="${escapeHtml(source)}" alt="${name}" />`
+      : type === "application/pdf" || /\.pdf$/i.test(resourceName)
+        ? `<iframe class="file-viewer-frame" title="${name}" src="${escapeHtml(source)}"></iframe>`
+        : `<div class="file-viewer-unavailable"><strong>${name}</strong><p>Este formato no tiene vista previa. Puedes descargarlo desde el expediente.</p></div>`;
+    content.innerHTML = `<div class="file-viewer-heading"><strong>${name}</strong><a class="file-viewer-download" href="${escapeHtml(apiResourceUrl(downloadUrl))}" download>Descargar</a></div>${media}`;
+    openDialog(viewer);
+  }
+  function openFileViewer(item, index) {
+    const file = Array.isArray(item?.archivos) ? item.archivos[index] : null;
+    if (!file) return;
+    openResourceViewer(file.url || safeFileData(file), file.name || `Archivo ${index + 1}`, file.type || "", requestFileUrl(item, index, true));
+  }
+  async function bindExternalAssignment(detail, item) {
+    const nameInput = detail.querySelector("[data-external-name]");
+    const emailInput = detail.querySelector("[data-external-email]");
+    const phoneInput = detail.querySelector("[data-external-phone]");
+    const results = detail.querySelector("[data-external-results]");
+    const save = detail.querySelector("[data-save-request-external]");
+    if (!nameInput || !emailInput || !phoneInput || !results || !save) return;
+    let applicants = [];
+    let selected = item.asignadoExternoId ? { id: item.asignadoExternoId, name: item.asignadoExternoNombre || "", email: item.asignadoExternoEmail || "", phone: "" } : null;
+    const renderMatches = () => {
+      const query = [nameInput.value, emailInput.value, phoneInput.value].join(" ").trim().toLocaleLowerCase("es-MX");
+      const matches = !query ? applicants.slice(0, 8) : applicants.filter((user) => [user.name, user.email, user.phone].join(" ").toLocaleLowerCase("es-MX").includes(query)).slice(0, 8);
+      results.innerHTML = matches.length ? matches.map((user) => `<button type="button" class="request-external-result" data-external-result="${escapeHtml(user.id)}"><strong>${escapeHtml(user.name)}</strong><small>${escapeHtml(user.email || "")} · ${escapeHtml(user.phone || "Sin teléfono")}</small></button>`).join("") : `<small class="request-external-empty">No se encontraron usuarios externos.</small>`;
+      results.querySelectorAll("[data-external-result]").forEach((button) => button?.addEventListener("click", () => {
+        selected = applicants.find((user) => user.id === button.dataset.externalResult) || null;
+        if (selected) { nameInput.value = selected.name || ""; emailInput.value = selected.email || ""; phoneInput.value = selected.phone || ""; }
+        results.innerHTML = selected ? `<small class="request-external-selected">Seleccionado: ${escapeHtml(selected.name)}</small>` : "";
+      }));
+    };
+    try {
+      applicants = await api("/applicants");
+      if (selected) { nameInput.value = selected.name; emailInput.value = selected.email; phoneInput.value = selected.phone; }
+      [nameInput, emailInput, phoneInput].forEach((input) => input?.addEventListener("input", () => { selected = null; renderMatches(); }));
+      renderMatches();
+      save?.addEventListener("click", async () => {
+        if (!selected) selected = applicants.find((user) => String(user.name || "").toLocaleLowerCase("es-MX") === nameInput.value.trim().toLocaleLowerCase("es-MX") || String(user.email || "").toLowerCase() === emailInput.value.trim().toLowerCase() || String(user.phone || "").trim() === phoneInput.value.trim()) || null;
+        if (!selected) { window.alert("Busca y selecciona un usuario externo antes de asignar."); return; }
+        save.disabled = true;
+        try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ asignadoExternoId: selected.id, asignadoExternoEmail: selected.email || "", asignadoExternoNombre: selected.name || "" }) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); window.dispatchEvent(new CustomEvent("control-avaluos:request-updated", { detail: updated })); } catch (error) { window.alert(error.message || "No se pudo asignar el usuario externo."); } finally { save.disabled = false; }
+      });
+    } catch { results.innerHTML = `<small class="request-external-empty">No se pudieron cargar los usuarios externos.</small>`; save.disabled = true; }
+  }
+  function openRequestEditor(item) {
+    const form = getRequestForm();
+    if (!form || !requestDialog || !item) return;
+    const detailDialog = $("#requestDetailDialog");
+    if (detailDialog?.open) detailDialog.close();
+    if (!requestDialog.open) {
+      try { requestDialog.showModal(); }
+      catch { requestDialog.setAttribute("open", ""); }
+    }
+    const warnings = [];
+    const safely = (label, action) => {
+      try { return action(); }
+      catch (error) { console.warn(`Edición: no se pudo cargar ${label}.`, error); warnings.push(label); return undefined; }
+    };
+    safely("el reinicio del formulario", () => resetRequestForm());
+    editingRequestId = item.id || "";
+    archivosExistentesEnEdicion = Array.isArray(item.archivos) ? item.archivos : [];
+    archivosSeleccionados = [];
+    safely("los nombres de campos", ensureRequestFieldNames);
+    const specific = item.datosEspecificos && typeof item.datosEspecificos === "object" && !Array.isArray(item.datosEspecificos) ? item.datosEspecificos : {};
+    const normalized = (value) => String(value ?? "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("es-MX");
+    const setField = (name, value) => safely(`el campo ${name}`, () => {
+      if (value == null) return;
+      const found = form.elements.namedItem(name);
+      const controls = found?.nodeType === 1 ? [found] : found && typeof found.length === "number" ? Array.from(found) : [];
+      if (!controls.length) return;
+      const text = String(value);
+      controls.forEach((field) => {
+        if (field.disabled || field.type === "file") return;
+        if (field.tagName === "SELECT") {
+          const option = Array.from(field.options).find((candidate) => candidate.value === text) || Array.from(field.options).find((candidate) => normalized(candidate.value) === normalized(text) || normalized(candidate.textContent) === normalized(text));
+          field.value = option ? option.value : "";
+          field.dispatchEvent(new Event("change", { bubbles: true }));
+        } else if (field.type === "checkbox") field.checked = value === true || text === "true" || text === "1";
+        else if (field.type === "radio") field.checked = normalized(field.value) === normalized(text);
+        else field.value = text;
+      });
+    });
+
+    const category = item.tipoBien || specific.tipoBien || specific.tipo_bien || "";
+    if (category) safely("la categoría del bien", () => selectCategory(category));
+    setField("nombre", item.solicitante?.nombre || item.solicitante?.name || item.nombre || "");
+    setField("telefono", item.solicitante?.telefono || item.solicitante?.phone || item.telefono || "");
+    setField("correo", item.solicitante?.correo || item.solicitante?.email || item.requesterEmail || "");
+    setField("tipoAvaluo", item.tipoAvaluo || specific.tipoAvaluo || specific.tipo_avaluo || "");
+    Object.entries(specific).forEach(([key, value]) => {
+      if (["tipoBien", "tipo_bien"].includes(key) || value == null || typeof value === "object") return;
+      setField(key, value);
+    });
+    setField("asesor", item.asesor || specific.asesor || "");
+    setField("propietario", item.propietario || specific.propietario || "");
+    setField("valorOperacion", item.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "");
+    setField("contactoVisitaNombre", item.contactoVisita?.nombre || item.contactoVisita?.name || specific.contactoVisitaNombre || specific.contacto_visita || "");
+    setField("contactoVisitaTelefono", item.contactoVisita?.telefono || item.contactoVisita?.phone || specific.contactoVisitaTelefono || specific.telefono_visita || "");
+    setField("direccionVisita", item.contactoVisita?.direccion || specific.direccionVisita || specific.direccion_visita || "");
+    setField("observaciones", item.observaciones || specific.observaciones || "");
+    if (item.notaria || specific.notariaReferida) setField("notariaReferida", item.notaria || specific.notariaReferida);
+
+    safely("la casilla de privacidad", () => { const consent = $("#requestPrivacyConsent"); if (consent) consent.checked = true; });
+    safely("los archivos adjuntos", renderSelectedFiles);
+    safely("la primera página", () => showRequestStep(1));
+    safely("el cálculo de valor", updateOperationMoneyPreview);
+    safely("el resumen", updateSummary);
+    safely("los valuadores", () => fillAdvisors().then(() => setField("asesor", item.asesor || specific.asesor || "")).catch((error) => console.warn("Edición: no se pudo cargar el catálogo de valuadores.", error)));
+    if (item.notaria || specific.notariaReferida) safely("la notaría", () => window.setTimeout(() => renderNotarySearch(item.notaria || specific.notariaReferida), 0));
+    safely("la asignación de usuario externo", bindNewRequestExternalAssignment);
+    setMessage($("#publicRequestMessage"), warnings.length ? `Se abrió la solicitud, pero algunos campos no pudieron precargarse: ${warnings.join(", ")}.` : "");
+  }
+
+  function renderRequestDetail(item) {
+    const detail = $("#requestDetailContent");
+    const dialog = $("#requestDetailDialog");
+    if (!detail || !dialog || !item) return;
+
+    dialog.classList.add("cp6-request-detail-dialog");
+    const files = Array.isArray(item.archivos) ? item.archivos : [];
+    const annexFiles = annexFilesFor(item);
+    const annexFileSet = new Set(annexFiles);
+    const annexFileKeys = new Set(annexFiles.map((file) => String(file?.url || file?.storageName || file?.name || "").trim()).filter(Boolean));
+    const digitalFiles = files.filter((file) => !annexFileSet.has(file) && !annexFileKeys.has(String(file?.url || file?.storageName || file?.name || "").trim()));
+    const hasAnnex = annexFiles.length > 0;
+    const specific = item.datosEspecificos && typeof item.datosEspecificos === "object" ? item.datosEspecificos : {};
+    const currentApplicant = item.solicitante && typeof item.solicitante === "object" ? item.solicitante : {};
+    const activeRole = $("#appShell")?.dataset.role || "";
+    const canManage = !applicantSession && ["admin", "auditor", "valuador"].includes(activeRole);
+    const isAdmin = !applicantSession && activeRole === "admin";
+    const readValue = (value, fallback = "N/D") => escapeHtml(value === undefined || value === null || value === "" ? fallback : String(value));
+    const formatOperationValue = (value) => {
+      const raw = String(value ?? "").trim();
+      const numeric = Number(raw.replace(/[^0-9.-]/g, ""));
+      if (!Number.isFinite(numeric)) return escapeHtml(raw || "$0.00 MXN");
+      return escapeHtml(`${new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numeric)} MXN`);
+    };
+    const creatorName = item.creadoPorNombre || item.creadoPor || currentApplicant.nombre || "Usuario externo";
+    const creatorRole = item.creadorRol ? ({ admin: "Administrador", auditor: "Auditor", valuador: "Valuador", editor: "Editor", viewer: "Solo lectura" }[item.creadorRol] || item.creadorRol) : "";
+    const externalName = item.asignadoExternoNombre || "";
+    const appraisalNumber = String(item.numeroAvaluo || "").replace(/\D/g, "").slice(0, 4);
+    const requestNumber = item.folio || item.numeroSolicitud || item.requestNumber || "—";
+    const finalPdf = apiResourceUrl(item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url || "");
+    const visitContact = item.contactoVisita && typeof item.contactoVisita === "object" ? item.contactoVisita : {};
+
+    const filesMarkup = digitalFiles.length ? digitalFiles.map((file) => {
+      const index = files.indexOf(file);
+      const name = escapeHtml(file.name || `Archivo ${index + 1}`);
+      const source = apiResourceUrl(file.url || safeFileData(file));
+      if (!source) return `<div class="cp6-file-card cp6-file-unavailable"><span>${name}</span></div>`;
+      const isPdf = /\.pdf$/i.test(file.name || "") || String(file.type || "").toLowerCase() === "application/pdf";
+      const isImage = /\.(jpg|jpeg|png|webp|gif)$/i.test(file.name || "") || String(file.type || "").startsWith("image/");
+      const iconClass = isPdf ? "fa-file-pdf text-red-600 bg-red-50" : (isImage ? "fa-file-image text-amber-600 bg-amber-50" : "fa-file-lines text-blue-600 bg-blue-50");
+      const preview = `<div class="cp6-file-icon w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg ${iconClass}" aria-hidden="true"><i class="fa-solid ${iconClass.split(" ")[0]}"></i></div>`;
+      return `<div class="cp6-file-card cp6-file-document bg-white p-2.5 rounded-xl border border-slate-200 flex items-center justify-between hover:shadow-sm transition min-w-0">
+        <div class="flex items-center gap-2.5 overflow-hidden min-w-0"><button type="button" class="cp6-file-preview flex-shrink-0" data-view-file="${index}" aria-label="Ver ${name}">${preview}</button><div class="truncate"><span class="text-xs font-bold text-slate-800 truncate block" title="${name}">${name}</span><span class="text-[10px] text-slate-400 block">${escapeHtml(file.size || "1.2 MB")}</span></div></div>
+        <div class="flex items-center gap-1"><button type="button" class="cp6-detail-button p-1.5 text-slate-400 hover:text-blue-600 rounded-lg flex-shrink-0" data-view-file="${index}" aria-label="Ver archivo"><i class="fa-solid fa-eye text-xs"></i></button>${isAdmin ? `<button type="button" class="cp6-file-delete p-1.5 text-slate-400 hover:text-red-600 rounded-lg flex-shrink-0" data-delete-file="${index}" title="Eliminar archivo (Solo Admin)"><i class="fa-solid fa-trash-can text-xs"></i></button>` : ""}</div>
+      </div>`;
+    }).join("") : `<div class="cp6-file-empty text-xs text-slate-500 p-3">No hay documentos cargados.</div>`;
+
+    const finalActions = finalPdf
+      ? `<div class="cp6-final-actions"><button type="button" class="cp6-action-button cp6-primary-button" data-view-final-pdf="${escapeHtml(finalPdf)}"><i class="fa-solid fa-eye"></i> Ver avalúo</button>${isAdmin ? `<button type="button" class="cp6-real-delete-button" data-delete-final-pdf="${escapeHtml(item.id)}" title="Eliminar avalúo" aria-label="Eliminar avalúo"><i class="fa-solid fa-trash-can"></i></button>` : ""}</div>`
+      : `<button type="button" class="cp6-action-button cp6-primary-button" data-upload-final-pdf="${escapeHtml(item.id)}"><i class="fa-solid fa-cloud-arrow-up"></i> Subir avalúo final</button>`;
+    const finalSection = `<div class="cp6-detail-deliverable ${finalPdf ? "is-complete" : "is-pending"}"><div class="cp6-detail-deliverable-title"><div class="cp6-detail-deliverable-icon"><i class="fa-solid ${finalPdf ? "fa-file-circle-check" : "fa-file-arrow-up"}"></i></div><div><h4>Avalúo final</h4><p>${finalPdf ? "El documento final está disponible para consulta." : "Aún no se ha adjuntado el documento final de este trámite."}</p></div></div><div class="cp6-detail-deliverable-action">${finalActions}</div></div>`;
+    const annexSection = `<div class="cp6-detail-deliverable ${hasAnnex ? "is-complete" : "is-annex"}"><div class="cp6-detail-deliverable-title"><div class="cp6-detail-deliverable-icon"><i class="fa-solid fa-paperclip"></i></div><div><h4>Anexo</h4><p>${hasAnnex ? `${annexFiles.length} documento${annexFiles.length === 1 ? "" : "s"} complementario${annexFiles.length === 1 ? "" : "s"} cargado${annexFiles.length === 1 ? "" : "s"}.` : "Documento complementario del avalúo."}</p></div></div><div class="cp6-detail-deliverable-action">${hasAnnex ? `<button type="button" class="cp6-real-secondary-button" data-view-annex><i class="fa-solid fa-eye"></i> Ver anexo</button>` : `<button type="button" class="cp6-real-secondary-button" data-upload-annex="${escapeHtml(item.id)}"><i class="fa-solid fa-paperclip"></i> Subir anexo</button>`}</div></div>`;
+    const valueOperation = item.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "";
+    const contactName = visitContact.nombre || visitContact.name || item.contactoVisitaNombre || specific.contactoVisitaNombre || specific.contacto_visita || "";
+    const visitPhone = visitContact.telefono || visitContact.phone || item.contactoVisitaTelefono || specific.contactoVisitaTelefono || specific.telefono_visita || "";
+    const typeBien = item.tipoBien || specific.tipoBien || specific.tipo_bien || "";
+    const typeAppraisal = item.tipoAvaluo || item.tipo_avaluo || specific.tipoAvaluo || specific.tipo_avaluo || specific.tipo_de_avaluo || "";
+    const ownerName = item.propietario || specific.propietario || "";
+    const propertyAddress = visitContact.direccion || item.direccion || specific.direccionVisita || specific.direccion_visita || "";
+    const detailStatus = item.estatus || item.estado || item.status || "Pendiente de avalúo";
+
+    const canEditRequestInfo = Boolean(applicantSession || ["admin", "auditor"].includes(activeRole));
+    const editMarkup = canEditRequestInfo ? `<button type="button" class="cp6-detail-button cp6-edit-request-button" data-edit-request-info><i class="fa-solid fa-pen-to-square"></i> Editar información</button>` : "";
+    detail.innerHTML = `<div class="cp6-real-request-card" data-request-card>
+      <div class="cp6-real-detail-topline"></div>
+      <div class="cp6-real-detail-header">
+        <div class="cp6-real-detail-heading"><div class="cp6-real-title-row"><h2>Solicitud ${readValue(requestNumber)}</h2><span class="cp6-real-status">${readValue(detailStatus)}</span></div><div class="cp6-real-applicant-name">${readValue(currentApplicant.nombre || item.nombre || creatorName)}</div><div class="cp6-real-applicant-email">${readValue(currentApplicant.correo || item.requesterEmail || "Correo no registrado")}</div></div>
+        <div class="cp6-real-header-actions"><span><i class="fa-solid fa-calendar-day"></i> ${escapeHtml(requestDate(item.creadoEn))}</span><button type="button" data-close-request-detail aria-label="Cerrar detalle"><i class="fa-solid fa-xmark"></i></button></div>
+      </div>
+      <div class="cp6-real-detail-body"><div class="cp6-real-detail-columns">
+        <div class="cp6-real-detail-stack">
+          <section class="cp6-real-panel cp6-real-general-panel"><div class="cp6-real-panel-head"><h3>Información general</h3>${editMarkup}</div><div class="cp6-real-info-grid">
+            <div><span>Valor de operación</span><strong class="is-operation-value">${formatOperationValue(valueOperation)}</strong></div><div><span>Tipo de bien</span><strong>${readValue(typeBien)}</strong></div>
+            <div><span>Contacto para visita</span><strong>${readValue(contactName)}</strong></div><div><span>Teléfono de visita</span><strong>${readValue(visitPhone)}</strong></div>
+            <div class="is-full"><span>Propietario</span><strong>${readValue(ownerName)}</strong></div><div class="is-full"><span>Dirección del inmueble</span><strong>${readValue(propertyAddress)}</strong></div>
+          </div></section>
+          <section class="cp6-real-panel cp6-real-management-panel"><div class="cp6-real-panel-head"><h3>Asignación y gestión</h3></div><div class="cp6-real-assigned"><span>Valuador asignado</span><strong>${readValue(item.asesor || specific.asesor || "Sin asignar")}</strong>${["admin", "auditor"].includes(String($("#appShell")?.dataset.role || "")) ? `<button type="button" class="cp6-real-icon-action" data-open-valuator-popup title="Cambiar valuador"><i class="fa-solid fa-pen-to-square"></i></button>` : ""}</div><div class="cp6-real-management-pair"><div><span>Expediente interno</span><strong class="cp6-real-badge is-green">${readValue(appraisalNumber || "Sin asignar")}</strong><button type="button" class="cp6-real-icon-action" data-open-appraisal-popup title="Asignar número de avalúo" aria-label="Asignar número de avalúo"><i class="fa-solid fa-pen-to-square"></i></button></div><div><span>Acceso portal usuario</span><strong class="cp6-real-badge is-blue">${externalName ? readValue(item.asignadoExternoEmail || externalName) : "Sin usuario externo"}</strong><button type="button" class="cp6-real-icon-action" data-open-external-popup title="Asignar usuario externo"><i class="fa-solid fa-pen-to-square"></i></button></div></div></section>
+        </div>
+        <div class="cp6-real-detail-stack">
+          <section class="cp6-real-panel cp6-real-files-panel"><div class="cp6-real-panel-head"><div><h3>Expediente digital <small>(${digitalFiles.length})</small></h3><p>Documentos técnicos, escrituras y antecedentes.</p></div><button type="button" class="cp6-real-primary-button" data-attach-digital="${escapeHtml(item.id)}"><i class="fa-solid fa-plus"></i> Anexar documentos</button></div><div class="cp6-real-file-list">${filesMarkup}</div></section>
+          <section class="cp6-real-panel cp6-real-deliverables-panel"><div class="cp6-real-panel-head"><h3>Entregables</h3></div><div class="cp6-real-deliverables-grid">${finalSection}${annexSection}</div></section>
+        </div>
+      </div></div>
+      <div class="cp6-submodal cp6-assignment-submodal" data-appraisal-popup hidden><div class="cp6-submodal-card cp6-assignment-card"><div class="cp6-submodal-heading"><span class="cp6-submodal-icon"><i class="fa-solid fa-hashtag"></i></span><div><h3>Asignar número de avalúo</h3><p>Escribe el número de avalúo que corresponde a esta solicitud.</p></div></div><label class="cp6-submodal-label" for="cp6-appraisal-number">Número de avalúo <small>4 dígitos</small></label><input id="cp6-appraisal-number" class="cp6-submodal-number" data-popup-appraisal-number inputmode="numeric" maxlength="4" value="${escapeHtml(appraisalNumber)}" placeholder="0000" /><div class="cp6-submodal-divider"></div><div class="cp6-submodal-actions"><button type="button" class="cp6-submodal-cancel" data-close-submodal>Cancelar</button><button type="button" class="cp6-submodal-confirm" data-accept-appraisal>Guardar número</button></div><p class="cp6-submodal-caption">Este número aparecerá en Expediente interno.</p></div></div>
+      <div class="cp6-submodal cp6-assignment-submodal" data-valuator-popup hidden><div class="cp6-submodal-card cp6-assignment-card"><div class="cp6-submodal-heading"><span class="cp6-submodal-icon"><i class="fa-solid fa-user-check"></i></span><div><h3>Cambiar valuador</h3><p>Selecciona el usuario responsable de este avalúo.</p></div></div><label class="cp6-submodal-label" for="cp6-valuator-select">Valuador asignado <small>Usuario administrativo</small></label><select id="cp6-valuator-select" class="cp6-submodal-select" data-popup-valuator><option value="">Selecciona un usuario</option></select><div class="cp6-submodal-divider"></div><div class="cp6-submodal-actions"><button type="button" class="cp6-submodal-cancel" data-close-submodal>Cancelar</button><button type="button" class="cp6-submodal-confirm" data-accept-valuator>Guardar valuador</button></div><p class="cp6-submodal-caption">El cambio se reflejará en Asignación y gestión.</p></div></div>
+      <div class="cp6-submodal cp6-assignment-submodal" data-external-popup hidden><div class="cp6-submodal-card cp6-assignment-card cp6-external-assignment-card"><div class="cp6-submodal-heading"><span class="cp6-submodal-icon"><i class="fa-solid fa-user-plus"></i></span><div><h3>Asignar usuario externo</h3><p>Busca y selecciona el usuario que podrá consultar este avalúo.</p></div></div><label class="cp6-submodal-label" for="cp6-external-search">Buscar usuario <small>Nombre, correo o teléfono</small></label><div class="cp6-external-search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input id="cp6-external-search" class="cp6-submodal-search" data-popup-external-search placeholder="Escribe para buscar" /></div><div class="cp6-popup-results cp6-external-results" data-popup-external-results></div><div class="cp6-submodal-divider"></div><div class="cp6-submodal-actions"><button type="button" class="cp6-submodal-cancel" data-close-submodal>Cancelar</button><button type="button" class="cp6-submodal-confirm" data-accept-external disabled>Guardar usuario</button></div><p class="cp6-submodal-caption">El usuario podrá consultar el avance y el avalúo final desde su portal.</p></div></div>
+    </div>`;
+    detail.querySelectorAll("h2, h3, h4, button, input").forEach((element) => { element.style.fontFamily = "Plus Jakarta Sans, system-ui, -apple-system, sans-serif"; });
+    openDialog(dialog);
+    const closeRequestDetail = (event) => {
+      event?.preventDefault?.();
+      event?.stopPropagation?.();
+      if (dialog.open) dialog.close();
+      dialog.removeAttribute("open");
+      dialog.classList.remove("client-luxury-detail");
+    };
+    detail.querySelector("[data-close-request-detail]")?.addEventListener("click", closeRequestDetail);
+    dialog.addEventListener("cancel", closeRequestDetail, { once: true });
+    detail.querySelectorAll("[data-view-file]").forEach((button) => button?.addEventListener("click", () => openFileViewer(item, Number(button.dataset.viewFile))));
+    detail.querySelectorAll("[data-delete-file]").forEach((button) => button?.addEventListener("click", async () => {
+      const index = Number(button.dataset.deleteFile);
+      if (!isAdmin || !Number.isInteger(index) || !files[index]) return;
+      if (!window.confirm("¿Eliminar este archivo del expediente?")) return;
+      try {
+        const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ archivos: files.filter((_, fileIndex) => fileIndex !== index) }) });
+        requests = requests.map((candidate) => candidate.id === item.id ? (updated?.solicitud || updated) : candidate);
+        renderRequestDetail(updated?.solicitud || updated);
+      } catch (error) { window.alert(error.message || "No se pudo eliminar el archivo."); }
+    }));
+    detail.querySelector("[data-view-final-pdf]")?.addEventListener("click", (event) => openResourceViewer(event.currentTarget.dataset.viewFinalPdf, "Avalúo final.pdf", "application/pdf"));
+    detail.querySelectorAll("[data-attach-digital]").forEach((button) => button.addEventListener("click", () => annexDocuments(item, "expediente")));
+    detail.querySelector("[data-upload-annex]")?.addEventListener("click", () => annexDocuments(item, "anexo"));
+    detail.querySelector("[data-view-annex]")?.addEventListener("click", () => openAnnexViewer(item));
+    detail.querySelector("[data-upload-final-pdf]")?.addEventListener("click", () => uploadFinalPdf(item));
+    detail.querySelector("[data-delete-final-pdf]")?.addEventListener("click", async () => {
+      if (!window.confirm("¿Eliminar el avalúo final? El estatus cambiará a En trámite.")) return;
+      try {
+        const result = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ removeFinalPdf: true }) });
+        const updated = result?.solicitud || result;
+        requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate);
+        await renderRequests();
+        renderRequestDetail(updated);
+      } catch (error) { window.alert(error.message || "No se pudo eliminar el avalúo final."); }
+    });
+    const closeSubmodals = () => detail.querySelectorAll("[data-appraisal-popup],[data-external-popup],[data-valuator-popup]").forEach((modal) => { modal.hidden = true; });
+    detail.querySelectorAll("[data-close-submodal]").forEach((button) => button?.addEventListener("click", closeSubmodals));
+    const appraisalPopup = detail.querySelector("[data-appraisal-popup]");
+    detail.querySelector("[data-open-appraisal-popup]")?.addEventListener("click", () => { closeSubmodals(); appraisalPopup.hidden = false; appraisalPopup.querySelector("input")?.focus(); });
+    detail.querySelector("[data-accept-appraisal]")?.addEventListener("click", async () => {
+      const input = detail.querySelector("[data-popup-appraisal-number]"); const value = String(input?.value || "").replace(/\D/g, "").slice(0, 4);
+      if (!/^\d{4}$/.test(value)) { window.alert("El número de avalúo debe tener exactamente 4 dígitos."); return; }
+      try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ numeroAvaluo: value }) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); } catch (error) { window.alert(error.message || "No se pudo asignar el avalúo."); }
+    });
+    const valuatorPopup = detail.querySelector("[data-valuator-popup]");
+    const valuatorSelect = detail.querySelector("[data-popup-valuator]");
+    detail.querySelector("[data-open-valuator-popup]")?.addEventListener("click", async () => {
+      closeSubmodals(); valuatorPopup.hidden = false;
+      try { const users = await api("/users"); const assignableUsers = (Array.isArray(users) ? users : []).filter((user) => ["admin", "auditor", "valuador"].includes(String(user.role || "").toLowerCase())).sort((a, b) => a.name.localeCompare(b.name, "es")); valuatorSelect.innerHTML = `<option value="">Selecciona un usuario</option>` + assignableUsers.map((user) => `<option value="${escapeHtml(user.name)}">${escapeHtml(user.name)} · ${escapeHtml(({ admin: "Administrador", auditor: "Auditor", valuador: "Valuador" }[String(user.role || "").toLowerCase()] || user.role || "Usuario"))}</option>`).join(""); valuatorSelect.value = item.asesor || ""; } catch (error) { valuatorSelect.innerHTML = `<option value="">${escapeHtml(error.message || "No se pudieron cargar los usuarios administrativos")}</option>`; }
+    });
+    detail.querySelector("[data-accept-valuator]")?.addEventListener("click", async () => {
+      const value = String(valuatorSelect?.value || "").trim(); if (!value) { window.alert("Selecciona un valuador."); return; }
+      try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ valuadorAsignado: value }) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); } catch (error) { window.alert(error.message || "No se pudo cambiar el valuador."); }
+    });
+    const externalPopup = detail.querySelector("[data-external-popup]"); const search = detail.querySelector("[data-popup-external-search]"); const resultBox = detail.querySelector("[data-popup-external-results]"); const acceptExternal = detail.querySelector("[data-accept-external]");
+    let externalUsers = []; let selectedExternal = null;
+    detail.querySelector("[data-open-external-popup]")?.addEventListener("click", async () => { closeSubmodals(); externalPopup.hidden = false; search.focus(); try { externalUsers = await api("/applicants"); } catch (error) { resultBox.innerHTML = `<small>${escapeHtml(error.message || "No se pudieron cargar los usuarios.")}</small>`; } });
+    search?.addEventListener("input", () => { selectedExternal = null; acceptExternal.disabled = true; const query = search.value.trim().toLocaleLowerCase("es-MX"); if (!query) { resultBox.innerHTML = ""; return; } const matches = externalUsers.filter((user) => [user.name, user.email, user.phone].join(" ").toLocaleLowerCase("es-MX").includes(query)).slice(0, 8); resultBox.innerHTML = matches.length ? matches.map((user) => `<button type="button" class="cp6-popup-result w-full text-left px-3 py-2 hover:bg-slate-50 transition flex flex-col" data-external-id="${escapeHtml(user.id)}"><span class="text-xs font-bold text-slate-800">${escapeHtml(user.name)}</span><span class="text-[11px] text-slate-500">${escapeHtml(user.email || "")} • ${escapeHtml(user.phone || "")}</span></button>`).join("") : `<small>No se encontraron usuarios.</small>`; resultBox.querySelectorAll("[data-external-id]").forEach((button) => button?.addEventListener("click", () => { selectedExternal = externalUsers.find((user) => user.id === button.dataset.externalId); search.value = selectedExternal?.name || ""; acceptExternal.disabled = !selectedExternal; resultBox.innerHTML = selectedExternal ? `<small>Seleccionado: ${escapeHtml(selectedExternal.name)}</small>` : ""; })); });
+    acceptExternal?.addEventListener("click", async () => { if (!selectedExternal) return; try { const updated = await api(`/service-requests/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ asignadoExternoId: selectedExternal.id, asignadoExternoEmail: selectedExternal.email || "", asignadoExternoNombre: selectedExternal.name || "" }) }); requests = requests.map((candidate) => candidate.id === item.id ? updated : candidate); renderRequestDetail(updated); } catch (error) { window.alert(error.message || "No se pudo asignar el usuario externo."); } });
+    detail.querySelector("[data-edit-request-info]")?.addEventListener("click", () => openRequestEditor(item));
+  }
+  function renderHomeQuickDetail(item) {
+    let dialog = $("#homeQuickRequestDialog");
+    if (!dialog) { dialog = document.createElement("dialog"); dialog.id = "homeQuickRequestDialog"; dialog.className = "cp6-home-quick-dialog"; document.body.appendChild(dialog); }
+    const specific = item.datosEspecificos || {};
+    const applicant = item.solicitante?.nombre || item.solicitante?.name || "Sin solicitante";
+    const phone = item.solicitante?.telefono || item.solicitante?.phone || "Sin teléfono";
+    const type = item.tipoBien || specific.tipoBien || specific.tipo_bien || "Sin especificar";
+    const appraisal = item.tipoAvaluo || specific.tipoAvaluo || specific.tipo_avaluo || "Sin especificar";
+    const status = String(item.estado || "En trámite");
+    dialog.innerHTML = `<div class="cp6-home-quick-card"><div class="cp6-home-quick-accent"></div><header><div><span class="cp6-home-quick-kicker">DETALLE RÁPIDO</span><h2>${escapeHtml(item.folio || "Solicitud")}</h2></div><button type="button" class="cp6-home-quick-close" data-close-home-quick aria-label="Cerrar detalle"><i class="fa-solid fa-xmark"></i></button></header><div class="cp6-home-quick-status"><span class="request-status request-status-${status.toLowerCase() === "concluida" ? "concluida" : "tramite"}">${escapeHtml(status)}</span><span class="cp6-home-quick-date">${escapeHtml(requestDate(item.creadoEn))}</span></div><div class="cp6-home-quick-grid"><div><small>Solicitante</small><strong><i class="fa-solid fa-user"></i>${escapeHtml(applicant)}</strong></div><div><small>Teléfono</small><strong><i class="fa-solid fa-phone"></i>${escapeHtml(phone)}</strong></div><div><small>Tipo de bien</small><strong><i class="fa-solid fa-building"></i>${escapeHtml(type)}</strong></div><div><small>Tipo de avalúo</small><strong><i class="fa-solid fa-file-lines"></i>${escapeHtml(appraisal)}</strong></div><div><small>Valuador</small><strong><i class="fa-solid fa-user-check"></i>${escapeHtml(item.asesor || "Sin asignar")}</strong></div><div><small>No. de avalúo</small><strong><i class="fa-solid fa-hashtag"></i>${escapeHtml(item.numeroAvaluo || "Sin asignar")}</strong></div></div><footer><button type="button" class="cp6-home-quick-secondary" data-close-home-quick>Cerrar</button><button type="button" class="cp6-home-quick-primary" data-open-full-request="${escapeHtml(item.id)}">Ver detalle completo <i class="fa-solid fa-arrow-right"></i></button></footer></div>`;
+    openDialog(dialog);
+    dialog.querySelectorAll("[data-close-home-quick]").forEach((button) => button.addEventListener("click", () => dialog.close()));
+    dialog.querySelector("[data-open-full-request]")?.addEventListener("click", () => { dialog.close(); renderRequestDetail(item); });
+    dialog.addEventListener("cancel", (event) => { event.preventDefault(); dialog.close(); }, { once: true });
+  }
+  function bindRequestDetailButtons(container, list) { const isHomeRecent = container?.id === "welcomeRequestsTable"; container.querySelectorAll("[data-request-detail]").forEach((button) => button?.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); const item = list.find((candidate) => String(candidate.id) === String(button.dataset.requestDetail)); if (!item) return; if (isHomeRecent) renderHomeQuickDetail(item); else renderRequestDetail(item); })); }
+
+  async function submitPublicRequest(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const form = event.currentTarget;
+    const message = $("#publicRequestMessage");
+    setMessage(message, "");
+    if (!requireFields(form, ["nombre", "telefono", "tipoBien"])) { setMessage(message, "Completa nombre, teléfono y tipo de avalúo."); return; }
+    const values = formObject(form);
+    if (!String(values.asesor || "").trim() || /sin\s+asignar/i.test(String(values.asesor || ""))) { setMessage(message, "Selecciona un valuador antes de enviar la solicitud."); showRequestStep(1); $("#publicRequestAdvisor")?.focus(); return; }
+    if (values.valorOperacion) values.valorOperacion = String(values.valorOperacion).replace(/,/g, "");
+    // El formulario puede crear un segundo campo dinámico llamado tipoBien.
+    // Siempre tomamos el selector principal para no dejar que el campo dinámico
+    // vacío sobrescriba el tipo de bien seleccionado por el usuario.
+    const primaryType = String(form.querySelector("#publicRequestType")?.value || "").trim();
+    values.tipoBien = primaryType || String(values.tipoBien || "").trim();
+    if (!values.tipoAvaluo || ["Inmuebles", "Vehículo Automotriz", "Automotriz", "Maquinaria y equipo", "Mobiliario y Bienes Diversos", "Intangibles"].includes(values.tipoAvaluo)) values.tipoAvaluo = values.tipoBien;
+    setBusy(form, true, "Enviando…");
+    try {
+      const files = await readFiles(archivosSeleccionados);
+      const payload = { solicitante: { nombre: values.nombre, telefono: values.telefono, correo: values.correo }, asignadoExternoId: form.dataset.externalId || "", asignadoExternoEmail: form.dataset.externalEmail || "", asignadoExternoNombre: form.dataset.externalName || "", tipoBien: values.tipoBien, tipoAvaluo: values.tipoAvaluo, asesor: values.asesor, notaria: values.notaria || values.notariaReferida || "", modalidad: values.modalidadInmueble || "", datosEspecificos: { ...values, tipoBien: values.tipoBien }, archivos: [...archivosExistentesEnEdicion, ...files], contactoVisita: { nombre: values.contactoVisitaNombre, telefono: values.contactoVisitaTelefono }, observaciones: values.observaciones, usuario_id: applicantSession?.id || values.usuario_id || "", requesterEmail: values.correo || applicantSession?.email || "" };
+      const result = await api(editingRequestId ? `/service-requests/${encodeURIComponent(editingRequestId)}` : "/service-requests", { method: editingRequestId ? "PUT" : "POST", body: JSON.stringify(payload) });
+      clearRequestDraft();
+      const actionLabel = editingRequestId ? "Solicitud actualizada" : "Solicitud registrada";
+      setMessage(message, `${actionLabel} con folio ${result.folio}. Conserva este número para consultar el avance.`, "success");
+      window.setTimeout(() => { resetRequestForm(); closeDialog(requestDialog); if (applicantSession) renderApplicantHomeRequests(); }, 2600);
+    } catch (error) { setMessage(message, error.message || "No se pudo registrar la solicitud."); }
+    finally { setBusy(form, false); }
+  }
+
+  async function registerApplicant(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const form = event.currentTarget;
+    const values = formObject(form);
+    const message = $("#applicantRegisterMessage");
+    setMessage(message, "");
+    if (!requireFields(form, ["nombre", "correo", "password", "passwordConfirm"])) { setMessage(message, "Completa los campos obligatorios del registro."); return; }
+    if (values.password !== values.passwordConfirm) { setMessage(message, "Las contraseñas no coinciden."); return; }
+    setBusy(form, true, "Registrando…");
+    try {
+      const result = await api("/applicants/register", { method: "POST", body: JSON.stringify({ name: values.nombre, email: values.correo, phone: values.telefono, notaria: values.notaria || "", password: values.password }) });
+      applicantSession = result;
+      sessionStorage.setItem("control-avaluos.applicant", JSON.stringify(result));
+      setMessage(message, "Registro realizado. Ya puedes enviar solicitudes y consultar su avance.", "success");
+      window.setTimeout(() => {
+        closeDialog(applicantRegisterDialog);
+        showApplicantHome();
+        renderApplicantHomeRequests();
+      }, 900);
+    } catch (error) { setMessage(message, error.message || "No se pudo registrar el usuario."); }
+    finally { setBusy(form, false); }
+  }
+
+  async function renderApplicantRequests() {
+    if (!applicantSession) return;
+    const table = $("#applicantRequestsTable");
+    if (!table) return;
+    const own = await api(`/mis-solicitudes?email=${encodeURIComponent(applicantSession.email)}&usuario_id=${encodeURIComponent(applicantSession.id || "")}`);
+    table.innerHTML = applicantOwnRequestsTable(own);
+    bindRequestDetailButtons(table, own);
+    table.querySelectorAll("[data-edit-own-request]").forEach((button) => button?.addEventListener("click", () => { const item = own.find((candidate) => candidate.id === button.dataset.editOwnRequest); if (item) editOwnRequest(item); }));
+    openDialog(applicantRequestsDialog);
+  }
+  function editOwnRequest(item) { openRequestEditor(item); }
+
+  async function saveApplicantProfile(event) {
+    event.preventDefault();
+    if (!applicantSession) return;
+    const form = event.currentTarget;
+    const values = formObject(form);
+    const message = $("#applicantProfileMessage");
+    setMessage(message, "");
+    if (!String(values.nombre || "").trim()) { setMessage(message, "El nombre es obligatorio."); return; }
+    if (values.password && values.password !== values.passwordConfirm) { setMessage(message, "Las contraseñas no coinciden."); return; }
+    setBusy(form, true, "Guardando…");
+    try {
+      const updated = await api(`/applicants/${encodeURIComponent(applicantSession.id)}/profile`, { method: "PUT", body: JSON.stringify({ name: values.nombre, phone: values.telefono, password: values.password || "" }) });
+      applicantSession = updated;
+      sessionStorage.setItem("control-avaluos.applicant", JSON.stringify(updated));
+      $("#applicantWelcomeName") && ($("#applicantWelcomeName").textContent = updated.name || "—");
+      $("#applicantWelcomeNameMessage") && ($("#applicantWelcomeNameMessage").textContent = updated.name || "—");
+      $("#applicantWelcomeNameMirror") && ($("#applicantWelcomeNameMirror").textContent = updated.name || "—");
+      $("#applicantProfileEmail") && ($("#applicantProfileEmail").textContent = updated.email || "—");
+      $("#applicantProfilePhone") && ($("#applicantProfilePhone").textContent = updated.phone || "—");
+      setMessage(message, "Perfil actualizado correctamente.", "success");
+      window.setTimeout(() => closeDialog($("#applicantProfileDialog")), 700);
+    } catch (error) { setMessage(message, error.message || "No se pudo actualizar el perfil."); }
+    finally { setBusy(form, false); }
+  }
+  function openApplicantProfile() {
+    if (!applicantSession) return;
+    const form = $("#applicantProfileForm");
+    form.elements.nombre.value = applicantSession.name || "";
+    form.elements.correo.value = applicantSession.email || "";
+    form.elements.telefono.value = applicantSession.phone || "";
+    form.elements.password.value = "";
+    form.elements.passwordConfirm.value = "";
+    setMessage($("#applicantProfileMessage"), "");
+    openDialog($("#applicantProfileDialog"));
+  }
+  async function loginApplicant(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const form = event.currentTarget;
+    const values = formObject(form);
+    const message = $("#applicantLoginMessage");
+    setMessage(message, "");
+    if (!requireFields(form, ["email", "password"])) { setMessage(message, "Captura correo y contraseña."); return; }
+    setBusy(form, true, "Entrando…");
+    try { applicantSession = await api("/applicants/login", { method: "POST", body: JSON.stringify({ email: values.email, password: values.password }) }).then((result) => result.applicant); sessionStorage.setItem("control-avaluos.applicant", JSON.stringify(applicantSession)); closeDialog(applicantLoginDialog); showApplicantHome(); } catch (error) { setMessage(message, error.message || "No se pudo iniciar sesión."); }
+    finally { setBusy(form, false); }
+  }
+
+  function requestRows(list, canManage = false, canViewDetail = true, canDelete = false) {
+    if (!list.length) return `<p class="request-empty">No hay solicitudes para mostrar.</p>`;
+    const activeRole = String($("#appShell")?.dataset.role || "");
+    const canUploadFinal = ["admin", "auditor", "valuador"].includes(activeRole);
+    const infoIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 10v6M12 7h.01"></path></svg>`;
+    const uploadIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 18h9a4.5 4.5 0 0 0 .7-8.95A5.5 5.5 0 0 0 6.5 10.5 3.5 3.5 0 0 0 7.5 18Z"></path><path d="M12 10v5M9.8 12.2 12 10l2.2 2.2"></path></svg>`;
+    const replaceIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14-4L4 9M4 5v4h4M4 13a8 8 0 0 0 14 4l2-2M20 19v-4h-4"></path></svg>`;
+    const deleteIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7l1-3h4l1 3"></path></svg>`;
+    return `<div class="cp6-request-card-grid cp6-admin-request-cards">${list.map((item) => { const finalPdf = item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url; const specific = item.datosEspecificos || {}; const owner = item.propietario || specific.propietario || specific.razonSocial || item.solicitante?.nombre || item.solicitante?.name || "No especificado"; const address = String(specific.direccionVisita || specific.direccion_visita || item.contactoVisita?.direccion || item.direccionVisita || item.direccion || "").trim() || "Sin ubicación registrada"; const value = item.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? ""; const status = String(item.estado || "En trámite"); const type = item.tipoBien || specific.tipoBien || specific.tipo_bien || "Solicitud de avalúo"; const advisor = item.asesor || item.valuadorAsignado || "Sin asignar"; const appraisalNumber = String(item.numeroAvaluo || "").trim(); const actions = `<button type="button" class="request-icon-button request-info-button client-table-view-button cp6-card-detail-button" title="Ver detalle" aria-label="Ver detalle" data-request-detail="${escapeHtml(item.id)}">${infoIcon}<span>Ver detalles</span></button>${canUploadFinal ? `<button type="button" class="request-icon-button request-upload-pdf-button cp6-card-upload-action" title="${finalPdf ? "Actualizar avalúo" : "Subir avalúo"}" aria-label="${finalPdf ? "Actualizar avalúo" : "Subir avalúo"}" data-upload-final-row="${escapeHtml(item.id)}">${finalPdf ? replaceIcon : uploadIcon}<span>${finalPdf ? "Actualizar avalúo" : "Subir avalúo"}</span></button>` : ""}${canDelete ? `<button type="button" class="request-icon-button request-delete-button cp6-card-icon-action" title="Eliminar" aria-label="Eliminar" data-delete-request="${escapeHtml(item.id)}">${deleteIcon}</button>` : ""}`; return `<article class="cp6-request-card cp6-admin-request-card${requestStatusClass(item.estado) === "concluida" ? " is-concluded" : ""}"><div class="cp6-request-card-top"><div><strong class="cp6-request-folio">${escapeHtml(item.folio || "Pendiente")}</strong><span class="cp6-request-applicant-name">${escapeHtml(item.solicitante?.nombre || item.solicitante?.name || item.solicitante?.correo || "Solicitante no registrado")}</span><span class="cp6-request-meta">Valuador: ${escapeHtml(advisor)}</span></div><div class="cp6-request-status-stack"><span class="request-status request-status-${requestStatusClass(item.estado)}">${escapeHtml(status)}</span>${appraisalNumber ? `<span class="cp6-request-appraisal-number">Avalúo ${escapeHtml(appraisalNumber)}</span>` : ""}</div></div><div class="cp6-request-card-field"><span>Propietario</span><strong>${escapeHtml(owner)}</strong></div><div class="cp6-request-card-field cp6-request-location"><span>Ubicación</span><strong><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${escapeHtml(address)}</strong></div><div class="cp6-request-card-field cp6-request-operation"><span>Valor de operación</span><strong>${requestMoneyValue(value)}</strong></div><div class="cp6-request-card-actions">${actions}</div></article>`; }).join("")}</div>`;
+  }
+  function homeRequestRows(list) {
+    if (!list.length) return `<p class="request-empty">No hay solicitudes para mostrar.</p>`;
+    const activeRole = String($("#appShell")?.dataset.role || "");
+    const canUploadFinal = ["admin", "auditor", "valuador"].includes(activeRole);
+    const infoIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 10v6M12 7h.01"></path></svg>`;
+    const uploadIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 18h9a4.5 4.5 0 0 0 .7-8.95A5.5 5.5 0 0 0 6.5 10.5 3.5 3.5 0 0 0 7.5 18Z"></path><path d="M12 10v5M9.8 12.2 12 10l2.2 2.2"></path></svg>`;
+    const replaceIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14-4L4 9M4 5v4h4M4 13a8 8 0 0 0 14 4l2-2M20 19v-4h-4"></path></svg>`;
+    const userIcon = `<span class="cp6-cell-icon cp6-cell-icon-user" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.2"></circle><path d="M5.5 20c.7-3.5 2.8-5.2 6.5-5.2s5.8 1.7 6.5 5.2"></path></svg></span>`;
+    return `<table class="request-table request-table-compact cp6-home-recent-table"><thead><tr><th>Número de solicitud</th><th>Solicitante</th><th>Acciones</th></tr></thead><tbody>${list.map((item) => { const finalPdf = item.finalPdfUrl || item.pdfUrl || item.archivoFinal?.url; return `<tr><td class="request-folio-cell"><strong>${escapeHtml(item.folio || "—")}</strong></td><td class="requester-cell"><span class="cp6-cell-with-icon">${userIcon}${escapeHtml(item.solicitante?.nombre || item.solicitante?.name || "—")}</span></td><td class="request-action-cell"><button type="button" class="request-icon-button request-info-button" title="Ver detalle" aria-label="Ver detalle" data-request-detail="${escapeHtml(item.id)}">${infoIcon}</button>${canUploadFinal ? `<button type="button" class="request-icon-button request-upload-pdf-button" title="${finalPdf ? "Reemplazar archivo" : "Subir archivo"}" aria-label="${finalPdf ? "Reemplazar archivo" : "Subir archivo"}" data-upload-final-row="${escapeHtml(item.id)}">${finalPdf ? replaceIcon : uploadIcon}</button>` : ""}</td></tr>`; }).join("")}</tbody></table>`;
+  }
+
+  async function loadRequests(role = "", user = "") {
+    if (!user) return requests;
+    const key = `${role}:${user}`;
+    if (requestsLoadPromise && requestsLoadKey === key) return requestsLoadPromise;
+    const sequence = ++requestsLoadSequence;
+    requestsLoadKey = key;
+    const promise = (async () => {
+      try {
+        const query = role === "valuador" ? `?asesor=${encodeURIComponent(user)}` : "";
+        const result = await api(`/service-requests${query}`);
+        if (sequence !== requestsLoadSequence || window.ControlAvaluosDesktop?.getActiveUser?.() !== user) return requests;
+        if (!Array.isArray(result)) throw new Error("Respuesta de solicitudes inválida.");
+        const normalizedUser = String(user || "").trim().toLocaleLowerCase("es-MX");
+        requests = role === "valuador" ? result.filter((item) => [item.asesor, item.valuadorAsignado, item.valuador, item.asesorValuador, item.usuario]
+          .map((value) => String(value || "").trim().toLocaleLowerCase("es-MX"))
+          .includes(normalizedUser)) : result;
+        window.__controlSolicitudes = requests;
+        window.dispatchEvent(new CustomEvent("control-avaluos:home-refresh"));
+      } catch {
+        // Un fallo de red no equivale a cero solicitudes: conservar los datos válidos.
+        if (sequence === requestsLoadSequence && window.ControlAvaluosDesktop?.getActiveUser?.() === user && Array.isArray(window.__controlSolicitudes)) requests = window.__controlSolicitudes;
+      }
+      return requests;
+    })();
+    requestsLoadPromise = promise;
+    try { return await promise; } finally { if (requestsLoadPromise === promise) requestsLoadPromise = null; }
+  }
+  async function renderRegisteredApplicants() {
+    const table = $("#registeredApplicantsTable");
+    if (!table) return;
+    try {
+      const applicants = await api("/applicants");
+      const query = String($("#registeredApplicantsSearchInput")?.value || "").trim().toLocaleLowerCase("es-MX");
+      const visible = applicants.filter((item) => !query || [item.name, item.email, item.phone, item.createdAt].join(" ").toLocaleLowerCase("es-MX").includes(query));
+      const editIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"></path><path d="m14 7 3 3"></path></svg>`;
+      const deleteIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7l1-3h4l1 3"></path></svg>`;
+      table.innerHTML = visible.length ? `<table class="request-table request-table-compact users-external-table"><thead><tr><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Registro</th><th>Acciones</th></tr></thead><tbody>${visible.map((item) => `<tr><td><strong>${escapeHtml(item.name)}</strong></td><td>${escapeHtml(item.email)}</td><td>${escapeHtml(item.phone || "—")}</td><td>${escapeHtml(item.createdAt?.slice(0, 10) || "—")}</td><td class="request-action-cell"><button type="button" class="request-icon-button request-info-button" data-edit-applicant="${escapeHtml(item.id)}" title="Editar usuario" aria-label="Editar usuario">${editIcon}</button><button type="button" class="request-icon-button request-delete-button" data-delete-applicant="${escapeHtml(item.id)}" title="Eliminar usuario" aria-label="Eliminar usuario">${deleteIcon}</button></td></tr>`).join("")}</tbody></table>` : `<p class="request-empty">${query ? "No se encontraron usuarios externos." : "No hay solicitantes registrados."}</p>`;
+      table.querySelectorAll("[data-edit-applicant]").forEach((button) => button?.addEventListener("click", () => editApplicant(applicants.find((item) => item.id === button.dataset.editApplicant))));
+      table.querySelectorAll("[data-delete-applicant]").forEach((button) => button?.addEventListener("click", () => deleteApplicant(button.dataset.deleteApplicant)));
+    } catch { table.innerHTML = `<p class="request-empty">No se pudo cargar la lista de solicitantes.</p>`; }
+  }
+  async function editApplicant(item) {
+    if (!item) return;
+    const name = window.prompt("Nombre completo", item.name); if (name === null) return;
+    const email = window.prompt("Correo electrónico", item.email); if (email === null) return;
+    const phone = window.prompt("Teléfono", item.phone || ""); if (phone === null) return;
+    const password = window.prompt("Nueva contraseña (opcional)", "");
+    try { await api(`/applicants/${encodeURIComponent(item.id)}`, { method: "PUT", body: JSON.stringify({ name, email, phone, password: password || "" }) }); await renderRegisteredApplicants(); } catch (error) { window.alert(error.message); }
+  }
+  async function deleteApplicant(id) {
+    if (!window.confirm("¿Eliminar este solicitante registrado?")) return;
+    try { await api(`/applicants/${encodeURIComponent(id)}`, { method: "DELETE" }); await renderRegisteredApplicants(); } catch (error) { window.alert(error.message); }
+  }
+  async function deleteRequest(id) {
+    if (!window.confirm("¿Eliminar esta solicitud? Esta acción no se puede deshacer.")) return;
+    try { await api(`/service-requests/${encodeURIComponent(id)}`, { method: "DELETE" }); await renderRequests(); } catch (error) { window.alert(error.message); }
+  }
+  function requestsPagination(page, total) {
+    const pages = Math.max(1, Math.ceil(total / REQUESTS_PAGE_SIZE));
+    if (pages <= 1) return "";
+    const current = Math.min(Math.max(1, page), pages);
+    const buttons = Array.from({ length: pages }, (_, index) => { const number = index + 1; return `<button type="button" class="table-page-button${number === current ? " is-active" : ""}" data-requests-page="${number}" aria-current="${number === current ? "page" : "false"}">${number}</button>`; }).join("");
+    return `<nav class="table-pagination request-table-pagination" aria-label="Paginación de solicitudes"><span>Mostrando ${Math.min((current - 1) * REQUESTS_PAGE_SIZE + 1, total)}-${Math.min(current * REQUESTS_PAGE_SIZE, total)} de ${total}</span><div><button type="button" class="table-page-button" data-requests-page="${current - 1}" ${current === 1 ? "disabled" : ""} aria-label="Página anterior">‹</button>${buttons}<button type="button" class="table-page-button" data-requests-page="${current + 1}" ${current === pages ? "disabled" : ""} aria-label="Página siguiente">›</button></div></nav>`;
+  }
+  function requestAdminStatusGroup(status) {
+    const normalized = String(status || "").trim().toLocaleLowerCase("es-MX").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (normalized === "concluida" || normalized === "concluido") return "concluida";
+    if (normalized === "recibida" || normalized === "recibido") return "recibida";
+    return normalized;
+  }
+  function bindRequestStatusButtons() {
+    if (requestStatusButtonsBound) return;
+    requestStatusButtonsBound = true;
+    document.addEventListener("click", (event) => {
+      const button = event.target?.closest?.("#solicitudesView [data-request-status]");
+      if (!button) return;
+      event.preventDefault();
+      document.querySelectorAll("#solicitudesView [data-request-status]").forEach((item) => {
+        const active = item === button;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+      requestsPage = 1;
+      renderRequests();
+    });
+  }
+  async function renderRequests(refresh = true) {
+    const table = $("#serviceRequestsTable");
+    if (!table) return;
+    const role = $("#appShell")?.dataset.role || "viewer";
+    const user = window.ControlAvaluosDesktop?.getActiveUser?.() || "";
+    if (refresh) await loadRequests(role, user);
+    if (user !== window.ControlAvaluosDesktop?.getActiveUser?.()) return;
+    let visible = role === "valuador" ? requests.filter((item) => [item.asesor, item.valuadorAsignado, item.valuador, item.asesorValuador, item.usuario]
+      .map((value) => String(value || "").trim().toLocaleLowerCase("es-MX"))
+      .includes(String(user || "").trim().toLocaleLowerCase("es-MX"))) : requests;
+    const query = String($("#requestSearchInput")?.value || "").toLowerCase();
+    const status = document.querySelector("#solicitudesView .request-status-pill.is-active")?.dataset.requestStatus || "";
+    visible = visible.filter((item) => (!query || JSON.stringify(item).toLowerCase().includes(query)) && (!status || requestAdminStatusGroup(item.estado) === status));
+    const pages = Math.max(1, Math.ceil(visible.length / REQUESTS_PAGE_SIZE));
+    requestsPage = Math.min(Math.max(1, requestsPage), pages);
+    const pageItems = visible.slice((requestsPage - 1) * REQUESTS_PAGE_SIZE, requestsPage * REQUESTS_PAGE_SIZE);
+    table.innerHTML = `${requestRows(pageItems, ["admin", "auditor", "valuador"].includes(role), true, role === "admin")}${requestsPagination(requestsPage, visible.length)}`;
+    bindRequestDetailButtons(table, pageItems);
+    table.querySelectorAll("[data-requests-page]").forEach((button) => button?.addEventListener("click", () => { if (button.disabled) return; requestsPage = Number(button.dataset.requestsPage) || 1; renderRequests(); }));
+    table.querySelectorAll("[data-delete-request]").forEach((button) => button?.addEventListener("click", () => deleteRequest(button.dataset.deleteRequest))); table.querySelectorAll("[data-upload-final-row]").forEach((button) => button?.addEventListener("click", () => { const item = requests.find((request) => request.id === button.dataset.uploadFinalRow); if (item) uploadFinalPdf(item); }));
+  }
+
+  async function renderWelcomeRequests(refresh = true) {
+    const panel = $("#welcomeRequestsPanel");
+    const table = $("#welcomeRequestsTable");
+    if (!panel || !table) return;
+    const role = $("#appShell")?.dataset.role || "viewer";
+    if (!["admin", "auditor", "valuador"].includes(role)) { panel.hidden = true; return; }
+    const user = window.ControlAvaluosDesktop?.getActiveUser?.() || "";
+    if (refresh) await loadRequests(role, user);
+    if (user !== window.ControlAvaluosDesktop?.getActiveUser?.()) return;
+    window.dispatchEvent(new CustomEvent("control-avaluos:home-refresh"));
+    const visible = requests;
+    panel.hidden = false; table.innerHTML = homeRequestRows(visible.slice(0, 8)); bindRequestDetailButtons(table, visible.slice(0, 8));
+    table.querySelectorAll("[data-upload-final-row]").forEach((button) => button?.addEventListener("click", () => { const item = requests.find((request) => request.id === button.dataset.uploadFinalRow); if (item) uploadFinalPdf(item); }));
+  }
+
+  function bind() {
+    if (window.__controlSolicitudesBound) return;
+    window.__controlSolicitudesBound = true;
+    $("#publicRequestType")?.addEventListener("change", () => { renderDynamicFields(); fillNotaries(); });
+    document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => tab?.addEventListener("click", () => showRequestStep(index + 1)));
+    $("#btn-prev")?.addEventListener("click", () => {
+      if (requestStep === 1) { closeDialog(requestDialog); return; }
+      showRequestStep(requestStep - 1);
+    });
+    $("#btn-next")?.addEventListener("click", () => { if (!requestStepValid(requestStep)) return; showRequestStep(requestStep + 1); });
+    $("#requestPrivacyConsent")?.addEventListener("change", syncPrivacyConsentState);
+    $("#publicRequestForm")?.addEventListener("click", (event) => {
+      const category = event.target.closest?.("[data-request-category]");
+      if (!category) return;
+      if (category.getAttribute("onclick")) return;
+      selectCategory(category.dataset.requestCategory || "");
+      return;
+      const categoryClasses = {
+        "Inmuebles": ["border-blue-500", "bg-blue-50", "text-blue-700"],
+        "Vehículo Automotriz": ["border-emerald-500", "bg-emerald-50", "text-emerald-700"],
+        "Maquinaria y equipo": ["border-amber-500", "bg-amber-50", "text-amber-700"],
+        "Mobiliario y Bienes Diversos": ["border-violet-500", "bg-violet-50", "text-violet-700"],
+        "Intangibles": ["border-rose-500", "bg-rose-50", "text-rose-700"]
+      };
+      const allCategoryClasses = Object.values(categoryClasses).flat();
+      document.querySelectorAll("[data-request-category]").forEach((candidate) => {
+        candidate.classList.remove(...allCategoryClasses);
+        if (candidate === category) candidate.classList.add(...(categoryClasses[category.dataset.requestCategory] || categoryClasses.Inmuebles));
+        else candidate.classList.add("border-slate-200", "bg-white", "text-slate-800");
+      });
+      renderDynamicFields();
+      fillNotaries();
+    });
+
+    $("#publicRequestAttachments")?.addEventListener("change", (event) => addSelectedFiles(event.target.files));
+    window.addEventListener("control-avaluos:notarias-updated", () => { if (selectedNotaryValue() || $("#requestNotaryMunicipality")) renderNotarySearch(selectedNotaryValue()); });
+    $("#publicRequestForm")?.addEventListener("submit", submitPublicRequest);
+    $("#valor_operacion")?.addEventListener("input", () => { updateOperationMoneyPreview(); updateSummary(); scheduleRequestDraftSave(); });
+    $("#publicRequestForm")?.addEventListener("input", () => { syncPrivacyConsentState(); updateSummary(); scheduleRequestDraftSave(); });
+    $("#publicRequestForm")?.addEventListener("change", () => { syncPrivacyConsentState(); updateSummary(); scheduleRequestDraftSave(); });
+    requestDialog?.addEventListener("cancel", (event) => event.preventDefault());
+    $("#applicantRegisterForm")?.addEventListener("submit", registerApplicant);
+    $("#applicantLoginForm")?.addEventListener("submit", loginApplicant);
+    $("#closeApplicantRequestsButton")?.addEventListener("click", () => closeDialog(applicantRequestsDialog));
+    $("#cancelApplicantRequestsButton")?.addEventListener("click", () => closeDialog(applicantRequestsDialog));
+    $("#newApplicantRequestButton")?.addEventListener("click", () => { closeDialog(applicantRequestsDialog); clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); bindNewRequestExternalAssignment(); });
+    $("#openPublicRequestButton")?.addEventListener("click", () => { applicantSession = null; clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); bindNewRequestExternalAssignment(); });
+    $("#openApplicantRegisterButton")?.addEventListener("click", () => { setMessage($("#applicantRegisterMessage"), ""); openDialog(applicantRegisterDialog); });
+    $("#applicantLoginRegisterButton")?.addEventListener("click", () => {
+      const loginForm = $("#applicantLoginForm"), registerForm = $("#applicantRegisterForm");
+      if (!loginForm || !registerForm) return;
+      setMessage($("#applicantLoginMessage"), ""); setMessage($("#applicantRegisterMessage"), "");
+      loginForm.classList.add("cp6-login-swap-out");
+      window.setTimeout(() => { loginForm.hidden = true; loginForm.classList.remove("cp6-login-swap-out"); registerForm.hidden = false; registerForm.classList.add("cp6-login-swap-in"); registerForm.querySelector("input")?.focus(); }, 180);
+    });
+    $("#applicantRegisterBackButton")?.addEventListener("click", () => {
+      const loginForm = $("#applicantLoginForm"), registerForm = $("#applicantRegisterForm");
+      if (!loginForm || !registerForm) return;
+      registerForm.classList.add("cp6-login-swap-out");
+      window.setTimeout(() => { registerForm.hidden = true; registerForm.classList.remove("cp6-login-swap-out"); loginForm.hidden = false; loginForm.classList.add("cp6-login-swap-in"); loginForm.querySelector("input")?.focus(); }, 180);
+    });
+    $("#openApplicantLoginButton")?.addEventListener("click", () => applicantSession ? showApplicantHome() : openDialog(applicantLoginDialog));
+    ["closePublicRequestButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(requestDialog)));
+    ["closeApplicantRegisterButton", "cancelApplicantRegisterButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(applicantRegisterDialog)));
+    ["closeApplicantLoginButton", "cancelApplicantLoginButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(applicantLoginDialog)));
+    $("#newInternalRequestButton")?.addEventListener("click", () => { clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); bindNewRequestExternalAssignment(); });
+    window.selectCategory = selectCategory;
+    showRequestStep(1);
+    refreshRequestIcons();
+    $("#openRequestsViewButton")?.addEventListener("click", () => $("[data-app-view=solicitudes]")?.click());
+    $("#backRequestsToAvaluosButton")?.addEventListener("click", () => $("[data-app-view=avaluos]")?.click());
+    $("#applicantProfileForm")?.addEventListener("submit", saveApplicantProfile);
+    $("#applicantHomeNewRequestButton")?.addEventListener("click", () => { clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); bindNewRequestExternalAssignment(); });
+    $("#applicantRequestSearchInput")?.addEventListener("input", () => filterApplicantRequests(true));
+    $("#applicantRequestStatusFilter")?.addEventListener("change", () => filterApplicantRequests(true));
+    document.querySelectorAll("[data-client-quick-filter]").forEach((button) => button?.addEventListener("click", () => {
+      const value = button.dataset.clientQuickFilter || "";
+      const select = $("#applicantRequestStatusFilter");
+      if (select) select.value = value;
+      document.querySelectorAll("[data-client-quick-filter]").forEach((item) => item.classList.toggle("is-active", item === button));
+      filterApplicantRequests(true);
+    }));
+    $("#applicantVisualNewRequestButton")?.addEventListener("click", () => { clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); bindNewRequestExternalAssignment(); });
+    window.addEventListener("pagehide", saveRequestDraft);
+    $("#applicantVisualProfileButton")?.addEventListener("click", openApplicantProfile);
+    $("#applicantHomeProfileButton")?.addEventListener("click", openApplicantProfile);
+    $("#applicantNotificationsButton")?.addEventListener("click", () => { const panel = $("#applicantNotificationsPanel"), button = $("#applicantNotificationsButton"); if (!panel || !button) return; panel.hidden = !panel.hidden; button.setAttribute("aria-expanded", String(!panel.hidden)); if (!panel.hidden) { renderApplicantNotifications(); refreshApplicantNotifications(); } });
+    $("#applicantMarkNotificationsRead")?.addEventListener("click", async () => { try { await api("/notifications/read-all", { method: "PUT" }); applicantNotifications = applicantNotifications.map((item) => ({ ...item, leida: true })); renderApplicantNotifications(); } catch (error) { window.alert(error.message); } });
+    $("#closeApplicantProfileButton")?.addEventListener("click", () => closeDialog($("#applicantProfileDialog")));
+    $("#cancelApplicantProfileButton")?.addEventListener("click", () => closeDialog($("#applicantProfileDialog")));
+    $("#applicantHomeLogoutButton")?.addEventListener("click", () => { applicantSession = null; sessionStorage.removeItem("control-avaluos.applicant"); showPublicEntry(); });
+    $("#requestSearchInput")?.addEventListener("input", () => { requestsPage = 1; renderRequests(); });
+    $("#registeredApplicantsSearchInput")?.addEventListener("input", renderRegisteredApplicants);
+    bindRequestStatusButtons();
+    window.addEventListener("control-avaluos:authenticated", () => { renderWelcomeRequests(); renderRequests(); });
+    window.addEventListener("control-avaluos:state-ready", event => {
+      const user = window.ControlAvaluosDesktop?.getActiveUser?.();
+      if (!user || event.detail?.user !== user) return;
+      requests = Array.isArray(window.__controlSolicitudes) ? window.__controlSolicitudes : requests;
+      renderWelcomeRequests(false); renderRequests(false);
+    });
+    // La sesión restaurada puede haberse anunciado antes de cargar este módulo.
+    if (window.ControlAvaluosDesktop?.getActiveUser?.()) { renderWelcomeRequests(); renderRequests(); }
+    window.addEventListener("control-avaluos:users-view", renderRegisteredApplicants);
+    window.addEventListener("control-avaluos:section", (event) => { if (event.detail === "solicitudes") renderRequests(); });
+    $("#closeFileViewerButton")?.addEventListener("click", () => closeDialog($("#fileViewerDialog")));
+    // El detalle se renderiza dinámicamente; delegamos el cierre para que el botón siga funcionando después de cada actualización.
+    document.addEventListener("click", (event) => {
+      const closeButton = event.target?.closest?.("[data-close-request-detail]");
+      if (!closeButton) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const detailDialog = document.querySelector("#requestDetailDialog");
+      if (detailDialog?.open) detailDialog.close();
+      detailDialog?.removeAttribute("open");
+      detailDialog?.classList.remove("client-luxury-detail");
+    });
+    try { const storedApplicant = JSON.parse(sessionStorage.getItem("control-avaluos.applicant") || "null"); if (storedApplicant?.email) { applicantSession = storedApplicant; showApplicantHome(); } } catch { sessionStorage.removeItem("control-avaluos.applicant"); }
+    fillAdvisors();
+    fillNotaries();
+    window.addEventListener("control-avaluos:notarias-updated", (event) => { window.__controlNotarias = event.detail || []; fillNotaries(); });
+  }
+  window.SolicitudesControl = { renderRequests, renderWelcomeRequests, renderApplicantRequests, openDetail: (id) => { const item = requests.find((candidate) => String(candidate.id) === String(id)); if (item) renderRequestDetail(item); }, open: () => { clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); fillNotaries(); bindNewRequestExternalAssignment(); } };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind); else bind();
+})();

@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<script>window.CP6_GAME_NAME = "Run Logo";</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Logo Run - Torreón Edition</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b132b;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.1rem;
+            color: #f8fafc;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 
+                1px 1px 0px #38bdf8,
+                2px 2px 0px #0284c7,
+                4px 4px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        #game-container {
+            position: relative;
+            width: 860px;
+            height: 440px;
+            background: #0d1b2a;
+            border: 3px solid #1e3a8a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+        }
+
+        canvas {
+            display: block;
+            background: transparent;
+        }
+
+        .ui-overlay {
+            position: absolute;
+            top: 15px;
+            left: 25px;
+            right: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        #score-display {
+            font-size: 1.5rem;
+            color: #38bdf8;
+            background: rgba(15, 23, 42, 0.7);
+            padding: 6px 16px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        #houses-score {
+            font-size: 2.4rem;
+            color: #ffffff;
+            display: inline-block;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.8);
+        }
+
+        .pulse-num {
+            transform: scale(1.5);
+            color: #34d399 !important;
+        }
+
+        #rank-notification {
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            text-align: center;
+            z-index: 20;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 100%;
+        }
+
+        #rank-notification.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #rank-notification h3 {
+            color: #38bdf8;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+            margin-bottom: 4px;
+        }
+
+        #rank-notification h2 {
+            color: #34d399;
+            font-size: 2.5rem;
+            text-shadow: 0 0 15px rgba(52, 211, 153, 0.7), 0 2px 6px rgba(0, 0, 0, 0.9);
+        }
+
+        #start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(13, 27, 42, 0.96);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #start-screen h2 {
+            font-size: 2.2rem;
+            color: #38bdf8;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+        }
+
+        #start-screen p {
+            font-size: 1rem;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+            max-width: 480px;
+            line-height: 1.5;
+        }
+
+        .meta-box {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            padding: 10px 18px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .meta-box span {
+            color: #34d399;
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 12px 34px;
+            background-color: #0284c7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1.15rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            background-color: #0369a1;
+            transform: scale(1.05);
+        }
+    </style>
+<style>.cp6-session-badge{position:fixed;top:10px;left:14px;z-index:9999;padding:5px 10px;border:1px solid rgba(59,130,246,.55);border-radius:999px;background:rgba(15,23,42,.86);color:#dbeafe;font:500 11px Segoe UI,sans-serif;pointer-events:none}</style></head>
+<body class="cp6-integrated-game">
+
+    <header>
+        <h1>RUN LOGO RUN</h1>
+    </header>
+
+    <div id="game-container">
+        <div id="rank-notification">
+            <h3 id="notif-subtitle">¡Nuevo Rango Desbloqueado!</h3>
+            <h2 id="notif-rank-name">Valuador Principiante</h2>
+        </div>
+
+        <div class="ui-overlay">
+            <div id="score-display">Avalúos: <span id="houses-score">0</span> / 30</div>
+            <div>Rango: <span id="rank">Principiante</span></div>
+        </div>
+        
+        <div id="start-screen">
+            <h2 id="screen-title">INSPECCIÓN PERICIAL TORREÓN</h2>
+            <p id="screen-desc">Nivel ajustado con física justa y tiempos de reacción óptimos. Supera los obstáculos y alcanza los <b>30 avalúos</b>.</p>
+            <div class="meta-box">Meta del Nivel: <span>30 Puntos para Aprobar</span></div>
+            <button id="start-btn" class="btn">Comenzar Carrera</button>
+        </div>
+
+        <canvas id="gameCanvas" width="860" height="440"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const startScreen = document.getElementById("start-screen");
+        const startBtn = document.getElementById("start-btn");
+        const housesScoreEl = document.getElementById("houses-score");
+        const rankEl = document.getElementById("rank");
+        const rankNotification = document.getElementById("rank-notification");
+        const notifSubtitle = document.getElementById("notif-subtitle");
+        const notifRankName = document.getElementById("notif-rank-name");
+        const screenTitle = document.getElementById("screen-title");
+        const screenDesc = document.getElementById("screen-desc");
+
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSound(type) {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'jump') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(200, now);
+                    osc.frequency.exponentialRampToValueAtTime(480, now + 0.12);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } else if (type === 'collect') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(350, now);
+                    osc.frequency.setValueAtTime(700, now + 0.08);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.18);
+                    osc.start(now);
+                    osc.stop(now + 0.18);
+                } else if (type === 'crash') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(120, now);
+                    osc.frequency.linearRampToValueAtTime(60, now + 0.3);
+                    gain.gain.setValueAtTime(0.35, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                }
+            } catch(e) {}
+        }
+
+        let gameStarted = false;
+        let isCrashing = false;
+        let crashTimer = 0;
+        let housesCollected = 0;
+        const targetHouses = 30;
+        let currentRankIndex = 0;
+        let gameWon = false;
+        let consecutiveCollectiblesCount = 0;
+        let jumpRequested = false; 
+        let safeDistanceAfterPlatform = 0; 
+
+        const ranks = [
+            { threshold: 0, name: "Principiante" },
+            { threshold: 5, name: "Valuador Jr." },
+            { threshold: 10, name: "Analista" },
+            { threshold: 15, name: "Senior" },
+            { threshold: 20, name: "Master" }
+        ];
+
+        const tileSize = 22;
+        const player = {
+            x: 110,
+            y: 240,
+            width: tileSize * 3,
+            height: tileSize * 3,
+            vy: 0,
+            gravity: 1.0,          
+            jumpForce: -14.5,      
+            grounded: true,
+            rotation: 0
+        };
+
+        let brokenBlocks = [];
+        const groundY = 350;       
+        let obstacles = [];
+        let collectibles = [];
+        let platforms = []; 
+        let floatingTexts = [];
+        let particles = [];
+        
+        let telefericoX = 500;
+        let gameSpeed = 9.5;
+        let nextSpawnDistance = 360;
+
+        function resetGame() {
+            player.y = groundY - player.height;
+            player.vy = 0;
+            player.grounded = true;
+            player.rotation = 0;
+            obstacles = [];
+            collectibles = [];
+            platforms = [];
+            floatingTexts = [];
+            particles = [];
+            brokenBlocks = [];
+            isCrashing = false;
+            crashTimer = 0;
+            housesCollected = 0;
+            currentRankIndex = 0;
+            gameSpeed = 9.5;
+            nextSpawnDistance = 360;
+            consecutiveCollectiblesCount = 0;
+            jumpRequested = false;
+            safeDistanceAfterPlatform = 0;
+            gameWon = false;
+            housesScoreEl.textContent = housesCollected;
+            rankEl.textContent = ranks[0].name;
+            rankNotification.classList.remove('show');
+        }
+
+        function startGame() {
+            initAudio();
+            startScreen.style.display = "none";
+            resetGame();
+            gameStarted = true;
+            showInitialRankPopup(ranks[0].name);
+
+            setTimeout(() => {
+                if (gameStarted && collectibles.length === 0) {
+                    collectibles.push({
+                        x: canvas.width + 100,
+                        y: groundY - 130,
+                        width: 46,
+                        height: 42,
+                        points: 1,
+                        type: 'house',
+                        collected: false
+                    });
+                    consecutiveCollectiblesCount = 1;
+                }
+            }, 300);
+        }
+
+        function triggerScoreAnimation() {
+            housesScoreEl.classList.add('pulse-num');
+            setTimeout(() => {
+                housesScoreEl.classList.remove('pulse-num');
+            }, 150);
+        }
+
+        function showInitialRankPopup(rankName) {
+            notifSubtitle.textContent = "Iniciando Turno";
+            notifRankName.textContent = rankName;
+            rankNotification.classList.add('show');
+            setTimeout(() => {
+                rankNotification.classList.remove('show');
+            }, 2000);
+        }
+
+        function showRankPopup(rankName) {
+            notifSubtitle.textContent = "¡Nuevo Rango Desbloqueado!";
+            notifRankName.textContent = rankName;
+            rankNotification.classList.add('show');
+            setTimeout(() => {
+                rankNotification.classList.remove('show');
+            }, 2200);
+        }
+
+        function checkRankProgression() {
+            let newIndex = currentRankIndex;
+            for (let i = ranks.length - 1; i >= 0; i--) {
+                if (housesCollected >= ranks[i].threshold) {
+                    newIndex = i;
+                    break;
+                }
+            }
+
+            if (newIndex > currentRankIndex) {
+                currentRankIndex = newIndex;
+                const newRankName = ranks[currentRankIndex].name;
+                rankEl.textContent = newRankName;
+                showRankPopup(newRankName);
+            }
+
+            if (housesCollected < 10) {
+                gameSpeed = 9.5;
+            } else if (housesCollected >= 10 && housesCollected < 20) {
+                gameSpeed = 10.3;
+            } else if (housesCollected >= 20) {
+                gameSpeed = 11.2;
+            }
+        }
+
+        function jump() {
+            if (!gameStarted || isCrashing) return;
+            jumpRequested = true; 
+        }
+
+        window.addEventListener("keydown", (e) => {
+            if (e.code === "Space" || e.code === "ArrowUp") {
+                e.preventDefault();
+                jump();
+            }
+        }, { passive: false });
+
+        window.addEventListener("mousedown", () => jump());
+        window.addEventListener("touchstart", () => jump(), { passive: true });
+
+        startBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            startGame();
+        });
+
+        function spawnEntitiesRandomly() {
+            let lastObs = obstacles[obstacles.length - 1];
+            let lastCol = collectibles[collectibles.length - 1];
+            let lastPlat = platforms[platforms.length - 1];
+            let rightmostX = Math.max(lastObs ? lastObs.x : 0, lastCol ? lastCol.x : 0, lastPlat ? lastPlat.x : 0);
+
+            if (rightmostX < canvas.width - nextSpawnDistance) {
+                const spawnX = canvas.width + 50;
+                let rand = Math.random();
+
+                // Margen de seguridad estricto tras bajar de un escalón para dar tiempo absoluto de reacción
+                if (safeDistanceAfterPlatform > 0) {
+                    safeDistanceAfterPlatform--;
+                    rand = 0.9; // Forzamos espacio limpio o coleccionable aéreo seguro
+                }
+
+                if (consecutiveCollectiblesCount >= 2) {
+                    rand = Math.random() < 0.5 ? 0.2 : 0.6;
+                }
+
+                if (rand < 0.40) {
+                    const isOnlyCone = Math.random() < 0.6;
+                    const width = isOnlyCone ? 38 : 64;
+                    const height = isOnlyCone ? 48 : 56;
+
+                    obstacles.push({
+                        x: spawnX,
+                        y: groundY - height,
+                        width: width,
+                        height: height,
+                        type: isOnlyCone ? 'cono' : 'valla_obra'
+                    });
+                    consecutiveCollectiblesCount = 0;
+                    nextSpawnDistance = Math.floor(Math.random() * 80) + 360;
+                } else if (rand < 0.75) {
+                    const platWidth = Math.floor(Math.random() * 90) + 130;
+                    const platHeight = 45;
+                    const platY = groundY - platHeight;
+
+                    platforms.push({
+                        x: spawnX,
+                        y: platY,
+                        width: platWidth,
+                        height: platHeight
+                    });
+
+                    let topPlatY = platY;
+                    let topPlatWidth = platWidth;
+                    let topPlatX = spawnX;
+
+                    if (Math.random() < 0.35) {
+                        topPlatWidth = Math.floor(Math.random() * 70) + platWidth;
+                        topPlatY = platY - 45;
+                        topPlatX = spawnX + 10;
+
+                        platforms.push({
+                            x: topPlatX,
+                            y: topPlatY, 
+                            width: topPlatWidth,
+                            height: platHeight
+                        });
+
+                        if (Math.random() < 0.2) {
+                            obstacles.push({
+                                x: topPlatX + topPlatWidth - 45,
+                                y: topPlatY - 42,
+                                width: 36,
+                                height: 42,
+                                type: 'cono'
+                            });
+                        }
+                    }
+
+                    // Margen de seguridad amplio al salir del escalón para que nunca caigas encima de un obstáculo sin tiempo
+                    safeDistanceAfterPlatform = 3;
+
+                    if (Math.random() < 0.5) {
+                        collectibles.push({
+                            x: topPlatX + topPlatWidth / 2 - 23,
+                            y: topPlatY - 48,
+                            width: 46,
+                            height: 42,
+                            points: 1,
+                            type: 'house',
+                            collected: false
+                        });
+                        consecutiveCollectiblesCount++;
+                    } else {
+                        consecutiveCollectiblesCount = 0;
+                    }
+
+                    nextSpawnDistance = Math.floor(Math.random() * 80) + 380;
+                } else {
+                    const isBuilding = Math.random() < 0.3;
+                    collectibles.push({
+                        x: spawnX,
+                        y: groundY - 140 - Math.random() * 30,
+                        width: isBuilding ? 40 : 46,
+                        height: isBuilding ? 40 : 42,
+                        points: isBuilding ? 2 : 1,
+                        type: isBuilding ? 'building' : 'house',
+                        collected: false
+                    });
+                    consecutiveCollectiblesCount++;
+                    nextSpawnDistance = Math.floor(Math.random() * 70) + 340;
+                }
+            }
+        }
+
+        function triggerCrashAnimation() {
+            isCrashing = true;
+            playSound('crash');
+
+            const ts = tileSize;
+            const cx = player.x + player.width / 2;
+            const cy = player.y + player.height / 2;
+
+            const blockOffsets = [
+                {bx: 0, by: 0},
+                {bx: 1, by: 0},
+                {bx: 2, by: 0},
+                {bx: 1, by: 1},
+                {bx: 2, by: 1},
+                {bx: 2, by: 2}
+            ];
+
+            brokenBlocks = blockOffsets.map(b => ({
+                x: cx + (b.bx - 1) * ts,
+                y: cy + (b.by - 1) * ts,
+                vx: (Math.random() - 0.3) * 10,
+                vy: -Math.random() * 11 - 2,
+                rotation: Math.random() * Math.PI,
+                vRot: (Math.random() - 0.5) * 0.3
+            }));
+
+            crashTimer = 45;
+        }
+
+        function update() {
+            if (!gameStarted) return;
+
+            if (isCrashing) {
+                crashTimer--;
+                brokenBlocks.forEach(bb => {
+                    bb.x += bb.vx;
+                    bb.y += bb.vy;
+                    bb.vy += 0.75;
+                    bb.rotation += bb.vRot;
+                });
+                if (crashTimer <= 0) {
+                    gameOver("¡Choque en zona de obra! Inspección suspendida.");
+                }
+                return;
+            }
+
+            if (gameWon) return;
+
+            telefericoX -= gameSpeed * 0.2;
+            if (telefericoX < -140) telefericoX = canvas.width + 120;
+
+            player.vy += player.gravity;
+            player.y += player.vy;
+
+            let onGround = false;
+            if (player.y >= groundY - player.height) {
+                player.y = groundY - player.height;
+                player.vy = 0;
+                onGround = true;
+            }
+
+            platforms.forEach(plat => {
+                plat.x -= gameSpeed;
+
+                if (
+                    player.x + player.width > plat.x + 4 &&
+                    player.x < plat.x + 12 &&
+                    player.y + player.height > plat.y + 6 &&
+                    player.y < plat.y + plat.height - 4
+                ) {
+                    triggerCrashAnimation();
+                    return;
+                }
+
+                if (
+                    player.vy >= 0 &&
+                    player.x + player.width > plat.x + 6 &&
+                    player.x < plat.x + plat.width - 6 &&
+                    player.y + player.height >= plat.y &&
+                    player.y + player.height <= plat.y + 18
+                ) {
+                    player.y = plat.y - player.height;
+                    player.vy = 0;
+                    onGround = true;
+                }
+            });
+
+            player.grounded = onGround;
+
+            if (player.grounded && jumpRequested) {
+                player.vy = player.jumpForce;
+                player.grounded = false;
+                jumpRequested = false;
+                playSound('jump');
+
+                for(let i = 0; i < 8; i++) {
+                    particles.push({
+                        x: player.x + 25,
+                        y: player.y + player.height,
+                        vx: (Math.random() - 0.5) * 6,
+                        vy: -Math.random() * 5,
+                        alpha: 1,
+                        color: '#38bdf8'
+                    });
+                }
+            } else if (!player.grounded) {
+                player.rotation += 0.12;
+            } else {
+                player.rotation = 0;
+                jumpRequested = false; 
+            }
+
+            spawnEntitiesRandomly();
+
+            for (let i = platforms.length - 1; i >= 0; i--) {
+                if (platforms[i].x + platforms[i].width < 0) {
+                    platforms.splice(i, 1);
+                }
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].x += particles[i].vx;
+                particles[i].y += particles[i].vy;
+                particles[i].alpha -= 0.04;
+                if (particles[i].alpha <= 0) particles.splice(i, 1);
+            }
+
+            for (let i = floatingTexts.length - 1; i >= 0; i--) {
+                floatingTexts[i].y -= 1.5;
+                floatingTexts[i].alpha -= 0.025;
+                if (floatingTexts[i].alpha <= 0) {
+                    floatingTexts.splice(i, 1);
+                }
+            }
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                obstacles[i].x -= gameSpeed;
+
+                if (
+                    player.x < obstacles[i].x + obstacles[i].width - 8 &&
+                    player.x + player.width > obstacles[i].x + 8 &&
+                    player.y < obstacles[i].y + obstacles[i].height - 8 &&
+                    player.y + player.height > obstacles[i].y + 8
+                ) {
+                    triggerCrashAnimation();
+                    return;
+                }
+
+                if (obstacles[i].x + obstacles[i].width < 0) {
+                    obstacles.splice(i, 1);
+                }
+            }
+
+            for (let i = collectibles.length - 1; i >= 0; i--) {
+                collectibles[i].x -= gameSpeed;
+
+                if (
+                    !collectibles[i].collected &&
+                    player.x < collectibles[i].x + collectibles[i].width &&
+                    player.x + player.width > collectibles[i].x &&
+                    player.y < collectibles[i].y + collectibles[i].height &&
+                    player.y + player.height > collectibles[i].y
+                ) {
+                    collectibles[i].collected = true;
+                    housesCollected += collectibles[i].points;
+                    housesScoreEl.textContent = housesCollected;
+                    
+                    playSound('collect');
+                    triggerScoreAnimation();
+                    checkRankProgression();
+
+                    floatingTexts.push({
+                        text: `+${collectibles[i].points} Valuado`,
+                        x: collectibles[i].x,
+                        y: collectibles[i].y,
+                        alpha: 1.0
+                    });
+
+                    for(let p = 0; p < 6; p++) {
+                        particles.push({
+                            x: collectibles[i].x + 23,
+                            y: collectibles[i].y + 20,
+                            vx: (Math.random() - 0.5) * 6,
+                            vy: (Math.random() - 0.5) * 6,
+                            alpha: 1,
+                            color: '#34d399'
+                        });
+                    }
+
+                    if (housesCollected >= targetHouses) {
+                        gameWon = true;
+                        triggerWin();
+                        return;
+                    }
+                }
+
+                if (collectibles[i].x + collectibles[i].width < 0) {
+                    collectibles.splice(i, 1);
+                }
+            }
+        }
+
+        function triggerWin() {
+            window.cp6RecordGameResult?.(100);
+            gameStarted = false;
+            startScreen.style.display = "flex";
+            screenTitle.textContent = "🏆 ¡META DE AVALÚOS CUMPLIDA!";
+            screenDesc.textContent = `¡Excelente trabajo! Has superado este nivel avanzado en Torreón con ${targetHouses} avalúos. ¡Dictamen aprobado con honores!`;
+            startBtn.textContent = "Jugar de Nuevo";
+        }
+
+        function gameOver(msg) {
+            gameStarted = false;
+            startScreen.style.display = "flex";
+            screenTitle.textContent = "⚠️ DICTAMEN RECHAZADO";
+            screenDesc.textContent = msg + ` Avalúos acumulados: ${housesCollected} / ${targetHouses}. ¡Inténtalo de nuevo!`;
+            startBtn.textContent = "Reintentar Recorrido";
+        }
+
+        function drawTorreonBackground() {
+            const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            bgGradient.addColorStop(0, "#031b2e");
+            bgGradient.addColorStop(0.5, "#07324f");
+            bgGradient.addColorStop(1, "#0c4366");
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#051e33";
+            ctx.beginPath();
+            ctx.moveTo(0, groundY);
+            ctx.lineTo(80, groundY - 50);
+            ctx.lineTo(190, groundY - 90);
+            ctx.lineTo(360, groundY - 90); 
+            ctx.lineTo(500, groundY - 50);
+            ctx.lineTo(canvas.width, groundY - 60);
+            ctx.lineTo(canvas.width, groundY);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = "#082846";
+            ctx.fillRect(80, groundY - 130, 45, 130);
+            ctx.fillRect(135, groundY - 160, 55, 160);
+            ctx.fillRect(380, groundY - 140, 50, 140);
+            ctx.fillRect(440, groundY - 180, 65, 180);
+            ctx.fillRect(650, groundY - 150, 60, 150);
+            ctx.fillRect(720, groundY - 190, 75, 190);
+
+            ctx.fillStyle = "#0f3a5f";
+            ctx.fillRect(60, groundY - 90, 50, 90);
+            ctx.fillStyle = "#164e7d";
+            ctx.fillRect(110, groundY - 90, 12, 90);
+
+            ctx.fillStyle = "#0f3a5f";
+            ctx.fillRect(560, groundY - 120, 70, 120);
+            ctx.fillStyle = "#164e7d";
+            ctx.fillRect(630, groundY - 120, 15, 120);
+
+            ctx.fillStyle = "#0f3a5f";
+            ctx.fillRect(740, groundY - 100, 60, 100);
+            ctx.fillStyle = "#164e7d";
+            ctx.fillRect(800, groundY - 100, 14, 100);
+
+            ctx.fillStyle = "rgba(56, 189, 248, 0.4)";
+            for (let bx = 580; bx < 620; bx += 18) {
+                for (let by = groundY - 105; by < groundY - 20; by += 22) {
+                    ctx.fillRect(bx, by, 10, 14);
+                }
+            }
+
+            const cx = 275;
+            const groundBaseY = groundY - 90;
+            ctx.fillStyle = "#082846";
+
+            ctx.beginPath();
+            ctx.moveTo(cx - 55, groundBaseY);
+            ctx.lineTo(cx - 45, groundBaseY - 40);
+            ctx.lineTo(cx + 45, groundBaseY - 40);
+            ctx.lineTo(cx + 55, groundBaseY);
+            ctx.closePath();
+            ctx.fill();
+
+            const cristoBottom = groundBaseY - 40;
+            const cristoTop = cristoBottom - 155;
+            
+            ctx.beginPath();
+            ctx.moveTo(cx - 22, cristoBottom);
+            ctx.lineTo(cx - 18, cristoTop + 38);
+            ctx.lineTo(cx + 18, cristoTop + 38);
+            ctx.lineTo(cx + 22, cristoBottom);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(cx - 20, cristoTop + 38);
+            ctx.lineTo(cx - 32, cristoTop + 22);
+            ctx.lineTo(cx + 32, cristoTop + 22);
+            ctx.lineTo(cx + 20, cristoTop + 38);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(cx - 30, cristoTop + 22);
+            ctx.lineTo(cx - 122, cristoTop + 14);
+            ctx.lineTo(cx - 128, cristoTop + 25); 
+            ctx.lineTo(cx - 28, cristoTop + 35);
+            ctx.lineTo(cx + 28, cristoTop + 35);
+            ctx.lineTo(cx + 128, cristoTop + 25);
+            ctx.lineTo(cx - 122 + 246, cristoTop + 14);
+            ctx.lineTo(cx + 30, cristoTop + 22);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(cx, cristoTop + 11, 12, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = "#082846";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, 110);
+            ctx.bezierCurveTo(280, 150, 600, 150, canvas.width, 120);
+            ctx.stroke();
+
+            const tx = telefericoX;
+            const ty = 145;
+            ctx.fillStyle = "#051e33";
+            ctx.strokeStyle = "#38bdf8";
+            ctx.lineWidth = 2;
+            ctx.fillRect(tx, ty, 32, 22);
+            ctx.strokeRect(tx, ty, 32, 22);
+            
+            ctx.beginPath();
+            ctx.moveTo(tx + 16, ty);
+            ctx.lineTo(tx + 16, ty - 12);
+            ctx.stroke();
+
+            ctx.fillStyle = "#38bdf8";
+            ctx.fillRect(tx + 6, ty + 5, 20, 8);
+        }
+
+        function drawHouseIcon(hx, hy, hw, hh) {
+            ctx.fillStyle = "#38bdf8";
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2.5;
+
+            ctx.fillRect(hx + 4, hy + 10, hw - 8, hh - 10);
+            ctx.strokeRect(hx + 4, hy + 10, hw - 8, hh - 10);
+
+            ctx.beginPath();
+            ctx.moveTo(hx, hy + 12);
+            ctx.lineTo(hx + hw / 2, hy);
+            ctx.lineTo(hx + hw, hy + 12);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(hx + hw / 2 - 4, hy + hh - 10, 8, 10);
+        }
+
+        function drawBuildingIcon(bx, by, bw, bh) {
+            ctx.fillStyle = "#34d399";
+            ctx.fillRect(bx, by, bw, bh);
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 2.5;
+            ctx.strokeRect(bx, by, bw, bh);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(bx + 6, by + 6, 8, 9);
+            ctx.fillRect(bx + 20, by + 6, 8, 9);
+            ctx.fillRect(bx + 6, by + 20, 8, 9);
+            ctx.fillRect(bx + 20, by + 20, 8, 9);
+        }
+
+        function drawPlatform(plat) {
+            ctx.fillStyle = "#1e293b";
+            ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
+
+            ctx.strokeStyle = "#38bdf8";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(plat.x, plat.y + plat.height);
+            ctx.lineTo(plat.x, plat.y);
+            ctx.lineTo(plat.x + plat.width, plat.y);
+            ctx.lineTo(plat.x + plat.width, plat.y + plat.height);
+            ctx.stroke();
+
+            ctx.fillStyle = "#38bdf8";
+            ctx.fillRect(plat.x, plat.y, plat.width, 5);
+        }
+
+        function drawObstacle(obs) {
+            const ox = obs.x;
+            const oy = obs.y;
+            const ow = obs.width;
+            const oh = obs.height;
+
+            if (obs.type === 'cono') {
+                ctx.fillStyle = "#1e293b";
+                ctx.fillRect(ox, oy + oh - 8, ow, 8);
+
+                ctx.fillStyle = "#f97316";
+                ctx.beginPath();
+                ctx.moveTo(ox + ow / 2, oy);
+                ctx.lineTo(ox + 4, oy + oh - 8);
+                ctx.lineTo(ox + ow - 4, oy + oh - 8);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = "#ffffff";
+                ctx.beginPath();
+                ctx.moveTo(ox + ow / 2 - 8, oy + 18);
+                ctx.lineTo(ox + ow / 2 + 8, oy + 18);
+                ctx.lineTo(ox + ow / 2 + 12, oy + 32);
+                ctx.lineTo(ox + ow / 2 - 12, oy + 32);
+                ctx.closePath();
+                ctx.fill();
+            } else {
+                ctx.fillStyle = "#854d0e";
+                ctx.fillRect(ox + 8, oy + 26, 6, 30);
+                ctx.fillRect(ox + ow - 14, oy + 26, 6, 30);
+
+                const topH = 24;
+                ctx.fillStyle = "#f97316";
+                ctx.fillRect(ox, oy, ow, topH);
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = 2;
+                ctx.strokeRect(ox, oy, ow, topH);
+
+                ctx.fillStyle = "#ffffff";
+                for (let i = 0; i < ow; i += 18) {
+                    ctx.beginPath();
+                    ctx.moveTo(ox + i, oy);
+                    ctx.lineTo(ox + i + 8, oy);
+                    ctx.lineTo(ox + i - 4, oy + topH);
+                    ctx.lineTo(ox + i - 12, oy + topH);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+
+                const botY = oy + 26;
+                const botH = 30;
+                ctx.fillStyle = "#f97316";
+                ctx.fillRect(ox, botY, ow, botH);
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = 2;
+                ctx.strokeRect(ox, botY, ow, botH);
+
+                ctx.fillStyle = "#000000";
+                ctx.font = "bold 10px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText("OBRA", ox + ow / 2, botY + 13);
+                ctx.fillText("STOP", ox + ow / 2, botY + 24);
+                ctx.textAlign = "left";
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawTorreonBackground();
+
+            ctx.fillStyle = "#0f172a";
+            ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+            ctx.strokeStyle = "#38bdf8";
+            ctx.lineWidth = 3.5;
+            ctx.beginPath();
+            ctx.moveTo(0, groundY);
+            ctx.lineTo(canvas.width, groundY);
+            ctx.stroke();
+
+            particles.forEach(pt => {
+                ctx.save();
+                ctx.globalAlpha = pt.alpha;
+                ctx.fillStyle = pt.color;
+                ctx.fillRect(pt.x, pt.y, 5, 5);
+                ctx.restore();
+            });
+
+            platforms.forEach(plat => {
+                drawPlatform(plat);
+            });
+
+            collectibles.forEach(item => {
+                if (!item.collected) {
+                    if (item.type === 'house') {
+                        drawHouseIcon(item.x, item.y, item.width, item.height);
+                    } else {
+                        drawBuildingIcon(item.x, item.y, item.width, item.height);
+                    }
+                }
+            });
+
+            floatingTexts.forEach(ft => {
+                ctx.save();
+                ctx.globalAlpha = ft.alpha;
+                ctx.fillStyle = "#34d399";
+                ctx.font = "bold 16px Segoe UI";
+                ctx.fillText(ft.text, ft.x, ft.y);
+                ctx.restore();
+            });
+
+            obstacles.forEach(obs => {
+                drawObstacle(obs);
+            });
+
+            if (isCrashing) {
+                brokenBlocks.forEach(bb => {
+                    ctx.save();
+                    ctx.translate(bb.x, bb.y);
+                    ctx.rotate(bb.rotation);
+                    
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(-tileSize/2, -tileSize/2, tileSize, tileSize);
+                    ctx.strokeStyle = "#111827";
+                    ctx.lineWidth = 3;
+                    ctx.strokeRect(-tileSize/2, -tileSize/2, tileSize, tileSize);
+
+                    ctx.restore();
+                });
+            } else {
+                ctx.save();
+                ctx.translate(player.x + player.width / 2, player.y + player.height / 2);
+                ctx.rotate(player.rotation);
+                
+                const ox = -player.width / 2;
+                const oy = -player.height / 2;
+
+                const ts = tileSize;
+                const drawLogoBlock = (bx, by) => {
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(ox + bx * ts, oy + by * ts, ts, ts);
+
+                    ctx.strokeStyle = "#111827";
+                    ctx.lineWidth = 3.5;
+                    ctx.strokeRect(ox + bx * ts, oy + by * ts, ts, ts);
+                };
+
+                drawLogoBlock(0, 0);
+                drawLogoBlock(1, 0);
+                drawLogoBlock(2, 0);
+                drawLogoBlock(1, 1);
+                drawLogoBlock(2, 1);
+                drawLogoBlock(2, 2);
+
+                ctx.restore();
+            }
+        }
+
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+    </script>
+
+<script>
+(() => {
+  const sessionKey = "control-avaluos.desktop.session.v1";
+  const user = sessionStorage.getItem(sessionKey) || "Usuario CP6";
+  const game = window.CP6_GAME_NAME || document.title.split(" - ")[0] || "Juego";
+  const key = `cp6_game_stats_${user}`;
+  window.CP6_GAME_USER = user;
+  window.cp6RecordGameResult = (points) => {
+    let stats = {}; try { stats = JSON.parse(localStorage.getItem(key) || "{}"); } catch {}
+    const history = Array.isArray(stats.history) ? stats.history : [];
+    const result = { game, points: Number(points) || 0, score: Number(points) || 0, completedAt: new Date().toISOString() };
+    stats.points = Number(stats.points || 0) + result.points; stats.games = Number(stats.games || 0) + 1;
+    stats.best = Math.max(Number(stats.best || 0), result.score); stats.history = [result, ...history].slice(0, 40);
+    localStorage.setItem(key, JSON.stringify(stats));
+  };
+  const badge = document.createElement("div"); badge.className = "cp6-session-badge"; badge.textContent = user;
+  document.body.appendChild(badge);
+})();
+</script>
+</body>
+</html>
