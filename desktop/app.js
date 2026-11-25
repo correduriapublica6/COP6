@@ -520,7 +520,7 @@
     const firstAdminAccess = isFirstAdminAccess(user);
     const selfChange = Boolean(activeSessionUser && !isAdmin() && user === activeSessionUser);
     const externalAuthorization = pendingCredentialAuthorization && pendingCredentialAuthorization.user === user && pendingCredentialAuthorization.expiresAt > Date.now();
-    if (!isAdmin() && !selfChange && !externalAuthorization) {
+    if (!isAdmin() && !selfChange && !externalAuthorization && !firstAdminAccess) {
       credentialMessage.textContent = "Solo puedes cambiar tu propia contraseña.";
       return;
     }
