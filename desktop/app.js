@@ -936,6 +936,25 @@
     if (showExternal) window.dispatchEvent(new CustomEvent("control-avaluos:users-view"));
   }
 
+  function resetHomeScrollPosition() {
+    const workspace = document.querySelector("#appShell .app-workspace");
+    const profile = document.querySelector("#perfilView");
+    const reset = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      if (workspace) workspace.scrollTop = 0;
+      if (profile) profile.scrollTop = 0;
+    };
+    reset();
+    // El cambio de hidden/is-active puede conservar la posición del layout
+    // durante un frame; repetirlo después del recálculo evita el salto ocasional.
+    window.requestAnimationFrame(() => {
+      reset();
+      window.requestAnimationFrame(reset);
+    });
+  }
+
   function switchAppView(view) {
     if (!VIEW_DETAILS[view] || (view === "resumen" ? !canViewSummary() : view === "fe-publica" ? !canViewFePublica() : view === "solicitudes" ? !canViewRequests() : view !== "avaluos" && view !== "inicio" && view !== "mensajeria" && view !== "juegos" && view !== "perfil" && !isAdmin())) return;
     // Toda navegación del Navbar inicia las subsecciones en modo lista.
@@ -957,6 +976,7 @@
     }
     if (view === "solicitudes") window.dispatchEvent(new CustomEvent("control-avaluos:section", { detail: "solicitudes" }));
     window.dispatchEvent(new CustomEvent("control-avaluos:view", { detail: view }));
+    if (view === "perfil") resetHomeScrollPosition();
     if (view === "usuarios") { setUsersSection("menu"); window.dispatchEvent(new CustomEvent("control-avaluos:users-view")); }
     if (view === "resumen") initialiseReportDates();
     if (view === "configuracion") { renderNotarySettings(); renderPendingReceptionSummary(); refreshOperationalSettings(); }
@@ -1046,15 +1066,12 @@
   }
 
   function setPaymentVisibility() {
-    const paymentEnabled = paidInput.checked;
-    const paymentLocked = !paymentEnabled || form?.dataset.viewOnly === "true";
-    paymentDetails.classList.remove("is-hidden");
-    [amountInput, methodInput, paymentDeliveredToInput, paymentDateInput].forEach((field) => { field.disabled = paymentLocked; });
-    amountInput.required = paymentEnabled;
-    methodInput.required = paymentEnabled;
-    paymentDeliveredToInput.required = paymentEnabled;
-    paymentDateInput.required = paymentEnabled;
-    if (!paymentEnabled) { amountInput.value = ""; methodInput.value = ""; paymentDeliveredToInput.value = ""; paymentDateInput.value = ""; }
+    paymentDetails.classList.toggle("is-hidden", !paidInput.checked);
+    amountInput.required = paidInput.checked;
+    methodInput.required = paidInput.checked;
+    paymentDeliveredToInput.required = paidInput.checked;
+    paymentDateInput.required = paidInput.checked;
+    if (!paidInput.checked) { amountInput.value = ""; methodInput.value = ""; paymentDeliveredToInput.value = ""; paymentDateInput.value = ""; }
     else if (!paymentDateInput.value) paymentDateInput.value = today();
   }
   function openDialog(id = null, readOnly = false) {
@@ -1087,7 +1104,6 @@
     const headerDate = document.getElementById("receptionHeaderDate");
     if (headerDate) headerDate.textContent = formatDate(record.fechaAvaluo);
     if (id && record.numeroAvaluo) renderReceptionRecordSummary(record);
-    form.dataset.viewOnly = String(viewOnly);
     form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = viewOnly; });
     form.querySelectorAll("[data-record-save-action]").forEach((button) => button.classList.toggle("is-hidden", viewOnly));
     const dialogTitle = $("#dialogTitle");
@@ -1111,9 +1127,7 @@
     // Los combobox personalizados no se actualizan solos con form.reset().
     form.querySelectorAll("select").forEach((select) => select.dispatchEvent(new Event("change", { bubbles: true })));
     paidInput.checked = false;
-    form.dataset.viewOnly = "false";
-    paymentDetails.classList.remove("is-hidden");
-    setPaymentVisibility();
+    paymentDetails.classList.add("is-hidden");
     $("#formMessage").textContent = "";
   }
   async function removeRecord(id) { if (!isAdmin()) return; const record = records.find((item) => item.id === id); if (!record || !window.confirm(`¿Eliminar el avalúo ${record.numeroAvaluo}? Esta acción no se puede deshacer.`)) return; try { await deleteRemoteRecord(id); records = records.filter((item) => item.id !== id); saveRecords(); render(); } catch (error) { window.alert(error.message); } }
@@ -1179,7 +1193,7 @@
       const setField = (name, value) => { const field = form.elements.namedItem(name); if (field && value) { if (field.tagName === "SELECT" && !Array.from(field.options).some((option) => option.value === String(value))) field.add(new Option(String(value), String(value))); field.value = value; } };
       const specific = match.datosEspecificos || {}; const type = match.tipoBien || specific.tipoBien || specific.tipo_bien || ""; const appraisalType = match.tipoAvaluo || match.tipoAvalúo || specific.tipoAvaluo || specific.tipoAvalúo || specific.tipo_avaluo || "";
       setField("tipoBien", type); setField("tipoAvaluo", appraisalType); setField("usuario", match.asesor || match.valuadorAsignado || ""); setField("solicitante", match.solicitante?.nombre || match.nombreSolicitante || "");
-      // Honorarios es captura manual; nunca se copia el valor de operación de la Solicitud.
+      const operation = match.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? ""; if (operation !== "") setField("valorAvaluo", operation);
       renderReceptionSummary(match, number); $("#formMessage").textContent = `Datos de la solicitud ${match.folio || number} cargados para un nuevo registro.`;
     } catch { clearReceptionSummary("No fue posible consultar el expediente; puedes capturarlo manualmente."); }
     finally { if (receptionSearchButton) { receptionSearchButton.disabled = false; receptionSearchButton.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>'; } }
@@ -1859,6 +1873,17 @@
   $("#profilePeriodFilter")?.addEventListener("change", (event) => { $("#profileCustomDates") && ($("#profileCustomDates").hidden = event.target.value !== "custom"); profileRequestsPage = 1; renderProfileDashboard(); });
   $("#profileStartDate")?.addEventListener("change", () => { profileRequestsPage = 1; renderProfileDashboard(); });
   $("#profileEndDate")?.addEventListener("change", () => { profileRequestsPage = 1; renderProfileDashboard(); });
+  $("#sendProfileSummaryWhatsApp")?.addEventListener("click", async () => {
+    const button = $("#sendProfileSummaryWhatsApp"); const message = $("#profileSummaryWhatsAppMessage");
+    const currentUser = String(activeSessionUser || ""); const selectedUser = roleFor(currentUser) === "admin" ? ($("#profileMetricsFilter")?.value || "__all") : currentUser;
+    const period = $("#profilePeriodFilter")?.value || "all";
+    button.disabled = true; if (message) { message.textContent = "Enviando resumen…"; message.className = "cp6-summary-whatsapp-message is-loading"; }
+    try {
+      await apiRequest("/profile-summary/whatsapp", { method: "POST", body: JSON.stringify({ selectedUser, period, startDate: $("#profileStartDate")?.value || "", endDate: $("#profileEndDate")?.value || "" }) });
+      if (message) { message.textContent = selectedUser === "__all" ? "Resumen enviado a los usuarios configurados." : "Resumen enviado por WhatsApp."; message.className = "cp6-summary-whatsapp-message is-success"; }
+    } catch (error) { if (message) { message.textContent = error.message || "No se pudo enviar el resumen."; message.className = "cp6-summary-whatsapp-message is-error"; } }
+    finally { button.disabled = false; }
+  });
   document.querySelectorAll("[data-profile-quick-filter]").forEach((button) => button.addEventListener("click", () => { profileQuickFilter = button.dataset.profileQuickFilter || ""; profileRequestsPage = 1; renderProfileDashboard(); }));
   window.addEventListener("control-avaluos:home-refresh", () => { if (activeAppView === "perfil") renderProfileDashboard(); });
   $("#logoutHeaderButton")?.addEventListener("click", resetAuthUiBeforeLogout);
