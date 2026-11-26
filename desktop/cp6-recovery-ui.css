@@ -496,3 +496,170 @@ body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > #usuar
   body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .cp6-nav-link,
   body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-operation-nav button { width: auto !important; padding: 0 9px !important; }
 }
+
+/* Propuesta aplicada: Usuarios y Configuración compactos, alineados arriba y sin dorado. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) {
+  background: #f4f7fb !important;
+  color: #172235 !important;
+  display: block !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 0 28px !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .v2-page-banner { display: none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro {
+  display: block !important;
+  margin: 0 0 18px !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  position: static !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro .section-kicker {
+  color: #68819d !important;
+  display: block !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.5px !important;
+  margin: 0 0 5px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro h2 {
+  color: #172235 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: 27px !important;
+  font-weight: 760 !important;
+  letter-spacing: -.7px !important;
+  line-height: 1.12 !important;
+  margin: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro p {
+  color: #748198 !important;
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+  margin: 6px 0 0 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > #usuariosMenuSection {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: static !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-card {
+  align-items: center !important;
+  background: #fff !important;
+  border: 1px solid #dbe3ed !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 24px rgba(25,45,75,.07) !important;
+  color: #172235 !important;
+  display: grid !important;
+  gap: 12px !important;
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  min-height: 112px !important;
+  padding: 18px !important;
+  position: relative !important;
+  transform: none !important;
+  width: 100% !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-card:hover,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-card:focus-visible {
+  border-color: #8298b2 !important;
+  box-shadow: 0 14px 28px rgba(25,45,75,.12) !important;
+  outline: none !important;
+  transform: translateY(-2px) !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-icon {
+  align-items: center !important;
+  background: #eaf0f7 !important;
+  border-radius: 10px !important;
+  color: #344f70 !important;
+  display: inline-flex !important;
+  font-size: 17px !important;
+  height: 38px !important;
+  justify-content: center !important;
+  width: 38px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-copy { display: grid !important; gap: 5px !important; min-width: 0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-copy strong { color: #172235 !important; font-size: 13px !important; font-weight: 750 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-copy small { color: #748198 !important; font-size: 10px !important; line-height: 1.45 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-arrow { color: #344f70 !important; font-size: 17px !important; }
+
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView > .settings-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-card,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .inline-panel {
+  background: #fff !important;
+  border: 1px solid #dbe3ed !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 24px rgba(25,45,75,.06) !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-card {
+  min-height: 214px !important;
+  padding: 18px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-icon {
+  background: #eaf0f7 !important;
+  border-radius: 9px !important;
+  color: #344f70 !important;
+  height: 35px !important;
+  margin-bottom: 13px !important;
+  width: 35px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-card h3 { color: #172235 !important; font-size: 13px !important; margin: 0 0 5px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-card p { color: #748198 !important; font-size: 10px !important; line-height: 1.45 !important; margin: 0 0 13px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-card :is(input, select) {
+  background: #fbfdff !important;
+  border: 1px solid #cad6e3 !important;
+  border-radius: 8px !important;
+  color: #34445b !important;
+  min-height: 34px !important;
+  padding: 7px 9px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-card :is(button, .primary-button, .secondary-button) {
+  background: #344f70 !important;
+  border-color: #344f70 !important;
+  border-radius: 8px !important;
+  color: #fff !important;
+  font-size: 10px !important;
+  min-height: 32px !important;
+  margin-top: auto !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-import {
+  align-items: center !important;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 18px !important;
+  grid-column: 1 / -1 !important;
+  justify-content: space-between !important;
+  min-height: 106px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-import .import-controls { margin: 0 !important; min-width: 250px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosAdminPanel, #usuariosExternalPanel) .inline-panel,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosAdminPanel, #usuariosExternalPanel) .setting-card {
+  border-color: #dbe3ed !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 24px rgba(25,45,75,.06) !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosAdminPanel .admin-grid { gap: 16px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosAdminPanel .inline-panel-heading { margin-bottom: 14px !important; padding-bottom: 11px !important; }
+
+@media (max-width: 900px) {
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-grid,
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView > .settings-grid { grid-template-columns: 1fr !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-import { align-items: stretch !important; flex-direction: column !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-import .import-controls { min-width: 0 !important; width: 100% !important; }
+}
