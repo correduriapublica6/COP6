@@ -377,6 +377,71 @@ body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-appraisals-card {
   body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-blocks { grid-template-columns: 1fr !important; }
   body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 }
+
+/* Recepción v17: búsqueda y datos operativos arriba; pago visible a la derecha. */
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-form-v7 {
+  grid-template-columns: minmax(0, 1fr) minmax(330px, .78fr) !important;
+  gap: 14px !important;
+  align-items: start !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-strip {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  min-width: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-layout {
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+  min-width: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-card {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  min-width: 0 !important;
+  height: 100% !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-card .reception-payment-body {
+  padding: 14px 16px !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-fees-card {
+  grid-column: 1 / -1 !important;
+  grid-row: 3 !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-actions,
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-form-message {
+  grid-column: 1 / -1 !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-fields {
+  gap: 14px !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-notes {
+  grid-template-columns: minmax(130px, .8fr) minmax(180px, 1.2fr) !important;
+}
+
+/* Configuración y Usuarios: eliminar el encabezado duplicado y el espacio superior histórico. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .v2-page-banner {
+  display: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro {
+  margin: 0 0 12px !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro h2 {
+  margin: 0 0 5px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro p {
+  margin: 0 !important;
+}
+
+@media (max-width: 900px) {
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-form-v7 { grid-template-columns: 1fr !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-strip,
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-layout,
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-card,
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-fees-card { grid-column: 1 !important; grid-row: auto !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-card { height: auto !important; }
+}
 @media (max-width: 560px) {
   body.cp6-redesign .cp6-applicant-login-card { padding: 24px 20px !important; }
   body.cp6-redesign .login-screen .public-entry-panel { padding: 24px 16px !important; }
