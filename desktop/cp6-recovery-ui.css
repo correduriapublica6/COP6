@@ -11,6 +11,10 @@
   --cp6-blue: #246bd1;
 }
 
+/* Nunca anular el atributo HTML hidden: evita que el login oculto empuje el Home hacia abajo. */
+body.cp6-redesign .login-screen[hidden],
+body.cp6-redesign #appShell[hidden] { display: none !important; }
+
 /* Login público: campos visibles, compactos y alineados. */
 body.cp6-redesign .login-screen {
   min-height: 100vh !important;
