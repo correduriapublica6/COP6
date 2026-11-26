@@ -663,3 +663,52 @@ body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosAdminPanel .i
   body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-import { align-items: stretch !important; flex-direction: column !important; }
   body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-import .import-controls { min-width: 0 !important; width: 100% !important; }
 }
+
+/* Override final: el espacio estaba en el contenedor del workspace, no en las tarjetas. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace {
+  align-items: stretch !important;
+  display: block !important;
+  min-height: 0 !important;
+  padding-top: 18px !important;
+  padding-bottom: 28px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .workspace-header {
+  margin: 0 auto 16px !important;
+  max-width: 1200px !important;
+  padding: 0 0 2px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view#usuariosView:not([hidden]),
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view#configuracionView:not([hidden]) {
+  display: block !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 auto !important;
+  max-width: 1200px !important;
+  padding: 0 !important;
+  position: relative !important;
+  top: auto !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view#usuariosView:not([hidden]) > .v2-page-banner,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view#configuracionView:not([hidden]) > .v2-page-banner {
+  display: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view#usuariosView:not([hidden]) > .admin-intro,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view#configuracionView:not([hidden]) > .admin-intro {
+  margin: 0 0 16px !important;
+  padding: 0 !important;
+}
+
+/* Regla de seguridad al final de la cascada: ninguna vista o panel hidden reserva espacio. */
+html body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view:is(#mensajeriaView, #juegosView, #inicioView, #solicitudesView, #fe-publicaView, #avaluosView, #perfilView, #resumenView, #usuariosView, #configuracionView)[hidden],
+html body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view [hidden] {
+  display: none !important;
+  visibility: hidden !important;
+}
+html body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view:is(#mensajeriaView, #juegosView, #inicioView, #solicitudesView, #fe-publicaView, #avaluosView, #perfilView, #resumenView, #usuariosView, #configuracionView)[hidden] {
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
