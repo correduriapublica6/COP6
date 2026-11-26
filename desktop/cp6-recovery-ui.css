@@ -412,22 +412,18 @@ body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor
   grid-column: 1 / -1 !important;
 }
 body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-fields {
-  display: grid !important;
-  grid-template-columns: 250px minmax(0, 1fr) !important;
-  gap: 12px 14px !important;
-  align-items: start !important;
+  display: block !important;
 }
-body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-main { display: contents !important; }
-body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number { grid-column: 1 !important; grid-row: 1 !important; min-width: 0 !important; }
-body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-date { grid-column: 2 !important; grid-row: 1 !important; width: auto !important; margin-top: 0 !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-main { display: block !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number,
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-date { width: 100% !important; min-width: 0 !important; margin: 0 !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-date { margin-top: 10px !important; }
 body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-notes {
-  grid-column: 2 !important;
-  grid-row: 2 !important;
   display: grid !important;
   grid-template-columns: minmax(130px, .8fr) minmax(180px, 1.2fr) !important;
   gap: 10px !important;
   width: 100% !important;
-  margin-top: 0 !important;
+  margin-top: 10px !important;
 }
 
 /* Configuración y Usuarios: eliminar el encabezado duplicado y el espacio superior histórico. */
