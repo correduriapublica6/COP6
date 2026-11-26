@@ -442,6 +442,33 @@ body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #co
   margin: 0 !important;
 }
 
+/* Usuarios: el contenido debe iniciar inmediatamente debajo del encabezado. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView {
+  display: block !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding-top: 0 !important;
+  padding-bottom: 24px !important;
+  margin-top: 0 !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > .admin-intro,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > #usuariosMenuSection,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > .users-subview {
+  position: static !important;
+  top: auto !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > #usuariosMenuSection {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > #usuariosMenuSection .usuarios-choice-grid {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
 @media (max-width: 900px) {
   body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-form-v7 { grid-template-columns: 1fr !important; }
   body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-strip,
