@@ -1,0 +1,266 @@
+/* CP6 — menú principal de Avalúos: estilos aislados para no alterar Recepción ni Gestión. */
+#appShell.control-shell #avaluosView > #avaluosMenuSection:not([hidden]) {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-section-heading {
+  margin: 0 0 28px !important;
+  padding: 0 !important;
+  position: static !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #2c3744 !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-section-heading .avaluos-menu-kicker {
+  display: block !important;
+  margin: 0 0 5px !important;
+  color: #697b8e !important;
+  font: 700 0.72rem/1.3 Inter, "Segoe UI", sans-serif !important;
+  letter-spacing: 0.12em !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-section-heading h2 {
+  margin: 0 0 7px !important;
+  color: #2d3947 !important;
+  font: 700 clamp(1.8rem, 2.6vw, 2.25rem)/1.13 Inter, "Segoe UI", sans-serif !important;
+  letter-spacing: -0.035em !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-section-heading h2 span {
+  color: inherit !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-section-heading p {
+  margin: 0 !important;
+  color: #697687 !important;
+  font: 400 0.96rem/1.5 Inter, "Segoe UI", sans-serif !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 20px !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-grid .avaluos-choice-card {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 64px minmax(0, 1fr) 20px !important;
+  grid-template-rows: minmax(112px, auto) !important;
+  align-items: center !important;
+  column-gap: 16px !important;
+  row-gap: 0 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 190px !important;
+  margin: 0 !important;
+  padding: 22px 22px !important;
+  overflow: hidden !important;
+  border: 1px solid #dfe5eb !important;
+  border-radius: 13px !important;
+  background: #fff !important;
+  box-shadow: 0 3px 10px rgba(30, 45, 62, 0.045) !important;
+  color: #2d3947 !important;
+  text-align: left !important;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-grid .avaluos-choice-card::before,
+#appShell.control-shell #avaluosView .avaluos-choice-grid .avaluos-choice-card::after {
+  display: none !important;
+  content: none !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-grid .avaluos-choice-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: #c7d1db !important;
+  background: #fff !important;
+  box-shadow: 0 10px 22px rgba(30, 45, 62, 0.085) !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-grid .avaluos-choice-card:focus-visible {
+  outline: 3px solid rgba(101, 122, 143, 0.35) !important;
+  outline-offset: 3px !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-icon {
+  display: grid !important;
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  place-items: center !important;
+  flex: initial !important;
+  width: 64px !important;
+  height: 64px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid #e4e9ef !important;
+  border-radius: 11px !important;
+  background: #f1f4f7 !important;
+  box-shadow: none !important;
+  color: #40566b !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-icon,
+#appShell.control-shell #avaluosView .avaluos-choice-icon svg {
+  color: #40566b !important;
+  stroke: #40566b !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-icon svg {
+  display: block !important;
+  width: 31px !important;
+  height: 31px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  stroke-width: 1.8 !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-copy {
+  display: flex !important;
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  flex: initial !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 9px !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-copy strong {
+  display: block !important;
+  margin: 0 !important;
+  color: #2d3947 !important;
+  font: 650 1.12rem/1.3 Inter, "Segoe UI", sans-serif !important;
+  letter-spacing: -0.02em !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-copy small {
+  display: block !important;
+  margin: 0 !important;
+  color: #687586 !important;
+  font: 400 0.86rem/1.48 Inter, "Segoe UI", sans-serif !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-arrow {
+  position: static !important;
+  inset: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  display: grid !important;
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+  place-items: center !important;
+  align-self: center !important;
+  width: 20px !important;
+  height: 28px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #78899a !important;
+  font: 400 1.45rem/1 Inter, "Segoe UI", sans-serif !important;
+  transition: transform 180ms ease, color 180ms ease !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-card:hover .avaluos-choice-arrow {
+  transform: translateX(3px) !important;
+  color: #40566b !important;
+}
+
+#appShell.control-shell #avaluosView .avaluos-choice-access {
+  position: absolute !important;
+  top: 13px !important;
+  right: 48px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 22px !important;
+  padding: 0 8px !important;
+  border-radius: 999px !important;
+  background: #edf1f4 !important;
+  color: #657586 !important;
+  font: 650 0.59rem/1 Inter, "Segoe UI", sans-serif !important;
+  letter-spacing: 0.025em !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 980px) {
+  #appShell.control-shell #avaluosView .avaluos-choice-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 980px) {
+  #appShell.control-shell #avaluosView .validation-choice .avaluos-choice-copy {
+    padding-top: 30px !important;
+  }
+
+  #appShell.control-shell #avaluosView .avaluos-choice-access {
+    top: 12px !important;
+    right: 12px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  #appShell.control-shell #avaluosView .avaluos-section-heading {
+    margin-bottom: 20px !important;
+  }
+
+  #appShell.control-shell #avaluosView .avaluos-choice-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 14px !important;
+  }
+
+  #appShell.control-shell #avaluosView .avaluos-choice-grid .avaluos-choice-card {
+    grid-template-columns: 58px minmax(0, 1fr) 18px !important;
+    grid-template-rows: minmax(100px, auto) !important;
+    column-gap: 14px !important;
+    min-height: 150px !important;
+    padding: 18px !important;
+  }
+
+  #appShell.control-shell #avaluosView .avaluos-choice-icon {
+    width: 58px !important;
+    height: 58px !important;
+  }
+
+  #appShell.control-shell #avaluosView .avaluos-choice-copy strong {
+    font-size: 1.03rem !important;
+  }
+
+  #appShell.control-shell #avaluosView .avaluos-choice-copy small {
+    font-size: 0.82rem !important;
+  }
+
+  #appShell.control-shell #avaluosView .avaluos-choice-access {
+    top: 9px !important;
+    right: 41px !important;
+  }
+}
+
+/* En el menú se evita repetir “Avalúos” en la barra superior; las subsecciones la conservan. */
+#appShell.control-shell:has(#avaluosMenuSection:not([hidden]) .avaluos-choice-grid:not([hidden]):not(.is-hidden)) > .app-workspace > .v2-topbar,
+#appShell.control-shell:has(#avaluosMenuSection:not([hidden]) .avaluos-choice-grid:not([hidden]):not(.is-hidden)) > .app-workspace > .workspace-header {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #appShell.control-shell #avaluosView .avaluos-choice-grid .avaluos-choice-card,
+  #appShell.control-shell #avaluosView .avaluos-choice-arrow {
+    transition: none !important;
+  }
+}
