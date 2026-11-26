@@ -1,0 +1,700 @@
+/* CP6 · Recuperación visual controlada
+   Solo corrige composición visual. No contiene lógica ni toca datos. */
+:root {
+  --cp6-graphite-950: #0d141c;
+  --cp6-graphite-900: #151d26;
+  --cp6-graphite-850: #202a35;
+  --cp6-graphite-700: #344250;
+  --cp6-ink: #172536;
+  --cp6-muted: #718096;
+  --cp6-line: #dce5ed;
+  --cp6-blue: #246bd1;
+}
+
+/* Nunca anular el atributo HTML hidden: evita que el login oculto empuje el Home hacia abajo. */
+body.cp6-redesign .login-screen[hidden],
+body.cp6-redesign #appShell[hidden] { display: none !important; }
+
+/* La portada de acceso debe ocupar siempre la ventana visible, aunque el navegador
+   haya conservado una posición de scroll anterior. */
+html:has(body.cp6-redesign #loginScreen:not([hidden]):not(.applicant-dashboard-active)),
+body.cp6-redesign:has(#loginScreen:not([hidden]):not(.applicant-dashboard-active)) {
+  overflow: hidden !important;
+}
+body.cp6-redesign #loginScreen:not([hidden]):not(.applicant-dashboard-active) {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 100 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 0 !important;
+  overflow: auto !important;
+}
+
+/* Login público: campos visibles, compactos y alineados. */
+body.cp6-redesign .login-screen {
+  min-height: 100vh !important;
+  display: grid !important;
+  grid-template-columns: minmax(360px, 43%) minmax(460px, 57%) !important;
+  background: #f5f7fa !important;
+}
+body.cp6-redesign .login-screen .login-visual {
+  min-height: 100vh !important;
+  min-width: 0 !important;
+}
+body.cp6-redesign .login-screen .public-entry-panel {
+  min-width: 0 !important;
+  min-height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 40px 28px !important;
+  background: #f8fafc !important;
+}
+body.cp6-redesign .login-screen .public-entry-content {
+  width: min(100%, 430px) !important;
+  flex: 0 0 auto !important;
+}
+body.cp6-redesign .cp6-applicant-login-card {
+  width: 100% !important;
+  max-width: 430px !important;
+  margin: 0 auto !important;
+  padding: 30px 34px !important;
+  border: 1px solid #e0e7ef !important;
+  border-radius: 20px !important;
+  background: #fff !important;
+  box-shadow: 0 16px 45px rgba(20, 39, 59, .10) !important;
+}
+body.cp6-redesign .cp6-login-heading { margin-bottom: 24px !important; }
+body.cp6-redesign .cp6-login-heading h2 {
+  margin: 0 0 7px !important;
+  color: var(--cp6-ink) !important;
+  font-size: 25px !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+}
+body.cp6-redesign .cp6-login-heading p {
+  margin: 0 !important;
+  color: var(--cp6-muted) !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+body.cp6-redesign .cp6-login-field {
+  display: block !important;
+  margin: 0 0 15px !important;
+  color: #40556b !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+body.cp6-redesign .cp6-login-field > span { display: block !important; margin-bottom: 7px !important; }
+body.cp6-redesign .cp6-password-label { display: flex !important; justify-content: space-between !important; gap: 10px !important; }
+body.cp6-redesign .cp6-password-label small { color: var(--cp6-blue) !important; font-size: 10px !important; font-weight: 600 !important; }
+body.cp6-redesign .cp6-login-input-wrap { position: relative !important; }
+body.cp6-redesign .cp6-login-input-wrap > i {
+  position: absolute !important;
+  left: 14px !important;
+  top: 50% !important;
+  z-index: 1 !important;
+  color: #8a9aaa !important;
+  transform: translateY(-50%) !important;
+  pointer-events: none !important;
+}
+body.cp6-redesign .cp6-login-input-wrap > input {
+  width: 100% !important;
+  min-height: 46px !important;
+  box-sizing: border-box !important;
+  padding: 0 14px 0 40px !important;
+  border: 1px solid #ccd8e3 !important;
+  border-radius: 11px !important;
+  outline: none !important;
+  background: #fbfdff !important;
+  color: var(--cp6-ink) !important;
+  font: 500 13px/1.2 "Plus Jakarta Sans", Arial, sans-serif !important;
+}
+body.cp6-redesign .cp6-login-input-wrap > input:focus {
+  border-color: #5b96df !important;
+  box-shadow: 0 0 0 3px rgba(36, 107, 209, .12) !important;
+}
+body.cp6-redesign .cp6-remember {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 3px 0 18px !important;
+  color: #718096 !important;
+  font-size: 11px !important;
+}
+body.cp6-redesign .cp6-remember input { accent-color: var(--cp6-blue) !important; }
+body.cp6-redesign .cp6-login-submit {
+  width: 100% !important;
+  min-height: 46px !important;
+  border: 0 !important;
+  border-radius: 11px !important;
+  background: var(--cp6-graphite-850) !important;
+  color: #fff !important;
+  font: 700 13px/1 "Plus Jakarta Sans", Arial, sans-serif !important;
+  cursor: pointer !important;
+  box-shadow: 0 7px 16px rgba(21, 29, 38, .18) !important;
+}
+body.cp6-redesign .cp6-login-submit:hover { background: #2d3a47 !important; }
+body.cp6-redesign .cp6-login-divider { height: 1px !important; margin: 22px 0 16px !important; background: #e9eef3 !important; }
+body.cp6-redesign .cp6-login-register {
+  display: block !important;
+  width: 100% !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: #718096 !important;
+  font: 500 11px/1.4 "Plus Jakarta Sans", Arial, sans-serif !important;
+  cursor: pointer !important;
+}
+body.cp6-redesign .cp6-login-register strong { color: var(--cp6-blue) !important; font-weight: 700 !important; }
+body.cp6-redesign .public-entry-internal {
+  position: static !important;
+  inset: auto !important;
+  width: min(100%, 430px) !important;
+  margin: 18px auto 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  justify-content: center !important;
+  text-align: center !important;
+  flex: 0 0 auto !important;
+}
+body.cp6-redesign .internal-access-button { color: #627487 !important; font-size: 12px !important; font-weight: 600 !important; }
+
+/* Acceso administrativo: tamaño estable y campos sin doble texto. */
+body.cp6-redesign .admin-access-dialog { padding: 0 !important; border: 0 !important; background: transparent !important; }
+body.cp6-redesign .admin-access-dialog .admin-login-card {
+  width: min(430px, calc(100vw - 32px)) !important;
+  padding: 28px !important;
+  border: 1px solid var(--cp6-line) !important;
+  border-radius: 18px !important;
+  background: #fff !important;
+  box-shadow: 0 20px 60px rgba(14, 31, 48, .20) !important;
+}
+body.cp6-redesign .admin-access-dialog .admin-login-card label { display: block !important; margin: 0 0 14px !important; color: #40556b !important; font-size: 12px !important; font-weight: 700 !important; }
+body.cp6-redesign .admin-access-dialog .admin-login-card select,
+body.cp6-redesign .admin-access-dialog .admin-login-card input { width: 100% !important; min-height: 46px !important; box-sizing: border-box !important; margin-top: 7px !important; padding: 0 13px !important; border: 1px solid #ccd8e3 !important; border-radius: 10px !important; background: #fbfdff !important; color: var(--cp6-ink) !important; font: 500 13px "Plus Jakarta Sans", Arial, sans-serif !important; }
+body.cp6-redesign .admin-access-dialog .admin-login-card .login-button { width: 100% !important; min-height: 45px !important; margin-top: 8px !important; }
+
+/* Escritorio: barra lateral estable. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui {
+  display: grid !important;
+  grid-template-columns: 246px minmax(0, 1fr) !important;
+  min-height: 100vh !important;
+  background: #f4f7fa !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 20 !important;
+  width: auto !important;
+  min-height: 100vh !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 22px 14px 18px !important;
+  background: linear-gradient(180deg, var(--cp6-graphite-950), var(--cp6-graphite-900)) !important;
+  color: #fff !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-main-nav,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-operation-nav { width: 100% !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-nav,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-operation-nav { display: grid !important; gap: 5px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-nav-label { margin: 22px 8px 7px !important; color: #8f9aa6 !important; font-size: 9px !important; letter-spacing: .12em !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .cp6-nav-link,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-operation-nav button {
+  min-height: 38px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 11px !important;
+  padding: 0 11px !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  background: transparent !important;
+  color: #eef3f7 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .cp6-nav-link:hover,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-operation-nav button:hover { background: #28333e !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .cp6-nav-link.active,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .cp6-nav-link.is-active,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-operation-nav button.active,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-operation-nav button[aria-current="page"] { background: #354250 !important; color: #fff !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .cp6-hand-icon { width: 19px !important; flex: 0 0 19px !important; text-align: center !important; color: #b8c7d5 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-sidebar-foot { margin-top: auto !important; }
+
+/* Perfil y conexión arriba; herramientas en una sola fila horizontal. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-sidebar-account {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 12px 5px 14px !important;
+  border-top: 1px solid rgba(255,255,255,.10) !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-sidebar-account .navbar-profile-wrap { position: relative !important; display: flex !important; justify-content: center !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-sidebar-account .cp6-sidebar-status { display: block !important; min-height: 16px !important; color: #aab6c2 !important; font-size: 10px !important; text-align: center !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-sidebar-tools {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  width: 100% !important;
+  padding: 12px 0 0 !important;
+  border-top: 1px solid rgba(255,255,255,.10) !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-sidebar-tools .cp6-icon-btn {
+  width: 34px !important;
+  height: 34px !important;
+  flex: 0 0 34px !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+  border: 1px solid #3b4855 !important;
+  border-radius: 9px !important;
+  background: #222c36 !important;
+  color: #f3f6f8 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-sidebar-tools .cp6-icon-btn:hover,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-sidebar-tools .cp6-icon-btn.is-active { background: #354250 !important; border-color: #5a6b7b !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .profile-menu { right: 0 !important; bottom: calc(100% + 8px) !important; top: auto !important; }
+
+/* Home / espacio de trabajo: evita desplazamientos residuales y conserva una composición limpia. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace { min-width: 0 !important; padding: 22px 28px 34px !important; overflow-x: hidden !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .v2-topbar { min-height: 44px !important; margin: 0 0 12px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .workspace-header.v2-legacy-heading { margin: 0 0 16px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #perfilView.cp6-workspace-profile { position: relative !important; inset: auto !important; transform: none !important; margin: 0 !important; padding: 0 !important; }
+/* Home aprobado: neutraliza la cuadrícula histórica 360px + 1fr y vuelve a una
+   sola columna: filtros, rendimiento, siete métricas y listado. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #perfilView.profile-root-light {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: calc(100vh - 70px) !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+  background: transparent !important;
+  color: #172536 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-filters { display: flex !important; align-items: center !important; flex-wrap: wrap !important; gap: 10px 16px !important; margin: 0 0 14px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-filter { display: inline-flex !important; align-items: center !important; gap: 8px !important; color: #53677b !important; font-size: 11px !important; font-weight: 700 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-filter select { min-height: 34px !important; width: auto !important; min-width: 150px !important; padding: 0 30px 0 10px !important; border-radius: 8px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #profilePerformanceCard {
+  width: 100% !important;
+  margin: 0 0 14px !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+  border: 1px solid #dce2e8 !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  box-shadow: 0 5px 16px rgba(31,41,55,.06) !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-blocks {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(150px, .55fr) !important;
+  align-items: stretch !important;
+  gap: 14px !important;
+  width: 100% !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-global {
+  min-width: 0 !important;
+  min-height: 96px !important;
+  box-sizing: border-box !important;
+  padding: 15px !important;
+  border: 1px solid #e3e9ef !important;
+  border-radius: 11px !important;
+  background: #f8fafc !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading { display: flex !important; align-items: center !important; gap: 10px !important; min-width: 0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading > div { min-width: 0 !important; flex: 1 1 auto !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading b,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading small { display: block !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading b { color: #26384a !important; font-size: 12px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading small { margin-top: 4px !important; color: #718096 !important; font-size: 10px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading > strong { flex: 0 0 auto !important; color: #173f58 !important; font-size: 28px !important; line-height: 1 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-global { display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important; text-align: center !important; background: #173f58 !important; color: #fff !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-global span { font-size: 11px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-global strong { margin-top: 6px !important; color: #fff !important; font-size: 30px !important; line-height: 1 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-bar { height: 5px !important; margin-top: 14px !important; overflow: hidden !important; border-radius: 999px !important; background: #e5ebf1 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-bar i { display: block !important; height: 100% !important; border-radius: inherit !important; background: #2f8f63 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpis {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  gap: 9px !important;
+  width: 100% !important;
+  margin: 0 0 14px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi {
+  display: flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  min-height: 88px !important;
+  box-sizing: border-box !important;
+  padding: 13px 12px !important;
+  border: 1px solid transparent !important;
+  border-radius: 10px !important;
+  color: #fff !important;
+  text-align: left !important;
+  box-shadow: 0 5px 12px rgba(31,41,55,.08) !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi > span { display: block !important; min-width: 0 !important; width: 100% !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi b,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi strong,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi small { display: block !important; color: inherit !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi b { min-height: 28px !important; font-size: 11px !important; font-weight: 600 !important; line-height: 1.25 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi strong { margin-top: 7px !important; font-size: 25px !important; line-height: 1 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi small { margin-top: 7px !important; font-size: 9px !important; white-space: nowrap !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-total { background: #2f6fad !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-completed,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-paid { background: #2f8f63 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-pending,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-delivery-pending { background: #f2b705 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-delivered-unpaid,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-expired { background: #c64b4b !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-lower-grid { display: block !important; width: 100% !important; margin: 0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-appraisals-card { width: 100% !important; min-width: 0 !important; box-sizing: border-box !important; }
+@media (max-width: 900px) {
+  body.cp6-redesign .login-screen { grid-template-columns: 1fr !important; }
+  body.cp6-redesign .login-screen .login-visual { display: none !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui { grid-template-columns: 82px minmax(0, 1fr) !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar { padding: 18px 9px !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-brand > div,
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-nav-label,
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .cp6-nav-link > span:last-child,
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-operation-nav button > span,
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-sidebar-foot { display: none !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .cp6-nav-link,
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-operation-nav button { justify-content: center !important; padding: 0 !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-sidebar-tools { flex-wrap: wrap !important; gap: 5px !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-sidebar-tools .cp6-icon-btn { width: 28px !important; height: 28px !important; flex-basis: 28px !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace { padding: 18px 16px 28px !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-blocks { grid-template-columns: 1fr !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+
+/* Recepción v17: búsqueda y datos operativos arriba; pago visible a la derecha. */
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-form-v7 {
+  grid-template-columns: minmax(0, 1fr) minmax(330px, .78fr) !important;
+  gap: 14px !important;
+  align-items: start !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-strip {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  min-width: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-layout {
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+  min-width: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-card {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  min-width: 0 !important;
+  height: 100% !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-card .reception-payment-body {
+  padding: 14px 16px !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-fees-card {
+  grid-column: 1 / -1 !important;
+  grid-row: 3 !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-actions,
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-form-message {
+  grid-column: 1 / -1 !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-fields {
+  display: block !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-main { display: block !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number,
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-date { width: 100% !important; min-width: 0 !important; margin: 0 !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-date { margin-top: 10px !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-notes {
+  display: grid !important;
+  grid-template-columns: minmax(130px, .8fr) minmax(180px, 1.2fr) !important;
+  gap: 10px !important;
+  width: 100% !important;
+  margin-top: 10px !important;
+}
+
+/* Configuración y Usuarios: eliminar el encabezado duplicado y el espacio superior histórico. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .v2-page-banner {
+  display: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro {
+  margin: 0 0 12px !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro h2 {
+  margin: 0 0 5px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro p {
+  margin: 0 !important;
+}
+
+/* Usuarios: el contenido debe iniciar inmediatamente debajo del encabezado. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView {
+  display: block !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding-top: 0 !important;
+  padding-bottom: 24px !important;
+  margin-top: 0 !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > .admin-intro,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > #usuariosMenuSection,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > .users-subview {
+  position: static !important;
+  top: auto !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > #usuariosMenuSection {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > #usuariosMenuSection .usuarios-choice-grid {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+@media (max-width: 900px) {
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-form-v7 { grid-template-columns: 1fr !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-strip,
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-new-layout,
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-card,
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-fees-card { grid-column: 1 !important; grid-row: auto !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-fields { display: block !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-main { display: block !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-number,
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-date,
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-notes { grid-column: auto !important; grid-row: auto !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-search-notes { margin-top: 12px !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-payment-card { height: auto !important; }
+}
+@media (max-width: 560px) {
+  body.cp6-redesign .cp6-applicant-login-card { padding: 24px 20px !important; }
+  body.cp6-redesign .login-screen .public-entry-panel { padding: 24px 16px !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui { display: block !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar { position: relative !important; min-height: auto !important; width: 100% !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-brand > div,
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-nav-label,
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-sidebar-foot { display: none !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-nav,
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-operation-nav { display: flex !important; flex-wrap: wrap !important; justify-content: center !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .cp6-nav-link,
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .v2-sidebar .v2-operation-nav button { width: auto !important; padding: 0 9px !important; }
+}
+
+/* Propuesta aplicada: Usuarios y Configuración compactos, alineados arriba y sin dorado. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) {
+  background: #f4f7fb !important;
+  color: #172235 !important;
+  display: block !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 0 28px !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .v2-page-banner { display: none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro {
+  display: block !important;
+  margin: 0 0 18px !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  position: static !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro .section-kicker {
+  color: #68819d !important;
+  display: block !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.5px !important;
+  margin: 0 0 5px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro h2 {
+  color: #172235 !important;
+  font-family: Inter, "Segoe UI", sans-serif !important;
+  font-size: 27px !important;
+  font-weight: 760 !important;
+  letter-spacing: -.7px !important;
+  line-height: 1.12 !important;
+  margin: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView, #configuracionView) > .admin-intro p {
+  color: #748198 !important;
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+  margin: 6px 0 0 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > #usuariosMenuSection {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: static !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-card {
+  align-items: center !important;
+  background: #fff !important;
+  border: 1px solid #dbe3ed !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 24px rgba(25,45,75,.07) !important;
+  color: #172235 !important;
+  display: grid !important;
+  gap: 12px !important;
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  min-height: 112px !important;
+  padding: 18px !important;
+  position: relative !important;
+  transform: none !important;
+  width: 100% !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-card:hover,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-card:focus-visible {
+  border-color: #8298b2 !important;
+  box-shadow: 0 14px 28px rgba(25,45,75,.12) !important;
+  outline: none !important;
+  transform: translateY(-2px) !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-icon {
+  align-items: center !important;
+  background: #eaf0f7 !important;
+  border-radius: 10px !important;
+  color: #344f70 !important;
+  display: inline-flex !important;
+  font-size: 17px !important;
+  height: 38px !important;
+  justify-content: center !important;
+  width: 38px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-copy { display: grid !important; gap: 5px !important; min-width: 0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-copy strong { color: #172235 !important; font-size: 13px !important; font-weight: 750 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-copy small { color: #748198 !important; font-size: 10px !important; line-height: 1.45 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-arrow { color: #344f70 !important; font-size: 17px !important; }
+
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView > .settings-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-card,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .inline-panel {
+  background: #fff !important;
+  border: 1px solid #dbe3ed !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 24px rgba(25,45,75,.06) !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-card {
+  min-height: 214px !important;
+  padding: 18px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-icon {
+  background: #eaf0f7 !important;
+  border-radius: 9px !important;
+  color: #344f70 !important;
+  height: 35px !important;
+  margin-bottom: 13px !important;
+  width: 35px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-card h3 { color: #172235 !important; font-size: 13px !important; margin: 0 0 5px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-card p { color: #748198 !important; font-size: 10px !important; line-height: 1.45 !important; margin: 0 0 13px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-card :is(input, select) {
+  background: #fbfdff !important;
+  border: 1px solid #cad6e3 !important;
+  border-radius: 8px !important;
+  color: #34445b !important;
+  min-height: 34px !important;
+  padding: 7px 9px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-card :is(button, .primary-button, .secondary-button) {
+  background: #344f70 !important;
+  border-color: #344f70 !important;
+  border-radius: 8px !important;
+  color: #fff !important;
+  font-size: 10px !important;
+  min-height: 32px !important;
+  margin-top: auto !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-import {
+  align-items: center !important;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 18px !important;
+  grid-column: 1 / -1 !important;
+  justify-content: space-between !important;
+  min-height: 106px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-import .import-controls { margin: 0 !important; min-width: 250px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosAdminPanel, #usuariosExternalPanel) .inline-panel,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosAdminPanel, #usuariosExternalPanel) .setting-card {
+  border-color: #dbe3ed !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 24px rgba(25,45,75,.06) !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosAdminPanel .admin-grid { gap: 16px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosAdminPanel .inline-panel-heading { margin-bottom: 14px !important; padding-bottom: 11px !important; }
+
+@media (max-width: 900px) {
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .usuarios-choice-grid,
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView > .settings-grid { grid-template-columns: 1fr !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-import { align-items: stretch !important; flex-direction: column !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-import .import-controls { min-width: 0 !important; width: 100% !important; }
+}
+
+/* Override final: el espacio estaba en el contenedor del workspace, no en las tarjetas. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace {
+  align-items: stretch !important;
+  display: block !important;
+  min-height: 0 !important;
+  padding-top: 18px !important;
+  padding-bottom: 28px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .workspace-header {
+  margin: 0 auto 16px !important;
+  max-width: 1200px !important;
+  padding: 0 0 2px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view#usuariosView:not([hidden]),
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view#configuracionView:not([hidden]) {
+  display: block !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 auto !important;
+  max-width: 1200px !important;
+  padding: 0 !important;
+  position: relative !important;
+  top: auto !important;
+  transform: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view#usuariosView:not([hidden]) > .v2-page-banner,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view#configuracionView:not([hidden]) > .v2-page-banner {
+  display: none !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view#usuariosView:not([hidden]) > .admin-intro,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace > .app-view#configuracionView:not([hidden]) > .admin-intro {
+  margin: 0 0 16px !important;
+  padding: 0 !important;
+}
