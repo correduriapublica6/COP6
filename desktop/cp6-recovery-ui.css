@@ -712,3 +712,143 @@ html body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace 
   padding: 0 !important;
   overflow: hidden !important;
 }
+
+
+/* CP6: usuarios en una sola vista integrada, conforme a la referencia aprobada. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui:has(#usuariosView:not([hidden])) > .app-workspace > .v2-topbar,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui:has(#configuracionView:not([hidden])) > .app-workspace > .v2-topbar,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui:has(#usuariosView:not([hidden])) > .app-workspace > .workspace-header,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui:has(#configuracionView:not([hidden])) > .app-workspace > .workspace-header { display:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > .users-admin-intro { display:flex !important; align-items:flex-start !important; justify-content:space-between !important; gap:18px !important; margin:0 0 14px !important; padding:0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > .users-admin-intro .section-kicker,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView > .settings-admin-intro .section-kicker { display:block !important; margin:0 0 5px !important; color:#71839b !important; font-size:9px !important; font-weight:800 !important; letter-spacing:1.25px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > .users-admin-intro h2,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView > .settings-admin-intro h2 { margin:0 !important; color:#1d2b3c !important; font-family:Inter,"Segoe UI",sans-serif !important; font-size:23px !important; font-weight:760 !important; letter-spacing:-.45px !important; line-height:1.15 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > .users-admin-intro p,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView > .settings-admin-intro p { margin:4px 0 0 !important; color:#78869a !important; font-size:10px !important; line-height:1.45 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-connection-badge { display:inline-flex !important; align-items:center !important; gap:6px !important; flex:0 0 auto !important; margin-top:7px !important; padding:6px 10px !important; border:1px solid #e2eee8 !important; border-radius:999px !important; background:#f1faf5 !important; color:#477660 !important; font-size:9px !important; font-weight:700 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-connection-dot { width:5px !important; height:5px !important; border-radius:50% !important; background:#4aac78 !important; }
+body.cp6-redesign[data-server-status="offline"] #appShell.control-shell.cp6-approved-ui #usuariosView .users-connection-badge { border-color:#f1dcdc !important; background:#fff5f4 !important; color:#9b5252 !important; }
+body.cp6-redesign[data-server-status="offline"] #appShell.control-shell.cp6-approved-ui #usuariosView .users-connection-dot { background:#d06464 !important; }
+body.cp6-redesign[data-server-status="checking"] #appShell.control-shell.cp6-approved-ui #usuariosView .users-connection-badge { border-color:#eee8d8 !important; background:#fffaf0 !important; color:#8b7445 !important; }
+body.cp6-redesign[data-server-status="checking"] #appShell.control-shell.cp6-approved-ui #usuariosView .users-connection-dot { background:#c5a34f !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > .users-admin-overview { display:grid !important; grid-template-columns:minmax(0,1.25fr) minmax(280px,.8fr) !important; align-items:stretch !important; gap:14px !important; margin:0 0 12px !important; padding:0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-accounts-card,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-password-card,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-card { box-sizing:border-box !important; min-width:0 !important; margin:0 !important; padding:14px !important; border:1px solid #e0e6ee !important; border-radius:13px !important; background:#fff !important; box-shadow:0 7px 20px rgba(33,53,78,.055) !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-card-heading { margin:0 0 8px !important; padding:0 0 7px !important; border-bottom:1px solid #eef1f5 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-card-heading h3,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-summary strong { margin:0 !important; color:#202b3a !important; font-family:Inter,"Segoe UI",sans-serif !important; font-size:13px !important; font-weight:750 !important; line-height:1.25 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-card-heading p,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-summary small { display:block !important; margin:3px 0 0 !important; color:#8490a0 !important; font-size:10px !important; line-height:1.35 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView #userPermissionsList { display:grid !important; gap:3px !important; max-height:180px !important; overflow:auto !important; padding-right:2px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .user-permission-row { display:grid !important; grid-template-columns:25px minmax(0,1fr) auto !important; align-items:center !important; gap:7px !important; min-height:43px !important; box-sizing:border-box !important; padding:4px 5px !important; border:0 !important; border-bottom:1px solid #f0f2f6 !important; border-radius:0 !important; background:#fff !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .user-initial { width:24px !important; height:24px !important; border-radius:7px !important; background:#edf2f8 !important; color:#546b85 !important; font-size:8px !important; font-weight:800 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-account-copy { min-width:0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-account-copy > strong { display:block !important; overflow:hidden !important; color:#283448 !important; font-family:Inter,"Segoe UI",sans-serif !important; font-size:10px !important; font-weight:750 !important; line-height:1.2 !important; text-overflow:ellipsis !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-account-email { display:block !important; overflow:hidden !important; margin-top:1px !important; color:#8994a3 !important; font-size:8px !important; line-height:1.2 !important; text-overflow:ellipsis !important; white-space:nowrap !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-account-detail { display:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-email-editor { display:block !important; margin-top:2px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-email-editor > summary { color:#71829a !important; cursor:pointer !important; font-size:7px !important; line-height:1.2 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-email-editor[open] .user-email-editor { position:absolute !important; z-index:10 !important; display:grid !important; gap:5px !important; width:190px !important; padding:8px !important; border:1px solid #dfe5ed !important; border-radius:8px !important; background:#fff !important; box-shadow:0 8px 20px rgba(30,47,70,.12) !important; font-size:8px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-email-editor[open] .user-email-editor input { min-height:28px !important; padding:4px 6px !important; font-size:8px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-email-editor[open] .user-email-editor button { justify-self:start !important; padding:4px 7px !important; font-size:8px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .user-permission-status { min-width:0 !important; display:grid !important; justify-items:end !important; gap:2px !important; text-align:right !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .user-permission-status > small { margin:0 !important; color:#9aa3b0 !important; font-size:7px !important; line-height:1.2 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .role-badge,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-role-editor > summary { min-width:0 !important; padding:3px 6px !important; border:1px solid #e5eaf0 !important; border-radius:999px !important; background:#f4f7fa !important; color:#718095 !important; font-size:7px !important; font-weight:650 !important; line-height:1.2 !important; white-space:nowrap !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .role-badge.admin { border-color:#e4e9f1 !important; background:#eef2f8 !important; color:#546985 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-role-editor { position:relative !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-role-editor select { position:absolute !important; z-index:5 !important; top:100% !important; right:0 !important; width:112px !important; min-height:30px !important; padding:4px !important; border:1px solid #d6deea !important; border-radius:7px !important; background:#fff !important; box-shadow:0 6px 16px rgba(30,47,70,.12) !important; font-size:9px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-role-editor:not([open]) select { display:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-create-accordion { margin-top:7px !important; border-top:1px solid #eef1f5 !important; padding-top:6px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-create-accordion > summary { color:#67778c !important; cursor:pointer !important; font-size:8px !important; font-weight:650 !important; list-style:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-create-accordion > summary::-webkit-details-marker,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-summary::-webkit-details-marker { display:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-create-accordion .new-user-panel { margin:10px 0 0 !important; padding:12px !important; border:1px solid #edf0f4 !important; border-radius:9px !important; box-shadow:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-create-accordion:not([open]) .new-user-panel { display:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-password-card .inline-credential-form { gap:7px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-password-card .inline-credential-form label { display:grid !important; gap:3px !important; color:#66758b !important; font-family:Inter,"Segoe UI",sans-serif !important; font-size:8px !important; font-weight:750 !important; letter-spacing:.25px !important; text-transform:uppercase !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-password-card .inline-credential-form :is(input,select) { width:100% !important; min-width:0 !important; min-height:30px !important; box-sizing:border-box !important; padding:4px 6px !important; border:1px solid #d7dfe9 !important; border-radius:6px !important; background:#fff !important; color:#45566d !important; font-family:Inter,"Segoe UI",sans-serif !important; font-size:9px !important; font-weight:450 !important; text-transform:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-password-card .inline-credential-form .primary-button { width:100% !important; min-height:31px !important; justify-self:stretch !important; margin:2px 0 0 !important; padding:6px 9px !important; border:0 !important; border-radius:7px !important; background:#344f70 !important; color:#fff !important; font-family:Inter,"Segoe UI",sans-serif !important; font-size:9px !important; font-weight:700 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-password-card .form-message,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-accounts-card > .form-message { font-size:8px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > .users-external-overview { margin:0 !important; padding:0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-card { padding:0 !important; overflow:hidden !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-summary { display:flex !important; align-items:center !important; justify-content:space-between !important; gap:16px !important; min-height:62px !important; box-sizing:border-box !important; padding:12px 14px !important; cursor:pointer !important; list-style:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-summary::-webkit-details-marker { display:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-summary > span { min-width:0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-summary small { font-size:10px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-summary > i { color:#71829a !important; font-size:10px !important; transition:transform .18s ease !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-card[open] .users-external-summary > i { transform:rotate(180deg) !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .registered-applicants-panel { margin:0 14px 14px !important; padding:12px !important; border:1px solid #edf0f4 !important; border-radius:9px !important; box-shadow:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .registered-applicants-panel .inline-panel-heading { margin-bottom:10px !important; padding-bottom:8px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-table-toolbar { display:grid !important; grid-template-columns:auto minmax(0,1fr) !important; align-items:center !important; gap:10px !important; margin-bottom:10px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-table-toolbar label { color:#64758b !important; font-size:8px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-table-toolbar input { min-width:0 !important; min-height:30px !important; border:1px solid #d7dfe9 !important; border-radius:7px !important; padding:5px 8px !important; font-size:9px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-card:not([open]) .registered-applicants-panel { display:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView > .settings-admin-intro { margin-bottom:14px !important; }
+@media (max-width:760px) {
+ body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > .users-admin-overview { grid-template-columns:1fr !important; }
+ body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView > .users-admin-intro { gap:8px !important; }
+ body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-connection-badge { margin-top:5px !important; }
+}
+
+/* Configuración compacta: tres herramientas iguales y franja de importación abajo. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView > .cp6-settings-compact { align-items:start !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:16px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact > .setting-card:not(.setting-import) { min-height:272px !important; height:auto !important; padding:20px !important; display:flex !important; flex-direction:column !important; gap:0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact .setting-icon { width:32px !important; height:32px !important; margin:0 0 13px !important; font-size:14px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact h3 { margin:0 0 5px !important; font-size:14px !important; font-weight:700 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact p { margin:0 0 15px !important; font-size:11px !important; line-height:1.45 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact :is(label,.settings-period-caption) { font:700 9px/1.35 Inter,"Segoe UI",sans-serif !important; letter-spacing:.3px !important; color:#758297 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact .compact-settings-form { display:grid !important; gap:8px !important; grid-template-columns:1fr !important; margin:0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact .compact-settings-form label { display:grid !important; gap:4px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact :is(input,select) { min-height:32px !important; padding:5px 8px !important; font:400 11px/1.4 Inter,"Segoe UI",sans-serif !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact button { width:fit-content !important; padding:7px 12px !important; min-height:32px !important; margin:0 !important; font:600 10px/1.35 Inter,"Segoe UI",sans-serif !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact .dialog-actions { display:flex !important; justify-content:flex-start !important; flex-wrap:wrap !important; gap:6px !important; margin:0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact .notary-records-toggle { margin-top:6px !important; min-height:23px !important; padding:3px 6px !important; border:0 !important; background:transparent !important; color:#667e99 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact .export-date-controls { gap:4px !important; margin:0 0 9px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact .export-date-controls label { display:grid !important; grid-template-columns:36px minmax(0,1fr) !important; align-items:center !important; gap:5px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .settings-extra-fields > summary,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .settings-import-options > summary { font:500 10px/1.4 Inter,"Segoe UI",sans-serif !important; color:#61758c !important; cursor:pointer !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .settings-notary-fields { display:grid !important; grid-template-columns:1fr !important; gap:8px !important; padding:8px 0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .settings-extra-fields:not([open]) .settings-notary-fields { display:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact .setting-import { min-height:106px !important; padding:20px !important; display:grid !important; grid-template-columns:minmax(0,1fr) 190px !important; gap:12px 22px !important; align-items:center !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .settings-import-copy p { margin:0 !important; max-width:480px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact .import-controls { min-width:0 !important; width:190px !important; display:grid !important; gap:6px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .settings-file-button { position:relative !important; display:flex !important; justify-content:center !important; align-items:center !important; min-height:32px !important; padding:6px 12px !important; border-radius:8px !important; background:#344f70 !important; color:#fff !important; overflow:hidden !important; font-size:10px !important; cursor:pointer !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .settings-file-button input { position:absolute !important; inset:0 !important; width:100% !important; height:100% !important; opacity:0 !important; cursor:pointer !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .settings-import-options:not([open]) select { display:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .settings-import-options select { margin-top:5px !important; width:100% !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView #importDataButton { width:100% !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui :is(#usuariosView,#configuracionView) .form-message:empty { display:none !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .setting-import > .form-message { grid-column:1 / -1 !important; margin:0 !important; }
+/* Escala de escritorio legible; la referencia es una miniatura, no letras de 7 px. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-accounts-card,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-password-card { padding:20px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-card-heading h3,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-summary strong { font-size:15px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-card-heading p,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-summary small { font-size:11px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView #userPermissionsList { max-height:222px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .user-permission-row { min-height:70px !important; grid-template-columns:32px minmax(0,1fr) auto !important; padding:9px 4px !important; gap:10px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .user-initial { width:32px !important; height:32px !important; font-size:10px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-account-copy > strong { font-size:12px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-account-email { font-size:10px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-email-editor > summary { font-size:9px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .user-permission-status > small { font-size:8px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .role-badge,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-role-editor > summary { font-size:9px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-password-card .inline-credential-form { gap:11px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-password-card .inline-credential-form label { font-size:10px !important; gap:5px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-password-card .inline-credential-form :is(input,select) { min-height:36px !important; font-size:12px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-password-card .inline-credential-form .primary-button { min-height:36px !important; font-size:11px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-create-accordion > summary { font-size:10px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #usuariosView .users-external-summary { min-height:84px !important; padding:20px !important; }
+@media(max-width:900px) {
+ body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView > .cp6-settings-compact { grid-template-columns:1fr !important; }
+ body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact .setting-import { grid-template-columns:1fr !important; }
+}
+
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .settings-file-button > span { color:#fff !important; font:600 10px/1.35 Inter,"Segoe UI",sans-serif !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #configuracionView .cp6-settings-compact > .setting-card:not(.setting-import) { min-height:286px !important; }

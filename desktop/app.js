@@ -162,8 +162,10 @@
     serverOnline = normalized === "online";
     document.body.dataset.serverStatus = normalized;
     const label = $("#serverStatusLabel");
+    const usersConnectionLabel = $("#usersConnectionLabel");
     const indicator = $("#serverConnectionStatus");
     if (label) label.textContent = normalized === "online" ? "En línea" : normalized === "checking" ? "Comprobando servidor" : "Sin conexión";
+    if (usersConnectionLabel) usersConnectionLabel.textContent = normalized === "online" ? "En línea" : normalized === "checking" ? "Comprobando servidor" : "Sin conexión";
     if (indicator) indicator.title = normalized === "online" ? "Conectado al servidor de Recepción; los datos se sincronizan con la base central." : normalized === "checking" ? "Comprobando conexión con el servidor de Recepción." : "No se puede acceder al servidor de Recepción; los datos no se están sincronizando.";
   }
   function loadTechnicalObjectives() {
@@ -466,7 +468,8 @@
   function closeCredentialSetup() { credentialDialog.close(); }
   function isFirstAdminAccess(user = loginUser.value) {
     const credentials = loadCredentials();
-    return Boolean(user && roleFor(user) === "admin" && !credentials[user]);
+    const remoteUser = remoteUsers?.find((item) => item.name === user);
+    return Boolean(user && roleFor(user) === "admin" && (!credentials[user] || remoteUser?.hasPassword === false));
   }
   function syncCredentialSetupVisibility() {
     const button = $("#openCredentialSetupButton");
@@ -518,13 +521,15 @@
     const credentials = loadCredentials();
     const bootstrap = Object.keys(credentials).length === 0;
     const firstAdminAccess = isFirstAdminAccess(user);
+    const selectedRemoteUser = remoteUsers?.find((item) => item.name === user);
+    const firstAdminProfile = roleFor(user) === "admin" || DEFAULT_ROLE_BY_USER[user] === "admin" || selectedRemoteUser?.role === "admin";
     const selfChange = Boolean(activeSessionUser && !isAdmin() && user === activeSessionUser);
     const externalAuthorization = pendingCredentialAuthorization && pendingCredentialAuthorization.user === user && pendingCredentialAuthorization.expiresAt > Date.now();
     if (!isAdmin() && !selfChange && !externalAuthorization && !firstAdminAccess) {
       credentialMessage.textContent = "Solo puedes cambiar tu propia contraseña.";
       return;
     }
-    if ((bootstrap || firstAdminAccess || externalAuthorization) && !selfChange && roleFor(user) !== "admin") {
+    if ((bootstrap || firstAdminAccess || externalAuthorization) && !selfChange && !firstAdminProfile) {
       credentialMessage.textContent = "Solo se pueden modificar credenciales de perfiles Administrador desde este acceso.";
       return;
     }
@@ -929,13 +934,16 @@
     const adminPanel = $("#usuariosAdminPanel");
     const externalPanel = $("#usuariosExternalPanel");
     if (!menu || !adminPanel || !externalPanel) return;
-    const showAdmin = section === "administrativos";
-    const showExternal = section === "externos";
-    menu.hidden = showAdmin || showExternal;
-    adminPanel.hidden = !showAdmin;
-    externalPanel.hidden = !showExternal;
-    if (showAdmin) renderUserPermissions();
-    if (showExternal) window.dispatchEvent(new CustomEvent("control-avaluos:users-view"));
+    // Vista integrada aprobada: cuentas administrativas y usuarios externos
+    // permanecen en la misma página, sin ocultar módulos al entrar a Usuarios.
+    menu.hidden = true;
+    adminPanel.hidden = false;
+    externalPanel.hidden = false;
+    renderUserPermissions();
+    if (section === "externos") {
+      externalPanel.querySelector("details")?.setAttribute("open", "");
+      window.dispatchEvent(new CustomEvent("control-avaluos:users-view"));
+    }
   }
 
   function resetHomeScrollPosition() {
@@ -1438,10 +1446,11 @@
       const role = roleFor(user);
       const remoteUser = remoteUsers?.find((item) => item.name === user);
       const email = remoteUser?.email || "";
-      const detail = role === "admin" ? "Control total, contraseñas, resumen y configuración" : role === "auditor" ? "Acceso total a Avalúos, Fe Pública, resumen, Chat y Notas/Tareas" : role === "valuador" ? "Puede crear y editar avalúos técnicos; Recepción solo en consulta" : role === "editor" ? "Puede crear y editar avalúos" : "Solo consulta, recibos y listados";
-      const roleControl = DEFAULT_ROLE_BY_USER[user] === "admin" ? `<span class="role-badge admin">Administrador</span>` : `<label class="role-select-label">Rol<select class="role-select" data-role-user="${escapeHtml(user)}" aria-label="Cambiar rol de ${escapeHtml(user)}"><option value="editor" ${role === "editor" ? "selected" : ""}>Editor(a)</option><option value="viewer" ${role === "viewer" ? "selected" : ""}>Solo lectura</option><option value="valuador" ${role === "valuador" ? "selected" : ""}>Valuador</option><option value="auditor" ${role === "auditor" ? "selected" : ""}>Auditor</option></select></label>`;
-      const emailEditor = `<label class="user-email-editor">Correo electrónico<input type="email" value="${escapeHtml(email)}" data-email-user="${escapeHtml(user)}" placeholder="correo@ejemplo.com" required /><button type="button" class="text-action-button btn-copu-primary" data-save-email-user="${escapeHtml(user)}">Guardar correo</button></label>`;
-      return `<article class="user-permission-row"><div class="user-initial">${escapeHtml(user.split(" ").map((part) => part[0]).slice(0, 2).join(""))}</div><div><strong>${escapeHtml(user)}</strong><span>${detail}</span>${emailEditor}</div><div class="user-permission-status">${roleControl}<small>${credentials[user] ? "Contraseña configurada" : "Sin contraseña"}</small></div></article>`;
+      const roleControl = DEFAULT_ROLE_BY_USER[user] === "admin" ? `<span class="role-badge admin">Administrador</span>` : `<details class="users-role-editor"><summary>${escapeHtml(roleLabel(role))}</summary><select class="role-select" data-role-user="${escapeHtml(user)}" aria-label="Cambiar rol de ${escapeHtml(user)}"><option value="editor" ${role === "editor" ? "selected" : ""}>Editor(a)</option><option value="viewer" ${role === "viewer" ? "selected" : ""}>Solo lectura</option><option value="valuador" ${role === "valuador" ? "selected" : ""}>Valuador</option><option value="auditor" ${role === "auditor" ? "selected" : ""}>Auditor</option></select></details>`;
+      const emailEditor = `<details class="users-email-editor"><summary>Editar correo</summary><label class="user-email-editor">Correo electrónico<input type="email" value="${escapeHtml(email)}" data-email-user="${escapeHtml(user)}" placeholder="correo@ejemplo.com" required /><button type="button" class="text-action-button btn-copu-primary" data-save-email-user="${escapeHtml(user)}">Guardar correo</button></label></details>`;
+      const emailLabel = email || "Correo no registrado";
+      const hasPassword = Boolean(credentials[user] || remoteUser?.hasPassword);
+      return `<article class="user-permission-row"><div class="user-initial">${escapeHtml(user.split(" ").map((part) => part[0]).slice(0, 2).join(""))}</div><div class="users-account-copy"><strong>${escapeHtml(user)}</strong><span class="users-account-email">${escapeHtml(emailLabel)}</span>${emailEditor}</div><div class="user-permission-status">${roleControl}<small>${hasPassword ? "Contraseña configurada" : "Sin contraseña"}</small></div></article>`;
     }).join("");
     $$(".role-select").forEach((select) => select?.addEventListener("change", () => updateUserRole(select.dataset.roleUser, select.value)));
     $$('[data-save-email-user]').forEach((button) => button?.addEventListener("click", () => { const input = document.querySelector(`[data-email-user="${CSS.escape(button.dataset.saveEmailUser)}"]`); updateUserEmail(button.dataset.saveEmailUser, input?.value); }));
@@ -1957,6 +1966,8 @@
   $("#notaryForm")?.addEventListener("submit", async (event) => { event.preventDefault(); if (!isAdmin()) return; const id = $("#notaryEditId").value.trim(); const payload = { municipio: $("#notaryMunicipalityInput").value.trim(), numero: $("#notaryNumberInput").value, nombre: $("#notaryNameInput").value.trim(), direccion: $("#notaryAddressInput").value.trim(), telefono: $("#notaryPhoneInput").value.trim() }; const message = $("#notaryMessage"); try { const saved = await apiRequest(id ? `/notarias/${encodeURIComponent(id)}` : "/notarias", { method: id ? "PUT" : "POST", body: JSON.stringify(payload) }); notarias = Array.isArray(saved) ? saved : (id ? notarias.map((item) => item.id === id ? saved : item) : [...notarias, saved]); $("#notaryForm").reset(); $("#notaryEditId").value = ""; message.textContent = "Notaría guardada correctamente."; message.className = "form-message is-success"; renderNotarySettings(); window.dispatchEvent(new CustomEvent("control-avaluos:notarias-updated", { detail: notarias })); } catch (error) { message.textContent = error.message; message.className = "form-message is-error"; } });
   $("#toggleNotariesRecordsButton")?.addEventListener("click", () => { const target = $("#notariesSettingsList"); const button = $("#toggleNotariesRecordsButton"); if (!target || !button) return; const willShow = target.hidden; target.hidden = !willShow; button.setAttribute("aria-expanded", String(willShow)); button.textContent = willShow ? "Ocultar registros" : "Ver registros"; if (willShow) renderNotarySettings(); });
   $("#cancelNotaryEditButton")?.addEventListener("click", () => { $("#notaryForm").reset(); $("#notaryEditId").value = ""; });
+  $("#notaryForm")?.addEventListener("invalid", (event) => { event.target.closest("details")?.setAttribute("open", ""); }, true);
+  $("#notariesSettingsList")?.addEventListener("click", (event) => { if (event.target.closest("[data-edit-notary]")) $("#notaryDetailSection")?.setAttribute("open", ""); });
   async function saveAuthorizedFolioFrom(inputSelector, messageSelector) { if (!canAuthorizeFolios()) return; const value = normalizeNumber($(inputSelector)?.value || ""); const message = $(messageSelector); if (!/^\d{4}$/.test(value)) { if (message) message.textContent = "Escribe un número de avalúo de cuatro dígitos."; return; }     try { const response = await apiRequest("/authorized-folios", { method: "POST", body: JSON.stringify({ numeroAvaluo: value }) }); authorizedAppraisalNumbers = Array.isArray(response.values) ? response.values : [...new Set([...authorizedAppraisalNumbers, value])].sort(); $(inputSelector).value = ""; if (message) { message.textContent = `El avalúo ${value} quedó autorizado para Recepción.`; message.className = "form-message is-success"; } renderAuthorizedFolios(); await renderPendingReceptionSummary(); await renderValidationRegistry(); } catch (error) { if (message) { message.textContent = error.message; message.className = "form-message is-error"; } } }
   $("#authorizedFolioForm")?.addEventListener("submit", async (event) => { event.preventDefault(); await saveAuthorizedFolioFrom("#authorizedFolioInput", "#authorizedFolioMessage"); });
   $("#authorizedFolioFormAvaluos")?.addEventListener("submit", async (event) => { event.preventDefault(); await saveAuthorizedFolioFrom("#authorizedFolioInputAvaluos", "#authorizedFolioMessageAvaluos"); });
