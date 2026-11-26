@@ -1,3 +1,8 @@
+/* En Juegos no mostramos la barra contextual duplicada; se restaura sola al cambiar de vista. */
+#appShell.control-shell:has(#juegosView.is-active) > .app-workspace > .v2-topbar .v2-context {
+  display: none !important;
+}
+
 /* CP6 — propuesta aplicada al apartado Juegos. Estilos aislados para no afectar otras vistas. */
 #appShell.control-shell #juegosView.games-view {
   width: 100% !important;
