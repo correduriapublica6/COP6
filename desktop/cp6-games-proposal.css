@@ -1,0 +1,408 @@
+/* CP6 — propuesta aplicada al apartado Juegos. Estilos aislados para no afectar otras vistas. */
+#appShell.control-shell #juegosView.games-view {
+  width: 100% !important;
+  padding: 0 0 40px !important;
+  color: #273341 !important;
+}
+
+#appShell.control-shell #juegosView .games-page-heading {
+  width: 100% !important;
+  margin: 0 0 22px !important;
+}
+
+#appShell.control-shell #juegosView .games-page-heading .section-kicker {
+  display: inline-block !important;
+  margin: 0 0 4px !important;
+  color: #607287 !important;
+  font: 700 0.73rem/1.3 Inter, "Segoe UI", sans-serif !important;
+  letter-spacing: 0.12em !important;
+}
+
+#appShell.control-shell #juegosView .games-page-heading h2 {
+  margin: 2px 0 6px !important;
+  color: #273341 !important;
+  font: 700 clamp(1.8rem, 2.6vw, 2.25rem)/1.12 Inter, "Segoe UI", sans-serif !important;
+  letter-spacing: -0.035em !important;
+}
+
+#appShell.control-shell #juegosView .games-page-heading p {
+  margin: 0 !important;
+  color: #637182 !important;
+  font: 400 0.96rem/1.5 Inter, "Segoe UI", sans-serif !important;
+}
+
+#appShell.control-shell #juegosView .games-welcome {
+  display: flex !important;
+  align-items: center !important;
+  gap: 22px !important;
+  width: 100% !important;
+  min-height: 112px !important;
+  margin: 0 0 24px !important;
+  padding: 18px 22px !important;
+  box-sizing: border-box !important;
+  border: 1px solid #dfe5eb !important;
+  border-radius: 13px !important;
+  background: #fff !important;
+  box-shadow: 0 2px 8px rgba(30, 45, 62, 0.035) !important;
+}
+
+#appShell.control-shell #juegosView .games-welcome-icon {
+  display: grid !important;
+  flex: 0 0 104px !important;
+  place-items: center !important;
+  align-self: stretch !important;
+  border-right: 1px solid #e0e5eb !important;
+  color: #657b91 !important;
+}
+
+#appShell.control-shell #juegosView .games-welcome-icon svg {
+  display: block !important;
+  width: 54px !important;
+  height: 54px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  stroke-width: 2.2 !important;
+}
+
+#appShell.control-shell #juegosView .games-welcome-copy h3 {
+  margin: 0 0 10px !important;
+  color: #354252 !important;
+  font: 650 1.15rem/1.35 Inter, "Segoe UI", sans-serif !important;
+}
+
+#appShell.control-shell #juegosView .games-availability {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 30px !important;
+  padding: 0 13px !important;
+  border-radius: 999px !important;
+  background: #647b91 !important;
+  color: #fff !important;
+  font: 600 0.78rem/1 Inter, "Segoe UI", sans-serif !important;
+}
+
+#appShell.control-shell #juegosView .games-card-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 20px !important;
+  width: 100% !important;
+}
+
+#appShell.control-shell #juegosView .games-card-grid .game-card {
+  display: grid !important;
+  grid-template-columns: 86px minmax(0, 1fr) !important;
+  grid-template-rows: minmax(150px, 1fr) auto !important;
+  align-items: stretch !important;
+  column-gap: 20px !important;
+  row-gap: 16px !important;
+  min-width: 0 !important;
+  min-height: 252px !important;
+  padding: 21px 22px 20px !important;
+  box-sizing: border-box !important;
+  border: 1px solid #dfe5eb !important;
+  border-radius: 13px !important;
+  background: #fff !important;
+  box-shadow: 0 3px 10px rgba(30, 45, 62, 0.045) !important;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease !important;
+}
+
+#appShell.control-shell #juegosView .games-card-grid .game-card:hover {
+  border-color: #c6d0db !important;
+  box-shadow: 0 9px 22px rgba(30, 45, 62, 0.085) !important;
+  transform: translateY(-2px) !important;
+}
+
+#appShell.control-shell #juegosView .games-card-grid .game-card .game-card-icon {
+  display: grid !important;
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  place-items: center !important;
+  align-self: start !important;
+  width: 86px !important;
+  height: 86px !important;
+  margin: 3px 0 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  border: 1px solid #e6ebf0 !important;
+  border-radius: 12px !important;
+  background: #f4f6f8 !important;
+  color: #344b60 !important;
+  font: 500 1rem/1 Inter, "Segoe UI", sans-serif !important;
+}
+
+#appShell.control-shell #juegosView .games-card-grid .game-card .game-card-copy {
+  display: flex !important;
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  padding: 0 !important;
+  position: relative !important;
+}
+
+#appShell.control-shell #juegosView .game-card-titleline {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+  order: 1 !important;
+}
+
+#appShell.control-shell #juegosView .games-card-grid .game-card .game-card-copy h3,
+#appShell.control-shell #juegosView .games-card-grid .game-card .title {
+  margin: 0 !important;
+  color: #2d3947 !important;
+  font: 650 1.18rem/1.25 Inter, "Segoe UI", sans-serif !important;
+  letter-spacing: -0.02em !important;
+}
+
+#appShell.control-shell #juegosView .games-card-grid .game-card .game-card-kicker {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 24px !important;
+  padding: 0 10px !important;
+  border-radius: 999px !important;
+  background: #edf1f4 !important;
+  color: #526274 !important;
+  font: 650 0.65rem/1 Inter, "Segoe UI", sans-serif !important;
+  letter-spacing: 0.035em !important;
+}
+
+#appShell.control-shell #juegosView .games-card-grid .game-card .description {
+  order: 2 !important;
+  margin: 15px 0 0 !important;
+  color: #667383 !important;
+  font: 400 0.88rem/1.5 Inter, "Segoe UI", sans-serif !important;
+  letter-spacing: 0 !important;
+}
+
+/* La puntuación se conserva en el DOM para el hook existente, pero la propuesta aprobada no la muestra. */
+#appShell.control-shell #juegosView .games-card-grid .game-card .game-card-score {
+  display: none !important;
+}
+
+#appShell.control-shell #juegosView .games-card-grid .game-card .game-card-action,
+#appShell.control-shell #juegosView .games-card-grid .game-card .btn-play {
+  display: inline-flex !important;
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  padding: 10px 16px !important;
+  border: 1px solid #293746 !important;
+  border-radius: 7px !important;
+  background: #293746 !important;
+  box-shadow: none !important;
+  color: #fff !important;
+  font: 600 0.86rem/1 Inter, "Segoe UI", sans-serif !important;
+  cursor: pointer !important;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease !important;
+}
+
+#appShell.control-shell #juegosView .games-card-grid .game-card .game-card-action:hover,
+#appShell.control-shell #juegosView .games-card-grid .game-card .btn-play:hover {
+  border-color: #1f2b37 !important;
+  background: #1f2b37 !important;
+  box-shadow: none !important;
+}
+
+#appShell.control-shell #juegosView .games-card-grid .game-card .btn-play:focus-visible,
+#appShell.control-shell #juegosView .games-card-grid .game-card .game-card-action:focus-visible,
+#appShell.control-shell #juegosView .game-stage-back:focus-visible {
+  outline: 3px solid rgba(100, 123, 145, 0.4) !important;
+  outline-offset: 2px !important;
+}
+
+#appShell.control-shell #juegosView .game-mini-cards {
+  position: relative !important;
+  display: block !important;
+  width: 60px !important;
+  height: 60px !important;
+}
+
+#appShell.control-shell #juegosView .game-mini-card {
+  position: absolute !important;
+  top: 8px !important;
+  left: 5px !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 34px !important;
+  height: 46px !important;
+  border: 1px solid #cad3dc !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+  color: #354a60 !important;
+  font: 600 1.3rem/1 Inter, "Segoe UI", sans-serif !important;
+  box-shadow: 0 2px 5px rgba(28, 43, 59, 0.1) !important;
+  transform: rotate(-10deg) !important;
+}
+
+#appShell.control-shell #juegosView .game-mini-card.game-mini-card-red {
+  top: 5px !important;
+  left: 22px !important;
+  color: #b75355 !important;
+  transform: rotate(9deg) !important;
+}
+
+#appShell.control-shell #juegosView .game-sudoku-art,
+#appShell.control-shell #juegosView .game-mines-art {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  grid-template-rows: repeat(3, 1fr) !important;
+  width: 58px !important;
+  height: 58px !important;
+  overflow: hidden !important;
+  border: 2px solid #3d5369 !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+}
+
+#appShell.control-shell #juegosView .game-sudoku-art span,
+#appShell.control-shell #juegosView .game-mines-art span {
+  display: grid !important;
+  place-items: center !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  border-right: 1px solid #d5dde5 !important;
+  border-bottom: 1px solid #d5dde5 !important;
+  color: #40566b !important;
+  font: 600 0.77rem/1 Inter, "Segoe UI", sans-serif !important;
+}
+
+#appShell.control-shell #juegosView .game-sudoku-art span:nth-child(3n),
+#appShell.control-shell #juegosView .game-mines-art span:nth-child(3n) {
+  border-right: 0 !important;
+}
+
+#appShell.control-shell #juegosView .game-sudoku-art span:nth-child(n+7),
+#appShell.control-shell #juegosView .game-mines-art span:nth-child(n+7) {
+  border-bottom: 0 !important;
+}
+
+#appShell.control-shell #juegosView .game-mines-art span.mine-tile {
+  background: #e5eaf0 !important;
+  color: #42566b !important;
+  font-size: 0.9rem !important;
+}
+
+#appShell.control-shell #juegosView .game-aval-art {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  grid-template-rows: repeat(2, 1fr) !important;
+  gap: 4px !important;
+  width: 60px !important;
+  height: 60px !important;
+}
+
+#appShell.control-shell #juegosView .game-aval-art span {
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 6px !important;
+  background: #dfe7ef !important;
+  color: #455d75 !important;
+  font: 700 1.15rem/1 Inter, "Segoe UI", sans-serif !important;
+}
+
+#appShell.control-shell #juegosView .game-run-art {
+  display: grid !important;
+  place-items: center !important;
+  width: 62px !important;
+  height: 62px !important;
+  color: #40566d !important;
+  font-size: 2.65rem !important;
+}
+
+#appShell.control-shell #juegosView .game-stage {
+  width: 100% !important;
+  margin-top: 0 !important;
+  border: 1px solid #dfe5eb !important;
+  border-radius: 13px !important;
+  background: #fff !important;
+  box-shadow: 0 6px 20px rgba(30, 45, 62, 0.07) !important;
+}
+
+#appShell.control-shell #juegosView .game-stage-toolbar {
+  border-bottom: 1px solid #e2e7ed !important;
+  background: #fff !important;
+  color: #2d3947 !important;
+}
+
+#appShell.control-shell #juegosView .game-stage-back {
+  border-color: #d5dde5 !important;
+  background: #f2f4f6 !important;
+  color: #334457 !important;
+}
+
+#appShell.control-shell #juegosView .game-stage-back:hover {
+  border-color: #c4ced8 !important;
+  background: #e8edf1 !important;
+  color: #273746 !important;
+}
+
+@media (max-width: 980px) {
+  #appShell.control-shell #juegosView .games-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 680px) {
+  #appShell.control-shell #juegosView .games-page-heading {
+    margin-bottom: 17px !important;
+  }
+
+  #appShell.control-shell #juegosView .games-welcome {
+    min-height: 94px !important;
+    gap: 14px !important;
+    margin-bottom: 18px !important;
+    padding: 14px !important;
+  }
+
+  #appShell.control-shell #juegosView .games-welcome-icon {
+    flex-basis: 62px !important;
+  }
+
+  #appShell.control-shell #juegosView .games-welcome-icon svg {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  #appShell.control-shell #juegosView .games-welcome-copy h3 {
+    font-size: 0.98rem !important;
+  }
+
+  #appShell.control-shell #juegosView .games-card-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 14px !important;
+  }
+
+  #appShell.control-shell #juegosView .games-card-grid .game-card {
+    grid-template-columns: 68px minmax(0, 1fr) !important;
+    grid-template-rows: minmax(112px, 1fr) auto !important;
+    column-gap: 14px !important;
+    row-gap: 13px !important;
+    min-height: 206px !important;
+    padding: 16px !important;
+  }
+
+  #appShell.control-shell #juegosView .games-card-grid .game-card .game-card-icon {
+    width: 68px !important;
+    height: 68px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #appShell.control-shell #juegosView .games-card-grid .game-card,
+  #appShell.control-shell #juegosView .games-card-grid .game-card .btn-play {
+    transition: none !important;
+  }
+}
