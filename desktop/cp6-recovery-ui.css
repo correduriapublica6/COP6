@@ -269,9 +269,96 @@ body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace { min
 body.cp6-redesign #appShell.control-shell.cp6-approved-ui .v2-topbar { min-height: 44px !important; margin: 0 0 12px !important; }
 body.cp6-redesign #appShell.control-shell.cp6-approved-ui .workspace-header.v2-legacy-heading { margin: 0 0 16px !important; }
 body.cp6-redesign #appShell.control-shell.cp6-approved-ui #perfilView.cp6-workspace-profile { position: relative !important; inset: auto !important; transform: none !important; margin: 0 !important; padding: 0 !important; }
+/* Home aprobado: neutraliza la cuadrícula histórica 360px + 1fr y vuelve a una
+   sola columna: filtros, rendimiento, siete métricas y listado. */
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #perfilView.profile-root-light {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: calc(100vh - 70px) !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+  background: transparent !important;
+  color: #172536 !important;
+}
 body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-filters { display: flex !important; align-items: center !important; flex-wrap: wrap !important; gap: 10px 16px !important; margin: 0 0 14px !important; }
 body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-filter { display: inline-flex !important; align-items: center !important; gap: 8px !important; color: #53677b !important; font-size: 11px !important; font-weight: 700 !important; }
 body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-filter select { min-height: 34px !important; width: auto !important; min-width: 150px !important; padding: 0 30px 0 10px !important; border-radius: 8px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui #profilePerformanceCard {
+  width: 100% !important;
+  margin: 0 0 14px !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+  border: 1px solid #dce2e8 !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  box-shadow: 0 5px 16px rgba(31,41,55,.06) !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-blocks {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(150px, .55fr) !important;
+  align-items: stretch !important;
+  gap: 14px !important;
+  width: 100% !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-global {
+  min-width: 0 !important;
+  min-height: 96px !important;
+  box-sizing: border-box !important;
+  padding: 15px !important;
+  border: 1px solid #e3e9ef !important;
+  border-radius: 11px !important;
+  background: #f8fafc !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading { display: flex !important; align-items: center !important; gap: 10px !important; min-width: 0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading > div { min-width: 0 !important; flex: 1 1 auto !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading b,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading small { display: block !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading b { color: #26384a !important; font-size: 12px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading small { margin-top: 4px !important; color: #718096 !important; font-size: 10px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-block-heading > strong { flex: 0 0 auto !important; color: #173f58 !important; font-size: 28px !important; line-height: 1 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-global { display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important; text-align: center !important; background: #173f58 !important; color: #fff !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-global span { font-size: 11px !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-global strong { margin-top: 6px !important; color: #fff !important; font-size: 30px !important; line-height: 1 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-bar { height: 5px !important; margin-top: 14px !important; overflow: hidden !important; border-radius: 999px !important; background: #e5ebf1 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-bar i { display: block !important; height: 100% !important; border-radius: inherit !important; background: #2f8f63 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpis {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  gap: 9px !important;
+  width: 100% !important;
+  margin: 0 0 14px !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi {
+  display: flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  min-height: 88px !important;
+  box-sizing: border-box !important;
+  padding: 13px 12px !important;
+  border: 1px solid transparent !important;
+  border-radius: 10px !important;
+  color: #fff !important;
+  text-align: left !important;
+  box-shadow: 0 5px 12px rgba(31,41,55,.08) !important;
+}
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi > span { display: block !important; min-width: 0 !important; width: 100% !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi b,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi strong,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi small { display: block !important; color: inherit !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi b { min-height: 28px !important; font-size: 11px !important; font-weight: 600 !important; line-height: 1.25 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi strong { margin-top: 7px !important; font-size: 25px !important; line-height: 1 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi small { margin-top: 7px !important; font-size: 9px !important; white-space: nowrap !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-total { background: #2f6fad !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-completed,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-paid { background: #2f8f63 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-pending,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-delivery-pending { background: #f2b705 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-delivered-unpaid,
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpi.is-expired { background: #c64b4b !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-lower-grid { display: block !important; width: 100% !important; margin: 0 !important; }
+body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-appraisals-card { width: 100% !important; min-width: 0 !important; box-sizing: border-box !important; }
 @media (max-width: 900px) {
   body.cp6-redesign .login-screen { grid-template-columns: 1fr !important; }
   body.cp6-redesign .login-screen .login-visual { display: none !important; }
@@ -287,6 +374,8 @@ body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-filter 
   body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-sidebar-tools { flex-wrap: wrap !important; gap: 5px !important; }
   body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-sidebar-tools .cp6-icon-btn { width: 28px !important; height: 28px !important; flex-basis: 28px !important; }
   body.cp6-redesign #appShell.control-shell.cp6-approved-ui > .app-workspace { padding: 18px 16px 28px !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-performance-blocks { grid-template-columns: 1fr !important; }
+  body.cp6-redesign #appShell.control-shell.cp6-approved-ui .cp6-workspace-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 }
 @media (max-width: 560px) {
   body.cp6-redesign .cp6-applicant-login-card { padding: 24px 20px !important; }
