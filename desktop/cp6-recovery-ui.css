@@ -15,6 +15,22 @@
 body.cp6-redesign .login-screen[hidden],
 body.cp6-redesign #appShell[hidden] { display: none !important; }
 
+/* La portada de acceso debe ocupar siempre la ventana visible, aunque el navegador
+   haya conservado una posición de scroll anterior. */
+html:has(body.cp6-redesign #loginScreen:not([hidden]):not(.applicant-dashboard-active)),
+body.cp6-redesign:has(#loginScreen:not([hidden]):not(.applicant-dashboard-active)) {
+  overflow: hidden !important;
+}
+body.cp6-redesign #loginScreen:not([hidden]):not(.applicant-dashboard-active) {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 100 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 0 !important;
+  overflow: auto !important;
+}
+
 /* Login público: campos visibles, compactos y alineados. */
 body.cp6-redesign .login-screen {
   min-height: 100vh !important;
