@@ -183,7 +183,8 @@
   function valuadores() {
     const users = window.ControlAvaluosDesktop?.allUsers?.() || [];
     const remote = window.__controlRemoteUsers || [];
-    const names = [...new Set([...users, ...remote.filter((user) => user.role === "valuador").map((user) => user.name)])].filter((name) => /Ivan|Juan|Gabriel|Cesar|Diana|Caridad|Francisco|Emmanuel/i.test(name)); return names.sort((a, b) => { const priority = (name) => /juan manuel barrera mart[ií]nez/i.test(name) ? 0 : 1; return priority(a) - priority(b) || a.localeCompare(b, "es"); });
+    const fixed = ["Manuel Alejandro Barrera Rivera", "Erik Galvan"];
+    const names = [...new Set([...fixed, ...users, ...remote.filter((user) => user.role === "valuador").map((user) => user.name)])].filter((name) => /Ivan|Juan|Gabriel|Cesar|Diana|Caridad|Francisco|Emmanuel|Manuel Alejandro Barrera Rivera|Erik Galvan/i.test(name)); return names.sort((a, b) => { const priority = (name) => /juan manuel barrera mart[ií]nez/i.test(name) ? 0 : 1; return priority(a) - priority(b) || a.localeCompare(b, "es"); });
   }
 
   async function fillAdvisors() {
@@ -191,7 +192,8 @@
     if (!select) return;
     let names = valuadores();
     try { const state = await api("/state"); window.__controlRemoteUsers = state.users || []; names = [...new Set((state.users || []).filter((user) => user.role === "valuador").map((user) => user.name).concat(names))].sort((a, b) => (/juan manuel barrera mart[ií]nez/i.test(a) ? 0 : 1) - (/juan manuel barrera mart[ií]nez/i.test(b) ? 0 : 1) || a.localeCompare(b, "es")); } catch {}
-    select.innerHTML = `<option value="">Selecciona un valuador</option>${names.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("")}`;
+    const phones = { "Manuel Alejandro Barrera Rivera": "5513092858", "Erik Galvan": "8717279489" };
+    select.innerHTML = `<option value="">Selecciona un valuador</option>${names.map((name) => { const phone = phones[name] ? ` · Tel. ${phones[name]}` : ""; return `<option value="${escapeHtml(name)}">${escapeHtml(name + phone)}</option>`; }).join("")}`;
   }
   function notaryOptions(selected = "") {
     const list = Array.isArray(window.__controlNotarias) ? window.__controlNotarias : [];
