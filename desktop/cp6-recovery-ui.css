@@ -29,13 +29,16 @@ body.cp6-redesign .login-screen .login-visual {
 body.cp6-redesign .login-screen .public-entry-panel {
   min-width: 0 !important;
   min-height: 100vh !important;
-  display: grid !important;
-  place-items: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
   padding: 40px 28px !important;
   background: #f8fafc !important;
 }
 body.cp6-redesign .login-screen .public-entry-content {
   width: min(100%, 430px) !important;
+  flex: 0 0 auto !important;
 }
 body.cp6-redesign .cp6-applicant-login-card {
   width: 100% !important;
@@ -130,7 +133,17 @@ body.cp6-redesign .cp6-login-register {
   cursor: pointer !important;
 }
 body.cp6-redesign .cp6-login-register strong { color: var(--cp6-blue) !important; font-weight: 700 !important; }
-body.cp6-redesign .public-entry-internal { width: min(100%, 430px) !important; margin: 15px auto 0 !important; text-align: center !important; }
+body.cp6-redesign .public-entry-internal {
+  position: static !important;
+  inset: auto !important;
+  width: min(100%, 430px) !important;
+  margin: 18px auto 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  justify-content: center !important;
+  text-align: center !important;
+  flex: 0 0 auto !important;
+}
 body.cp6-redesign .internal-access-button { color: #627487 !important; font-size: 12px !important; font-weight: 600 !important; }
 
 /* Acceso administrativo: tamaño estable y campos sin doble texto. */
