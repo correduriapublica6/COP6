@@ -753,3 +753,322 @@ body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-reque
     right: 12px !important;
   }
 }
+
+
+/* v16: la página 1 vuelve al mismo patrón de popup que los pasos 2–5. */
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 {
+  position: fixed;
+  inset: 0;
+  box-sizing: border-box;
+  width: min(1000px, calc(100vw - 36px));
+  height: min(900px, 92dvh);
+  min-height: 0;
+  max-width: 1000px;
+  max-height: 92dvh;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: 0 26px 80px rgba(15, 23, 42, .30);
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1::backdrop {
+  background: rgba(12, 22, 38, .55);
+  backdrop-filter: blur(2px);
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 > div {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  height: min(900px, 92dvh);
+  min-height: 0;
+  max-height: 92dvh;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #dbe3ec;
+  border-radius: 18px;
+  background: #f3f4f6;
+  box-shadow: none;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-brandbar {
+  min-height: 64px;
+  flex: 0 0 64px;
+  padding: 8px 25px;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-brand-mark {
+  width: 31px;
+  height: 31px;
+  flex-basis: 31px;
+  gap: 3px;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-brand-copy strong { font-size: 13px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-brand-copy small { font-size: 9px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-brand-actions { padding-right: 0; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-my-requests { font-size: 11px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-close {
+  position: static !important;
+  width: 26px !important;
+  height: 26px !important;
+  min-width: 26px !important;
+  flex: 0 0 26px;
+  padding: 0 !important;
+  font-size: 15px !important;
+  opacity: .82;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page-intro {
+  width: min(calc(100% - 48px), 920px);
+  padding: 20px 0 15px;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page-intro h1 { font-size: 25px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page-intro p { font-size: 12px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-steps {
+  width: min(calc(100% - 48px), 920px);
+  min-height: 62px;
+  flex: 0 0 62px !important;
+  margin: 0 auto 12px;
+  padding: 9px 14px !important;
+  border-radius: 12px;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-steps > div { gap: 5px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .step-tab-number { width: 32px; height: 32px; flex-basis: 32px; font-size: 12px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .step-tab-label { font-size: 9px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #publicRequestForm {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  align-self: stretch;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #publicRequestForm > .flex-1.overflow-y-auto {
+  box-sizing: border-box;
+  width: 100% !important;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0 24px 12px !important;
+  background: transparent;
+  overscroll-behavior: contain;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #step-content-1 {
+  box-sizing: border-box;
+  width: min(100%, 920px);
+  min-height: 0 !important;
+  flex: 0 0 auto !important;
+  gap: 0 !important;
+  margin: 0 auto;
+  padding: 0;
+  border: 1px solid #dfe2e4;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 5px 18px rgba(25, 38, 50, .045);
+  overflow: hidden;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #step-content-1 > .cp6-request-page1-heading {
+  grid-template-columns: 39px minmax(0, 1fr);
+  gap: 13px;
+  padding: 17px 22px 15px;
+  border-bottom: 1px solid #e7eaec;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-heading-icon {
+  width: 39px;
+  height: 39px;
+  border-radius: 11px;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-heading-icon svg { width: 20px; height: 20px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page1-heading h2 { font-size: 17px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page1-heading p { font-size: 10px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #step-content-1 > .cp6-request-page1-fields {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 18px;
+  padding: 15px 22px 0 !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-contact-title { font-size: 12px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #step-content-1 :is(#solicitante_nombre, #solicitante_telefono, #solicitante_correo, #inmueble_propietario, #publicRequestAdvisor) {
+  min-height: 44px !important;
+  height: 44px !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page1-fields > .space-y-1\.5 > label { font-size: 10px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page1-fields :is(input, select),
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page1-fields input::placeholder,
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page1-fields .custom-select-trigger { font-size: 12px !important; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .request-privacy-box {
+  min-height: 0;
+  margin: 16px 22px 18px;
+  padding: 12px 15px 11px;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .request-privacy-box h3 { font-size: 12px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .request-privacy-box > p { font-size: 10px; line-height: 1.5; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .request-privacy-box .request-consent-label {
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 9px;
+  padding: 9px 10px;
+  font-size: 10px;
+  line-height: 1.4;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .request-privacy-box input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  min-width: 17px;
+  min-height: 17px;
+  flex-basis: 17px;
+  margin-top: 1px;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-consent-hint { margin: 5px 0 0 27px; font-size: 9px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-footer {
+  display: flex;
+  min-height: 66px;
+  flex: 0 0 66px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 24px;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-step-hint { margin-right: auto; font-size: 9px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #btn-prev,
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #btn-next { min-width: 124px; min-height: 38px; height: 38px; font-size: 11px; }
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page-signature { display: none !important; }
+
+/* Popup compacto en móvil: conserva el modal, el fondo atenuado y el footer visible. */
+@media (max-width: 740px) {
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 {
+    inset: 0;
+    width: min(620px, calc(100vw - 24px));
+    max-width: 620px;
+    height: min(880px, 92dvh);
+    min-height: 0;
+    max-height: 92dvh;
+    margin: auto;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1::backdrop { background: rgba(12, 22, 38, .58); backdrop-filter: blur(2px); }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 > div {
+    width: 100%;
+    height: min(880px, 92dvh);
+    min-height: 0;
+    max-height: 92dvh;
+    border: 1px solid #dbe3ec;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-brandbar { min-height: 55px; flex-basis: 55px; padding: 6px 12px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-brand-mark { width: 28px; height: 28px; flex-basis: 28px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-brand-copy strong { font-size: 11px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-brand-copy small { font-size: 8px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-brand-actions { padding-right: 0; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-my-requests,
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-user-pill { display: none; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-close { width: 24px !important; height: 24px !important; flex-basis: 24px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page-intro { width: calc(100% - 24px); padding: 13px 0 10px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page-eyebrow { font-size: 8px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page-intro h1 { margin-top: 2px; font-size: 20px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page-intro p { margin-top: 4px; font-size: 10px; line-height: 1.4; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-steps { width: calc(100% - 20px); min-height: 48px; flex-basis: 48px !important; margin: 0 auto 9px; padding: 7px 9px !important; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-steps > div { display: none !important; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-mobile-stepper { display: block !important; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-mobile-stepper-head { margin-bottom: 6px; font-size: 9px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-mobile-segments { gap: 4px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-mobile-segments i { height: 3px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #publicRequestForm { min-height: 0; flex: 1 1 auto; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #publicRequestForm > .flex-1.overflow-y-auto { padding: 0 10px 10px !important; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #step-content-1 { width: 100%; border-radius: 12px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #step-content-1 > .cp6-request-page1-heading { grid-template-columns: 30px minmax(0, 1fr); gap: 9px; padding: 11px 12px 9px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-heading-icon { width: 30px; height: 30px; border-radius: 8px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-heading-icon svg { width: 16px; height: 16px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page1-heading h2 { font-size: 13px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page1-heading p { margin-top: 2px; font-size: 8px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #step-content-1 > .cp6-request-page1-fields { grid-template-columns: 1fr; gap: 8px; padding: 10px 12px 0 !important; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-contact-title { font-size: 10px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page1-fields > .space-y-1\.5 > label { font-size: 9px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #step-content-1 :is(#solicitante_nombre, #solicitante_telefono, #solicitante_correo, #inmueble_propietario, #publicRequestAdvisor) { min-height: 38px !important; height: 38px !important; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page1-fields :is(input, select),
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page1-fields input::placeholder,
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page1-fields .custom-select-trigger { font-size: 11px !important; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page1-fields .cp6-request-field-hint { margin-top: 3px; font-size: 8px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .request-privacy-box { min-height: 0; margin: 10px 12px 11px; padding: 9px 10px 8px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-privacy-heading { gap: 7px; margin-bottom: 4px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .request-privacy-box h3 { font-size: 10px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .request-privacy-box > p { font-size: 8px; line-height: 1.4; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .request-privacy-box .request-consent-label { gap: 7px; margin-top: 7px; padding: 7px; font-size: 8px; line-height: 1.3; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .request-privacy-box input[type="checkbox"] { width: 16px; height: 16px; min-width: 16px; min-height: 16px; flex-basis: 16px; margin-top: 1px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-consent-hint { margin: 4px 0 0 23px; font-size: 8px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-footer { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; min-height: 77px; flex-basis: 77px; padding: 6px 12px 7px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-step-hint { grid-column: 1 / -1; margin: 0; font-size: 8px; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #btn-prev,
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #btn-next { width: 100%; min-width: 0; min-height: 33px; height: 33px; font-size: 9px; }
+}
+@media (max-width: 360px) {
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 { width: calc(100vw - 16px); height: min(880px, 94dvh); max-height: 94dvh; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 > div { height: min(880px, 94dvh); max-height: 94dvh; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page-intro { width: calc(100% - 20px); }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-steps { width: calc(100% - 16px); }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #publicRequestForm > .flex-1.overflow-y-auto { padding-inline: 8px !important; }
+}
+
+/* Página 2: todos los íconos usan grafito; solo la categoría elegida se resalta. */
+body.cp6-redesign #publicRequestDialog.public-request-dialog .category-btn {
+  position: relative;
+  min-height: 88px;
+  border: 1px solid #d9dfe3 !important;
+  border-radius: 11px;
+  background: #fff !important;
+  color: #5e6a73 !important;
+  box-shadow: none;
+  transform: none;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .category-btn:hover {
+  border-color: #aeb8bf !important;
+  background: #f7f8f9 !important;
+  color: #3d4952 !important;
+  transform: translateY(-1px);
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .category-btn [data-lucide] {
+  color: #697781 !important;
+  stroke: #697781 !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .category-btn span {
+  color: #505c65 !important;
+  font-weight: 650;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .category-btn:is(.border-blue-500, .border-emerald-500, .border-amber-500, .border-violet-500, .border-rose-500) {
+  border: 1.5px solid #48545d !important;
+  background: #f0f2f3 !important;
+  color: #29343f !important;
+  box-shadow: 0 0 0 2px rgba(41, 52, 63, .07);
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .category-btn:is(.border-blue-500, .border-emerald-500, .border-amber-500, .border-violet-500, .border-rose-500) [data-lucide] {
+  color: #29343f !important;
+  stroke: #29343f !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .category-btn:is(.border-blue-500, .border-emerald-500, .border-amber-500, .border-violet-500, .border-rose-500) span {
+  color: #29343f !important;
+  font-weight: 800;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .category-btn:is(.border-blue-500, .border-emerald-500, .border-amber-500, .border-violet-500, .border-rose-500)::after {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  display: grid;
+  width: 17px;
+  height: 17px;
+  place-items: center;
+  border-radius: 50%;
+  background: #29343f;
+  color: #fff;
+  content: "✓";
+  font: 700 10px/1 Inter, sans-serif;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .category-btn:focus-visible {
+  outline: 2px solid #65717c;
+  outline-offset: 2px;
+}
+@media (max-width: 740px) {
+  body.cp6-redesign #publicRequestDialog.public-request-dialog .category-btn { min-height: 70px; }
+}
