@@ -26,7 +26,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
-<link href="cp6-foundation.css?v=final-20261024" rel="stylesheet"/><link href="cp6-system.css?v=final-20261024" rel="stylesheet"/><link href="cp6-components.css?v=request-prefill-safe-20261105-03" rel="stylesheet"/><link href="cp6-final.css?v=home-scroll-reset-20261124-01" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link rel="stylesheet" href="cp6-approved.css?v=login-grafito-admin-20261121-05"/><link rel="stylesheet" href="cp6-tables-quotes-style.css?v=reception-final-dot-small-20261107-04"/>
+<link href="cp6-foundation.css?v=solicitud-paso5-review-20261127-01" rel="stylesheet"/><link href="cp6-system.css?v=final-20261024" rel="stylesheet"/><link href="cp6-components.css?v=request-prefill-safe-20261105-03" rel="stylesheet"/><link href="cp6-final.css?v=home-scroll-reset-20261124-01" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link rel="stylesheet" href="cp6-approved.css?v=login-grafito-admin-20261121-05"/><link rel="stylesheet" href="cp6-tables-quotes-style.css?v=reception-final-dot-small-20261107-04"/>
 <link rel="stylesheet" href="cp6-request-cards.css?v=concluded-header-graphite-20261124-01"/><link rel="stylesheet" href="cp6-reception-form-proposal.css?v=reception-form-v7-20261122-01"/><link rel="stylesheet" href="cp6-recovery-ui.css?v=users-integrated-layout-20261126-01"/><link rel="stylesheet" href="cp6-games-proposal.css?v=games-header-clean-20261126-01"/><link rel="stylesheet" href="cp6-appraisal-menu.css?v=modules-grid-20261126-01"/></head>
 <body class="cp6-redesign" data-server-status="checking">
 <section aria-label="Inicio de sesión" class="login-screen" id="loginScreen"><aside aria-hidden="false" class="login-visual left-panel" style="position: relative; overflow: hidden;"><div class="left-panel-content"><div class="login-visual-logo"><div class="v2-login-logo"><img class="cp6-brand-logo-image" src="assets/cp6-logo-blanco.png" alt="Logotipo Correduría Pública 6" /><div><strong>Correduría Pública 6</strong><small>Plaza Coahuila</small></div></div></div><div class="login-visual-copy" id="loginVisualBrand"><span class="v2-login-eyebrow">PRECISIÓN · CONFIANZA · CONTROL</span><h2>Una nueva forma<br/>de gestionar<br/><em>tus avalúos.</em></h2><p>Expedientes, solicitudes y seguimiento. La operación de tu correduría, conectada en un solo lugar.</p></div><section class="applicant-visual-panel" hidden="" id="applicantVisualPanel"><span class="section-kicker">SEGUIMIENTO PERSONAL</span><h2>Mis solicitudes</h2><div class="request-table-wrap" id="applicantVisualRequestsTable"></div><div class="applicant-visual-actions"><button class="primary-button" id="applicantVisualNewRequestButton" type="button">+ Solicitar servicio</button><button class="secondary-button" id="applicantVisualProfileButton" type="button">Editar perfil</button></div></section><div class="login-visual-holder">Titular Lic. Juan Manuel Barrera Martinez</div><div class="login-visual-footer">Av. Morelos 854 Oriente, Colonia Centro</div></div></aside>
@@ -402,83 +402,51 @@
 </div>
 </div>
 </div>
-<!-- ================= PASO 5: RESUMEN Y CONFIRMACIÓN ================= -->
-<div class="step-content hidden space-y-5" id="step-content-5">
-<div class="border-b border-slate-200 pb-3">
-<h2 class="text-base font-bold text-slate-900">Resumen y Observaciones</h2>
-<p class="text-xs text-slate-500">Verifique detenidamente la información capturada y agregue observaciones si es necesario antes de enviar el registro.</p>
+<!-- ================= PASO 5: REVISIÓN Y ENVÍO ================= -->
+<div class="step-content hidden space-y-4 request-review-page" id="step-content-5">
+<div class="request-review-intro">
+<h2>Revisa tu solicitud</h2>
+<p>Confirma la información y los documentos antes de enviar. Puedes editar cualquier sección.</p>
 </div>
-<!-- Contenedor Ficha Resumen -->
-<div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-xs">
-<div>
-<span class="text-slate-400 block font-medium">Solicitante:</span>
-<span class="font-bold text-slate-900 text-sm" id="sum-solicitante">-</span>
+<section class="request-review-section" aria-labelledby="requestReviewApplicantTitle">
+<header class="request-review-heading"><span class="request-review-icon"><i data-lucide="user-round" aria-hidden="true"></i></span><div><h3 id="requestReviewApplicantTitle">Datos del solicitante</h3><p>Información de contacto y asignación</p></div><button class="request-review-edit" type="button" data-request-review-step="1" aria-label="Editar datos del solicitante"><i data-lucide="pencil" aria-hidden="true"></i>Editar</button></header>
+<div class="request-review-grid">
+<div class="request-review-field"><span class="request-review-label">Solicitante</span><strong class="request-review-value" id="sum-solicitante">-</strong></div>
+<div class="request-review-field"><span class="request-review-label">Teléfono</span><strong class="request-review-value" id="sum-telefono">-</strong></div>
+<div class="request-review-field"><span class="request-review-label">Correo electrónico</span><strong class="request-review-value" id="sum-correo">-</strong></div>
+<div class="request-review-field hidden" id="sum-inmueble-propietario-row"><span class="request-review-label">Propietario(s)</span><strong class="request-review-value" id="sum-inmueble-propietario">-</strong></div>
+<div class="request-review-field"><span class="request-review-label">Valuador asignado</span><strong class="request-review-value" id="sum-valuador">-</strong></div>
 </div>
-<div>
-<span class="text-slate-400 block font-medium">Teléfono:</span>
-<span class="font-semibold text-slate-800" id="sum-telefono">-</span>
+</section>
+<section class="request-review-section" aria-labelledby="requestReviewAssetTitle">
+<header class="request-review-heading"><span class="request-review-icon"><i data-lucide="clipboard-list" aria-hidden="true"></i></span><div><h3 id="requestReviewAssetTitle">Bien a valuar</h3><p>Categoría y datos capturados para el avalúo</p></div><button class="request-review-edit" type="button" data-request-review-step="2" aria-label="Editar datos del bien a valuar"><i data-lucide="pencil" aria-hidden="true"></i>Editar</button></header>
+<div class="request-review-grid">
+<div class="request-review-field"><span class="request-review-label">Categoría principal</span><strong class="request-review-value request-review-category" id="sum-categoria">-</strong></div>
+<div class="request-review-field"><span class="request-review-label">Tipo de avalúo</span><strong class="request-review-value" id="sum-tipo-avaluo">-</strong></div>
+<div class="request-review-field hidden" id="sum-proposito-row" hidden><span class="request-review-label">Propósito del avalúo</span><strong class="request-review-value" id="sum-proposito">-</strong></div>
 </div>
-<div>
-<span class="text-slate-400 block font-medium">Correo electrónico:</span>
-<span class="font-semibold text-slate-800" id="sum-correo">-</span>
+<div class="request-review-specific-grid hidden" id="requestReviewSpecificFields" hidden></div>
+<div class="request-review-description"><span class="request-review-label">Descripción detallada del o los bienes</span><p class="request-review-description-value" id="sum-descripcion">-</p></div>
+<div class="request-review-operation hidden" id="sum-valor-operacion-container" hidden><span class="request-review-label">Valor de operación (solo inmuebles)</span><strong id="sum-valor-num">$0.00 MXN</strong><small id="sum-valor-letras">-</small></div>
+</section>
+<section class="request-review-section" aria-labelledby="requestReviewVisitTitle">
+<header class="request-review-heading"><span class="request-review-icon"><i data-lucide="map-pin" aria-hidden="true"></i></span><div><h3 id="requestReviewVisitTitle">Visita y ubicación</h3><p>Contacto y dirección para realizar la inspección</p></div><button class="request-review-edit" type="button" data-request-review-step="3" aria-label="Editar datos de visita y ubicación"><i data-lucide="pencil" aria-hidden="true"></i>Editar</button></header>
+<div class="request-review-grid">
+<div class="request-review-field"><span class="request-review-label">Contacto para visita</span><strong class="request-review-value" id="sum-contacto-visita">-</strong></div>
+<div class="request-review-field"><span class="request-review-label">Teléfono de visita</span><strong class="request-review-value" id="sum-telefono-visita">-</strong></div>
+<div class="request-review-field request-review-field-wide"><span class="request-review-label">Ubicación / Dirección</span><strong class="request-review-value" id="sum-direccion">-</strong></div>
 </div>
-<div>
-<span class="text-slate-400 block font-medium">Valuador asignado:</span>
-<span class="font-semibold text-slate-800" id="sum-valuador">-</span>
-</div>
-<div>
-<span class="text-slate-400 block font-medium">Categoría principal:</span>
-<span class="font-bold text-brand-600 uppercase tracking-wide" id="sum-categoria">-</span>
-</div>
-<div>
-<span class="text-slate-400 block font-medium">Tipo de avalúo:</span>
-<span class="font-semibold text-slate-800" id="sum-tipo-avaluo">-</span>
-</div>
-<!-- Fila condicional de Propósito -->
-<div class="hidden" id="sum-proposito-row">
-<span class="text-slate-400 block font-medium">Propósito del avalúo:</span>
-<span class="font-semibold text-slate-800" id="sum-proposito">-</span>
-</div>
-<!-- Filas condicionales exclusivas para Inmuebles en el Resumen -->
-<div class="hidden" id="sum-inmueble-enajenantes-row">
-<span class="text-slate-400 block font-medium">Número de enajenantes:</span>
-<span class="font-semibold text-slate-800" id="sum-inmueble-enajenantes">-</span>
-</div>
-<div class="hidden" id="sum-inmueble-propietario-row">
-<span class="text-slate-400 block font-medium">Propietario:</span>
-<span class="font-semibold text-slate-800" id="sum-inmueble-propietario">-</span>
-</div>
-<div>
-<span class="text-slate-400 block font-medium">Contacto para visita:</span>
-<span class="font-semibold text-slate-800" id="sum-contacto-visita">-</span>
-</div>
-<div>
-<span class="text-slate-400 block font-medium">Teléfono de visita:</span>
-<span class="font-semibold text-slate-800" id="sum-telefono-visita">-</span>
-</div>
-<div class="col-span-full">
-<span class="text-slate-400 block font-medium">Ubicación / Dirección:</span>
-<span class="font-semibold text-slate-800 block leading-relaxed" id="sum-direccion">-</span>
-</div>
-<div class="col-span-full">
-<span class="text-slate-400 block font-medium">Descripción del bien:</span>
-<span class="font-medium text-slate-700 block whitespace-pre-line bg-white p-3 rounded-xl border border-slate-200 mt-1" id="sum-descripcion">-</span>
-</div>
-</div>
-<!-- VALOR DE LA OPERACIÓN (SOLO PARA INMUEBLES) -->
-<div class="border-t border-slate-200 pt-3 mt-2 flex flex-col gap-1" id="sum-valor-operacion-container">
-<span class="text-xs text-slate-500 font-bold uppercase tracking-wider block">Valor de la Operación:</span>
-<span class="text-lg font-normal text-emerald-600 block" id="sum-valor-num">$0.00 MXN</span>
-<span class="text-xs font-normal text-emerald-600 italic block" id="sum-valor-letras">-</span>
-</div>
-</div>
-<!-- Campo de Observaciones al final del resumen -->
-<div class="space-y-1.5 pt-2">
-<label class="block text-xs font-semibold text-slate-700">Observaciones o notas adicionales</label>
-<textarea class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl p-3.5 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none py-3 pl-11" id="observaciones_solicitud" name="observaciones" placeholder="Agregue cualquier indicación especial, comentarios para el valuador o detalles adicionales..." rows="1"></textarea>
-</div>
-</div>
+</section>
+<section class="request-review-section" aria-labelledby="requestReviewDocumentsTitle">
+<header class="request-review-heading"><span class="request-review-icon"><i data-lucide="file-text" aria-hidden="true"></i></span><div><h3 id="requestReviewDocumentsTitle">Antecedentes y documentos</h3><p>Archivos de apoyo · paso opcional</p></div><button class="request-review-edit" type="button" data-request-review-step="4" aria-label="Editar antecedentes y documentos"><i data-lucide="pencil" aria-hidden="true"></i>Editar</button></header>
+<div class="request-review-files-head"><span>Archivos adjuntos</span><strong id="requestReviewFileCount">Sin adjuntos</strong></div>
+<div id="requestReviewFiles" class="request-review-files"></div>
+</section>
+<section class="request-review-section request-review-observations" aria-labelledby="requestReviewObservationsTitle">
+<header class="request-review-heading"><span class="request-review-icon"><i data-lucide="message-square-text" aria-hidden="true"></i></span><div><h3 id="requestReviewObservationsTitle">Observaciones o notas adicionales</h3><p>Comentarios para el valuador (opcional)</p></div></header>
+<label class="request-review-observations-label" for="observaciones_solicitud">Si necesitas agregar una indicación, escríbela aquí.</label>
+<textarea class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl p-3.5 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none" id="observaciones_solicitud" name="observaciones" placeholder="Agrega cualquier indicación especial o detalle adicional..." rows="2"></textarea>
+</section>
 </div>
 <!-- BOTONES DE NAVEGACIÓN INFERIORES -->
 <p class="form-message mx-6 mb-2" id="publicRequestMessage" role="alert"></p>
@@ -494,8 +462,8 @@
           <i class="w-4 h-4" data-lucide="chevron-right"></i>
 </button>
 <button class="hidden px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-emerald-500/20 transition" id="publicRequestSubmit" type="submit">
-<i class="w-4 h-4" data-lucide="check-circle"></i>
-          Guardar Registro de Avalúo
+<i class="w-4 h-4" data-lucide="arrow-right"></i>
+          Enviar solicitud
         </button>
 </div>
 </form>
@@ -870,7 +838,7 @@
 <script src="mobile-pwa.js?v=final-20261024"></script>
 <script src="automotriz-form.js?v=machinery-visible-20261113-01"></script>
 <script src="mobiliario-form.js?v=final-20261024"></script>
-<script src="solicitudes-form.js?v=valuadores-contactos-20261126-01"></script>
+<script src="solicitudes-form.js?v=solicitud-paso5-review-20261127-01"></script>
 <script src="messaging.js?v=chat-clean-compose-20261110-01"></script>
 <script src="cp6-presentation.js?v=workspace-profile-clean-20261121-04"></script></body>
 </html>

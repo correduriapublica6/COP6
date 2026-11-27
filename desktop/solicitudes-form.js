@@ -284,14 +284,53 @@
     if (raw) input.value = raw.replace(/^(\d+)(\.\d{0,2})?.*$/, (_, integer, decimal = "") => `${Number(integer).toLocaleString("en-US")}${decimal}`);
   }
   function textValue(id, fallback = "-") { return String($("#" + id)?.value || "").trim() || fallback; }
+  function updateRequestReviewSpecificFields() {
+    const container = $("#requestReviewSpecificFields");
+    if (!container) return;
+    const activeBlock = Array.from(document.querySelectorAll("#publicRequestForm .cat-specific-block")).find((block) => !block.hidden && !block.classList.contains("hidden"));
+    const fields = Array.from(activeBlock?.querySelectorAll("input, select, textarea") || []).filter((field) => field.id !== "inmueble_propietario" && !["hidden", "file", "checkbox", "radio", "button", "submit"].includes(field.type));
+    const rows = fields.map((field) => {
+      const value = field.tagName === "SELECT" ? String(field.selectedOptions?.[0]?.textContent || "").trim() : String(field.value || "").trim();
+      const label = String(field.closest(".space-y-1\\.5")?.querySelector("label")?.textContent || field.name || field.id || "Dato").replace(/\s*\*\s*/g, " ").trim();
+      return value ? `<div class="request-review-field"><span class="request-review-label">${escapeHtml(label)}</span><strong class="request-review-value">${escapeHtml(value)}</strong></div>` : "";
+    }).filter(Boolean);
+    container.innerHTML = rows.join("");
+    container.hidden = !rows.length;
+    container.classList.toggle("hidden", !rows.length);
+  }
+  function updateRequestReviewFiles() {
+    const container = $("#requestReviewFiles");
+    if (!container) return;
+    const files = [...(Array.isArray(archivosExistentesEnEdicion) ? archivosExistentesEnEdicion : []), ...(Array.isArray(archivosSeleccionados) ? archivosSeleccionados : [])].filter(Boolean);
+    const count = $("#requestReviewFileCount");
+    if (count) count.textContent = files.length ? `${files.length} ${files.length === 1 ? "archivo" : "archivos"}` : "Sin adjuntos";
+    container.innerHTML = files.length ? `<ul class="request-review-file-list">${files.map((file) => {
+      const name = String(file.name || file.filename || file.originalName || file.nombre || "Archivo adjunto");
+      const size = Number(file.size || file.sizeBytes || file.tamano || 0);
+      const detail = size > 0 ? `${Math.max(1, Math.round(size / 1024))} KB` : (name.split(".").pop() || "Archivo").toUpperCase();
+      return `<li><span class="request-review-file-icon"><i data-lucide="${fileIconName({ name })}" class="w-4 h-4" aria-hidden="true"></i></span><span class="request-review-file-copy"><strong title="${escapeHtml(name)}">${escapeHtml(name)}</strong><small>${escapeHtml(detail)}</small></span><span class="request-review-file-check" aria-label="Adjunto"><i data-lucide="check" class="w-3.5 h-3.5" aria-hidden="true"></i></span></li>`;
+    }).join("")}</ul>` : `<p class="request-review-empty-files">No hay documentos adjuntos. Este paso es opcional y puedes continuar.</p>`;
+    refreshRequestIcons();
+  }
   function updateSummary() {
     ensureRequestFieldNames();
-    const values = { solicitante: textValue("solicitante_nombre"), telefono: textValue("solicitante_telefono"), correo: textValue("solicitante_correo"), valuador: textValue("publicRequestAdvisor"), tipo: textValue("publicRequestType"), tipoAvaluo: textValue("publicRequestAppraisalType"), subtipo: textValue("inmueble_subtipo"), propietario: textValue("inmueble_propietario"), contacto: textValue("contacto_visita"), telefonoVisita: textValue("telefono_visita"), direccion: textValue("direccion_visita"), descripcion: textValue("descripcion_bien"), observaciones: textValue("observaciones_solicitud"), archivos: String(archivosSeleccionados.length) };
+    const values = { solicitante: textValue("solicitante_nombre"), telefono: textValue("solicitante_telefono"), correo: textValue("solicitante_correo"), valuador: textValue("publicRequestAdvisor"), tipo: textValue("publicRequestType"), tipoAvaluo: textValue("publicRequestAppraisalType"), propietario: textValue("inmueble_propietario"), contacto: textValue("contacto_visita"), telefonoVisita: textValue("telefono_visita"), direccion: textValue("direccion_visita"), descripcion: textValue("descripcion_bien"), observaciones: textValue("observaciones_solicitud"), archivos: String(archivosSeleccionados.length + archivosExistentesEnEdicion.length) };
     const set = (id, value) => { const node = $("#" + id); if (node) node.textContent = value; };
-    set("sum-solicitante", values.solicitante); set("sum-telefono", values.telefono); set("sum-correo", values.correo); set("sum-valuador", values.valuador); set("sum-categoria", values.tipo); set("sum-tipo-avaluo", values.tipoAvaluo); set("sum-contacto-visita", values.contacto); set("sum-telefono-visita", values.telefonoVisita); set("sum-direccion", values.direccion); set("sum-descripcion", values.descripcion); set("sum-archivos", `${values.archivos} archivo(s)`); set("sum-observaciones", values.observaciones);
-    const inmueble = values.tipo === "Inmuebles"; $("#sum-inmueble-enajenantes-row")?.classList.toggle("hidden", !inmueble); $("#sum-inmueble-propietario-row")?.classList.toggle("hidden", !inmueble); set("sum-inmueble-enajenantes", textValue("inmueble_enajenantes")); set("sum-inmueble-propietario", values.propietario); const amount = moneyNumber(textValue("valor_operacion", "0")); set("sum-valor-num", `$${formattedMoney(amount)} MXN`); set("sum-valor-letras", amount ? `${numeroEnLetras(Math.floor(amount))} pesos mexicanos${Math.round((amount % 1) * 100) ? ` con ${String(Math.round((amount % 1) * 100)).padStart(2, "0")} centavos` : ""}` : "-");
+    set("sum-solicitante", values.solicitante); set("sum-telefono", values.telefono); set("sum-correo", values.correo); set("sum-valuador", values.valuador); set("sum-categoria", values.tipo); set("sum-tipo-avaluo", values.tipoAvaluo); set("sum-contacto-visita", values.contacto); set("sum-telefono-visita", values.telefonoVisita); set("sum-direccion", values.direccion); set("sum-descripcion", values.descripcion);
+    const inmueble = values.tipo === "Inmuebles";
+    $("#sum-inmueble-enajenantes-row")?.classList.toggle("hidden", !inmueble); const ownerRow = $("#sum-inmueble-propietario-row"); if (ownerRow) { ownerRow.classList.toggle("hidden", !inmueble); ownerRow.hidden = !inmueble; }
+    set("sum-inmueble-enajenantes", textValue("inmueble_enajenantes")); set("sum-inmueble-propietario", values.propietario);
+    const purpose = textValue("proposito_avaluo", ""); const purposeRow = $("#sum-proposito-row");
+    if (purposeRow) { purposeRow.classList.toggle("hidden", !purpose); purposeRow.hidden = !purpose; }
+    set("sum-proposito", purpose || "-");
+    const operation = $("#sum-valor-operacion-container");
+    if (operation) { operation.classList.toggle("hidden", !inmueble); operation.hidden = !inmueble; }
+    const amount = moneyNumber(textValue("valor_operacion", "0"));
+    set("sum-valor-num", `$${formattedMoney(amount)} MXN`); set("sum-valor-letras", amount ? `${numeroEnLetras(Math.floor(amount))} pesos mexicanos${Math.round((amount % 1) * 100) ? ` con ${String(Math.round((amount % 1) * 100)).padStart(2, "0")} centavos` : ""}` : "-");
+    updateRequestReviewSpecificFields();
+    updateRequestReviewFiles();
   }
-  window.updateSummary = updateSummary;
+    window.updateSummary = updateSummary;
   window.formatTitleCase = (input) => { if (input?.value) input.value = input.value.replace(/\s+/g, " ").replace(/(^|\s)\S/g, (letter) => letter.toUpperCase()); updateSummary(); };
   function openDialog(dialog) { if (dialog?.showModal) dialog.showModal(); }
   function closeDialog(dialog) { if (dialog?.open) dialog.close(); }
@@ -1250,6 +1289,11 @@
     window.__controlSolicitudesBound = true;
     $("#publicRequestType")?.addEventListener("change", () => { renderDynamicFields(); fillNotaries(); });
     document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => tab?.addEventListener("click", () => showRequestStep(index + 1)));
+    $("#publicRequestForm")?.addEventListener("click", (event) => {
+      const editButton = event.target.closest?.("[data-request-review-step]");
+      if (!editButton) return;
+      showRequestStep(Number(editButton.dataset.requestReviewStep));
+    });
     $("#btn-prev")?.addEventListener("click", () => {
       if (requestStep === 1) { closeDialog(requestDialog); return; }
       showRequestStep(requestStep - 1);
