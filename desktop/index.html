@@ -26,9 +26,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
-<link href="cp6-foundation.css?v=solicitud-paso5-review-20261127-01" rel="stylesheet"/><link href="cp6-system.css?v=final-20261024" rel="stylesheet"/><link href="cp6-components.css?v=request-prefill-safe-20261105-03" rel="stylesheet"/><link href="cp6-final.css?v=home-scroll-reset-20261124-01" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link rel="stylesheet" href="cp6-approved.css?v=home-table-visual-v1-20261127"/><link rel="stylesheet" href="cp6-tables-quotes-style.css?v=reception-final-dot-small-20261107-04"/>
+<link href="cp6-foundation.css?v=solicitud-paso5-review-20261127-01" rel="stylesheet"/><link href="cp6-system.css?v=final-20261024" rel="stylesheet"/><link href="cp6-components.css?v=request-prefill-safe-20261105-03" rel="stylesheet"/><link href="cp6-final.css?v=home-scroll-reset-20261124-01" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link rel="stylesheet" href="cp6-approved.css?v=login-grafito-admin-20261121-05"/><link rel="stylesheet" href="cp6-tables-quotes-style.css?v=reception-final-dot-small-20261107-04"/>
 <link rel="stylesheet" href="cp6-request-cards.css?v=concluded-header-graphite-20261124-01"/><link rel="stylesheet" href="cp6-reception-form-proposal.css?v=reception-form-v7-20261122-01"/><link rel="stylesheet" href="cp6-recovery-ui.css?v=users-integrated-layout-20261126-01"/><link rel="stylesheet" href="cp6-games-proposal.css?v=games-header-clean-20261126-01"/><link rel="stylesheet" href="cp6-appraisal-menu.css?v=modules-grid-20261126-01"/>
-<link rel="stylesheet" href="cp6-request-wizard.css?v=request-page1-match-20261127-20"/></head>
+<link rel="stylesheet" href="cp6-request-wizard.css?v=request-page1-match-20261127-20"/><link rel="stylesheet" href="cp6-reception-register-v2.css?v=reception-register-v2-20261127-01"/></head>
 <body class="cp6-redesign" data-server-status="checking">
 <section aria-label="Inicio de sesión" class="login-screen" id="loginScreen"><aside aria-hidden="false" class="login-visual left-panel" style="position: relative; overflow: hidden;"><div class="left-panel-content"><div class="login-visual-logo"><div class="v2-login-logo"><img class="cp6-brand-logo-image" src="assets/cp6-logo-blanco.png" alt="Logotipo Correduría Pública 6" /><div><strong>Correduría Pública 6</strong><small>Plaza Coahuila</small></div></div></div><div class="login-visual-copy" id="loginVisualBrand"><span class="v2-login-eyebrow">PRECISIÓN · CONFIANZA · CONTROL</span><h2>Una nueva forma<br/>de gestionar<br/><em>tus avalúos.</em></h2><p>Expedientes, solicitudes y seguimiento. La operación de tu correduría, conectada en un solo lugar.</p></div><section class="applicant-visual-panel" hidden="" id="applicantVisualPanel"><span class="section-kicker">SEGUIMIENTO PERSONAL</span><h2>Mis solicitudes</h2><div class="request-table-wrap" id="applicantVisualRequestsTable"></div><div class="applicant-visual-actions"><button class="primary-button" id="applicantVisualNewRequestButton" type="button">+ Solicitar servicio</button><button class="secondary-button" id="applicantVisualProfileButton" type="button">Editar perfil</button></div></section><div class="login-visual-holder">Titular Lic. Juan Manuel Barrera Martinez</div><div class="login-visual-footer">Av. Morelos 854 Oriente, Colonia Centro</div></div></aside>
 <section class="public-entry-panel">
@@ -625,12 +625,86 @@
 <section aria-label="Búsqueda y filtros de avalúos recibidos" class="search-panel request-style-filter-panel v2-operational-toolbar">
 <div class="search-row"><div class="reception-filter-title"><span aria-hidden="true" class="reception-filter-title-icon"><i class="fa-solid fa-clipboard-check"></i></span><strong>Recepción</strong></div><div class="reception-search-input-wrap"><input autocomplete="off" id="searchInput" placeholder="Buscar avalúo, solicitud o valuador" type="search"/></div><select aria-label="Filtrar avalúos recibidos" id="statusViewSelect"><option value="todos">Todos los estados</option><option value="pendientes-entrega">Pendientes de entrega</option><option value="entregados-sin-pago">Entregados sin pago</option><option value="pagados">Pagados</option><option value="vencidos">Vencidos</option></select><div class="reception-filter-actions"><button class="subtle-action-button btn-copu-primary btn-gold-cream is-hidden" id="backAvaluosButton" type="button"><i aria-hidden="true" class="fa-solid fa-arrow-left"></i> Regresar</button><button class="subtle-action-button btn-copu-primary is-hidden" id="newRecordButton" type="button"><i aria-hidden="true" class="fa-solid fa-plus"></i> Nueva Recepción</button></div></div>
 </section>
-<section aria-label="Registro de Avalúos" class="inline-record-editor" hidden id="recordEditor"><div class="reception-editor-shell"><form class="reception-form-v7" id="recordForm"><span hidden id="receptionHeaderDate"></span>
-<section class="reception-search-strip"><div class="reception-search-heading"><strong>Buscar expediente</strong><span>El número se toma de la Solicitud asignada</span></div><div class="reception-search-fields"><div class="reception-search-main"><div class="reception-search-number"><span class="reception-new-label">NÚMERO DE AVALÚO <b>*</b></span><div class="reception-search-number-line"><input id="numeroInput" inputmode="numeric" maxlength="4" name="numeroAvaluo" pattern="[0-9]{4}" placeholder="3690" required type="text"><button aria-label="Buscar expediente" class="reception-new-search reception-search-icon-button" id="receptionSearchButton" title="Buscar expediente" type="button"><i class="fa-solid fa-magnifying-glass"></i></button><button class="reception-new-clear" id="receptionClearButton" type="button">Limpiar</button></div></div><div class="reception-search-date"><span class="reception-new-label">FECHA DE SOLICITUD <b>*</b></span><input id="avaluoDateInput" name="fechaAvaluo" required type="date"></div></div><div class="reception-search-notes"><div class="reception-new-field"><label>ENTREGADO A</label><input name="seEntregoA" placeholder="Nombre de quien recibe el avalúo" type="text"></div><div class="reception-new-field"><label>OBSERVACIÓN</label><textarea name="observacion" placeholder="Notas relevantes del avalúo..." rows="2"></textarea></div></div></div><div class="reception-lookup-status" id="receptionLookupStatus" aria-live="polite"><i class="fa-solid fa-circle-info"></i><span>Busca el número asignado en Solicitudes.</span></div></section>
-<div class="reception-new-layout"><section class="reception-new-card reception-request-card"><div class="reception-new-card-head"><div><h3>Información de la Solicitud</h3><p>Datos informativos provenientes del expediente seleccionado.</p></div><span class="reception-summary-state" id="receptionSummaryState">Sin búsqueda</span></div><div class="reception-request-body"><input name="usuario" type="hidden"><input name="solicitante" type="hidden"><input name="tipoBien" type="hidden"><input name="tipoAvaluo" type="hidden"><div class="reception-request-grid reception-detail-grid"><div class="reception-detail-item reception-operation"><span>VALOR DE OPERACIÓN</span><strong id="summaryOperationValue">$0.00 MXN</strong></div><div class="reception-detail-item"><span>NÚMERO DE SOLICITUD</span><strong id="summaryRequestNumber">—</strong></div><div class="reception-detail-item"><span>SOLICITANTE</span><strong id="summaryApplicant">—</strong></div><div class="reception-detail-item"><span>VALUADOR ASIGNADO</span><strong id="summaryValuator">—</strong></div><div class="reception-detail-item reception-detail-wide"><span>PROPIETARIO</span><strong id="summaryOwner">—</strong></div><div class="reception-detail-item reception-detail-wide"><span>DIRECCIÓN DEL INMUEBLE</span><strong id="summaryAddress">—</strong></div></div><div class="reception-new-chips"><span id="receptionTypeBienValue">—</span><span id="receptionTypeAvaluoValue">—</span></div></div></section></div>
-<section class="reception-new-card reception-fees-card"><div class="reception-new-card-head"><div><h3>Honorarios</h3><p>Importe del servicio registrado.</p></div></div><div class="reception-fees-body"><div class="reception-new-field"><label>HONORARIOS</label><div class="reception-money"><span>$</span><input data-money-input id="appraisalValueInput" inputmode="decimal" name="valorAvaluo" placeholder="0.00" type="text"></div></div></div></section>
-<section class="reception-new-card reception-payment-card"><div class="reception-new-card-head"><div><h3>Ya fue pagado</h3><p>Activa esta opción para registrar la liquidación.</p></div><label class="reception-new-toggle"><span>Ya fue pagado</span><input id="paidInput" name="pagado" type="checkbox"><i></i></label></div><div class="reception-payment-body"><div class="reception-payment-details" id="paymentDetails"><div class="reception-new-field"><label>CANTIDAD PAGADA <b>*</b></label><div class="reception-money"><span>$</span><input data-money-input id="amountInput" inputmode="decimal" name="montoPagado" placeholder="0.00" type="text"></div></div><div class="reception-new-field"><label>FECHA DE PAGO <b>*</b></label><input id="paymentDateInput" name="fechaPago" type="date"></div><div class="reception-new-field"><label>MÉTODO DE PAGO <b>*</b></label><select id="methodInput" name="metodoPago"><option value="">Selecciona una opción</option><option value="Efectivo">Efectivo</option><option value="Transferencia">Transferencia</option><option value="Tarjeta">Tarjeta</option></select></div><div class="reception-new-field"><label>PAGO ENTREGADO A <b>*</b></label><select id="paymentDeliveredToInput" name="pagoEntregadoA"><option value="">Selecciona una opción</option><option>Juan Manuel Barrera Martínez</option><option>Gabriel Barrera Martínez</option><option>Cesar Delgado Armendáriz</option><option>Diana Barrera Rivera</option><option>Francisco Gabriel Hernández Estrada</option><option>Emmanuel Barrera Atilano</option><option>Caridad Rojas Vázquez</option></select></div><small class="reception-new-hint"><i class="fa-regular fa-circle-question"></i> Los datos de pago se guardan junto con el registro y pueden completarse después.</small></div></div></section>
-<footer class="reception-new-actions"><span>Los campos marcados con <b>*</b> son obligatorios.</span><div><button class="reception-new-cancel" id="cancelDialogButton" type="button">Cancelar</button><button class="reception-new-save" data-record-save-action="" id="saveRecordButton" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar registro y pago</button></div></footer><p class="reception-form-message" id="formMessage" role="alert"></p></form></div></section>
+<section aria-label="Registro de Avalúos" class="inline-record-editor" hidden id="recordEditor">
+  <div class="reception-editor-shell">
+    <header class="reception-register-header"><div><span>AVALÚOS · RECEPCIÓN</span><h2>Registrar avalúo</h2></div><small>Registro y pago en un mismo formulario</small></header>
+    <form class="reception-form-v7" id="recordForm">
+      <span hidden id="receptionHeaderDate"></span>
+      <section class="reception-search-strip" aria-label="Localizar solicitud">
+        <div class="reception-search-heading">
+          <strong>Localizar solicitud</strong>
+          <span>Ingresa el número de avalúo para cargar sus datos.</span>
+        </div>
+        <div class="reception-register-field">
+          <label class="reception-new-label" for="numeroInput">NÚMERO DE AVALÚO</label>
+          <div class="reception-register-search-row">
+            <input id="numeroInput" inputmode="numeric" maxlength="4" name="numeroAvaluo" pattern="[0-9]{4}" placeholder="4 dígitos" required type="text">
+            <button aria-label="Buscar" class="reception-new-search reception-search-icon-button" id="receptionSearchButton" title="Buscar solicitud" type="button"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+          </div>
+        </div>
+        <div class="reception-register-field">
+          <label class="reception-new-label" for="avaluoDateInput">FECHA DE SOLICITUD <b>*</b></label>
+          <input id="avaluoDateInput" name="fechaAvaluo" required type="date">
+        </div>
+        <div class="reception-register-field">
+          <span class="reception-new-label">NÚMERO DE SOLICITUD</span>
+          <div class="reception-register-mini-value reception-register-request-number" id="summaryRequestNumber">—</div>
+        </div>
+        <div class="reception-lookup-status" id="receptionLookupStatus" aria-live="polite"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>Busca el número asignado en Solicitudes.</span></div>
+      </section>
+      <section class="reception-new-layout" aria-label="Información de la solicitud">
+        <section class="reception-new-card reception-request-card">
+          <div class="reception-new-card-head">
+            <div><h3>Información de la Solicitud</h3><p>Datos informativos del expediente seleccionado.</p></div>
+            <span class="reception-summary-state" id="receptionSummaryState">Sin búsqueda</span>
+          </div>
+          <div class="reception-request-body">
+            <input name="usuario" type="hidden">
+            <input name="solicitante" type="hidden">
+            <input name="tipoBien" type="hidden">
+            <input name="tipoAvaluo" type="hidden">
+            <div class="reception-request-grid reception-detail-grid">
+              <div class="reception-detail-item"><span>SOLICITANTE</span><strong id="summaryApplicant">—</strong></div>
+              <div class="reception-detail-item"><span>PROPIETARIO</span><strong id="summaryOwner">—</strong></div>
+              <div class="reception-detail-item"><span>VALUADOR</span><strong id="summaryValuator">—</strong></div>
+              <div class="reception-detail-item reception-detail-wide reception-info-address"><span>UBICACIÓN DEL BIEN</span><strong id="summaryAddress">—</strong></div>
+              <div class="reception-detail-item reception-operation"><span>VALOR DE OPERACIÓN</span><strong id="summaryOperationValue">—</strong></div>
+            </div>
+            <div class="reception-new-chips"><span id="receptionTypeBienValue">—</span><span id="receptionTypeAvaluoValue">—</span></div>
+          </div>
+        </section>
+      </section>
+      <section class="reception-new-card reception-capture-card" aria-label="Datos de recepción">
+        <div class="reception-new-card-head"><div><h3>Datos de recepción</h3><p>Registra la entrega y los honorarios del servicio.</p></div></div>
+        <div class="reception-capture-grid">
+          <div class="reception-new-field reception-register-field"><label for="receptionDeliveredTo">ENTREGADO A</label><input id="receptionDeliveredTo" name="seEntregoA" placeholder="Nombre de quien recibe" type="text"></div>
+          <div class="reception-new-field reception-register-field"><label for="appraisalValueInput">HONORARIOS · MXN</label><div class="reception-money"><span aria-hidden="true">$</span><input data-money-input id="appraisalValueInput" inputmode="decimal" name="valorAvaluo" placeholder="0.00" type="text"></div></div>
+          <div class="reception-new-field reception-register-field"><label for="receptionObservation">OBSERVACIÓN</label><input id="receptionObservation" name="observacion" placeholder="Anotación breve sobre la recepción" type="text"></div>
+        </div>
+      </section>
+      <section class="reception-new-card reception-payment-card" aria-label="Datos de pago">
+        <div class="reception-new-card-head">
+          <div><h3>Datos de pago</h3><p>Los campos permanecen visibles; activa el control para capturarlos.</p></div>
+          <label class="reception-new-toggle"><span>Ya fue pagado</span><input id="paidInput" name="pagado" type="checkbox"><i aria-hidden="true"></i></label>
+        </div>
+        <div class="reception-payment-body">
+          <div class="reception-payment-details is-hidden" id="paymentDetails">
+            <div class="reception-new-field"><label for="amountInput">CANTIDAD PAGADA <b>*</b></label><div class="reception-money"><span aria-hidden="true">$</span><input data-money-input id="amountInput" inputmode="decimal" name="montoPagado" placeholder="0.00" type="text"></div></div>
+            <div class="reception-new-field"><label for="paymentDateInput">FECHA DE PAGO <b>*</b></label><input id="paymentDateInput" name="fechaPago" type="date"></div>
+            <div class="reception-new-field"><label for="methodInput">MÉTODO DE PAGO <b>*</b></label><select id="methodInput" name="metodoPago"><option value="">Selecciona una opción</option><option value="Efectivo">Efectivo</option><option value="Transferencia">Transferencia</option><option value="Tarjeta">Tarjeta</option></select></div>
+            <div class="reception-new-field"><label for="paymentDeliveredToInput">PAGO ENTREGADO A <b>*</b></label><select id="paymentDeliveredToInput" name="pagoEntregadoA"><option value="">Selecciona una opción</option><option>Juan Manuel Barrera Martínez</option><option>Gabriel Barrera Martínez</option><option>Cesar Delgado Armendáriz</option><option>Diana Barrera Rivera</option><option>Francisco Gabriel Hernández Estrada</option><option>Emmanuel Barrera Atilano</option><option>Caridad Rojas Vázquez</option></select></div>
+            <small class="reception-new-hint"><i class="fa-regular fa-circle-question" aria-hidden="true"></i> Para modificarlos, activa «Ya fue pagado».</small>
+          </div>
+        </div>
+      </section>
+      <footer class="reception-new-actions">
+        <span>Los campos marcados con <b>*</b> son obligatorios.</span>
+        <div><button class="reception-new-cancel" id="cancelDialogButton" type="button">Cancelar</button><button class="reception-new-save" data-record-save-action="" id="saveRecordButton" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Guardar registro y pago</button></div>
+      </footer>
+      <p class="reception-form-message" id="formMessage" role="alert"></p>
+    </form>
+  </div>
+</section>
 
 <section aria-label="Estados de avalúos recibidos" class="dashboard-tabs">
 <div class="section-heading status-list-heading"><h2 id="statusListTitle">Registros Recientes</h2><span class="section-count" id="statusListCount">0</span></div>
@@ -864,7 +938,7 @@
 </main>
 <dialog class="record-dialog report-dialog" id="reportDialog"><form id="reportForm" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">REPORTE GENERAL</p><h2>Selecciona el periodo</h2></div><button aria-label="Cerrar" class="icon-button" id="closeReportDialogButton" type="button">×</button></div><p class="report-dialog-copy">Para generar un resumen primero selecciona las fechas y da clic en Generar resumen PDF.</p><div class="form-grid"><label>Desde *<input id="reportStartDate" required="" type="date"/></label><label>Hasta *<input id="reportEndDate" required="" type="date"/></label></div><p class="form-message" id="reportMessage" role="alert"></p><div class="dialog-actions"><button class="secondary-button btn-copu-primary" id="cancelReportDialogButton" type="button">Cancelar</button><button class="primary-button" type="submit">Generar resumen PDF</button></div></form></dialog>
 <script src="automotriz-model.js?v=final-20261024"></script>
-<script src="app.js?v=request-wizard-update-message-20261127-01"></script>
+<script src="app.js?v=reception-register-20261127-02"></script>
 <script src="image-utils.js?v=final-20261024"></script>
 <script src="vendor/html-docx.js?v=final-20261024"></script>
 <script src="word-export.js?v=final-20261024"></script>

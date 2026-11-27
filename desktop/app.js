@@ -40,6 +40,7 @@
   let notifications = [];
   let pendingCredentialAuthorization = null;
   let editingId = null;
+  let receptionReadOnly = false;
   let serverMonitorId = null;
   let versionMonitorId = null;
   let stateLoadPromise = null;
@@ -1077,12 +1078,17 @@
 
   function setPaymentVisibility() {
     paymentDetails.classList.toggle("is-hidden", !paidInput.checked);
-    amountInput.required = paidInput.checked;
-    methodInput.required = paidInput.checked;
-    paymentDeliveredToInput.required = paidInput.checked;
-    paymentDateInput.required = paidInput.checked;
+    const canEditPayment = paidInput.checked && !receptionReadOnly;
+    [amountInput, methodInput, paymentDeliveredToInput, paymentDateInput].forEach((field) => {
+      field.disabled = !canEditPayment;
+      field.required = paidInput.checked;
+      const customTrigger = field.__customWrapper?.querySelector(".custom-select-trigger");
+      if (customTrigger) customTrigger.disabled = !canEditPayment;
+    });
     if (!paidInput.checked) { amountInput.value = ""; methodInput.value = ""; paymentDeliveredToInput.value = ""; paymentDateInput.value = ""; }
     else if (!paymentDateInput.value) paymentDateInput.value = today();
+    [methodInput, paymentDeliveredToInput].forEach((field) => field.__customWrapper?.__syncCustomOptions?.());
+    if (!canEditPayment) closeCustomSelects();
   }
   function openDialog(id = null, readOnly = false) {
     if (!canEditReception() && !id) return;
@@ -1091,6 +1097,7 @@
     const record = id ? records.find((item) => item.id === id) : initialDraft;
     if (!record) return;
     const viewOnly = readOnly || !canEditReception();
+    receptionReadOnly = viewOnly;
     form.reset();
     clearReceptionSummary();
     Object.entries(initialDraft).forEach(([key, value]) => {
@@ -1116,6 +1123,7 @@
     if (id && record.numeroAvaluo) renderReceptionRecordSummary(record);
     form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = viewOnly; });
     form.querySelectorAll("[data-record-save-action]").forEach((button) => button.classList.toggle("is-hidden", viewOnly));
+    if (receptionSearchButton) receptionSearchButton.disabled = viewOnly;
     const dialogTitle = $("#dialogTitle");
     if (dialogTitle) dialogTitle.innerHTML = `<i class="fa-solid fa-file-signature" aria-hidden="true"></i><span>${viewOnly ? "Consulta de avalúo" : id ? "Editar avalúo" : "Recepción del avalúo"}</span>`;
     $("#formMessage").textContent = "";
@@ -1132,6 +1140,8 @@
     $("#avaluosView").classList.remove("is-registering");
     $(".app-workspace")?.classList.remove("is-registration-mode");
     editingId = null;
+    receptionReadOnly = false;
+    if (receptionSearchButton) receptionSearchButton.disabled = false;
     form.querySelectorAll("input,select,textarea").forEach((field) => { field.disabled = false; });
     form.reset();
     // Los combobox personalizados no se actualizan solos con form.reset().
@@ -1203,7 +1213,6 @@
       const setField = (name, value) => { const field = form.elements.namedItem(name); if (field && value) { if (field.tagName === "SELECT" && !Array.from(field.options).some((option) => option.value === String(value))) field.add(new Option(String(value), String(value))); field.value = value; } };
       const specific = match.datosEspecificos || {}; const type = match.tipoBien || specific.tipoBien || specific.tipo_bien || ""; const appraisalType = match.tipoAvaluo || match.tipoAvalúo || specific.tipoAvaluo || specific.tipoAvalúo || specific.tipo_avaluo || "";
       setField("tipoBien", type); setField("tipoAvaluo", appraisalType); setField("usuario", match.asesor || match.valuadorAsignado || ""); setField("solicitante", match.solicitante?.nombre || match.nombreSolicitante || "");
-      const operation = match.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? ""; if (operation !== "") setField("valorAvaluo", operation);
       renderReceptionSummary(match, number); $("#formMessage").textContent = `Datos de la solicitud ${match.folio || number} cargados para un nuevo registro.`;
     } catch { clearReceptionSummary("No fue posible consultar el expediente; puedes capturarlo manualmente."); }
     finally { if (receptionSearchButton) { receptionSearchButton.disabled = false; receptionSearchButton.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>'; } }
