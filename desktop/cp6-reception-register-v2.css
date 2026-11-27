@@ -336,11 +336,8 @@ body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor
 
 /* Cierre de integración: marco y estados de los controles de la propuesta aprobada. */
 body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-editor-shell { background: #fff !important; border: 1px solid #d4dde2 !important; border-radius: 16px !important; overflow: hidden !important; }
-body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-register-header { display: flex !important; justify-content: space-between !important; align-items: center !important; gap: 12px !important; padding: 20px !important; border-bottom: 1px solid #e7ebed !important; }
-body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-register-header span { color: #718089 !important; font-size: 10px !important; font-weight: 600 !important; letter-spacing: .1em !important; }
-body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-register-header h2 { color: #27343d !important; font-size: 22px !important; font-weight: 700 !important; margin: 4px 0 0 !important; }
-body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-register-header small { color: #718089 !important; font-size: 11px !important; padding: 7px 11px !important; border: 1px solid #e7ebed !important; border-radius: 20px !important; }
 body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-form-v7 { padding: 20px !important; box-sizing: border-box !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-capture-grid .reception-new-field label { display: block !important; min-height: 14px !important; margin: 0 0 7px !important; color: #4f5e67 !important; font-size: 10px !important; font-weight: 700 !important; letter-spacing: .055em !important; line-height: 1.35 !important; }
 body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-request-grid.reception-detail-grid { border: 0 !important; overflow: visible !important; gap: 16px !important; }
 body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-detail-item { padding: 0 !important; min-height: 44px !important; border: 0 !important; }
 body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-detail-item.reception-info-address { border: 0 !important; }
@@ -358,7 +355,5 @@ body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor
 body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor #paymentDetails .reception-money input { border-radius: 0 9px 9px 0 !important; }
 body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor #saveRecordButton.is-hidden { display: none !important; }
 @media (max-width: 560px) {
-  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-register-header { padding: 16px !important; }
-  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-register-header small { display: none !important; }
   body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #recordEditor .reception-form-v7 { padding: 12px !important; }
 }
