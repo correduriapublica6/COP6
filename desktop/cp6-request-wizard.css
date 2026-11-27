@@ -1072,3 +1072,163 @@ body.cp6-redesign #publicRequestDialog.public-request-dialog .category-btn:focus
 @media (max-width: 740px) {
   body.cp6-redesign #publicRequestDialog.public-request-dialog .category-btn { min-height: 70px; }
 }
+
+/* v17: página 1 usa la misma cabecera y pestañas que los pasos 2–5. */
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-brandbar,
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-page-intro {
+  display: none !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-legacy-header {
+  display: flex !important;
+  min-height: 86px;
+  flex: 0 0 auto;
+  padding: 19px 66px 19px 28px;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-steps {
+  width: 100%;
+  min-height: 0;
+  flex: 0 0 auto !important;
+  margin: 0;
+  padding: 11px 26px !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-steps > div {
+  display: grid !important;
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-steps [data-step-connector] {
+  display: none !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-steps > .cp6-request-mobile-stepper {
+  display: none !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .step-tab {
+  display: flex !important;
+  min-width: 0 !important;
+  min-height: 60px;
+  flex: initial;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 5px;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px;
+  background: #fff !important;
+  color: #718096;
+  text-align: center;
+  box-shadow: none !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .step-tab.is-active {
+  border-color: #aeb8c1 !important;
+  background: #f1f3f5 !important;
+  box-shadow: 0 2px 8px rgba(41, 52, 63, .08) !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .step-tab.is-completed {
+  border-color: #b9ddce !important;
+  background: #f0f8f4 !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .step-tab-number {
+  width: 22px;
+  height: 22px;
+  flex-basis: 22px;
+  font-size: 10px;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .step-tab-label {
+  display: block;
+  max-width: 100%;
+  font-size: 10px;
+  line-height: 1.2;
+  text-align: center;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-close {
+  position: absolute !important;
+  z-index: 3;
+  top: 18px !important;
+  right: 19px !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  flex: 0 0 34px;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-step-hint {
+  margin-right: auto;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 :is(#btn-prev, #btn-next) {
+  flex: 0 0 auto;
+  margin: 0;
+}
+@media (max-width: 740px) {
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-legacy-header {
+    min-height: 73px;
+    padding: 15px 53px 15px 16px;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-legacy-header > div:first-child > div:first-child {
+    width: 38px;
+    height: 38px;
+    padding: 8px;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-legacy-header h1 {
+    font-size: 17px;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-legacy-header p {
+    font-size: 9px;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-steps {
+    width: 100%;
+    min-height: 0;
+    flex-basis: auto !important;
+    margin: 0;
+    padding: 8px 9px !important;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-steps > div {
+    gap: 5px;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .step-tab {
+    min-height: 58px;
+    gap: 4px;
+    padding: 5px 2px;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .step-tab-number {
+    width: 20px;
+    height: 20px;
+    flex-basis: 20px;
+    font-size: 9px;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .step-tab-label {
+    font-size: 8px;
+    line-height: 1.15;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-steps [data-step-connector] {
+    display: none !important;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-mobile-stepper {
+    display: none !important;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .cp6-request-close {
+    top: 13px !important;
+    right: 12px !important;
+    width: 31px !important;
+    height: 31px !important;
+    min-width: 31px !important;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .v2-request-footer {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #btn-prev { grid-column: 1; }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 #btn-next { grid-column: 2; }
+}
+@media (max-width: 360px) {
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .step-tab-label { font-size: 7px; }
+}
