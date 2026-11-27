@@ -1232,3 +1232,11 @@ body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 :is(#btn-p
 @media (max-width: 360px) {
   body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 .step-tab-label { font-size: 7px; }
 }
+
+/* v19: se ocultan las leyendas de progreso redundantes en pasos 2–5; se conservan las pestañas superiores. */
+body.cp6-redesign #publicRequestDialog.public-request-dialog:not(.is-page1) .cp6-request-step-hint {
+  display: none !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog:not(.is-page1) .cp6-request-mobile-stepper {
+  display: none !important;
+}
