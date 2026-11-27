@@ -197,6 +197,27 @@
   }
   function showRequestStep(step) {
     requestStep = Math.max(1, Math.min(5, Number(step) || 1));
+    requestDialog?.classList.toggle("is-page1", requestStep === 1);
+    const stepNames = ["Datos del solicitante", "Bien a valuar", "Visita", "Antecedentes", "Revisar y enviar"];
+    const stepHint = $("#requestStepHint");
+    const mobileStepTitle = $("#requestMobileStepTitle");
+    const mobileStepCount = $("#requestMobileStepCount");
+    const mobileSegments = document.querySelectorAll(".cp6-request-mobile-segments i");
+    const internalUser = Boolean(window.ControlAvaluosDesktop?.getActiveUser?.());
+    const myRequestsButton = $("#requestHeaderMyRequestsButton");
+    const userPill = $("#requestHeaderUserPill");
+    requestDialog?.classList.toggle("is-internal-user", internalUser);
+    if (myRequestsButton) myRequestsButton.hidden = internalUser;
+    if (userPill) userPill.hidden = internalUser;
+    if (stepHint) stepHint.textContent = requestStep === 1
+      ? "Paso 1 de 5 · Al continuar pasarás a los datos del bien a valuar."
+      : `Paso ${requestStep} de 5 · ${stepNames[requestStep - 1]}.`;
+    if (mobileStepTitle) mobileStepTitle.textContent = `Paso ${requestStep} · ${stepNames[requestStep - 1]}`;
+    if (mobileStepCount) mobileStepCount.textContent = `${requestStep} de 5`;
+    mobileSegments.forEach((segment, index) => {
+      segment.classList.toggle("is-active", index + 1 === requestStep);
+      segment.classList.toggle("is-complete", index + 1 < requestStep);
+    });
     document.querySelectorAll("#publicRequestForm .step-content").forEach((panel, index) => {
       const hidden = index + 1 !== requestStep;
       panel.classList.toggle("hidden", hidden);
@@ -1483,6 +1504,17 @@
     $("#closeApplicantRequestsButton")?.addEventListener("click", () => closeDialog(applicantRequestsDialog));
     $("#cancelApplicantRequestsButton")?.addEventListener("click", () => closeDialog(applicantRequestsDialog));
     $("#newApplicantRequestButton")?.addEventListener("click", () => { closeDialog(applicantRequestsDialog); clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); bindNewRequestExternalAssignment(); });
+    $("#requestHeaderMyRequestsButton")?.addEventListener("click", () => {
+      closeDialog(requestDialog);
+      if (applicantSession) showApplicantHome();
+      else {
+        const publicEntry = $(".public-entry-content");
+        const applicantHome = $("#applicantHomePanel");
+        if (publicEntry) publicEntry.hidden = false;
+        if (applicantHome) applicantHome.hidden = true;
+        $("#loginScreen")?.classList.remove("applicant-dashboard-active");
+      }
+    });
     $("#openPublicRequestButton")?.addEventListener("click", () => { applicantSession = null; clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); bindNewRequestExternalAssignment(); });
     $("#openApplicantRegisterButton")?.addEventListener("click", () => { setMessage($("#applicantRegisterMessage"), ""); openDialog(applicantRegisterDialog); });
     $("#applicantLoginRegisterButton")?.addEventListener("click", () => {
