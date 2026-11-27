@@ -1240,3 +1240,41 @@ body.cp6-redesign #publicRequestDialog.public-request-dialog:not(.is-page1) .cp6
 body.cp6-redesign #publicRequestDialog.public-request-dialog:not(.is-page1) .cp6-request-mobile-stepper {
   display: none !important;
 }
+
+/* v20: conservar el mismo marco del popup al cambiar entre página 1 y pasos 2–5. */
+body.cp6-redesign #publicRequestDialog.public-request-dialog,
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 {
+  width: min(1000px, calc(100vw - 36px)) !important;
+  max-width: 1000px !important;
+  height: min(900px, 92dvh) !important;
+  max-height: 92dvh !important;
+  margin: auto !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog > div,
+body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 > div {
+  height: 100% !important;
+  max-height: 100% !important;
+}
+@media (max-width: 740px) {
+  body.cp6-redesign #publicRequestDialog.public-request-dialog,
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 {
+    width: min(620px, calc(100vw - 16px)) !important;
+    max-width: min(620px, calc(100vw - 16px)) !important;
+    height: min(880px, 92dvh) !important;
+    max-height: 92dvh !important;
+    margin: auto !important;
+    border-radius: 15px !important;
+  }
+  body.cp6-redesign #publicRequestDialog.public-request-dialog > div,
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 > div {
+    width: 100% !important;
+    border-radius: 15px !important;
+  }
+}
+@media (max-width: 360px) {
+  body.cp6-redesign #publicRequestDialog.public-request-dialog,
+  body.cp6-redesign #publicRequestDialog.public-request-dialog.is-page1 {
+    height: min(880px, 94dvh) !important;
+    max-height: 94dvh !important;
+  }
+}
