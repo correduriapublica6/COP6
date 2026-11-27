@@ -3,6 +3,10 @@
   const $ = (selector) => document.querySelector(selector);
   const escapeHtml = (value) => String(value || "").replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#039;", '"': "&quot;" }[character]));
   const requestDialog = $("#publicRequestDialog");
+  const requestGeographyUrl = new URL("./cp6-geografia.json", document.currentScript?.src || window.location.href).href;
+  const fallbackStates = ["Aguascalientes", "Baja California", "Baja California Sur", "Campeche", "Coahuila de Zaragoza", "Colima", "Chiapas", "Chihuahua", "Ciudad de México", "Durango", "Guanajuato", "Guerrero", "Hidalgo", "Jalisco", "México", "Michoacán de Ocampo", "Morelos", "Nayarit", "Nuevo León", "Oaxaca", "Puebla", "Querétaro", "Quintana Roo", "San Luis Potosí", "Sinaloa", "Sonora", "Tabasco", "Tamaulipas", "Tlaxcala", "Veracruz de Ignacio de la Llave", "Yucatán", "Zacatecas"];
+  let requestGeography = null;
+  let requestGeographyPromise = null;
   const applicantLoginDialog = $("#applicantLoginDialog");
   const applicantRegisterDialog = $("#applicantRegisterDialog");
   const applicantRequestsDialog = $("#applicantRequestsDialog");
@@ -61,6 +65,127 @@
 
   let requestStep = 1;
   function refreshRequestIcons() { window.lucide?.createIcons?.(); }
+  function normalizeGeoSearch(value) { return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("es-MX").trim(); }
+  function geographyStates() { return Array.isArray(requestGeography?.entidades) ? requestGeography.entidades : fallbackStates.map((nombre) => ({ nombre, municipios: [] })); }
+  function populateRequestStates(selected = "") {
+    const select = $("#estado_visita");
+    if (!select) return;
+    const current = selected || select.value;
+    select.innerHTML = `<option value="">Selecciona un estado</option>${geographyStates().map((state) => `<option value="${escapeHtml(state.nombre)}">${escapeHtml(state.nombre)}</option>`).join("")}`;
+    const match = geographyStates().find((state) => normalizeGeoSearch(state.nombre) === normalizeGeoSearch(current) || state.clave === String(current || "").padStart(2, "0"));
+    if (match) select.value = match.nombre;
+  }
+  function closeMunicipalityOptions() {
+    const list = $("#cp6MunicipiosList");
+    const input = $("#municipio_visita");
+    if (list) list.hidden = true;
+    input?.setAttribute("aria-expanded", "false");
+  }
+  function renderMunicipalityOptions(query = "") {
+    const stateSelect = $("#estado_visita");
+    const input = $("#municipio_visita");
+    const list = $("#cp6MunicipiosList");
+    const status = $("#requestGeographyStatus");
+    if (!stateSelect || !input || !list) return;
+    const state = geographyStates().find((entry) => entry.nombre === stateSelect.value);
+    if (!state) {
+      list.innerHTML = `<p class="request-municipality-empty">Primero selecciona un estado.</p>`;
+      list.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+      return;
+    }
+    if (status) status.textContent = requestGeography ? `${state.municipios.length} municipios disponibles en ${state.nombre} · Catálogo INEGI` : `Catálogo de municipios no disponible. Puedes escribir el municipio manualmente.`;
+    const search = normalizeGeoSearch(query);
+    const matches = (Array.isArray(state.municipios) ? state.municipios : []).filter((municipality) => !search || normalizeGeoSearch(municipality.nombre).includes(search)).slice(0, 10);
+    list.innerHTML = matches.length ? matches.map((municipality) => `<button type="button" class="request-municipality-option" role="option" aria-selected="${normalizeGeoSearch(input.value) === normalizeGeoSearch(municipality.nombre)}" data-municipality-name="${escapeHtml(municipality.nombre)}">${escapeHtml(municipality.nombre)}</button>`).join("") : `<p class="request-municipality-empty">${search ? "No hay coincidencias. Puedes conservar el nombre escrito." : "Escribe para buscar un municipio."}</p>`;
+    list.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+    list.querySelectorAll("[data-municipality-name]").forEach((button) => button.addEventListener("click", () => {
+      input.value = button.dataset.municipalityName || "";
+      input.dataset.municipalitySelected = input.value;
+      closeMunicipalityOptions();
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    }));
+  }
+  function bindRequestGeographyControls() {
+    const form = $("#publicRequestForm");
+    const state = $("#estado_visita");
+    const municipality = $("#municipio_visita");
+    if (!form || !state || !municipality || form.dataset.geographyBound === "true") return;
+    form.dataset.geographyBound = "true";
+    populateRequestStates();
+    state.addEventListener("change", () => {
+      municipality.value = "";
+      delete municipality.dataset.municipalitySelected;
+      closeMunicipalityOptions();
+      const selectedState = geographyStates().find((entry) => entry.nombre === state.value);
+      const status = $("#requestGeographyStatus");
+      if (status) status.textContent = selectedState && requestGeography ? `${selectedState.municipios.length} municipios disponibles en ${selectedState.nombre} · Catálogo INEGI` : selectedState ? "Catálogo de municipios no disponible. Puedes escribir el nombre manualmente." : "Selecciona el estado para ver coincidencias de municipios.";
+      syncStructuredRequestAddress();
+      updateSummary();
+      scheduleRequestDraftSave();
+    });
+    municipality.addEventListener("focus", () => renderMunicipalityOptions(municipality.value));
+    municipality.addEventListener("input", () => {
+      if (municipality.dataset.municipalitySelected !== municipality.value) delete municipality.dataset.municipalitySelected;
+      renderMunicipalityOptions(municipality.value);
+    });
+    municipality.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") { closeMunicipalityOptions(); return; }
+      if (event.key === "Enter" && !$("#cp6MunicipiosList")?.hidden) {
+        const first = $("#cp6MunicipiosList [data-municipality-name]");
+        if (first) { event.preventDefault(); first.click(); }
+      }
+    });
+    document.addEventListener("click", (event) => {
+      if (!event.target?.closest?.(".request-municipality-combobox")) closeMunicipalityOptions();
+    });
+    if (!requestGeographyPromise) {
+      requestGeographyPromise = fetch(requestGeographyUrl, { cache: "force-cache" }).then((response) => {
+        if (!response.ok) throw new Error(`Catálogo INEGI no disponible (${response.status})`);
+        return response.json();
+      }).then((catalog) => {
+        if (!Array.isArray(catalog?.entidades) || catalog.entidades.length !== 32) throw new Error("Catálogo de entidades incompleto");
+        requestGeography = catalog;
+        const selectedState = state.value;
+        populateRequestStates(selectedState);
+        const selected = geographyStates().find((entry) => entry.nombre === state.value);
+        const status = $("#requestGeographyStatus");
+        if (status) status.textContent = selected ? `${selected.municipios.length} municipios disponibles en ${selected.nombre} · Catálogo INEGI` : "Selecciona el estado para ver coincidencias de municipios.";
+      }).catch((error) => {
+        console.warn("No se pudo cargar el catálogo geográfico del INEGI.", error);
+        requestGeography = null;
+        populateRequestStates(state.value);
+        const status = $("#requestGeographyStatus");
+        if (status) status.textContent = "El catálogo de municipios no pudo cargarse; puedes escribir el nombre manualmente.";
+      });
+    }
+  }
+  function syncStructuredRequestAddress() {
+    const field = $("#direccion_visita");
+    if (!field) return "";
+    const read = (id) => String($("#" + id)?.value || "").trim();
+    const parts = [read("direccion_calle"), read("direccion_numero") ? `No. ${read("direccion_numero")}` : "", read("direccion_colonia") ? `Col. ${read("direccion_colonia")}` : "", read("municipio_visita"), read("estado_visita"), read("direccion_manzana") ? `Manzana ${read("direccion_manzana")}` : "", read("direccion_lote") ? `Lote ${read("direccion_lote")}` : ""].filter(Boolean);
+    const reference = read("referencia_direccion");
+    const address = parts.length ? [parts.join(", "), reference ? `Referencia: ${reference}` : ""].filter(Boolean).join(". ") : reference;
+    field.value = address;
+    return address;
+  }
+  function updateRequestAttachmentGuidance() {
+    const category = String($("#publicRequestType")?.value || "");
+    const guidance = {
+      "Inmuebles": { icon: "building-2", text: "Para inmuebles puedes adjuntar escrituras, planos, predial y fotografías del bien. Los documentos son opcionales." },
+      "Vehículo Automotriz": { icon: "car", text: "Para vehículos puedes adjuntar factura, tarjeta de circulación y fotografías del vehículo. Los documentos son opcionales." },
+      "Maquinaria y equipo": { icon: "cog", text: "Para maquinaria puedes adjuntar facturas, fichas técnicas, números de serie y fotografías. Los documentos son opcionales." },
+      "Mobiliario y Bienes Diversos": { icon: "armchair", text: "Para mobiliario puedes adjuntar inventarios, facturas y fotografías de los bienes. Los documentos son opcionales." },
+      "Intangibles": { icon: "badge-percent", text: "Para intangibles puedes adjuntar registros, licencias, títulos y documentación de soporte. Los documentos son opcionales." }
+    }[category] || { icon: "upload-cloud", text: "Adjunta fotografías, documentos o antecedentes relacionados con el bien. Este paso es opcional." };
+    const icon = $("#requestAttachmentIcon");
+    const description = $("#requestAttachmentDescription");
+    if (icon) icon.setAttribute("data-lucide", guidance.icon);
+    if (description) description.textContent = guidance.text;
+    refreshRequestIcons();
+  }
   function syncPrivacyConsentState() {
     const consent = $("#requestPrivacyConsent");
     const next = $("#btn-next");
@@ -79,7 +204,7 @@
     });
     const requestScrollRegion = document.querySelector("#publicRequestForm > .flex-1.overflow-y-auto");
     if (requestScrollRegion) requestScrollRegion.scrollTop = 0;
-    document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => {
+    document.querySelectorAll("#publicRequestDialog .step-tab").forEach((tab, index) => {
       const number = index + 1;
       tab.classList.toggle("is-active", number === requestStep);
       tab.classList.toggle("is-completed", number < requestStep);
@@ -139,6 +264,7 @@
       button.querySelector("[data-lucide]")?.classList.toggle("text-slate-500", !active);
     });
     fillNotaries();
+    updateRequestAttachmentGuidance();
     updateSummary?.();
   }
   function requestStepValid(step) {
@@ -159,6 +285,8 @@
   function renderSelectedFiles() {
     const list = $("#publicRequestAttachmentsList");
     if (!list) return;
+    const count = $("#file-count");
+    if (count) count.textContent = String(archivosSeleccionados.length);
     list.innerHTML = archivosSeleccionados.length ? `<ul>${archivosSeleccionados.map((file, index) => `<li><span class="request-file-icon request-file-icon-${fileIconName(file)}"><i data-lucide="${fileIconName(file)}" class="w-5 h-5"></i></span><span class="request-file-meta"><strong title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</strong><small>${Math.max(1, Math.round(file.size / 1024))} KB</small></span><button type="button" data-remove-request-file="${index}" aria-label="Quitar ${escapeHtml(file.name)}"><i data-lucide="x" class="w-4 h-4"></i></button></li>`).join("")}</ul>` : `<p class="text-xs text-slate-400 italic text-center py-4">No se han adjuntado archivos aún.</p>`;
     list.querySelectorAll("[data-remove-request-file]").forEach((button) => button?.addEventListener("click", () => { archivosSeleccionados.splice(Number(button.dataset.removeRequestFile), 1); renderSelectedFiles(); }));
     refreshRequestIcons();
@@ -251,6 +379,8 @@
     const names = { solicitante_nombre: "nombre", solicitante_telefono: "telefono", solicitante_correo: "correo", publicRequestAdvisor: "asesor", publicRequestAppraisalType: "tipoAvaluo", inmueble_subtipo: "subtipoBien", inmueble_enajenantes: "numeroEnajenantes", inmueble_propietario: "propietario", vehiculo_marca: "marcaVehiculo", vehiculo_modelo: "modeloVehiculo", vehiculo_km: "kilometraje", maquinaria_tipo: "tipoMaquinaria", maquinaria_serie: "serieMaquinaria", mobiliario_tipo: "tipoMobiliario", mobiliario_estado: "estadoMobiliario", intangible_tipo: "tipoIntangible", intangible_registro: "registroIntangible", descripcion_bien: "descripcion", valor_operacion: "valorOperacion", contacto_visita: "contactoVisitaNombre", telefono_visita: "contactoVisitaTelefono", direccion_visita: "direccionVisita", observaciones_solicitud: "observaciones" };
     const form = $("#publicRequestForm");
     Object.entries(names).forEach(([id, name]) => { const field = form?.querySelector(`#${id}`); if (field && !field.name) field.name = name; });
+    const addressNames = { direccion_calle: "calleVisita", direccion_numero: "numeroVisita", direccion_colonia: "coloniaVisita", estado_visita: "estadoVisita", municipio_visita: "municipioVisita", direccion_manzana: "manzanaVisita", direccion_lote: "loteVisita", referencia_direccion: "referenciaDireccion" };
+    Object.entries(addressNames).forEach(([id, name]) => { const field = form?.querySelector(`#${id}`); if (field && !field.name) field.name = name; });
   }
   const unidadesTexto = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve", "veinte", "veintiuno", "veintidós", "veintitrés", "veinticuatro", "veinticinco", "veintiséis", "veintisiete", "veintiocho", "veintinueve"];
   const decenasTexto = ["", "", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"];
@@ -314,11 +444,12 @@
   }
   function updateSummary() {
     ensureRequestFieldNames();
-    const values = { solicitante: textValue("solicitante_nombre"), telefono: textValue("solicitante_telefono"), correo: textValue("solicitante_correo"), valuador: textValue("publicRequestAdvisor"), tipo: textValue("publicRequestType"), tipoAvaluo: textValue("publicRequestAppraisalType"), propietario: textValue("inmueble_propietario"), contacto: textValue("contacto_visita"), telefonoVisita: textValue("telefono_visita"), direccion: textValue("direccion_visita"), descripcion: textValue("descripcion_bien"), observaciones: textValue("observaciones_solicitud"), archivos: String(archivosSeleccionados.length + archivosExistentesEnEdicion.length) };
+    const address = syncStructuredRequestAddress();
+    const values = { solicitante: textValue("solicitante_nombre"), telefono: textValue("solicitante_telefono"), correo: textValue("solicitante_correo"), valuador: textValue("publicRequestAdvisor"), tipo: textValue("publicRequestType"), tipoAvaluo: textValue("publicRequestAppraisalType"), propietario: textValue("inmueble_propietario"), contacto: textValue("contacto_visita"), telefonoVisita: textValue("telefono_visita"), direccion: address || textValue("direccion_visita"), descripcion: textValue("descripcion_bien"), observaciones: textValue("observaciones_solicitud"), archivos: String(archivosSeleccionados.length + archivosExistentesEnEdicion.length) };
     const set = (id, value) => { const node = $("#" + id); if (node) node.textContent = value; };
     set("sum-solicitante", values.solicitante); set("sum-telefono", values.telefono); set("sum-correo", values.correo); set("sum-valuador", values.valuador); set("sum-categoria", values.tipo); set("sum-tipo-avaluo", values.tipoAvaluo); set("sum-contacto-visita", values.contacto); set("sum-telefono-visita", values.telefonoVisita); set("sum-direccion", values.direccion); set("sum-descripcion", values.descripcion);
     const inmueble = values.tipo === "Inmuebles";
-    $("#sum-inmueble-enajenantes-row")?.classList.toggle("hidden", !inmueble); const ownerRow = $("#sum-inmueble-propietario-row"); if (ownerRow) { ownerRow.classList.toggle("hidden", !inmueble); ownerRow.hidden = !inmueble; }
+    $("#sum-inmueble-enajenantes-row")?.classList.toggle("hidden", !inmueble); const ownerRow = $("#sum-inmueble-propietario-row"); const hasOwner = Boolean(String(values.propietario || "").trim() && values.propietario !== "-"); if (ownerRow) { ownerRow.classList.toggle("hidden", !hasOwner); ownerRow.hidden = !hasOwner; }
     set("sum-inmueble-enajenantes", textValue("inmueble_enajenantes")); set("sum-inmueble-propietario", values.propietario);
     const purpose = textValue("proposito_avaluo", ""); const purposeRow = $("#sum-proposito-row");
     if (purposeRow) { purposeRow.classList.toggle("hidden", !purpose); purposeRow.hidden = !purpose; }
@@ -438,6 +569,11 @@
     ensureRequestFieldNames();
     clearRequestDraft();
     form.reset();
+    ["municipio_visita"].forEach((id) => { const field = $("#" + id); if (field) delete field.dataset.municipalitySelected; });
+    closeMunicipalityOptions();
+    populateRequestStates();
+    syncStructuredRequestAddress();
+    updateRequestAttachmentGuidance();
     showRequestStep(1);
     archivosSeleccionados = [];
     archivosExistentesEnEdicion = [];
@@ -845,7 +981,19 @@
     setField("valorOperacion", item.valorOperacion ?? specific.valorOperacion ?? specific.valor_operacion ?? "");
     setField("contactoVisitaNombre", item.contactoVisita?.nombre || item.contactoVisita?.name || specific.contactoVisitaNombre || specific.contacto_visita || "");
     setField("contactoVisitaTelefono", item.contactoVisita?.telefono || item.contactoVisita?.phone || specific.contactoVisitaTelefono || specific.telefono_visita || "");
-    setField("direccionVisita", item.contactoVisita?.direccion || specific.direccionVisita || specific.direccion_visita || "");
+    const address = item.contactoVisita?.direccion || specific.direccionVisita || specific.direccion_visita || "";
+    ["calleVisita", "numeroVisita", "coloniaVisita", "estadoVisita", "municipioVisita", "manzanaVisita", "loteVisita", "referenciaDireccion"].forEach((name) => { if (specific[name] != null) setField(name, specific[name]); });
+    const hasStructuredAddress = ["calleVisita", "numeroVisita", "coloniaVisita", "estadoVisita", "municipioVisita", "manzanaVisita", "loteVisita", "referenciaDireccion"].some((name) => String(specific[name] || "").trim());
+    if (!hasStructuredAddress && address) setField("referenciaDireccion", address);
+    setField("direccionVisita", address);
+    requestGeographyPromise?.then(() => {
+      if (editingRequestId !== item.id) return;
+      if (specific.estadoVisita) setField("estadoVisita", specific.estadoVisita);
+      ["calleVisita", "numeroVisita", "coloniaVisita", "municipioVisita", "manzanaVisita", "loteVisita", "referenciaDireccion"].forEach((name) => { if (specific[name] != null) setField(name, specific[name]); });
+      if (!hasStructuredAddress && address) setField("referenciaDireccion", address);
+      syncStructuredRequestAddress();
+      updateSummary();
+    });
     setField("observaciones", item.observaciones || specific.observaciones || "");
     if (item.notaria || specific.notariaReferida) setField("notariaReferida", item.notaria || specific.notariaReferida);
 
@@ -1288,7 +1436,7 @@
     if (window.__controlSolicitudesBound) return;
     window.__controlSolicitudesBound = true;
     $("#publicRequestType")?.addEventListener("change", () => { renderDynamicFields(); fillNotaries(); });
-    document.querySelectorAll("#publicRequestForm .step-tab").forEach((tab, index) => tab?.addEventListener("click", () => showRequestStep(index + 1)));
+    document.querySelectorAll("#publicRequestDialog .step-tab").forEach((tab, index) => tab?.addEventListener("click", () => showRequestStep(index + 1)));
     $("#publicRequestForm")?.addEventListener("click", (event) => {
       const editButton = event.target.closest?.("[data-request-review-step]");
       if (!editButton) return;
@@ -1356,6 +1504,8 @@
     ["closeApplicantLoginButton", "cancelApplicantLoginButton"].forEach((id) => $("#" + id)?.addEventListener("click", () => closeDialog(applicantLoginDialog)));
     $("#newInternalRequestButton")?.addEventListener("click", () => { clearRequestDraft(); resetRequestForm(); openDialog(requestDialog); fillAdvisors(); bindNewRequestExternalAssignment(); });
     window.selectCategory = selectCategory;
+    bindRequestGeographyControls();
+    document.querySelectorAll("#publicRequestForm .step-content label:not(.request-consent-label)").forEach((label) => label.classList.add("request-uppercase-label"));
     showRequestStep(1);
     refreshRequestIcons();
     $("#openRequestsViewButton")?.addEventListener("click", () => $("[data-app-view=solicitudes]")?.click());

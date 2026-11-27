@@ -27,7 +27,8 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <link href="cp6-foundation.css?v=solicitud-paso5-review-20261127-01" rel="stylesheet"/><link href="cp6-system.css?v=final-20261024" rel="stylesheet"/><link href="cp6-components.css?v=request-prefill-safe-20261105-03" rel="stylesheet"/><link href="cp6-final.css?v=home-scroll-reset-20261124-01" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link rel="stylesheet" href="cp6-approved.css?v=login-grafito-admin-20261121-05"/><link rel="stylesheet" href="cp6-tables-quotes-style.css?v=reception-final-dot-small-20261107-04"/>
-<link rel="stylesheet" href="cp6-request-cards.css?v=concluded-header-graphite-20261124-01"/><link rel="stylesheet" href="cp6-reception-form-proposal.css?v=reception-form-v7-20261122-01"/><link rel="stylesheet" href="cp6-recovery-ui.css?v=users-integrated-layout-20261126-01"/><link rel="stylesheet" href="cp6-games-proposal.css?v=games-header-clean-20261126-01"/><link rel="stylesheet" href="cp6-appraisal-menu.css?v=modules-grid-20261126-01"/></head>
+<link rel="stylesheet" href="cp6-request-cards.css?v=concluded-header-graphite-20261124-01"/><link rel="stylesheet" href="cp6-reception-form-proposal.css?v=reception-form-v7-20261122-01"/><link rel="stylesheet" href="cp6-recovery-ui.css?v=users-integrated-layout-20261126-01"/><link rel="stylesheet" href="cp6-games-proposal.css?v=games-header-clean-20261126-01"/><link rel="stylesheet" href="cp6-appraisal-menu.css?v=modules-grid-20261126-01"/>
+<link rel="stylesheet" href="cp6-request-wizard.css?v=wizard-footer-review-fix-20261127-03"/></head>
 <body class="cp6-redesign" data-server-status="checking">
 <section aria-label="Inicio de sesión" class="login-screen" id="loginScreen"><aside aria-hidden="false" class="login-visual left-panel" style="position: relative; overflow: hidden;"><div class="left-panel-content"><div class="login-visual-logo"><div class="v2-login-logo"><img class="cp6-brand-logo-image" src="assets/cp6-logo-blanco.png" alt="Logotipo Correduría Pública 6" /><div><strong>Correduría Pública 6</strong><small>Plaza Coahuila</small></div></div></div><div class="login-visual-copy" id="loginVisualBrand"><span class="v2-login-eyebrow">PRECISIÓN · CONFIANZA · CONTROL</span><h2>Una nueva forma<br/>de gestionar<br/><em>tus avalúos.</em></h2><p>Expedientes, solicitudes y seguimiento. La operación de tu correduría, conectada en un solo lugar.</p></div><section class="applicant-visual-panel" hidden="" id="applicantVisualPanel"><span class="section-kicker">SEGUIMIENTO PERSONAL</span><h2>Mis solicitudes</h2><div class="request-table-wrap" id="applicantVisualRequestsTable"></div><div class="applicant-visual-actions"><button class="primary-button" id="applicantVisualNewRequestButton" type="button">+ Solicitar servicio</button><button class="secondary-button" id="applicantVisualProfileButton" type="button">Editar perfil</button></div></section><div class="login-visual-holder">Titular Lic. Juan Manuel Barrera Martinez</div><div class="login-visual-footer">Av. Morelos 854 Oriente, Colonia Centro</div></div></aside>
 <section class="public-entry-panel">
@@ -109,27 +110,32 @@
 <div class="flex items-center justify-between max-w-2xl mx-auto">
 <!-- Paso 1 -->
 <button class="step-tab flex items-center gap-2 group focus:outline-none" id="step-tab-1" type="button">
-<span class="step-tab-label" id="step-label-1">Datos Personales</span>
+<span aria-hidden="true" class="step-tab-number">1</span>
+<span class="step-tab-label" id="step-label-1">Solicitante</span>
 </button>
 <div class="h-0.5 flex-1 bg-slate-200 mx-2 transition-colors" data-step-connector="1"></div>
 <!-- Paso 2 -->
 <button class="step-tab flex items-center gap-2 group focus:outline-none" id="step-tab-2" type="button">
-<span class="step-tab-label" id="step-label-2">Descripción del bien</span>
+<span aria-hidden="true" class="step-tab-number">2</span>
+<span class="step-tab-label" id="step-label-2">Bien y avalúo</span>
 </button>
 <div class="h-0.5 flex-1 bg-slate-200 mx-2 transition-colors" data-step-connector="2"></div>
 <!-- Paso 3 -->
 <button class="step-tab flex items-center gap-2 group focus:outline-none" id="step-tab-3" type="button">
-<span class="step-tab-label" id="step-label-3">Contacto para visita</span>
+<span aria-hidden="true" class="step-tab-number">3</span>
+<span class="step-tab-label" id="step-label-3">Visita y ubicación</span>
 </button>
 <div class="h-0.5 flex-1 bg-slate-200 mx-2 transition-colors" data-step-connector="3"></div>
 <!-- Paso 4 -->
 <button class="step-tab flex items-center gap-2 group focus:outline-none" id="step-tab-4" type="button">
-<span class="step-tab-label" id="step-label-4">Antecedentes</span>
+<span aria-hidden="true" class="step-tab-number">4</span>
+<span class="step-tab-label" id="step-label-4">Documentos</span>
 </button>
 <div class="h-0.5 flex-1 bg-slate-200 mx-2 transition-colors" data-step-connector="4"></div>
 <!-- Paso 5 -->
 <button class="step-tab flex items-center gap-2 group focus:outline-none" id="step-tab-5" type="button">
-<span class="step-tab-label" id="step-label-5">Resumen</span>
+<span aria-hidden="true" class="step-tab-number">5</span>
+<span class="step-tab-label" id="step-label-5">Revisión</span>
 </button>
 </div>
 </div>
@@ -139,8 +145,8 @@
 <!-- ================= PASO 1: SOLICITANTE ================= -->
 <div class="step-content space-y-5" id="step-content-1">
 <div class="border-b border-slate-200 pb-3">
-<h2 class="text-base font-bold text-slate-900">Datos Generales del Solicitante</h2>
-<p class="text-xs text-slate-500">Ingrese la información básica del cliente y asignación técnica.</p>
+<h2 class="text-base font-bold text-slate-900">Datos del solicitante</h2>
+<p class="text-xs text-slate-500">Capture los datos de contacto, propietario y valuador asignado.</p>
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <!-- Nombre Completo -->
@@ -165,6 +171,13 @@
 <div class="relative">
 <i class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" data-lucide="mail"></i>
 <input class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" id="solicitante_correo" name="correo" placeholder="ejemplo@correo.com" type="email"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="block text-xs font-semibold text-slate-700" for="inmueble_propietario">Propietario(s)</label>
+<div class="relative">
+<i class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" data-lucide="user-round"></i>
+<input class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition" id="inmueble_propietario" placeholder="Nombre del propietario o propietarios" type="text"/>
 </div>
 </div>
 <!-- Valuador Asignado (COMBOBOX / SELECT) -->
@@ -201,8 +214,8 @@
 <!-- ================= PASO 2: TIPO DE BIEN ================= -->
 <div class="step-content hidden space-y-5" id="step-content-2">
 <div class="border-b border-slate-200 pb-3">
-<h2 class="text-base font-bold text-slate-900">Categoría y Especificación del Bien</h2>
-<p class="text-xs text-slate-500">Seleccione el tipo de bien y complete los datos requeridos para esa categoría.</p>
+<h2 class="text-base font-bold text-slate-900">Bien y datos del avalúo</h2>
+<p class="text-xs text-slate-500">Selecciona la categoría y captura la información específica del bien.</p>
 </div>
 <!-- Selección de Categoría (Iconos limpios) -->
 <div class="space-y-2">
@@ -236,7 +249,7 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
 <!-- Tipo de Avalúo (Común) -->
 <div class="space-y-1.5">
-<label class="block text-xs font-semibold text-slate-700">Tipo de avalúo</label>
+<label class="block text-xs font-semibold text-slate-700" for="publicRequestAppraisalType">Objeto del avalúo</label>
 <select class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition pl-11" id="publicRequestAppraisalType" name="tipoAvaluo">
 <option value="">Selecciona el tipo de avalúo</option>
 <option value="Referido">Referido</option>
@@ -255,16 +268,12 @@
 <div class="cat-specific-block space-y-4 border-t border-slate-200 pt-3 hidden" id="cat-fields-inmuebles">
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 <div class="space-y-1.5">
-<label class="block text-xs font-semibold text-slate-700">Subtipo de inmueble</label>
-<select class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition pl-11" id="inmueble_subtipo"><option value="">Selecciona el tipo de bien</option><option value="Terreno">Terreno</option><option value="Construcción">Construcción</option><option value="Casa Habitación">Casa habitación</option><option value="Departamento">Departamento</option><option value="Local Comercial">Local comercial</option><option value="Nave Industrial">Nave industrial</option><option value="Oficina">Oficina</option></select>
+<label class="block text-xs font-semibold text-slate-700" for="inmueble_subtipo">Tipo de bien</label>
+<select class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition pl-11" id="inmueble_subtipo"><option value="">Selecciona el tipo de bien</option><option value="Terreno">Terreno</option><option value="Construcción">Construcción</option><option value="Terreno y construcción">Terreno y construcción</option><option value="Casa Habitación">Casa habitación</option><option value="Departamento">Departamento</option><option value="Local Comercial">Local comercial</option><option value="Nave Industrial">Nave industrial</option><option value="Oficina">Oficina</option></select>
 </div>
 <div class="space-y-1.5">
 <label class="block text-xs font-semibold text-slate-700">Número de enajenantes</label>
 <input class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition pl-11" id="inmueble_enajenantes" min="1" placeholder="Ej. 1" type="number"/>
-</div>
-<div class="space-y-1.5">
-<label class="block text-xs font-semibold text-slate-700">Propietario</label>
-<input class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl px-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition pl-11" id="inmueble_propietario" placeholder="Ej. María González Pérez" type="text"/>
 </div>
 </div>
 </div>
@@ -334,11 +343,6 @@
 </div>
 </div>
 </div>
-<!-- Descripción libre del bien o múltiples bienes -->
-<div class="space-y-1.5">
-<label class="block text-xs font-semibold text-slate-700">Descripción detallada del o los bienes</label>
-<textarea class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl p-4 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none py-3 pl-11" id="descripcion_bien" placeholder="Escriba aquí los detalles principales. Si se trata de múltiples bienes, agréguelos en este espacio..." rows="1"></textarea>
-</div>
 <!-- Valor de Operación (Solo se muestra en Inmuebles) -->
 <div class="space-y-1.5" id="valor-operacion-container">
 <label class="block text-xs font-semibold text-slate-700">Valor de operación / estimado (MXN)</label>
@@ -371,25 +375,37 @@
 </div>
 </div>
 </div>
-<div class="space-y-1.5">
-<label class="block text-xs font-semibold text-slate-700">Ubicación / Dirección completa</label>
-<div class="relative">
-<i class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" data-lucide="map-pin"></i>
-<textarea class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none" id="direccion_visita" name="direccionVisita" placeholder="Calle, número, colonia, código postal, municipio y estado..." rows="3"></textarea>
+<section aria-labelledby="requestAddressTitle" class="request-address-card">
+<header class="request-address-heading"><span class="request-address-icon"><i data-lucide="map-pin" aria-hidden="true"></i></span><div><h3 id="requestAddressTitle">Ubicación del bien</h3><p>Captura la dirección con el mayor detalle posible.</p></div></header>
+<div class="request-address-grid">
+<label class="request-address-field request-address-street" for="direccion_calle"><span>Calle</span><input autocomplete="address-line1" id="direccion_calle" name="calleVisita" placeholder="Nombre de la calle" type="text"/></label>
+<label class="request-address-field" for="direccion_numero"><span>Número</span><input autocomplete="off" id="direccion_numero" name="numeroVisita" placeholder="Exterior / interior" type="text"/></label>
+<label class="request-address-field" for="direccion_colonia"><span>Colonia</span><input autocomplete="address-level3" id="direccion_colonia" name="coloniaVisita" placeholder="Colonia o localidad" type="text"/></label>
+<label class="request-address-field" for="estado_visita"><span>Estado</span><select autocomplete="address-level1" id="estado_visita" name="estadoVisita"><option value="">Selecciona un estado</option></select></label>
+<div class="request-address-field request-municipality-field"><label for="municipio_visita"><span>Municipio</span></label><div class="request-municipality-combobox"><input aria-autocomplete="list" aria-controls="cp6MunicipiosList" aria-expanded="false" autocomplete="off" id="municipio_visita" name="municipioVisita" placeholder="Escribe para buscar" role="combobox" type="text"/><div class="request-municipality-options" hidden="" id="cp6MunicipiosList" role="listbox"></div></div></div>
+<label class="request-address-field" for="direccion_manzana"><span>Manzana</span><input autocomplete="off" id="direccion_manzana" name="manzanaVisita" placeholder="Opcional" type="text"/></label>
+<label class="request-address-field" for="direccion_lote"><span>Lote</span><input autocomplete="off" id="direccion_lote" name="loteVisita" placeholder="Opcional" type="text"/></label>
 </div>
+<label class="request-address-field request-address-reference" for="referencia_direccion"><span>Referencia adicional (opcional)</span><textarea id="referencia_direccion" name="referenciaDireccion" placeholder="Entre calles, referencias de acceso u otra indicación de ubicación" rows="2"></textarea></label>
+<p class="request-geography-status" id="requestGeographyStatus" role="status">Selecciona el estado para ver coincidencias de municipios.</p>
+<textarea hidden="" id="direccion_visita" name="direccionVisita" aria-hidden="true" tabindex="-1"></textarea>
+</section>
+<div class="space-y-1.5 request-description-field">
+<label class="block text-xs font-semibold text-slate-700" for="descripcion_bien">Descripción detallada del inmueble o bien</label>
+<textarea class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl p-4 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-y" id="descripcion_bien" placeholder="Describe sus características, por ejemplo: número de pisos, color, estado de conservación o si el terreno está baldío." rows="4"></textarea>
 </div>
 </div>
 <!-- ================= PASO 4: DOCUMENTOS ADJUNTOS ================= -->
 <div class="step-content hidden space-y-4" id="step-content-4">
 <div class="border-b border-slate-200 pb-3">
-<h2 class="text-base font-bold text-slate-900">Antecedentes</h2>
-<p class="text-xs text-slate-500">Adjunte escrituras, fotografías, facturas u otros antecedentes relevantes.</p>
+<h2 class="text-base font-bold text-slate-900">Documentación de apoyo</h2>
+<p class="text-xs text-slate-500" id="requestAttachmentDescription">Adjunta fotografías, documentos o antecedentes relacionados con el bien. Este paso es opcional.</p>
 </div>
 <!-- Creador de Dropzone -->
 <label class="border-2 border-dashed border-slate-300 hover:border-brand-500 bg-slate-50/50 hover:bg-brand-50/30 rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer transition text-center group" for="publicRequestAttachments">
 <input accept="image/*,.pdf,.doc,.docx,.zip" class="hidden" id="publicRequestAttachments" multiple="" name="archivos" type="file"/>
 <div class="p-3 bg-white rounded-full shadow-sm border border-slate-200 group-hover:scale-110 transition mb-2">
-<i class="w-6 h-6 text-brand-600" data-lucide="upload-cloud"></i>
+<i class="w-6 h-6 text-brand-600" data-lucide="upload-cloud" id="requestAttachmentIcon"></i>
 </div>
 <p class="text-xs font-bold text-slate-800">Haga clic o arrastre archivos aquí</p>
 <p class="text-[11px] text-slate-400 mt-0.5">Soporta PDF, imágenes (JPG, PNG), Word y ZIP (Máx. 100 MB por archivo)</p>
@@ -422,11 +438,10 @@
 <header class="request-review-heading"><span class="request-review-icon"><i data-lucide="clipboard-list" aria-hidden="true"></i></span><div><h3 id="requestReviewAssetTitle">Bien a valuar</h3><p>Categoría y datos capturados para el avalúo</p></div><button class="request-review-edit" type="button" data-request-review-step="2" aria-label="Editar datos del bien a valuar"><i data-lucide="pencil" aria-hidden="true"></i>Editar</button></header>
 <div class="request-review-grid">
 <div class="request-review-field"><span class="request-review-label">Categoría principal</span><strong class="request-review-value request-review-category" id="sum-categoria">-</strong></div>
-<div class="request-review-field"><span class="request-review-label">Tipo de avalúo</span><strong class="request-review-value" id="sum-tipo-avaluo">-</strong></div>
+<div class="request-review-field"><span class="request-review-label">Objeto del avalúo</span><strong class="request-review-value" id="sum-tipo-avaluo">-</strong></div>
 <div class="request-review-field hidden" id="sum-proposito-row" hidden><span class="request-review-label">Propósito del avalúo</span><strong class="request-review-value" id="sum-proposito">-</strong></div>
 </div>
 <div class="request-review-specific-grid hidden" id="requestReviewSpecificFields" hidden></div>
-<div class="request-review-description"><span class="request-review-label">Descripción detallada del o los bienes</span><p class="request-review-description-value" id="sum-descripcion">-</p></div>
 <div class="request-review-operation hidden" id="sum-valor-operacion-container" hidden><span class="request-review-label">Valor de operación (solo inmuebles)</span><strong id="sum-valor-num">$0.00 MXN</strong><small id="sum-valor-letras">-</small></div>
 </section>
 <section class="request-review-section" aria-labelledby="requestReviewVisitTitle">
@@ -436,6 +451,7 @@
 <div class="request-review-field"><span class="request-review-label">Teléfono de visita</span><strong class="request-review-value" id="sum-telefono-visita">-</strong></div>
 <div class="request-review-field request-review-field-wide"><span class="request-review-label">Ubicación / Dirección</span><strong class="request-review-value" id="sum-direccion">-</strong></div>
 </div>
+<div class="request-review-description"><span class="request-review-label">Descripción detallada del inmueble o bien</span><p class="request-review-description-value" id="sum-descripcion">-</p></div>
 </section>
 <section class="request-review-section" aria-labelledby="requestReviewDocumentsTitle">
 <header class="request-review-heading"><span class="request-review-icon"><i data-lucide="file-text" aria-hidden="true"></i></span><div><h3 id="requestReviewDocumentsTitle">Antecedentes y documentos</h3><p>Archivos de apoyo · paso opcional</p></div><button class="request-review-edit" type="button" data-request-review-step="4" aria-label="Editar antecedentes y documentos"><i data-lucide="pencil" aria-hidden="true"></i>Editar</button></header>
@@ -447,6 +463,7 @@
 <label class="request-review-observations-label" for="observaciones_solicitud">Si necesitas agregar una indicación, escríbela aquí.</label>
 <textarea class="w-full bg-white border border-slate-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 rounded-2xl p-3.5 text-sm text-slate-900 font-medium placeholder:text-slate-400 outline-none transition resize-none" id="observaciones_solicitud" name="observaciones" placeholder="Agrega cualquier indicación especial o detalle adicional..." rows="2"></textarea>
 </section>
+</div>
 </div>
 <!-- BOTONES DE NAVEGACIÓN INFERIORES -->
 <p class="form-message mx-6 mb-2" id="publicRequestMessage" role="alert"></p>
@@ -828,7 +845,7 @@
 </main>
 <dialog class="record-dialog report-dialog" id="reportDialog"><form id="reportForm" method="dialog"><div class="dialog-heading"><div><p class="eyebrow">REPORTE GENERAL</p><h2>Selecciona el periodo</h2></div><button aria-label="Cerrar" class="icon-button" id="closeReportDialogButton" type="button">×</button></div><p class="report-dialog-copy">Para generar un resumen primero selecciona las fechas y da clic en Generar resumen PDF.</p><div class="form-grid"><label>Desde *<input id="reportStartDate" required="" type="date"/></label><label>Hasta *<input id="reportEndDate" required="" type="date"/></label></div><p class="form-message" id="reportMessage" role="alert"></p><div class="dialog-actions"><button class="secondary-button btn-copu-primary" id="cancelReportDialogButton" type="button">Cancelar</button><button class="primary-button" type="submit">Generar resumen PDF</button></div></form></dialog>
 <script src="automotriz-model.js?v=final-20261024"></script>
-<script src="app.js?v=users-integrated-layout-20261126-01"></script>
+<script src="app.js?v=request-wizard-update-message-20261127-01"></script>
 <script src="image-utils.js?v=final-20261024"></script>
 <script src="vendor/html-docx.js?v=final-20261024"></script>
 <script src="word-export.js?v=final-20261024"></script>
@@ -838,7 +855,7 @@
 <script src="mobile-pwa.js?v=final-20261024"></script>
 <script src="automotriz-form.js?v=machinery-visible-20261113-01"></script>
 <script src="mobiliario-form.js?v=final-20261024"></script>
-<script src="solicitudes-form.js?v=solicitud-paso5-review-20261127-01"></script>
+<script src="solicitudes-form.js?v=all-steps-upload-count-20261127-02"></script>
 <script src="messaging.js?v=chat-clean-compose-20261110-01"></script>
 <script src="cp6-presentation.js?v=workspace-profile-clean-20261121-04"></script></body>
 </html>

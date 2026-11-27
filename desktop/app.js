@@ -1683,8 +1683,9 @@
   enhanceAllSelects();
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker?.addEventListener("controllerchange", () => {
-      const activeForm = document.querySelector("#publicRequestForm:not([hidden])") || document.querySelector("form:focus-within");
-      const message = document.querySelector("#publicRequestMessage") || document.querySelector("#formMessage");
+      const requestDialog = document.querySelector("#publicRequestDialog");
+      const activeForm = requestDialog?.open ? document.querySelector("#publicRequestForm") : document.querySelector("form:focus-within");
+      const message = activeForm?.querySelector("#publicRequestMessage") || (activeForm?.id === "recordForm" ? document.querySelector("#formMessage") : null);
       if (activeForm && message) {
         message.textContent = "Hay una actualización disponible. Tus datos siguen en esta pantalla; termina o guarda el formulario antes de recargar.";
         message.className = "form-message is-success";
