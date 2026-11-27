@@ -339,3 +339,52 @@ body.cp6-redesign #publicRequestDialog.public-request-dialog .step-tab { min-wid
   body.cp6-redesign #publicRequestDialog.public-request-dialog .step-tab { width: 100%; min-width: 0 !important; padding-inline: 2px; }
   body.cp6-redesign #publicRequestDialog.public-request-dialog .step-tab-label { max-width: 100%; white-space: normal !important; overflow-wrap: anywhere; font-size: 8px; }
 }
+
+/* Override final: el wizard aprobado usa grafito y los iconos quedan fuera del área de texto. */
+body.cp6-redesign #publicRequestDialog.public-request-dialog .v2-request-header {
+  background: #29343f !important;
+  background-image: none !important;
+  color: #fff !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .v2-request-header > div:first-child > div:first-child {
+  border-color: rgba(255,255,255,.18) !important;
+  background: #3a4652 !important;
+  color: #eef2f5 !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .step-content .relative > :is(input, select, textarea):not([type="hidden"]):not([type="file"]) {
+  padding-left: 44px !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .step-content .relative > select:not([type="hidden"]) {
+  padding-right: 40px !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .v2-request-header [data-lucide] {
+  color: #eef2f5 !important;
+  stroke: currentColor !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .step-tab.is-active {
+  border-color: #aeb8c1 !important;
+  background: #f1f3f5 !important;
+  color: #29343f !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .step-tab.is-active .step-tab-number {
+  border-color: #29343f !important;
+  background: #29343f !important;
+  color: #fff !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .step-tab.is-active .step-tab-label {
+  color: #29343f !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .step-content > .border-b::after {
+  background: #65717c !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog .step-content :is(input, select, textarea):focus {
+  border-color: #65717c !important;
+  box-shadow: 0 0 0 3px rgba(65, 77, 89, .12) !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog #btn-next {
+  background: #29343f !important;
+  color: #fff !important;
+}
+body.cp6-redesign #publicRequestDialog.public-request-dialog #btn-next:hover {
+  background: #1f2933 !important;
+}
