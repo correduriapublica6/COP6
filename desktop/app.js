@@ -1523,6 +1523,11 @@
     const target = $("#validationRegistryList");
     if (!target) return;
     const filter = $("#validationRegistryFilter")?.value || "todos";
+    $$('[data-validation-filter]').forEach((button) => {
+      const active = button.dataset.validationFilter === filter;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
     const query = String($("#validationRegistrySearch")?.value || "").trim().toLocaleLowerCase("es-MX");
     const uniqueValidationRows = new Map();
     validationRegistryRows.forEach((item) => {
@@ -1547,7 +1552,7 @@
     target.innerHTML = `<table class="validation-registry-table"><thead><tr><th>No. de avalúo</th><th>Fecha</th><th>Valuador</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${items.map(item => {
       const stamp = item.fechaRegistro || item.creadoEn;
       const date = stamp ? new Date(stamp).toLocaleDateString("es-MX", { day: "2-digit", month: "2-digit", year: "numeric" }) : "—";
-      return `<tr><td><strong>#${escapeHtml(item.numeroAvaluo)}</strong></td><td>${escapeHtml(date)}</td><td>${escapeHtml(item.valuador || "Sin valuador")}</td><td><span class="folio-validation-status ${item.registrado ? "is-registered" : "is-pending"}">${escapeHtml(item.estado || (item.registrado ? "Registrado en Recepción" : "Pendiente de Recepción"))}</span></td><td><button type="button" class="validation-delete-button" data-delete-validation-folio="${escapeHtml(item.numeroAvaluo)}" aria-label="Eliminar folio ${escapeHtml(item.numeroAvaluo)}" title="Eliminar folio"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button></td></tr>`;
+      return `<tr><td><strong>#${escapeHtml(item.numeroAvaluo)}</strong></td><td>${escapeHtml(date)}</td><td>${escapeHtml(item.valuador || "Sin valuador")}</td><td><span class="folio-validation-status ${item.registrado ? "is-registered" : "is-pending"}">${escapeHtml(item.estado || (item.registrado ? "Registrado en Recepción" : "Pendiente de Recepción"))}</span></td><td><button type="button" class="validation-delete-button" data-delete-validation-folio="${escapeHtml(item.numeroAvaluo)}" aria-label="Retirar folio ${escapeHtml(item.numeroAvaluo)}" title="Retirar folio"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button></td></tr>`;
     }).join("")}</tbody></table><nav class="table-pagination validation-pagination" aria-label="Paginación de avalúos validados"><span>Mostrando ${start + 1}-${start + items.length} de ${visible.length}</span><div><button type="button" class="table-page-button" data-validation-page="${validationRegistryPage - 1}" ${validationRegistryPage === 1 ? "disabled" : ""} aria-label="Página anterior">‹</button>${pageButtons}<button type="button" class="table-page-button" data-validation-page="${validationRegistryPage + 1}" ${validationRegistryPage === pages ? "disabled" : ""} aria-label="Página siguiente">›</button></div></nav>`;
     target.querySelectorAll("[data-validation-page]").forEach(button => button.addEventListener("click", () => { if (button.disabled) return; validationRegistryPage = Number(button.dataset.validationPage); paintValidationRegistry(); }));
     target.querySelectorAll("[data-delete-validation-folio]").forEach(button => button.addEventListener("click", async () => {
@@ -1912,6 +1917,7 @@
   });
   window.addEventListener("control-avaluos:subsection-change", (event) => {
     const section = event.detail;
+    $("#avaluosView")?.classList.toggle("is-validating", section === "validacion");
     // Cambiar entre Recepción, Gestión o Validación siempre abandona el formulario.
     if (section !== "recepcion") window.dispatchEvent(new CustomEvent("control-avaluos:close-reception-editor"));
     if (section !== "crear") window.dispatchEvent(new CustomEvent("control-avaluos:close-technical-creation"));
@@ -1937,16 +1943,16 @@
     if (backButton && inAvaluos && section === "recepcion") backButton.innerHTML = '<i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Regresar';
     if (registerButton && inAvaluos && section === "recepcion") registerButton.innerHTML = '<i class="fa-solid fa-plus" aria-hidden="true"></i> Nueva Recepción';
     if (section === "recepcion") createButton?.classList.add("is-hidden");
+    const validationPanel = $("#avaluosAuthorizedFoliosPanel");
     if (section !== "validacion") {
+      if (validationPanel) { delete validationPanel.dataset.open; validationPanel.classList.add("is-hidden"); validationPanel.hidden = true; validationPanel.style.removeProperty("display"); }
       const validationMessage = $("#authorizedFolioMessageAvaluos");
       if (validationMessage) { validationMessage.textContent = ""; validationMessage.className = "form-message"; }
     }
     if (section === "validacion") {
-      const validationPanel = $("#avaluosAuthorizedFoliosPanel");
-      if (validationPanel) { validationPanel.dataset.open = "true"; validationPanel.classList.remove("is-hidden"); validationPanel.hidden = false; validationPanel.style.setProperty("display", "block", "important"); }
+      if (validationPanel) { validationPanel.dataset.open = "true"; validationPanel.hidden = false; validationPanel.style.removeProperty("display"); }
       renderAuthorizedFolios();
       renderValidationRegistry();
-      window.setTimeout(() => { const panel = $("#avaluosAuthorizedFoliosPanel"); if (panel) { panel.classList.remove("is-hidden"); panel.hidden = false; panel.style.setProperty("display", "block", "important"); } }, 0);
     }
   });
   window.addEventListener("control-avaluos:technical-creation-state", (event) => {
@@ -1984,6 +1990,12 @@
   $("#searchAuthorizedFolioButton")?.addEventListener("click", () => { const value = normalizeNumber($("#authorizedFolioSearchInputAvaluos")?.value || ""); const message = $("#authorizedFolioMessageAvaluos"); if (!/^\d{4}$/.test(value)) { if (message) message.textContent = "Escribe un número de avalúo de cuatro dígitos para buscar."; return; } const authorized = authorizedAppraisalNumbers.some((item) => normalizeNumber(item) === value); const technical = technicalAppraisals.some((item) => normalizeNumber(item.numeroAvaluo || item.numero) === value); const received = records.some((item) => normalizeNumber(item.numeroAvaluo) === value); if (message) { message.textContent = authorized || technical || received ? `El avalúo ${value} fue localizado${received ? " y ya está en Recepción" : technical ? " en expedientes técnicos" : " como folio autorizado"}.` : `No se encontró el avalúo ${value}.`; message.className = `form-message ${authorized || technical || received ? "is-success" : "is-error"}`; } });
   $("#refreshPendingSummaryButton")?.addEventListener("click", renderPendingReceptionSummary);
   $("#validationRegistryFilter")?.addEventListener("change", () => { validationRegistryPage = 1; paintValidationRegistry(); });
+  $$('[data-validation-filter]').forEach((button) => button?.addEventListener("click", () => {
+    const filter = $("#validationRegistryFilter");
+    if (!filter) return;
+    filter.value = button.dataset.validationFilter || "todos";
+    filter.dispatchEvent(new Event("change", { bubbles: true }));
+  }));
   $("#validationRegistrySearch")?.addEventListener("input", () => { validationRegistryPage = 1; paintValidationRegistry(); });
 
   // Cotizaciones se abre dentro del flujo normal de Avalúos, no como popup.

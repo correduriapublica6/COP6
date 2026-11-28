@@ -1,0 +1,362 @@
+/* Validación CP6 · diseño de escritorio y móvil · 2026-11-27 */
+#appShell.control-shell #avaluosAuthorizedFoliosPanel {
+  width: min(100%, 1500px) !important;
+  max-width: 1500px !important;
+  margin: 0 auto 22px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell #avaluosView.is-validating #avaluosAuthorizedFoliosPanel:not(.is-hidden):not([hidden]) { display: block !important; }
+#appShell.control-shell #avaluosView.is-validating .avaluos-section-heading { display: none !important; }
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-authorize-card {
+  display: grid !important;
+  grid-template-columns: minmax(220px, .8fr) minmax(360px, 1.2fr) !important;
+  align-items: center !important;
+  gap: 24px !important;
+  padding: 22px 26px !important;
+  border: 1px solid #e2e7eb !important;
+  border-radius: 16px !important;
+  background: #fff !important;
+  box-shadow: 0 5px 18px rgba(27, 39, 48, .055) !important;
+}
+#appShell.control-shell .validation-authorize-copy > span,
+#appShell.control-shell .validation-registry-panel-heading > div > span {
+  display: block !important;
+  margin-bottom: 6px !important;
+  color: #8a6b42 !important;
+  font: 750 10px/1.2 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  letter-spacing: .105em !important;
+  text-transform: uppercase !important;
+}
+#appShell.control-shell .validation-authorize-copy h3,
+#appShell.control-shell .validation-registry-panel-heading h3 {
+  margin: 0 !important;
+  color: #283640 !important;
+  font: 750 19px/1.3 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  letter-spacing: -.025em !important;
+}
+#appShell.control-shell .validation-authorize-copy p,
+#appShell.control-shell .validation-registry-panel-heading p {
+  margin: 5px 0 0 !important;
+  color: #69757d !important;
+  font: 400 12px/1.55 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-authorize-form {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 128px !important;
+  align-items: end !important;
+  justify-content: stretch !important;
+  gap: 7px 12px !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-field {
+  display: flex !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  flex: initial !important;
+  flex-direction: column !important;
+  gap: 7px !important;
+}
+#appShell.control-shell .validation-field-label {
+  color: #52616a !important;
+  font: 700 10px/1.3 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  letter-spacing: .055em !important;
+}
+#appShell.control-shell #authorizedFolioInputAvaluos {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 44px !important;
+  box-sizing: border-box !important;
+  padding: 0 13px !important;
+  border: 1px solid #cbd3d8 !important;
+  border-radius: 9px !important;
+  background: #fff !important;
+  color: #293741 !important;
+  font: 550 14px "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  letter-spacing: .035em !important;
+  outline: none !important;
+}
+#appShell.control-shell #authorizedFolioInputAvaluos::placeholder { color: #9aa4aa !important; opacity: 1 !important; }
+#appShell.control-shell #authorizedFolioInputAvaluos:focus,
+#appShell.control-shell #validationRegistrySearch:focus {
+  border-color: #55636c !important;
+  box-shadow: 0 0 0 3px rgba(71, 88, 99, .12) !important;
+}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-actions {
+  display: flex !important;
+  margin: 0 !important;
+  align-items: flex-end !important;
+}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-actions button {
+  display: inline-flex !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  border: 1px solid #34434d !important;
+  border-radius: 9px !important;
+  background: #34434d !important;
+  color: #fff !important;
+  font: 650 12px "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  box-shadow: none !important;
+}
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-actions button:hover { background: #26343d !important; }
+#appShell.control-shell #authorizedFolioMessageAvaluos { grid-column: 1 / -1 !important; min-height: 0 !important; margin: 0 !important; font-size: 11px !important; }
+#appShell.control-shell #authorizedFolioMessageAvaluos:empty { display: none !important; }
+#appShell.control-shell .validation-registry-section {
+  display: block !important;
+  width: 100% !important;
+  margin: 16px 0 0 !important;
+  padding: 20px 22px 14px !important;
+  border: 1px solid #e2e7eb !important;
+  border-radius: 16px !important;
+  background: #fff !important;
+  box-shadow: 0 5px 18px rgba(27, 39, 48, .055) !important;
+}
+#appShell.control-shell .validation-registry-panel-heading { margin-bottom: 16px !important; }
+#appShell.control-shell .validation-registry-panel-heading > div > span { margin-bottom: 5px !important; }
+#appShell.control-shell .validation-registry-panel-heading h3 { font-size: 18px !important; }
+#appShell.control-shell .validation-registry-panel-heading p { font-size: 11px !important; }
+#appShell.control-shell .validation-registry-heading {
+  display: grid !important;
+  grid-template-columns: minmax(230px, 1fr) max-content !important;
+  align-items: center !important;
+  justify-content: stretch !important;
+  gap: 12px !important;
+  margin: 0 0 14px !important;
+}
+#appShell.control-shell .validation-registry-heading > .custom-select { display: none !important; }
+#appShell.control-shell .validation-registry-search-wrap {
+  position: relative !important;
+  display: flex !important;
+  width: 100% !important;
+  max-width: 430px !important;
+  height: 42px !important;
+  align-items: center !important;
+}
+#appShell.control-shell .validation-registry-search-wrap i {
+  position: absolute !important;
+  z-index: 2 !important;
+  top: 50% !important;
+  left: 14px !important;
+  color: #7e8a91 !important;
+  font-size: 13px !important;
+  pointer-events: none !important;
+  transform: translateY(-50%) !important;
+}
+#appShell.control-shell #validationRegistrySearch {
+  width: 100% !important;
+  height: 42px !important;
+  box-sizing: border-box !important;
+  padding: 0 14px 0 39px !important;
+  border: 1px solid #ccd4d9 !important;
+  border-radius: 9px !important;
+  background: #fff !important;
+  color: #34434d !important;
+  font: 400 12px "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  outline: none !important;
+}
+#appShell.control-shell #validationRegistrySearch::placeholder { color: #8c989e !important; opacity: 1 !important; }
+#appShell.control-shell .validation-native-filter { position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; clip-path: inset(50%) !important; }
+#appShell.control-shell .validation-filter-pills {
+  display: flex !important;
+  min-width: 0 !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  justify-self: end !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 5px !important;
+  padding: 4px !important;
+  border: 1px solid #e3e7ea !important;
+  border-radius: 10px !important;
+  background: #f6f7f8 !important;
+}
+#appShell.control-shell .validation-filter-pill {
+  display: inline-flex !important;
+  min-height: 34px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 11px !important;
+  border: 1px solid transparent !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  color: #637078 !important;
+  font: 600 10px/1.3 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  transition: background-color .15s ease, color .15s ease, box-shadow .15s ease !important;
+}
+#appShell.control-shell .validation-filter-pill:hover { color: #293943 !important; background: #fff !important; }
+#appShell.control-shell .validation-filter-pill.is-active {
+  border-color: #e1e5e8 !important;
+  background: #fff !important;
+  color: #2f3e48 !important;
+  box-shadow: 0 1px 3px rgba(28, 41, 49, .08) !important;
+}
+#appShell.control-shell .validation-filter-pill:focus-visible,
+#appShell.control-shell .validation-delete-button:focus-visible,
+#appShell.control-shell .validation-pagination button:focus-visible { outline: 2px solid #657681 !important; outline-offset: 2px !important; }
+#appShell.control-shell .validation-registry-table-wrap { display: block !important; width: 100% !important; overflow-x: auto !important; overscroll-behavior-x: contain !important; border: 1px solid #e7ebee !important; border-radius: 10px !important; }
+#appShell.control-shell .validation-registry-table {
+  width: 100% !important;
+  min-width: 760px !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  background: #fff !important;
+  font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+}
+#appShell.control-shell .validation-registry-table th {
+  height: 42px !important;
+  padding: 10px 15px !important;
+  border: 0 !important;
+  border-bottom: 1px solid #e5eaed !important;
+  background: #f7f8f8 !important;
+  color: #65727a !important;
+  font: 700 9px/1.3 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  letter-spacing: .075em !important;
+  text-align: left !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+#appShell.control-shell .validation-registry-table td {
+  height: 56px !important;
+  padding: 10px 15px !important;
+  border: 0 !important;
+  border-bottom: 1px solid #edf0f2 !important;
+  background: #fff !important;
+  color: #46545d !important;
+  font: 400 12px/1.4 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  vertical-align: middle !important;
+}
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #validationRegistryList .validation-registry-table :is(th, td) { font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif !important; }
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #validationRegistryList .validation-registry-table td { font-size: 12px !important; line-height: 1.4 !important; }
+#appShell.control-shell .validation-registry-table tbody tr:last-child td { border-bottom: 0 !important; }
+#appShell.control-shell .validation-registry-table tbody tr:hover td { background: #fafbfb !important; }
+#appShell.control-shell .validation-registry-table th:first-child,
+#appShell.control-shell .validation-registry-table td:first-child { width: 150px !important; }
+#appShell.control-shell .validation-registry-table td:first-child strong { color: #34434d !important; font-size: 13px !important; font-weight: 750 !important; letter-spacing: .035em !important; }
+#appShell.control-shell .validation-registry-table th:nth-child(2),
+#appShell.control-shell .validation-registry-table td:nth-child(2) { width: 140px !important; white-space: nowrap !important; }
+#appShell.control-shell .validation-registry-table th:nth-child(4) { width: 240px !important; }
+#appShell.control-shell .validation-registry-table td:last-child,
+#appShell.control-shell .validation-registry-table th:last-child { width: 88px !important; text-align: center !important; }
+#appShell.control-shell .folio-validation-status {
+  display: inline-flex !important;
+  max-width: 100% !important;
+  min-height: 26px !important;
+  align-items: center !important;
+  padding: 4px 10px !important;
+  border: 1px solid transparent !important;
+  border-radius: 999px !important;
+  font: 650 9px/1.25 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  white-space: normal !important;
+}
+/* La hoja aprobada del Home usa selectores de tabla con varios IDs repetidos; limitar esta excepción a Validación. */
+body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #validationRegistryList#validationRegistryList#validationRegistryList .validation-registry-table .folio-validation-status { font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif !important; font-size: 10px !important; line-height: 1.25 !important; }
+#appShell.control-shell .folio-validation-status.is-registered { border-color: #cce6d5 !important; background: #edf7f0 !important; color: #36714c !important; }
+#appShell.control-shell .folio-validation-status.is-pending { border-color: #ead8bb !important; background: #fbf4e8 !important; color: #896531 !important; }
+#appShell.control-shell .validation-delete-button {
+  display: inline-flex !important;
+  width: 34px !important;
+  height: 34px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  border: 1px solid #f0d6d7 !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  color: #b5474d !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease !important;
+}
+#appShell.control-shell .validation-delete-button:hover { border-color: #e7b9bb !important; background: #fff2f2 !important; color: #a32f36 !important; }
+#appShell.control-shell .validation-pagination {
+  display: flex !important;
+  min-height: 49px !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  padding: 9px 3px 0 !important;
+  color: #727e85 !important;
+  font: 500 10px/1.4 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+}
+#appShell.control-shell .validation-pagination > div { display: flex !important; align-items: center !important; gap: 4px !important; }
+#appShell.control-shell .validation-pagination .table-page-button {
+  display: inline-flex !important;
+  min-width: 30px !important;
+  height: 30px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 8px !important;
+  border: 1px solid #e1e6e9 !important;
+  border-radius: 7px !important;
+  background: #fff !important;
+  color: #59666e !important;
+  font: 600 10px "Plus Jakarta Sans", Inter, system-ui, sans-serif !important;
+  cursor: pointer !important;
+}
+#appShell.control-shell .validation-pagination .table-page-button.is-active { border-color: #34434d !important; background: #34434d !important; color: #fff !important; }
+#appShell.control-shell .validation-pagination .table-page-button:disabled { opacity: .4 !important; cursor: not-allowed !important; }
+#appShell.control-shell .validation-pagination .table-page-button:not(:disabled):not(.is-active):hover { background: #f3f5f6 !important; }
+#appShell.control-shell #validationRegistryList > .settings-empty { margin: 0 !important; padding: 22px 12px !important; color: #77838a !important; font: 400 11px/1.5 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important; text-align: center !important; }
+#appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-hidden-list { display: none !important; }
+
+@media (max-width: 900px) {
+  #appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-authorize-card { grid-template-columns: minmax(190px, .75fr) minmax(310px, 1.25fr) !important; gap: 18px !important; padding: 19px 20px !important; }
+  #appShell.control-shell .validation-registry-heading { grid-template-columns: minmax(190px, 1fr) max-content !important; gap: 9px !important; }
+  #appShell.control-shell .validation-filter-pill { padding-right: 8px !important; padding-left: 8px !important; font-size: 9px !important; }
+}
+@media (max-width: 700px) {
+  #appShell.control-shell #avaluosAuthorizedFoliosPanel { margin-bottom: 14px !important; }
+  #appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-authorize-card { grid-template-columns: 1fr !important; gap: 15px !important; padding: 17px !important; }
+  #appShell.control-shell .validation-authorize-copy h3 { font-size: 17px !important; }
+  #appShell.control-shell .validation-registry-section { margin-top: 12px !important; padding: 17px 13px 11px !important; }
+  #appShell.control-shell .validation-registry-heading { grid-template-columns: minmax(0, 1fr) !important; gap: 9px !important; }
+  #appShell.control-shell .validation-registry-search-wrap { max-width: none !important; }
+  #appShell.control-shell .validation-filter-pills { display: grid !important; grid-template-columns: .72fr 1.55fr 1fr !important; width: 100% !important; gap: 3px !important; }
+  #appShell.control-shell .validation-filter-pill { min-width: 0 !important; min-height: 39px !important; padding: 4px 5px !important; font-size: 9px !important; text-align: center !important; white-space: normal !important; }
+  #appShell.control-shell .validation-registry-table-wrap { overflow: visible !important; border: 0 !important; }
+  #appShell.control-shell .validation-registry-table { display: block !important; min-width: 0 !important; }
+  #appShell.control-shell .validation-registry-table thead { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; clip-path: inset(50%) !important; }
+  #appShell.control-shell .validation-registry-table tbody { display: grid !important; gap: 8px !important; padding: 1px !important; }
+  #appShell.control-shell .validation-registry-table tbody tr { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; grid-template-rows: auto auto auto !important; grid-template-areas: "folio status" "date actions" "valuator actions" !important; align-items: center !important; min-height: 98px !important; padding: 10px 11px !important; border: 1px solid #e6eaed !important; border-radius: 10px !important; background: #fff !important; }
+  #appShell.control-shell .validation-registry-table td { display: flex !important; width: auto !important; height: auto !important; min-width: 0 !important; align-items: flex-start !important; flex-direction: column !important; justify-content: center !important; gap: 2px !important; padding: 3px 4px !important; border: 0 !important; background: transparent !important; font-size: 10px !important; text-align: left !important; white-space: normal !important; }
+  body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #validationRegistryList .validation-registry-table td { font-size: 10px !important; line-height: 1.3 !important; }
+  body.cp6-redesign #appShell#appShell#appShell.cp6-approved-ui #validationRegistryList#validationRegistryList#validationRegistryList .validation-registry-table .folio-validation-status { font-size: 8px !important; line-height: 1.2 !important; }
+  #appShell.control-shell .validation-registry-table td::before { display: block !important; color: #849097 !important; font: 700 8px/1.25 "Plus Jakarta Sans", Inter, system-ui, sans-serif !important; letter-spacing: .06em !important; text-transform: uppercase !important; }
+  #appShell.control-shell .validation-registry-table td:first-child { grid-area: folio !important; }
+  #appShell.control-shell .validation-registry-table td:first-child::before { content: "No. de avalúo" !important; }
+  #appShell.control-shell .validation-registry-table td:first-child strong { font-size: 12px !important; }
+  #appShell.control-shell .validation-registry-table td:nth-child(2) { grid-area: date !important; }
+  #appShell.control-shell .validation-registry-table td:nth-child(2)::before { content: "Fecha" !important; }
+  #appShell.control-shell .validation-registry-table td:nth-child(3) { grid-area: valuator !important; }
+  #appShell.control-shell .validation-registry-table td:nth-child(3)::before { content: "Valuador" !important; }
+  #appShell.control-shell .validation-registry-table td:nth-child(4) { grid-area: status !important; align-items: flex-end !important; }
+  #appShell.control-shell .validation-registry-table td:nth-child(4)::before { align-self: flex-end !important; content: "Estado" !important; }
+  #appShell.control-shell .validation-registry-table td:nth-child(4) .folio-validation-status { justify-content: center !important; min-height: 24px !important; padding: 3px 7px !important; font-size: 8px !important; text-align: center !important; overflow-wrap: normal !important; word-break: normal !important; }
+  #appShell.control-shell .validation-registry-table td:last-child { grid-area: actions !important; align-items: flex-end !important; justify-content: center !important; }
+  #appShell.control-shell .validation-registry-table td:last-child::before { align-self: flex-end !important; content: "Retirar" !important; }
+  #appShell.control-shell .validation-pagination { flex-wrap: wrap !important; justify-content: center !important; }
+  #appShell.control-shell .validation-pagination > span { width: 100% !important; text-align: center !important; }
+  #appShell.control-shell .validation-pagination > div { max-width: 100% !important; flex-wrap: wrap !important; justify-content: center !important; }
+}
+@media (max-width: 360px) {
+  #appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-authorize-form { grid-template-columns: 1fr !important; }
+  #appShell.control-shell #avaluosAuthorizedFoliosPanel .validation-actions button { width: 100% !important; }
+  #appShell.control-shell .validation-filter-pills { grid-template-columns: .8fr 1.45fr 1fr !important; }
+  #appShell.control-shell .validation-filter-pill { min-height: 40px !important; padding-right: 3px !important; padding-left: 3px !important; font-size: 8px !important; }
+}
