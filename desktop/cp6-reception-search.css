@@ -321,29 +321,6 @@ body.cp6-redesign #appShell.control-shell #buscarView {
   padding: 0;
   width: 100%;
 }
-body.cp6-redesign #appShell.control-shell #buscarView .search-view-banner {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  margin: 0 0 18px;
-}
-body.cp6-redesign #appShell.control-shell #buscarView .search-view-kicker {
-  color: #6a7580;
-  display: block;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .1em;
-  margin: 0 0 4px;
-}
-body.cp6-redesign #appShell.control-shell #buscarView .search-view-banner h2 {
-  color: #202b35 !important;
-  font-size: 27px !important;
-  font-weight: 750 !important;
-  letter-spacing: -.035em;
-  line-height: 1.2;
-  margin: 0;
-}
-body.cp6-redesign #appShell.control-shell #buscarView .search-view-banner p { color: #697581; font-size: 13px; margin: 5px 0 0; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-view-main {
   align-items: stretch;
   display: grid;
@@ -448,8 +425,7 @@ body.cp6-redesign #appShell.control-shell #buscarView .search-view-empty { color
 }
 @media (max-width: 800px) {
   body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-banner { align-items: flex-start !important; }
-  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-banner h2,
-  body.cp6-redesign #appShell.control-shell #buscarView .search-view-banner h2 { font-size: 23px !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-banner h2 { font-size: 23px !important; }
   body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tabs { overflow-x: auto; }
   body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tab { flex: 0 0 auto; min-width: 115px; }
   body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-search-toolbar .search-row { grid-template-columns: minmax(0, 1fr) minmax(125px, 160px) !important; }

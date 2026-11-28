@@ -1137,7 +1137,7 @@
     if (!list || !detail) return;
     const filtered = getSearchRecords($("#searchRecordsInput")?.value || "");
     const searchRecordCount = $("#searchRecordCount");
-    if (searchRecordCount) searchRecordCount.textContent = `${filtered.length} ${filtered.length === 1 ? "registro" : "registros"}`;
+    if (searchRecordCount) searchRecordCount.textContent = `${filtered.length} ${filtered.length === 1 ? "resultado" : "resultados"}`;
     const pages = Math.max(1, Math.ceil(filtered.length / SEARCH_PAGE_SIZE));
     searchPage = Math.min(Math.max(1, searchPage), pages);
     const pageItems = filtered.slice((searchPage - 1) * SEARCH_PAGE_SIZE, searchPage * SEARCH_PAGE_SIZE);
