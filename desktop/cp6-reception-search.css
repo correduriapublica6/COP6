@@ -372,7 +372,12 @@ body.cp6-redesign #appShell.control-shell #buscarView .search-record-option.is-s
 body.cp6-redesign #appShell.control-shell #buscarView .search-record-option-main { align-items: baseline; display: flex; flex-wrap: wrap; gap: 4px 8px; min-width: 0; width: 100%; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-record-option-main strong { color: #2c3741; font-size: 12px; font-weight: 700; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-record-option-main > span { color: #58636d; font-size: 12px; overflow-wrap: anywhere; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-id-pair { align-items: center; display: flex; flex-wrap: wrap; gap: 4px 7px; width: 100%; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-option-main .search-record-id-pair strong { color: #596671; font-size: 10px; font-weight: 700; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-option-main .search-record-id-pair > span { color: #a6afb6; font-size: 10px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-option-main strong.search-record-applicant { color: #2c3741; font-size: 12px; font-weight: 750; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-record-option-meta { align-items: center; display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; width: 100%; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-summary { color: #84909a; font-size: 10px; overflow-wrap: anywhere; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-record-folio { color: #84909a; font-size: 10px; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-record-option .avaluo-status { font-size: 10px !important; padding: 3px 7px !important; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-view-pagination { align-items: center; border-top: 1px solid #edf0f2; color: #75808a; display: flex; font-size: 10px; justify-content: space-between; min-height: 42px; padding: 7px 3px; }
@@ -386,7 +391,16 @@ body.cp6-redesign #appShell.control-shell #buscarView .search-detail-empty { ali
 body.cp6-redesign #appShell.control-shell #buscarView .search-detail-empty-icon { align-items: center; background: #f2f4f5; border-radius: 50%; color: #65717b; display: inline-flex; font-size: 20px; height: 50px; justify-content: center; width: 50px; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-detail-empty h3 { color: #36414a; font-size: 16px; margin: 15px 0 6px; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-detail-empty p { color: #78838c; font-size: 12px; line-height: 1.5; margin: 0; max-width: 360px; }
-body.cp6-redesign #appShell.control-shell #buscarView .search-detail-topline { align-items: center; color: #77838d; display: flex; flex-wrap: wrap; font-size: 10px; font-weight: 700; gap: 10px; justify-content: space-between; letter-spacing: .045em; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-topline { align-items: center; color: #77838d; display: flex; flex-wrap: wrap; font-size: 10px; font-weight: 700; gap: 10px; justify-content: flex-start; letter-spacing: .045em; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-identifiers { align-items: center; display: flex; flex-wrap: wrap; gap: 8px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-identifier { align-items: center; background: #f3f5f6; border: 1px solid #e2e7ea; border-radius: 7px; display: inline-flex; gap: 7px; padding: 7px 10px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-identifier > span { color: #7b8790; font-size: 9px; font-weight: 650; letter-spacing: .02em; text-transform: none; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-identifier > strong { color: #35414a; font-size: 11px; font-weight: 750; letter-spacing: 0; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-contact-section { margin-top: 12px; padding-top: 12px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-contact-section > h4 { margin-bottom: 8px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-state.status-delivered strong { background: #e7f6ef; color: #207b55; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-state.status-pending strong { background: #fff4d6; color: #936600; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-state.status-expired strong { background: #fce8e9; color: #b42318; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-record-detail h3 { color: #202b35; font-size: 23px; font-weight: 700; letter-spacing: -.025em; margin: 13px 0 2px; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-detail-appraisal-number { color: #74808a; font-size: 12px; margin: 0; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-detail-section { border-top: 1px solid #e8ecef; margin: 17px 0 0; padding: 14px 0 0; }
@@ -448,7 +462,10 @@ body.cp6-redesign #appShell.control-shell #buscarView .search-view-empty { color
 body.cp6-redesign #appShell.control-shell #buscarView .search-view-list-panel { padding: 12px 10px 6px; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-view-detail-panel { min-height: 310px; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-record-detail { padding: 17px 15px 18px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-identifiers { gap: 6px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-identifier { gap: 5px; padding: 6px 8px; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px 15px; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-detail-field-wide { grid-column: 1 / -1; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-section { margin-top: 15px; padding-top: 12px; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-detail-actions button { flex: 1 1 auto; }
 }
