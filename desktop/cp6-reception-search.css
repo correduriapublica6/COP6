@@ -1,0 +1,479 @@
+/* CP6 · Recepción (propuesta 2) + Buscar (panel de consulta).
+   Alcance limitado a #recepcionAvaluosSection y #buscarView.
+   No altera Inicio, el editor #recordEditor, permisos ni persistencia. */
+
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-banner {
+  align-items: center !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #26313b !important;
+  display: flex !important;
+  gap: 22px !important;
+  justify-content: space-between !important;
+  margin: 0 0 15px !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-banner > div:first-child { min-width: 0; }
+body.cp6-redesign #appShell.control-shell.is-reception-view > .app-workspace > .v2-topbar { display: none !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-banner > div:first-child > span {
+  color: #6a7580 !important;
+  display: block;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .1em !important;
+  margin: 0 0 4px !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-banner h2 {
+  color: #202b35 !important;
+  font-size: 27px !important;
+  font-weight: 750 !important;
+  letter-spacing: -.035em !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-banner p {
+  color: #697581 !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  margin: 5px 0 0 !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-banner > i { display: none !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-actions {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 9px;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-actions #newRecordButton {
+  align-items: center !important;
+  background: #35414a !important;
+  border: 1px solid #35414a !important;
+  border-radius: 9px !important;
+  box-shadow: none !important;
+  color: #fff !important;
+  display: inline-flex;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+  gap: 9px !important;
+  justify-content: center;
+  min-height: 44px !important;
+  padding: 0 17px !important;
+  white-space: nowrap;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-actions #newRecordButton:hover { background: #27333b !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-actions #newRecordButton.is-hidden { display: none !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-actions #backAvaluosButton { background: #fff !important; border: 1px solid #d9dee3 !important; box-shadow: none !important; color: #35414a !important; min-height: 44px !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-actions #backAvaluosButton:hover { background: #f5f6f7 !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-actions #backAvaluosButton.is-hidden { display: none !important; }
+
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tabs {
+  align-items: stretch;
+  background: #fff;
+  border: 1px solid #e1e5e9;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(26, 37, 48, .035);
+  display: flex;
+  margin: 0 0 12px;
+  min-height: 45px;
+  overflow: hidden;
+  width: 100%;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tab {
+  align-items: center !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-right: 1px solid #e7eaee !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #495560 !important;
+  cursor: pointer;
+  display: inline-flex !important;
+  flex: 1 1 0;
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 550 !important;
+  gap: 9px !important;
+  justify-content: center;
+  line-height: 1.25 !important;
+  min-height: 44px !important;
+  min-width: 0;
+  padding: 8px 12px !important;
+  transition: background .15s ease, color .15s ease;
+  white-space: nowrap;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tab:last-child { border-right: 0 !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tab:hover { background: #f5f6f7 !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tab.is-active {
+  background: #35414a !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tab b {
+  color: #78828b;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tab.is-active b { color: #fff; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tab:focus-visible,
+body.cp6-redesign #appShell.control-shell #buscarView :is(button, input):focus-visible {
+  outline: 3px solid rgba(81, 101, 115, .22) !important;
+  outline-offset: 2px;
+}
+
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-search-toolbar {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  margin: 0 0 12px !important;
+  padding: 0 !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-search-toolbar .search-row {
+  align-items: center !important;
+  display: grid !important;
+  gap: 10px !important;
+  grid-template-columns: minmax(220px, 1fr) minmax(150px, 185px) auto !important;
+  width: 100%;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-search-toolbar .reception-filter-title { display: none !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-search-toolbar .reception-search-input-wrap::before { display: none !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-search-toolbar .reception-search-input-wrap,
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-input-wrap {
+  align-items: center;
+  background: #fff !important;
+  border: 1px solid #d9dee3 !important;
+  border-radius: 9px !important;
+  box-shadow: none !important;
+  display: flex;
+  gap: 9px;
+  height: 43px;
+  min-width: 0;
+  padding: 0 12px;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-search-toolbar .reception-search-input-wrap > i,
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-input-wrap > i {
+  color: #7a8791;
+  flex: 0 0 auto;
+  font-size: 14px;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #searchInput,
+body.cp6-redesign #appShell.control-shell #buscarView #searchRecordsInput {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #25313b !important;
+  flex: 1 1 auto;
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+  font-size: 13px !important;
+  height: 40px !important;
+  min-width: 0;
+  outline: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #searchInput::placeholder,
+body.cp6-redesign #appShell.control-shell #buscarView #searchRecordsInput::placeholder { color: #89939c; opacity: 1; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-period-filter {
+  background: #fff !important;
+  border: 1px solid #d9dee3 !important;
+  border-radius: 9px !important;
+  color: #495560 !important;
+  font-family: Inter, "Segoe UI", Arial, sans-serif !important;
+  font-size: 12px !important;
+  height: 43px !important;
+  min-width: 0;
+  padding: 0 30px 0 12px !important;
+  width: 100%;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-native-filter { display: none !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-native-filter-wrap { display: none !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-filter-actions {
+  align-items: center !important;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  justify-content: flex-end !important;
+  margin: 0 !important;
+  width: auto !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #backAvaluosButton {
+  background: #fff !important;
+  border: 1px solid #d9dee3 !important;
+  border-radius: 9px !important;
+  box-shadow: none !important;
+  color: #35414a !important;
+  font-size: 12px !important;
+  min-height: 43px !important;
+  padding: 0 13px !important;
+  white-space: nowrap;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #backAvaluosButton.is-hidden { display: none !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #statusListTitle { color: #27333d !important; font-size: 17px !important; font-weight: 700 !important; letter-spacing: -.02em; margin: 0 !important; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #statusListCount {
+  align-items: center;
+  background: #f0f2f4;
+  border-radius: 999px;
+  color: #596671;
+  display: inline-flex;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  justify-content: center;
+  min-height: 25px;
+  min-width: 31px;
+  padding: 0 8px;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .status-list-heading {
+  align-items: center !important;
+  background: #fff !important;
+  border: 1px solid #e1e5e9 !important;
+  border-bottom: 0 !important;
+  border-radius: 12px 12px 0 0 !important;
+  box-shadow: 0 4px 14px rgba(26, 37, 48, .035) !important;
+  display: flex !important;
+  gap: 10px;
+  justify-content: space-between !important;
+  margin: 0 !important;
+  min-height: 54px;
+  padding: 15px 17px 9px !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .status-list-heading { display: none !important; }
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList {
+  background: #fff !important;
+  border: 1px solid #e1e5e9 !important;
+  border-radius: 0 0 12px 12px !important;
+  box-shadow: 0 4px 14px rgba(26, 37, 48, .035) !important;
+  margin: 0 !important;
+  min-width: 0;
+  overflow: auto !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table-wrap {
+  background: #fff !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  overflow-x: auto !important;
+  padding: 0 12px !important;
+}
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  min-width: 830px;
+  width: 100% !important;
+}
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList th {
+  background: #f5f6f7 !important;
+  border: 0 !important;
+  border-bottom: 1px solid #e6e9ec !important;
+  color: #69747e !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .035em;
+  padding: 12px 13px !important;
+  text-transform: none !important;
+  white-space: nowrap;
+}
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList td {
+  background: #fff !important;
+  border: 0 !important;
+  border-bottom: 1px solid #edf0f2 !important;
+  color: #303c45 !important;
+  font-size: 12px !important;
+  padding: 13px !important;
+  vertical-align: middle !important;
+}
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList tbody tr:hover td { background: #fafbfc !important; }
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection .dashboard-tabs::before,
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table-wrap::before { display: none !important; }
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList .cp6-table-primary { color: #293640 !important; font-size: 12px !important; font-weight: 650 !important; }
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList .cp6-table-secondary { color: #73808a !important; font-size: 11px !important; }
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList .avaluo-status.status-pending { background: #fff4d6 !important; color: #936600 !important; }
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList .avaluo-status.status-delivered,
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList .avaluo-status.status-paid { background: #e7f6ef !important; color: #207b55 !important; }
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList .avaluo-status.status-expired { background: #fce8e9 !important; color: #b42318 !important; }
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList :is(.money-cell, .avaluo-list-user, .avaluo-list-requester) { white-space: nowrap; }
+body.cp6-redesign #appShell#appShell#appShell.control-shell #recepcionAvaluosSection #statusRecordList .reception-actions { display: flex; justify-content: flex-end; gap: 5px; }
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .table-pagination {
+  align-items: center !important;
+  background: #fff !important;
+  border: 0 !important;
+  color: #69747e !important;
+  display: flex !important;
+  font-size: 11px !important;
+  justify-content: space-between !important;
+  padding: 11px 17px !important;
+}
+body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .table-page-button { border-radius: 7px !important; min-width: 31px !important; }
+body.cp6-redesign #appShell#appShell#appShell.control-shell.cp6-approved-ui #recepcionAvaluosSection .reception-page-actions #newRecordButton#newRecordButton { background: #35414a !important; border-color: #35414a !important; color: #fff !important; }
+body.cp6-redesign #appShell#appShell#appShell.control-shell.cp6-approved-ui #recepcionAvaluosSection #statusRecordList .table-page-button.is-active { background: #35414a !important; border-color: #35414a !important; color: #fff !important; }
+body.cp6-redesign #appShell.control-shell #avaluosView.is-registering #recepcionAvaluosSection :is(.reception-page-banner, .reception-status-tabs, .reception-search-toolbar, .dashboard-tabs) { display: none !important; }
+
+/* Vista Buscar: lista compacta + panel de consulta de solo lectura. */
+body.cp6-redesign #appShell.control-shell #buscarView {
+  color: #28343e;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+  width: 100%;
+}
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-banner {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 18px;
+}
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-kicker {
+  color: #6a7580;
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  margin: 0 0 4px;
+}
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-banner h2 {
+  color: #202b35 !important;
+  font-size: 27px !important;
+  font-weight: 750 !important;
+  letter-spacing: -.035em;
+  line-height: 1.2;
+  margin: 0;
+}
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-banner p { color: #697581; font-size: 13px; margin: 5px 0 0; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-main {
+  align-items: stretch;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(285px, .84fr) minmax(0, 1.5fr);
+  min-width: 0;
+}
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-list-panel,
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-detail-panel {
+  background: #fff;
+  border: 1px solid #e0e5e9;
+  border-radius: 12px;
+  box-shadow: 0 5px 18px rgba(26, 37, 48, .04);
+  min-width: 0;
+}
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-list-panel { overflow: hidden; padding: 15px 14px 8px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-list-heading { align-items: center; display: flex; justify-content: space-between; margin: 0 0 12px; }
+body.cp6-redesign #appShell.control-shell #buscarView #searchRecordCount { color: #7b8790; font-size: 10px; font-variant-numeric: tabular-nums; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-list-heading h3,
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-detail-heading {
+  color: #2a3640 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  letter-spacing: -.02em;
+  margin: 0;
+}
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-input-wrap { margin: 0 0 10px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-filter-row { display: flex; gap: 4px; margin: 0 0 10px; overflow-x: auto; padding: 1px 1px 4px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-filter-row button {
+  background: #fff;
+  border: 1px solid #dce1e5;
+  border-radius: 999px;
+  color: #505b65;
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  min-height: 29px;
+  padding: 0 7px;
+  white-space: nowrap;
+}
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-filter-row button.is-active { background: #35414a; border-color: #35414a; color: #fff; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-filter-row button:focus-visible { outline: 3px solid rgba(81, 101, 115, .22); outline-offset: 1px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-filter-row button span { opacity: .8; font-variant-numeric: tabular-nums; margin-left: 4px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-list { max-height: min(57vh, 555px); min-height: 260px; overflow: auto; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-option {
+  align-items: flex-start;
+  background: #fff;
+  border: 0;
+  border-bottom: 1px solid #edf0f2;
+  border-left: 3px solid transparent;
+  border-radius: 0;
+  color: #303b44;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 12px 10px 12px 11px;
+  text-align: left;
+  transition: background .12s ease;
+  width: 100%;
+}
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-option:hover { background: #f7f8f9; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-option.is-selected { background: #f2f4f5; border-left-color: #35414a; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-option-main { align-items: baseline; display: flex; flex-wrap: wrap; gap: 4px 8px; min-width: 0; width: 100%; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-option-main strong { color: #2c3741; font-size: 12px; font-weight: 700; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-option-main > span { color: #58636d; font-size: 12px; overflow-wrap: anywhere; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-option-meta { align-items: center; display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; width: 100%; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-folio { color: #84909a; font-size: 10px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-option .avaluo-status { font-size: 10px !important; padding: 3px 7px !important; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-pagination { align-items: center; border-top: 1px solid #edf0f2; color: #75808a; display: flex; font-size: 10px; justify-content: space-between; min-height: 42px; padding: 7px 3px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-pagination-actions { display: flex; gap: 5px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-pagination-actions button { background: #fff; border: 1px solid #dce1e5; border-radius: 7px; color: #46525c; cursor: pointer; font-size: 16px; height: 28px; line-height: 1; width: 30px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-pagination-actions button:disabled { color: #b5bdc4; cursor: default; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-detail-panel { min-height: 430px; overflow: hidden; padding: 0; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-detail-heading { border-bottom: 1px solid #e9edf0; padding: 15px 19px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-detail { padding: 21px 23px 23px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-empty { align-items: center; color: #707c86; display: flex; flex-direction: column; justify-content: center; min-height: 355px; padding: 35px; text-align: center; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-empty-icon { align-items: center; background: #f2f4f5; border-radius: 50%; color: #65717b; display: inline-flex; font-size: 20px; height: 50px; justify-content: center; width: 50px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-empty h3 { color: #36414a; font-size: 16px; margin: 15px 0 6px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-empty p { color: #78838c; font-size: 12px; line-height: 1.5; margin: 0; max-width: 360px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-topline { align-items: center; color: #77838d; display: flex; flex-wrap: wrap; font-size: 10px; font-weight: 700; gap: 10px; justify-content: space-between; letter-spacing: .045em; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-detail h3 { color: #202b35; font-size: 23px; font-weight: 700; letter-spacing: -.025em; margin: 13px 0 2px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-appraisal-number { color: #74808a; font-size: 12px; margin: 0; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields { border-bottom: 1px solid #e8ecef; border-top: 1px solid #e8ecef; display: grid; gap: 15px; grid-template-columns: minmax(0, 1.4fr) minmax(130px, .8fr) minmax(125px, .65fr); margin: 24px 0 18px; padding: 20px 0; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields > div { min-width: 0; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields span { color: #7a858e; display: block; font-size: 11px; margin-bottom: 6px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields strong { color: #35414a; display: block; font-size: 13px; font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-readonly { display: grid; gap: 6px; margin: 19px 0 20px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-readonly strong { color: #78838c; font-size: 9px; letter-spacing: .08em; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-readonly span { color: #77828b; font-size: 11px; line-height: 1.45; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-actions { display: flex; flex-wrap: wrap; gap: 9px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-actions button { align-items: center; border-radius: 8px; cursor: pointer; display: inline-flex; font-family: Inter, "Segoe UI", Arial, sans-serif; font-size: 12px; font-weight: 650; gap: 8px; justify-content: center; min-height: 41px; padding: 0 16px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-view { background: #35414a; border: 1px solid #35414a; color: #fff; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-edit { background: #fff; border: 1px solid #d5dce1; color: #35414a; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-view:hover { background: #27333b; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-empty { color: #7a858e; font-size: 12px; line-height: 1.5; margin: 0; padding: 24px 12px; text-align: center; }
+
+@media (max-width: 1120px) {
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tab { font-size: 11px !important; gap: 6px !important; padding-left: 8px !important; padding-right: 8px !important; }
+  body.cp6-redesign #appShell.control-shell #buscarView .search-view-main { grid-template-columns: minmax(250px, .9fr) minmax(0, 1.2fr); }
+  body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 800px) {
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-banner { align-items: flex-start !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-banner h2,
+  body.cp6-redesign #appShell.control-shell #buscarView .search-view-banner h2 { font-size: 23px !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tabs { overflow-x: auto; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tab { flex: 0 0 auto; min-width: 115px; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-search-toolbar .search-row { grid-template-columns: minmax(0, 1fr) minmax(125px, 160px) !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-filter-actions { grid-column: 1 / -1; justify-content: flex-start !important; }
+  body.cp6-redesign #appShell.control-shell #buscarView .search-view-main { grid-template-columns: minmax(0, 1fr); }
+  body.cp6-redesign #appShell.control-shell #buscarView .search-record-list { max-height: 380px; min-height: 200px; }
+  body.cp6-redesign #appShell.control-shell #buscarView .search-view-detail-panel { min-height: 330px; }
+}
+@media (max-width: 520px) {
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-banner { flex-direction: column; gap: 12px !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-actions { align-self: stretch; width: 100%; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-page-actions #newRecordButton { width: 100%; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tabs { margin-bottom: 10px; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-status-tab { font-size: 10px !important; min-width: 98px; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-search-toolbar .search-row { grid-template-columns: minmax(0, 1fr) !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .reception-filter-actions { grid-column: auto; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #backAvaluosButton { width: 100%; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .status-list-heading { min-height: 48px; padding: 12px 13px 8px !important; }
+  body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table-wrap { padding: 0 6px !important; }
+  body.cp6-redesign #appShell.control-shell #buscarView .search-view-list-panel { padding: 12px 10px 6px; }
+  body.cp6-redesign #appShell.control-shell #buscarView .search-view-detail-panel { min-height: 310px; }
+  body.cp6-redesign #appShell.control-shell #buscarView .search-record-detail { padding: 17px 15px 18px; }
+  body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields { grid-template-columns: minmax(0, 1fr); gap: 13px; margin: 18px 0 15px; padding: 16px 0; }
+  body.cp6-redesign #appShell.control-shell #buscarView .search-detail-actions button { flex: 1 1 auto; }
+}

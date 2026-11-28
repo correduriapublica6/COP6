@@ -30,7 +30,11 @@
   let authorizedAppraisalNumbers = [];
   let operationalView = "todos";
   let receptionPage = 1;
-  const AVALUOS_PAGE_SIZE = 9;
+  let searchOperationalView = "todos";
+  let searchPage = 1;
+  let selectedSearchRecordId = "";
+  const AVALUOS_PAGE_SIZE = 5;
+  const SEARCH_PAGE_SIZE = 5;
   let activeAppView = "avaluos";
   let activeSessionUser = "";
   let workspaceSelectedUser = "__all";
@@ -398,6 +402,7 @@
   const isAdmin = () => roleFor(activeSessionUser) === "admin";
   const canEdit = () => ["admin", "editor", "valuador", "auditor"].includes(roleFor(activeSessionUser));
   const canEditReception = () => ["admin", "editor", "valuador", "auditor"].includes(roleFor(activeSessionUser));
+  const canViewReception = () => Boolean(activeSessionUser);
   const canCreateTask = () => ["admin", "editor", "valuador", "auditor"].includes(roleFor(activeSessionUser));
   const canViewSummary = () => ["admin", "editor", "auditor"].includes(roleFor(activeSessionUser));
   const canAuthorizeFolios = () => ["admin", "auditor"].includes(roleFor(activeSessionUser));
@@ -602,6 +607,8 @@
     if (activeAppView === "resumen" && !canViewSummary()) switchAppView("avaluos");
     if (activeAppView === "fe-publica" && !canViewFePublica()) switchAppView("avaluos");
     $$(".solicitudes-access").forEach((button) => button.classList.toggle("is-hidden", !canViewRequests()));
+    $$(".reception-access").forEach((button) => button.classList.toggle("is-hidden", !canViewReception()));
+    if (activeAppView === "buscar" && !canViewReception()) switchAppView("avaluos");
     syncWorkspaceUserFilter();
     if (activeAppView === "solicitudes" && !canViewRequests()) switchAppView("avaluos");
     renderHomeActions();
@@ -929,6 +936,7 @@
     mensajeria: { title: "Mensajería", kicker: "COMUNICACIÓN INSTITUCIONAL", description: "Conecta con el equipo CP6 y los usuarios externos en conversaciones seguras." },
     juegos: { title: "Juegos", kicker: "ESPACIO DE DESCANSO", description: "Elige una actividad para despejar la mente entre tus actividades de trabajo." },
     perfil: { title: "Inicio", kicker: "ESPACIO DE TRABAJO", description: "Métricas y avalúos de tu operación." },
+    buscar: { title: "Buscar", kicker: "CONSULTA DE AVALÚOS", description: "Localiza registros de Recepción y consulta su información." },
   };
   function setUsersSection(section = "menu") {
     const menu = $("#usuariosMenuSection");
@@ -967,12 +975,13 @@
   }
 
   function switchAppView(view) {
-    if (!VIEW_DETAILS[view] || (view === "resumen" ? !canViewSummary() : view === "fe-publica" ? !canViewFePublica() : view === "solicitudes" ? !canViewRequests() : view !== "avaluos" && view !== "inicio" && view !== "mensajeria" && view !== "juegos" && view !== "perfil" && !isAdmin())) return;
+    if (!VIEW_DETAILS[view] || (view === "resumen" ? !canViewSummary() : view === "fe-publica" ? !canViewFePublica() : view === "solicitudes" ? !canViewRequests() : view === "buscar" ? !canViewReception() : view !== "avaluos" && view !== "inicio" && view !== "mensajeria" && view !== "juegos" && view !== "perfil" && !isAdmin())) return;
     // Toda navegación del Navbar inicia las subsecciones en modo lista.
     // El formulario de Recepción y cualquier ficha técnica nunca se arrastran a otra vista.
     window.dispatchEvent(new CustomEvent("control-avaluos:close-reception-editor"));
     window.dispatchEvent(new CustomEvent("control-avaluos:close-technical-creation"));
     activeAppView = view;
+    appShell.classList.remove("is-reception-view");
     $("#pageTitle").closest(".workspace-header")?.classList.toggle("avaluos-header", view === "avaluos");
     $$(".app-view").forEach((section) => { const active = section.id === `${view}View`; section.hidden = !active; section.classList.toggle("is-active", active); });
     $$("[data-app-view]").forEach((button) => button.classList.toggle("is-active", button.dataset.appView === (view === "perfil" ? "inicio" : view)));
@@ -990,6 +999,7 @@
     if (view === "perfil") resetHomeScrollPosition();
     if (view === "usuarios") { setUsersSection("menu"); window.dispatchEvent(new CustomEvent("control-avaluos:users-view")); }
     if (view === "resumen") initialiseReportDates();
+    if (view === "buscar") renderSearchWorkspace();
     if (view === "configuracion") { renderNotarySettings(); renderPendingReceptionSummary(); refreshOperationalSettings(); }
   }
 
@@ -998,16 +1008,17 @@
   const dateInRange = (value, start, end) => Boolean(value && (!start || value >= start) && (!end || value <= end));
   function currentWeekRange() { const date = new Date(`${today()}T12:00:00`); const day = date.getDay(); date.setDate(date.getDate() + (day === 0 ? -6 : 1 - day)); const start = date.toISOString().slice(0, 10); date.setDate(date.getDate() + 6); return { start, end: date.toISOString().slice(0, 10) }; }
   function prioritize(items) { return [...items].sort((left, right) => { const leftDate = new Date(left.creadoEn || left.createdAt || left.fechaAvaluo || 0).getTime() || 0; const rightDate = new Date(right.creadoEn || right.createdAt || right.fechaAvaluo || 0).getTime() || 0; return rightDate - leftDate; }); }
-  function getVisibleRecords() {
-    const query = searchInput.value.trim().toLocaleLowerCase("es-MX");
-    const numericQuery = normalizeNumber(query);
-    return prioritize(records.filter((record) => {
+  function filterRecordsByQuery(query, source = records) {
+    const normalizedQuery = String(query || "").trim().toLocaleLowerCase("es-MX");
+    const numericQuery = normalizeNumber(normalizedQuery);
+    return prioritize(source.filter((record) => {
       const linkedRequest = (window.__controlSolicitudes || []).find((request) => normalizeNumber(request.numeroAvaluo) === normalizeNumber(record.numeroAvaluo));
       const searchableValues = [record.numeroAvaluo, record.solicitante, record.usuario, record.asesorValuador, record.asesor, record.folioSolicitud, record.solicitudFolio, linkedRequest?.folio, linkedRequest?.numeroSolicitud, linkedRequest?.id];
-      const matchesSearch = !query || searchableValues.some((value) => String(value ?? "").toLocaleLowerCase("es-MX").includes(query)) || (numericQuery && searchableValues.some((value) => normalizeNumber(value).includes(numericQuery)));
+      const matchesSearch = !normalizedQuery || searchableValues.some((value) => String(value ?? "").toLocaleLowerCase("es-MX").includes(normalizedQuery)) || (numericQuery && searchableValues.some((value) => normalizeNumber(value).includes(numericQuery)));
       return matchesSearch;
     }));
   }
+  function getVisibleRecords() { return filterRecordsByQuery(searchInput.value); }
   function getRecordsForOperationalView(view, source) {
     if (view === "pendientes-entrega") return source.filter((record) => !record.pagado && !record.seEntregoA && !isExpiredWithoutDeliveryOrPayment(record));
     if (view === "entregados-sin-pago") return source.filter((record) => !record.pagado && Boolean(record.seEntregoA));
@@ -1055,6 +1066,80 @@
     const pageItems = items.slice((receptionPage - 1) * AVALUOS_PAGE_SIZE, receptionPage * AVALUOS_PAGE_SIZE);
     $("#statusRecordList").innerHTML = `<div class="operational-table-wrap"><table class="operational-table operational-table-compact cp6-request-stacked"><thead><tr><th>Solicitud</th><th>Solicitante</th><th>Dirección</th><th>Valuador</th><th>Honorarios</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${pageItems.length ? pageItems.map(renderListRow).join("") : `<tr><td colspan="7" class="empty">${escapeHtml(emptyCopy)}</td></tr>`}</tbody></table></div>${paginationMarkup("reception", receptionPage, items.length)}`;
   }
+  function searchRecordAddress(record) {
+    const linkedRequest = (window.__controlSolicitudes || []).find((request) => normalizeNumber(request.numeroAvaluo) === normalizeNumber(record.numeroAvaluo));
+    const specific = linkedRequest?.datosEspecificos || {};
+    return String(specific.direccionVisita || specific.direccion_visita || linkedRequest?.contactoVisita?.direccion || linkedRequest?.direccionVisita || record.direccion || record.ubicacion || "").trim();
+  }
+  function getSearchRecords(query) {
+    const normalizedQuery = String(query || "").trim().toLocaleLowerCase("es-MX");
+    if (!normalizedQuery) return prioritize(records);
+    const numericQuery = normalizeNumber(normalizedQuery);
+    return prioritize(records.filter((record) => {
+      const linkedRequest = (window.__controlSolicitudes || []).find((request) => normalizeNumber(request.numeroAvaluo) === normalizeNumber(record.numeroAvaluo));
+      const searchableValues = [record.numeroAvaluo, record.solicitante, record.usuario, record.asesorValuador, record.asesor, record.folioSolicitud, record.solicitudFolio, linkedRequest?.folio, linkedRequest?.numeroSolicitud, linkedRequest?.id, searchRecordAddress(record)];
+      return searchableValues.some((value) => String(value ?? "").toLocaleLowerCase("es-MX").includes(normalizedQuery)) || (numericQuery && searchableValues.some((value) => normalizeNumber(value).includes(numericQuery)));
+    }));
+  }
+  function searchRecordStatus(record) {
+    const paid = Boolean(record.pagado);
+    const delivered = Boolean(record.seEntregoA);
+    const expired = isExpiredWithoutDeliveryOrPayment(record);
+    return paid ? { key: "pagados", label: "Pagado", className: "status-paid" } : expired ? { key: "vencidos", label: "Vencido", className: "status-expired" } : delivered ? { key: "entregados-sin-pago", label: "Entregado sin pago", className: "status-delivered" } : { key: "pendientes-entrega", label: "Pendiente de entrega", className: "status-pending" };
+  }
+  function searchPageMarkup(page, totalItems) {
+    const pages = Math.max(1, Math.ceil(totalItems / SEARCH_PAGE_SIZE));
+    if (pages <= 1) return `<span class="search-view-pagination-count">${totalItems} ${totalItems === 1 ? "resultado" : "resultados"}</span>`;
+    const current = Math.min(Math.max(1, page), pages);
+    const first = Math.min((current - 1) * SEARCH_PAGE_SIZE + 1, totalItems);
+    const last = Math.min(current * SEARCH_PAGE_SIZE, totalItems);
+    return `<span class="search-view-pagination-count">Mostrando ${first}–${last} de ${totalItems}</span><div class="search-view-pagination-actions"><button type="button" data-search-page="${current - 1}" aria-label="Página anterior" ${current <= 1 ? "disabled" : ""}>‹</button><button type="button" data-search-page="${current + 1}" aria-label="Página siguiente" ${current >= pages ? "disabled" : ""}>›</button></div>`;
+  }
+  function renderSearchWorkspace() {
+    const list = $("#searchRecordList");
+    const detail = $("#searchRecordDetail");
+    if (!list || !detail) return;
+    const baseRecords = getSearchRecords($("#searchRecordsInput")?.value || "");
+    const counts = {
+      todos: baseRecords.length,
+      "pendientes-entrega": getRecordsForOperationalView("pendientes-entrega", baseRecords).length,
+      "entregados-sin-pago": getRecordsForOperationalView("entregados-sin-pago", baseRecords).length,
+      pagados: getRecordsForOperationalView("pagados", baseRecords).length,
+      vencidos: getRecordsForOperationalView("vencidos", baseRecords).length,
+    };
+    $$('[data-search-status]').forEach((button) => {
+      const key = button.dataset.searchStatus || "todos";
+      button.classList.toggle("is-active", key === searchOperationalView);
+      button.setAttribute("aria-pressed", String(key === searchOperationalView));
+      const count = button.querySelector("[data-search-status-count]");
+      if (count) count.textContent = String(counts[key] ?? 0);
+    });
+    const filtered = getRecordsForOperationalView(searchOperationalView, baseRecords);
+    const searchRecordCount = $("#searchRecordCount");
+    if (searchRecordCount) searchRecordCount.textContent = `${filtered.length} ${filtered.length === 1 ? "registro" : "registros"}`;
+    const pages = Math.max(1, Math.ceil(filtered.length / SEARCH_PAGE_SIZE));
+    searchPage = Math.min(Math.max(1, searchPage), pages);
+    const pageItems = filtered.slice((searchPage - 1) * SEARCH_PAGE_SIZE, searchPage * SEARCH_PAGE_SIZE);
+    if (!pageItems.some((record) => String(record.id) === String(selectedSearchRecordId))) selectedSearchRecordId = pageItems[0]?.id || "";
+    list.innerHTML = pageItems.length ? pageItems.map((record) => {
+      const state = searchRecordStatus(record);
+      const folio = record.folioSolicitud || record.solicitudFolio || record.numeroSolicitud || "—";
+      const active = String(record.id) === String(selectedSearchRecordId);
+      return `<button class="search-record-option${active ? " is-selected" : ""}" type="button" data-search-select="${escapeHtml(record.id)}" aria-pressed="${active}"><span class="search-record-option-main"><strong>${escapeHtml(record.numeroAvaluo || "—")}</strong><span>${escapeHtml(record.solicitante || "Sin solicitante")}</span></span><span class="search-record-option-meta"><span class="search-record-folio">Solicitud ${escapeHtml(folio)}</span><span class="avaluo-status ${state.className}">${state.label}</span></span></button>`;
+    }).join("") : `<p class="search-view-empty">No se encontraron avalúos para esta búsqueda.</p>`;
+    const pagination = $("#searchRecordPagination");
+    if (pagination) pagination.innerHTML = searchPageMarkup(searchPage, filtered.length);
+    const selected = filtered.find((record) => String(record.id) === String(selectedSearchRecordId));
+    if (!selected) {
+      detail.innerHTML = `<div class="search-detail-empty"><span class="search-detail-empty-icon"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></span><h3>${filtered.length ? "Selecciona un avalúo" : "Sin resultados"}</h3><p>${filtered.length ? "Elige un registro de la lista para consultar sus datos." : "Prueba con otro número, solicitud, solicitante o valuador."}</p></div>`;
+      return;
+    }
+    const linkedRequest = (window.__controlSolicitudes || []).find((request) => normalizeNumber(request.numeroAvaluo) === normalizeNumber(selected.numeroAvaluo));
+    const state = searchRecordStatus(selected);
+    const folio = linkedRequest?.folio || selected.folioSolicitud || selected.solicitudFolio || selected.numeroSolicitud || "—";
+    const address = searchRecordAddress(selected) || "Sin ubicación registrada";
+    detail.innerHTML = `<div class="search-detail-topline"><span>SOLICITUD ${escapeHtml(folio)}</span><span class="avaluo-status ${state.className}">${state.label}</span></div><h3>${escapeHtml(selected.solicitante || "Sin solicitante")}</h3><p class="search-detail-appraisal-number">Avalúo ${escapeHtml(selected.numeroAvaluo || "—")}</p><div class="search-detail-fields"><div><span>Dirección</span><strong>${escapeHtml(address)}</strong></div><div><span>Valuador</span><strong>${escapeHtml(selected.usuario || selected.asesorValuador || selected.asesor || "—")}</strong></div><div><span>Honorarios</span><strong>${escapeHtml(formatCurrency(selected.valorAvaluo))}</strong></div></div><div class="search-detail-readonly"><strong>VISTA DE CONSULTA</strong><span>Esta información es solo de consulta. No es posible editarla desde aquí.</span></div><div class="search-detail-actions"><button class="search-detail-view" type="button" data-search-view-record="${escapeHtml(selected.id)}"><i class="fa-regular fa-eye" aria-hidden="true"></i> Ver detalle</button>${canEditReception() ? `<button class="search-detail-edit" type="button" data-search-edit-record="${escapeHtml(selected.id)}"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Editar avalúo</button>` : ""}</div>`;
+  }
   function bindRecordActions() {
     $$('[data-edit]').forEach((button) => button?.addEventListener("click", () => openDialog(button.dataset.edit)));
   $$('[data-view]').forEach((button) => button?.addEventListener("click", () => openDialog(button.dataset.view, true)));
@@ -1066,6 +1151,15 @@
     const visible = getVisibleRecords();
     const operationalRecords = getRecordsForOperationalView(operationalView, visible);
     const titles = { todos: "Registros Recientes", "pendientes-entrega": "Pendientes de entrega", "entregados-sin-pago": "Entregados sin registro de pago", pagados: "Pagados", vencidos: "Vencidos" };
+    const receptionCounts = { todos: visible.length, "pendientes-entrega": getRecordsForOperationalView("pendientes-entrega", visible).length, "entregados-sin-pago": getRecordsForOperationalView("entregados-sin-pago", visible).length, pagados: getRecordsForOperationalView("pagados", visible).length, vencidos: getRecordsForOperationalView("vencidos", visible).length };
+    $$('[data-reception-filter]').forEach((button) => {
+      const key = button.dataset.receptionFilter || "todos";
+      const active = key === operationalView;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+      const count = button.querySelector("[data-reception-status-count]");
+      if (count) count.textContent = String(receptionCounts[key] ?? 0);
+    });
     const filteredCount = $("#filteredCount");
     if (filteredCount) filteredCount.textContent = `${visible.length} ${visible.length === 1 ? "resultado" : "resultados"}`;
     $("#statusListTitle").textContent = titles[operationalView];
@@ -1073,6 +1167,7 @@
     renderList(operationalRecords, "No hay avalúos para este estado, búsqueda o periodo.");
     renderAuthorizedFolios();
     bindRecordActions();
+    if (activeAppView === "buscar") renderSearchWorkspace();
     $$('[data-reception-page]').forEach((button) => button?.addEventListener("click", () => { if (button.disabled) return; receptionPage = Number(button.dataset.receptionPage) || 1; render(); }));
   }
 
@@ -1597,6 +1692,7 @@
     select.dataset.customEnhanced = "true";
     const wrapper = document.createElement("div");
     wrapper.className = `custom-select${select.id === "methodInput" ? " custom-select-opens-up" : ""}`;
+    if (select.id === "statusViewSelect") wrapper.classList.add("reception-native-filter-wrap");
     select.parentNode.insertBefore(wrapper, select);
     wrapper.appendChild(select);
     select.classList.add("custom-select-native");
@@ -1928,6 +2024,7 @@
       validacion: { title: "Validación", description: "Autoriza folios y verifica cuáles siguen pendientes de Recepción." },
     }[section] || { title: "Avalúos", description: "" };
     const inAvaluos = activeAppView === "avaluos";
+    appShell.classList.toggle("is-reception-view", inAvaluos && section === "recepcion");
     $("#pageTitle").textContent = details.title;
     $("#pageDescription").textContent = details.description;
     const workspaceHeader = $("#pageTitle").closest(".workspace-header");
@@ -1966,7 +2063,28 @@
   $("#previewReceiptButton")?.addEventListener("click", () => openReceipt(formDraft()));
   paidInput?.addEventListener("change", setPaymentVisibility);
   numberInput?.addEventListener("input", () => { numberInput.value = normalizeNumber(numberInput.value); });
-  searchInput?.addEventListener("input", () => { receptionPage = 1; if (searchInput.value.trim()) { operationalView = "todos"; $$("[data-view]").forEach((item) => item.classList.toggle("is-active", item.dataset.view === "todos")); } render(); });
+    searchInput?.addEventListener("input", () => { receptionPage = 1; if (searchInput.value.trim()) { operationalView = "todos"; $$('[data-reception-filter]').forEach((item) => item.classList.toggle("is-active", item.dataset.receptionFilter === "todos")); } render(); });
+    $("#searchRecordsInput")?.addEventListener("input", () => { searchPage = 1; selectedSearchRecordId = ""; renderSearchWorkspace(); });
+    $$('[data-search-status]').forEach((button) => button?.addEventListener("click", () => { searchOperationalView = button.dataset.searchStatus || "todos"; searchPage = 1; selectedSearchRecordId = ""; renderSearchWorkspace(); }));
+    $("#searchRecordList")?.addEventListener("click", (event) => {
+      const selectButton = event.target.closest("[data-search-select]");
+      const pageButton = event.target.closest("[data-search-page]");
+      if (selectButton) { selectedSearchRecordId = selectButton.dataset.searchSelect || ""; renderSearchWorkspace(); }
+      if (pageButton && !pageButton.disabled) { searchPage = Number(pageButton.dataset.searchPage) || 1; selectedSearchRecordId = ""; renderSearchWorkspace(); }
+    });
+    $("#searchRecordPagination")?.addEventListener("click", (event) => {
+      const pageButton = event.target.closest("[data-search-page]");
+      if (!pageButton || pageButton.disabled) return;
+      searchPage = Number(pageButton.dataset.searchPage) || 1;
+      selectedSearchRecordId = "";
+      renderSearchWorkspace();
+    });
+    $("#searchRecordDetail")?.addEventListener("click", (event) => {
+      const viewButton = event.target.closest("[data-search-view-record]");
+      const editButton = event.target.closest("[data-search-edit-record]");
+      if (viewButton) { switchAppView("avaluos"); openDialog(viewButton.dataset.searchViewRecord, true); }
+      if (editButton && canEditReception()) { switchAppView("avaluos"); openDialog(editButton.dataset.searchEditRecord); }
+    });
   $$("[data-view]").forEach((button) => button?.addEventListener("click", () => { operationalView = button.dataset.view; $$("[data-view]").forEach((item) => item.classList.toggle("is-active", item === button)); render(); }));
   $$("[data-app-view]").forEach((button) => button?.addEventListener("click", (event) => { event.preventDefault(); if (button.dataset.appView === "mensajeria") { window.dispatchEvent(new CustomEvent("control-avaluos:open-messaging-popup")); return; } switchAppView(button.dataset.appView === "inicio" ? "perfil" : button.dataset.appView); }));
   $("#generateInlineReportButton")?.addEventListener("click", prepareInlineReport);
@@ -1978,7 +2096,13 @@
   $("#importDataButton")?.addEventListener("click", importBackup);
   $("#exportButton")?.addEventListener("click", () => switchAppView("configuracion"));
   $("#reportButton")?.addEventListener("click", () => switchAppView("resumen"));
-  $("#statusViewSelect")?.addEventListener("change", (event) => { operationalView = event.target.value; receptionPage = 1; render(); });
+    $("#statusViewSelect")?.addEventListener("change", (event) => { operationalView = event.target.value; receptionPage = 1; render(); });
+    $$('[data-reception-filter]').forEach((button) => button?.addEventListener("click", () => {
+      const filter = $("#statusViewSelect");
+      if (!filter) return;
+      filter.value = button.dataset.receptionFilter || "todos";
+      filter.dispatchEvent(new Event("change", { bubbles: true }));
+    }));
   $("#notaryForm")?.addEventListener("submit", async (event) => { event.preventDefault(); if (!isAdmin()) return; const id = $("#notaryEditId").value.trim(); const payload = { municipio: $("#notaryMunicipalityInput").value.trim(), numero: $("#notaryNumberInput").value, nombre: $("#notaryNameInput").value.trim(), direccion: $("#notaryAddressInput").value.trim(), telefono: $("#notaryPhoneInput").value.trim() }; const message = $("#notaryMessage"); try { const saved = await apiRequest(id ? `/notarias/${encodeURIComponent(id)}` : "/notarias", { method: id ? "PUT" : "POST", body: JSON.stringify(payload) }); notarias = Array.isArray(saved) ? saved : (id ? notarias.map((item) => item.id === id ? saved : item) : [...notarias, saved]); $("#notaryForm").reset(); $("#notaryEditId").value = ""; message.textContent = "Notaría guardada correctamente."; message.className = "form-message is-success"; renderNotarySettings(); window.dispatchEvent(new CustomEvent("control-avaluos:notarias-updated", { detail: notarias })); } catch (error) { message.textContent = error.message; message.className = "form-message is-error"; } });
   $("#toggleNotariesRecordsButton")?.addEventListener("click", () => { const target = $("#notariesSettingsList"); const button = $("#toggleNotariesRecordsButton"); if (!target || !button) return; const willShow = target.hidden; target.hidden = !willShow; button.setAttribute("aria-expanded", String(willShow)); button.textContent = willShow ? "Ocultar registros" : "Ver registros"; if (willShow) renderNotarySettings(); });
   $("#cancelNotaryEditButton")?.addEventListener("click", () => { $("#notaryForm").reset(); $("#notaryEditId").value = ""; });

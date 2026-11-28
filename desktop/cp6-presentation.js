@@ -2,7 +2,7 @@
 (() => {
   const $ = (query) => document.querySelector(query);
   const set = (id, text) => { const el = document.getElementById(id); if (el && el.textContent !== text) el.textContent = text; };
-  const titles = { inicio: ['Inicio', ''], avaluos: ['Avalúos', 'Gestiona cada etapa de tu operación.'], solicitudes: ['', ''], 'fe-publica': ['Fe Pública', 'El espacio de trabajo de tu correduría.'], resumen: ['Resumen general', 'Una visión clara de tu operación.'], usuarios: ['Usuarios', 'Tu equipo, conectado.'], configuracion: ['Configuración', 'Todo listo para trabajar.'], perfil: ['', ''], mensajeria: ['Mensajes', 'Mantén a tu equipo conectado.'], juegos: ['Juegos', 'Un momento para despejar la mente.'] };
+  const titles = { inicio: ['Inicio', ''], buscar: ['Buscar', 'Localiza registros y consulta su información.'], avaluos: ['Avalúos', 'Gestiona cada etapa de tu operación.'], solicitudes: ['', ''], 'fe-publica': ['Fe Pública', 'El espacio de trabajo de tu correduría.'], resumen: ['Resumen general', 'Una visión clara de tu operación.'], usuarios: ['Usuarios', 'Tu equipo, conectado.'], configuracion: ['Configuración', 'Todo listo para trabajar.'], perfil: ['', ''], mensajeria: ['Mensajes', 'Mantén a tu equipo conectado.'], juegos: ['Juegos', 'Un momento para despejar la mente.'] };
   const currentView = () => $('.app-view.is-active')?.id.replace(/View$/, '') || 'inicio';
   const refreshContext = (view = currentView()) => {
     const [title, description] = titles[view] || titles.inicio;
