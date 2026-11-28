@@ -30,7 +30,6 @@
   let authorizedAppraisalNumbers = [];
   let operationalView = "todos";
   let receptionPage = 1;
-  let searchOperationalView = "todos";
   let searchPage = 1;
   let selectedSearchRecordId = "";
   const AVALUOS_PAGE_SIZE = 5;
@@ -1071,14 +1070,34 @@
     const specific = linkedRequest?.datosEspecificos || {};
     return String(specific.direccionVisita || specific.direccion_visita || linkedRequest?.contactoVisita?.direccion || linkedRequest?.direccionVisita || record.direccion || record.ubicacion || "").trim();
   }
+  function normalizeSearchText(value) {
+    return String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("es-MX").replace(/\s+/g, " ").trim();
+  }
+  function collectSearchableValues(source) {
+    const values = [];
+    const visited = new WeakSet();
+    const visit = (value) => {
+      if (value == null) return;
+      if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") { values.push(String(value)); return; }
+      if (typeof value !== "object" || visited.has(value)) return;
+      visited.add(value);
+      if (Array.isArray(value)) { value.forEach(visit); return; }
+      Object.values(value).forEach(visit);
+    };
+    visit(source);
+    return values;
+  }
   function getSearchRecords(query) {
-    const normalizedQuery = String(query || "").trim().toLocaleLowerCase("es-MX");
+    const normalizedQuery = normalizeSearchText(query);
     if (!normalizedQuery) return prioritize(records);
-    const numericQuery = normalizeNumber(normalizedQuery);
+    const numericQuery = /\d/.test(normalizedQuery) && /^[\d\s#./-]+$/.test(normalizedQuery) ? normalizeNumber(normalizedQuery) : "";
     return prioritize(records.filter((record) => {
       const linkedRequest = (window.__controlSolicitudes || []).find((request) => normalizeNumber(request.numeroAvaluo) === normalizeNumber(record.numeroAvaluo));
-      const searchableValues = [record.numeroAvaluo, record.solicitante, record.usuario, record.asesorValuador, record.asesor, record.folioSolicitud, record.solicitudFolio, linkedRequest?.folio, linkedRequest?.numeroSolicitud, linkedRequest?.id, searchRecordAddress(record)];
-      return searchableValues.some((value) => String(value ?? "").toLocaleLowerCase("es-MX").includes(normalizedQuery)) || (numericQuery && searchableValues.some((value) => normalizeNumber(value).includes(numericQuery)));
+      const specific = linkedRequest?.datosEspecificos || {};
+      const proprietor = linkedRequest?.propietario || specific.propietario || specific.razonSocial || record.propietario || record.razonSocial || "";
+      const paymentTerms = [record.pagado ? "pagado pago registrado con pago" : "pendiente de pago sin pago", record.pagado ? record.montoPagado : "", record.pagado ? record.metodoPago : "", record.pagado ? record.fechaPago : "", record.pagado ? record.pagoEntregadoA : ""];
+      const searchableValues = collectSearchableValues({ record, solicitud: linkedRequest, propietario: proprietor, direccion: searchRecordAddress(record), estado: searchRecordStatus(record).label, terminosPago: paymentTerms });
+      return searchableValues.some((value) => normalizeSearchText(value).includes(normalizedQuery)) || (numericQuery && searchableValues.some((value) => normalizeNumber(value).includes(numericQuery)));
     }));
   }
   function searchRecordStatus(record) {
@@ -1086,6 +1105,23 @@
     const delivered = Boolean(record.seEntregoA);
     const expired = isExpiredWithoutDeliveryOrPayment(record);
     return paid ? { key: "pagados", label: "Pagado", className: "status-paid" } : expired ? { key: "vencidos", label: "Vencido", className: "status-expired" } : delivered ? { key: "entregados-sin-pago", label: "Entregado sin pago", className: "status-delivered" } : { key: "pendientes-entrega", label: "Pendiente de entrega", className: "status-pending" };
+  }
+  function searchEntityName(value) {
+    if (value && typeof value === "object") return String(value.nombre || value.name || value.razonSocial || value.razon_social || value.correo || "").trim();
+    return String(value ?? "").trim();
+  }
+  function searchDisplayValue(...values) {
+    for (const value of values) {
+      const display = searchEntityName(value);
+      if (display) return display;
+    }
+    return "—";
+  }
+  function renderSearchField(label, value, className = "") {
+    return `<div class="search-detail-field${className ? ` ${className}` : ""}"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value || "—")}</strong></div>`;
+  }
+  function renderSearchSection(title, fields, className = "") {
+    return `<section class="search-detail-section${className ? ` ${className}` : ""}"><h4>${escapeHtml(title)}</h4><div class="search-detail-fields">${fields.join("")}</div></section>`;
   }
   function searchPageMarkup(page, totalItems) {
     const pages = Math.max(1, Math.ceil(totalItems / SEARCH_PAGE_SIZE));
@@ -1099,22 +1135,7 @@
     const list = $("#searchRecordList");
     const detail = $("#searchRecordDetail");
     if (!list || !detail) return;
-    const baseRecords = getSearchRecords($("#searchRecordsInput")?.value || "");
-    const counts = {
-      todos: baseRecords.length,
-      "pendientes-entrega": getRecordsForOperationalView("pendientes-entrega", baseRecords).length,
-      "entregados-sin-pago": getRecordsForOperationalView("entregados-sin-pago", baseRecords).length,
-      pagados: getRecordsForOperationalView("pagados", baseRecords).length,
-      vencidos: getRecordsForOperationalView("vencidos", baseRecords).length,
-    };
-    $$('[data-search-status]').forEach((button) => {
-      const key = button.dataset.searchStatus || "todos";
-      button.classList.toggle("is-active", key === searchOperationalView);
-      button.setAttribute("aria-pressed", String(key === searchOperationalView));
-      const count = button.querySelector("[data-search-status-count]");
-      if (count) count.textContent = String(counts[key] ?? 0);
-    });
-    const filtered = getRecordsForOperationalView(searchOperationalView, baseRecords);
+    const filtered = getSearchRecords($("#searchRecordsInput")?.value || "");
     const searchRecordCount = $("#searchRecordCount");
     if (searchRecordCount) searchRecordCount.textContent = `${filtered.length} ${filtered.length === 1 ? "registro" : "registros"}`;
     const pages = Math.max(1, Math.ceil(filtered.length / SEARCH_PAGE_SIZE));
@@ -1135,10 +1156,58 @@
       return;
     }
     const linkedRequest = (window.__controlSolicitudes || []).find((request) => normalizeNumber(request.numeroAvaluo) === normalizeNumber(selected.numeroAvaluo));
+    const specific = linkedRequest?.datosEspecificos || {};
     const state = searchRecordStatus(selected);
     const folio = linkedRequest?.folio || selected.folioSolicitud || selected.solicitudFolio || selected.numeroSolicitud || "—";
     const address = searchRecordAddress(selected) || "Sin ubicación registrada";
-    detail.innerHTML = `<div class="search-detail-topline"><span>SOLICITUD ${escapeHtml(folio)}</span><span class="avaluo-status ${state.className}">${state.label}</span></div><h3>${escapeHtml(selected.solicitante || "Sin solicitante")}</h3><p class="search-detail-appraisal-number">Avalúo ${escapeHtml(selected.numeroAvaluo || "—")}</p><div class="search-detail-fields"><div><span>Dirección</span><strong>${escapeHtml(address)}</strong></div><div><span>Valuador</span><strong>${escapeHtml(selected.usuario || selected.asesorValuador || selected.asesor || "—")}</strong></div><div><span>Honorarios</span><strong>${escapeHtml(formatCurrency(selected.valorAvaluo))}</strong></div></div><div class="search-detail-readonly"><strong>VISTA DE CONSULTA</strong><span>Esta información es solo de consulta. No es posible editarla desde aquí.</span></div><div class="search-detail-actions"><button class="search-detail-view" type="button" data-search-view-record="${escapeHtml(selected.id)}"><i class="fa-regular fa-eye" aria-hidden="true"></i> Ver detalle</button>${canEditReception() ? `<button class="search-detail-edit" type="button" data-search-edit-record="${escapeHtml(selected.id)}"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Editar avalúo</button>` : ""}</div>`;
+    const proprietor = searchDisplayValue(linkedRequest?.propietario, specific.propietario, specific.razonSocial, selected.propietario, selected.razonSocial);
+    const applicant = searchDisplayValue(selected.solicitante, linkedRequest?.solicitante);
+    const appraisedOn = selected.fechaAvaluo ? formatDate(selected.fechaAvaluo) : "—";
+    const createdOn = selected.creadoEn ? formatDate(selected.creadoEn) : "—";
+    const requestCreatedOn = linkedRequest?.fechaSolicitud || linkedRequest?.fechaCreacion || linkedRequest?.createdAt || linkedRequest?.creadoEn || "";
+    const requestDate = requestCreatedOn ? formatDate(String(requestCreatedOn)) : "—";
+    const paid = Boolean(selected.pagado);
+    const paymentState = paid ? "Pagado" : "No pagado";
+    const deliveryState = selected.seEntregoA ? "Entregado" : "Pendiente de entrega";
+    const deliveryStateClass = selected.seEntregoA ? "status-delivered" : state.key === "vencidos" ? "status-expired" : "status-pending";
+    const appraiser = searchDisplayValue(selected.usuario, selected.asesorValuador, selected.asesor, specific.asesor, linkedRequest?.asesor, linkedRequest?.valuadorAsignado);
+    const typeOfProperty = searchDisplayValue(selected.tipoBien, selected.tipo_bien, specific.tipoBien, specific.tipo_bien);
+    const appraisalType = searchDisplayValue(selected.tipoAvaluo, selected.tipo_avaluo, specific.tipoAvaluo, specific.tipo_avaluo, specific.tipo_de_avaluo);
+    const operationValue = linkedRequest?.valorOperacion ?? linkedRequest?.valor_operacion ?? specific.valorOperacion ?? specific.valor_operacion;
+    const observations = searchDisplayValue(selected.observacion, linkedRequest?.observaciones, specific.observaciones);
+    const applicantPhone = searchDisplayValue(linkedRequest?.solicitante?.telefono, linkedRequest?.telefono, specific.telefono);
+    const applicantEmail = searchDisplayValue(linkedRequest?.solicitante?.correo, linkedRequest?.solicitante?.email, linkedRequest?.correo, specific.correo);
+    const visitContact = searchDisplayValue(linkedRequest?.contactoVisita?.nombre, linkedRequest?.contactoVisita?.name, specific.contactoVisitaNombre, specific.contacto_visita);
+    const visitPhone = searchDisplayValue(linkedRequest?.contactoVisita?.telefono, linkedRequest?.contactoVisita?.phone, specific.contactoVisitaTelefono, specific.telefono_visita);
+    const requestStatus = searchDisplayValue(linkedRequest?.estado);
+    const deliveryFields = [
+      renderSearchField("Estado de entrega", deliveryState, `search-detail-state ${deliveryStateClass}`),
+      renderSearchField("Entregado a", selected.seEntregoA, ""),
+      renderSearchField("Fecha de entrega", selected.fechaEntrega || selected.fechaEntregado ? formatDate(String(selected.fechaEntrega || selected.fechaEntregado)) : "—", ""),
+      renderSearchField("Observaciones", observations, "search-detail-field-wide"),
+    ];
+    const paymentFields = [
+      renderSearchField("Estado del pago", paymentState, paid ? "search-detail-payment-paid" : "search-detail-payment-unpaid"),
+      renderSearchField("Cantidad pagada", paid ? formatCurrency(parseMoney(selected.montoPagado)) : "—"),
+      renderSearchField("Método de pago", paid ? selected.metodoPago : "—"),
+      renderSearchField("Fecha de pago", paid && selected.fechaPago ? formatDate(selected.fechaPago) : "—"),
+      renderSearchField("Pago entregado a", paid ? selected.pagoEntregadoA : "—"),
+    ];
+    detail.innerHTML = `
+      <div class="search-detail-topline"><span>SOLICITUD ${escapeHtml(folio)}</span><span class="avaluo-status ${state.className}">${escapeHtml(state.label)}</span></div>
+      <h3>${escapeHtml(applicant)}</h3><p class="search-detail-appraisal-number">Avalúo ${escapeHtml(selected.numeroAvaluo || "—")}</p>
+      ${renderSearchSection("Datos del expediente", [
+        renderSearchField("Solicitante", applicant), renderSearchField("Propietario", proprietor), renderSearchField("Ubicación", address, "search-detail-field-wide"),
+        renderSearchField("Teléfono del solicitante", applicantPhone), renderSearchField("Correo del solicitante", applicantEmail), renderSearchField("Estado de solicitud", requestStatus),
+        renderSearchField("Contacto para visita", visitContact), renderSearchField("Teléfono para visita", visitPhone),
+        renderSearchField("Valuador", appraiser), renderSearchField("Tipo de bien", typeOfProperty), renderSearchField("Tipo de avalúo", appraisalType),
+        renderSearchField("Fecha de recepción", appraisedOn), renderSearchField("Fecha de registro", createdOn), renderSearchField("Fecha de solicitud", requestDate),
+        renderSearchField("Honorarios", formatCurrency(selected.valorAvaluo)), renderSearchField("Valor de operación", operationValue != null && operationValue !== "" ? formatCurrency(parseMoney(operationValue)) : "—"),
+      ])}
+      ${renderSearchSection("Entrega y observaciones", deliveryFields)}
+      ${renderSearchSection("Pago", paymentFields, "search-detail-payment-section")}
+      <div class="search-detail-readonly"><strong>VISTA DE CONSULTA</strong><span>La información se muestra en modo de consulta. ${canEditReception() ? "Si necesitas cambiarla, usa Editar avalúo." : "No es posible editarla con este perfil."}</span></div>
+      <div class="search-detail-actions"><button class="search-detail-view" type="button" data-search-view-record="${escapeHtml(selected.id)}"><i class="fa-regular fa-eye" aria-hidden="true"></i> Ver detalle</button>${canEditReception() ? `<button class="search-detail-edit" type="button" data-search-edit-record="${escapeHtml(selected.id)}"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Editar avalúo</button>` : ""}</div>`;
   }
   function bindRecordActions() {
     $$('[data-edit]').forEach((button) => button?.addEventListener("click", () => openDialog(button.dataset.edit)));
@@ -2065,7 +2134,6 @@
   numberInput?.addEventListener("input", () => { numberInput.value = normalizeNumber(numberInput.value); });
     searchInput?.addEventListener("input", () => { receptionPage = 1; if (searchInput.value.trim()) { operationalView = "todos"; $$('[data-reception-filter]').forEach((item) => item.classList.toggle("is-active", item.dataset.receptionFilter === "todos")); } render(); });
     $("#searchRecordsInput")?.addEventListener("input", () => { searchPage = 1; selectedSearchRecordId = ""; renderSearchWorkspace(); });
-    $$('[data-search-status]').forEach((button) => button?.addEventListener("click", () => { searchOperationalView = button.dataset.searchStatus || "todos"; searchPage = 1; selectedSearchRecordId = ""; renderSearchWorkspace(); }));
     $("#searchRecordList")?.addEventListener("click", (event) => {
       const selectButton = event.target.closest("[data-search-select]");
       const pageButton = event.target.closest("[data-search-page]");

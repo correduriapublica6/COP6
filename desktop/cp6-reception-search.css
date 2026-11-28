@@ -371,24 +371,7 @@ body.cp6-redesign #appShell.control-shell #buscarView .search-view-detail-headin
   margin: 0;
 }
 body.cp6-redesign #appShell.control-shell #buscarView .search-view-input-wrap { margin: 0 0 10px; }
-body.cp6-redesign #appShell.control-shell #buscarView .search-view-filter-row { display: flex; gap: 4px; margin: 0 0 10px; overflow-x: auto; padding: 1px 1px 4px; }
-body.cp6-redesign #appShell.control-shell #buscarView .search-view-filter-row button {
-  background: #fff;
-  border: 1px solid #dce1e5;
-  border-radius: 999px;
-  color: #505b65;
-  cursor: pointer;
-  flex: 0 0 auto;
-  font-family: Inter, "Segoe UI", Arial, sans-serif;
-  font-size: 9px;
-  font-weight: 600;
-  min-height: 29px;
-  padding: 0 7px;
-  white-space: nowrap;
-}
-body.cp6-redesign #appShell.control-shell #buscarView .search-view-filter-row button.is-active { background: #35414a; border-color: #35414a; color: #fff; }
-body.cp6-redesign #appShell.control-shell #buscarView .search-view-filter-row button:focus-visible { outline: 3px solid rgba(81, 101, 115, .22); outline-offset: 1px; }
-body.cp6-redesign #appShell.control-shell #buscarView .search-view-filter-row button span { opacity: .8; font-variant-numeric: tabular-nums; margin-left: 4px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-input-wrap { margin: 0 0 12px; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-record-list { max-height: min(57vh, 555px); min-height: 260px; overflow: auto; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-record-option {
   align-items: flex-start;
@@ -429,10 +412,25 @@ body.cp6-redesign #appShell.control-shell #buscarView .search-detail-empty p { c
 body.cp6-redesign #appShell.control-shell #buscarView .search-detail-topline { align-items: center; color: #77838d; display: flex; flex-wrap: wrap; font-size: 10px; font-weight: 700; gap: 10px; justify-content: space-between; letter-spacing: .045em; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-record-detail h3 { color: #202b35; font-size: 23px; font-weight: 700; letter-spacing: -.025em; margin: 13px 0 2px; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-detail-appraisal-number { color: #74808a; font-size: 12px; margin: 0; }
-body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields { border-bottom: 1px solid #e8ecef; border-top: 1px solid #e8ecef; display: grid; gap: 15px; grid-template-columns: minmax(0, 1.4fr) minmax(130px, .8fr) minmax(125px, .65fr); margin: 24px 0 18px; padding: 20px 0; }
-body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields > div { min-width: 0; }
-body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields span { color: #7a858e; display: block; font-size: 11px; margin-bottom: 6px; }
-body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields strong { color: #35414a; display: block; font-size: 13px; font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-section { border-top: 1px solid #e8ecef; margin: 17px 0 0; padding: 14px 0 0; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-section > h4 { color: #52606b; font-size: 10px; font-weight: 750; letter-spacing: .075em; margin: 0 0 12px; text-transform: uppercase; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields { display: grid; gap: 14px 18px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; padding: 0; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-field { min-width: 0; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-field-wide { grid-column: 1 / -1; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields span { color: #7a858e; display: block; font-size: 10px; font-weight: 650; letter-spacing: .025em; margin-bottom: 4px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields strong { color: #35414a; display: block; font-size: 12px; font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; white-space: pre-wrap; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-field.search-detail-state strong,
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-field.search-detail-payment-paid strong,
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-field.search-detail-payment-unpaid strong { display: inline-flex; border-radius: 999px; padding: 4px 9px; width: fit-content; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields .search-detail-field.search-detail-state strong,
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields .search-detail-field.search-detail-payment-paid strong,
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields .search-detail-field.search-detail-payment-unpaid strong { display: inline-flex !important; max-width: 100% !important; width: fit-content !important; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-field.search-detail-state.status-pending strong { background: #fff4d6; color: #936600; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-field.search-detail-state.status-delivered strong,
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-field.search-detail-payment-paid strong { background: #e7f6ef; color: #207b55; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-field.search-detail-state.status-paid strong { background: #e7f6ef; color: #207b55; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-field.search-detail-state.status-expired strong { background: #fce8e9; color: #b42318; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-field.search-detail-payment-unpaid strong { background: #f1f3f5; color: #687580; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-detail-readonly { display: grid; gap: 6px; margin: 19px 0 20px; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-detail-readonly strong { color: #78838c; font-size: 9px; letter-spacing: .08em; }
 body.cp6-redesign #appShell.control-shell #buscarView .search-detail-readonly span { color: #77828b; font-size: 11px; line-height: 1.45; }
@@ -471,9 +469,10 @@ body.cp6-redesign #appShell.control-shell #buscarView .search-view-empty { color
   body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #backAvaluosButton { width: 100%; }
   body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection .status-list-heading { min-height: 48px; padding: 12px 13px 8px !important; }
   body.cp6-redesign #appShell.control-shell #recepcionAvaluosSection #statusRecordList .operational-table-wrap { padding: 0 6px !important; }
-  body.cp6-redesign #appShell.control-shell #buscarView .search-view-list-panel { padding: 12px 10px 6px; }
-  body.cp6-redesign #appShell.control-shell #buscarView .search-view-detail-panel { min-height: 310px; }
-  body.cp6-redesign #appShell.control-shell #buscarView .search-record-detail { padding: 17px 15px 18px; }
-  body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields { grid-template-columns: minmax(0, 1fr); gap: 13px; margin: 18px 0 15px; padding: 16px 0; }
-  body.cp6-redesign #appShell.control-shell #buscarView .search-detail-actions button { flex: 1 1 auto; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-list-panel { padding: 12px 10px 6px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-view-detail-panel { min-height: 310px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-record-detail { padding: 17px 15px 18px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px 15px; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-field-wide { grid-column: 1 / -1; }
+body.cp6-redesign #appShell.control-shell #buscarView .search-detail-actions button { flex: 1 1 auto; }
 }
